@@ -194,7 +194,7 @@ const CaourseContentPage = () => {
     });
 
     setVideos(updatedVideos);
-  }, [currentVideoIndex]);
+  }, [currentVideoIndex, videos]);
 
   return (
     <>

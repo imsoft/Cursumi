@@ -8,7 +8,7 @@ export const BannerCourseFinished = () => {
               ¡Eres un crack!
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-              Hasta terminado este curso "Nombre del curso" exitosamente, hoy
+              Hasta terminado este curso &quot;Nombre del curso&quot; exitosamente, hoy
               diste un gran paso para un mejor futuro.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">

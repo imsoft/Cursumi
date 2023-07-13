@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { CanvasConfetti } from "@/components";
 import { ArrowDownTrayIcon, ShareIcon } from "@heroicons/react/24/outline";
 
@@ -13,12 +14,14 @@ const CertificatePage = () => {
             <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8">
               <div className="flex flex-col-reverse col-span-2">
                 <div className="aspect-h-1 aspect-w-1 w-full">
-                  <img
+                  <Image
                     src={
                       "https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
                     }
                     alt={`Curso finalizado en Cursumi, certificado de ${nombreCertificado}`}
                     className="h-full w-full object-cover object-center sm:rounded-lg"
+                    height={500}
+                    width={500}
                   />
                 </div>
               </div>
