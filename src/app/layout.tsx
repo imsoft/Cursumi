@@ -5,7 +5,7 @@ import { HeaderMenu } from '../components/shared/HeaderMenu';
 const gantari = Gantari({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Cursimi",
+  title: "Cursumi",
   description: "Cursumi",
 };
 
