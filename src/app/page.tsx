@@ -1,19 +1,5 @@
-import {
-  FifthSection,
-  FirstSection,
-  FourthSection,
-  SecondSection,
-  ThirdSection,
-} from "@/components";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <main>
-      <FirstSection />
-      <SecondSection />
-      <ThirdSection />
-      <FourthSection />
-      <FifthSection />
-    </main>
-  );
+  redirect("/es");
 }

@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Gantari } from "next/font/google";
-import { HeaderMenu } from '../components/shared/HeaderMenu';
 
 const gantari = Gantari({ subsets: ["latin"] });
 

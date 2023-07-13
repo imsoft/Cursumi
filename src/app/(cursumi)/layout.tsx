@@ -1,6 +1,6 @@
 import { Footer, HeaderMenu } from "@/components";
 
-export default function HeaderFooterLayout({
+export default function WebAppLayout({
   children,
 }: {
   children: React.ReactNode;
