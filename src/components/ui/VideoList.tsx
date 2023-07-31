@@ -1,7 +1,8 @@
-import { Video, VideoListItem } from "./VideoListItem";
+import { IVideo } from "@/interfaces";
+import { VideoListItem } from "./VideoListItem";
 
 interface Props {
-  videos: Video[];
+  videos: IVideo[];
   currentVideoIndex: number;
   onSelectVideo: (videoId: number) => void;
 }

@@ -37,8 +37,8 @@ export const HeaderMenu = () => {
               <span className="sr-only">Cursumi</span>
               <Image
                 className="h-12 w-auto"
-                src="https://firebasestorage.googleapis.com/v0/b/cursumi.appspot.com/o/Logotipo%2FCursumi.png?alt=media&token=0c5eb7b5-c8bf-4537-949d-a978c5ce176f&_gl=1*1ql1quh*_ga*MTkzOTYyOTQxNi4xNjg1NDEzODI1*_ga_CW55HF8NVT*MTY4NjI1MzQyNS40LjEuMTY4NjI1MzQ0Mi4wLjAuMA.."
-                alt="Logo Cursumi"
+                src="/cursumi.png"
+                alt="Cursumi"
                 width={500}
                 height={500}
               />
@@ -198,7 +198,7 @@ export const HeaderMenu = () => {
                 <span className="sr-only">Cursumi</span>
                 <Image
                   className="h-8 w-auto"
-                  src="https://firebasestorage.googleapis.com/v0/b/cursumi.appspot.com/o/Logotipo%2FCursumi.png?alt=media&token=0c5eb7b5-c8bf-4537-949d-a978c5ce176f&_gl=1*1ql1quh*_ga*MTkzOTYyOTQxNi4xNjg1NDEzODI1*_ga_CW55HF8NVT*MTY4NjI1MzQyNS40LjEuMTY4NjI1MzQ0Mi4wLjAuMA.."
+                  src="/cursumi.png"
                   alt="Cursumi"
                   width={500}
                   height={500}

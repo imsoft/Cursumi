@@ -4,37 +4,12 @@ import { Fragment } from "react";
 import Image from "next/image";
 import { Tab } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/24/solid";
+import { IFAQ, ILicense, IReview } from "@/interfaces";
 
 interface Props {
-  reviews: Reviews;
-  faqs: FAQ[];
-  license: License;
-}
-
-interface FAQ {
-  question: string;
-  answer: string;
-}
-
-interface License {
-  href: string;
-  summary: string;
-  content: string;
-}
-
-interface Reviews {
-  average: number;
-  featured: Featured[];
-}
-
-interface Featured {
-  id: string;
-  rating: number;
-  content: string;
-  date: string;
-  datetime: string;
-  author: string;
-  avatarSrc: string;
+  reviews: IReview;
+  faqs: IFAQ[];
+  license: ILicense;
 }
 
 export const TabMenu = ({ reviews, faqs, license }: Props) => {

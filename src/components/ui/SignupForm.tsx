@@ -92,6 +92,7 @@ export const SignupForm = () => {
     password,
   }: FormData) => {
     setShowError(false);
+    console.log(name, surname, email, password);
   };
 
   return (

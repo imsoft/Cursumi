@@ -1,17 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ICourseCard } from "@/interfaces";
 
-interface CourseCard {
-  _id: string;
-  name: string;
-  category: string;
-  price: string;
-  href: string;
-  imageSrc: string;
-  imageAlt: string;
-}
-
-interface Props extends CourseCard {}
+interface Props extends ICourseCard {}
 
 export const CourseCard = ({
   _id,

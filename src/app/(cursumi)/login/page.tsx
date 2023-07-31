@@ -11,8 +11,8 @@ const IniciarSesion = () => {
             <div>
               <Image
                 className="h-10 w-auto"
-                src="https://firebasestorage.googleapis.com/v0/b/cursumi.appspot.com/o/Logotipo%2FCursumi.png?alt=media&token=0c5eb7b5-c8bf-4537-949d-a978c5ce176f"
-                alt="Your Company"
+                src="/cursumi.png"
+                alt="Cursumi"
                 width={500}
                 height={500}
               />

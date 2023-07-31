@@ -18,8 +18,8 @@ const ContactPage = () => {
             <div className="lg:mt-6 lg:w-80 lg:flex-none">
               <Image
                 className="h-12 w-auto"
-                src="https://firebasestorage.googleapis.com/v0/b/cursumi.appspot.com/o/Logotipo%2FCursumi.png?alt=media&token=0c5eb7b5-c8bf-4537-949d-a978c5ce176f"
-                alt=""
+                src="/cursumi.png"
+                alt="Cursumi"
                 width={500}
                 height={500}
               />

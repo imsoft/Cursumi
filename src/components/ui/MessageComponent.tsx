@@ -6,22 +6,23 @@ import {
   ComputerDesktopIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
+import { IMessageLink } from "@/interfaces";
 
-const links = [
+const links: IMessageLink[] = [
   {
-    nameOfService: "Cursos",
+    title: "Cursos",
     description: "Ve todos nuestros cursos.",
     href: "/courses",
     icon: AcademicCapIcon,
   },
   {
-    nameOfService: "Blog",
+    title: "Blog",
     description: "Mantante informado con los articulos de nuestro blog.",
     href: "/blogs",
     icon: ComputerDesktopIcon,
   },
   {
-    nameOfService: "Contántanos",
+    title: "Contántanos",
     description: "Contáctanos para aclarar tus dudas.",
     href: "/contact",
     icon: GlobeAltIcon,
@@ -36,8 +37,8 @@ export const MessageComponent = ({ topic, message, comment }: any) => {
           <div className="flex-shrink-0 pt-16">
             <Image
               className="mx-auto h-24 w-auto"
-              src="https://firebasestorage.googleapis.com/v0/b/cursumi.appspot.com/o/Logotipo%2FCursumi.png?alt=media&token=0c5eb7b5-c8bf-4537-949d-a978c5ce176f&_gl=1*1ql1quh*_ga*MTkzOTYyOTQxNi4xNjg1NDEzODI1*_ga_CW55HF8NVT*MTY4NjI1MzQyNS40LjEuMTY4NjI1MzQ0Mi4wLjAuMA.."
-              alt="Your Company"
+              src="/cursumi.png"
+              alt="Cursumi"
               height={100}
               width={100}
             />
@@ -79,7 +80,7 @@ export const MessageComponent = ({ topic, message, comment }: any) => {
                               className="absolute inset-0"
                               aria-hidden="true"
                             />
-                            {link.nameOfService}
+                            {link.title}
                           </Link>
                         </span>
                       </h3>

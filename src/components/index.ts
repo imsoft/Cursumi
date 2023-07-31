@@ -1,5 +1,3 @@
-
-
 export { FirstSection } from './indexPage/FirstSection';
 export { SecondSection } from './indexPage/SecondSection';
 export { ThirdSection } from './indexPage/ThirdSection';

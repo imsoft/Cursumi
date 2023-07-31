@@ -1,15 +1,8 @@
+import { IVideo } from "@/interfaces";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
-export interface Video {
-  id: number;
-  name: string;
-  description: string;
-  href: string;
-  status: string;
-}
-
 interface Props {
-  video: Video;
+  video: IVideo;
   isActive: boolean;
   onSelect: () => void;
 }
