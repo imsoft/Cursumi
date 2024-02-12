@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { CanvasConfetti } from "@/components";
 import { ArrowDownTrayIcon, ShareIcon } from "@heroicons/react/24/outline";
 
 const nombreCertificado = "Brandon Uriel Garcia Ramos";
@@ -7,7 +6,6 @@ const nombreCertificado = "Brandon Uriel Garcia Ramos";
 const CertificatePage = () => {
   return (
     <>
-      <CanvasConfetti />
       <div className="bg-white">
         <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
           <div className="mx-auto max-w-2xl lg:max-w-none">

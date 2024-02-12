@@ -14,6 +14,12 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'tailwindui.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'raw.githubusercontent.com',
+                // port: '',
+                // pathname: '/imsoft/The-Gaming-Corps-Blog/main/images/**',
+              },
         ],
     }
 }

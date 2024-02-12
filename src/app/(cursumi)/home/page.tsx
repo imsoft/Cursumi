@@ -6,16 +6,16 @@ import {
   ThirdSection,
 } from "@/components";
 
-const page = () => {
+const MainPage = () => {
   return (
     <main>
       <FirstSection />
       <SecondSection />
-      <ThirdSection />
       <FourthSection />
+      <ThirdSection />
       <FifthSection />
     </main>
   );
 };
 
-export default page;
+export default MainPage;

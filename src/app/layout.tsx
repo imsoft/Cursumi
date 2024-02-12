@@ -1,9 +1,10 @@
+import { Metadata } from "next";
 import "./globals.css";
 import { Gantari } from "next/font/google";
 
 const gantari = Gantari({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Cursumi",
   description: "Cursumi",
 };

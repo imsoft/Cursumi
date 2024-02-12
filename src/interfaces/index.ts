@@ -9,3 +9,4 @@ export type { IFAQ } from "./faq";
 export type { ILicense } from "./license";
 export type { IReview } from "./review";
 export type { IFeatured } from "./featured";
+export type { RequiredMetatag } from "./requiredMetatag";
