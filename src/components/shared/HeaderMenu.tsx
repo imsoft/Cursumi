@@ -82,9 +82,9 @@ export const HeaderMenu = () => {
                 </button>
 
                 <button
-                  // href="/registro"
+                  // href="/signup"
                   className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm lg:text-base hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  onClick={() => navigateTo(`/registro?p=${router.refresh}`)}
+                  onClick={() => navigateTo(`/signup?p=${router.refresh}`)}
                 >
                   Regístrate
                 </button>
@@ -211,7 +211,7 @@ export const HeaderMenu = () => {
                 Iniciar sesión
               </Link>
               <Link
-                href="/registro"
+                href="/signup"
                 className="ml-auto rounded-md bg-indigo-600 px-3 py-2 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Regístrate
@@ -246,7 +246,7 @@ export const HeaderMenu = () => {
                     Iniciar sesión
                   </Link>
                   <Link
-                    href="/registro"
+                    href="/signup"
                     className="-mx-3 block rounded-md px-3 py-2.5 mt-6 text-base font-semibold shadow-sm leading-7 bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Regístrate

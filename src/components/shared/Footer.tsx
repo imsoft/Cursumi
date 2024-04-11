@@ -33,7 +33,7 @@ export const Footer = () => {
             iconStyle={"text-gray-400 hover:text-primary-500"}
           />
           <p className="mt-10 text-center text-xs leading-5 text-gray-500">
-            &copy; 2023 Cursumi. Todos los derechos reservados.
+            &copy; 2024 Cursumi. Todos los derechos reservados.
           </p>
         </div>
       </footer>

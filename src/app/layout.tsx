@@ -1,6 +1,9 @@
 import { Metadata } from "next";
-import "./globals.css";
 import { Gantari } from "next/font/google";
+
+import { Footer, HeaderMenu } from "@/components";
+
+import "./globals.css";
 
 const gantari = Gantari({ subsets: ["latin"] });
 
@@ -16,7 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={gantari.className}>{children}</body>
+      <body className={gantari.className}>
+        <HeaderMenu />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

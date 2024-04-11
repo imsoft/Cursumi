@@ -12,7 +12,7 @@ export const FirstSection = () => {
                 <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                   Únete a nuestra comunidad de aprendizaje en línea hoy mismo.{" "}
                   <Link
-                    href="/registro"
+                    href="/signup"
                     className="whitespace-nowrap font-semibold text-indigo-600"
                   >
                     <span className="absolute inset-0" aria-hidden="true" />

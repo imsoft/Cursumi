@@ -37,7 +37,7 @@ export const getPostByName = async (
   fileName: string
 ): Promise<BlogPost | undefined> => {
   const res = await fetch(
-    `https://raw.githubusercontent.com/imsoft/The-Gaming-Corps-Blog/main/${fileName}`,
+    `https://raw.githubusercontent.com/imsoft/BlogPosts/main/${fileName}`,
     {
       headers: {
         Accept: "application/vnd.github+json",
@@ -93,7 +93,7 @@ export const getPostsMeta = async (): Promise<
   RequiredMetatag[] | undefined
 > => {
   const res = await fetch(
-    "https://api.github.com/repos/imsoft/The-Gaming-Corps-Blog/git/trees/main?recursive=1",
+    "https://api.github.com/repos/imsoft/BlogPosts/git/trees/main?recursive=1",
     {
       headers: {
         Accept: "application/vnd.github+json",
@@ -128,7 +128,7 @@ export const getPostsMetaRandom = async (
   numberOfPosts: number
 ): Promise<RequiredMetatag[] | undefined> => {
   const res = await fetch(
-    "https://api.github.com/repos/imsoft/The-Gaming-Corps-Blog/git/trees/main?recursive=1",
+    "https://api.github.com/repos/imsoft/BlogPosts/git/trees/main?recursive=1",
     {
       headers: {
         Accept: "application/vnd.github+json",

@@ -47,55 +47,76 @@ const products = [
 export const FourthSection = () => {
   return (
     <>
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <div className="md:flex md:items-center md:justify-between">
-            <h2 className="text-5xl font-bold tracking-tight text-gray-900">
+      <div className="bg-white py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Nuestros cursos
             </h2>
-            <Link
-              href="/cursos"
-              className="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
-            >
-              Ver cursos
-              <span aria-hidden="true"> &rarr;</span>
-            </Link>
+            <p className="mt-2 text-lg leading-8 text-gray-600">
+              Conoce los cursos que tenemos para ti.
+            </p>
           </div>
-
-          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
+          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {products.map((product) => (
-              <div key={product.id} className="group relative">
-                <div className="h-56 w-full overflow-hidden rounded-md bg-white group-hover:opacity-75 lg:h-72 xl:h-40">
+              <article
+                key={product.id}
+                className="flex flex-col items-start justify-between"
+              >
+                <div className="relative w-full">
                   <Image
                     src={product.imageSrc}
-                    alt={product.imageAlt}
-                    className="h-full w-full object-scale-down object-center"
-                    width={1920}
-                    height={1080}
+                    alt=""
+                    className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
+                    width={300}
+                    height={300}
                   />
+                  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
                 </div>
-                <h3 className="mt-4 text-sm text-gray-700">
-                  <Link href={product.href}>
-                    <span className="absolute inset-0" />
-                    {product.name}
-                  </Link>
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">{product.category}</p>
-                <p className="mt-1 text-sm font-medium text-gray-900">
-                  {product.price}
-                </p>
-              </div>
+                <div className="max-w-xl">
+                  <div className="mt-8 flex items-center gap-x-4 text-xs">
+                    <time dateTime={product.name} className="text-gray-500">
+                      {product.name}
+                    </time>
+                    <Link
+                      href={product.name}
+                      className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
+                    >
+                      {product.name}
+                    </Link>
+                  </div>
+                  <div className="group relative">
+                    <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                      <Link href={product.href}>
+                        <span className="absolute inset-0" />
+                        {product.name}
+                      </Link>
+                    </h3>
+                    <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                      {product.name}
+                    </p>
+                  </div>
+                  <div className="relative mt-8 flex items-center gap-x-4">
+                    <Image
+                      src={product.imageSrc}
+                      alt=""
+                      className="h-10 w-10 rounded-full bg-gray-100"
+                      width={40}
+                      height={40}
+                    />
+                    <div className="text-sm leading-6">
+                      <p className="font-semibold text-gray-900">
+                        <Link href={product.name}>
+                          <span className="absolute inset-0" />
+                          {product.name}
+                        </Link>
+                      </p>
+                      <p className="text-gray-600">{product.name}</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
             ))}
-          </div>
-
-          <div className="mt-8 text-sm md:hidden">
-            <Link
-              href="/cursos"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              Ver cursos
-              <span aria-hidden="true"> &rarr;</span>
-            </Link>
           </div>
         </div>
       </div>

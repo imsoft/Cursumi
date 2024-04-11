@@ -32,6 +32,7 @@ export const generateMetadata = async ({ params: { postId } }: Props) => {
     title: post.requiredMetatags.title,
     description: post.requiredMetatags.description,
     keywords: post.requiredMetatags.keywords,
+    url: post.requiredMetatags.url,
     twitter: {
       card: "summary_large_image",
       title: post.requiredMetatags.title,
@@ -69,8 +70,6 @@ const BlogPage = async ({ params: { postId } }: Props) => {
   if (!recommendationsPosts) notFound();
 
   const { requiredMetatags, content } = post;
-
-  // const publicationDate = getFormattedDate(requiredMetatags.date);
 
   const tags = requiredMetatags.tags.map((tag, i) => (
     <Link

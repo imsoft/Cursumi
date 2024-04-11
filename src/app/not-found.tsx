@@ -1,102 +1,104 @@
+import Image from "next/image";
 import Link from "next/link";
+import {
+  AcademicCapIcon,
+  BookOpenIcon,
+  ChatBubbleLeftRightIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/outline";
 
-export default function NotFound() {
+const links = [
+  {
+    name: "Nuestros cursos",
+    href: "/courses",
+    description: "Conoce nuestros cursos y especialidades.",
+    icon: AcademicCapIcon,
+  },
+  {
+    name: "Blog",
+    href: "/blogs",
+    description: "Actualizate con nuestros artículos y noticias.",
+    icon: BookOpenIcon,
+  },
+  {
+    name: "Contáctanos",
+    href: "/contact",
+    description: "Contáctanos para más información o soporte.",
+    icon: ChatBubbleLeftRightIcon,
+  },
+];
+
+const NotFound = () => {
   return (
-    <div className="text-center">
-      <p className="mt-10">Sorry, the requested post does not exist.</p>
-      <Link href="/">Back to Home</Link>
+    <div className="bg-white">
+      <main className="mx-auto w-full max-w-7xl px-6 pb-16 pt-10 sm:pb-24 lg:px-8">
+        <Image
+          className="mx-auto h-10 w-auto sm:h-12"
+          src="/cursumi.svg"
+          alt="Cursumi"
+          width={120}
+          height={120}
+        />
+        <div className="mx-auto mt-20 max-w-2xl text-center sm:mt-24">
+          <p className="text-base font-semibold leading-8 text-indigo-600">
+            404
+          </p>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Esta página no existe
+          </h1>
+          <p className="mt-4 text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8">
+            Lo sentimos, no pudimos encontrar la página que buscas.
+          </p>
+        </div>
+        <div className="mx-auto mt-16 flow-root max-w-lg sm:mt-20">
+          <h2 className="sr-only">Popular pages</h2>
+          <ul
+            role="list"
+            className="-mt-6 divide-y divide-gray-900/5 border-b border-gray-900/5"
+          >
+            {links.map((link, linkIdx) => (
+              <li key={linkIdx} className="relative flex gap-x-6 py-6">
+                <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg shadow-sm ring-1 ring-gray-900/10">
+                  <link.icon
+                    className="h-6 w-6 text-indigo-600"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex-auto">
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                    <Link href={link.href}>
+                      <span className="absolute inset-0" aria-hidden="true" />
+                      {link.name}
+                    </Link>
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">
+                    {link.description}
+                  </p>
+                </div>
+                <div className="flex-none self-center">
+                  <ChevronRightIcon
+                    className="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-10 flex justify-center">
+            <Link
+              href="/"
+              className="text-sm font-semibold leading-6 text-indigo-600"
+            >
+              <span className="mr-2" aria-hidden="true">
+                &larr;
+              </span>
+              Regresar al inicio
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
-}
+};
 
-// import MessageComponent from "@/components/ui/shared/MessageComponent";
-// import { dateMetatagInfo } from "@/data";
-// import { INotificationMessage, RequiredMetatags } from "@/interfaces";
-
-// const NotFound = () => {
-//   const notificationMessageInfo: INotificationMessage = {
-//     topic: "404",
-//     message: "Esta página no existe",
-//     comment: "¡Ups! Parece que has llegado a una página que no existe.",
-//   };
-
-//   const metatagsInfo: RequiredMetatags = {
-//     title: "Esta página no existe | imSoft",
-//     description: "¡Ups! Parece que has llegado a una página que no existe",
-//     keywords: "404, Esta página no existe, imSoft",
-//     author: "Brandon Uriel García Ramos",
-//     subject: "404",
-//     date: dateMetatagInfo,
-//     type: "404",
-//     source: "https://www.imsoft.io/404",
-//     image: "https://firebasestorage.googleapis.com/v0/b/imsoft-website.appspot.com/o/Logos%20Empresa%2FLogotipo%20imSoft.png?alt=media&token=4b71448f-4047-402f-8b41-82a6c5e59ec",
-//     url: "https://www.imsoft.io/404",
-//     robots: "index,follow",
-//     _id: "",
-//     tags: []
-//   };
-
-//   return (
-//     <>
-//         {/* MetaEtiquetas Básicas */}
-//         <title>{metatagsInfo.title}</title>
-//         <meta name="title" content={metatagsInfo.title} />
-//         <meta httpEquiv="title" content={metatagsInfo.title} />
-//         <meta name="description" lang="es" content={metatagsInfo.description} />
-//         <meta name="keywords" lang="es" content={metatagsInfo.keywords} />
-//         <meta name="date" content={metatagsInfo.date} />
-
-//         {/* Informacion del autor */}
-//         <meta name="author" content={metatagsInfo.author} />
-
-//         {/* Dublincore */}
-//         <meta name="DC.title" lang="es-MX" content={metatagsInfo.title} />
-//         <meta name="DC.creator" lang="es-MX" content={metatagsInfo.author} />
-//         <meta name="DC.subject" lang="es-MX" content={metatagsInfo.subject} />
-//         <meta
-//           name="DC.description"
-//           lang="es-MX"
-//           content={metatagsInfo.description}
-//         />
-//         <meta name="DC.publisher" lang="es-MX" content={metatagsInfo.author} />
-//         <meta name="DC.date" lang="es-MX" content={metatagsInfo.date} />
-//         <meta name="DC.type" lang="es-MX" content={metatagsInfo.type} />
-//         <meta name="DC.identifier" lang="es-MX" content={metatagsInfo.title} />
-//         <meta name="DC.source" lang="es-MX" content={metatagsInfo.source} />
-//         <meta name="DC.relation" lang="es-MX" content={metatagsInfo.source} />
-
-//         {/* Twitter */}
-//         <meta name="twitter:title" content={metatagsInfo.title} />
-//         <meta name="twitter:description" content={metatagsInfo.description} />
-//         <meta name="twitter:image:src" content={metatagsInfo.image} />
-//         <meta name="twitter:image:alt" content={metatagsInfo.title} />
-
-//         {/* Facebook */}
-//         <meta property="og:title" content={metatagsInfo.title} />
-//         <meta property="og:type" content={metatagsInfo.type} />
-//         <meta
-//           property="og:url"
-//           content={`https://www.imsoft.io${metatagsInfo.url}`}
-//         />
-//         <meta property="og:image" content={metatagsInfo.image} />
-//         <meta property="og:description" content={metatagsInfo.description} />
-
-//         {/* Google + / Pinterest */}
-//         <meta itemProp="description" content={metatagsInfo.description} />
-//         <meta itemProp="image" content={metatagsInfo.image} />
-
-//         {/* Robots */}
-//         <meta name="robots" content={metatagsInfo.robots} />
-
-//       <main>
-//         <MessageComponent
-//           topic={notificationMessageInfo.topic}
-//           message={notificationMessageInfo.message}
-//           comment={notificationMessageInfo.comment}
-//         />
-//       </main>
-//     </>
-//   );
-// };
-
-// export default NotFound;
+export default NotFound;

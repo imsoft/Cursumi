@@ -1,27 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: 'firebasestorage.googleapis.com',
-            },
-            {
-                protocol: 'https',
-                hostname: 'images.unsplash.com',
-            },
-            {
-                protocol: 'https',
-                hostname: 'tailwindui.com',
-            },
-            {
-                protocol: 'https',
-                hostname: 'raw.githubusercontent.com',
-                // port: '',
-                // pathname: '/imsoft/The-Gaming-Corps-Blog/main/images/**',
-              },
-        ],
-    }
-}
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tailwindui.com",
+      },
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+      },
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
