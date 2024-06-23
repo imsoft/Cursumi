@@ -1,4 +1,3 @@
-import React from "react";
 import { BlogCard, MessageComponent } from "@/components";
 import { getPostsMeta } from "@/lib/posts";
 

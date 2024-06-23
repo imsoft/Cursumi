@@ -10,46 +10,103 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Status {
+model User {
+  id           Int          @id @default(autoincrement())
+  userId       String       @unique @default(uuid())
+  name         String
+  lastname     String
+  profileImage String?      @db.VarChar(255) // URL to profile image, can be null
+  birthday     DateTime
+  role         Role         @default(student)
+  email        String       @unique
+  password     String       @db.VarChar(255) // Encrypted with bcrypt
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+  courses      Course[]
+  blogs        Blog[]
+  enrollments  Enrollment[]
+
+  @@map("users")
+}
+
+model Course {
+  id           Int             @id @default(autoincrement())
+  courseId     String          @unique @default(uuid())
+  title        String
+  description  String
+  thumbnail    String          @db.VarChar(255)
+  price        Decimal         @db.Decimal(10, 2)
+  courseStatus CourseStatus    @default(not_started)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @default(now())
+  userId       Int
+  chapters     CourseChapter[]
+  enrollments  Enrollment[]
+  user         User            @relation(fields: [userId], references: [id])
+
+  @@map("courses")
+}
+
+model CourseChapter {
+  id              Int             @id @default(autoincrement())
+  courseChapterId String          @unique @default(uuid())
+  title           String
+  videoUrl        String          @db.VarChar(255)
+  status          VideoStatus     @default(upcoming)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  courseId        Int
+  course          Course          @relation(fields: [courseId], references: [id])
+
+  @@map("courseChapters")
+}
+
+model Enrollment {
+  id           Int      @id @default(autoincrement())
+  enrollmentId String   @unique @default(uuid())
+  userId       Int
+  courseId     Int
+  status       String?  @default("enrolled") @db.VarChar(50) // Estado de la inscripción
+  grade        Float?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+  course       Course   @relation(fields: [courseId], references: [id])
+
+  @@map("enrollment")
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  blogId    String   @unique @default(uuid())
+  title     String   @db.VarChar(255)
+  content   String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  tags        String[] @default([])
+  description String?  @db.VarChar(255)
+  keywords    String[] @default([])
+
+  @@map("blogs")
+}
+
+enum Role {
+  student
+  teacher
+  admin
+}
+
+enum VideoStatus {
   complete
   current
   upcoming
 }
 
-enum Gender {
-  man
-  woman
-  other
-}
-
-model User {
-  id       String @id @default(uuid())
-  name     String
-  surname  String
-  email    String @unique
-  password String
-  role     String
-  // Course   Course[]
-}
-
-model Course {
-  id          String @id @default(uuid())
-  title       String
-  description String
-  price       Float
-
-  // user   User   @relation(fields: [userId], references: [id])
-  // userId String
-
-  // CourseChapter CourseChapter[]
-}
-
-model CourseChapter {
-  id       String @id @default(uuid())
-  title    String
-  videoUrl String
-  status   Status
-
-  // course   Course @relation(fields: [courseId], references: [id])
-  // courseId String
+enum CourseStatus {
+  not_started
+  in_progress
+  completed
 }
