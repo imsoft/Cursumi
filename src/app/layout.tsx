@@ -4,8 +4,9 @@ import { Gantari } from "next/font/google";
 import { Footer, HeaderMenu } from "@/components";
 
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const gantari = Gantari({ subsets: ["latin"] });
+const gantari = Gantari({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Cursumi",
@@ -19,7 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={gantari.className}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          gantari.variable
+        )}
+      >
         <HeaderMenu />
         {children}
         <Footer />

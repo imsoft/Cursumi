@@ -11,20 +11,20 @@ export { HeaderMenu } from './shared/HeaderMenu';
 export { SocialMediaBanner } from './shared/SocialMediaBanner';
 
 // UI
-export { BannerCourseFinished } from './ui/BannerCourseFinished';
-export { BlogCard } from './ui/BlogCard';
-export { ButtonShowModal } from './ui/ButtonShowModal';
-export { ContactForm } from './ui/ContactForm';
-export { CourseCard } from './ui/CourseCard';
-export { CourseProgress } from './ui/CourseProgress';
-export { LoginForm } from './ui/LoginForm';
-export { MessageComponent } from './ui/MessageComponent';
-export { SignupForm } from './ui/SignupForm';
-export { TabMenu } from './ui/TabMenu';
-export { VideoList } from './ui/VideoList';
-export { VideoListItem } from './ui/VideoListItem';
-export { VideoModal } from './ui/VideoModal';
-export { VideoPlayer } from './ui/VideoPlayer';
+export { BannerCourseFinished } from './cursumi-ui/BannerCourseFinished';
+export { BlogCard } from './cursumi-ui/BlogCard';
+export { ButtonShowModal } from './cursumi-ui/ButtonShowModal';
+export { ContactForm } from './cursumi-ui/ContactForm';
+export { CourseCard } from './cursumi-ui/CourseCard';
+export { CourseProgress } from './cursumi-ui/CourseProgress';
+export { LoginForm } from './cursumi-ui/LoginForm';
+export { MessageComponent } from './cursumi-ui/MessageComponent';
+export { SignupForm } from './cursumi-ui/SignupForm';
+export { TabMenu } from './cursumi-ui/TabMenu';
+export { VideoList } from './cursumi-ui/VideoList';
+export { VideoListItem } from './cursumi-ui/VideoListItem';
+export { VideoModal } from './cursumi-ui/VideoModal';
+export { VideoPlayer } from './cursumi-ui/VideoPlayer';
 
 // Article
 export * from './article/ArticleImage';
