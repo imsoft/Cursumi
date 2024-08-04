@@ -3,27 +3,27 @@ import Image from "next/image";
 const metrics = [
   {
     id: 1,
-    stat: "8K+",
-    emphasis: "Companies",
-    rest: "use laoreet amet lacus nibh integer quis.",
+    stat: "",
+    emphasis: "Aprendizaje Personalizado, ",
+    rest: "cursos adaptados a tu ritmo y estilo.",
   },
   {
     id: 2,
-    stat: "25K+",
-    emphasis: "Countries around the globe",
-    rest: "lacus nibh integer quis.",
+    stat: "",
+    emphasis: "Enfoque Práctico, ",
+    rest: "aplica lo aprendido con proyectos reales.",
   },
   {
     id: 3,
-    stat: "98%",
-    emphasis: "Customer satisfaction",
-    rest: "laoreet amet lacus nibh integer quis.",
+    stat: "",
+    emphasis: "Soporte y Comunidad, ",
+    rest: "accede a una red de estudiantes y expertos.",
   },
   {
     id: 4,
-    stat: "12M+",
-    emphasis: "Issues resolved",
-    rest: "lacus nibh integer quis.",
+    stat: "",
+    emphasis: "Contenido de Alta Calidad, ",
+    rest: "lecciones creadas por profesionales.",
   },
 ];
 
@@ -37,7 +37,7 @@ export const FifthSection = () => {
             <div className="h-full xl:relative xl:col-start-2">
               <Image
                 alt="People working on laptops"
-                src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2830&q=80&sat=-100"
+                src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 className="h-full w-full object-cover opacity-25 xl:absolute xl:inset-0"
                 width={2830}
                 height={1200}
@@ -53,18 +53,16 @@ export const FifthSection = () => {
           <div className="relative pb-64 pt-12 sm:pb-64 sm:pt-24 xl:col-start-1 xl:pb-24">
             <h2 className="text-base font-semibold">
               <span className="bg-gradient-to-r from-purple-300 to-purple-300 bg-clip-text text-transparent">
-                Valuable Metrics
+                Cursumi
               </span>
             </h2>
             <p className="mt-3 text-3xl font-bold tracking-tight text-white">
-              Get actionable data that will help grow your business
+              Impulsa tu Crecimiento con Datos Accionables
             </p>
             <p className="mt-5 text-lg text-gray-300">
-              Rhoncus sagittis risus arcu erat lectus bibendum. Ut in adipiscing
-              quis in viverra tristique sem. Ornare feugiat viverra eleifend
-              fusce orci in quis amet. Sit in et vitae tortor, massa. Dapibus
-              laoreet amet lacus nibh integer quis. Eu vulputate diam sit tellus
-              quis at.
+              En Cursumi, ofrecemos herramientas poderosas que te permiten
+              transformar tus metas en realidad. Aprovecha los recursos
+              diseñados para optimizar tu aprendizaje y desarrollo personal.
             </p>
             <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
               {metrics.map((item) => (
