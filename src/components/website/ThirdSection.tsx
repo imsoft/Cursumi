@@ -57,7 +57,7 @@ export const ThirdSection = () => {
                     <div className="flex items-center space-x-3">
                       <div className="flex-shrink-0">
                         <Image
-                          alt=""
+                          alt="Brandon Garcia CEO de Cursumi"
                           src="/Brandon.png"
                           className="h-6 w-6 rounded-full"
                           width={24}
@@ -75,7 +75,7 @@ export const ThirdSection = () => {
             <div className="mt-12 sm:mt-16 lg:mt-0">
               <div className="-mr-48 pl-6 md:-mr-16 lg:relative lg:m-0 lg:h-full lg:px-0">
                 <Image
-                  alt="Inbox user interface"
+                  alt="Estudiantes colaborando en proyectos de aprendizaje en línea en Cursumi"
                   src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
                   width={500}
@@ -122,7 +122,7 @@ export const ThirdSection = () => {
             <div className="mt-12 sm:mt-16 lg:col-start-1 lg:mt-0">
               <div className="-ml-48 pr-6 md:-ml-16 lg:relative lg:m-0 lg:h-full lg:px-0">
                 <Image
-                  alt="Customer profile user interface"
+                  alt="Perfil de usuario en la plataforma de aprendizaje en línea Cursumi"
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none"
                   width={500}

@@ -36,7 +36,7 @@ export const FifthSection = () => {
           <div className="h-full w-full xl:grid xl:grid-cols-2">
             <div className="h-full xl:relative xl:col-start-2">
               <Image
-                alt="People working on laptops"
+                alt="Estudiantes trabajando en laptops aprendiendo en línea con Cursumi"
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 className="h-full w-full object-cover opacity-25 xl:absolute xl:inset-0"
                 width={2830}
