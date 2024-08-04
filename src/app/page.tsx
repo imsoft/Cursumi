@@ -228,8 +228,8 @@ const Home = () => {
                 <Link href="#">
                   <span className="sr-only">Your Company</span>
                   <Image
-                    alt=""
-                    src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=purple&to-shade=600&toShade=600"
+                    alt="Cursumi Logo"
+                    src="/cursumi.svg"
                     className="h-8 w-auto sm:h-10"
                     width={40}
                     height={40}
@@ -330,8 +330,8 @@ const Home = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <Image
-                        alt="Your Company"
-                        src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=purple&to-shade=600&toShade=600"
+                        alt="Cursumi Logo"
+                        src="/cursumi.svg"
                         className="h-8 w-auto"
                         width={40}
                         height={40}
