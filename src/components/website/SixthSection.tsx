@@ -14,10 +14,10 @@ export const SixthSection = () => {
           </h2>
           <div className="mt-6 space-y-4 sm:flex sm:space-x-5 sm:space-y-0">
             <Link
-              href="#"
+              href="/cursos"
               className="flex items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-purple-600 to-purple-600 bg-origin-border px-4 py-3 text-base font-medium text-white shadow-sm hover:from-purple-700 hover:to-purple-700"
             >
-              Más información
+              Ver Cursos
             </Link>
             <Link
               href="#"

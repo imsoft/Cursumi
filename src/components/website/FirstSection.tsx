@@ -38,7 +38,7 @@ export const FirstSection = () => {
                     Empezar Ahora
                   </Link>
                   <Link
-                    href="#"
+                    href="/cursos"
                     className="flex items-center justify-center rounded-md border border-transparent bg-purple-500 bg-opacity-60 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-opacity-70 sm:px-8"
                   >
                     Ver cursos
