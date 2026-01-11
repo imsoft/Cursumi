@@ -1,0 +1,267 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { PageHeader } from "@/components/shared/page-header";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/shared/empty-state";
+import { Users, UserPlus } from "lucide-react";
+
+type UserRole = "student" | "instructor" | "admin";
+type UserStatus = "active" | "inactive" | "suspended";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  status: UserStatus;
+  createdAt: string;
+  coursesCount?: number;
+}
+
+const mockUsers: User[] = [
+  {
+    id: "1",
+    name: "Brandon García",
+    email: "brandon@example.com",
+    role: "student",
+    status: "active",
+    createdAt: "15 de octubre, 2024",
+    coursesCount: 3,
+  },
+  {
+    id: "2",
+    name: "Ana López",
+    email: "ana@example.com",
+    role: "instructor",
+    status: "active",
+    createdAt: "10 de septiembre, 2024",
+    coursesCount: 5,
+  },
+  {
+    id: "3",
+    name: "Carlos Méndez",
+    email: "carlos@example.com",
+    role: "instructor",
+    status: "active",
+    createdAt: "5 de noviembre, 2024",
+    coursesCount: 2,
+  },
+  {
+    id: "4",
+    name: "María González",
+    email: "maria@example.com",
+    role: "student",
+    status: "inactive",
+    createdAt: "20 de agosto, 2024",
+    coursesCount: 1,
+  },
+  {
+    id: "5",
+    name: "Luis Herrera",
+    email: "luis@example.com",
+    role: "instructor",
+    status: "active",
+    createdAt: "1 de septiembre, 2024",
+    coursesCount: 8,
+  },
+];
+
+const roleOptions = [
+  { value: "all", label: "Todos" },
+  { value: "student", label: "Estudiantes" },
+  { value: "instructor", label: "Instructores" },
+  { value: "admin", label: "Administradores" },
+];
+
+const statusOptions = [
+  { value: "all", label: "Todos" },
+  { value: "active", label: "Activos" },
+  { value: "inactive", label: "Inactivos" },
+  { value: "suspended", label: "Suspendidos" },
+];
+
+const getRoleBadge = (role: UserRole) => {
+  const variants: Record<UserRole, "default" | "outline"> = {
+    student: "outline",
+    instructor: "default",
+    admin: "default",
+  };
+  const labels: Record<UserRole, string> = {
+    student: "Estudiante",
+    instructor: "Instructor",
+    admin: "Admin",
+  };
+  return { variant: variants[role], label: labels[role] };
+};
+
+const getStatusBadge = (status: UserStatus) => {
+  const colors: Record<UserStatus, string> = {
+    active: "bg-green-600 hover:bg-green-700",
+    inactive: "bg-gray-600 hover:bg-gray-700",
+    suspended: "bg-red-600 hover:bg-red-700",
+  };
+  const labels: Record<UserStatus, string> = {
+    active: "Activo",
+    inactive: "Inactivo",
+    suspended: "Suspendido",
+  };
+  return { color: colors[status], label: labels[status] };
+};
+
+export default function AdminUsersPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const filteredUsers = useMemo(() => {
+    return mockUsers
+      .filter((user) => {
+        const searchLower = searchTerm.trim().toLowerCase();
+        return (
+          user.name.toLowerCase().includes(searchLower) ||
+          user.email.toLowerCase().includes(searchLower)
+        );
+      })
+      .filter((user) => {
+        if (roleFilter === "all") return true;
+        return user.role === roleFilter;
+      })
+      .filter((user) => {
+        if (statusFilter === "all") return true;
+        return user.status === statusFilter;
+      });
+  }, [searchTerm, roleFilter, statusFilter]);
+
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setRoleFilter("all");
+    setStatusFilter("all");
+  };
+
+  const hasActiveFilters = searchTerm.trim() !== "" || roleFilter !== "all" || statusFilter !== "all";
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Gestión de Usuarios"
+        description="Administra todos los usuarios de la plataforma Cursumi"
+        action={{
+          label: "Nuevo usuario",
+          href: "/admin/users/new",
+          variant: "default",
+          icon: <UserPlus className="mr-2 h-4 w-4" />,
+        }}
+      />
+
+      <Card className="border border-border bg-card/90">
+        <CardContent className="p-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="flex-1">
+              <Input
+                label="Buscar usuario"
+                placeholder="Buscar por nombre o email..."
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+            </div>
+            <div className="grid w-full gap-4 md:w-auto md:grid-cols-2">
+              <Select
+                label="Rol"
+                options={roleOptions}
+                value={roleFilter}
+                onChange={(event) => setRoleFilter(event.target.value)}
+              />
+              <Select
+                label="Estado"
+                options={statusOptions}
+                value={statusFilter}
+                onChange={(event) => setStatusFilter(event.target.value)}
+              />
+            </div>
+            <div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full"
+                disabled={!hasActiveFilters}
+                onClick={handleClearFilters}
+              >
+                Limpiar filtros
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {filteredUsers.length === 0 ? (
+        <EmptyState
+          title="No se encontraron usuarios"
+          description="Intenta ajustar los filtros de búsqueda."
+          icon={Users}
+          secondaryAction={
+            hasActiveFilters
+              ? {
+                  label: "Limpiar filtros",
+                  onClick: handleClearFilters,
+                  variant: "outline",
+                }
+              : undefined
+          }
+        />
+      ) : (
+        <Card className="border border-border bg-card/90">
+          <CardHeader>
+            <CardTitle>
+              Usuarios ({filteredUsers.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {filteredUsers.map((user) => {
+                const roleBadge = getRoleBadge(user.role);
+                const statusBadge = getStatusBadge(user.status);
+                return (
+                  <div
+                    key={user.id}
+                    className="flex flex-col gap-4 rounded-lg border border-border bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-foreground">{user.name}</h3>
+                        <Badge variant={roleBadge.variant}>{roleBadge.label}</Badge>
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold text-white ${statusBadge.color}`}>
+                          {statusBadge.label}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                        <span>Registrado: {user.createdAt}</span>
+                        {user.coursesCount !== undefined && (
+                          <span>{user.coursesCount} cursos</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm">
+                        Ver detalles
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        Editar
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
