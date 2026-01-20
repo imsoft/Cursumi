@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, Edit2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon } from "lucide-react";
+import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon } from "lucide-react";
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
 
 interface LessonEditorProps {
   lesson: CourseLesson;
@@ -39,6 +40,9 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const [newCriterionText, setNewCriterionText] = useState("");
   const [newResourceTitle, setNewResourceTitle] = useState("");
   const [newResourceUrl, setNewResourceUrl] = useState("");
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const [, setUploadId] = useState<string | null>(null);
   
   // Estados para crear pregunta de opción múltiple
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
@@ -295,14 +299,35 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                         accept="video/*"
                         className="hidden"
                         id="video-upload"
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            // En producción, aquí subirías el archivo
-                            console.log("Video seleccionado:", file.name);
-                            setVideoUrl(file.name);
-                            // Detectar duración automáticamente
                             detectVideoDuration(file);
+                            setUploadingVideo(true);
+                            setVideoError(null);
+                            try {
+                              const { uploadUrl, uploadId } = await createMuxUploadUrl("*");
+                              setUploadId(uploadId);
+                              const res = await fetch(uploadUrl, {
+                                method: "PUT",
+                                headers: { "Content-Type": file.type },
+                                body: file,
+                              });
+                              if (!res.ok) {
+                                throw new Error(`Mux upload failed: ${res.statusText}`);
+                              }
+                              // Nota: en un flujo real se consultaría el asset para obtener playback_id
+                              // Recuperar playbackId después del procesado
+                              const playback = await getMuxPlaybackId(uploadId);
+                              setVideoUrl(playback.playbackUrl);
+                            } catch (err) {
+                              setVideoError(err instanceof Error ? err.message : "Error al subir video");
+                              setVideoUrl("");
+                              setDuration("");
+                              setUploadId(null);
+                            } finally {
+                              setUploadingVideo(false);
+                            }
                           }
                         }}
                       />
@@ -332,6 +357,9 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                             <span className="text-sm text-foreground">{videoUrl}</span>
                             {isDetectingDuration && (
                               <span className="text-xs text-muted-foreground">Detectando duración...</span>
+                            )}
+                            {uploadingVideo && (
+                              <span className="text-xs text-muted-foreground">Subiendo a Mux...</span>
                             )}
                             {duration && !isDetectingDuration && (
                               <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground ml-auto">
@@ -375,6 +403,9 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Puedes usar enlaces de YouTube, Vimeo u otras plataformas de video
                     </p>
+                    {videoError && (
+                      <p className="mt-2 text-xs text-destructive">{videoError}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -832,4 +863,3 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
     </Card>
   );
 };
-

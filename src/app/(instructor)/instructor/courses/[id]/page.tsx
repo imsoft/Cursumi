@@ -1,51 +1,16 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit, Users, Calendar, BookOpen } from "lucide-react";
+import { ArrowLeft, Edit, Users } from "lucide-react";
+import { getCourseDetailForUser } from "@/app/actions/course-actions";
 
-// Mock data - en producción vendría de una API
-const mockCourseData: Record<string, any> = {
-  "1": {
-    id: "1",
-    title: "Introducción a JavaScript",
-    description: "Aprende los fundamentos de JavaScript desde cero. Este curso te llevará desde los conceptos básicos hasta la programación orientada a objetos y el manejo del DOM.",
-    modality: "virtual",
-    status: "published",
-    category: "Programación",
-    level: "Principiante",
-    studentsCount: 28,
-    nextSession: "25 de noviembre · 7:00 PM",
-    price: 1500,
-    startDate: "20 de octubre, 2024",
-    duration: "8 semanas",
-    instructorName: "Brandon García",
-    imageUrl: "/api/placeholder/800/400",
-  },
-  "2": {
-    id: "2",
-    title: "Copywriting efectivo",
-    description: "Domina el arte de escribir textos persuasivos que convierten. Aprende técnicas probadas de copywriting para marketing digital.",
-    modality: "virtual",
-    status: "draft",
-    category: "Marketing",
-    level: "Intermedio",
-    studentsCount: 12,
-    price: 2000,
-    startDate: "1 de diciembre, 2024",
-    duration: "6 semanas",
-    instructorName: "Brandon García",
-    imageUrl: "/api/placeholder/800/400",
-  },
-};
-
-export default function CourseDetailPage() {
-  const params = useParams();
-  const courseId = params.id as string;
-  const course = mockCourseData[courseId];
+export default async function CourseDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const course = await getCourseDetailForUser(params.id).catch(() => null);
 
   if (!course) {
     return (
@@ -94,7 +59,7 @@ export default function CourseDetailPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
-            <Link href={`/instructor/courses/${courseId}/edit`}>
+            <Link href={`/instructor/courses/${course.id}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
               Editar
             </Link>
@@ -116,7 +81,7 @@ export default function CourseDetailPage() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Nivel</p>
-                  <p className="text-foreground">{course.level}</p>
+                  <p className="text-foreground">{course.level ?? "—"}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Modalidad</p>
@@ -124,18 +89,18 @@ export default function CourseDetailPage() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Duración</p>
-                  <p className="text-foreground">{course.duration}</p>
+                  <p className="text-foreground">{course.duration ?? "—"}</p>
                 </div>
                 {course.startDate && (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Fecha de inicio</p>
-                    <p className="text-foreground">{course.startDate}</p>
+                    <p className="text-foreground">{course.startDate.toISOString()}</p>
                   </div>
                 )}
                 {course.nextSession && (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Próxima sesión</p>
-                    <p className="text-foreground">{course.nextSession}</p>
+                    <p className="text-foreground">{course.nextSession.toISOString()}</p>
                   </div>
                 )}
               </div>
@@ -153,11 +118,11 @@ export default function CourseDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-2xl font-bold text-foreground">{course.studentsCount}</p>
+                <p className="text-2xl font-bold text-foreground">{course._count.enrollments}</p>
                 <p className="text-sm text-muted-foreground">Estudiantes inscritos</p>
               </div>
               <Button variant="outline" className="w-full" asChild>
-                <Link href={`/instructor/courses/${courseId}/students`}>
+                <Link href={`/instructor/courses/${course.id}/students`}>
                   Ver todos los alumnos
                 </Link>
               </Button>
@@ -170,13 +135,13 @@ export default function CourseDetailPage() {
             </CardHeader>
             <CardContent className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href={`/instructor/courses/${courseId}/edit`}>
+                <Link href={`/instructor/courses/${course.id}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
                   Editar curso
                 </Link>
               </Button>
               <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href={`/instructor/courses/${courseId}/students`}>
+                <Link href={`/instructor/courses/${course.id}/students`}>
                   <Users className="mr-2 h-4 w-4" />
                   Ver alumnos
                 </Link>
@@ -188,4 +153,3 @@ export default function CourseDetailPage() {
     </div>
   );
 }
-

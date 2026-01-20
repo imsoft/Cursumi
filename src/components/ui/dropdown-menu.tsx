@@ -26,6 +26,13 @@ interface DropdownMenuItemProps {
   asChild?: boolean;
 }
 
+type ClickableElementProps = {
+  onClick?: (event: React.MouseEvent) => void;
+  className?: string;
+};
+
+type ClickableElement = React.ReactElement<ClickableElementProps>;
+
 const DropdownMenuContext = createContext<{
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -66,13 +73,14 @@ export const DropdownMenuTrigger = ({ children, className, asChild }: DropdownMe
   const { open, setOpen } = context;
   
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
+    const child = children as ClickableElement;
+    return React.cloneElement(child, {
       onClick: (event: React.MouseEvent) => {
         event.stopPropagation();
         setOpen(!open);
-        (children.props as any)?.onClick?.(event);
+        child.props.onClick?.(event);
       },
-    } as any);
+    });
   }
   
   return (
@@ -120,13 +128,14 @@ export const DropdownMenuItem = ({ children, onSelect, className, asChild }: Dro
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
-      className: `block w-full px-4 py-2.5 text-left text-sm text-foreground transition-colors hover:bg-muted focus:bg-muted focus:outline-none ${(children.props as any)?.className || ""}`,
+    const child = children as ClickableElement;
+    return React.cloneElement(child, {
+      className: `block w-full px-4 py-2.5 text-left text-sm text-foreground transition-colors hover:bg-muted focus:bg-muted focus:outline-none ${child.props.className || ""}`,
       onClick: (event: React.MouseEvent) => {
         handleClick();
-        (children.props as any)?.onClick?.(event);
+        child.props.onClick?.(event);
       },
-    } as any);
+    });
   }
 
   return (
@@ -139,4 +148,3 @@ export const DropdownMenuItem = ({ children, onSelect, className, asChild }: Dro
     </button>
   );
 };
-

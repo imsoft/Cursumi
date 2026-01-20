@@ -1,77 +1,40 @@
-"use client";
-
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { AppSidebar } from "@/components/dashboard/app-sidebar";
-import {
-  LayoutDashboard,
-  Users,
-  BookOpenCheck,
-  Settings,
-  BarChart3,
-  DollarSign,
-  Calculator,
-} from "lucide-react";
-
-const adminNavItems = [
-  {
-    title: "Dashboard",
-    href: "/admin",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Usuarios",
-    href: "/admin/users",
-    icon: Users,
-  },
-  {
-    title: "Cursos",
-    href: "/admin/courses",
-    icon: BookOpenCheck,
-  },
-  {
-    title: "Analíticas",
-    href: "/admin/analytics",
-    icon: BarChart3,
-  },
-  {
-    title: "Finanzas",
-    href: "/admin/finances",
-    icon: DollarSign,
-  },
-  {
-    title: "Simulador",
-    href: "/admin/simulator",
-    icon: Calculator,
-  },
-  {
-    title: "Configuración",
-    href: "/admin/settings",
-    icon: Settings,
-  },
-];
+import { auth } from "@/lib/auth";
+import { AdminShell } from "@/components/layouts/admin-shell";
+import { getUserRole } from "@/lib/user-service";
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default async function AdminLayout({ children }: AdminLayoutProps) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  const role = await getUserRole(session.user.id);
+  if (role !== "admin") {
+    redirect("/dashboard");
+  }
+
+  const userName = session.user.name || "Admin";
+  const userInitials =
+    session.user.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "AD";
+
   return (
-    <SidebarProvider>
-      <AppSidebar navItems={adminNavItems} title="Cursumi Admin" />
-      <SidebarInset>
-        <DashboardHeader
-          user={{ name: "Admin", initials: "AD" }}
-        />
-        <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-          {children}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <AdminShell userName={userName} userInitials={userInitials}>
+      {children}
+    </AdminShell>
   );
 }

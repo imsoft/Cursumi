@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -22,54 +22,6 @@ interface User {
   createdAt: string;
   coursesCount?: number;
 }
-
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "Brandon García",
-    email: "brandon@example.com",
-    role: "student",
-    status: "active",
-    createdAt: "15 de octubre, 2024",
-    coursesCount: 3,
-  },
-  {
-    id: "2",
-    name: "Ana López",
-    email: "ana@example.com",
-    role: "instructor",
-    status: "active",
-    createdAt: "10 de septiembre, 2024",
-    coursesCount: 5,
-  },
-  {
-    id: "3",
-    name: "Carlos Méndez",
-    email: "carlos@example.com",
-    role: "instructor",
-    status: "active",
-    createdAt: "5 de noviembre, 2024",
-    coursesCount: 2,
-  },
-  {
-    id: "4",
-    name: "María González",
-    email: "maria@example.com",
-    role: "student",
-    status: "inactive",
-    createdAt: "20 de agosto, 2024",
-    coursesCount: 1,
-  },
-  {
-    id: "5",
-    name: "Luis Herrera",
-    email: "luis@example.com",
-    role: "instructor",
-    status: "active",
-    createdAt: "1 de septiembre, 2024",
-    coursesCount: 8,
-  },
-];
 
 const roleOptions = [
   { value: "all", label: "Todos" },
@@ -117,9 +69,32 @@ export default function AdminUsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/admin/users", { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("No pudimos cargar usuarios");
+        }
+        const data = (await res.json()) as Omit<User, "status">[];
+        const withStatus = data.map((u) => ({ ...u, status: "active" as UserStatus }));
+        setUsers(withStatus);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al cargar usuarios");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const filteredUsers = useMemo(() => {
-    return mockUsers
+    return users
       .filter((user) => {
         const searchLower = searchTerm.trim().toLowerCase();
         return (
@@ -157,6 +132,7 @@ export default function AdminUsersPage() {
           icon: <UserPlus className="mr-2 h-4 w-4" />,
         }}
       />
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Card className="border border-border bg-card/90">
         <CardContent className="p-4">
@@ -198,7 +174,11 @@ export default function AdminUsersPage() {
         </CardContent>
       </Card>
 
-      {filteredUsers.length === 0 ? (
+      {loading ? (
+        <Card className="border border-border bg-card/90">
+          <CardContent className="py-12 text-center text-muted-foreground">Cargando usuarios...</CardContent>
+        </Card>
+      ) : filteredUsers.length === 0 ? (
         <EmptyState
           title="No se encontraron usuarios"
           description="Intenta ajustar los filtros de búsqueda."
@@ -264,4 +244,3 @@ export default function AdminUsersPage() {
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/stores/auth-store";
 
@@ -17,18 +17,15 @@ export function SessionProvider({
 }: SessionProviderProps) {
   const { session, isPending } = useAuth();
   const router = useRouter();
-  const [isChecking, setIsChecking] = useState(true);
+  const shouldRedirect = requireAuth && !isPending && !session;
 
   useEffect(() => {
-    if (!isPending) {
-      setIsChecking(false);
-      if (requireAuth && !session) {
-        router.push(redirectTo);
-      }
+    if (shouldRedirect) {
+      router.push(redirectTo);
     }
-  }, [session, isPending, requireAuth, redirectTo, router]);
+  }, [shouldRedirect, redirectTo, router]);
 
-  if (isPending || isChecking) {
+  if (isPending) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
@@ -39,10 +36,9 @@ export function SessionProvider({
     );
   }
 
-  if (requireAuth && !session) {
+  if (shouldRedirect) {
     return null; // El redirect se maneja en el useEffect
   }
 
   return <>{children}</>;
 }
-

@@ -1,7 +1,5 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import Link from "next/link";
+import { listStudentsForCourse, getCourseDetailForUser } from "@/app/actions/course-actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,80 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { ArrowLeft, Search, Mail, Calendar } from "lucide-react";
 
-// Mock data - en producción vendría de una API
-const mockCourseData: Record<string, any> = {
-  "1": {
-    id: "1",
-    title: "Introducción a JavaScript",
-    studentsCount: 28,
-  },
-  "2": {
-    id: "2",
-    title: "Copywriting efectivo",
-    studentsCount: 12,
-  },
-};
-
-const mockStudents: Record<string, any[]> = {
-  "1": [
-    {
-      id: "1",
-      name: "Ana López",
-      email: "ana@example.com",
-      enrolledDate: "15 de octubre, 2024",
-      progress: 45,
-      status: "active",
-    },
-    {
-      id: "2",
-      name: "Carlos Pérez",
-      email: "carlos@example.com",
-      enrolledDate: "16 de octubre, 2024",
-      progress: 78,
-      status: "active",
-    },
-    {
-      id: "3",
-      name: "María González",
-      email: "maria@example.com",
-      enrolledDate: "17 de octubre, 2024",
-      progress: 23,
-      status: "active",
-    },
-    {
-      id: "4",
-      name: "Juan Martínez",
-      email: "juan@example.com",
-      enrolledDate: "18 de octubre, 2024",
-      progress: 90,
-      status: "active",
-    },
-  ],
-  "2": [
-    {
-      id: "1",
-      name: "Laura Sánchez",
-      email: "laura@example.com",
-      enrolledDate: "1 de noviembre, 2024",
-      progress: 60,
-      status: "active",
-    },
-    {
-      id: "2",
-      name: "Roberto Díaz",
-      email: "roberto@example.com",
-      enrolledDate: "2 de noviembre, 2024",
-      progress: 35,
-      status: "active",
-    },
-  ],
-};
-
-export default function CourseStudentsPage() {
-  const params = useParams();
-  const courseId = params.id as string;
-  const course = mockCourseData[courseId];
-  const students = mockStudents[courseId] || [];
+export default async function CourseStudentsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const course = await getCourseDetailForUser(params.id).catch(() => null);
+  const students = course ? await listStudentsForCourse(course.id).catch(() => []) : [];
 
   if (!course) {
     return (
@@ -106,7 +37,7 @@ export default function CourseStudentsPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
-          <Link href={`/instructor/courses/${courseId}`}>
+          <Link href={`/instructor/courses/${course.id}`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver al curso
           </Link>
@@ -115,7 +46,7 @@ export default function CourseStudentsPage() {
 
       <div>
         <h1 className="text-3xl font-semibold text-foreground mb-2">
-          Alumnos de "{course.title}"
+          Alumnos de {course.title}
         </h1>
         <p className="text-muted-foreground">
           {students.length} {students.length === 1 ? "alumno inscrito" : "alumnos inscritos"}
@@ -131,6 +62,7 @@ export default function CourseStudentsPage() {
               <Input
                 placeholder="Buscar alumno..."
                 className="pl-9"
+                aria-label="Buscar alumno"
               />
             </div>
           </div>
@@ -150,7 +82,7 @@ export default function CourseStudentsPage() {
                   <div className="flex items-center gap-4">
                     <Avatar className="h-10 w-10">
                       <div className="flex h-full w-full items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary">
-                        {student.name
+                        {(student.name || student.email)
                           .split(" ")
                           .map((n: string) => n[0])
                           .join("")
@@ -159,14 +91,14 @@ export default function CourseStudentsPage() {
                       </div>
                     </Avatar>
                     <div>
-                      <p className="font-semibold text-foreground">{student.name}</p>
+                      <p className="font-semibold text-foreground">{student.name || "Sin nombre"}</p>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Mail className="h-3 w-3" />
                         <span>{student.email}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                         <Calendar className="h-3 w-3" />
-                        <span>Inscrito: {student.enrolledDate}</span>
+                        <span>Inscrito: {new Date(student.enrolledDate).toLocaleDateString()}</span>
                       </div>
                     </div>
                   </div>
@@ -188,4 +120,3 @@ export default function CourseStudentsPage() {
     </div>
   );
 }
-

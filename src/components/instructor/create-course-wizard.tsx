@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect, useState, useTransition } from "react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { CourseBasicInfo } from "@/components/instructor/course-basic-info";
 import { CourseSectionsManager } from "@/components/instructor/course-sections-manager";
 import { CoursePricing } from "@/components/instructor/course-pricing";
 import { CourseFinalExamComponent } from "@/components/instructor/course-final-exam";
 import { CoursePreview } from "@/components/instructor/course-preview";
-import { CheckCircle2, Circle, ArrowRight, ArrowLeft, Save } from "lucide-react";
-import type { CourseFormData, CourseSection, CourseLesson } from "@/components/instructor/course-types";
+import { CheckCircle2, Save } from "lucide-react";
+import type { CourseFormData } from "@/components/instructor/course-types";
+import { createCourseDraft, publishCourse } from "@/app/actions/course-actions";
 
 const steps = [
   { id: "info", label: "Información básica", icon: CheckCircle2 },
@@ -21,8 +21,10 @@ const steps = [
   { id: "preview", label: "Vista previa", icon: CheckCircle2 },
 ];
 
-export const CreateCourseWizard = () => {
+export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormData }) => {
   const [currentStep, setCurrentStep] = useState("info");
+  const [isPending, startTransition] = useTransition();
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [courseData, setCourseData] = useState<CourseFormData>({
     title: "",
     description: "",
@@ -39,6 +41,12 @@ export const CreateCourseWizard = () => {
     imageUrl: "",
     sections: [],
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setCourseData(initialData);
+    }
+  }, [initialData]);
 
   const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
   const isFirstStep = currentStepIndex === 0;
@@ -67,13 +75,19 @@ export const CreateCourseWizard = () => {
   };
 
   const handleSaveDraft = () => {
-    console.log("Guardar borrador:", courseData);
-    alert("Curso guardado como borrador");
+    setStatusMessage(null);
+    startTransition(async () => {
+      await createCourseDraft(courseData);
+      setStatusMessage("Curso guardado como borrador");
+    });
   };
 
   const handlePublish = () => {
-    console.log("Publicar curso:", courseData);
-    alert("Curso publicado exitosamente");
+    setStatusMessage(null);
+    startTransition(async () => {
+      await publishCourse(courseData);
+      setStatusMessage("Curso publicado exitosamente");
+    });
   };
 
   const getStepStatus = (stepId: string) => {
@@ -98,7 +112,6 @@ export const CreateCourseWizard = () => {
           <div className="flex items-center justify-between gap-2 overflow-x-auto">
             {steps.map((step, index) => {
               const status = getStepStatus(step.id);
-              const StepIcon = step.icon;
               
               return (
                 <div key={step.id} className="flex flex-1 items-center">
@@ -149,12 +162,18 @@ export const CreateCourseWizard = () => {
             variant="outline"
             onClick={handleSaveDraft}
             className="flex items-center gap-2"
+            disabled={isPending}
           >
             <Save className="h-4 w-4" />
-            Guardar como borrador
+            {isPending ? "Guardando..." : "Guardar como borrador"}
           </Button>
         </CardHeader>
         <CardContent className="p-6">
+          {statusMessage && (
+            <div className="mb-4 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
+              {statusMessage}
+            </div>
+          )}
           <Tabs value={currentStep} onValueChange={setCurrentStep} className="w-full">
             <TabsContent value="info" className="mt-0">
               <CourseBasicInfo
@@ -205,4 +224,3 @@ export const CreateCourseWizard = () => {
     </div>
   );
 };
-

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
@@ -27,41 +27,102 @@ const profileSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-const mockProfile = {
-  fullName: "Brandon García",
-  email: "brandon@example.com",
-  phone: "+52 55 1234 5678",
-  city: "Ciudad de México",
-  bio: "Estudiante apasionado por el aprendizaje continuo y el desarrollo profesional. Me encanta explorar nuevas tecnologías y habilidades.",
-  website: "",
-  linkedinUrl: "",
-  instagramUrl: "",
-  avatar: "BG",
-  joinDate: "Enero 2024",
-  coursesCompleted: 5,
-  coursesInProgress: 3,
-};
-
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState<{
+    fullName: string;
+    email: string;
+    joinDate: string;
+    avatar: string | null;
+    coursesCompleted: number;
+    coursesInProgress: number;
+  }>({
+    fullName: "",
+    email: "",
+    joinDate: "",
+    avatar: null,
+    coursesCompleted: 0,
+    coursesInProgress: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<ProfileFormValues>({
     resolver: createZodResolver(profileSchema),
     defaultValues: {
-      fullName: mockProfile.fullName,
-      email: mockProfile.email,
-      phone: mockProfile.phone,
-      city: mockProfile.city,
-      bio: mockProfile.bio,
-      website: mockProfile.website,
-      linkedinUrl: mockProfile.linkedinUrl,
-      instagramUrl: mockProfile.instagramUrl,
+      fullName: "",
+      email: "",
+      phone: "",
+      city: "",
+      bio: "",
+      website: "",
+      linkedinUrl: "",
+    instagramUrl: "",
     },
   });
+  const initials =
+    profile.fullName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "U";
 
-  const onSubmit = (values: ProfileFormValues) => {
-    console.log("Profile updated", values);
-    setIsEditing(false);
-    // Aquí iría la lógica para guardar en el backend
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/me/profile", { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("No pudimos cargar tu perfil");
+        }
+        const data = await res.json();
+        setProfile({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          joinDate: data.joinDate || "",
+          avatar: data.avatar || null,
+          coursesCompleted: data.coursesCompleted || 0,
+          coursesInProgress: data.coursesInProgress || 0,
+        });
+        form.reset({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          phone: "",
+          city: "",
+          bio: "",
+          website: "",
+          linkedinUrl: "",
+          instagramUrl: "",
+        });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al cargar el perfil");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProfile();
+  }, [form]);
+
+  const onSubmit = async (values: ProfileFormValues) => {
+    try {
+      setError(null);
+      const res = await fetch("/api/me/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName: values.fullName, email: values.email }),
+      });
+      if (!res.ok) {
+        throw new Error("No pudimos actualizar tu perfil");
+      }
+      setProfile((prev) => ({
+        ...prev,
+        fullName: values.fullName,
+        email: values.email,
+      }));
+      setIsEditing(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al actualizar el perfil");
+    }
   };
 
   return (
@@ -70,6 +131,7 @@ export default function ProfilePage() {
         title="Mi perfil"
         description="Gestiona tu información personal y preferencias de cuenta."
       />
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Resumen del perfil */}
@@ -77,25 +139,27 @@ export default function ProfilePage() {
           <CardHeader className="flex flex-col items-center gap-4 pb-4">
             <Avatar className="h-24 w-24">
               <div className="flex h-full w-full items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground">
-                {mockProfile.avatar}
+                {initials}
               </div>
             </Avatar>
             <div className="text-center">
-              <h3 className="text-xl font-bold text-foreground">{mockProfile.fullName}</h3>
+              <h3 className="text-xl font-bold text-foreground">{profile.fullName || "Estudiante"}</h3>
               <p className="text-sm text-muted-foreground">Estudiante</p>
             </div>
             <div className="flex flex-wrap justify-center gap-2">
-              <Badge variant="outline">Miembro desde {mockProfile.joinDate}</Badge>
+              <Badge variant="outline">
+                {profile.joinDate ? `Miembro desde ${new Date(profile.joinDate).toLocaleDateString("es-MX")}` : "Miembro"}
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 border-t border-border pt-4">
             <div className="space-y-2 text-center">
               <div>
-                <p className="text-2xl font-bold text-foreground">{mockProfile.coursesCompleted}</p>
+                <p className="text-2xl font-bold text-foreground">{profile.coursesCompleted}</p>
                 <p className="text-xs text-muted-foreground">Cursos completados</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{mockProfile.coursesInProgress}</p>
+                <p className="text-2xl font-bold text-foreground">{profile.coursesInProgress}</p>
                 <p className="text-xs text-muted-foreground">Cursos en progreso</p>
               </div>
             </div>
@@ -264,4 +328,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { calculateStripeStandard, calculateStripeConnect } from "@/lib/stripe-calculator";
 import { formatPriceMXN } from "@/lib/utils";
-import { ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 
 export function PricingComparison() {
   const [amount, setAmount] = useState(1000);

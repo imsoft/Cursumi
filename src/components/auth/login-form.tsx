@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { signIn } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
@@ -180,10 +181,11 @@ export const LoginForm = () => {
               }
             }}
           >
-            <img
+            <Image
               src="/logos/google.svg"
               alt="Google"
-              className="h-5 w-5"
+              width={20}
+              height={20}
             />
             Continuar con Google
           </Button>
@@ -192,4 +194,3 @@ export const LoginForm = () => {
     </Card>
   );
 };
-

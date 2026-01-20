@@ -3,6 +3,24 @@ import { ContactInfo } from "@/components/contact/contact-info";
 import { ContactFAQ } from "@/components/contact/contact-faq";
 import { ContactCTA } from "@/components/contact/contact-cta";
 import { Card } from "@/components/ui/card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contacto | Cursumi",
+  description: "Escríbenos para soporte, dudas o propuestas sobre tus cursos en Cursumi.",
+  openGraph: {
+    title: "Contacto | Cursumi",
+    description: "Comunícate con el equipo Cursumi para soporte y dudas.",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Contacto Cursumi",
+      },
+    ],
+  },
+};
 
 export default function ContactPage() {
   return (
@@ -31,4 +49,3 @@ export default function ContactPage() {
     </div>
   );
 }
-

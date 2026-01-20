@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { signUp, signIn } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
@@ -61,7 +62,7 @@ export const RegisterForm = () => {
       // Si el registro fue exitoso, redirigir a la página de verificación de email
       // Better Auth enviará automáticamente el correo de verificación
       router.push("/verify-email-sent");
-    } catch (err) {
+    } catch {
       setError("Ocurrió un error inesperado. Por favor, intenta de nuevo.");
     }
   };
@@ -179,10 +180,11 @@ export const RegisterForm = () => {
               }
             }}
           >
-            <img
+            <Image
               src="/logos/google.svg"
               alt="Google"
-              className="h-5 w-5"
+              width={20}
+              height={20}
             />
             Continuar con Google
           </Button>
@@ -191,4 +193,3 @@ export const RegisterForm = () => {
     </Card>
   );
 };
-

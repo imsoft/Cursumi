@@ -126,6 +126,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -166,6 +167,78 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InstructorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  headline: 'headline',
+  bio: 'bio',
+  city: 'city',
+  specialties: 'specialties',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CourseScalarFieldEnum = {
+  id: 'id',
+  instructorId: 'instructorId',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  level: 'level',
+  modality: 'modality',
+  city: 'city',
+  location: 'location',
+  courseType: 'courseType',
+  startDate: 'startDate',
+  duration: 'duration',
+  price: 'price',
+  maxStudents: 'maxStudents',
+  imageUrl: 'imageUrl',
+  status: 'status',
+  nextSession: 'nextSession',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CourseSectionScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  title: 'title',
+  description: 'description',
+  order: 'order'
+};
+
+exports.Prisma.LessonScalarFieldEnum = {
+  id: 'id',
+  sectionId: 'sectionId',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  duration: 'duration',
+  order: 'order',
+  videoUrl: 'videoUrl',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LessonProgressScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  lessonId: 'lessonId',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.EnrollmentScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  status: 'status',
+  progress: 'progress',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -180,13 +253,52 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  student: 'student',
+  instructor: 'instructor',
+  admin: 'admin'
+};
 
+exports.Modality = exports.$Enums.Modality = {
+  virtual: 'virtual',
+  presencial: 'presencial'
+};
+
+exports.CourseType = exports.$Enums.CourseType = {
+  fechado: 'fechado',
+  ondemand: 'ondemand'
+};
+
+exports.CourseStatus = exports.$Enums.CourseStatus = {
+  draft: 'draft',
+  published: 'published',
+  archived: 'archived'
+};
+
+exports.LessonType = exports.$Enums.LessonType = {
+  video: 'video',
+  text: 'text',
+  quiz: 'quiz',
+  assignment: 'assignment'
+};
+
+exports.EnrollmentStatus = exports.$Enums.EnrollmentStatus = {
+  active: 'active',
+  completed: 'completed',
+  cancelled: 'cancelled'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  InstructorProfile: 'InstructorProfile',
+  Course: 'Course',
+  CourseSection: 'CourseSection',
+  Lesson: 'Lesson',
+  LessonProgress: 'LessonProgress',
+  Enrollment: 'Enrollment'
 };
 
 /**

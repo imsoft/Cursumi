@@ -1,4 +1,4 @@
-export type CourseCategory = "programacion" | "marketing" | "diseno" | "negocios";
+export type CourseCategory = string;
 export type CourseModality = "virtual" | "presencial";
 
 export interface Course {
@@ -11,4 +11,3 @@ export interface Course {
   duration: string;
   imageUrl: string;
 }
-

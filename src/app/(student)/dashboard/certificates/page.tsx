@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CertificatesHeader } from "@/components/student/certificates-header";
 import { CertificateCard } from "@/components/student/certificate-card";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -9,48 +9,6 @@ import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Certificate } from "@/components/student/types";
 import { Award } from "lucide-react";
-
-const mockCertificates: Certificate[] = [
-  {
-    id: "cert-1",
-    courseId: "4",
-    courseTitle: "Marketing de contenidos",
-    studentName: "Brandon García",
-    instructorName: "Luis Herrera",
-    issueDate: "30 de septiembre, 2024",
-    certificateNumber: "CUR-2024-001234",
-    category: "Marketing",
-    modality: "virtual",
-    hours: 40,
-    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "cert-2",
-    courseId: "6",
-    courseTitle: "Fotografía digital",
-    studentName: "Brandon García",
-    instructorName: "María González",
-    issueDate: "15 de septiembre, 2024",
-    certificateNumber: "CUR-2024-001189",
-    category: "Diseño",
-    modality: "presencial",
-    hours: 32,
-    imageUrl: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "cert-3",
-    courseId: "8",
-    courseTitle: "Copywriting persuasivo",
-    studentName: "Brandon García",
-    instructorName: "Laura Fernández",
-    issueDate: "25 de agosto, 2024",
-    certificateNumber: "CUR-2024-001045",
-    category: "Marketing",
-    modality: "virtual",
-    hours: 24,
-    imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80",
-  },
-];
 
 const categoryOptions = [
   { value: "all", label: "Todas" },
@@ -70,9 +28,31 @@ export default function CertificatesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [modalityFilter, setModalityFilter] = useState("all");
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/me/certificates", { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("No pudimos cargar tus certificados");
+        }
+        const data = (await res.json()) as Certificate[];
+        setCertificates(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al cargar certificados");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const filteredCertificates = useMemo(() => {
-    return mockCertificates
+    return certificates
       .filter((cert) => {
         const searchLower = searchTerm.trim().toLowerCase();
         return (
@@ -102,6 +82,7 @@ export default function CertificatesPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <CertificatesHeader />
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <div className="rounded-2xl border border-border bg-card/90 p-4 shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -141,7 +122,11 @@ export default function CertificatesPage() {
         </div>
       </div>
 
-      {filteredCertificates.length === 0 ? (
+      {loading ? (
+        <div className="rounded-xl border border-border bg-card/90 p-6 text-center text-muted-foreground">
+          Cargando certificados...
+        </div>
+      ) : filteredCertificates.length === 0 ? (
         <EmptyState
           title="No encontramos certificados"
           description="Completa más cursos para obtener certificados."
@@ -178,4 +163,3 @@ export default function CertificatesPage() {
     </div>
   );
 }
-

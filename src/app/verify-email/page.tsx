@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,7 +44,18 @@ export default async function VerifyEmailPage({
       headers: await headers(),
     });
 
-    if (!result || (result as any).error) {
+    const hasError =
+      typeof result === "object" &&
+      result !== null &&
+      "error" in result &&
+      typeof (result as { error?: unknown }).error === "object";
+
+    if (!result || hasError) {
+      const errorMessage =
+        hasError && typeof (result as { error?: { message?: string } }).error?.message === "string"
+          ? (result as { error?: { message?: string } }).error?.message
+          : null;
+
       return (
         <div className="flex min-h-screen items-center justify-center px-4">
           <Card className="w-full max-w-md">
@@ -56,7 +66,7 @@ export default async function VerifyEmailPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                {(result as any)?.error?.message || "El token de verificación no es válido o ha expirado."}
+                {errorMessage || "El token de verificación no es válido o ha expirado."}
               </p>
               <Button asChild className="w-full">
                 <Link href="/login">Ir al inicio de sesión</Link>
@@ -110,4 +120,3 @@ export default async function VerifyEmailPage({
     );
   }
 }
-

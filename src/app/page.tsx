@@ -9,6 +9,26 @@ import { HowItWorks } from "@/components/how-it-works";
 import { InstructorSection } from "@/components/instructor-section";
 import { Testimonials } from "@/components/testimonials";
 
+export const metadata = {
+  title: "Formación presencial y online para crecer con expertos",
+  description:
+    "Descubre cursos virtuales y presenciales con instructores verificados. Aprende habilidades prácticas con Cursumi.",
+  openGraph: {
+    title: "Cursumi | Cursos virtuales y presenciales",
+    description: "Aprende con instructores expertos en cursos online y presenciales.",
+    url: "https://cursumi.com/",
+    type: "website",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Cursumi - Formación presencial y online",
+      },
+    ],
+  },
+};
+
 export default async function Home() {
   // Verificar si el usuario tiene sesión activa
   try {

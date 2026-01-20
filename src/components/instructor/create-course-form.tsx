@@ -1,10 +1,11 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -80,6 +81,8 @@ const courseTypeOptions = [
 ];
 
 export const CreateCourseForm = () => {
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<CreateCourseFormValues>({
     resolver: createZodResolver(createCourseSchema),
     defaultValues: {
@@ -98,11 +101,27 @@ export const CreateCourseForm = () => {
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const modalityValue = form.watch("modality");
 
-  const handleSubmit = form.handleSubmit((values) => {
-    console.log("Crear curso (mock)", values);
-    alert(`Curso creado (mock)${values.isDraft ? " - borrador" : ""}`);
+  const handleSubmit = form.handleSubmit(async (values) => {
+    try {
+      setError(null);
+      setStatusMessage(null);
+      const res = await fetch("/api/instructor/courses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "No pudimos crear el curso");
+      }
+      setStatusMessage(values.isDraft ? "Curso guardado como borrador" : "Curso publicado");
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al crear el curso");
+    }
   });
 
   const handleDraft = () => {
@@ -122,6 +141,8 @@ export const CreateCourseForm = () => {
         <p className="mt-2 text-sm text-muted-foreground">
           Configura los detalles de tu curso virtual o presencial en Cursumi.
         </p>
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        {statusMessage && <p className="text-sm text-green-600">{statusMessage}</p>}
       </CardHeader>
       <CardContent className="space-y-6 px-6 pb-6 pt-0">
         <form className="space-y-6" onSubmit={handlePublish}>
@@ -433,4 +454,3 @@ const ImagePreviewSection = ({ imageUrl, onFileSelect, onClear }: ImagePreviewSe
     </div>
   );
 };
-

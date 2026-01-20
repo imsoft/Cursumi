@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cursumi Frontend
 
-## Getting Started
+Frontend en Next.js 16 (App Router) con autenticación Better Auth + Prisma/Neon y UI basada en shadcn/tailwind v4.
 
-First, run the development server:
+## Requisitos
+- Node 20+
+- pnpm
+- Variables de entorno (`.env.local`): usa `.env.example` como referencia.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Scripts
+- `pnpm dev` – desarrollo
+- `pnpm lint` – lint (pasa en limpio)
+- `pnpm build` / `pnpm start` – producción
+- `pnpm db:generate` – generar cliente Prisma (usa `prisma/schema.prisma`)
+- `pnpm db:migrate` o `pnpm db:push` – aplicar schema a Neon
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuración rápida
+1) Copia `.env.example` a `.env.local` y rellena:
+   - `DATABASE_URL` (Neon PostgreSQL)
+   - `NEXT_PUBLIC_APP_URL` (ej: http://localhost:3000)
+   - Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`)
+   - Google OAuth (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`)
+   - Mux (`MUX_TOKEN_ID`, `MUX_TOKEN_SECRET`) para uploads de video
+2) Instala deps: `pnpm install`
+3) Genera Prisma: `pnpm db:generate` y migra/push la BD.
+4) Ejecuta: `pnpm dev`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentación útil
+- `docs/AUTH_SETUP.md` – flujo de auth, Resend, Google.
+- `docs/PROJECT_STRUCTURE.md` – organización de rutas y componentes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notas
+- Rutas protegidas: layouts de Admin/Instructor/Student validan sesión con Better Auth en server y el proxy (`src/proxy.ts`) revisa cookie de sesión.
+- Datos de dashboards y algunas vistas siguen mock; conecta todo a Prisma/Neon antes de producción.
+- Mux: `src/app/actions/mux-actions.ts` expone `createMuxUploadUrl` (requiere env). Úsalo desde el frontend para obtener URL de carga directa.

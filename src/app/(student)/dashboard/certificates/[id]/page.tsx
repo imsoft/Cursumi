@@ -1,56 +1,11 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Certificate } from "@/components/student/types";
 import { ArrowLeft, Download, Share2, Calendar, Award, Clock, User, Check } from "lucide-react";
-
-// Mock data - En producción esto vendría de una API
-const mockCertificates: Record<string, Certificate> = {
-  "cert-1": {
-    id: "cert-1",
-    courseId: "4",
-    courseTitle: "Marketing de contenidos",
-    studentName: "Brandon García",
-    instructorName: "Luis Herrera",
-    issueDate: "30 de septiembre, 2024",
-    certificateNumber: "CUR-2024-001234",
-    category: "Marketing",
-    modality: "virtual",
-    hours: 40,
-    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-  },
-  "cert-2": {
-    id: "cert-2",
-    courseId: "6",
-    courseTitle: "Fotografía digital",
-    studentName: "Brandon García",
-    instructorName: "María González",
-    issueDate: "15 de septiembre, 2024",
-    certificateNumber: "CUR-2024-001189",
-    category: "Diseño",
-    modality: "presencial",
-    hours: 32,
-    imageUrl: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?auto=format&fit=crop&w=800&q=80",
-  },
-  "cert-3": {
-    id: "cert-3",
-    courseId: "8",
-    courseTitle: "Copywriting persuasivo",
-    studentName: "Brandon García",
-    instructorName: "Laura Fernández",
-    issueDate: "25 de agosto, 2024",
-    certificateNumber: "CUR-2024-001045",
-    category: "Marketing",
-    modality: "virtual",
-    hours: 24,
-    imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80",
-  },
-};
 
 interface CertificatePageProps {
   params: Promise<{ id: string }>;
@@ -58,10 +13,27 @@ interface CertificatePageProps {
 
 export default function CertificatePage({ params }: CertificatePageProps) {
   const { id } = use(params);
-  const certificate = mockCertificates[id];
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/me/certificates/${id}`, { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("Certificado no encontrado");
+        }
+        const data = (await res.json()) as Certificate;
+        setCertificate(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "No pudimos cargar el certificado");
+      }
+    };
+    load();
+  }, [id]);
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -102,7 +74,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
     }
   };
 
-  if (!certificate) {
+  if (error || !certificate) {
     return (
       <div className="mx-auto max-w-4xl space-y-6">
         <Link href="/dashboard/certificates">
@@ -117,7 +89,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
             <div className="text-center">
               <h2 className="text-xl font-semibold text-foreground">Certificado no encontrado</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                El certificado que buscas no existe o no tienes acceso a él.
+                {error || "El certificado que buscas no existe o no tienes acceso a él."}
               </p>
             </div>
             <Link href="/dashboard/certificates">
@@ -288,4 +260,3 @@ export default function CertificatePage({ params }: CertificatePageProps) {
     </div>
   );
 }
-

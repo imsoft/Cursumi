@@ -14,7 +14,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { LogOut, LucideIcon } from "lucide-react";
@@ -42,7 +41,7 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild tooltip={title}>
               <Link href={navItems[0]?.href || "/"} className="flex items-center gap-2">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-transparent group-data-[collapsible=icon]:size-8">
+                <div className="hidden aspect-square size-8 items-center justify-center rounded-lg bg-transparent group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:size-8">
                   <Image
                     src="/logos/cursumi.svg"
                     alt="Cursumi"
@@ -55,7 +54,7 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
                   <Image
                     src="/logos/cursumi.svg"
                     alt="Cursumi"
-                    width={100}
+                    width={120}
                     height={32}
                     className="h-6 w-auto"
                   />
@@ -129,4 +128,3 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
     </Sidebar>
   );
 }
-

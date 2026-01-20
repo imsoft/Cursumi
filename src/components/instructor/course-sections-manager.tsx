@@ -180,7 +180,6 @@ export const CourseSectionsManager = ({
           <div className="space-y-4">
             {sections.map((section, sectionIndex) => {
               const isExpanded = expandedSections.has(section.id);
-              const LessonIcon = getLessonIcon;
 
               return (
                 <Card key={section.id} className="border border-border bg-card/90">
@@ -375,4 +374,3 @@ export const CourseSectionsManager = ({
     </div>
   );
 };
-

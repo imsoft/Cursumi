@@ -1,4 +1,6 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/incompatible-library */
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -90,8 +92,6 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
   // Actualizar schema cuando cambia la modalidad
   useEffect(() => {
     if (modalityValue !== modality) {
-      const newSchema = createBasicInfoSchema(modalityValue);
-      // Re-validar con el nuevo schema
       form.clearErrors();
       if (modalityValue === "virtual") {
         form.setValue("city", "");
@@ -347,4 +347,3 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
     </div>
   );
 };
-

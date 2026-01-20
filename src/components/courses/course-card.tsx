@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Course } from "./types";
@@ -42,11 +43,12 @@ export const CourseCard = ({ course }: CourseCardProps) => {
         </div>
       </CardContent>
       <CardFooter className="mt-auto border-t border-border/70 px-6 py-4">
-        <Button variant="outline" size="sm" className="w-full justify-between">
-          Ver detalles
+        <Button variant="outline" size="sm" className="w-full justify-between" asChild>
+          <Link href={`/dashboard/explore/${course.id}`}>
+            Ver detalles
+          </Link>
         </Button>
       </CardFooter>
     </Card>
   );
 };
-

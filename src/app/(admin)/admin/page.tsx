@@ -1,60 +1,44 @@
-"use client";
-
+import { loadAdminStats } from "@/app/actions/admin-actions";
+import { PageHeader } from "@/components/shared/page-header";
+import { StatsGrid, StatItem } from "@/components/shared/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { StatsGrid, StatItem } from "@/components/shared/stats-card";
 import { Users, BookOpenCheck, TrendingUp, DollarSign } from "lucide-react";
 
-const stats: StatItem[] = [
-  {
-    title: "Total de usuarios",
-    value: "1,234",
-    description: "+12% desde el mes pasado",
-    icon: Users,
-    iconColor: "text-blue-600",
-    trend: {
-      value: "+12% desde el mes pasado",
-      isPositive: true,
-    },
-  },
-  {
-    title: "Cursos activos",
-    value: "89",
-    description: "+5 nuevos esta semana",
-    icon: BookOpenCheck,
-    iconColor: "text-green-600",
-    trend: {
-      value: "+5 nuevos esta semana",
-      isPositive: true,
-    },
-  },
-  {
-    title: "Ingresos",
-    value: "$45,231",
-    description: "+20% desde el mes pasado",
-    icon: DollarSign,
-    iconColor: "text-purple-600",
-    trend: {
-      value: "+20% desde el mes pasado",
-      isPositive: true,
-    },
-  },
-  {
-    title: "Tasa de crecimiento",
-    value: "+18.2%",
-    description: "Comparado al mes anterior",
-    icon: TrendingUp,
-    iconColor: "text-orange-600",
-    trend: {
-      value: "Comparado al mes anterior",
-      isPositive: true,
-    },
-  },
-];
+export default async function AdminDashboardPage() {
+  const statsData = await loadAdminStats();
 
-import { PageHeader } from "@/components/shared/page-header";
+  const stats: StatItem[] = [
+    {
+      title: "Total de usuarios",
+      value: statsData.totalUsers.toString(),
+      description: "Usuarios registrados",
+      icon: Users,
+      iconColor: "text-blue-600",
+    },
+    {
+      title: "Cursos publicados",
+      value: statsData.publishedCourses.toString(),
+      description: `${statsData.draftCourses} en borrador`,
+      icon: BookOpenCheck,
+      iconColor: "text-green-600",
+    },
+    {
+      title: "Inscripciones",
+      value: statsData.totalEnrollments.toString(),
+      description: "Total de enrollments",
+      icon: TrendingUp,
+      iconColor: "text-orange-600",
+    },
+    {
+      title: "Ingresos estimados",
+      value: `$${statsData.estimatedRevenue.toLocaleString("es-MX")}`,
+      description: "Precio * inscripciones",
+      icon: DollarSign,
+      iconColor: "text-purple-600",
+    },
+  ];
 
-export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
@@ -70,25 +54,8 @@ export default function AdminDashboardPage() {
             <CardTitle>Actividad reciente</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">Nuevo curso publicado</p>
-                  <p className="text-xs text-muted-foreground">Hace 2 horas</p>
-                </div>
-                <Button variant="outline" size="sm">
-                  Ver
-                </Button>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">Nuevo instructor registrado</p>
-                  <p className="text-xs text-muted-foreground">Hace 5 horas</p>
-                </div>
-                <Button variant="outline" size="sm">
-                  Ver
-                </Button>
-              </div>
+            <div className="space-y-4 text-sm text-muted-foreground">
+              <p>Conecta un feed real de actividad cuando haya eventos.</p>
             </div>
           </CardContent>
         </Card>
@@ -113,4 +80,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-

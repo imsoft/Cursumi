@@ -1,11 +1,12 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { Button } from "@/components/ui/button";
 import { formatPriceMXN } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Eye, Save, Send } from "lucide-react";
+import { ArrowLeft, Save, Send } from "lucide-react";
 import type { CourseFormData } from "./course-types";
 
 interface CoursePreviewProps {
@@ -182,4 +183,3 @@ export const CoursePreview = ({
     </div>
   );
 };
-

@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Upload, FileText, Image, File } from "lucide-react";
+import { Upload } from "lucide-react";
 import type { CourseFile } from "./course-types";
 
 interface FileUploaderProps {
@@ -114,4 +113,3 @@ export const FileUploader = ({
     </div>
   );
 };
-

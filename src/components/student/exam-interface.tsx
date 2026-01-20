@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ArrowLeft, Send } from "lucide-react";
-import type { CourseFinalExam, QuizQuestion } from "@/components/instructor/course-types";
+import type { CourseFinalExam } from "@/components/instructor/course-types";
 
 interface ExamInterfaceProps {
   exam: CourseFinalExam;
@@ -27,6 +27,29 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
   const answeredQuestions = Object.keys(answers).length;
   const progress = (answeredQuestions / totalQuestions) * 100;
 
+  const handleSubmitExam = useCallback(() => {
+    setIsSubmitting(true);
+    let totalPoints = 0;
+    let earnedPoints = 0;
+
+    exam.questions.forEach((question) => {
+      totalPoints += question.points || 0;
+      const userAnswer = answers[question.id];
+      if (userAnswer !== undefined && userAnswer === question.correctAnswer) {
+        earnedPoints += question.points || 0;
+      }
+    });
+
+    const percentage = totalPoints > 0 ? (earnedPoints / totalPoints) * 100 : 0;
+    const passed = percentage >= exam.passingScore;
+    onSubmit(answers, percentage, passed);
+  }, [answers, exam, onSubmit]);
+
+  const handleAutoSubmit = useCallback(() => {
+    if (isSubmitting) return;
+    handleSubmitExam();
+  }, [isSubmitting, handleSubmitExam]);
+
   // Timer
   useEffect(() => {
     if (timeRemaining === null || timeRemaining <= 0) return;
@@ -42,7 +65,7 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeRemaining]);
+  }, [timeRemaining, handleAutoSubmit]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -64,36 +87,6 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
-  };
-
-  const calculateScore = () => {
-    let correctAnswers = 0;
-    let totalPoints = 0;
-    let earnedPoints = 0;
-
-    exam.questions.forEach((question) => {
-      totalPoints += question.points || 0;
-      const userAnswer = answers[question.id];
-      if (userAnswer !== undefined && userAnswer === question.correctAnswer) {
-        correctAnswers++;
-        earnedPoints += question.points || 0;
-      }
-    });
-
-    const percentage = totalPoints > 0 ? (earnedPoints / totalPoints) * 100 : 0;
-    return { correctAnswers, totalQuestions, percentage, earnedPoints, totalPoints };
-  };
-
-  const handleAutoSubmit = () => {
-    if (isSubmitting) return;
-    handleSubmitExam();
-  };
-
-  const handleSubmitExam = () => {
-    setIsSubmitting(true);
-    const { percentage } = calculateScore();
-    const passed = percentage >= exam.passingScore;
-    onSubmit(answers, percentage, passed);
   };
 
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;

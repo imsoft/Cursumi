@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatPriceMXN } from "@/lib/utils";
 import { PageHeader } from "@/components/shared/page-header";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
-import { BookOpenCheck, Search } from "lucide-react";
+import { BookOpenCheck } from "lucide-react";
 
 type CourseStatus = "published" | "draft" | "archived" | "pending";
 type Modality = "virtual" | "presencial";
@@ -25,64 +25,6 @@ interface AdminCourse {
   price: number;
   createdAt: string;
 }
-
-const mockCourses: AdminCourse[] = [
-  {
-    id: "1",
-    title: "Introducción a JavaScript",
-    instructorName: "Ana López",
-    category: "Programación",
-    modality: "virtual",
-    status: "published",
-    studentsCount: 45,
-    price: 299,
-    createdAt: "15 de octubre, 2024",
-  },
-  {
-    id: "2",
-    title: "Diseño UX práctico",
-    instructorName: "Natalia Soto",
-    category: "Diseño",
-    modality: "presencial",
-    status: "published",
-    studentsCount: 32,
-    price: 499,
-    createdAt: "10 de octubre, 2024",
-  },
-  {
-    id: "3",
-    title: "Marketing digital avanzado",
-    instructorName: "Luis Herrera",
-    category: "Marketing",
-    modality: "virtual",
-    status: "pending",
-    studentsCount: 0,
-    price: 399,
-    createdAt: "5 de noviembre, 2024",
-  },
-  {
-    id: "4",
-    title: "Bootcamp Full Stack",
-    instructorName: "Carlos Méndez",
-    category: "Programación",
-    modality: "presencial",
-    status: "draft",
-    studentsCount: 0,
-    price: 1299,
-    createdAt: "1 de noviembre, 2024",
-  },
-  {
-    id: "5",
-    title: "Fotografía profesional",
-    instructorName: "María González",
-    category: "Diseño",
-    modality: "presencial",
-    status: "published",
-    studentsCount: 28,
-    price: 599,
-    createdAt: "20 de septiembre, 2024",
-  },
-];
 
 const statusOptions = [
   { value: "all", label: "Todos" },
@@ -112,9 +54,31 @@ export default function AdminCoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [modalityFilter, setModalityFilter] = useState("all");
+  const [courses, setCourses] = useState<AdminCourse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/admin/courses", { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("No pudimos cargar los cursos");
+        }
+        const data = (await res.json()) as AdminCourse[];
+        setCourses(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al cargar cursos");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const filteredCourses = useMemo(() => {
-    return mockCourses
+    return courses
       .filter((course) => {
         const searchLower = searchTerm.trim().toLowerCase();
         return (
@@ -147,6 +111,7 @@ export default function AdminCoursesPage() {
         title="Gestión de Cursos"
         description="Administra y revisa todos los cursos de la plataforma"
       />
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Card className="border border-border bg-card/90">
         <CardContent className="p-4">
@@ -188,7 +153,11 @@ export default function AdminCoursesPage() {
         </CardContent>
       </Card>
 
-      {filteredCourses.length === 0 ? (
+      {loading ? (
+        <Card className="border border-border bg-card/90">
+          <CardContent className="py-12 text-center text-muted-foreground">Cargando cursos...</CardContent>
+        </Card>
+      ) : filteredCourses.length === 0 ? (
         <EmptyState
           title="No se encontraron cursos"
           description="Intenta ajustar los filtros de búsqueda."
@@ -250,4 +219,3 @@ export default function AdminCoursesPage() {
     </div>
   );
 }
-

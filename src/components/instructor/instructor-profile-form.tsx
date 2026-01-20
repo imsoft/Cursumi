@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,29 +30,70 @@ const instructorProfileSchema = z.object({
 
 export type InstructorProfileFormValues = z.infer<typeof instructorProfileSchema>;
 
-const defaultValues: InstructorProfileFormValues = {
-  fullName: "Brandon García",
-  email: "brandon@cursumi.com",
-  city: "CDMX",
-  headline: "Instructor de desarrollo web",
-  bio: "Soy Brandon, instructor con 8 años de experiencia entregando bootcamps de programación y liderazgo técnico.",
-  specialties: "JavaScript, React, Node.js",
-  teachingYears: 8,
-  website: "https://cursumi.com",
-  linkedinUrl: "https://linkedin.com/in/brandon",
-  instagramUrl: "https://instagram.com/brandon",
-};
-
 export const InstructorProfileForm = () => {
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<InstructorProfileFormValues>({
     resolver: createZodResolver(instructorProfileSchema),
-    defaultValues,
+    defaultValues: {
+      fullName: "",
+      email: "",
+      city: "",
+      headline: "",
+      bio: "",
+      specialties: "",
+      teachingYears: undefined,
+      website: "",
+      linkedinUrl: "",
+      instagramUrl: "",
+    },
     mode: "onBlur",
   });
 
-  const onSubmit = (values: InstructorProfileFormValues) => {
-    console.log("Perfil actualizado (mock)", values);
-    alert("Perfil actualizado (mock)");
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch("/api/instructor/profile", { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error("No pudimos cargar tu perfil");
+        }
+        const data = await res.json();
+        form.reset({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          city: data.city || "",
+          headline: data.headline || "",
+          bio: data.bio || "",
+          specialties: data.specialties || "",
+          teachingYears: data.teachingYears || undefined,
+          website: data.website || "",
+          linkedinUrl: data.linkedinUrl || "",
+          instagramUrl: data.instagramUrl || "",
+        });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al cargar perfil");
+      }
+    };
+    load();
+  }, [form]);
+
+  const onSubmit = async (values: InstructorProfileFormValues) => {
+    try {
+      setError(null);
+      setStatusMessage(null);
+      const res = await fetch("/api/instructor/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "No pudimos actualizar el perfil");
+      }
+      setStatusMessage("Perfil actualizado");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al actualizar perfil");
+    }
   };
 
   return (
@@ -62,6 +103,8 @@ export const InstructorProfileForm = () => {
         <p className="text-sm text-muted-foreground">
           Actualiza tu información para que tus estudiantes te conozcan mejor.
         </p>
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        {statusMessage && <p className="text-sm text-green-600">{statusMessage}</p>}
       </CardHeader>
       <CardContent className="space-y-4 px-6 pb-8 pt-0">
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -147,5 +190,4 @@ export const InstructorProfileForm = () => {
       </CardContent>
     </Card>
   );
-};
-
+}

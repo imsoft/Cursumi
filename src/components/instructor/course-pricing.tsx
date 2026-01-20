@@ -74,6 +74,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
     } as PricingFormData,
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const courseType = form.watch("courseType");
   const showStartDate = isPresencial || (isVirtual && courseType === "fechado");
 
@@ -250,11 +251,13 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
               <p className="mt-1 text-xs text-muted-foreground">
                 Número máximo de estudiantes que pueden inscribirse
               </p>
-              {isPresencial && (form.formState.errors as any).maxStudents && (
-                <p className="mt-1 text-xs text-destructive">
-                  {(form.formState.errors as any).maxStudents.message}
-                </p>
-              )}
+              {isPresencial &&
+                "maxStudents" in form.formState.errors &&
+                form.formState.errors.maxStudents && (
+                  <p className="mt-1 text-xs text-destructive">
+                    {form.formState.errors.maxStudents.message}
+                  </p>
+                )}
             </div>
           </div>
         )}
@@ -273,4 +276,3 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
     </div>
   );
 };
-

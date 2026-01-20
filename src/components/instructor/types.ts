@@ -6,6 +6,8 @@ export type InstructorCourse = {
   studentsCount: number;
   nextSession?: string;
   category: string;
+  price?: number;
+  startDate?: string | null;
 };
 
 export type UpcomingSession = {
@@ -15,4 +17,3 @@ export type UpcomingSession = {
   modality: "virtual" | "presencial";
   city?: string;
 };
-

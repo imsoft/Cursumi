@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -16,6 +17,7 @@ const statusLabelMap: Record<InstructorCourse["status"], { label: string; varian
 };
 
 export const CourseListItem = ({ course }: CourseListItemProps) => {
+  const [archiving, setArchiving] = useState(false);
   const statusLabel = statusLabelMap[course.status];
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
@@ -48,14 +50,22 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
             <DropdownMenuItem asChild>
               <Link href={`/instructor/courses/${course.id}/students`}>Ver alumnos</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem 
-              onSelect={() => {
-                // En producción, aquí harías la llamada a la API para archivar
-                console.log("Archivar curso:", course.id);
-                alert("Curso archivado (mock)");
+            <DropdownMenuItem
+              onSelect={async () => {
+                if (archiving) return;
+                try {
+                  setArchiving(true);
+                  await fetch(`/api/instructor/courses/${course.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status: "archived" }),
+                  });
+                } finally {
+                  setArchiving(false);
+                }
               }}
             >
-              Archivar
+              {archiving ? "Archivando..." : "Archivar"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -63,4 +73,3 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
     </div>
   );
 };
-

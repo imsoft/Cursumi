@@ -99,6 +99,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -139,6 +140,78 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InstructorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  headline: 'headline',
+  bio: 'bio',
+  city: 'city',
+  specialties: 'specialties',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CourseScalarFieldEnum = {
+  id: 'id',
+  instructorId: 'instructorId',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  level: 'level',
+  modality: 'modality',
+  city: 'city',
+  location: 'location',
+  courseType: 'courseType',
+  startDate: 'startDate',
+  duration: 'duration',
+  price: 'price',
+  maxStudents: 'maxStudents',
+  imageUrl: 'imageUrl',
+  status: 'status',
+  nextSession: 'nextSession',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CourseSectionScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  title: 'title',
+  description: 'description',
+  order: 'order'
+};
+
+exports.Prisma.LessonScalarFieldEnum = {
+  id: 'id',
+  sectionId: 'sectionId',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  duration: 'duration',
+  order: 'order',
+  videoUrl: 'videoUrl',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LessonProgressScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  lessonId: 'lessonId',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.EnrollmentScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  status: 'status',
+  progress: 'progress',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -153,13 +226,52 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  student: 'student',
+  instructor: 'instructor',
+  admin: 'admin'
+};
 
+exports.Modality = exports.$Enums.Modality = {
+  virtual: 'virtual',
+  presencial: 'presencial'
+};
+
+exports.CourseType = exports.$Enums.CourseType = {
+  fechado: 'fechado',
+  ondemand: 'ondemand'
+};
+
+exports.CourseStatus = exports.$Enums.CourseStatus = {
+  draft: 'draft',
+  published: 'published',
+  archived: 'archived'
+};
+
+exports.LessonType = exports.$Enums.LessonType = {
+  video: 'video',
+  text: 'text',
+  quiz: 'quiz',
+  assignment: 'assignment'
+};
+
+exports.EnrollmentStatus = exports.$Enums.EnrollmentStatus = {
+  active: 'active',
+  completed: 'completed',
+  cancelled: 'cancelled'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  InstructorProfile: 'InstructorProfile',
+  Course: 'Course',
+  CourseSection: 'CourseSection',
+  Lesson: 'Lesson',
+  LessonProgress: 'LessonProgress',
+  Enrollment: 'Enrollment'
 };
 /**
  * Create the Client
@@ -169,10 +281,10 @@ const config = {
   "clientVersion": "7.1.0",
   "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
   "activeProvider": "postgresql",
-  "inlineSchema": "// Prisma Schema para Better Auth con Neon PostgreSQL\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n// Modelos requeridos por Better Auth\nmodel User {\n  id            String   @id @default(cuid())\n  name          String?\n  email         String   @unique\n  emailVerified Boolean  @default(false)\n  image         String?\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n\n  accounts Account[]\n  sessions Session[]\n}\n\nmodel Account {\n  id                   String    @id @default(cuid())\n  userId               String\n  accountId            String\n  providerId           String\n  accessToken          String?   @db.Text\n  refreshToken         String?   @db.Text\n  idToken              String?   @db.Text\n  expiresAt            DateTime?\n  accessTokenExpiresAt DateTime?\n  scope                String?\n  password             String?\n  createdAt            DateTime  @default(now())\n  updatedAt            DateTime  @updatedAt\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([providerId, accountId])\n  @@index([userId])\n}\n\nmodel Session {\n  id        String   @id @default(cuid())\n  userId    String\n  expiresAt DateTime\n  token     String   @unique\n  ipAddress String?\n  userAgent String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([token])\n}\n\nmodel Verification {\n  id         String   @id @default(cuid())\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier, value])\n}\n"
+  "inlineSchema": "// Prisma Schema para Better Auth con Neon PostgreSQL\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n// Modelos requeridos por Better Auth\nmodel User {\n  id            String   @id @default(cuid())\n  name          String?\n  email         String   @unique\n  emailVerified Boolean  @default(false)\n  image         String?\n  role          Role     @default(student)\n  createdAt     DateTime @default(now())\n  updatedAt     DateTime @updatedAt\n\n  accounts          Account[]\n  sessions          Session[]\n  instructorProfile InstructorProfile?\n  instructorCourses Course[]           @relation(\"InstructorCourses\")\n  enrollments       Enrollment[]       @relation(\"StudentEnrollments\")\n}\n\nmodel Account {\n  id                   String    @id @default(cuid())\n  userId               String\n  accountId            String\n  providerId           String\n  accessToken          String?   @db.Text\n  refreshToken         String?   @db.Text\n  idToken              String?   @db.Text\n  expiresAt            DateTime?\n  accessTokenExpiresAt DateTime?\n  scope                String?\n  password             String?\n  createdAt            DateTime  @default(now())\n  updatedAt            DateTime  @updatedAt\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([providerId, accountId])\n  @@index([userId])\n}\n\nmodel Session {\n  id        String   @id @default(cuid())\n  userId    String\n  expiresAt DateTime\n  token     String   @unique\n  ipAddress String?\n  userAgent String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([token])\n}\n\nmodel Verification {\n  id         String   @id @default(cuid())\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier, value])\n}\n\nenum Role {\n  student\n  instructor\n  admin\n}\n\n// Perfil opcional para instructores\nmodel InstructorProfile {\n  id          String   @id @default(cuid())\n  userId      String   @unique\n  headline    String?\n  bio         String?\n  city        String?\n  specialties String? // CSV simple de categorías/habilidades\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel Course {\n  id           String       @id @default(cuid())\n  instructorId String\n  title        String\n  description  String\n  category     String\n  level        String?\n  modality     Modality\n  city         String?\n  location     String?\n  courseType   CourseType\n  startDate    DateTime?\n  duration     String?\n  price        Int\n  maxStudents  Int?\n  imageUrl     String?\n  status       CourseStatus @default(draft)\n  nextSession  DateTime?\n  createdAt    DateTime     @default(now())\n  updatedAt    DateTime     @updatedAt\n\n  instructor  User            @relation(\"InstructorCourses\", fields: [instructorId], references: [id], onDelete: Cascade)\n  sections    CourseSection[]\n  enrollments Enrollment[]\n\n  @@index([instructorId])\n  @@index([status])\n  @@index([category])\n}\n\nmodel CourseSection {\n  id          String  @id @default(cuid())\n  courseId    String\n  title       String\n  description String?\n  order       Int\n\n  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)\n  lessons Lesson[]\n\n  @@index([courseId, order])\n}\n\nmodel Lesson {\n  id          String     @id @default(cuid())\n  sectionId   String\n  title       String\n  description String?\n  type        LessonType\n  duration    String?\n  order       Int\n  videoUrl    String?\n  content     String?\n  createdAt   DateTime   @default(now())\n  updatedAt   DateTime   @updatedAt\n\n  section  CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)\n  progress LessonProgress[]\n\n  @@index([sectionId, order])\n}\n\nmodel LessonProgress {\n  id           String   @id @default(cuid())\n  enrollmentId String\n  lessonId     String\n  completedAt  DateTime @default(now())\n\n  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)\n  lesson     Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)\n\n  @@unique([enrollmentId, lessonId])\n  @@index([lessonId])\n}\n\nmodel Enrollment {\n  id        String           @id @default(cuid())\n  courseId  String\n  studentId String\n  status    EnrollmentStatus @default(active)\n  progress  Int              @default(0)\n  createdAt DateTime         @default(now())\n  updatedAt DateTime         @updatedAt\n\n  course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)\n  student        User             @relation(\"StudentEnrollments\", fields: [studentId], references: [id], onDelete: Cascade)\n  lessonProgress LessonProgress[]\n\n  @@unique([courseId, studentId])\n  @@index([studentId])\n}\n\nenum Modality {\n  virtual\n  presencial\n}\n\nenum CourseType {\n  fechado\n  ondemand\n}\n\nenum CourseStatus {\n  draft\n  published\n  archived\n}\n\nenum LessonType {\n  video\n  text\n  quiz\n  assignment\n}\n\nenum EnrollmentStatus {\n  active\n  completed\n  cancelled\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"accessTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Verification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"instructorProfile\",\"kind\":\"object\",\"type\":\"InstructorProfile\",\"relationName\":\"InstructorProfileToUser\"},{\"name\":\"instructorCourses\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"InstructorCourses\"},{\"name\":\"enrollments\",\"kind\":\"object\",\"type\":\"Enrollment\",\"relationName\":\"StudentEnrollments\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"accessTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Verification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"InstructorProfile\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"headline\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"specialties\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"InstructorProfileToUser\"}],\"dbName\":null},\"Course\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"instructorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"modality\",\"kind\":\"enum\",\"type\":\"Modality\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"courseType\",\"kind\":\"enum\",\"type\":\"CourseType\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"duration\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"maxStudents\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"CourseStatus\"},{\"name\":\"nextSession\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"instructor\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"InstructorCourses\"},{\"name\":\"sections\",\"kind\":\"object\",\"type\":\"CourseSection\",\"relationName\":\"CourseToCourseSection\"},{\"name\":\"enrollments\",\"kind\":\"object\",\"type\":\"Enrollment\",\"relationName\":\"CourseToEnrollment\"}],\"dbName\":null},\"CourseSection\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"courseId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"course\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CourseToCourseSection\"},{\"name\":\"lessons\",\"kind\":\"object\",\"type\":\"Lesson\",\"relationName\":\"CourseSectionToLesson\"}],\"dbName\":null},\"Lesson\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sectionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"LessonType\"},{\"name\":\"duration\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"videoUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"section\",\"kind\":\"object\",\"type\":\"CourseSection\",\"relationName\":\"CourseSectionToLesson\"},{\"name\":\"progress\",\"kind\":\"object\",\"type\":\"LessonProgress\",\"relationName\":\"LessonToLessonProgress\"}],\"dbName\":null},\"LessonProgress\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"enrollmentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lessonId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"completedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"enrollment\",\"kind\":\"object\",\"type\":\"Enrollment\",\"relationName\":\"EnrollmentToLessonProgress\"},{\"name\":\"lesson\",\"kind\":\"object\",\"type\":\"Lesson\",\"relationName\":\"LessonToLessonProgress\"}],\"dbName\":null},\"Enrollment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"courseId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"EnrollmentStatus\"},{\"name\":\"progress\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"course\",\"kind\":\"object\",\"type\":\"Course\",\"relationName\":\"CourseToEnrollment\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"StudentEnrollments\"},{\"name\":\"lessonProgress\",\"kind\":\"object\",\"type\":\"LessonProgress\",\"relationName\":\"EnrollmentToLessonProgress\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_bg.js'),
