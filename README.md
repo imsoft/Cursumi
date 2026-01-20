@@ -1,35 +1,44 @@
-# Cursumi Frontend
+# Cursumi · Plataforma educativa (Frontend)
 
-Frontend en Next.js 16 (App Router) con autenticación Better Auth + Prisma/Neon y UI basada en shadcn/tailwind v4.
+Next.js 16 (App Router) + React 19 con autenticación Better Auth, base de datos en Neon (Prisma) y UI con shadcn/tailwind v4. Soporta video en Mux y subida de imágenes a Cloudinary.
 
 ## Requisitos
 - Node 20+
 - pnpm
-- Variables de entorno (`.env.local`): usa `.env.example` como referencia.
+- Variables de entorno (`.env`): usa `.env.example` como guía
 
-## Scripts
-- `pnpm dev` – desarrollo
-- `pnpm lint` – lint (pasa en limpio)
-- `pnpm build` / `pnpm start` – producción
-- `pnpm db:generate` – generar cliente Prisma (usa `prisma/schema.prisma`)
-- `pnpm db:migrate` o `pnpm db:push` – aplicar schema a Neon
-
-## Configuración rápida
-1) Copia `.env.example` a `.env.local` y rellena:
-   - `DATABASE_URL` (Neon PostgreSQL)
-   - `NEXT_PUBLIC_APP_URL` (ej: http://localhost:3000)
-   - Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`)
-   - Google OAuth (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`)
-   - Mux (`MUX_TOKEN_ID`, `MUX_TOKEN_SECRET`) para uploads de video
-2) Instala deps: `pnpm install`
-3) Genera Prisma: `pnpm db:generate` y migra/push la BD.
+## Setup rápido
+1) Copia `.env.example` a `.env` y completa:
+   - `DATABASE_URL` (Neon direct/pooler), `BETTER_AUTH_SECRET`
+   - `NEXT_PUBLIC_APP_URL` (ej: http://localhost:3000 o https://cursumi.com)
+   - Resend: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`
+   - Google OAuth: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+   - Mux video: `MUX_TOKEN_ID`, `MUX_TOKEN_SECRET`
+   - Cloudinary imágenes: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_UPLOAD_PRESET`
+2) Instala dependencias: `pnpm install`
+3) Genera cliente Prisma y aplica schema: `pnpm db:generate` + `pnpm prisma migrate deploy` (usa conexión directa de Neon para migrar) o `pnpm db:push`
 4) Ejecuta: `pnpm dev`
 
-## Documentación útil
-- `docs/AUTH_SETUP.md` – flujo de auth, Resend, Google.
-- `docs/PROJECT_STRUCTURE.md` – organización de rutas y componentes.
+## Scripts
+- `pnpm dev` – modo desarrollo (Turbopack)
+- `pnpm build` / `pnpm start` – build y arranque en producción (Turbopack desactivado en build via `NEXT_USE_TURBOPACK=0`)
+- `pnpm lint` – linting
+- `pnpm db:generate` – genera Prisma Client
+- `pnpm prisma migrate deploy` – aplica migraciones a la base
 
-## Notas
-- Rutas protegidas: layouts de Admin/Instructor/Student validan sesión con Better Auth en server y el proxy (`src/proxy.ts`) revisa cookie de sesión.
-- Datos de dashboards y algunas vistas siguen mock; conecta todo a Prisma/Neon antes de producción.
-- Mux: `src/app/actions/mux-actions.ts` expone `createMuxUploadUrl` (requiere env). Úsalo desde el frontend para obtener URL de carga directa.
+## Integraciones clave
+- **Auth:** Better Auth con Google + email/password. Endpoints en `/api/auth/*`.
+- **DB:** Prisma contra Neon. Modelos de cursos, secciones, lecciones, inscripciones y progreso.
+- **Video:** Mux (`src/app/actions/mux-actions.ts`, endpoints `/api/mux/*`).
+- **Imágenes:** Cloudinary, endpoint de firma en `/api/cloudinary/signature`.
+
+## Rutas y roles
+- Marketing: `/`, `/courses`, `/how-it-works`, `/instructors`, `/contact`
+- Estudiante: `/dashboard`, `/dashboard/explore`, `/dashboard/my-courses`, `/dashboard/certificates`, `/dashboard/profile`
+- Instructor: `/instructor`, `/instructor/courses`, `/instructor/earnings`, `/instructor/analytics`, `/instructor/profile`
+- Admin: `/admin` y subrutas (analytics, users, courses, finances, etc.)
+
+## Notas operativas
+- Usa la conexión **directa** de Neon para ejecutar migraciones; luego puedes dejar el pooler en producción.
+- Si desarrollas desde otro origen (app móvil/webview), ajusta CORS o usa el mismo dominio para cookies de sesión.
+- OG dinámico por curso disponible en `/api/og/course/[id]`.
