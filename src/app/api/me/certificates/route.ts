@@ -2,13 +2,47 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 
-function buildCertificateNumber(enrollmentId: string) {
-  return `CUR-${enrollmentId.slice(0, 8).toUpperCase()}`;
-}
-
 export async function GET() {
   try {
     const session = await requireSession();
+
+    // First try to get real certificates from DB
+    const dbCerts = await prisma.certificate.findMany({
+      where: { userId: session.user.id },
+      orderBy: { issuedAt: "desc" },
+      include: {
+        course: {
+          select: {
+            id: true,
+            title: true,
+            category: true,
+            modality: true,
+            duration: true,
+            instructor: { select: { name: true } },
+            imageUrl: true,
+          },
+        },
+      },
+    });
+
+    if (dbCerts.length > 0) {
+      const certificates = dbCerts.map((cert) => ({
+        id: cert.id,
+        courseId: cert.course.id,
+        courseTitle: cert.course.title,
+        studentName: session.user.name || "Estudiante",
+        instructorName: cert.course.instructor?.name || "Instructor",
+        issueDate: cert.issuedAt.toISOString(),
+        certificateNumber: cert.number,
+        category: cert.course.category,
+        modality: cert.course.modality,
+        hours: cert.course.duration ? parseInt(cert.course.duration, 10) || undefined : undefined,
+        imageUrl: cert.course.imageUrl || null,
+      }));
+      return NextResponse.json(certificates);
+    }
+
+    // Fallback: derive from completed enrollments (legacy)
     const enrollments = await prisma.enrollment.findMany({
       where: {
         studentId: session.user.id,
@@ -37,7 +71,7 @@ export async function GET() {
       studentName: session.user.name || "Estudiante",
       instructorName: enrollment.course.instructor?.name || "Instructor",
       issueDate: enrollment.updatedAt.toISOString(),
-      certificateNumber: buildCertificateNumber(enrollment.id),
+      certificateNumber: `CUR-${enrollment.id.slice(0, 8).toUpperCase()}`,
       category: enrollment.course.category,
       modality: enrollment.course.modality,
       hours: enrollment.course.duration ? parseInt(enrollment.course.duration, 10) || undefined : undefined,

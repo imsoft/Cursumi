@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getSessionSafe } from "@/lib/session";
 import { CourseTypes } from "@/components/course-types";
 import { FeaturedCourses } from "@/components/featured-courses";
 import { CTASection } from "@/components/cta-section";
@@ -30,20 +29,9 @@ export const metadata = {
 };
 
 export default async function Home() {
-  // Verificar si el usuario tiene sesión activa
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    // Si el usuario está autenticado, redirigir al dashboard
-    if (session) {
-      redirect("/dashboard");
-    }
-  } catch (error) {
-    // Si hay un error al verificar la sesión, continuar mostrando la página
-    // (puede ser un error de conexión, etc.)
-    console.error("Error al verificar sesión:", error);
+  const session = await getSessionSafe();
+  if (session) {
+    redirect("/dashboard");
   }
 
   return (

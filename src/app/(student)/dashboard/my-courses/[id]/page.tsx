@@ -1,40 +1,58 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getMyCourseDetail } from "@/app/actions/course-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Users, PlayCircle } from "lucide-react";
+import {
+  Calendar,
+  Users,
+  PlayCircle,
+  FileText,
+  HelpCircle,
+  ClipboardList,
+  CheckCircle,
+} from "lucide-react";
+import type { LessonType } from "@/generated/prisma";
 
-type SectionWithLessons = {
-  id: string;
-  title: string;
-  description: string | null;
-  lessons: {
-    id: string;
-    title: string;
-    duration: string | null;
-  }[];
+const lessonIcon = (type: LessonType) => {
+  switch (type) {
+    case "video": return <PlayCircle className="h-4 w-4 text-primary" />;
+    case "text": return <FileText className="h-4 w-4 text-primary" />;
+    case "quiz": return <HelpCircle className="h-4 w-4 text-primary" />;
+    case "assignment": return <ClipboardList className="h-4 w-4 text-primary" />;
+  }
 };
 
 export default async function MyCourseDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const detail = await getMyCourseDetail(params.id);
+  const { id: courseId } = await params;
+  const detail = await getMyCourseDetail(courseId);
   if (!detail) {
     redirect("/dashboard/my-courses");
   }
 
-  const { course, progress } = detail;
-  const sections = course.sections as SectionWithLessons[];
+  const { course, progress, lessonProgress } = detail as typeof detail & {
+    lessonProgress?: { lessonId: string }[];
+  };
+
+  const completedIds = new Set((lessonProgress ?? []).map((lp: { lessonId: string }) => lp.lessonId));
+
+  // Find first uncompleted lesson for "Continue" button
+  const allLessons = course.sections.flatMap((s) => s.lessons);
+  const nextLesson = allLessons.find((l) => !completedIds.has(l.id)) ?? allLessons[0];
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="underline">Mis cursos</span>
+        <Link href="/dashboard/my-courses" className="underline">
+          Mis cursos
+        </Link>
         <span>/</span>
         <span className="text-foreground">{course.title}</span>
       </div>
@@ -62,7 +80,7 @@ export default async function MyCourseDetailPage({
             {course.startDate && (
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <Calendar className="h-4 w-4" />
-                <span>Inicio: {course.startDate.toISOString()}</span>
+                <span>Inicio: {new Date(course.startDate).toLocaleDateString("es-MX")}</span>
               </div>
             )}
             <div className="flex items-center gap-2 text-sm text-foreground">
@@ -73,14 +91,17 @@ export default async function MyCourseDetailPage({
           <Separator />
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-foreground">Contenido del curso</h4>
-            {sections.length === 0 ? (
+            {course.sections.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 El curso aún no tiene secciones publicadas.
               </p>
             ) : (
               <div className="space-y-3">
-                {sections.map((section, sectionIndex) => (
-                  <div key={section.id} className="rounded-lg border border-border bg-muted/20 p-4">
+                {course.sections.map((section, sectionIndex) => (
+                  <div
+                    key={section.id}
+                    className="rounded-lg border border-border bg-muted/20 p-4"
+                  >
                     <div className="flex items-center gap-2">
                       <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
                         {sectionIndex + 1}
@@ -93,31 +114,46 @@ export default async function MyCourseDetailPage({
                       </div>
                     </div>
                     <div className="mt-3 space-y-2">
-                      {section.lessons.map((lesson) => (
-                        <div
-                          key={lesson.id}
-                          className="flex items-center gap-2 rounded-md border border-border/60 bg-background px-3 py-2 text-sm"
-                        >
-                          <PlayCircle className="h-4 w-4 text-primary" />
-                          <div className="flex-1">
-                            <p className="font-medium text-foreground">{lesson.title}</p>
-                            {lesson.duration && (
-                              <p className="text-xs text-muted-foreground">{lesson.duration}</p>
+                      {section.lessons.map((lesson) => {
+                        const done = completedIds.has(lesson.id);
+                        return (
+                          <Link
+                            key={lesson.id}
+                            href={`/dashboard/my-courses/${courseId}/lessons/${lesson.id}`}
+                            className="flex items-center gap-2 rounded-md border border-border/60 bg-background px-3 py-2 text-sm transition-colors hover:bg-muted"
+                          >
+                            {done ? (
+                              <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
+                            ) : (
+                              lessonIcon(lesson.type)
                             )}
-                          </div>
-                        </div>
-                      ))}
+                            <div className="flex-1">
+                              <p className="font-medium text-foreground">{lesson.title}</p>
+                              {lesson.duration && (
+                                <p className="text-xs text-muted-foreground">{lesson.duration}</p>
+                              )}
+                            </div>
+                            {done && (
+                              <span className="text-xs text-green-600">Completada</span>
+                            )}
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
               </div>
             )}
           </div>
-          <div className="flex justify-end">
-            <Button>
-              Continuar curso
-            </Button>
-          </div>
+          {nextLesson && (
+            <div className="flex justify-end">
+              <Button asChild>
+                <Link href={`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`}>
+                  {progress === 0 ? "Comenzar curso" : "Continuar curso"}
+                </Link>
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

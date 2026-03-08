@@ -11,12 +11,14 @@ interface StudentDashboardClientProps {
   name: string;
   courses: StudentCourse[];
   recommendations: Recommendation[];
+  hoursWatched?: string;
 }
 
 export function StudentDashboardClient({
   name,
   courses,
   recommendations,
+  hoursWatched = "0h",
 }: StudentDashboardClientProps) {
   const stats = [
     { title: "Cursos activos", value: courses.length, subtitle: "Actualmente en progreso" },
@@ -26,9 +28,9 @@ export function StudentDashboardClient({
       subtitle: "Total finalizados",
     },
     {
-      title: "Horas vistas",
-      value: "~",
-      subtitle: "Registra duración real para este dato",
+      title: "Horas aprendidas",
+      value: hoursWatched,
+      subtitle: "De lecciones completadas",
     },
     {
       title: "Próxima clase",

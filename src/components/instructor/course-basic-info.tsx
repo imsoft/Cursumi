@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ArrowRight, Upload, Monitor, MapPin } from "lucide-react";
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import type { CourseFormData } from "./course-types";
 
 const createBasicInfoSchema = (modality: "virtual" | "presencial") => {
@@ -41,7 +41,7 @@ const createBasicInfoSchema = (modality: "virtual" | "presencial") => {
 
 type BasicInfoFormData = z.infer<ReturnType<typeof createBasicInfoSchema>>;
 
-const categoryOptions = [
+const fallbackCategoryOptions = [
   { value: "programacion", label: "Programación" },
   { value: "marketing", label: "Marketing" },
   { value: "diseno", label: "Diseño" },
@@ -69,6 +69,18 @@ interface CourseBasicInfoProps {
 export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modality = data.modality || "virtual";
+  const [categoryOptions, setCategoryOptions] = useState(fallbackCategoryOptions);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((r) => r.json())
+      .then((cats: { slug: string; name: string }[]) => {
+        if (Array.isArray(cats) && cats.length > 0) {
+          setCategoryOptions(cats.map((c) => ({ value: c.slug, label: c.name })));
+        }
+      })
+      .catch(() => {/* use fallback */});
+  }, []);
   const basicInfoSchema = createBasicInfoSchema(modality);
   
   const form = useForm<BasicInfoFormData>({

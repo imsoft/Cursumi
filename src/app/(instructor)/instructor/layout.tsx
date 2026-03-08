@@ -1,7 +1,6 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/session";
 import { InstructorShell } from "@/components/layouts/instructor-shell";
 import { getUserRole } from "@/lib/user-service";
 
@@ -10,9 +9,12 @@ interface InstructorLayoutProps {
 }
 
 export default async function InstructorLayout({ children }: InstructorLayoutProps) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  let session;
+  try {
+    session = await getCachedSession();
+  } catch {
+    redirect("/login");
+  }
 
   if (!session) {
     redirect("/login");

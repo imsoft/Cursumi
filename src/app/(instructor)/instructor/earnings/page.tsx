@@ -1,19 +1,22 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { Suspense } from "react";
+import { getCachedSession } from "@/lib/session";
 import { getInstructorEarnings } from "@/lib/instructor-service";
 import { InstructorEarningsClient } from "@/components/instructor/instructor-earnings-client";
+import { StripeConnectBanner } from "@/components/instructor/stripe-connect-banner";
 
 export default async function InstructorEarningsPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    redirect("/login");
-  }
+  const session = await getCachedSession();
+  if (!session) redirect("/login");
 
   const earnings = await getInstructorEarnings(session.user.id);
 
-  return <InstructorEarningsClient earnings={earnings} />;
+  return (
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <Suspense>
+        <StripeConnectBanner />
+      </Suspense>
+      <InstructorEarningsClient earnings={earnings} />
+    </div>
+  );
 }

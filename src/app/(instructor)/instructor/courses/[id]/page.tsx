@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit, Users } from "lucide-react";
+import { ArrowLeft, Edit, Users, MessageSquare } from "lucide-react";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
 
 export default async function CourseDetailPage({
@@ -144,6 +144,12 @@ export default async function CourseDetailPage({
                 <Link href={`/instructor/courses/${course.id}/students`}>
                   <Users className="mr-2 h-4 w-4" />
                   Ver alumnos
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link href={`/instructor/courses/${course.id}/messages`}>
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Mensajes
                 </Link>
               </Button>
             </CardContent>

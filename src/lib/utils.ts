@@ -6,6 +6,25 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Parses a duration string like "1h30m", "45m", "2h", "90" (minutes assumed) → total minutes
+ */
+export function parseDurationToMinutes(duration: string | null | undefined): number {
+  if (!duration) return 0;
+  const lower = duration.toLowerCase().trim();
+  let total = 0;
+  const hours = lower.match(/(\d+)\s*h/);
+  const mins = lower.match(/(\d+)\s*m/);
+  if (hours) total += parseInt(hours[1]) * 60;
+  if (mins) total += parseInt(mins[1]);
+  // If only digits, assume minutes
+  if (!hours && !mins) {
+    const num = parseInt(lower, 10);
+    if (!isNaN(num)) total = num;
+  }
+  return total;
+}
+
+/**
  * Formatea un precio en formato de moneda mexicana (MXN)
  * @param price - Precio numérico a formatear
  * @param showDecimals - Si se deben mostrar decimales (default: false)

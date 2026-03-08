@@ -68,6 +68,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       maxStudents: data.maxStudents,
       imageUrl: data.imageUrl,
       status: data.status ?? "draft",
+      finalExam: data.finalExam ? (data.finalExam as object) : undefined,
       sections: data.sections
         ? {
             create: data.sections.map((section, index) => ({
@@ -110,19 +111,42 @@ export async function getCourseDetail(courseId: string) {
   });
 }
 
-export async function listPublishedCourses(): Promise<Course[]> {
+interface CourseFilters {
+  search?: string;
+  category?: string;
+  modality?: string;
+  level?: string;
+}
+
+export async function listPublishedCourses(filters: CourseFilters = {}): Promise<Course[]> {
+  const { search, category, modality, level } = filters;
+
   const courses = await prisma.course.findMany({
-    where: { status: "published" },
+    where: {
+      status: "published",
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+        ],
+      }),
+      ...(category && { category: { contains: category, mode: "insensitive" } }),
+      ...(modality && { modality: modality as Modality }),
+      ...(level && { level: { contains: level, mode: "insensitive" } }),
+    },
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
       title: true,
       modality: true,
       category: true,
+      level: true,
       city: true,
       description: true,
       duration: true,
+      price: true,
       imageUrl: true,
+      instructor: { select: { name: true } },
     },
   });
 
@@ -131,9 +155,12 @@ export async function listPublishedCourses(): Promise<Course[]> {
     title: course.title,
     modality: course.modality,
     category: course.category,
+    level: course.level ?? undefined,
     city: course.city || "Online",
     description: course.description,
     duration: course.duration || "A tu ritmo",
+    price: course.price,
+    instructorName: course.instructor?.name ?? undefined,
     imageUrl:
       course.imageUrl ||
       "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
@@ -146,6 +173,11 @@ export async function getPublishedCourse(courseId: string) {
     include: {
       instructor: { select: { name: true } },
       _count: { select: { enrollments: true } },
+      reviews: {
+        select: { rating: true, comment: true, user: { select: { name: true } }, createdAt: true },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      },
     },
   });
 }
@@ -266,6 +298,56 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
           _count: { select: { enrollments: true } },
         },
       },
+      lessonProgress: { select: { lessonId: true } },
     },
   });
+}
+
+export async function getLessonForStudent(lessonId: string, studentId: string) {
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    include: {
+      section: {
+        include: {
+          course: {
+            include: {
+              sections: {
+                orderBy: { order: "asc" },
+                include: { lessons: { orderBy: { order: "asc" }, select: { id: true, title: true, type: true, duration: true, order: true } } },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!lesson) return null;
+
+  const courseId = lesson.section.courseId;
+
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { courseId_studentId: { courseId, studentId } },
+    include: { lessonProgress: { select: { lessonId: true } } },
+  });
+
+  if (!enrollment) return null;
+
+  const completedIds = new Set(enrollment.lessonProgress.map((lp) => lp.lessonId));
+
+  // Flatten all lessons in order to find prev/next
+  const allLessons = lesson.section.course.sections.flatMap((s) => s.lessons);
+  const idx = allLessons.findIndex((l) => l.id === lessonId);
+  const prevLesson = idx > 0 ? allLessons[idx - 1] : null;
+  const nextLesson = idx < allLessons.length - 1 ? allLessons[idx + 1] : null;
+
+  return {
+    lesson,
+    enrollment,
+    completedIds,
+    prevLesson,
+    nextLesson,
+    courseId,
+    sections: lesson.section.course.sections,
+  };
 }

@@ -14,6 +14,7 @@ import {
   Award,
   Search,
   UserCircle,
+  Settings,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -22,6 +23,7 @@ const studentNavItems = [
   { title: "Certificados", href: "/dashboard/certificates", icon: Award },
   { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
   { title: "Perfil", href: "/dashboard/profile", icon: UserCircle },
+  { title: "Configuración", href: "/dashboard/settings", icon: Settings },
 ];
 
 interface StudentShellProps {

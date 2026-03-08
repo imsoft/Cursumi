@@ -6,8 +6,11 @@ export interface Course {
   title: string;
   modality: CourseModality;
   category: CourseCategory;
+  level?: string;
   city: string;
   description: string;
   duration: string;
+  price?: number;
+  instructorName?: string;
   imageUrl: string;
 }

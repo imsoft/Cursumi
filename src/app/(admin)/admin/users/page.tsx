@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
-import { Users, UserPlus } from "lucide-react";
+import { Users, UserPlus, ShieldCheck } from "lucide-react";
 
 type UserRole = "student" | "instructor" | "admin";
 type UserStatus = "active" | "inactive" | "suspended";
@@ -65,6 +65,8 @@ const getStatusBadge = (status: UserStatus) => {
   return { color: colors[status], label: labels[status] };
 };
 
+type RoleTarget = { id: string; name: string; newRole: UserRole } | null;
+
 export default function AdminUsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -72,6 +74,8 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [roleTarget, setRoleTarget] = useState<RoleTarget>(null);
+  const [changingRole, setChangingRole] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -111,6 +115,27 @@ export default function AdminUsersPage() {
         return user.status === statusFilter;
       });
   }, [searchTerm, roleFilter, statusFilter]);
+
+  const handleRoleChange = async () => {
+    if (!roleTarget) return;
+    setChangingRole(true);
+    try {
+      const res = await fetch(`/api/admin/users/${roleTarget.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: roleTarget.newRole }),
+      });
+      if (!res.ok) throw new Error("No se pudo cambiar el rol");
+      setUsers((prev) =>
+        prev.map((u) => (u.id === roleTarget.id ? { ...u, role: roleTarget.newRole } : u))
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al cambiar el rol");
+    } finally {
+      setChangingRole(false);
+      setRoleTarget(null);
+    }
+  };
 
   const handleClearFilters = () => {
     setSearchTerm("");
@@ -227,12 +252,37 @@ export default function AdminUsersPage() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        Ver detalles
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        Editar
-                      </Button>
+                      {user.role !== "instructor" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            setRoleTarget({
+                              id: user.id,
+                              name: user.name,
+                              newRole: "instructor",
+                            })
+                          }
+                        >
+                          <ShieldCheck className="mr-1 h-3 w-3" />
+                          Hacer instructor
+                        </Button>
+                      )}
+                      {user.role !== "student" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            setRoleTarget({
+                              id: user.id,
+                              name: user.name,
+                              newRole: "student",
+                            })
+                          }
+                        >
+                          Hacer estudiante
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );
@@ -240,6 +290,35 @@ export default function AdminUsersPage() {
             </div>
           </CardContent>
         </Card>
+      )}
+      {/* Confirmation modal for role change */}
+      {roleTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="mx-4 max-w-sm rounded-lg border border-border bg-card p-6 shadow-lg">
+            <h2 className="mb-2 text-lg font-semibold text-foreground">Cambiar rol</h2>
+            <p className="mb-6 text-sm text-muted-foreground">
+              ¿Estás seguro de que deseas cambiar el rol de{" "}
+              <strong>{roleTarget.name}</strong> a{" "}
+              <strong>
+                {roleTarget.newRole === "instructor" ? "Instructor" : "Estudiante"}
+              </strong>
+              ? Esta acción puede afectar el acceso a la plataforma.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setRoleTarget(null)}
+                disabled={changingRole}
+              >
+                Cancelar
+              </Button>
+              <Button size="sm" onClick={handleRoleChange} disabled={changingRole}>
+                {changingRole ? "Cambiando..." : "Confirmar"}
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

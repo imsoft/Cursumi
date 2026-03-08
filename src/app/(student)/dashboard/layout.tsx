@@ -1,7 +1,6 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/session";
 import { StudentShell } from "@/components/layouts/student-shell";
 
 interface StudentLayoutProps {
@@ -9,9 +8,12 @@ interface StudentLayoutProps {
 }
 
 export default async function StudentLayout({ children }: StudentLayoutProps) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  let session;
+  try {
+    session = await getCachedSession();
+  } catch {
+    redirect("/login");
+  }
 
   if (!session) {
     redirect("/login");

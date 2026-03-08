@@ -86,11 +86,7 @@ export const LoginForm = () => {
 
       // Si el login fue exitoso, redirigir
       if (result.data) {
-        // Pequeño delay para asegurar que la cookie se establezca
-        setTimeout(() => {
-          router.push("/dashboard");
-          router.refresh(); // Refrescar para actualizar la sesión
-        }, 100);
+        router.push("/dashboard");
       }
     } catch (err) {
       console.error("Error en login:", err);
@@ -154,7 +150,7 @@ export const LoginForm = () => {
           </Button>
           <div className="text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{" "}
-            <a href="/registro" className="text-primary underline">
+            <a href="/signup" className="text-primary underline">
               Crear cuenta
             </a>
           </div>

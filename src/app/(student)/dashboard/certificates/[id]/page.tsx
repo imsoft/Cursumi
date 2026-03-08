@@ -35,15 +35,11 @@ export default function CertificatePage({ params }: CertificatePageProps) {
     load();
   }, [id]);
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     setIsDownloading(true);
-    // Simular descarga (en producción, esto generaría un PDF real)
-    setTimeout(() => {
-      setIsDownloading(false);
-      // En producción, aquí se generaría y descargaría el PDF
-      // Por ahora, solo mostramos un mensaje
-      alert(`Descargando certificado: ${certificate?.certificateNumber}`);
-    }, 500);
+    // Use browser's print-to-PDF. A global @media print CSS hides nav elements.
+    window.print();
+    setTimeout(() => setIsDownloading(false), 1000);
   };
 
   const handleShare = async () => {

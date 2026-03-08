@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Monitor, Users, Calendar } from "lucide-react";
 import { EnrollActionForm } from "@/components/student/enroll-action-form";
+import { CheckoutButton } from "@/components/student/checkout-button";
+import { ReviewSection } from "@/components/student/review-section";
+import { formatPriceMXN } from "@/lib/utils";
 
 type Params = { params: Promise<{ id: string }> };
 const ogFallback =
@@ -66,9 +69,10 @@ async function enrollCourseAction(_prev: EnrollState, formData: FormData): Promi
 export default async function ExploreCourseDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const course = await getPublishedCourseDetail(params.id);
+  const { id } = await params;
+  const course = await getPublishedCourseDetail(id);
 
   if (!course) {
     redirect("/dashboard/explore");
@@ -141,9 +145,21 @@ export default async function ExploreCourseDetail({
 
           <Separator />
 
-          <EnrollActionForm action={enrollCourseAction} courseId={course.id} />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-3xl font-bold text-foreground">{formatPriceMXN(course.price)}</p>
+              <p className="text-xs text-muted-foreground">Pago único · acceso de por vida</p>
+            </div>
+            {course.price === 0 ? (
+              <EnrollActionForm action={enrollCourseAction} courseId={course.id} />
+            ) : (
+              <CheckoutButton courseId={course.id} price={course.price} />
+            )}
+          </div>
         </CardContent>
       </Card>
+
+      <ReviewSection courseId={id} />
     </div>
   );
 }

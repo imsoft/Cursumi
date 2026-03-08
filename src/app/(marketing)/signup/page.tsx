@@ -1,22 +1,11 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getSessionSafe } from "@/lib/session";
 import { RegisterForm } from "@/components/auth/register-form";
 
 export default async function RegisterPage() {
-  // Verificar si el usuario tiene sesión activa
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    // Si el usuario está autenticado, redirigir al dashboard
-    if (session) {
-      redirect("/dashboard");
-    }
-  } catch (error) {
-    // Si hay un error al verificar la sesión, continuar mostrando la página
-    console.error("Error al verificar sesión:", error);
+  const session = await getSessionSafe();
+  if (session) {
+    redirect("/dashboard");
   }
 
   return (

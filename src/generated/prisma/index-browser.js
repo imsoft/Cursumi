@@ -24,12 +24,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 7.1.0
- * Query Engine version: ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
+ * Prisma Client JS version: 7.2.0
+ * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
  */
 Prisma.prismaVersion = {
-  client: "7.1.0",
-  engine: "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba"
+  client: "7.2.0",
+  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -174,8 +174,17 @@ exports.Prisma.InstructorProfileScalarFieldEnum = {
   bio: 'bio',
   city: 'city',
   specialties: 'specialties',
+  stripeAccountId: 'stripeAccountId',
+  stripeOnboarded: 'stripeOnboarded',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  order: 'order'
 };
 
 exports.Prisma.CourseScalarFieldEnum = {
@@ -184,6 +193,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   title: 'title',
   description: 'description',
   category: 'category',
+  categoryId: 'categoryId',
   level: 'level',
   modality: 'modality',
   city: 'city',
@@ -196,6 +206,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   imageUrl: 'imageUrl',
   status: 'status',
   nextSession: 'nextSession',
+  finalExam: 'finalExam',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -239,9 +250,91 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ExamSubmissionScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  answers: 'answers',
+  score: 'score',
+  passed: 'passed',
+  submittedAt: 'submittedAt'
+};
+
+exports.Prisma.CertificateScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  userId: 'userId',
+  courseId: 'courseId',
+  number: 'number',
+  issuedAt: 'issuedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  userId: 'userId',
+  courseId: 'courseId',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  stripePaymentId: 'stripePaymentId',
+  stripeSessionId: 'stripeSessionId',
+  platformFee: 'platformFee',
+  instructorAmount: 'instructorAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  userId: 'userId',
+  rating: 'rating',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  read: 'read',
+  link: 'link',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  studentId: 'studentId',
+  instructorId: 'instructorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  body: 'body',
+  read: 'read',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -252,6 +345,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.Role = exports.$Enums.Role = {
   student: 'student',
@@ -288,17 +387,32 @@ exports.EnrollmentStatus = exports.$Enums.EnrollmentStatus = {
   cancelled: 'cancelled'
 };
 
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  pending: 'pending',
+  completed: 'completed',
+  failed: 'failed',
+  refunded: 'refunded'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
   InstructorProfile: 'InstructorProfile',
+  Category: 'Category',
   Course: 'Course',
   CourseSection: 'CourseSection',
   Lesson: 'Lesson',
   LessonProgress: 'LessonProgress',
-  Enrollment: 'Enrollment'
+  Enrollment: 'Enrollment',
+  ExamSubmission: 'ExamSubmission',
+  Certificate: 'Certificate',
+  Transaction: 'Transaction',
+  Review: 'Review',
+  Notification: 'Notification',
+  Conversation: 'Conversation',
+  Message: 'Message'
 };
 
 /**

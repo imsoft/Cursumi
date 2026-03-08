@@ -12,7 +12,7 @@ interface InstructorEarningsClientProps {
 
 export function InstructorEarningsClient({ earnings }: InstructorEarningsClientProps) {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+    <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-foreground">Ingresos generados</h1>
         <p className="text-sm text-muted-foreground mt-1">
