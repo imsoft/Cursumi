@@ -49,6 +49,20 @@ export const auth = betterAuth({
   ],
   baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   basePath: "/api/auth",
+  trustedOrigins: getTrustedOrigins(),
 });
+
+function getTrustedOrigins(): string[] {
+  const url = process.env.NEXT_PUBLIC_APP_URL;
+  if (!url) return ["http://localhost:3000"];
+  const base = url.replace(/\/$/, "");
+  const origins = [base];
+  if (base.startsWith("https://www.")) {
+    origins.push(base.replace("https://www.", "https://"));
+  } else if (base.startsWith("https://")) {
+    origins.push(base.replace("https://", "https://www."));
+  }
+  return origins;
+}
 
 export type Session = typeof auth.$Infer.Session;
