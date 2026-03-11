@@ -29,9 +29,9 @@ const lessonIcon = (type: LessonType) => {
 export default async function MyCourseDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ courseId: string }>;
 }) {
-  const { id: courseId } = await params;
+  const { courseId } = await params;
   const detail = await getMyCourseDetail(courseId);
   if (!detail) {
     redirect("/dashboard/my-courses");
