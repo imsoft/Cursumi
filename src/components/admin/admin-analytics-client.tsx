@@ -19,6 +19,58 @@ interface AdminAnalyticsClientProps {
   usersByMonth: UsersSeries[];
 }
 
+const chartWrapperClass = "min-h-[200px] h-[200px] w-full overflow-hidden";
+
+function ChartOrEmpty({
+  data,
+  dataKey,
+  config,
+  title,
+  emptyMessage = "No hay datos para mostrar",
+}: {
+  data: { month: string; [k: string]: string | number }[];
+  dataKey: string;
+  config: Record<string, { label: string; color: string }>;
+  title: string;
+  emptyMessage?: string;
+}) {
+  const hasData = data.length > 0 && data.some((d) => Number(d[dataKey]) > 0);
+
+  if (!hasData) {
+    return (
+      <Card className="border border-border bg-card/90">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex min-h-[200px] items-center justify-center rounded-md bg-muted/30">
+          <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="border border-border bg-card/90">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="overflow-hidden">
+        <div className={chartWrapperClass}>
+          <ChartContainer config={config} className="h-full w-full">
+            <BarChart data={data} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+              <CartesianGrid vertical={false} />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} />
+              <YAxis />
+              <RechartsTooltip content={<ChartTooltip content={<ChartTooltipContent />} />} />
+              <Bar dataKey={dataKey} fill={config[dataKey].color} radius={4} isAnimationActive={false} />
+            </BarChart>
+          </ChartContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function AdminAnalyticsClient({ revenueByMonth, usersByMonth }: AdminAnalyticsClientProps) {
   const revenueConfig = {
     amount: { label: "Ingresos", color: "oklch(0.541 0.281 293.009)" },
@@ -30,39 +82,18 @@ export function AdminAnalyticsClient({ revenueByMonth, usersByMonth }: AdminAnal
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      <Card className="border border-border bg-card/90">
-        <CardHeader>
-          <CardTitle>Ingresos por mes</CardTitle>
-        </CardHeader>
-        <CardContent className="overflow-hidden">
-          <ChartContainer config={revenueConfig} className="min-h-[200px] w-full overflow-hidden">
-            <BarChart data={revenueByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis dataKey="month" tickLine={false} axisLine={false} />
-              <YAxis />
-              <RechartsTooltip content={<ChartTooltip content={<ChartTooltipContent />} />} />
-              <Bar dataKey="amount" fill={revenueConfig.amount.color} radius={4} isAnimationActive={false} />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      <Card className="border border-border bg-card/90">
-        <CardHeader>
-          <CardTitle>Usuarios nuevos por mes</CardTitle>
-        </CardHeader>
-        <CardContent className="overflow-hidden">
-          <ChartContainer config={usersConfig} className="min-h-[200px] w-full overflow-hidden">
-            <BarChart data={usersByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis dataKey="month" tickLine={false} axisLine={false} />
-              <YAxis />
-              <RechartsTooltip content={<ChartTooltip content={<ChartTooltipContent />} />} />
-              <Bar dataKey="users" fill={usersConfig.users.color} radius={4} isAnimationActive={false} />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+      <ChartOrEmpty
+        data={revenueByMonth}
+        dataKey="amount"
+        config={revenueConfig}
+        title="Ingresos por mes"
+      />
+      <ChartOrEmpty
+        data={usersByMonth}
+        dataKey="users"
+        config={usersConfig}
+        title="Usuarios nuevos por mes"
+      />
     </div>
   );
 }

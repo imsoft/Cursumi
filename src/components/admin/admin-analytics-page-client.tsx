@@ -66,7 +66,6 @@ export function AdminAnalyticsPageClient() {
 
   useEffect(() => {
     let cancelled = false;
-    let rafId = 0;
 
     Promise.all([
       fetch("/api/admin/stats", { cache: "no-store" }).then((r) =>
@@ -80,9 +79,7 @@ export function AdminAnalyticsPageClient() {
         if (cancelled) return;
         setStats(buildStats(statsData as AdminStats));
         setAnalytics((analyticsData as AdminAnalytics) ?? emptyAnalytics);
-        rafId = requestAnimationFrame(() => {
-          if (!cancelled) setShowCharts(true);
-        });
+        setShowCharts(true);
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Error al cargar");
@@ -90,7 +87,6 @@ export function AdminAnalyticsPageClient() {
 
     return () => {
       cancelled = true;
-      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
