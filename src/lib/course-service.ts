@@ -95,6 +95,139 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
   });
 }
 
+type UpdateCourseInput = CreateCourseInput & { id: string };
+
+export async function updateCourse(
+  courseId: string,
+  instructorId: string,
+  data: UpdateCourseInput
+) {
+  const existing = await prisma.course.findFirst({
+    where: { id: courseId, instructorId },
+    include: {
+      sections: {
+        orderBy: { order: "asc" },
+        include: { lessons: { orderBy: { order: "asc" } } },
+      },
+    },
+  });
+  if (!existing) {
+    throw new Error("Curso no encontrado o no autorizado");
+  }
+
+  await prisma.course.update({
+    where: { id: courseId },
+    data: {
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      level: data.level || "principiante",
+      modality: data.modality as Modality,
+      city: data.city,
+      location: data.location,
+      courseType: data.courseType as CourseType,
+      startDate: data.startDate ? new Date(data.startDate) : null,
+      duration: data.duration,
+      price: data.price,
+      maxStudents: data.maxStudents,
+      imageUrl: data.imageUrl,
+      status: data.status ?? existing.status,
+      finalExam: data.finalExam ? (data.finalExam as object) : undefined,
+    },
+  });
+
+  const existingSectionIds = new Set(existing.sections.map((s) => s.id));
+  const payloadSectionIds = new Set((data.sections ?? []).map((s) => s.id).filter(Boolean));
+
+  for (const section of data.sections ?? []) {
+    const sectionPayload = {
+      title: section.title,
+      description: section.description,
+      order: section.order ?? 0,
+      lessons: section.lessons ?? [],
+    };
+
+    if (section.id && existingSectionIds.has(section.id)) {
+      await prisma.courseSection.update({
+        where: { id: section.id },
+        data: {
+          title: sectionPayload.title,
+          description: sectionPayload.description ?? null,
+          order: sectionPayload.order,
+        },
+      });
+
+      const existingLessons = existing.sections.find((s) => s.id === section.id)?.lessons ?? [];
+      const existingLessonIds = new Set(existingLessons.map((l) => l.id));
+      const payloadLessonIds = new Set(sectionPayload.lessons.map((l) => l.id).filter(Boolean));
+
+      for (let i = 0; i < sectionPayload.lessons.length; i++) {
+        const lesson = sectionPayload.lessons[i];
+        const order = lesson.order ?? i + 1;
+        const lessonData = {
+          title: lesson.title,
+          description: lesson.description ?? null,
+          type: lesson.type as LessonType,
+          duration: lesson.duration ?? null,
+          order,
+          videoUrl: lesson.videoUrl ?? null,
+          content: lesson.content ?? null,
+          attachments: lesson.files?.length ? (lesson.files as object[]) : undefined,
+          resources: lesson.resources?.length ? (lesson.resources as object[]) : undefined,
+        };
+        if (lesson.id && existingLessonIds.has(lesson.id)) {
+          await prisma.lesson.update({
+            where: { id: lesson.id },
+            data: lessonData,
+          });
+        } else {
+          await prisma.lesson.create({
+            data: {
+              sectionId: section.id,
+              ...lessonData,
+            },
+          });
+        }
+      }
+
+      const toDelete = existingLessons.filter((l) => !payloadLessonIds.has(l.id));
+      for (const l of toDelete) {
+        await prisma.lesson.delete({ where: { id: l.id } });
+      }
+    } else {
+      const created = await prisma.courseSection.create({
+        data: {
+          courseId,
+          title: sectionPayload.title,
+          description: sectionPayload.description ?? null,
+          order: sectionPayload.order,
+          lessons: {
+            create: sectionPayload.lessons.map((lesson, lessonIndex) => ({
+              title: lesson.title,
+              description: lesson.description ?? null,
+              type: lesson.type as LessonType,
+              duration: lesson.duration ?? null,
+              order: lesson.order ?? lessonIndex + 1,
+              videoUrl: lesson.videoUrl ?? null,
+              content: lesson.content ?? null,
+              attachments: lesson.files?.length ? (lesson.files as object[]) : undefined,
+              resources: lesson.resources?.length ? (lesson.resources as object[]) : undefined,
+            })),
+          },
+        },
+      });
+      existingSectionIds.add(created.id);
+    }
+  }
+
+  const sectionsToDelete = existing.sections.filter((s) => !payloadSectionIds.has(s.id));
+  for (const s of sectionsToDelete) {
+    await prisma.courseSection.delete({ where: { id: s.id } });
+  }
+
+  return getCourseDetail(courseId);
+}
+
 export async function getCourseDetail(courseId: string) {
   return prisma.course.findUnique({
     where: { id: courseId },

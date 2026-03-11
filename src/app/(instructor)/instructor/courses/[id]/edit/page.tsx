@@ -24,6 +24,7 @@ export default function EditCoursePage() {
         }
         const data = await res.json();
         const mapped: CourseFormData = {
+          id: data.id,
           title: data.title,
           description: data.description,
           category: data.category,

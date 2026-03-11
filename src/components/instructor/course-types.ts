@@ -1,4 +1,5 @@
 export type CourseFormData = {
+  id?: string; // presente al editar un curso existente
   title: string;
   description: string;
   category: string;

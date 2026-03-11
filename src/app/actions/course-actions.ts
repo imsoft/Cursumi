@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import {
   getInstructorCourses,
   createCourse,
+  updateCourse,
   getCourseDetail,
   type InstructorCourseListItem,
   listPublishedCourses,
@@ -56,11 +57,19 @@ export async function listRecommendationsForUser(): Promise<Recommendation[]> {
 
 export async function createCourseDraft(data: CourseFormData) {
   const session = await requireSession();
+  if (data.id) {
+    await updateCourse(data.id, session.user.id, { ...data, id: data.id, status: "draft" });
+    return { id: data.id };
+  }
   return createCourse(session.user.id, { ...data, status: "draft" });
 }
 
 export async function publishCourse(data: CourseFormData) {
   const session = await requireSession();
+  if (data.id) {
+    await updateCourse(data.id, session.user.id, { ...data, id: data.id, status: "published" });
+    return { id: data.id };
+  }
   return createCourse(session.user.id, { ...data, status: "published" });
 }
 

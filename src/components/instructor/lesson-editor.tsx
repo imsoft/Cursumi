@@ -712,10 +712,10 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
           <div className="space-y-4">
             <div>
               <h4 className="text-lg font-semibold text-foreground mb-2">
-                Materiales extra (opcional)
+                Archivos y material de ayuda para la clase (opcional)
               </h4>
               <p className="text-sm text-muted-foreground">
-                Agrega archivos adicionales y recursos que complementen esta lección
+                Sube PDFs, documentos o imágenes y enlaces que los estudiantes puedan usar como apoyo en esta lección.
               </p>
             </div>
 
@@ -776,7 +776,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                   type="file"
                   id="material-file-upload"
                   className="hidden"
-                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.gif,.zip,.txt"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
@@ -791,13 +791,13 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                   className={`flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary/40 bg-primary/5 p-4 text-sm font-medium text-foreground transition-colors hover:border-primary/60 hover:bg-primary/10 ${uploadingFile ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   <Upload className="h-4 w-4" />
-                  {uploadingFile ? "Subiendo..." : "Subir archivo (PDF, Word, Imagen)"}
+                  {uploadingFile ? "Subiendo..." : "Subir archivo (PDF, Word, Excel, imágenes, ZIP…)"}
                 </label>
                 {fileUploadError && (
                   <p className="mt-1 text-xs text-destructive">{fileUploadError}</p>
                 )}
                 <p className="mt-2 text-xs text-muted-foreground text-center">
-                  Los estudiantes podrán descargar estos archivos como material complementario
+                  Los estudiantes verán estos archivos en la lección y podrán descargarlos
                 </p>
               </div>
             </div>
