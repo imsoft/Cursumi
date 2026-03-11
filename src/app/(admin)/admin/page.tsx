@@ -5,8 +5,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, BookOpenCheck, TrendingUp, DollarSign } from "lucide-react";
 
+const defaultStats = {
+  totalUsers: 0,
+  totalCourses: 0,
+  publishedCourses: 0,
+  draftCourses: 0,
+  totalEnrollments: 0,
+  estimatedRevenue: 0,
+};
+
 export default async function AdminDashboardPage() {
-  const statsData = await loadAdminStats();
+  let statsData;
+  try {
+    statsData = await loadAdminStats();
+  } catch {
+    statsData = defaultStats;
+  }
 
   const stats: StatItem[] = [
     {

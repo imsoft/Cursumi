@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { getCachedSession } from "@/lib/session";
+import { getSessionSafe } from "@/lib/session";
 import { AdminShell } from "@/components/layouts/admin-shell";
 import { getUserRole } from "@/lib/user-service";
 
@@ -14,18 +14,17 @@ interface AdminLayoutProps {
 }
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
-  let session;
+  const session = await getSessionSafe();
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  let role: string;
   try {
-    session = await getCachedSession();
+    role = await getUserRole(session.user.id);
   } catch {
     redirect("/login");
   }
-
-  if (!session) {
-    redirect("/login");
-  }
-
-  const role = await getUserRole(session.user.id);
   if (role !== "admin") {
     redirect("/dashboard");
   }
