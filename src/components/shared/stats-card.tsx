@@ -1,15 +1,45 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import {
+  LucideIcon,
+  Users,
+  BookOpenCheck,
+  TrendingUp,
+  DollarSign,
+  BarChart3,
+  Wallet,
+  CreditCard,
+  Receipt,
+  GraduationCap,
+  BookOpen,
+  Award,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  Users,
+  BookOpenCheck,
+  TrendingUp,
+  DollarSign,
+  BarChart3,
+  Wallet,
+  CreditCard,
+  Receipt,
+  GraduationCap,
+  BookOpen,
+  Award,
+};
 
 export interface StatItem {
   title: string;
   value: string | number;
   description?: string;
   subtitle?: string;
+  /** Use from client components */
   icon?: LucideIcon;
+  /** Use from server components (serializable); e.g. "Users", "DollarSign" */
+  iconName?: string;
   iconColor?: string;
   trend?: {
     value: string;
@@ -23,7 +53,7 @@ interface StatsCardProps {
 }
 
 export const StatsCard = ({ stat, className }: StatsCardProps) => {
-  const Icon = stat.icon;
+  const Icon = stat.icon ?? (stat.iconName ? ICON_MAP[stat.iconName] : undefined);
 
   return (
     <Card className={cn("border border-border bg-card/90", className)}>

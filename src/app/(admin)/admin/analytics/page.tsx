@@ -2,8 +2,6 @@ import { loadAdminAnalytics, loadAdminStats } from "@/app/actions/admin-actions"
 import { PageHeader } from "@/components/shared/page-header";
 import { StatsGrid, StatItem } from "@/components/shared/stats-card";
 import { AdminAnalyticsClient } from "@/components/admin/admin-analytics-client";
-import { Users, BookOpenCheck, TrendingUp, DollarSign } from "lucide-react";
-
 export default async function AdminAnalyticsPage() {
   const statsData = await loadAdminStats();
   const analytics = await loadAdminAnalytics();
@@ -11,30 +9,30 @@ export default async function AdminAnalyticsPage() {
   const stats: StatItem[] = [
     {
       title: "Total de usuarios",
-      value: statsData.totalUsers.toString(),
+      value: String(statsData.totalUsers ?? 0),
       description: "Usuarios registrados",
-      icon: Users,
+      iconName: "Users",
       iconColor: "text-blue-600",
     },
     {
       title: "Cursos publicados",
-      value: statsData.publishedCourses.toString(),
-      description: `${statsData.draftCourses} en borrador`,
-      icon: BookOpenCheck,
+      value: String(statsData.publishedCourses ?? 0),
+      description: `${statsData.draftCourses ?? 0} en borrador`,
+      iconName: "BookOpenCheck",
       iconColor: "text-green-600",
     },
     {
       title: "Inscripciones",
-      value: statsData.totalEnrollments.toString(),
+      value: String(statsData.totalEnrollments ?? 0),
       description: "Total de enrollments",
-      icon: TrendingUp,
+      iconName: "TrendingUp",
       iconColor: "text-orange-600",
     },
     {
       title: "Ingresos estimados",
-      value: `$${statsData.estimatedRevenue.toLocaleString("es-MX")}`,
+      value: `$${Number(statsData.estimatedRevenue ?? 0).toLocaleString("es-MX")}`,
       description: "Precio * inscripciones",
-      icon: DollarSign,
+      iconName: "DollarSign",
       iconColor: "text-purple-600",
     },
   ];

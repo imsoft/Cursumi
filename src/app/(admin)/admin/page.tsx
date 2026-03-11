@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/shared/page-header";
 import { StatsGrid, StatItem } from "@/components/shared/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, BookOpenCheck, TrendingUp, DollarSign } from "lucide-react";
 
 const defaultStats = {
   totalUsers: 0,
@@ -28,28 +27,28 @@ export default async function AdminDashboardPage() {
       title: "Total de usuarios",
       value: String(statsData.totalUsers ?? 0),
       description: "Usuarios registrados",
-      icon: Users,
+      iconName: "Users",
       iconColor: "text-blue-600",
     },
     {
       title: "Cursos publicados",
       value: String(statsData.publishedCourses ?? 0),
       description: `${statsData.draftCourses ?? 0} en borrador`,
-      icon: BookOpenCheck,
+      iconName: "BookOpenCheck",
       iconColor: "text-green-600",
     },
     {
       title: "Inscripciones",
       value: String(statsData.totalEnrollments ?? 0),
       description: "Inscripciones totales",
-      icon: TrendingUp,
+      iconName: "TrendingUp",
       iconColor: "text-orange-600",
     },
     {
       title: "Ingresos estimados",
       value: `$${Number(statsData.estimatedRevenue ?? 0).toLocaleString("es-MX")}`,
       description: "Precio * inscripciones",
-      icon: DollarSign,
+      iconName: "DollarSign",
       iconColor: "text-purple-600",
     },
   ];
