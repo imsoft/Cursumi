@@ -21,32 +21,33 @@ export default async function AdminDashboardPage() {
   } catch {
     statsData = defaultStats;
   }
+  statsData = statsData ?? defaultStats;
 
   const stats: StatItem[] = [
     {
       title: "Total de usuarios",
-      value: statsData.totalUsers.toString(),
+      value: String(statsData.totalUsers ?? 0),
       description: "Usuarios registrados",
       icon: Users,
       iconColor: "text-blue-600",
     },
     {
       title: "Cursos publicados",
-      value: statsData.publishedCourses.toString(),
-      description: `${statsData.draftCourses} en borrador`,
+      value: String(statsData.publishedCourses ?? 0),
+      description: `${statsData.draftCourses ?? 0} en borrador`,
       icon: BookOpenCheck,
       iconColor: "text-green-600",
     },
     {
       title: "Inscripciones",
-      value: statsData.totalEnrollments.toString(),
+      value: String(statsData.totalEnrollments ?? 0),
       description: "Inscripciones totales",
       icon: TrendingUp,
       iconColor: "text-orange-600",
     },
     {
       title: "Ingresos estimados",
-      value: `$${statsData.estimatedRevenue.toLocaleString("es-MX")}`,
+      value: `$${Number(statsData.estimatedRevenue ?? 0).toLocaleString("es-MX")}`,
       description: "Precio * inscripciones",
       icon: DollarSign,
       iconColor: "text-purple-600",
