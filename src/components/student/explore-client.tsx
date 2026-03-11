@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,7 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
+import { BookOpen, Search } from "lucide-react";
+
+const SEARCH_DEBOUNCE_MS = 350;
 import type { Course } from "@/components/courses/types";
 
 interface Category {
@@ -51,6 +54,7 @@ export function ExploreClient({
 }: ExploreClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [searchInput, setSearchInput] = useState(initialFilters.q);
 
   const categoryOptions = [
     { value: "all", label: "Todas las categorías" },
@@ -72,12 +76,26 @@ export function ExploreClient({
     [router, searchParams]
   );
 
+  useEffect(() => {
+    setSearchInput(initialFilters.q);
+  }, [initialFilters.q]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInput !== initialFilters.q) {
+        updateFilter("q", searchInput);
+      }
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [searchInput, updateFilter, initialFilters.q]);
+
   const clearFilters = () => {
+    setSearchInput("");
     router.push("/dashboard/explore");
   };
 
   const hasActiveFilters =
-    initialFilters.q !== "" ||
+    searchInput !== "" ||
     initialFilters.category !== "all" ||
     initialFilters.modality !== "all" ||
     initialFilters.level !== "all";
@@ -86,17 +104,17 @@ export function ExploreClient({
     <div className="mx-auto max-w-6xl space-y-6">
       <PageHeader
         title="Explorar cursos"
-        description="Descubre nuevos cursos y expande tus conocimientos en Cursumi."
+        description="Descubre cursos y sigue aprendiendo."
       />
 
       <div className="rounded-2xl border border-border bg-card/90 p-4 shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="flex-1">
             <Input
-              label="Buscar curso"
-              placeholder="Buscar por título o descripción..."
-              defaultValue={initialFilters.q}
-              onChange={(e) => updateFilter("q", e.target.value)}
+              label="Buscar"
+              placeholder="Nombre del curso, categoría..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
           </div>
           <div className="grid w-full gap-4 md:w-auto md:grid-cols-3">
@@ -139,8 +157,13 @@ export function ExploreClient({
         </p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {courses.length === 0 && (
-            <div className="col-span-full rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-muted-foreground">
-              No hay cursos que coincidan con los filtros.
+            <div className="col-span-full">
+              <EmptyState
+                icon={Search}
+                title="Ningún curso coincide con tu búsqueda"
+                description="Cambia los filtros o el texto de búsqueda y vuelve a intentar."
+                action={{ label: "Limpiar filtros", onClick: clearFilters, variant: "outline" }}
+              />
             </div>
           )}
           {courses.map((course) => {
@@ -158,6 +181,7 @@ export function ExploreClient({
                         alt={course.title}
                         fill
                         className="object-cover transition-transform group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </div>
                   )}
@@ -191,7 +215,7 @@ export function ExploreClient({
                     </span>
                     <Button size="sm" className="pointer-events-none">
                       <BookOpen className="mr-2 h-4 w-4" />
-                      {isEnrolled ? "Ver curso" : "Ver detalles"}
+                      {isEnrolled ? "Ir al curso" : "Ver detalles del curso"}
                     </Button>
                   </CardContent>
                 </Card>

@@ -12,8 +12,8 @@ export default function FinancesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Simulador de Precios"
-        description="Calcula comisiones de Stripe, Stripe Connect e impuestos mexicanos para diferentes modelos de negocio"
+        title="Simulador de precios"
+        description="Comisiones Stripe, Connect e impuestos (México)"
       />
 
       {/* Info Cards */}

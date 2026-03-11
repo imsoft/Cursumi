@@ -63,11 +63,6 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
 
       // Si fue exitoso, mostrar mensaje de éxito
       setIsSuccess(true);
-      
-      // Redirigir al login después de 2 segundos
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
     } catch (err) {
       console.error("Error al resetear contraseña:", err);
       setError("Ocurrió un error inesperado. Por favor, intenta de nuevo.");
@@ -102,7 +97,7 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
             ¡Contraseña restablecida!
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Tu contraseña ha sido restablecida exitosamente. Serás redirigido al inicio de sesión.
+            Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión con tu nueva contraseña.
           </p>
         </CardHeader>
         <CardContent className="px-6 pb-6">
@@ -121,7 +116,7 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
           Restablecer contraseña
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Ingresa tu nueva contraseña. Asegúrate de que tenga al menos 6 caracteres.
+          Nueva contraseña. Mínimo 6 caracteres.
         </p>
       </CardHeader>
       <CardContent className="px-6 pb-6">

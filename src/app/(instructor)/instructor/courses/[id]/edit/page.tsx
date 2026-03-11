@@ -97,7 +97,7 @@ export default function EditCoursePage() {
       <div>
         <h1 className="text-3xl font-semibold text-foreground mb-2">Editar curso</h1>
         <p className="text-muted-foreground">
-          Actualiza la información de tu curso {course.title}
+          Actualiza contenido, secciones y precio de &quot;{course.title}&quot;
         </p>
       </div>
 

@@ -58,7 +58,7 @@ export const ForgotPasswordForm = () => {
             Correo enviado
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Te hemos enviado un correo con las instrucciones para restablecer tu contraseña.
+            Revisa tu correo y sigue el enlace para restablecer tu contraseña.
           </p>
         </CardHeader>
         <CardContent className="px-6 pb-6 space-y-4">
@@ -83,7 +83,7 @@ export const ForgotPasswordForm = () => {
           ¿Olvidaste tu contraseña?
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+          Ingresa tu correo y te enviamos un enlace para restablecer tu contraseña.
         </p>
       </CardHeader>
       <CardContent className="px-6 pb-6">

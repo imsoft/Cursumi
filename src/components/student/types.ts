@@ -17,6 +17,7 @@ export type StudentCourse = {
 
 export type UpcomingClass = {
   id: string;
+  courseId: string;
   courseTitle: string;
   dateTime: string;
   modality: "virtual" | "presencial";

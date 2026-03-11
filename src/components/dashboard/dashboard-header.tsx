@@ -44,7 +44,7 @@ export function DashboardHeader({
       <SidebarTrigger />
       {(title || description) && (
         <div className="flex-1">
-          {title && <h1 className="text-lg font-semibold">{title}</h1>}
+          {title && <span className="text-lg font-semibold">{title}</span>}
           {description && (
             <p className="text-sm text-muted-foreground">{description}</p>
           )}

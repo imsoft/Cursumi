@@ -6,9 +6,12 @@ import { HowItWorksFAQ } from "@/components/how-it-works/faq";
 import { HowItWorksFinalCTA } from "@/components/how-it-works/final-cta";
 import type { Metadata } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata: Metadata = {
   title: "Cómo funciona Cursumi",
   description: "Conoce el flujo para estudiantes e instructores en Cursumi: publica, aprende y certifica.",
+  alternates: { canonical: `${baseUrl}/how-it-works` },
   openGraph: {
     title: "Cómo funciona Cursumi",
     description: "Descubre el flujo para estudiantes e instructores y cómo se certifica.",

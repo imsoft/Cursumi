@@ -97,7 +97,9 @@ export function InstructorChatClient({
         </Button>
         <div>
           <h1 className="text-xl font-semibold text-foreground">Mensajes</h1>
-          <p className="text-sm text-muted-foreground truncate max-w-xs">{courseTitle}</p>
+          <p className="text-sm text-muted-foreground truncate max-w-xs">
+            {courseTitle} · Conversaciones con alumnos
+          </p>
         </div>
       </div>
 
@@ -112,7 +114,7 @@ export function InstructorChatClient({
             {conversations.length === 0 ? (
               <div className="p-4 text-center">
                 <MessageSquare className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-                <p className="text-xs text-muted-foreground">Sin mensajes aún</p>
+                <p className="text-xs text-muted-foreground">Aún no hay conversaciones</p>
               </div>
             ) : (
               conversations.map((conv) => {
@@ -146,7 +148,7 @@ export function InstructorChatClient({
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground mb-3" />
-                <p className="text-muted-foreground">Selecciona una conversación</p>
+                <p className="text-muted-foreground">Elige un alumno para ver la conversación</p>
               </div>
             </div>
           ) : (
@@ -162,7 +164,7 @@ export function InstructorChatClient({
               <div className="flex-1 overflow-y-auto space-y-3 p-4">
                 {messages.length === 0 && (
                   <p className="text-center text-sm text-muted-foreground py-8">
-                    No hay mensajes aún.
+                    Aún no hay mensajes. Escribe algo para iniciar.
                   </p>
                 )}
                 {messages.map((msg) => {
@@ -209,7 +211,7 @@ export function InstructorChatClient({
                       }
                     }}
                     rows={1}
-                    placeholder="Escribe un mensaje..."
+                    placeholder="Escribe tu mensaje..."
                     className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <Button

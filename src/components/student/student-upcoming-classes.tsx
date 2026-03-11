@@ -45,7 +45,7 @@ export const StudentUpcomingClasses = ({ classes }: StudentUpcomingClassesProps)
                 {item.city ? ` · ${item.city}` : ""}
               </p>
               <div className="mt-auto pt-2 flex justify-end">
-                <Link href={`/dashboard/my-courses/${item.id}`}>
+                <Link href={`/dashboard/my-courses/${item.courseId}`}>
                   <Button variant="ghost" size="sm" className="px-4 py-2">
                     Ver curso
                   </Button>

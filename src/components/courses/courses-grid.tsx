@@ -35,8 +35,8 @@ export const CoursesGrid = ({
   return (
     <section className="mx-auto max-w-6xl px-4 py-6">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
+        {courses.map((course, index) => (
+          <CourseCard key={course.id} course={course} priority={index === 0} />
         ))}
       </div>
       {hasFiltersApplied && (

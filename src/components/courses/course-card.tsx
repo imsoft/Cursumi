@@ -6,9 +6,10 @@ import { Course } from "./types";
 
 interface CourseCardProps {
   course: Course;
+  priority?: boolean;
 }
 
-export const CourseCard = ({ course }: CourseCardProps) => {
+export const CourseCard = ({ course, priority }: CourseCardProps) => {
   return (
     <Card className="flex h-full flex-col">
       <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
@@ -18,6 +19,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 33vw"
+          priority={priority}
         />
         <span className="absolute top-3 left-3 rounded-full border border-white/80 bg-black/50 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-white">
           {course.modality === "virtual" ? "Virtual" : "Presencial"}
@@ -44,8 +46,8 @@ export const CourseCard = ({ course }: CourseCardProps) => {
       </CardContent>
       <CardFooter className="mt-auto border-t border-border/70 px-6 py-4">
         <Button variant="outline" size="sm" className="w-full justify-between" asChild>
-          <Link href={`/dashboard/explore/${course.id}`}>
-            Ver detalles
+          <Link href={`/courses/${course.id}`}>
+            Ver detalles del curso
           </Link>
         </Button>
       </CardFooter>

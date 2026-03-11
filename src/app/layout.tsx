@@ -30,6 +30,15 @@ const organizationJsonLd = {
   ],
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Cursumi",
+  url: siteUrl,
+  description: "Plataforma de cursos virtuales y presenciales con instructores expertos.",
+  publisher: { "@type": "Organization", name: "Cursumi", url: siteUrl },
+};
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -104,13 +113,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className="antialiased">
         <LayoutShell>{children}</LayoutShell>
         <script
           type="application/ld+json"
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <Analytics />
         <SpeedInsights />

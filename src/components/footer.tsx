@@ -8,6 +8,11 @@ const footerNav = [
   { label: "Contacto", href: "/contact" },
 ];
 
+const legalNav = [
+  { label: "Privacidad", href: "/privacidad" },
+  { label: "Términos de uso", href: "/terminos" },
+];
+
 export const Footer = () => {
   return (
     <footer className="border-t border-border bg-background/80">
@@ -30,13 +35,30 @@ export const Footer = () => {
             © {new Date().getFullYear()} Cursumi
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-6 text-sm text-muted-foreground sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-6 text-sm text-muted-foreground sm:grid-cols-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
               Navegación
             </p>
             <ul className="mt-3 space-y-2">
               {footerNav.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="transition hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+              Legal
+            </p>
+            <ul className="mt-3 space-y-2">
+              {legalNav.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}

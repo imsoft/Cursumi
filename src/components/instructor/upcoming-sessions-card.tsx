@@ -10,6 +10,9 @@ export const UpcomingSessionsCard = ({ sessions }: UpcomingSessionsCardProps) =>
     <Card className="border border-border bg-card/90">
       <CardHeader>
         <CardTitle className="text-lg">Próximas sesiones</CardTitle>
+        <p className="text-sm text-muted-foreground font-normal mt-1">
+          Sesiones programadas de tus cursos
+        </p>
       </CardHeader>
       <CardContent className="space-y-3 pt-0">
         {sessions.map((session) => (

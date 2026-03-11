@@ -99,7 +99,7 @@ export default function AdminCategoriesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Categorías"
-        description="Gestiona las categorías de cursos de la plataforma."
+        description="Gestiona las categorías de cursos"
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
 

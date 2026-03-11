@@ -233,7 +233,7 @@ export function LessonViewerClient({
       if (quizQuestions.length === 0) {
         return (
           <div className="rounded-lg border border-border bg-card p-6 text-muted-foreground">
-            El quiz no está disponible aún.
+            Este quiz aún no está disponible.
           </div>
         );
       }
@@ -337,10 +337,15 @@ export function LessonViewerClient({
     <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
       {/* Mobile sidebar toggle */}
       <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-3 lg:hidden">
-        <button onClick={() => setSidebarOpen((o) => !o)} className="p-1 text-muted-foreground">
+        <button
+          onClick={() => setSidebarOpen((o) => !o)}
+          className="flex items-center gap-2 rounded-md p-2 text-muted-foreground hover:bg-muted"
+          aria-label={sidebarOpen ? "Cerrar menú" : "Abrir menú"}
+        >
           {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <span className="text-sm font-medium">Menú</span>
         </button>
-        <span className="text-sm font-medium text-foreground truncate">{lesson.title}</span>
+        <span className="text-sm font-medium text-foreground truncate flex-1">{lesson.title}</span>
       </div>
 
       {/* Sidebar */}
@@ -516,10 +521,65 @@ export function LessonViewerClient({
                 variant="outline"
                 onClick={() => router.push(`/dashboard/my-courses/${courseId}`)}
               >
-                Terminar curso
+                Volver al curso
               </Button>
             )}
           </div>
+
+          {/* Sticky bottom bar: Marcar completada + Siguiente (solo video/texto, desktop) */}
+          {(lesson.type === "video" || lesson.type === "text") && (
+            <div className="hidden lg:flex sticky bottom-0 mt-6 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-3 items-center justify-between gap-4 border-t border-border bg-background/95 backdrop-blur">
+              <Button
+                onClick={markComplete}
+                disabled={isCompleted || marking}
+                variant={isCompleted ? "outline" : "default"}
+              >
+                {isCompleted ? (
+                  <>
+                    <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+                    Lección completada
+                  </>
+                ) : marking ? (
+                  "Marcando..."
+                ) : (
+                  "Marcar como completada"
+                )}
+              </Button>
+              <div className="flex gap-2">
+                {prevLesson && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      router.push(`/dashboard/my-courses/${courseId}/lessons/${prevLesson.id}`)
+                    }
+                  >
+                    <ChevronLeft className="mr-1 h-4 w-4" />
+                    Anterior
+                  </Button>
+                )}
+                {nextLesson ? (
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      router.push(`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`)
+                    }
+                  >
+                    Siguiente
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => router.push(`/dashboard/my-courses/${courseId}`)}
+                  >
+                    Volver al curso
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

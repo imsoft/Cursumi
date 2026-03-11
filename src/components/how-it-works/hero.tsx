@@ -11,9 +11,7 @@ export const HowItWorksHero = () => {
         ¿Cómo funciona Cursumi?
       </h1>
       <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
-        Cursumi conecta a estudiantes con cursos virtuales y presenciales y le
-        da a los instructores las herramientas para crear, publicar y gestionar
-        sus propuestas. Puedes elegir el camino que más te convenga:
+        Cursumi conecta estudiantes con cursos virtuales y presenciales. Los instructores tienen herramientas para crear, publicar y gestionar. Elige tu camino:
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link href="#estudiantes">

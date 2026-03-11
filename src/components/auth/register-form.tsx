@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { signUp, signIn } from "@/lib/auth-client";
 
@@ -30,7 +31,11 @@ const registerSchema = z
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-export const RegisterForm = () => {
+interface RegisterFormProps {
+  returnUrl?: string;
+}
+
+export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   
@@ -60,8 +65,9 @@ export const RegisterForm = () => {
       }
 
       // Si el registro fue exitoso, redirigir a la página de verificación de email
-      // Better Auth enviará automáticamente el correo de verificación
-      router.push("/verify-email-sent");
+      const params = new URLSearchParams({ email: values.email });
+      if (returnUrl && returnUrl.startsWith("/")) params.set("returnUrl", returnUrl);
+      router.push(`/verify-email-sent?${params.toString()}`);
     } catch {
       setError("Ocurrió un error inesperado. Por favor, intenta de nuevo.");
     }
@@ -72,7 +78,9 @@ export const RegisterForm = () => {
       <CardHeader className="flex flex-col gap-2 px-6 pt-6">
         <CardTitle className="text-3xl font-bold text-foreground">Crear cuenta</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Únete a Cursumi y empieza a aprender o enseñar en minutos.
+          {returnUrl && returnUrl.startsWith("/")
+            ? "Después de verificar tu correo podrás volver al curso."
+            : "Únete a Cursumi y empieza a aprender o enseñar en minutos."}
         </p>
       </CardHeader>
       <CardContent className="px-6 pb-6">
@@ -154,9 +162,9 @@ export const RegisterForm = () => {
         </form>
         <div className="mt-4 text-center text-sm text-muted-foreground">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/login" className="text-primary underline">
+          <Link href="/login" className="text-primary underline">
             Iniciar sesión
-          </a>
+          </Link>
         </div>
         <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
           <span className="flex-1 h-px bg-border" />

@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getCachedSession } from "@/lib/session";
 import { StudentShell } from "@/components/layouts/student-shell";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 interface StudentLayoutProps {
   children: ReactNode;

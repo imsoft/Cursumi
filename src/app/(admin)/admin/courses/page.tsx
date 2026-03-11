@@ -108,8 +108,8 @@ export default function AdminCoursesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Gestión de Cursos"
-        description="Administra y revisa todos los cursos de la plataforma"
+        title="Cursos"
+        description="Revisa y administra todos los cursos"
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
 
@@ -159,8 +159,8 @@ export default function AdminCoursesPage() {
         </Card>
       ) : filteredCourses.length === 0 ? (
         <EmptyState
-          title="No se encontraron cursos"
-          description="Intenta ajustar los filtros de búsqueda."
+          title="Ningún curso coincide"
+          description="Ajusta los filtros de búsqueda."
           icon={BookOpenCheck}
           secondaryAction={
             hasActiveFilters

@@ -6,22 +6,22 @@ const studentSteps = [
   {
     title: "Crear tu cuenta",
     description:
-      "Regístrate con tu correo o redes sociales, crea tu perfil y guarda tus preferencias.",
+      "Regístrate con correo o redes sociales y configura tu perfil.",
   },
   {
     title: "Explorar cursos",
     description:
-      "Filtra por modalidad, categoría o ciudad para encontrar el curso perfecto.",
+      "Filtra por modalidad, categoría o ciudad y encuentra tu curso.",
   },
   {
     title: "Inscribirte y pagar",
     description:
-      "Escoge métodos de pago locales y recibe confirmación inmediata.",
+      "Pago local y confirmación inmediata de tu inscripción.",
   },
   {
-    title: "Tomar tu curso y certificarte",
+    title: "Aprender y certificarte",
     description:
-      "Accede a clases en vivo o presenciales, participa en comunidad y recibe tu constancia.",
+      "Clases online o presenciales, comunidad y certificado al terminar.",
   },
 ];
 

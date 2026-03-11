@@ -8,14 +8,17 @@ import { HowItWorks } from "@/components/how-it-works";
 import { InstructorSection } from "@/components/instructor-section";
 import { Testimonials } from "@/components/testimonials";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata = {
   title: "Formación presencial y online para crecer con expertos",
   description:
     "Descubre cursos virtuales y presenciales con instructores verificados. Aprende habilidades prácticas con Cursumi.",
+  alternates: { canonical: baseUrl },
   openGraph: {
     title: "Cursumi | Cursos virtuales y presenciales",
     description: "Aprende con instructores expertos en cursos online y presenciales.",
-    url: "https://cursumi.com/",
+    url: `${baseUrl}/`,
     type: "website",
     images: [
       {

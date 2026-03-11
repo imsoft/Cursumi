@@ -12,9 +12,7 @@ export const HowItWorksFinalCTA = () => {
           Aprende o comparte tu conocimiento con Cursumi
         </h2>
         <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Ya sea que busques una ruta de aprendizaje guiada o quieras construir
-          tu propia comunidad de estudiantes, Cursumi te da las herramientas para
-          avanzar rápido y con impacto.
+          Aprende con cursos guiados o publica el tuyo. Cursumi te da las herramientas para avanzar.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link href="/courses">

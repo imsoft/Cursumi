@@ -5,9 +5,12 @@ import { ContactCTA } from "@/components/contact/contact-cta";
 import { Card } from "@/components/ui/card";
 import type { Metadata } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata: Metadata = {
   title: "Contacto | Cursumi",
   description: "Escríbenos para soporte, dudas o propuestas sobre tus cursos en Cursumi.",
+  alternates: { canonical: `${baseUrl}/contact` },
   openGraph: {
     title: "Contacto | Cursumi",
     description: "Comunícate con el equipo Cursumi para soporte y dudas.",
@@ -31,10 +34,10 @@ export default function ContactPage() {
             Escríbenos
           </p>
           <h1 className="mt-3 text-3xl font-bold text-foreground sm:text-4xl">
-            Ponte en contacto con nosotros
+            Contacto
           </h1>
           <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-            Estamos aquí para ayudarte, resolver dudas o escuchar tus propuestas.
+            Resolvemos dudas y escuchamos tus propuestas.
           </p>
         </section>
         <section className="mx-auto max-w-4xl px-4">

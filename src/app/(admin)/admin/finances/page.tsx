@@ -131,7 +131,7 @@ export default function FinancesPage() {
       <div className="flex items-center justify-between">
         <PageHeader
           title="Finanzas"
-          description="Visualiza y gestiona los ingresos de la plataforma Cursumi"
+          description="Ingresos y transacciones de la plataforma"
         />
         <div className="flex gap-2">
           <Button variant="outline" asChild>

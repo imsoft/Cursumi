@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition, useRef } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,11 @@ import { CourseSectionsManager } from "@/components/instructor/course-sections-m
 import { CoursePricing } from "@/components/instructor/course-pricing";
 import { CourseFinalExamComponent } from "@/components/instructor/course-final-exam";
 import { CoursePreview } from "@/components/instructor/course-preview";
-import { CheckCircle2, Save } from "lucide-react";
+import { CheckCircle2, Save, Loader2 } from "lucide-react";
 import type { CourseFormData } from "@/components/instructor/course-types";
 import { createCourseDraft, publishCourse } from "@/app/actions/course-actions";
+
+const AUTO_SAVE_INTERVAL_MS = 30_000;
 
 const steps = [
   { id: "info", label: "Información básica", icon: CheckCircle2 },
@@ -21,10 +23,14 @@ const steps = [
   { id: "preview", label: "Vista previa", icon: CheckCircle2 },
 ];
 
+type SaveStatus = "idle" | "saving" | "saved";
+
 export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormData }) => {
   const [currentStep, setCurrentStep] = useState("info");
   const [isPending, startTransition] = useTransition();
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
+  const savedAtRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [courseData, setCourseData] = useState<CourseFormData>({
     title: "",
     description: "",
@@ -48,6 +54,44 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
     }
   }, [initialData]);
 
+  const courseDataRef = useRef(courseData);
+  courseDataRef.current = courseData;
+
+  const performAutoSave = () => {
+    const data = courseDataRef.current;
+    // No guardar borrador vacío por timer: solo si ya existe id o hay título
+    if (!data.id && !data.title?.trim()) return;
+    setSaveStatus("saving");
+    startTransition(async () => {
+      try {
+        const result = await createCourseDraft(data);
+        const id = result && typeof result === "object" && "id" in result ? result.id : undefined;
+        if (id && !data.id) {
+          setCourseData((prev) => ({ ...prev, id }));
+        }
+        setSaveStatus("saved");
+        if (savedAtRef.current) clearTimeout(savedAtRef.current);
+        savedAtRef.current = setTimeout(() => {
+          setSaveStatus("idle");
+          savedAtRef.current = null;
+        }, 2500);
+      } catch {
+        setSaveStatus("idle");
+      }
+    });
+  };
+
+  useEffect(() => {
+    const interval = setInterval(performAutoSave, AUTO_SAVE_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (savedAtRef.current) clearTimeout(savedAtRef.current);
+    };
+  }, []);
+
   const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
@@ -67,7 +111,10 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
   };
 
   const handleStepClick = (stepId: string) => {
-    setCurrentStep(stepId);
+    if (stepId !== currentStep) {
+      performAutoSave();
+      setCurrentStep(stepId);
+    }
   };
 
   const updateCourseData = (data: Partial<CourseFormData>) => {
@@ -76,9 +123,24 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
 
   const handleSaveDraft = () => {
     setStatusMessage(null);
+    setSaveStatus("saving");
     startTransition(async () => {
-      await createCourseDraft(courseData);
-      setStatusMessage("Curso guardado como borrador");
+      try {
+        const result = await createCourseDraft(courseData);
+        const id = result && typeof result === "object" && "id" in result ? result.id : undefined;
+        if (id && !courseData.id) {
+          setCourseData((prev) => ({ ...prev, id }));
+        }
+        setStatusMessage("Curso guardado como borrador");
+        setSaveStatus("saved");
+        if (savedAtRef.current) clearTimeout(savedAtRef.current);
+        savedAtRef.current = setTimeout(() => {
+          setSaveStatus("idle");
+          savedAtRef.current = null;
+        }, 2500);
+      } catch {
+        setSaveStatus("idle");
+      }
     });
   };
 
@@ -102,7 +164,7 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
       <div>
         <h1 className="text-3xl font-bold text-foreground">Crear nuevo curso</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Completa los pasos para crear tu curso en Cursumi
+          Completa los pasos para publicar tu curso
         </p>
       </div>
 
@@ -158,15 +220,26 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
               Paso {currentStepIndex + 1} de {steps.length}
             </p>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleSaveDraft}
-            className="flex items-center gap-2"
-            disabled={isPending}
-          >
-            <Save className="h-4 w-4" />
-            {isPending ? "Guardando..." : "Guardar como borrador"}
-          </Button>
+          <div className="flex items-center gap-3">
+            {saveStatus === "saving" && (
+              <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Guardando…
+              </span>
+            )}
+            {saveStatus === "saved" && (
+              <span className="text-sm text-green-600">Guardado</span>
+            )}
+            <Button
+              variant="outline"
+              onClick={handleSaveDraft}
+              className="flex items-center gap-2"
+              disabled={isPending}
+            >
+              <Save className="h-4 w-4" />
+              {isPending ? "Guardando..." : "Guardar como borrador"}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="p-6">
           {statusMessage && (
@@ -174,7 +247,16 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
               {statusMessage}
             </div>
           )}
-          <Tabs value={currentStep} onValueChange={setCurrentStep} className="w-full">
+          <Tabs
+            value={currentStep}
+            onValueChange={(value) => {
+              if (value !== currentStep) {
+                performAutoSave();
+                setCurrentStep(value);
+              }
+            }}
+            className="w-full"
+          >
             <TabsContent value="info" className="mt-0">
               <CourseBasicInfo
                 data={courseData}

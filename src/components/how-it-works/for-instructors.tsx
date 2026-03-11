@@ -4,24 +4,24 @@ import { Button } from "@/components/ui/button";
 
 const instructorSteps = [
   {
-    title: "Crear tu cuenta de instructor",
+    title: "Cuenta de instructor",
     description:
-      "Completa tu perfil profesional, verifica tu identidad y configura tus credenciales.",
+      "Perfil profesional, verificación y configuración de cobro.",
   },
   {
-    title: "Diseñar y configurar tu curso",
+    title: "Diseñar tu curso",
     description:
-      "Define título, modalidad, fechas, duración, precios y logística presencial.",
+      "Título, modalidad, fechas, duración, precio y logística.",
   },
   {
     title: "Publicar y compartir",
     description:
-      "Sube recursos, activa la visibilidad y comparte tu curso en redes y eventos.",
+      "Sube recursos, publica y comparte en redes o eventos.",
   },
   {
-    title: "Gestionar alumnos y sesiones",
+    title: "Gestionar alumnos",
     description:
-      "Monitorea asistencia, responde dudas y entrega certificados digitales o físicos.",
+      "Asistencia, mensajes y certificados digitales o físicos.",
   },
 ];
 

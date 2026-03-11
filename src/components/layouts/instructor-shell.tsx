@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import {
   SidebarProvider,
   SidebarInset,
@@ -25,6 +26,20 @@ const instructorNavItems = [
   { title: "Perfil", href: "/instructor/profile", icon: UserCircle },
 ];
 
+const pathnameToTitle: Record<string, string> = {
+  "/instructor": "Dashboard",
+  "/instructor/courses": "Mis cursos",
+  "/instructor/earnings": "Ingresos",
+  "/instructor/analytics": "Analíticas",
+  "/instructor/profile": "Perfil",
+};
+
+function getPageTitle(pathname: string | null): string {
+  if (!pathname) return "Dashboard";
+  const base = pathname.split("/").slice(0, 3).join("/");
+  return pathnameToTitle[base] ?? instructorNavItems.find((n) => pathname.startsWith(n.href))?.title ?? "Dashboard";
+}
+
 interface InstructorShellProps {
   userName: string;
   userInitials: string;
@@ -32,11 +47,14 @@ interface InstructorShellProps {
 }
 
 export function InstructorShell({ userName, userInitials, children }: InstructorShellProps) {
+  const pathname = usePathname();
+  const pageTitle = getPageTitle(pathname);
+
   return (
     <SidebarProvider>
       <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" />
       <SidebarInset>
-        <DashboardHeader user={{ name: userName, initials: userInitials }} />
+        <DashboardHeader title={pageTitle} user={{ name: userName, initials: userInitials }} />
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
             {children}

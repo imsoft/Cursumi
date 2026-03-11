@@ -2,9 +2,12 @@ import { listPublicCourses } from "@/app/actions/course-actions";
 import { CoursesPageClient } from "@/components/courses/courses-page-client";
 import type { Metadata } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata: Metadata = {
   title: "Cursos disponibles | Cursumi",
   description: "Explora cursos virtuales y presenciales de programación, marketing, diseño y más.",
+  alternates: { canonical: `${baseUrl}/courses` },
   openGraph: {
     title: "Cursos disponibles | Cursumi",
     description: "Explora cursos virtuales y presenciales de programación, marketing, diseño y más.",
@@ -31,7 +34,7 @@ export default async function CoursesPage() {
     itemListElement: courses.map((course, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `https://cursumi.com/dashboard/explore/${course.id}`,
+      url: `${baseUrl}/courses/${course.id}`,
       name: course.title,
       item: {
         "@type": "Course",
@@ -40,10 +43,19 @@ export default async function CoursesPage() {
         provider: {
           "@type": "Organization",
           name: "Cursumi",
-          sameAs: "https://cursumi.com",
+          sameAs: baseUrl,
         },
       },
     })),
+  };
+
+  const breadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: baseUrl },
+      { "@type": "ListItem", position: 2, name: "Cursos", item: `${baseUrl}/courses` },
+    ],
   };
 
   return (
@@ -53,6 +65,11 @@ export default async function CoursesPage() {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbList) }}
       />
     </>
   );

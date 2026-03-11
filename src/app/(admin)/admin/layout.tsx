@@ -1,8 +1,13 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getCachedSession } from "@/lib/session";
 import { AdminShell } from "@/components/layouts/admin-shell";
 import { getUserRole } from "@/lib/user-service";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 interface AdminLayoutProps {
   children: ReactNode;

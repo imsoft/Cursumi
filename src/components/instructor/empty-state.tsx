@@ -9,8 +9,8 @@ interface EmptyStateProps {
 export const EmptyState = ({ onResetFilters }: EmptyStateProps) => {
   return (
     <SharedEmptyState
-      title="No encontramos cursos"
-      description="Ajusta los filtros para ver más cursos o crea uno nuevo."
+      title="Ningún curso coincide"
+      description="Ajusta los filtros o crea un curso nuevo."
       action={{
         label: "Crear nuevo curso",
         href: "/instructor/courses/new",

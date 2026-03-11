@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
     {
       title: "Inscripciones",
       value: statsData.totalEnrollments.toString(),
-      description: "Total de enrollments",
+      description: "Inscripciones totales",
       icon: TrendingUp,
       iconColor: "text-orange-600",
     },
@@ -42,8 +42,8 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Dashboard de Administración"
-        description="Resumen general de la plataforma Cursumi"
+        title="Administración"
+        description="Resumen de la plataforma"
       />
 
       <StatsGrid stats={stats} columns={4} />
@@ -55,7 +55,7 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4 text-sm text-muted-foreground">
-              <p>Conecta un feed real de actividad cuando haya eventos.</p>
+              <p>Próximamente: actividad reciente.</p>
             </div>
           </CardContent>
         </Card>

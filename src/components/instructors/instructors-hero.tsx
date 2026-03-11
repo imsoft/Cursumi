@@ -13,9 +13,7 @@ export const InstructorsHero = () => {
             Comparte tu conocimiento. Crea y vende tus cursos en Cursumi
           </h1>
           <p className="max-w-3xl text-base text-muted-foreground">
-            Publica cursos virtuales o presenciales, conecta con estudiantes
-            reales, gestiona pagos y crea experiencias memorables sin
-            complicaciones técnicas.
+            Publica cursos virtuales o presenciales, conecta con estudiantes, gestiona pagos y certificados sin complicaciones.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="#convertir">

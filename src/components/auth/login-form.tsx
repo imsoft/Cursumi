@@ -54,7 +54,11 @@ const loginResolver: Resolver<LoginFormValues> = async (values) => {
   };
 };
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  returnUrl?: string;
+}
+
+export const LoginForm = ({ returnUrl }: LoginFormProps) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   
@@ -84,9 +88,10 @@ export const LoginForm = () => {
         return;
       }
 
-      // Si el login fue exitoso, redirigir
+      // Si el login fue exitoso, redirigir (returnUrl si es ruta segura)
       if (result.data) {
-        router.push("/dashboard");
+        const target = returnUrl && returnUrl.startsWith("/") ? returnUrl : "/dashboard";
+        router.push(target);
       }
     } catch (err) {
       console.error("Error en login:", err);
@@ -99,7 +104,9 @@ export const LoginForm = () => {
       <CardHeader className="flex flex-col gap-2 px-6 pt-6">
         <CardTitle className="text-3xl font-bold text-foreground">Iniciar sesión</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Accede a tu cuenta para continuar aprendiendo en Cursumi
+          {returnUrl && returnUrl.startsWith("/")
+            ? "Después de iniciar sesión volverás al curso."
+            : "Accede a tu cuenta para continuar aprendiendo en Cursumi"}
         </p>
       </CardHeader>
       <CardContent className="space-y-4 px-6 pb-6">
@@ -150,9 +157,9 @@ export const LoginForm = () => {
           </Button>
           <div className="text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{" "}
-            <a href="/signup" className="text-primary underline">
+            <Link href="/signup" className="text-primary underline">
               Crear cuenta
-            </a>
+            </Link>
           </div>
         </form>
         <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">

@@ -60,6 +60,7 @@ function upcomingFromCourses(courses: StudentCourse[]): UpcomingClass[] {
     .slice(0, 3)
     .map((course) => ({
       id: `up-${course.id}`,
+      courseId: course.id,
       courseTitle: course.title,
       dateTime: course.nextSession || "",
       modality: course.modality,

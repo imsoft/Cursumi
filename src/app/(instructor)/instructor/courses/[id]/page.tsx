@@ -19,7 +19,7 @@ export default async function CourseDetailPage({
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-semibold text-foreground mb-2">Curso no encontrado</h2>
             <p className="text-muted-foreground mb-4">
-              El curso que buscas no existe o ha sido eliminado.
+              No existe o fue eliminado.
             </p>
             <Button asChild>
               <Link href="/instructor/courses">Volver a mis cursos</Link>
@@ -72,6 +72,9 @@ export default async function CourseDetailPage({
           <Card>
             <CardHeader>
               <CardTitle>Información del curso</CardTitle>
+              <p className="text-sm text-muted-foreground font-normal mt-1">
+                Categoría, modalidad y fechas
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
@@ -115,6 +118,9 @@ export default async function CourseDetailPage({
                 <Users className="h-5 w-5" />
                 Estadísticas
               </CardTitle>
+              <p className="text-sm text-muted-foreground font-normal mt-1">
+                Resumen del curso
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -132,6 +138,9 @@ export default async function CourseDetailPage({
           <Card>
             <CardHeader>
               <CardTitle>Acciones rápidas</CardTitle>
+              <p className="text-sm text-muted-foreground font-normal mt-1">
+                Editar, alumnos y mensajes
+              </p>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>

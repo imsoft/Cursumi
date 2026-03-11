@@ -42,8 +42,8 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Analíticas y Reportes"
-        description="Métricas y estadísticas de la plataforma Cursumi"
+        title="Analíticas"
+        description="Métricas y estadísticas de la plataforma"
       />
 
       <StatsGrid stats={stats} columns={4} />

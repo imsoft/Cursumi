@@ -16,7 +16,7 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
       <div>
         <h1 className="text-3xl font-semibold text-foreground">Ingresos generados</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Visualiza tus ganancias y transacciones en Cursumi
+          Tus ganancias y transacciones como instructor
         </p>
       </div>
 

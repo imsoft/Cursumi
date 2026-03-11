@@ -8,8 +8,10 @@ export const CoursesPageHeader = () => {
         Explora nuestros cursos
       </h1>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-        Encuentra cursos virtuales y presenciales creados por expertos para ayudarte
-        a crecer en tu carrera profesional.<span className="hidden sm:inline"> Filtra por modalidad, categoría o ciudad y responde a tus necesidades.</span>
+        Cursos virtuales y presenciales creados por expertos. Filtra por modalidad, categoría o ciudad.
+      </p>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        En Cursumi encontrarás cursos de programación, marketing, diseño y más: elige el que mejor se adapte a tus objetivos y aprende con instructores verificados. Muchos cursos incluyen certificación al completarlos.
       </p>
     </section>
   );

@@ -148,8 +148,8 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Gestión de Usuarios"
-        description="Administra todos los usuarios de la plataforma Cursumi"
+        title="Usuarios"
+        description="Administra usuarios de la plataforma"
         action={{
           label: "Nuevo usuario",
           href: "/admin/users/new",
@@ -205,8 +205,8 @@ export default function AdminUsersPage() {
         </Card>
       ) : filteredUsers.length === 0 ? (
         <EmptyState
-          title="No se encontraron usuarios"
-          description="Intenta ajustar los filtros de búsqueda."
+          title="Ningún usuario coincide"
+          description="Ajusta los filtros de búsqueda."
           icon={Users}
           secondaryAction={
             hasActiveFilters

@@ -39,7 +39,7 @@ export function InstructorCoursesClient({ initialCourses }: InstructorCoursesCli
         <div>
           <h1 className="text-3xl font-semibold text-foreground">Mis cursos</h1>
           <p className="text-sm text-muted-foreground">
-            Administra los cursos que impartes en Cursumi.
+            Crea y administra los cursos que impartes.
           </p>
         </div>
         <Button size="lg" asChild>

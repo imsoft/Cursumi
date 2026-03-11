@@ -22,7 +22,7 @@ export default async function CourseStudentsPage({
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-semibold text-foreground mb-2">Curso no encontrado</h2>
             <p className="text-muted-foreground mb-4">
-              El curso que buscas no existe o ha sido eliminado.
+              No existe o fue eliminado.
             </p>
             <Button asChild>
               <Link href="/instructor/courses">Volver a mis cursos</Link>
@@ -60,7 +60,7 @@ export default async function CourseStudentsPage({
             <div className="relative w-full sm:w-auto sm:min-w-[300px]">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Buscar alumno..."
+                placeholder="Nombre o correo..."
                 className="pl-9"
                 aria-label="Buscar alumno"
               />
@@ -70,7 +70,7 @@ export default async function CourseStudentsPage({
         <CardContent>
           {students.length === 0 ? (
             <div className="py-8 text-center">
-              <p className="text-muted-foreground">No hay alumnos inscritos en este curso.</p>
+              <p className="text-muted-foreground">Aún no hay alumnos inscritos en este curso.</p>
             </div>
           ) : (
             <div className="space-y-4">

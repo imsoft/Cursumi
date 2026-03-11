@@ -302,6 +302,15 @@ export async function listPublishedCourses(filters: CourseFilters = {}): Promise
   }));
 }
 
+/** Lightweight list for sitemap: only id and updatedAt of published courses */
+export async function getPublishedCourseIdsForSitemap(): Promise<{ id: string; updatedAt: Date }[]> {
+  return prisma.course.findMany({
+    where: { status: "published" },
+    select: { id: true, updatedAt: true },
+    orderBy: { updatedAt: "desc" },
+  });
+}
+
 export async function getPublishedCourse(courseId: string) {
   return prisma.course.findFirst({
     where: { id: courseId, status: "published" },

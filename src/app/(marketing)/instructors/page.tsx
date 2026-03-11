@@ -7,9 +7,12 @@ import { InstructorsFAQ } from "@/components/instructors/faq-section";
 import { InstructorsFinalCTA } from "@/components/instructors/final-cta";
 import type { Metadata } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata: Metadata = {
   title: "Para instructores | Publica y monetiza cursos en Cursumi",
   description: "Crea cursos virtuales o presenciales, gestiona estudiantes y cobra con Cursumi.",
+  alternates: { canonical: `${baseUrl}/instructors` },
   openGraph: {
     title: "Para instructores | Cursumi",
     description: "Publica cursos virtuales o presenciales y cobra con Cursumi.",

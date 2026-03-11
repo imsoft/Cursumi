@@ -15,7 +15,7 @@ export const StudentRecommendedCourses = ({ recommendations }: StudentRecommenda
     <Card className="flex h-full flex-col border border-border bg-card/90">
       <CardHeader className="px-4 pt-4 pb-3">
         <CardTitle className="text-lg font-semibold text-foreground">Recomendados para ti</CardTitle>
-        <p className="mt-1 text-sm text-muted-foreground">Basado en tus intereses.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Cursos que podrían interesarte.</p>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col space-y-3 px-4 pb-4 pt-0">
         {recommendations.map((rec) => (
@@ -30,6 +30,7 @@ export const StudentRecommendedCourses = ({ recommendations }: StudentRecommenda
                   alt={rec.title}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 280px"
                 />
               </div>
             )}

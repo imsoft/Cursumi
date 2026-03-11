@@ -16,10 +16,10 @@ export const Hero = () => {
           Cursos virtuales y presenciales para aprender lo que importa de verdad
         </h1>
         <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Cursumi conecta estudiantes con cursos de calidad, tanto online como presenciales, diseñados para llevar tus habilidades al siguiente nivel con instructores expertos.
+          Aprende con instructores expertos. Cursos online y presenciales para llevar tus habilidades al siguiente nivel.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Link href="#cursos" className="inline-flex">
+          <Link href="/courses" className="inline-flex">
             <Button size="lg">Explorar cursos</Button>
           </Link>
           <Link href="#instructores" className="inline-flex">

@@ -13,8 +13,7 @@ import { ReviewSection } from "@/components/student/review-section";
 import { formatPriceMXN } from "@/lib/utils";
 
 type Params = { params: Promise<{ id: string }> };
-const ogFallback =
-  "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80";
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
@@ -24,22 +23,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: "Curso no encontrado | Cursumi",
     };
   }
-  const image = course.imageUrl || ogFallback;
+  const canonicalUrl = `${baseUrl}/courses/${id}`;
   return {
     title: `${course.title} | Cursumi`,
     description: course.description,
-    openGraph: {
-      title: course.title,
-      description: course.description || "Curso en Cursumi",
-      images: [
-        image,
-        {
-          url: `/api/og/course/${course.id}`,
-        },
-      ],
-      url: `https://cursumi.com/dashboard/explore/${course.id}`,
-      type: "article",
-    },
+    robots: { index: false, follow: true },
+    alternates: { canonical: canonicalUrl },
   };
 }
 

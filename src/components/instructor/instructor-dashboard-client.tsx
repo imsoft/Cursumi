@@ -37,7 +37,7 @@ export function InstructorDashboardClient({ name, courses }: InstructorDashboard
         <Card className="border border-border bg-card/90">
           <div className="px-6 pt-6 pb-4">
             <h3 className="text-lg font-semibold text-foreground mb-1">Tus cursos</h3>
-            <p className="text-sm text-muted-foreground">Administra tus contenidos</p>
+            <p className="text-sm text-muted-foreground">Administra y publica tus contenidos</p>
           </div>
           <CardContent className="px-6 pb-6 pt-0">
             <Tabs

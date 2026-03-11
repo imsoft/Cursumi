@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata: Metadata = {
-  title: "Términos y Condiciones — Cursumi",
-  description: "Lee los términos y condiciones de uso de la plataforma Cursumi.",
+  title: "Términos y condiciones — Cursumi",
+  description: "Términos y condiciones de uso de la plataforma Cursumi.",
+  alternates: { canonical: `${baseUrl}/terminos` },
 };
 
 export default function TerminosPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-3xl px-4 py-16">
-        <h1 className="mb-2 text-3xl font-bold">Términos y Condiciones</h1>
+        <h1 className="mb-2 text-3xl font-bold">Términos y condiciones</h1>
         <p className="mb-8 text-sm text-muted-foreground">Última actualización: marzo 2025</p>
 
         <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-sm leading-relaxed">

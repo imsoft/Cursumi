@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 
+const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
+
 export const metadata: Metadata = {
-  title: "Aviso de Privacidad — Cursumi",
-  description: "Conoce cómo Cursumi recopila, usa y protege tus datos personales.",
+  title: "Aviso de privacidad — Cursumi",
+  description: "Cómo Cursumi recopila, usa y protege tus datos personales.",
+  alternates: { canonical: `${baseUrl}/privacidad` },
 };
 
 export default function PrivacidadPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-3xl px-4 py-16">
-        <h1 className="mb-2 text-3xl font-bold">Aviso de Privacidad</h1>
+        <h1 className="mb-2 text-3xl font-bold">Aviso de privacidad</h1>
         <p className="mb-8 text-sm text-muted-foreground">Última actualización: marzo 2025</p>
 
         <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-sm leading-relaxed">

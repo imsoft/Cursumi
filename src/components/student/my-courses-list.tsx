@@ -13,11 +13,11 @@ export const MyCoursesList = ({ courses, onClearFilters }: MyCoursesListProps) =
   if (courses.length === 0) {
     return (
       <EmptyState
-        title="No encontramos cursos con estos filtros"
-        description="Prueba ajustando tu búsqueda o explora nuevos cursos."
+        title="Ningún curso coincide"
+        description="Ajusta los filtros o explora más cursos para inscribirte."
         action={{
           label: "Explorar cursos",
-          href: "/courses",
+          href: "/dashboard/explore",
           variant: "default",
         }}
         secondaryAction={{

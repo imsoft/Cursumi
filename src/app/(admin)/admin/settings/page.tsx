@@ -15,7 +15,7 @@ export default function AdminSettingsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Configuración"
-        description="Administra la configuración general de la plataforma"
+        description="Configuración general de la plataforma"
       />
 
       <div className="grid gap-6 md:grid-cols-2">

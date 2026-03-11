@@ -16,6 +16,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import type { LessonType } from "@/generated/prisma";
+import { EnrolledWelcomeBanner } from "@/components/student/enrolled-welcome-banner";
 
 const lessonIcon = (type: LessonType) => {
   switch (type) {
@@ -28,10 +29,13 @@ const lessonIcon = (type: LessonType) => {
 
 export default async function MyCourseDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams: Promise<{ enrolled?: string }>;
 }) {
   const { courseId } = await params;
+  const { enrolled } = await searchParams;
   const detail = await getMyCourseDetail(courseId);
   if (!detail) {
     redirect("/dashboard/my-courses");
@@ -46,9 +50,13 @@ export default async function MyCourseDetailPage({
   // Find first uncompleted lesson for "Continue" button
   const allLessons = course.sections.flatMap((s) => s.lessons);
   const nextLesson = allLessons.find((l) => !completedIds.has(l.id)) ?? allLessons[0];
+  const firstLesson = allLessons[0];
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+      {enrolled === "true" && (
+        <EnrolledWelcomeBanner courseId={courseId} firstLessonId={firstLesson?.id} />
+      )}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Link href="/dashboard/my-courses" className="underline">
           Mis cursos

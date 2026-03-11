@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Verificación de correo",
+  robots: { index: false, follow: false },
+};
 
 interface VerifyEmailPageProps {
   searchParams: Promise<{ token?: string }>;

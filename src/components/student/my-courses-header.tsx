@@ -6,7 +6,7 @@ export const MyCoursesHeader = () => {
   return (
     <PageHeader
       title="Mis cursos"
-      description="Gestiona y continúa con tus cursos en Cursumi."
+      description="Tus cursos inscritos. Continúa donde lo dejaste."
       action={{
         label: "Explorar más cursos",
         href: "/dashboard/explore",
