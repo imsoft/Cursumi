@@ -12426,6 +12426,8 @@ export namespace Prisma {
     order: number
     videoUrl: number
     content: number
+    attachments: number
+    resources: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12478,6 +12480,8 @@ export namespace Prisma {
     order?: true
     videoUrl?: true
     content?: true
+    attachments?: true
+    resources?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12579,6 +12583,8 @@ export namespace Prisma {
     order: number
     videoUrl: string | null
     content: string | null
+    attachments: JsonValue | null
+    resources: JsonValue | null
     createdAt: Date
     updatedAt: Date
     _count: LessonCountAggregateOutputType | null
@@ -12612,6 +12618,8 @@ export namespace Prisma {
     order?: boolean
     videoUrl?: boolean
     content?: boolean
+    attachments?: boolean
+    resources?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -12629,6 +12637,8 @@ export namespace Prisma {
     order?: boolean
     videoUrl?: boolean
     content?: boolean
+    attachments?: boolean
+    resources?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -12644,6 +12654,8 @@ export namespace Prisma {
     order?: boolean
     videoUrl?: boolean
     content?: boolean
+    attachments?: boolean
+    resources?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -12659,11 +12671,13 @@ export namespace Prisma {
     order?: boolean
     videoUrl?: boolean
     content?: boolean
+    attachments?: boolean
+    resources?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "type" | "duration" | "order" | "videoUrl" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
+  export type LessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "type" | "duration" | "order" | "videoUrl" | "content" | "attachments" | "resources" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
   export type LessonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
     progress?: boolean | Lesson$progressArgs<ExtArgs>
@@ -12692,6 +12706,8 @@ export namespace Prisma {
       order: number
       videoUrl: string | null
       content: string | null
+      attachments: Prisma.JsonValue | null
+      resources: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["lesson"]>
@@ -13128,6 +13144,8 @@ export namespace Prisma {
     readonly order: FieldRef<"Lesson", 'Int'>
     readonly videoUrl: FieldRef<"Lesson", 'String'>
     readonly content: FieldRef<"Lesson", 'String'>
+    readonly attachments: FieldRef<"Lesson", 'Json'>
+    readonly resources: FieldRef<"Lesson", 'Json'>
     readonly createdAt: FieldRef<"Lesson", 'DateTime'>
     readonly updatedAt: FieldRef<"Lesson", 'DateTime'>
   }
@@ -23839,6 +23857,8 @@ export namespace Prisma {
     order: 'order',
     videoUrl: 'videoUrl',
     content: 'content',
+    attachments: 'attachments',
+    resources: 'resources',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -24883,6 +24903,8 @@ export namespace Prisma {
     order?: IntFilter<"Lesson"> | number
     videoUrl?: StringNullableFilter<"Lesson"> | string | null
     content?: StringNullableFilter<"Lesson"> | string | null
+    attachments?: JsonNullableFilter<"Lesson">
+    resources?: JsonNullableFilter<"Lesson">
     createdAt?: DateTimeFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
@@ -24899,6 +24921,8 @@ export namespace Prisma {
     order?: SortOrder
     videoUrl?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
+    attachments?: SortOrderInput | SortOrder
+    resources?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     section?: CourseSectionOrderByWithRelationInput
@@ -24918,6 +24942,8 @@ export namespace Prisma {
     order?: IntFilter<"Lesson"> | number
     videoUrl?: StringNullableFilter<"Lesson"> | string | null
     content?: StringNullableFilter<"Lesson"> | string | null
+    attachments?: JsonNullableFilter<"Lesson">
+    resources?: JsonNullableFilter<"Lesson">
     createdAt?: DateTimeFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
@@ -24934,6 +24960,8 @@ export namespace Prisma {
     order?: SortOrder
     videoUrl?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
+    attachments?: SortOrderInput | SortOrder
+    resources?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: LessonCountOrderByAggregateInput
@@ -24956,6 +24984,8 @@ export namespace Prisma {
     order?: IntWithAggregatesFilter<"Lesson"> | number
     videoUrl?: StringNullableWithAggregatesFilter<"Lesson"> | string | null
     content?: StringNullableWithAggregatesFilter<"Lesson"> | string | null
+    attachments?: JsonNullableWithAggregatesFilter<"Lesson">
+    resources?: JsonNullableWithAggregatesFilter<"Lesson">
     createdAt?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   }
@@ -26378,6 +26408,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
@@ -26394,6 +26426,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -26408,6 +26442,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
@@ -26424,6 +26460,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
@@ -26439,6 +26477,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -26452,6 +26492,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26466,6 +26508,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27904,6 +27948,8 @@ export namespace Prisma {
     order?: SortOrder
     videoUrl?: SortOrder
     content?: SortOrder
+    attachments?: SortOrder
+    resources?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -31929,6 +31975,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
@@ -31943,6 +31991,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -32056,6 +32106,8 @@ export namespace Prisma {
     order?: IntFilter<"Lesson"> | number
     videoUrl?: StringNullableFilter<"Lesson"> | string | null
     content?: StringNullableFilter<"Lesson"> | string | null
+    attachments?: JsonNullableFilter<"Lesson">
+    resources?: JsonNullableFilter<"Lesson">
     createdAt?: DateTimeFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
   }
@@ -32196,6 +32248,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
@@ -32211,6 +32265,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32277,6 +32333,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
@@ -32292,6 +32350,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35161,6 +35221,8 @@ export namespace Prisma {
     order: number
     videoUrl?: string | null
     content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35174,6 +35236,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
@@ -35188,6 +35252,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
@@ -35202,6 +35268,8 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

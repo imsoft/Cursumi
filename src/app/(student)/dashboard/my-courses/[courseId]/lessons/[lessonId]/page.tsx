@@ -27,6 +27,8 @@ export default async function LessonPage({
         content: lesson.content ?? null,
         videoUrl: lesson.videoUrl ?? null,
         duration: lesson.duration ?? null,
+        attachments: Array.isArray(lesson.attachments) ? (lesson.attachments as { id: string; name: string; type: string; url: string; size?: number }[]) : null,
+        resources: Array.isArray(lesson.resources) ? (lesson.resources as { id: string; title: string; url: string; type: string }[]) : null,
       }}
       courseId={courseId}
       sections={sections.map((s) => ({

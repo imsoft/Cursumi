@@ -51,6 +51,8 @@ export default function EditCoursePage() {
               order: lesson.order || lidx + 1,
               videoUrl: lesson.videoUrl || "",
               content: lesson.content || "",
+              files: Array.isArray(lesson.attachments) ? lesson.attachments : [],
+              resources: Array.isArray(lesson.resources) ? lesson.resources : [],
             })),
           })),
         };

@@ -22,6 +22,21 @@ import {
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
+interface LessonAttachment {
+  id: string;
+  name: string;
+  type: string;
+  url: string;
+  size?: number;
+}
+
+interface LessonResource {
+  id: string;
+  title: string;
+  url: string;
+  type: string;
+}
+
 interface LessonData {
   id: string;
   title: string;
@@ -29,6 +44,8 @@ interface LessonData {
   content: string | null;
   videoUrl: string | null;
   duration: string | null;
+  attachments?: LessonAttachment[] | null;
+  resources?: LessonResource[] | null;
 }
 
 interface SidebarLesson {
@@ -417,6 +434,53 @@ export function LessonViewerClient({
                   "Marcar como completada"
                 )}
               </Button>
+            </div>
+          )}
+
+          {/* Adjuntos y recursos */}
+          {((lesson.attachments && lesson.attachments.length > 0) || (lesson.resources && lesson.resources.length > 0)) && (
+            <div className="rounded-xl border border-border bg-muted/30 p-4 space-y-3">
+              <p className="text-sm font-semibold text-foreground">Material de esta lección</p>
+              {lesson.attachments && lesson.attachments.length > 0 && (
+                <div className="space-y-2">
+                  {lesson.attachments.map((att) => (
+                    <a
+                      key={att.id}
+                      href={att.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download={att.name}
+                      className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                    >
+                      <FileText className="h-4 w-4 shrink-0 text-primary" />
+                      <span className="flex-1 truncate">{att.name}</span>
+                      {att.size && (
+                        <span className="text-xs text-muted-foreground shrink-0">
+                          {att.size < 1024 * 1024
+                            ? `${(att.size / 1024).toFixed(0)} KB`
+                            : `${(att.size / 1024 / 1024).toFixed(1)} MB`}
+                        </span>
+                      )}
+                    </a>
+                  ))}
+                </div>
+              )}
+              {lesson.resources && lesson.resources.length > 0 && (
+                <div className="space-y-2">
+                  {lesson.resources.map((res) => (
+                    <a
+                      key={res.id}
+                      href={res.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-primary transition-colors hover:bg-muted"
+                    >
+                      <ChevronRight className="h-4 w-4 shrink-0" />
+                      <span className="flex-1 truncate">{res.title}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

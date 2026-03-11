@@ -229,6 +229,8 @@ exports.Prisma.LessonScalarFieldEnum = {
   order: 'order',
   videoUrl: 'videoUrl',
   content: 'content',
+  attachments: 'attachments',
+  resources: 'resources',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

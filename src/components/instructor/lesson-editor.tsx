@@ -37,6 +37,8 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const [evaluationCriteria, setEvaluationCriteria] = useState<EvaluationCriterion[]>(lesson.evaluationCriteria || []);
   const [files, setFiles] = useState<CourseFile[]>(lesson.files || []);
   const [resources, setResources] = useState<CourseResource[]>(lesson.resources || []);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [fileUploadError, setFileUploadError] = useState<string | null>(null);
   const [newCriterionText, setNewCriterionText] = useState("");
   const [newResourceTitle, setNewResourceTitle] = useState("");
   const [newResourceUrl, setNewResourceUrl] = useState("");
@@ -65,22 +67,33 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
     });
   };
 
-  const handleAddFile = (file: File) => {
-    // En producción, aquí subirías el archivo a un servidor
+  const handleAddFile = async (file: File) => {
     const fileType = file.type.includes("pdf") ? "pdf" :
                      file.type.includes("image") ? "image" :
                      file.type.includes("document") || file.name.endsWith(".docx") || file.name.endsWith(".doc") ? "document" :
                      "other";
 
-    const newFile: CourseFile = {
-      id: crypto.randomUUID(),
-      name: file.name,
-      type: fileType,
-      url: file.name, // En producción sería la URL del servidor
-      size: file.size,
-    };
+    setUploadingFile(true);
+    setFileUploadError(null);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/upload/attachment", { method: "POST", body: form });
+      if (!res.ok) throw new Error("Error al subir archivo");
+      const { url } = await res.json();
 
-    setFiles([...files, newFile]);
+      setFiles((prev) => [...prev, {
+        id: crypto.randomUUID(),
+        name: file.name,
+        type: fileType,
+        url,
+        size: file.size,
+      }]);
+    } catch (err) {
+      setFileUploadError(err instanceof Error ? err.message : "Error al subir");
+    } finally {
+      setUploadingFile(false);
+    }
   };
 
   const handleDeleteFile = (fileId: string) => {
@@ -771,14 +784,18 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                       e.target.value = "";
                     }
                   }}
+                  disabled={uploadingFile}
                 />
                 <label
                   htmlFor="material-file-upload"
-                  className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary/40 bg-primary/5 p-4 text-sm font-medium text-foreground transition-colors hover:border-primary/60 hover:bg-primary/10"
+                  className={`flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary/40 bg-primary/5 p-4 text-sm font-medium text-foreground transition-colors hover:border-primary/60 hover:bg-primary/10 ${uploadingFile ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   <Upload className="h-4 w-4" />
-                  Subir archivo (PDF, Word, Imagen)
+                  {uploadingFile ? "Subiendo..." : "Subir archivo (PDF, Word, Imagen)"}
                 </label>
+                {fileUploadError && (
+                  <p className="mt-1 text-xs text-destructive">{fileUploadError}</p>
+                )}
                 <p className="mt-2 text-xs text-muted-foreground text-center">
                   Los estudiantes podrán descargar estos archivos como material complementario
                 </p>

@@ -227,6 +227,8 @@ model Lesson {
   order       Int
   videoUrl    String?
   content     String?    @db.Text
+  attachments Json? // CourseFile[] — PDFs y archivos descargables
+  resources   Json? // CourseResource[] — enlaces externos
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 

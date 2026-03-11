@@ -84,6 +84,8 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
                   order: lesson.order ?? lessonIndex + 1,
                   videoUrl: lesson.videoUrl,
                   content: lesson.content,
+                  attachments: lesson.files?.length ? (lesson.files as object[]) : undefined,
+                  resources: lesson.resources?.length ? (lesson.resources as object[]) : undefined,
                 })) || [],
               },
             })),
