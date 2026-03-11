@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
@@ -14,33 +14,38 @@ interface AdminLayoutProps {
 }
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const session = await getSessionSafe();
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  let role: string;
   try {
-    role = await getUserRole(session.user.id);
-  } catch {
+    const session = await getSessionSafe();
+    if (!session?.user?.id) {
+      redirect("/login");
+    }
+
+    let role: string;
+    try {
+      role = await getUserRole(session.user.id);
+    } catch {
+      redirect("/login");
+    }
+    if (role !== "admin") {
+      redirect("/dashboard");
+    }
+
+    const userName = session.user.name ?? "Admin";
+    const userInitials =
+      session.user.name
+        ?.split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2) || "AD";
+
+    return (
+      <AdminShell userName={userName} userInitials={userInitials}>
+        {children}
+      </AdminShell>
+    );
+  } catch (e) {
+    unstable_rethrow(e);
     redirect("/login");
   }
-  if (role !== "admin") {
-    redirect("/dashboard");
-  }
-
-  const userName = session.user.name || "Admin";
-  const userInitials =
-    session.user.name
-      ?.split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2) || "AD";
-
-  return (
-    <AdminShell userName={userName} userInitials={userInitials}>
-      {children}
-    </AdminShell>
-  );
 }
