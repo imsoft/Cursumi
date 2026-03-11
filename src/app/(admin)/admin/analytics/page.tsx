@@ -1,7 +1,7 @@
 import { loadAdminAnalytics, loadAdminStats } from "@/app/actions/admin-actions";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatsGrid, StatItem } from "@/components/shared/stats-card";
-import { AdminAnalyticsClient } from "@/components/admin/admin-analytics-client";
+import { AdminAnalyticsChartsLazy } from "@/components/admin/admin-analytics-charts-lazy";
 
 const defaultStats = {
   totalUsers: 0,
@@ -77,7 +77,7 @@ export default async function AdminAnalyticsPage() {
       />
 
       <StatsGrid stats={stats} columns={4} />
-      <AdminAnalyticsClient
+      <AdminAnalyticsChartsLazy
         revenueByMonth={analytics.revenueByMonth}
         usersByMonth={analytics.usersByMonth}
       />

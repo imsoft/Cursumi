@@ -36,12 +36,12 @@ export function AdminAnalyticsClient({ revenueByMonth, usersByMonth }: AdminAnal
         </CardHeader>
         <CardContent>
           <ChartContainer config={revenueConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={revenueByMonth}>
+            <BarChart accessibilityLayer data={revenueByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey="month" tickLine={false} axisLine={false} />
               <YAxis />
               <RechartsTooltip content={<ChartTooltip content={<ChartTooltipContent />} />} />
-              <Bar dataKey="amount" fill={revenueConfig.amount.color} radius={4} />
+              <Bar dataKey="amount" fill={revenueConfig.amount.color} radius={4} isAnimationActive={false} />
             </BarChart>
           </ChartContainer>
         </CardContent>
@@ -53,12 +53,12 @@ export function AdminAnalyticsClient({ revenueByMonth, usersByMonth }: AdminAnal
         </CardHeader>
         <CardContent>
           <ChartContainer config={usersConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={usersByMonth}>
+            <BarChart accessibilityLayer data={usersByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey="month" tickLine={false} axisLine={false} />
               <YAxis />
               <RechartsTooltip content={<ChartTooltip content={<ChartTooltipContent />} />} />
-              <Bar dataKey="users" fill={usersConfig.users.color} radius={4} />
+              <Bar dataKey="users" fill={usersConfig.users.color} radius={4} isAnimationActive={false} />
             </BarChart>
           </ChartContainer>
         </CardContent>
