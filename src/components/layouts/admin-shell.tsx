@@ -39,7 +39,7 @@ interface AdminShellProps {
 export function AdminShell({ userName, userInitials, children }: AdminShellProps) {
   return (
     <SidebarProvider>
-      <AppSidebar navItems={adminNavItems} title="Cursumi Admin" />
+      <AppSidebar navItems={adminNavItems} title="Cursumi Admin" roleLabel="Panel de administración" />
       <SidebarInset>
         <DashboardHeader user={{ name: userName, initials: userInitials }} />
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">

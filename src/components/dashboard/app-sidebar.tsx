@@ -28,10 +28,12 @@ interface NavItem {
 interface AppSidebarProps {
   navItems: NavItem[];
   title?: string;
+  /** Etiqueta del rol (ej. "Panel de alumno") */
+  roleLabel?: string;
   footerAction?: React.ReactNode;
 }
 
-export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSidebarProps) {
+export function AppSidebar({ navItems, title = "Cursumi", roleLabel, footerAction }: AppSidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -39,7 +41,7 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild tooltip={title}>
+            <SidebarMenuButton size="lg" asChild tooltip={roleLabel ? `${title} · ${roleLabel}` : title}>
               <Link href={navItems[0]?.href || "/"} className="flex items-center gap-2">
                 <div className="hidden aspect-square size-8 items-center justify-center rounded-lg bg-transparent group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:size-8">
                   <Image
@@ -58,6 +60,9 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
                     height={32}
                     className="h-6 w-auto"
                   />
+                  {roleLabel && (
+                    <span className="mt-0.5 text-xs font-medium text-muted-foreground">{roleLabel}</span>
+                  )}
                 </div>
               </Link>
             </SidebarMenuButton>

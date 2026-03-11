@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Rutas que requieren autenticación
-  const protectedRoutes = ["/dashboard", "/instructor"];
+  const protectedRoutes = ["/dashboard", "/instructor", "/admin"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
@@ -27,9 +27,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Si es una ruta pública (solo para no autenticados) y hay cookie de sesión, redirigir al dashboard
-  if (isPublicOnlyRoute && sessionCookie) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  // Si es una ruta pública (login, signup, etc.) y hay sesión, redirigir a home; la home redirige por rol (admin/instructor/dashboard)
+  if (isPublicOnlyRoute && sessionCookie && pathname !== "/") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

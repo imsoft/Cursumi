@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
+import { getUserRole } from "@/lib/user-service";
 import { getPublicStats, getPublicTestimonials } from "@/lib/public-stats";
 import { CourseTypes } from "@/components/course-types";
 import { FeaturedCourses } from "@/components/featured-courses";
@@ -35,6 +36,9 @@ export const metadata = {
 export default async function Home() {
   const session = await getSessionSafe();
   if (session) {
+    const role = await getUserRole(session.user.id);
+    if (role === "admin") redirect("/admin");
+    if (role === "instructor") redirect("/instructor");
     redirect("/dashboard");
   }
 

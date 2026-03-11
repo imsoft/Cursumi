@@ -52,7 +52,7 @@ export function InstructorShell({ userName, userInitials, children }: Instructor
 
   return (
     <SidebarProvider>
-      <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" />
+      <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" roleLabel="Panel de instructor" />
       <SidebarInset>
         <DashboardHeader title={pageTitle} user={{ name: userName, initials: userInitials }} />
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
