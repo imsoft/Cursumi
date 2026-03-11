@@ -14,10 +14,9 @@ export async function getAdminStats(): Promise<AdminStats> {
     prisma.user.count(),
     prisma.course.findMany({
       select: {
-        id: true,
         status: true,
         price: true,
-        enrollments: { select: { id: true, createdAt: true } },
+        _count: { select: { enrollments: true } },
       },
     }),
     prisma.enrollment.count(),
@@ -25,9 +24,10 @@ export async function getAdminStats(): Promise<AdminStats> {
 
   const publishedCourses = courses.filter((c) => c.status === "published").length;
   const draftCourses = courses.filter((c) => c.status === "draft").length;
-  const estimatedRevenue = courses.reduce((sum, course) => {
-    return sum + course.price * course.enrollments.length;
-  }, 0);
+  const estimatedRevenue = courses.reduce(
+    (sum, c) => sum + c.price * c._count.enrollments,
+    0
+  );
 
   return {
     totalUsers: users,
