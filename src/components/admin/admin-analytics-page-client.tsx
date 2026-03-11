@@ -61,10 +61,12 @@ const emptyAnalytics: AdminAnalytics = {
 export function AdminAnalyticsPageClient() {
   const [stats, setStats] = useState<StatItem[] | null>(null);
   const [analytics, setAnalytics] = useState<AdminAnalytics | null>(null);
+  const [showCharts, setShowCharts] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    let rafId = 0;
 
     Promise.all([
       fetch("/api/admin/stats", { cache: "no-store" }).then((r) =>
@@ -78,6 +80,9 @@ export function AdminAnalyticsPageClient() {
         if (cancelled) return;
         setStats(buildStats(statsData as AdminStats));
         setAnalytics((analyticsData as AdminAnalytics) ?? emptyAnalytics);
+        rafId = requestAnimationFrame(() => {
+          if (!cancelled) setShowCharts(true);
+        });
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Error al cargar");
@@ -85,6 +90,7 @@ export function AdminAnalyticsPageClient() {
 
     return () => {
       cancelled = true;
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -118,7 +124,7 @@ export function AdminAnalyticsPageClient() {
         <StatsGrid stats={stats} columns={4} />
       )}
 
-      {analytics === null ? (
+      {analytics === null || !showCharts ? (
         <div className="grid gap-4 md:grid-cols-2">
           <Card className="border border-border bg-card/90">
             <CardHeader>
