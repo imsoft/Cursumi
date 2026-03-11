@@ -45,19 +45,20 @@ export type AdminAnalytics = {
 };
 
 export async function getAdminAnalytics(): Promise<AdminAnalytics> {
-  const [courses, users] = await Promise.all([
-    prisma.course.findMany({
-      select: {
-        price: true,
-        enrollments: { select: { createdAt: true } },
-      },
+  const now = new Date();
+  const startOfRange = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+
+  const [enrollmentsWithPrice, usersCreated] = await Promise.all([
+    prisma.enrollment.findMany({
+      where: { createdAt: { gte: startOfRange } },
+      select: { createdAt: true, course: { select: { price: true } } },
     }),
     prisma.user.findMany({
+      where: { createdAt: { gte: startOfRange } },
       select: { createdAt: true },
     }),
   ]);
 
-  const now = new Date();
   const revenueByMonth: { month: string; amount: number }[] = [];
   const usersByMonth: { month: string; users: number }[] = [];
 
@@ -65,12 +66,11 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
     const label = date.toLocaleDateString("es-MX", { month: "short" });
 
-    const amount = courses.reduce((sum, course) => {
-      const enrolls = course.enrollments.filter((e) => isSameMonth(e.createdAt, date)).length;
-      return sum + course.price * enrolls;
-    }, 0);
+    const amount = enrollmentsWithPrice
+      .filter((e) => isSameMonth(e.createdAt, date))
+      .reduce((sum, e) => sum + e.course.price, 0);
 
-    const usersCount = users.filter((u) => isSameMonth(u.createdAt, date)).length;
+    const usersCount = usersCreated.filter((u) => isSameMonth(u.createdAt, date)).length;
 
     revenueByMonth.push({ month: label, amount });
     usersByMonth.push({ month: label, users: usersCount });

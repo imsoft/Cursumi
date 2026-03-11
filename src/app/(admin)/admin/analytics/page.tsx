@@ -2,9 +2,41 @@ import { loadAdminAnalytics, loadAdminStats } from "@/app/actions/admin-actions"
 import { PageHeader } from "@/components/shared/page-header";
 import { StatsGrid, StatItem } from "@/components/shared/stats-card";
 import { AdminAnalyticsClient } from "@/components/admin/admin-analytics-client";
+
+const defaultStats = {
+  totalUsers: 0,
+  publishedCourses: 0,
+  draftCourses: 0,
+  totalEnrollments: 0,
+  estimatedRevenue: 0,
+};
+
+const defaultAnalytics = {
+  revenueByMonth: Array.from({ length: 6 }, (_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - (5 - i));
+    return { month: d.toLocaleDateString("es-MX", { month: "short" }), amount: 0 };
+  }),
+  usersByMonth: Array.from({ length: 6 }, (_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - (5 - i));
+    return { month: d.toLocaleDateString("es-MX", { month: "short" }), users: 0 };
+  }),
+};
+
 export default async function AdminAnalyticsPage() {
-  const statsData = await loadAdminStats();
-  const analytics = await loadAdminAnalytics();
+  let statsData = defaultStats;
+  let analytics = defaultAnalytics;
+  try {
+    const [statsResult, analyticsResult] = await Promise.all([
+      loadAdminStats(),
+      loadAdminAnalytics(),
+    ]);
+    statsData = statsResult ?? defaultStats;
+    analytics = analyticsResult ?? defaultAnalytics;
+  } catch {
+    // use defaults on error so page still renders
+  }
 
   const stats: StatItem[] = [
     {
