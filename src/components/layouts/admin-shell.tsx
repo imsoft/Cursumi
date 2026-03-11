@@ -43,7 +43,7 @@ export function AdminShell({ userName, userInitials, children }: AdminShellProps
       <SidebarInset>
         <DashboardHeader user={{ name: userName, initials: userInitials }} />
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
+          <div className="flex w-full flex-1 flex-col gap-4">
             {children}
           </div>
         </div>

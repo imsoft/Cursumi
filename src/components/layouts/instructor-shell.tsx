@@ -56,7 +56,7 @@ export function InstructorShell({ userName, userInitials, children }: Instructor
       <SidebarInset>
         <DashboardHeader title={pageTitle} user={{ name: userName, initials: userInitials }} />
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
+          <div className="flex w-full flex-1 flex-col gap-4">
             {children}
           </div>
         </div>
