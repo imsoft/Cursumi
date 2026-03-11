@@ -1,5 +1,5 @@
-import { AdminAnalyticsPageDynamic } from "@/components/admin/admin-analytics-page-dynamic";
+import { AnalyticsPageClient } from "./analytics-page-client";
 
 export default function AdminAnalyticsPage() {
-  return <AdminAnalyticsPageDynamic />;
+  return <AnalyticsPageClient />;
 }
