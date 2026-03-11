@@ -34,9 +34,9 @@ export function AdminAnalyticsClient({ revenueByMonth, usersByMonth }: AdminAnal
         <CardHeader>
           <CardTitle>Ingresos por mes</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={revenueConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={revenueByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+        <CardContent className="overflow-hidden">
+          <ChartContainer config={revenueConfig} className="min-h-[200px] w-full overflow-hidden">
+            <BarChart data={revenueByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey="month" tickLine={false} axisLine={false} />
               <YAxis />
@@ -51,9 +51,9 @@ export function AdminAnalyticsClient({ revenueByMonth, usersByMonth }: AdminAnal
         <CardHeader>
           <CardTitle>Usuarios nuevos por mes</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={usersConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={usersByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+        <CardContent className="overflow-hidden">
+          <ChartContainer config={usersConfig} className="min-h-[200px] w-full overflow-hidden">
+            <BarChart data={usersByMonth} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey="month" tickLine={false} axisLine={false} />
               <YAxis />
