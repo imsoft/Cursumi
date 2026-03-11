@@ -66,7 +66,7 @@ export function DashboardHeader({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/profile" className="block w-full">
+                <Link href="/dashboard/account?tab=profile" className="block w-full">
                   Perfil
                 </Link>
               </DropdownMenuItem>
