@@ -48,3 +48,29 @@ export async function getPublicTestimonials(limit: number = 6): Promise<PublicTe
     role: r.course.title,
   }));
 }
+
+export type FeaturedCourseItem = {
+  id: string;
+  title: string;
+  description: string;
+  modality: "virtual" | "presencial";
+  city: string | null;
+  imageUrl: string | null;
+};
+
+export async function getFeaturedCourses(limit: number = 6): Promise<FeaturedCourseItem[]> {
+  const courses = await prisma.course.findMany({
+    where: { status: "published" },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      modality: true,
+      city: true,
+      imageUrl: true,
+    },
+  });
+  return courses;
+}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { LogOut, LucideIcon } from "lucide-react";
+import { signOut } from "@/lib/auth-client";
 
 interface NavItem {
   title: string;
@@ -35,6 +36,13 @@ interface AppSidebarProps {
 
 export function AppSidebar({ navItems, title = "Cursumi", roleLabel, footerAction }: AppSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -121,6 +129,7 @@ export function AppSidebar({ navItems, title = "Cursumi", roleLabel, footerActio
                   variant="ghost"
                   className="w-full justify-start gap-2 text-sm font-semibold text-muted-foreground transition hover:text-primary group-data-[collapsible=icon]:justify-center"
                   type="button"
+                  onClick={handleSignOut}
                 >
                   <LogOut className="h-4 w-4" />
                   <span className="group-data-[collapsible=icon]:hidden">Cerrar sesión</span>

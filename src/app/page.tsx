@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
 import { getUserRole } from "@/lib/user-service";
-import { getPublicStats, getPublicTestimonials } from "@/lib/public-stats";
+import { getPublicStats, getPublicTestimonials, getFeaturedCourses } from "@/lib/public-stats";
 import { CourseTypes } from "@/components/course-types";
 import { FeaturedCourses } from "@/components/featured-courses";
 import { CTASection } from "@/components/cta-section";
@@ -42,9 +42,10 @@ export default async function Home() {
     redirect("/dashboard");
   }
 
-  const [stats, testimonials] = await Promise.all([
+  const [stats, testimonials, featuredCourses] = await Promise.all([
     getPublicStats(),
     getPublicTestimonials(),
+    getFeaturedCourses(6),
   ]);
 
   return (
@@ -53,7 +54,7 @@ export default async function Home() {
         <Hero stats={stats} />
         <CourseTypes />
         <HowItWorks />
-        <FeaturedCourses />
+        <FeaturedCourses courses={featuredCourses} />
         <InstructorSection />
         <Testimonials items={testimonials} />
         <CTASection />
