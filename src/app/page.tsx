@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
+import { getPublicStats, getPublicTestimonials } from "@/lib/public-stats";
 import { CourseTypes } from "@/components/course-types";
 import { FeaturedCourses } from "@/components/featured-courses";
 import { CTASection } from "@/components/cta-section";
@@ -37,15 +38,20 @@ export default async function Home() {
     redirect("/dashboard");
   }
 
+  const [stats, testimonials] = await Promise.all([
+    getPublicStats(),
+    getPublicTestimonials(),
+  ]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="space-y-12 pb-16 pt-8">
-        <Hero />
+        <Hero stats={stats} />
         <CourseTypes />
         <HowItWorks />
         <FeaturedCourses />
         <InstructorSection />
-        <Testimonials />
+        <Testimonials items={testimonials} />
         <CTASection />
       </main>
     </div>

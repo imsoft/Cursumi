@@ -165,7 +165,6 @@ export default function AdminUsersPage() {
             <div className="flex-1">
               <Input
                 label="Buscar usuario"
-                placeholder="Buscar por nombre o email..."
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
               />

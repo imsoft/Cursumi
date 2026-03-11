@@ -152,7 +152,6 @@ export const CreateCourseForm = () => {
               <div>
                 <Input
                   label="Título del curso *"
-                  placeholder="Introducción a JavaScript desde cero"
                   {...form.register("title")}
                 />
                 {form.formState.errors.title && (
@@ -162,7 +161,6 @@ export const CreateCourseForm = () => {
               <div>
                 <Textarea
                   label="Descripción *"
-                  placeholder="Describe de qué trata tu curso..."
                   {...form.register("description")}
                 />
                 {form.formState.errors.description && (
@@ -223,7 +221,6 @@ export const CreateCourseForm = () => {
                   <div>
                     <Input
                       label="Ciudad *"
-                      placeholder="CDMX, Guadalajara, Monterrey..."
                       {...form.register("city")}
                     />
                     {form.formState.errors.city && (
@@ -235,7 +232,6 @@ export const CreateCourseForm = () => {
                   <div>
                     <Input
                       label="Dirección / lugar *"
-                      placeholder="Calle, edificio y sala"
                       {...form.register("location")}
                     />
                     {form.formState.errors.location && (
@@ -277,7 +273,6 @@ export const CreateCourseForm = () => {
               <div>
                 <Input
                   label="Duración estimada *"
-                  placeholder="4 semanas · 8 sesiones · 10 horas"
                   {...form.register("duration")}
                 />
                 {form.formState.errors.duration && (
@@ -300,7 +295,6 @@ export const CreateCourseForm = () => {
                   type="number"
                   min="0"
                   step="0.01"
-                  placeholder="1200"
                   {...form.register("price", { valueAsNumber: true })}
                 />
                 {form.formState.errors.price && (
@@ -314,7 +308,6 @@ export const CreateCourseForm = () => {
                   label="Capacidad máxima"
                   type="number"
                   min="1"
-                  placeholder="30"
                   {...form.register("maxStudents", { valueAsNumber: true })}
                 />
                 {form.formState.errors.maxStudents && (
@@ -344,7 +337,6 @@ export const CreateCourseForm = () => {
             <div>
               <Input
                 label="URL de imagen"
-                placeholder="https://example.com/portada.jpg"
                 {...form.register("imageUrl")}
               />
               {form.formState.errors.imageUrl && (

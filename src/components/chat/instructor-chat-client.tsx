@@ -211,7 +211,6 @@ export function InstructorChatClient({
                       }
                     }}
                     rows={1}
-                    placeholder="Escribe tu mensaje..."
                     className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <Button

@@ -116,7 +116,6 @@ export default function AdminCategoriesPage() {
             <div className="flex-1 min-w-36">
               <Input
                 label="Nombre"
-                placeholder="Programación"
                 {...form.register("name")}
               />
               {form.formState.errors.name && (
@@ -126,7 +125,6 @@ export default function AdminCategoriesPage() {
             <div className="flex-1 min-w-36">
               <Input
                 label="Slug"
-                placeholder={autoSlug || "programacion"}
                 {...form.register("slug", { value: form.watch("slug") || autoSlug })}
               />
               {form.formState.errors.slug && (
@@ -137,7 +135,6 @@ export default function AdminCategoriesPage() {
               <Input
                 label="Orden"
                 type="number"
-                placeholder="1"
                 {...form.register("order")}
               />
             </div>

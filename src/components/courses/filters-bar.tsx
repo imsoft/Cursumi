@@ -63,7 +63,6 @@ export const FiltersBar = ({
         <div>
           <Input
             label="Buscar"
-            placeholder="Buscar por nombre, tema o instructor"
             value={searchText}
             onChange={(event) => onSearchChange(event.target.value)}
           />

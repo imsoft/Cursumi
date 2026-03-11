@@ -125,7 +125,6 @@ export function TestDbForm() {
           <form onSubmit={handleInsertComment} className="space-y-2">
             <Input
               type="text"
-              placeholder="Escribe un comentario..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               disabled={loading}

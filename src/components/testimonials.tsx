@@ -5,29 +5,15 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
+import type { PublicTestimonial } from "@/lib/public-stats";
 
-const testimonials = [
-  {
-    quote:
-      "Cursumi me ayudó a lanzar mi primer taller híbrido: desde la publicación hasta la logística presencial fue fluido.",
-    name: "María Torres",
-    role: "Instructora de diseño",
-  },
-  {
-    quote:
-      "La plataforma me conecta con estudiantes serios y respetuosos, además los contenidos virtuales siempre están actualizados.",
-    name: "David Paredes",
-    role: "Estudiante en bootcamp",
-  },
-  {
-    quote:
-      "Gracias a Cursumi organicé un curso presencial en Medellín con la mitad de los asistentes ya registrados.",
-    name: "Natalia Soto",
-    role: "Coach y consultora",
-  },
-];
+interface TestimonialsProps {
+  items: PublicTestimonial[];
+}
 
-export const Testimonials = () => {
+export const Testimonials = ({ items }: TestimonialsProps) => {
+  if (items.length === 0) return null;
+
   return (
     <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
       <div className="mb-6 flex flex-col gap-2 text-center">
@@ -39,15 +25,15 @@ export const Testimonials = () => {
         </h2>
       </div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {testimonials.map((item) => (
-          <Card key={item.name}>
+        {items.map((item, index) => (
+          <Card key={`${item.name}-${index}`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">{item.name}</CardTitle>
               <CardDescription className="text-sm">{item.role}</CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
               <p className="text-sm leading-relaxed text-muted-foreground">
-                “{item.quote}”
+                &quot;{item.quote}&quot;
               </p>
             </CardContent>
           </Card>
@@ -56,4 +42,3 @@ export const Testimonials = () => {
     </section>
   );
 };
-

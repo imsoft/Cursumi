@@ -1,8 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import type { PublicStats } from "@/lib/public-stats";
 
-export const Hero = () => {
+interface HeroProps {
+  stats: PublicStats;
+}
+
+export const Hero = ({ stats }: HeroProps) => {
+  const hasStats = stats.studentsCount > 0 || stats.citiesCount > 0 || stats.instructorsCount > 0;
   return (
     <section
       id="hero"
@@ -41,11 +47,19 @@ export const Hero = () => {
               priority
             />
           </div>
-          <div className="mt-6 space-y-1 text-sm text-muted-foreground">
-            <p>+1200 estudiantes activos</p>
-            <p>120 ciudades con cursos presenciales</p>
-            <p>100+ instructores verificados</p>
-          </div>
+          {hasStats && (
+            <div className="mt-6 space-y-1 text-sm text-muted-foreground">
+              {stats.studentsCount > 0 && (
+                <p>{stats.studentsCount} {stats.studentsCount === 1 ? "estudiante" : "estudiantes"}</p>
+              )}
+              {stats.citiesCount > 0 && (
+                <p>{stats.citiesCount} {stats.citiesCount === 1 ? "ciudad" : "ciudades"} con cursos presenciales</p>
+              )}
+              {stats.instructorsCount > 0 && (
+                <p>{stats.instructorsCount}+ instructores verificados</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>

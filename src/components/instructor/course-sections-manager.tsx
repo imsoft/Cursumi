@@ -147,7 +147,6 @@ export const CourseSectionsManager = ({
           <CardContent className="p-4">
             <div className="flex gap-2">
               <Input
-                placeholder="Nombre de la sección (ej: Introducción, Fundamentos, etc.)"
                 value={newSectionTitle}
                 onChange={(e) => setNewSectionTitle(e.target.value)}
                 onKeyDown={(e) => {
@@ -230,7 +229,6 @@ export const CourseSectionsManager = ({
                           />
                           <Textarea
                             label="Descripción (opcional)"
-                            placeholder="Describe brevemente qué aprenderán en esta sección"
                             value={section.description || ""}
                             onChange={(e) => updateSection(section.id, { description: e.target.value })}
                             rows={2}

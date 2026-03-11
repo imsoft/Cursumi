@@ -124,7 +124,6 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
           <div>
             <PasswordInput
               label="Nueva contraseña"
-              placeholder="••••••••"
               {...form.register("password")}
             />
             {form.formState.errors.password && (
@@ -136,7 +135,6 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
           <div>
             <PasswordInput
               label="Confirmar nueva contraseña"
-              placeholder="••••••••"
               {...form.register("confirmPassword")}
             />
             {form.formState.errors.confirmPassword && (

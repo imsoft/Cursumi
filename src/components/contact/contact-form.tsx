@@ -53,7 +53,6 @@ export const ContactForm = () => {
         <div>
           <Input
             label="Nombre completo"
-            placeholder="Luis Pérez"
             {...form.register("name")}
           />
           {form.formState.errors.name && (
@@ -65,7 +64,6 @@ export const ContactForm = () => {
         <div>
           <Input
             label="Correo electrónico"
-            placeholder="hola@cursumi.com"
             type="email"
             {...form.register("email")}
           />
@@ -78,7 +76,6 @@ export const ContactForm = () => {
       </div>
       <Input
         label="Asunto"
-        placeholder="Tu duda o propuesta"
         {...form.register("subject")}
       />
       <Select
@@ -88,7 +85,6 @@ export const ContactForm = () => {
       />
       <Textarea
         label="Mensaje"
-        placeholder="Cuéntanos qué necesitas y te responderemos pronto"
         {...form.register("message")}
       />
       {form.formState.errors.message && (

@@ -182,7 +182,6 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                   label="Título del examen"
                   value={examTitle}
                   onChange={(e) => setExamTitle(e.target.value)}
-                  placeholder="Ej: Examen Final de JavaScript"
                 />
               </div>
 
@@ -191,7 +190,6 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                   label="Descripción"
                   value={examDescription}
                   onChange={(e) => setExamDescription(e.target.value)}
-                  placeholder="Describe brevemente el examen..."
                   rows={2}
                 />
               </div>
@@ -201,7 +199,6 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                   label="Instrucciones para el estudiante"
                   value={examInstructions}
                   onChange={(e) => setExamInstructions(e.target.value)}
-                  placeholder="Instrucciones generales sobre cómo realizar el examen..."
                   rows={3}
                 />
               </div>
@@ -370,7 +367,6 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
 
                 <div>
                   <Input
-                    placeholder="Escribe la pregunta..."
                     value={newQuestionTitle}
                     onChange={(e) => setNewQuestionTitle(e.target.value)}
                   />
@@ -404,7 +400,6 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                           )}
                         </button>
                         <Input
-                          placeholder={`Opción ${index + 1}`}
                           value={option}
                           onChange={(e) => handleUpdateOption(index, e.target.value)}
                           className="flex-1"

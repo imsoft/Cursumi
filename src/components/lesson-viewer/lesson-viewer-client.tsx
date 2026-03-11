@@ -313,7 +313,6 @@ export function LessonViewerClient({
               onChange={(e) => setAssignmentText(e.target.value)}
               disabled={assignmentSaved}
               rows={6}
-              placeholder="Escribe tu respuesta aquí..."
               className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60"
             />
           </div>

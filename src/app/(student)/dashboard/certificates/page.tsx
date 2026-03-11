@@ -89,7 +89,6 @@ export default function CertificatesPage() {
           <div className="flex-1">
             <Input
               label="Buscar certificado"
-              placeholder="Buscar por curso o instructor..."
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
             />

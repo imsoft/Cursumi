@@ -115,7 +115,6 @@ export const LoginForm = ({ returnUrl }: LoginFormProps) => {
             <Input
               label="Correo electrónico"
               type="email"
-              placeholder="hola@cursumi.com"
               {...form.register("email")}
             />
             {form.formState.errors.email && (
@@ -127,7 +126,6 @@ export const LoginForm = ({ returnUrl }: LoginFormProps) => {
           <div>
             <PasswordInput
               label="Contraseña"
-              placeholder="••••••••"
               {...form.register("password")}
             />
             {form.formState.errors.password && (

@@ -147,7 +147,6 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
           <div>
             <Input
               label="Título del curso *"
-              placeholder="Introducción a JavaScript desde cero"
               {...form.register("title")}
             />
             {form.formState.errors.title && (
@@ -160,7 +159,6 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
           <div>
             <Textarea
               label="Descripción *"
-              placeholder="Describe de qué trata tu curso, qué aprenderán los estudiantes..."
               rows={5}
               {...form.register("description")}
             />
@@ -269,7 +267,6 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
                 <div>
                   <Input
                     label="Ciudad *"
-                    placeholder="CDMX, Guadalajara, Monterrey..."
                     {...form.register("city")}
                   />
                   {form.formState.errors.city && (
@@ -281,7 +278,6 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
                 <div>
                   <Input
                     label="Dirección / Lugar *"
-                    placeholder="Calle, edificio y sala"
                     {...form.register("location")}
                   />
                   {form.formState.errors.location && (

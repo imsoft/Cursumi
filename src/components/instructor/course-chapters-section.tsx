@@ -79,7 +79,6 @@ export const CourseChaptersSection = () => {
           <div>
             <Input
               label="Título *"
-              placeholder="Capítulo 3 · Manejo de datos"
               value={formData.title}
               onChange={(event) => setFormData((prev) => ({ ...prev, title: event.target.value }))}
             />
@@ -87,7 +86,6 @@ export const CourseChaptersSection = () => {
           <div>
             <Input
               label="Duración estimada *"
-              placeholder="45 min"
               value={formData.duration}
               onChange={(event) =>
                 setFormData((prev) => ({ ...prev, duration: event.target.value }))
@@ -97,7 +95,6 @@ export const CourseChaptersSection = () => {
           <div>
             <Textarea
               label="Resumen"
-              placeholder="Describe brevemente qué aprenderán los estudiantes."
               value={formData.summary}
               onChange={(event) =>
                 setFormData((prev) => ({ ...prev, summary: event.target.value }))

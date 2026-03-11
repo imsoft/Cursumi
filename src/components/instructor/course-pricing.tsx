@@ -130,7 +130,6 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
               type="number"
               min="0"
               step="0.01"
-              placeholder="1200"
               {...form.register("price", { valueAsNumber: true })}
             />
             {form.formState.errors.price && (
@@ -185,7 +184,6 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
             <div>
               <Input
                 label="Duración estimada *"
-                placeholder="4 semanas · 8 sesiones · 10 horas"
                 {...form.register("duration")}
               />
               {form.formState.errors.duration && (
@@ -230,7 +228,6 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
             <div>
               <Input
                 label="Duración estimada *"
-                placeholder="4 semanas · 8 sesiones · 10 horas"
                 {...form.register("duration")}
               />
               {form.formState.errors.duration && (
@@ -245,7 +242,6 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 label="Capacidad máxima *"
                 type="number"
                 min="1"
-                placeholder="30"
                 {...form.register("maxStudents", { valueAsNumber: true })}
               />
               <p className="mt-1 text-xs text-muted-foreground">

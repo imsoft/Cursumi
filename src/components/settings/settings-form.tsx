@@ -102,7 +102,6 @@ export function SettingsForm() {
             <div>
               <Input
                 label="Nombre completo"
-                placeholder="Tu nombre"
                 {...nameForm.register("name")}
               />
               {nameForm.formState.errors.name && (
@@ -140,7 +139,6 @@ export function SettingsForm() {
               <Input
                 label="Contraseña actual"
                 type="password"
-                placeholder="••••••••"
                 {...passwordForm.register("currentPassword")}
               />
               {passwordForm.formState.errors.currentPassword && (
@@ -153,7 +151,6 @@ export function SettingsForm() {
               <Input
                 label="Nueva contraseña"
                 type="password"
-                placeholder="••••••••"
                 {...passwordForm.register("newPassword")}
               />
               {passwordForm.formState.errors.newPassword && (
@@ -166,7 +163,6 @@ export function SettingsForm() {
               <Input
                 label="Confirmar nueva contraseña"
                 type="password"
-                placeholder="••••••••"
                 {...passwordForm.register("confirmPassword")}
               />
               {passwordForm.formState.errors.confirmPassword && (

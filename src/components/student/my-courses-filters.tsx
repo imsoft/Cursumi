@@ -50,7 +50,6 @@ export const MyCoursesFilters = ({
         <div className="flex-1">
           <Input
             label="Buscar curso"
-            placeholder="Buscar por nombre o instructor..."
             value={searchTerm}
             onChange={(event) => onSearchChange(event.target.value)}
           />

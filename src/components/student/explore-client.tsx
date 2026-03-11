@@ -112,7 +112,6 @@ export function ExploreClient({
           <div className="flex-1">
             <Input
               label="Buscar"
-              placeholder="Nombre del curso, categoría..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />

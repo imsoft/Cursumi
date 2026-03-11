@@ -14,7 +14,7 @@ interface RichTextEditorProps {
 export const RichTextEditor = ({
   value,
   onChange,
-  placeholder = "Escribe aquí...",
+  placeholder = "",
   className = "",
 }: RichTextEditorProps) => {
   const editorRef = useRef<HTMLDivElement>(null);

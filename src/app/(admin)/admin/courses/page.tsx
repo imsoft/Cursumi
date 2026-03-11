@@ -119,7 +119,6 @@ export default function AdminCoursesPage() {
             <div className="flex-1">
               <Input
                 label="Buscar curso"
-                placeholder="Buscar por título, instructor o categoría..."
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
               />

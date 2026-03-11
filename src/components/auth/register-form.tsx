@@ -88,7 +88,6 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
           <div>
             <Input
               label="Nombre completo"
-              placeholder="María Fernández"
               {...form.register("fullName")}
             />
             {form.formState.errors.fullName && (
@@ -100,7 +99,6 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
           <div>
             <Input
               label="Correo electrónico"
-              placeholder="hola@cursumi.com"
               type="email"
               {...form.register("email")}
             />
@@ -113,7 +111,6 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
           <div>
             <PasswordInput
               label="Contraseña"
-              placeholder="••••••••"
               {...form.register("password")}
             />
             {form.formState.errors.password && (
@@ -125,7 +122,6 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
           <div>
             <PasswordInput
               label="Confirmar contraseña"
-              placeholder="••••••••"
               {...form.register("confirmPassword")}
             />
             {form.formState.errors.confirmPassword && (

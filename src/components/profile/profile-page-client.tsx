@@ -140,7 +140,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                 <div>
                   <Input
                     label="Nombre completo"
-                    placeholder="Tu nombre completo"
                     disabled={!isEditing}
                     {...form.register("fullName")}
                   />
@@ -154,7 +153,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                   <Input
                     label="Correo electrónico"
                     type="email"
-                    placeholder="tu@email.com"
                     disabled={!isEditing}
                     {...form.register("email")}
                   />
@@ -170,7 +168,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                 <div>
                   <Input
                     label="Teléfono"
-                    placeholder="+52 55 1234 5678"
                     disabled={!isEditing}
                     {...form.register("phone")}
                   />
@@ -183,7 +180,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                 <div>
                   <Input
                     label="Ciudad"
-                    placeholder="Ciudad de México"
                     disabled={!isEditing}
                     {...form.register("city")}
                   />
@@ -198,7 +194,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
               <div>
                 <Textarea
                   label="Biografía"
-                  placeholder="Cuéntanos sobre ti..."
                   rows={4}
                   disabled={!isEditing}
                   {...form.register("bio")}
@@ -218,7 +213,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                   <div>
                     <Input
                       label="Sitio web"
-                      placeholder="https://tu-sitio.com"
                       disabled={!isEditing}
                       {...form.register("website")}
                     />
@@ -232,7 +226,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                     <div>
                       <Input
                         label="LinkedIn"
-                        placeholder="https://linkedin.com/in/tu-perfil"
                         disabled={!isEditing}
                         {...form.register("linkedinUrl")}
                       />
@@ -245,7 +238,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                     <div>
                       <Input
                         label="Instagram"
-                        placeholder="https://instagram.com/tu-perfil"
                         disabled={!isEditing}
                         {...form.register("instagramUrl")}
                       />

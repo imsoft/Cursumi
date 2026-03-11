@@ -270,7 +270,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                 label="Título de la lección *"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ej: Introducción a las variables"
               />
             </div>
             <div>
@@ -288,7 +287,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
               label="Descripción"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe qué aprenderán en esta lección"
               rows={3}
             />
           </div>
@@ -411,7 +409,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                       label="URL del video (YouTube, Vimeo, etc.)"
                       value={videoUrl.startsWith("http") ? videoUrl : ""}
                       onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="https://youtube.com/watch?v=... o https://vimeo.com/..."
                     />
                     <p className="mt-1 text-xs text-muted-foreground">
                       Puedes usar enlaces de YouTube, Vimeo u otras plataformas de video
@@ -431,7 +428,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                 label="Contenido de la lección *"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder="Escribe el contenido completo de la lección. Puedes usar formato Markdown para darle estructura..."
                 rows={12}
               />
               <p className="mt-1 text-xs text-muted-foreground">
@@ -447,7 +443,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                   label="Instrucciones del quiz *"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="Describe las instrucciones y el formato del quiz..."
                   rows={4}
                 />
               </div>
@@ -533,7 +528,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                       Nueva pregunta de opción múltiple
                     </label>
                     <Input
-                      placeholder="Escribe la pregunta..."
                       value={newQuestionTitle}
                       onChange={(e) => setNewQuestionTitle(e.target.value)}
                     />
@@ -568,7 +562,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                             )}
                           </button>
                           <Input
-                            placeholder={`Opción ${index + 1}`}
                             value={option}
                             onChange={(e) => handleUpdateOption(index, e.target.value)}
                             className="flex-1"
@@ -602,7 +595,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                         min="1"
                         value={newQuestionPoints}
                         onChange={(e) => setNewQuestionPoints(Number(e.target.value))}
-                        placeholder="10"
                       />
                     </div>
                   </div>
@@ -631,7 +623,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                 <RichTextEditor
                   value={content}
                   onChange={setContent}
-                  placeholder="Describe claramente qué deben hacer los estudiantes en esta tarea. Puedes usar formato de texto enriquecido..."
                 />
               </div>
               <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-4">
@@ -682,7 +673,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                 {/* Agregar nuevo criterio */}
                 <div className="space-y-2 pt-2 border-t border-border">
                   <Input
-                    placeholder="Escribe el criterio de evaluación..."
                     value={newCriterionText}
                     onChange={(e) => setNewCriterionText(e.target.value)}
                     onKeyDown={(e) => {
@@ -851,12 +841,10 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
               {/* Agregar recurso */}
               <div className="space-y-3 pt-2 border-t border-border">
                 <Input
-                  placeholder="Título del recurso (ej: Documentación oficial)"
                   value={newResourceTitle}
                   onChange={(e) => setNewResourceTitle(e.target.value)}
                 />
                 <Input
-                  placeholder="URL del recurso (https://...)"
                   value={newResourceUrl}
                   onChange={(e) => setNewResourceUrl(e.target.value)}
                   type="url"
