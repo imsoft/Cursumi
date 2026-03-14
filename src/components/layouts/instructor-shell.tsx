@@ -15,12 +15,14 @@ import {
   UserCircle,
   DollarSign,
   BarChart3,
+  Gamepad2,
 } from "lucide-react";
 
 const instructorNavItems = [
   { title: "Dashboard", href: "/instructor", icon: LayoutDashboard },
   { title: "Mis cursos", href: "/instructor/courses", icon: BookOpenCheck },
   { title: "Crear curso", href: "/instructor/courses/new", icon: PlusCircle },
+  { title: "Mis juegos", href: "/instructor/games", icon: Gamepad2 },
   { title: "Ingresos", href: "/instructor/earnings", icon: DollarSign },
   { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
   { title: "Perfil", href: "/instructor/profile", icon: UserCircle },
@@ -29,6 +31,7 @@ const instructorNavItems = [
 const pathnameToTitle: Record<string, string> = {
   "/instructor": "Dashboard",
   "/instructor/courses": "Mis cursos",
+  "/instructor/games": "Mis juegos",
   "/instructor/earnings": "Ingresos",
   "/instructor/analytics": "Analíticas",
   "/instructor/profile": "Perfil",

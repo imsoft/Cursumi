@@ -28,12 +28,47 @@ export type CourseFinalExam = {
   attemptsAllowed?: number; // Número de intentos permitidos (opcional)
 };
 
+export type SectionQuizQuestion = {
+  question: string;
+  options: string[];
+  correct: number; // índice de la opción correcta
+};
+
+export type SectionQuiz = {
+  passingScore: number; // 0-100, default 70
+  questions: SectionQuizQuestion[];
+};
+
+// Mini-games
+export type MemoryPair = { term: string; definition: string };
+export type HangmanWord = { word: string; hint: string };
+
+export type MemoryMinigame = {
+  type: "memory";
+  pairs: MemoryPair[]; // 4–8 pairs
+};
+
+export type HangmanMinigame = {
+  type: "hangman";
+  words: HangmanWord[]; // 3–5 words
+};
+
+export type SortMinigame = {
+  type: "sort";
+  instruction: string; // e.g. "Ordena los pasos del proceso"
+  items: string[]; // Items in correct order
+};
+
+export type SectionMinigame = MemoryMinigame | HangmanMinigame | SortMinigame;
+
 export type CourseSection = {
   id: string;
   title: string;
   description?: string;
   order: number;
   lessons: CourseLesson[];
+  quiz?: SectionQuiz;
+  minigame?: SectionMinigame;
 };
 
 export type QuizQuestion = {

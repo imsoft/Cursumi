@@ -26,6 +26,7 @@ model User {
   accounts              Account[]
   sessions              Session[]
   instructorProfile     InstructorProfile?
+  instructorApplication InstructorApplication?
   instructorCourses     Course[]           @relation("InstructorCourses")
   enrollments           Enrollment[]       @relation("StudentEnrollments")
   certificates          Certificate[]
@@ -35,6 +36,8 @@ model User {
   studentConversations  Conversation[]     @relation("StudentConversations")
   instructorConversations Conversation[]   @relation("InstructorConversations")
   sentMessages          Message[]
+  hostedGames           QuizGame[]
+  gameParticipations    QuizGameParticipant[]
 }
 
 model Account {
@@ -124,6 +127,12 @@ enum EnrollmentStatus {
   cancelled
 }
 
+enum ApplicationStatus {
+  pending
+  approved
+  rejected
+}
+
 enum TransactionStatus {
   pending
   completed
@@ -134,6 +143,22 @@ enum TransactionStatus {
 // ─────────────────────────────────────────
 // INSTRUCTORES
 // ─────────────────────────────────────────
+
+model InstructorApplication {
+  id              String            @id @default(cuid())
+  userId          String            @unique
+  status          ApplicationStatus @default(pending)
+  headline        String?
+  bio             String?           @db.Text
+  reason          String            @db.Text
+  rejectionReason String?           @db.Text
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
 
 model InstructorProfile {
   id               String   @id @default(cuid())
@@ -210,9 +235,12 @@ model CourseSection {
   title       String
   description String?
   order       Int
+  quiz        Json?   // SectionQuiz: { passingScore: number, questions: Array<{ question, options, correct }> }
+  minigame    Json?   // SectionMinigame: { type: "memory"|"hangman"|"sort", ... }
 
-  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons Lesson[]
+  course                 Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons                Lesson[]
+  sectionQuizSubmissions SectionQuizSubmission[]
 
   @@index([courseId, order])
 }
@@ -266,13 +294,33 @@ model Enrollment {
 
   course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   student        User             @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
-  lessonProgress LessonProgress[]
-  certificate    Certificate?
-  examSubmission ExamSubmission?
-  transaction    Transaction?
+  lessonProgress         LessonProgress[]
+  certificate            Certificate?
+  examSubmission         ExamSubmission?
+  transaction            Transaction?
+  sectionQuizSubmissions SectionQuizSubmission[]
 
   @@unique([courseId, studentId])
   @@index([studentId])
+}
+
+// ─────────────────────────────────────────
+// TEST DE SECCIÓN
+// ─────────────────────────────────────────
+
+model SectionQuizSubmission {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  sectionId    String
+  score        Int      // 0-100
+  passed       Boolean
+  submittedAt  DateTime @default(now())
+
+  enrollment Enrollment    @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  section    CourseSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, sectionId])
+  @@index([sectionId])
 }
 
 // ─────────────────────────────────────────
@@ -414,4 +462,97 @@ model Message {
 
   @@index([conversationId, createdAt])
   @@index([senderId])
+}
+
+enum GameStatus {
+  waiting
+  active
+  finished
+}
+
+model QuizGame {
+  id                String     @id @default(cuid())
+  code              String     @unique
+  title             String
+  hostId            String
+  status            GameStatus @default(waiting)
+  currentQuestion   Int        @default(0)
+  questionStartedAt DateTime?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  host         User                  @relation(fields: [hostId], references: [id])
+  questions    QuizGameQuestion[]
+  participants QuizGameParticipant[]
+  answers      QuizGameAnswer[]
+
+  @@index([code])
+  @@index([hostId])
+  @@index([status])
+}
+
+model QuizGameQuestion {
+  id           String @id @default(cuid())
+  gameId       String
+  order        Int
+  question     String @db.Text
+  options      Json
+  correct      Int
+  timeLimitSec Int    @default(20)
+  points       Int    @default(1000)
+
+  game    QuizGame         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  answers QuizGameAnswer[]
+
+  @@index([gameId])
+}
+
+model QuizGameParticipant {
+  id       String   @id @default(cuid())
+  gameId   String
+  userId   String
+  nickname String
+  score    Int      @default(0)
+  joinedAt DateTime @default(now())
+
+  game    QuizGame         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user    User             @relation(fields: [userId], references: [id])
+  answers QuizGameAnswer[]
+
+  @@unique([gameId, userId])
+  @@index([gameId])
+}
+
+model QuizGameAnswer {
+  id             String   @id @default(cuid())
+  gameId         String
+  questionId     String
+  participantId  String
+  selectedOption Int
+  isCorrect      Boolean
+  pointsEarned   Int      @default(0)
+  answeredAt     DateTime @default(now())
+
+  game        QuizGame            @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  question    QuizGameQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  participant QuizGameParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, participantId])
+  @@index([gameId])
+  @@index([participantId])
+}
+
+model Kpi {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?  @db.Text
+  unit         String   @default("")
+  targetValue  Float
+  currentValue Float    @default(0)
+  period       String   @default("mensual")
+  category     String   @default("general")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([category])
 }

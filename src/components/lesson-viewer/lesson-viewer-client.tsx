@@ -18,7 +18,13 @@ import {
   ClipboardList,
   Menu,
   X,
+  Lock,
+  ClipboardCheck,
+  Gamepad2,
 } from "lucide-react";
+import { MemoryGame } from "./minigames/memory-game";
+import { HangmanGame } from "./minigames/hangman-game";
+import { SortGame } from "./minigames/sort-game";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
@@ -59,8 +65,28 @@ interface SidebarLesson {
 interface SidebarSection {
   id: string;
   title: string;
+  hasQuiz: boolean;
+  quizPassed: boolean;
+  hasMinigame: boolean;
+  minigamePassed: boolean;
   lessons: SidebarLesson[];
 }
+
+interface SectionQuizQuestion {
+  question: string;
+  options: string[];
+  correct: number;
+}
+
+interface SectionQuiz {
+  passingScore: number;
+  questions: SectionQuizQuestion[];
+}
+
+type SectionMinigameData =
+  | { type: "memory"; pairs: { term: string; definition: string }[] }
+  | { type: "hangman"; words: { word: string; hint: string }[] }
+  | { type: "sort"; instruction: string; items: string[] };
 
 interface LessonViewerClientProps {
   lesson: LessonData;
@@ -69,6 +95,13 @@ interface LessonViewerClientProps {
   completedIds: string[];
   prevLesson: { id: string; title: string } | null;
   nextLesson: { id: string; title: string } | null;
+  sectionQuiz: SectionQuiz | null;
+  sectionQuizPassed: boolean;
+  sectionMinigame: SectionMinigameData | null;
+  sectionMinigamePassed: boolean;
+  isLastLessonInSection: boolean;
+  nextLessonSectionId: string | null;
+  currentSectionId: string;
 }
 
 const lessonTypeIcon: Record<LessonType, React.ReactNode> = {
@@ -79,7 +112,6 @@ const lessonTypeIcon: Record<LessonType, React.ReactNode> = {
 };
 
 function getMuxPlaybackId(url: string): string | null {
-  // https://stream.mux.com/{playbackId}.m3u8 or https://stream.mux.com/{playbackId}
   const match = url.match(/stream\.mux\.com\/([^/.]+)/);
   return match ? match[1] : null;
 }
@@ -98,6 +130,13 @@ export function LessonViewerClient({
   completedIds: initialCompleted,
   prevLesson,
   nextLesson,
+  sectionQuiz,
+  sectionQuizPassed: initialSectionQuizPassed,
+  sectionMinigame,
+  sectionMinigamePassed: initialSectionMinigamePassed,
+  isLastLessonInSection,
+  nextLessonSectionId,
+  currentSectionId,
 }: LessonViewerClientProps) {
   const router = useRouter();
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
@@ -108,6 +147,15 @@ export function LessonViewerClient({
   const [assignmentText, setAssignmentText] = useState("");
   const [assignmentSaved, setAssignmentSaved] = useState(false);
 
+  // Estado del test de sección
+  const [sectionQuizPassed, setSectionQuizPassed] = useState(initialSectionQuizPassed);
+  const [sectionMinigamePassed, setSectionMinigamePassed] = useState(initialSectionMinigamePassed);
+  const [showSectionQuiz, setShowSectionQuiz] = useState(false);
+  const [sectionQuizAnswers, setSectionQuizAnswers] = useState<Record<number, number>>({});
+  const [sectionQuizSubmitted, setSectionQuizSubmitted] = useState(false);
+  const [sectionQuizScore, setSectionQuizScore] = useState(0);
+  const [sectionQuizSubmitting, setSectionQuizSubmitting] = useState(false);
+
   const isCompleted = completedIds.has(lesson.id);
 
   const totalLessons = sections.reduce((acc, s) => acc + s.lessons.length, 0);
@@ -116,6 +164,17 @@ export function LessonViewerClient({
     0
   );
   const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+
+  // ¿El siguiente lesson es en otra sección y esa sección requiere pasar el test/minijuego?
+  const nextIsInDifferentSection =
+    nextLesson !== null && nextLessonSectionId !== null && nextLessonSectionId !== currentSectionId;
+  const sectionQuizRequired =
+    isLastLessonInSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
+  const sectionMinigameRequired =
+    isLastLessonInSection && sectionMinigame !== null;
+  const blockNextNavigation =
+    nextIsInDifferentSection &&
+    ((sectionQuizRequired && !sectionQuizPassed) || (sectionMinigameRequired && !sectionMinigamePassed));
 
   const markComplete = useCallback(async () => {
     if (isCompleted || marking) return;
@@ -134,7 +193,7 @@ export function LessonViewerClient({
     }
   }, [isCompleted, marking, lesson.id, courseId]);
 
-  // Parse quiz questions from content JSON
+  // Parse quiz questions from content JSON (lección tipo quiz)
   let quizQuestions: { question: string; options: string[]; correct: number }[] = [];
   if (lesson.type === "quiz" && lesson.content) {
     try {
@@ -165,6 +224,63 @@ export function LessonViewerClient({
     await markComplete();
   };
 
+  // Lógica del test de sección
+  const computedSectionQuizScore = () => {
+    if (!sectionQuiz) return 0;
+    const correct = sectionQuiz.questions.reduce(
+      (acc, q, i) => acc + (sectionQuizAnswers[i] === q.correct ? 1 : 0),
+      0
+    );
+    return Math.round((correct / sectionQuiz.questions.length) * 100);
+  };
+
+  const handleSectionQuizSubmit = async () => {
+    if (!sectionQuiz) return;
+    setSectionQuizSubmitting(true);
+    const score = computedSectionQuizScore();
+    const passingScore = sectionQuiz.passingScore ?? 70;
+    const passed = score >= passingScore;
+    setSectionQuizScore(score);
+    setSectionQuizSubmitted(true);
+
+    try {
+      await fetch(`/api/sections/${currentSectionId}/quiz/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseId, score, passed }),
+      });
+      if (passed) setSectionQuizPassed(true);
+    } finally {
+      setSectionQuizSubmitting(false);
+    }
+  };
+
+  const resetSectionQuiz = () => {
+    setSectionQuizAnswers({});
+    setSectionQuizSubmitted(false);
+    setSectionQuizScore(0);
+  };
+
+  const handleMinigameComplete = async () => {
+    try {
+      await fetch(`/api/sections/${currentSectionId}/minigame/complete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseId }),
+      });
+      setSectionMinigamePassed(true);
+    } catch {
+      // silently fail, user can still continue
+      setSectionMinigamePassed(true);
+    }
+  };
+
+  const handleNext = () => {
+    if (nextLesson) {
+      router.push(`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`);
+    }
+  };
+
   const renderContent = () => {
     if (lesson.type === "video") {
       if (lesson.videoUrl) {
@@ -172,7 +288,6 @@ export function LessonViewerClient({
         const ytId = getYouTubeId(lesson.videoUrl);
 
         if (muxId) {
-          // Dynamic import to avoid SSR issues
           const MuxPlayer = require("@mux/mux-player-react").default;
           return (
             <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
@@ -332,6 +447,191 @@ export function LessonViewerClient({
     return null;
   };
 
+  const renderSectionQuiz = () => {
+    if (!sectionQuiz || sectionQuiz.questions.length === 0) return null;
+
+    const passingScore = sectionQuiz.passingScore ?? 70;
+
+    return (
+      <div className="space-y-6 rounded-xl border-2 border-primary/30 bg-primary/5 p-6">
+        <div className="flex items-center gap-3">
+          <ClipboardCheck className="h-6 w-6 text-primary shrink-0" />
+          <div>
+            <h2 className="text-xl font-bold text-foreground">Test de sección</h2>
+            <p className="text-sm text-muted-foreground">
+              Debes aprobar este test ({passingScore}% mínimo) para continuar con la siguiente sección.
+            </p>
+          </div>
+        </div>
+
+        {sectionQuizPassed && (
+          <div className="flex items-center gap-2 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+            <CheckCircle className="h-5 w-5 shrink-0" />
+            <p className="text-sm font-medium">Ya aprobaste este test. Puedes continuar.</p>
+          </div>
+        )}
+
+        {!sectionQuizPassed && !showSectionQuiz && (
+          <Button onClick={() => setShowSectionQuiz(true)}>
+            <ClipboardCheck className="mr-2 h-4 w-4" />
+            Realizar test de sección
+          </Button>
+        )}
+
+        {!sectionQuizPassed && showSectionQuiz && (
+          <div className="space-y-6">
+            {sectionQuiz.questions.map((q, i) => (
+              <div key={i} className="space-y-3">
+                <p className="font-medium text-foreground">
+                  {i + 1}. {q.question}
+                </p>
+                <div className="space-y-2">
+                  {q.options.map((opt, j) => {
+                    const isSelected = sectionQuizAnswers[i] === j;
+                    const isCorrect = sectionQuizSubmitted && j === q.correct;
+                    const isWrong = sectionQuizSubmitted && isSelected && j !== q.correct;
+                    return (
+                      <button
+                        key={j}
+                        onClick={() =>
+                          !sectionQuizSubmitted &&
+                          setSectionQuizAnswers((prev) => ({ ...prev, [i]: j }))
+                        }
+                        disabled={sectionQuizSubmitted}
+                        className={`w-full rounded-md border px-4 py-2 text-left text-sm transition-colors ${
+                          isCorrect
+                            ? "border-green-500 bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                            : isWrong
+                            ? "border-red-500 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                            : isSelected
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border bg-background text-foreground hover:bg-muted"
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+
+            {!sectionQuizSubmitted && (
+              <Button
+                onClick={handleSectionQuizSubmit}
+                disabled={
+                  Object.keys(sectionQuizAnswers).length < sectionQuiz.questions.length ||
+                  sectionQuizSubmitting
+                }
+              >
+                {sectionQuizSubmitting ? "Enviando..." : "Enviar respuestas"}
+              </Button>
+            )}
+
+            {sectionQuizSubmitted && (
+              <div
+                className={`rounded-lg p-4 text-sm font-medium ${
+                  sectionQuizPassed
+                    ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                    : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                }`}
+              >
+                {sectionQuizPassed ? (
+                  <span>
+                    Aprobado: {sectionQuizScore}%. Puedes continuar con la siguiente sección.
+                  </span>
+                ) : (
+                  <div className="space-y-2">
+                    <p>
+                      No aprobado: {sectionQuizScore}%. Necesitas al menos {passingScore}%.
+                    </p>
+                    <button
+                      onClick={resetSectionQuiz}
+                      className="underline underline-offset-2 hover:no-underline"
+                    >
+                      Intentar de nuevo
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderSectionMinigame = () => {
+    if (!sectionMinigame) return null;
+    const minigameLabel =
+      sectionMinigame.type === "memory"
+        ? "Memoria"
+        : sectionMinigame.type === "hangman"
+        ? "Ahorcado"
+        : "Ordenar";
+
+    return (
+      <div className="space-y-6 rounded-xl border-2 border-purple-400/40 bg-purple-50/50 dark:bg-purple-900/10 p-6">
+        <div className="flex items-center gap-3">
+          <Gamepad2 className="h-6 w-6 text-purple-600 dark:text-purple-400 shrink-0" />
+          <div>
+            <h2 className="text-xl font-bold text-foreground">
+              Minijuego: {minigameLabel}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Completa el minijuego para continuar con la siguiente sección.
+            </p>
+          </div>
+        </div>
+
+        {sectionMinigamePassed ? (
+          <div className="flex items-center gap-2 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+            <CheckCircle className="h-5 w-5 shrink-0" />
+            <p className="text-sm font-medium">¡Minijuego completado! Puedes continuar.</p>
+          </div>
+        ) : (
+          <>
+            {sectionMinigame.type === "memory" && (
+              <MemoryGame pairs={sectionMinigame.pairs} onComplete={handleMinigameComplete} />
+            )}
+            {sectionMinigame.type === "hangman" && (
+              <HangmanGame words={sectionMinigame.words} onComplete={handleMinigameComplete} />
+            )}
+            {sectionMinigame.type === "sort" && (
+              <SortGame
+                instruction={sectionMinigame.instruction}
+                items={sectionMinigame.items}
+                onComplete={handleMinigameComplete}
+              />
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const nextButton = (size: "sm" | "default" = "sm") => {
+    if (!nextLesson) return null;
+    if (blockNextNavigation) {
+      const label =
+        sectionMinigameRequired && !sectionMinigamePassed
+          ? "Completa el minijuego"
+          : "Aprueba el test de sección";
+      return (
+        <Button size={size} disabled className="opacity-60">
+          <Lock className="mr-1 h-3 w-3" />
+          {label}
+        </Button>
+      );
+    }
+    return (
+      <Button size={size} onClick={handleNext}>
+        Siguiente
+        <ChevronRight className="ml-1 h-4 w-4" />
+      </Button>
+    );
+  };
+
   return (
     <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
       {/* Mobile sidebar toggle */}
@@ -397,6 +697,50 @@ export function LessonViewerClient({
                     </Link>
                   );
                 })}
+                {/* Indicador de test de sección en sidebar */}
+                {section.hasQuiz && (
+                  <div
+                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
+                      section.id === currentSectionId && sectionQuizPassed
+                        ? "text-green-600 dark:text-green-400"
+                        : section.quizPassed
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-amber-600 dark:text-amber-400"
+                    }`}
+                  >
+                    {(section.id === currentSectionId ? sectionQuizPassed : section.quizPassed) ? (
+                      <CheckCircle className="h-4 w-4 shrink-0" />
+                    ) : (
+                      <ClipboardCheck className="h-4 w-4 shrink-0" />
+                    )}
+                    <span className="flex-1 truncate text-xs font-medium">Test de sección</span>
+                    {!(section.id === currentSectionId ? sectionQuizPassed : section.quizPassed) && (
+                      <Lock className="h-3 w-3 shrink-0" />
+                    )}
+                  </div>
+                )}
+                {/* Indicador de minijuego en sidebar */}
+                {section.hasMinigame && (
+                  <div
+                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
+                      section.id === currentSectionId && sectionMinigamePassed
+                        ? "text-green-600 dark:text-green-400"
+                        : section.minigamePassed
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-purple-600 dark:text-purple-400"
+                    }`}
+                  >
+                    {(section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed) ? (
+                      <CheckCircle className="h-4 w-4 shrink-0" />
+                    ) : (
+                      <Gamepad2 className="h-4 w-4 shrink-0" />
+                    )}
+                    <span className="flex-1 truncate text-xs font-medium">Minijuego</span>
+                    {!(section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed) && (
+                      <Lock className="h-3 w-3 shrink-0" />
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -440,6 +784,12 @@ export function LessonViewerClient({
               </Button>
             </div>
           )}
+
+          {/* Test de sección — aparece después de completar la última lección de la sección */}
+          {sectionQuizRequired && isCompleted && renderSectionQuiz()}
+
+          {/* Minijuego de sección */}
+          {sectionMinigameRequired && isCompleted && renderSectionMinigame()}
 
           {/* Adjuntos y recursos */}
           {((lesson.attachments && lesson.attachments.length > 0) || (lesson.resources && lesson.resources.length > 0)) && (
@@ -505,15 +855,7 @@ export function LessonViewerClient({
               <div />
             )}
             {nextLesson ? (
-              <Button
-                size="sm"
-                onClick={() =>
-                  router.push(`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`)
-                }
-              >
-                Siguiente
-                <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
+              nextButton("sm")
             ) : (
               <Button
                 size="sm"
@@ -525,7 +867,7 @@ export function LessonViewerClient({
             )}
           </div>
 
-          {/* Sticky bottom bar: Marcar completada + Siguiente (solo video/texto, desktop) */}
+          {/* Sticky bottom bar (solo video/texto, desktop) */}
           {(lesson.type === "video" || lesson.type === "text") && (
             <div className="hidden lg:flex sticky bottom-0 mt-6 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-3 items-center justify-between gap-4 border-t border-border bg-background/95 backdrop-blur">
               <Button
@@ -558,15 +900,7 @@ export function LessonViewerClient({
                   </Button>
                 )}
                 {nextLesson ? (
-                  <Button
-                    size="sm"
-                    onClick={() =>
-                      router.push(`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`)
-                    }
-                  >
-                    Siguiente
-                    <ChevronRight className="ml-1 h-4 w-4" />
-                  </Button>
+                  nextButton("sm")
                 ) : (
                   <Button
                     size="sm"

@@ -167,6 +167,18 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InstructorApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  headline: 'headline',
+  bio: 'bio',
+  reason: 'reason',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.InstructorProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -216,7 +228,9 @@ exports.Prisma.CourseSectionScalarFieldEnum = {
   courseId: 'courseId',
   title: 'title',
   description: 'description',
-  order: 'order'
+  order: 'order',
+  quiz: 'quiz',
+  minigame: 'minigame'
 };
 
 exports.Prisma.LessonScalarFieldEnum = {
@@ -250,6 +264,15 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   progress: 'progress',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SectionQuizSubmissionScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  sectionId: 'sectionId',
+  score: 'score',
+  passed: 'passed',
+  submittedAt: 'submittedAt'
 };
 
 exports.Prisma.ExamSubmissionScalarFieldEnum = {
@@ -325,6 +348,62 @@ exports.Prisma.MessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.QuizGameScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  title: 'title',
+  hostId: 'hostId',
+  status: 'status',
+  currentQuestion: 'currentQuestion',
+  questionStartedAt: 'questionStartedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuizGameQuestionScalarFieldEnum = {
+  id: 'id',
+  gameId: 'gameId',
+  order: 'order',
+  question: 'question',
+  options: 'options',
+  correct: 'correct',
+  timeLimitSec: 'timeLimitSec',
+  points: 'points'
+};
+
+exports.Prisma.QuizGameParticipantScalarFieldEnum = {
+  id: 'id',
+  gameId: 'gameId',
+  userId: 'userId',
+  nickname: 'nickname',
+  score: 'score',
+  joinedAt: 'joinedAt'
+};
+
+exports.Prisma.QuizGameAnswerScalarFieldEnum = {
+  id: 'id',
+  gameId: 'gameId',
+  questionId: 'questionId',
+  participantId: 'participantId',
+  selectedOption: 'selectedOption',
+  isCorrect: 'isCorrect',
+  pointsEarned: 'pointsEarned',
+  answeredAt: 'answeredAt'
+};
+
+exports.Prisma.KpiScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  unit: 'unit',
+  targetValue: 'targetValue',
+  currentValue: 'currentValue',
+  period: 'period',
+  category: 'category',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -358,6 +437,12 @@ exports.Role = exports.$Enums.Role = {
   student: 'student',
   instructor: 'instructor',
   admin: 'admin'
+};
+
+exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected'
 };
 
 exports.Modality = exports.$Enums.Modality = {
@@ -396,11 +481,18 @@ exports.TransactionStatus = exports.$Enums.TransactionStatus = {
   refunded: 'refunded'
 };
 
+exports.GameStatus = exports.$Enums.GameStatus = {
+  waiting: 'waiting',
+  active: 'active',
+  finished: 'finished'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
+  InstructorApplication: 'InstructorApplication',
   InstructorProfile: 'InstructorProfile',
   Category: 'Category',
   Course: 'Course',
@@ -408,13 +500,19 @@ exports.Prisma.ModelName = {
   Lesson: 'Lesson',
   LessonProgress: 'LessonProgress',
   Enrollment: 'Enrollment',
+  SectionQuizSubmission: 'SectionQuizSubmission',
   ExamSubmission: 'ExamSubmission',
   Certificate: 'Certificate',
   Transaction: 'Transaction',
   Review: 'Review',
   Notification: 'Notification',
   Conversation: 'Conversation',
-  Message: 'Message'
+  Message: 'Message',
+  QuizGame: 'QuizGame',
+  QuizGameQuestion: 'QuizGameQuestion',
+  QuizGameParticipant: 'QuizGameParticipant',
+  QuizGameAnswer: 'QuizGameAnswer',
+  Kpi: 'Kpi'
 };
 
 /**

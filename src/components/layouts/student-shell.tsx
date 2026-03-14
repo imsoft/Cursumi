@@ -15,6 +15,8 @@ import {
   Award,
   Search,
   UserCircle,
+  GraduationCap,
+  Gamepad2,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -22,7 +24,9 @@ const studentNavItems = [
   { title: "Mis cursos", href: "/dashboard/my-courses", icon: BookOpenCheck },
   { title: "Certificados", href: "/dashboard/certificates", icon: Award },
   { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
+  { title: "Juegos", href: "/dashboard/games", icon: Gamepad2 },
   { title: "Cuenta", href: "/dashboard/account", icon: UserCircle },
+  { title: "Ser instructor", href: "/dashboard/become-instructor", icon: GraduationCap },
 ];
 
 const pathnameToTitle: Record<string, string> = {
@@ -30,9 +34,11 @@ const pathnameToTitle: Record<string, string> = {
   "/dashboard/my-courses": "Mis cursos",
   "/dashboard/certificates": "Certificados",
   "/dashboard/explore": "Explorar cursos",
+  "/dashboard/games": "Juegos",
   "/dashboard/account": "Cuenta",
   "/dashboard/profile": "Perfil",
   "/dashboard/settings": "Configuración",
+  "/dashboard/become-instructor": "Ser instructor",
 };
 
 function getPageTitle(pathname: string | null): string {

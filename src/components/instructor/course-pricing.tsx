@@ -5,13 +5,14 @@ import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, ArrowLeft, Monitor, MapPin } from "lucide-react";
+import { ArrowRight, ArrowLeft, Monitor, MapPin, TrendingUp } from "lucide-react";
 import type { CourseFormData } from "./course-types";
+import { formatPriceMXN } from "@/lib/utils";
 
-// Schema dinámico basado en modalidad
+const PLATFORM_FEE_PERCENT = 15; // debe coincidir con src/lib/stripe.ts
+
 const createPricingSchema = (modality: "virtual" | "presencial") => {
   const baseSchema = {
     price: z.coerce.number().positive("El precio debe ser mayor a 0"),
@@ -21,22 +22,12 @@ const createPricingSchema = (modality: "virtual" | "presencial") => {
   if (modality === "virtual") {
     return z.object({
       ...baseSchema,
-      courseType: z.string().min(1, "Selecciona el tipo de curso"),
-      startDate: z.string().optional(), // Solo requerido si es fechado
-    }).superRefine((data, ctx) => {
-      if (data.courseType === "fechado" && !data.startDate) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["startDate"],
-          message: "La fecha de inicio es obligatoria para cursos con fechas definidas",
-        });
-      }
+      courseType: z.string().default("ondemand"),
     });
   } else {
-    // Presencial
     return z.object({
       ...baseSchema,
-      courseType: z.literal("fechado"), // Presencial siempre es fechado
+      courseType: z.literal("fechado"),
       startDate: z.string().min(1, "Selecciona una fecha de inicio"),
       maxStudents: z.coerce.number().int().positive("La capacidad debe ser mayor que 0").optional(),
     });
@@ -44,11 +35,6 @@ const createPricingSchema = (modality: "virtual" | "presencial") => {
 };
 
 type PricingFormData = z.infer<ReturnType<typeof createPricingSchema>>;
-
-const courseTypeOptions = [
-  { value: "fechado", label: "Curso con fechas definidas" },
-  { value: "ondemand", label: "Curso a tu ritmo (on demand)" },
-];
 
 interface CoursePricingProps {
   data: CourseFormData;
@@ -62,21 +48,19 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
   const pricingSchema = createPricingSchema(modality);
   const isPresencial = modality === "presencial";
   const isVirtual = modality === "virtual";
-  
+
   const form = useForm<PricingFormData>({
     resolver: createZodResolver(pricingSchema),
     defaultValues: {
       price: data.price,
-      ...(isPresencial && { maxStudents: data.maxStudents }),
-      courseType: data.courseType || (modality === "presencial" ? "fechado" : "fechado"),
-      startDate: data.startDate,
       duration: data.duration,
+      courseType: isPresencial ? "fechado" : (data.courseType || "ondemand"),
+      ...(isPresencial && { startDate: data.startDate, maxStudents: data.maxStudents }),
     } as PricingFormData,
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const courseType = form.watch("courseType");
-  const showStartDate = isPresencial || (isVirtual && courseType === "fechado");
+  const watchedPrice = form.watch("price");
 
   const handleSubmit = form.handleSubmit((values) => {
     onUpdate(values);
@@ -89,7 +73,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
         <h2 className="text-2xl font-bold text-foreground">Precio y configuración</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {isVirtual
-            ? "Define el precio y configuración de tu curso virtual"
+            ? "Define el precio de tu curso virtual"
             : "Define el precio, fechas y capacidad de tu curso presencial"}
         </p>
       </div>
@@ -121,7 +105,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
       </Card>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Precio - Siempre visible */}
+        {/* Precio */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-foreground">Precio</h3>
           <div>
@@ -137,77 +121,45 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 {form.formState.errors.price.message}
               </p>
             )}
+            {watchedPrice > 0 && !form.formState.errors.price && (
+              <div className="mt-2 flex items-center gap-2 rounded-lg bg-primary/5 px-3 py-2 text-sm text-primary">
+                <TrendingUp className="h-4 w-4 shrink-0" />
+                <span>
+                  Recibirás{" "}
+                  <strong>
+                    {formatPriceMXN(Math.round(watchedPrice * (1 - PLATFORM_FEE_PERCENT / 100)))}
+                  </strong>{" "}
+                  por cada venta
+                  <span className="text-xs text-muted-foreground ml-1">
+                    (comisión plataforma {PLATFORM_FEE_PERCENT}%)
+                  </span>
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         <Separator />
 
-        {/* Configuración específica por modalidad */}
-        {isVirtual ? (
-          // Configuración para cursos VIRTUALES
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">Configuración del curso virtual</h3>
-            <div>
-              <Select
-                label="Tipo de curso *"
-                options={courseTypeOptions}
-                value={form.watch("courseType")}
-                onChange={(e) => {
-                  form.setValue("courseType", e.target.value);
-                  if (e.target.value === "ondemand") {
-                    form.setValue("startDate", "");
-                  }
-                }}
-              />
-              {form.formState.errors.courseType && (
-                <p className="mt-1 text-xs text-destructive">
-                  {form.formState.errors.courseType.message}
-                </p>
-              )}
-            </div>
+        {/* Duración — siempre visible */}
+        <div>
+          <Input
+            label="Duración estimada *"
+            {...form.register("duration")}
+          />
+          {form.formState.errors.duration && (
+            <p className="mt-1 text-xs text-destructive">
+              {form.formState.errors.duration.message}
+            </p>
+          )}
+        </div>
 
-            {showStartDate && (
-              <div>
-                <Input
-                  label="Fecha de inicio *"
-                  type="date"
-                  {...form.register("startDate")}
-                />
-                {form.formState.errors.startDate && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {form.formState.errors.startDate.message}
-                  </p>
-                )}
-              </div>
-            )}
-
-            <div>
-              <Input
-                label="Duración estimada *"
-                {...form.register("duration")}
-              />
-              {form.formState.errors.duration && (
-                <p className="mt-1 text-xs text-destructive">
-                  {form.formState.errors.duration.message}
-                </p>
-              )}
-            </div>
-
-            {courseType === "ondemand" && (
-              <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-                <p className="text-sm text-foreground">
-                  <strong>Curso a tu ritmo:</strong> Los estudiantes podrán acceder al contenido
-                  cuando lo deseen y avanzar a su propio ritmo.
-                </p>
-              </div>
-            )}
-          </div>
-        ) : (
-          // Configuración para cursos PRESENCIALES
+        {/* Configuración presencial */}
+        {isPresencial && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Configuración del curso presencial</h3>
             <div className="rounded-lg border border-border bg-muted/20 p-4">
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground">
                 Los cursos presenciales siempre tienen fechas definidas y requieren una capacidad máxima.
               </p>
             </div>
@@ -218,21 +170,9 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 type="date"
                 {...form.register("startDate")}
               />
-              {form.formState.errors.startDate && (
+              {"startDate" in form.formState.errors && form.formState.errors.startDate && (
                 <p className="mt-1 text-xs text-destructive">
-                  {form.formState.errors.startDate.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Input
-                label="Duración estimada *"
-                {...form.register("duration")}
-              />
-              {form.formState.errors.duration && (
-                <p className="mt-1 text-xs text-destructive">
-                  {form.formState.errors.duration.message}
+                  {(form.formState.errors.startDate as { message?: string }).message}
                 </p>
               )}
             </div>
@@ -247,13 +187,11 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
               <p className="mt-1 text-xs text-muted-foreground">
                 Número máximo de estudiantes que pueden inscribirse
               </p>
-              {isPresencial &&
-                "maxStudents" in form.formState.errors &&
-                form.formState.errors.maxStudents && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {form.formState.errors.maxStudents.message}
-                  </p>
-                )}
+              {"maxStudents" in form.formState.errors && form.formState.errors.maxStudents && (
+                <p className="mt-1 text-xs text-destructive">
+                  {(form.formState.errors.maxStudents as { message?: string }).message}
+                </p>
+              )}
             </div>
           </div>
         )}

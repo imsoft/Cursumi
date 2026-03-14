@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
-import type { Prisma, CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
+import { Prisma } from "@/generated/prisma";
+import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
 import type { CourseFormData, CourseSection } from "@/components/instructor/course-types";
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
@@ -75,6 +76,8 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
               title: section.title,
               description: section.description,
               order: section.order ?? index + 1,
+              quiz: section.quiz ? (section.quiz as object) : undefined,
+              minigame: section.minigame ? (section.minigame as object) : undefined,
               lessons: {
                 create: section.lessons?.map((lesson, lessonIndex) => ({
                   title: lesson.title,
@@ -154,6 +157,8 @@ export async function updateCourse(
           title: sectionPayload.title,
           description: sectionPayload.description ?? null,
           order: sectionPayload.order,
+          quiz: section.quiz ? (section.quiz as object) : Prisma.JsonNull,
+          minigame: section.minigame ? (section.minigame as object) : Prisma.JsonNull,
         },
       });
 
@@ -201,6 +206,8 @@ export async function updateCourse(
           title: sectionPayload.title,
           description: sectionPayload.description ?? null,
           order: sectionPayload.order,
+          quiz: section.quiz ? (section.quiz as object) : undefined,
+          minigame: section.minigame ? (section.minigame as object) : undefined,
           lessons: {
             create: sectionPayload.lessons.map((lesson, lessonIndex) => ({
               title: lesson.title,
@@ -472,18 +479,47 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
 
   const enrollment = await prisma.enrollment.findUnique({
     where: { courseId_studentId: { courseId, studentId } },
-    include: { lessonProgress: { select: { lessonId: true } } },
+    include: {
+      lessonProgress: { select: { lessonId: true } },
+      sectionQuizSubmissions: { select: { sectionId: true, passed: true } },
+    },
   });
 
   if (!enrollment) return null;
 
   const completedIds = new Set(enrollment.lessonProgress.map((lp) => lp.lessonId));
+  const passedSectionQuizIds = new Set(
+    enrollment.sectionQuizSubmissions.filter((s) => s.passed).map((s) => s.sectionId)
+  );
 
   // Flatten all lessons in order to find prev/next
   const allLessons = lesson.section.course.sections.flatMap((s) => s.lessons);
   const idx = allLessons.findIndex((l) => l.id === lessonId);
   const prevLesson = idx > 0 ? allLessons[idx - 1] : null;
   const nextLesson = idx < allLessons.length - 1 ? allLessons[idx + 1] : null;
+
+  // Current section info
+  const currentSection = lesson.section.course.sections.find((s) => s.id === lesson.sectionId);
+  const sectionLessons = (currentSection?.lessons ?? []).slice().sort((a, b) => a.order - b.order);
+  const isLastLessonInSection = sectionLessons[sectionLessons.length - 1]?.id === lessonId;
+
+  // Section quiz for current section
+  type SectionQuizData = { passingScore: number; questions: { question: string; options: string[]; correct: number }[] };
+  const sectionQuiz = (lesson.section.quiz as SectionQuizData | null) ?? null;
+  const sectionQuizPassed = passedSectionQuizIds.has(lesson.sectionId);
+
+  // Section minigame for current section
+  type SectionMinigameData =
+    | { type: "memory"; pairs: { term: string; definition: string }[] }
+    | { type: "hangman"; words: { word: string; hint: string }[] }
+    | { type: "sort"; instruction: string; items: string[] };
+  const sectionMinigame = (lesson.section.minigame as SectionMinigameData | null) ?? null;
+  const sectionMinigamePassed = passedSectionQuizIds.has(lesson.sectionId);
+
+  // Next lesson's section ID (to detect cross-section navigation)
+  const nextLessonSectionId = nextLesson
+    ? lesson.section.course.sections.find((s) => s.lessons.some((l) => l.id === nextLesson.id))?.id ?? null
+    : null;
 
   return {
     lesson,
@@ -493,5 +529,13 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     nextLesson,
     courseId,
     sections: lesson.section.course.sections,
+    sectionQuiz,
+    sectionQuizPassed,
+    sectionMinigame,
+    sectionMinigamePassed,
+    isLastLessonInSection,
+    passedSectionQuizIds,
+    nextLessonSectionId,
+    currentSectionId: lesson.sectionId,
   };
 }

@@ -16,7 +16,21 @@ export default async function LessonPage({
   const data = await getLessonForStudent(lessonId, session.user.id);
   if (!data) redirect(`/dashboard/my-courses/${courseId}`);
 
-  const { lesson, completedIds, prevLesson, nextLesson, sections } = data;
+  const {
+    lesson,
+    completedIds,
+    prevLesson,
+    nextLesson,
+    sections,
+    sectionQuiz,
+    sectionQuizPassed,
+    sectionMinigame,
+    sectionMinigamePassed,
+    isLastLessonInSection,
+    passedSectionQuizIds,
+    nextLessonSectionId,
+    currentSectionId,
+  } = data;
 
   return (
     <LessonViewerClient
@@ -34,6 +48,10 @@ export default async function LessonPage({
       sections={sections.map((s) => ({
         id: s.id,
         title: s.title,
+        hasQuiz: !!(s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length),
+        quizPassed: passedSectionQuizIds.has(s.id),
+        hasMinigame: !!(s.minigame && (s.minigame as { type?: string }).type),
+        minigamePassed: passedSectionQuizIds.has(s.id),
         lessons: s.lessons.map((l) => ({
           id: l.id,
           title: l.title,
@@ -45,6 +63,13 @@ export default async function LessonPage({
       completedIds={Array.from(completedIds)}
       prevLesson={prevLesson ? { id: prevLesson.id, title: prevLesson.title } : null}
       nextLesson={nextLesson ? { id: nextLesson.id, title: nextLesson.title } : null}
+      sectionQuiz={sectionQuiz}
+      sectionQuizPassed={sectionQuizPassed}
+      sectionMinigame={sectionMinigame}
+      sectionMinigamePassed={sectionMinigamePassed}
+      isLastLessonInSection={isLastLessonInSection}
+      nextLessonSectionId={nextLessonSectionId}
+      currentSectionId={currentSectionId}
     />
   );
 }

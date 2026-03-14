@@ -17,13 +17,17 @@ import {
   DollarSign,
   Calculator,
   Tag,
+  GraduationCap,
+  Target,
 } from "lucide-react";
 
 const adminNavItems = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Usuarios", href: "/admin/users", icon: Users },
+  { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
   { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },
   { title: "Categorías", href: "/admin/categories", icon: Tag },
+  { title: "KPIs", href: "/admin/kpis", icon: Target },
   { title: "Analíticas", href: "/admin/analytics", icon: BarChart3 },
   { title: "Finanzas", href: "/admin/finances", icon: DollarSign },
   { title: "Simulador", href: "/admin/simulator", icon: Calculator },

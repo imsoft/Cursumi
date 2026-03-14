@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ const steps = [
 type SaveStatus = "idle" | "saving" | "saved";
 
 export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormData }) => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState("info");
   const [isPending, startTransition] = useTransition();
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -131,13 +133,8 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
         if (id && !courseData.id) {
           setCourseData((prev) => ({ ...prev, id }));
         }
-        setStatusMessage("Curso guardado como borrador");
         setSaveStatus("saved");
-        if (savedAtRef.current) clearTimeout(savedAtRef.current);
-        savedAtRef.current = setTimeout(() => {
-          setSaveStatus("idle");
-          savedAtRef.current = null;
-        }, 2500);
+        router.push("/instructor/courses");
       } catch {
         setSaveStatus("idle");
       }
@@ -145,10 +142,9 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
   };
 
   const handlePublish = () => {
-    setStatusMessage(null);
     startTransition(async () => {
       await publishCourse(courseData);
-      setStatusMessage("Curso publicado exitosamente");
+      router.push("/instructor/courses");
     });
   };
 
