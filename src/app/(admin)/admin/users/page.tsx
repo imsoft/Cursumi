@@ -161,7 +161,7 @@ export default function AdminUsersPage() {
 
       <Card className="border border-border bg-card/90">
         <CardContent className="p-4">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex-1">
               <Input
                 label="Buscar usuario"
@@ -169,7 +169,7 @@ export default function AdminUsersPage() {
                 onChange={(event) => setSearchTerm(event.target.value)}
               />
             </div>
-            <div className="grid w-full gap-4 md:w-auto md:grid-cols-2">
+            <div className="grid w-full grid-cols-2 gap-4 sm:w-auto">
               <Select
                 label="Rol"
                 options={roleOptions}
@@ -292,8 +292,8 @@ export default function AdminUsersPage() {
       )}
       {/* Confirmation modal for role change */}
       {roleTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="mx-4 max-w-sm rounded-lg border border-border bg-card p-6 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-sm rounded-lg border border-border bg-card p-6 shadow-lg max-h-[90svh] overflow-y-auto">
             <h2 className="mb-2 text-lg font-semibold text-foreground">Cambiar rol</h2>
             <p className="mb-6 text-sm text-muted-foreground">
               ¿Estás seguro de que deseas cambiar el rol de{" "}

@@ -46,7 +46,7 @@ export function StudentDashboardClient({
       <StudentDashboardHeader name={name} />
       <StudentStatsCards stats={stats} />
       <StudentCoursesInProgress courses={courses} />
-      <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">
         <StudentUpcomingClasses classes={upcoming} />
         <StudentRecommendedCourses recommendations={recommendations} />
       </div>

@@ -638,7 +638,7 @@ export function LessonViewerClient({
   return (
     <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
       {/* Mobile sidebar toggle */}
-      <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-3 lg:hidden">
+      <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-3 md:hidden">
         <button
           onClick={() => setSidebarOpen((o) => !o)}
           className="flex items-center gap-2 rounded-md p-2 text-muted-foreground hover:bg-muted"
@@ -654,9 +654,9 @@ export function LessonViewerClient({
       <aside
         className={`${
           sidebarOpen ? "block" : "hidden"
-        } w-full shrink-0 border-r border-border bg-card lg:block lg:w-72 xl:w-80`}
+        } w-full shrink-0 border-r border-border bg-card md:block md:w-60 lg:w-72 xl:w-80`}
       >
-        <div className="sticky top-0 flex h-[calc(100vh-4rem)] flex-col overflow-hidden">
+        <div className="sticky top-0 flex h-[calc(100svh-4rem)] flex-col overflow-hidden">
           <div className="border-b border-border p-4">
             <Link
               href={`/dashboard/my-courses/${courseId}`}

@@ -32,13 +32,13 @@ export const CourseCard = ({
 }: CourseCardProps) => {
   return (
     <Card className="flex h-full flex-col">
-      <div className="relative h-48 w-full">
+      <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
         <Image
           src={imageSrc}
           alt={imageAlt ?? `${title} - curso en Cursumi`}
           fill
-          className="rounded-t-2xl object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
       </div>
       <CardHeader className="gap-2 pb-2">

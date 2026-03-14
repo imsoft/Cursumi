@@ -12,13 +12,13 @@ interface CourseCardProps {
 export const CourseCard = ({ course, priority }: CourseCardProps) => {
   return (
     <Card className="flex h-full flex-col">
-      <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
+      <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
         <Image
           src={course.imageUrl}
           alt={course.title}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority}
         />
         <span className="absolute top-3 left-3 rounded-full border border-white/80 bg-black/50 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-white">

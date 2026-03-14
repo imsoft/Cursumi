@@ -21,7 +21,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-16">
+      <main className="flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center px-4 py-8 sm:py-12 lg:py-16">
         <LoginForm returnUrl={returnUrl} />
       </main>
     </div>

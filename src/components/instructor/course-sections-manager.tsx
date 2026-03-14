@@ -523,7 +523,7 @@ function SectionActivityEditor({
   return (
     <div className="space-y-4">
       {/* Type selector */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
         {ACTIVITY_OPTIONS.map((opt) => (
           <button
             key={opt.type}
@@ -751,9 +751,9 @@ export const CourseSectionsManager = ({
                 <Card key={section.id} className="border border-border bg-card/90">
                   <Collapsible open={isExpanded} onOpenChange={() => toggleSection(section.id)}>
                     <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-center gap-2">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex-1 space-y-2 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
                             <GripVertical className="h-4 w-4 text-muted-foreground" />
                             <CardTitle className="text-lg">
                               {sectionIndex + 1}. {section.title}
@@ -776,7 +776,7 @@ export const CourseSectionsManager = ({
                             <p className="text-sm text-muted-foreground">{section.description}</p>
                           )}
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex shrink-0 items-center gap-2">
                           <Button
                             variant="ghost"
                             size="sm"

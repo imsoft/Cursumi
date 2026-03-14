@@ -43,13 +43,13 @@ export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
   return (
     <Card className="group flex h-full flex-col border border-border bg-card/90 transition-shadow hover:shadow-md">
       {course.imageUrl && (
-        <div className="relative h-40 w-full overflow-hidden rounded-t-2xl">
+        <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
           <Image
             src={course.imageUrl}
             alt={course.title}
             fill
             className="object-cover transition-transform group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
       )}

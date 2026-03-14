@@ -46,8 +46,8 @@ export function AdminShell({ userName, userInitials, children }: AdminShellProps
       <AppSidebar navItems={adminNavItems} title="Cursumi Admin" roleLabel="Panel de administración" />
       <SidebarInset>
         <DashboardHeader user={{ name: userName, initials: userInitials }} />
-        <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-          <div className="flex w-full flex-1 flex-col gap-4">
+        <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
+          <div className="flex w-full flex-1 flex-col gap-6">
             {children}
           </div>
         </div>

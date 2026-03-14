@@ -39,7 +39,7 @@ export const FeaturedCourses = ({ courses }: FeaturedCoursesProps) => {
           Próximamente habrá cursos publicados. Explora la plataforma en la sección Cursos.
         </p>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {courses.map((course) => (
             <CourseCard key={course.id} {...toCardProps(course)} />
           ))}

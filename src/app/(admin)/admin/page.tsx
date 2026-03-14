@@ -62,7 +62,7 @@ export default async function AdminDashboardPage() {
 
       <StatsGrid stats={stats} columns={4} />
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Card className="border border-border bg-card/90">
           <CardHeader>
             <CardTitle>Actividad reciente</CardTitle>

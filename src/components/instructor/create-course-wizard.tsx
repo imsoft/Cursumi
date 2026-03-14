@@ -167,18 +167,18 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
       {/* Progress Steps */}
       <Card className="border border-border bg-card/90">
         <CardContent className="p-4">
-          <div className="flex items-center justify-between gap-2 overflow-x-auto">
+          <div className="flex items-center justify-between gap-1 sm:gap-2">
             {steps.map((step, index) => {
               const status = getStepStatus(step.id);
-              
+
               return (
                 <div key={step.id} className="flex flex-1 items-center">
                   <button
                     onClick={() => handleStepClick(step.id)}
-                    className="flex flex-1 items-center gap-2 rounded-lg p-2 transition hover:bg-muted"
+                    className="flex flex-1 items-center gap-1.5 rounded-lg p-1.5 transition hover:bg-muted sm:gap-2 sm:p-2"
                     disabled={status === "upcoming"}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors"
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-colors sm:h-8 sm:w-8"
                       style={{
                         borderColor: status === "completed" ? "var(--primary)" : status === "current" ? "var(--primary)" : "var(--border)",
                         backgroundColor: status === "completed" ? "var(--primary)" : "transparent",
@@ -186,17 +186,17 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
                       }}
                     >
                       {status === "completed" ? (
-                        <CheckCircle2 className="h-4 w-4" />
+                        <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       ) : (
                         <span className="text-xs font-semibold">{index + 1}</span>
                       )}
                     </div>
-                    <span className={`text-sm font-medium ${status === "upcoming" ? "text-muted-foreground" : "text-foreground"}`}>
+                    <span className={`hidden text-sm font-medium sm:inline ${status === "upcoming" ? "text-muted-foreground" : "text-foreground"}`}>
                       {step.label}
                     </span>
                   </button>
                   {index < steps.length - 1 && (
-                    <div className={`h-0.5 w-8 ${status === "completed" ? "bg-primary" : "bg-border"}`} />
+                    <div className={`h-0.5 w-4 shrink-0 sm:w-8 ${status === "completed" ? "bg-primary" : "bg-border"}`} />
                   )}
                 </div>
               );
@@ -207,7 +207,7 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
 
       {/* Step Content */}
       <Card className="border border-border bg-card/90">
-        <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-4">
+        <CardHeader className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <CardTitle className="text-xl font-semibold text-foreground">
               {steps.find((s) => s.id === currentStep)?.label}

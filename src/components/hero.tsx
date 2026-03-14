@@ -12,7 +12,7 @@ export const Hero = ({ stats }: HeroProps) => {
   return (
     <section
       id="hero"
-      className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:py-16 lg:flex-row lg:items-center lg:gap-16"
+      className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-8 sm:py-12 lg:py-16 lg:flex-row lg:items-center lg:gap-16"
     >
       <div className="flex flex-1 flex-col gap-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -43,7 +43,7 @@ export const Hero = ({ stats }: HeroProps) => {
               alt="Estudiantes aprendiendo en línea"
               width={520}
               height={360}
-              className="h-72 w-full object-cover"
+              className="aspect-4/3 w-full object-cover sm:aspect-video"
               priority
             />
           </div>
