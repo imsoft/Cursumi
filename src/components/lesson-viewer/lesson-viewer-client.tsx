@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -25,6 +26,8 @@ import {
 import { MemoryGame } from "./minigames/memory-game";
 import { HangmanGame } from "./minigames/hangman-game";
 import { SortGame } from "./minigames/sort-game";
+
+const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
@@ -168,10 +171,11 @@ export function LessonViewerClient({
   // ¿El siguiente lesson es en otra sección y esa sección requiere pasar el test/minijuego?
   const nextIsInDifferentSection =
     nextLesson !== null && nextLessonSectionId !== null && nextLessonSectionId !== currentSectionId;
+  // Solo mostrar evaluación si hay una siguiente sección que desbloquear
   const sectionQuizRequired =
-    isLastLessonInSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
+    isLastLessonInSection && nextIsInDifferentSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
   const sectionMinigameRequired =
-    isLastLessonInSection && sectionMinigame !== null;
+    isLastLessonInSection && nextIsInDifferentSection && sectionMinigame !== null;
   const blockNextNavigation =
     nextIsInDifferentSection &&
     ((sectionQuizRequired && !sectionQuizPassed) || (sectionMinigameRequired && !sectionMinigamePassed));
@@ -288,7 +292,6 @@ export function LessonViewerClient({
         const ytId = getYouTubeId(lesson.videoUrl);
 
         if (muxId) {
-          const MuxPlayer = require("@mux/mux-player-react").default;
           return (
             <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
               <MuxPlayer
@@ -668,14 +671,41 @@ export function LessonViewerClient({
             </p>
           </div>
           <div className="flex-1 overflow-y-auto py-2">
-            {sections.map((section) => (
+            {(() => {
+              // Calcular qué secciones están bloqueadas (hay una sección previa con evaluación no superada)
+              const lockedSectionIds = new Set<string>();
+              let gateFailed = false;
+              for (const s of sections) {
+                if (gateFailed) lockedSectionIds.add(s.id);
+                if (!gateFailed) {
+                  const sectionPassed = s.id === currentSectionId
+                    ? (s.hasQuiz ? sectionQuizPassed : s.hasMinigame ? sectionMinigamePassed : true)
+                    : (s.hasQuiz ? s.quizPassed : s.hasMinigame ? s.minigamePassed : true);
+                  if ((s.hasQuiz || s.hasMinigame) && !sectionPassed) gateFailed = true;
+                }
+              }
+              return sections.map((section) => {
+                const isLocked = lockedSectionIds.has(section.id);
+                return (
               <div key={section.id}>
-                <p className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className={`px-4 py-2 text-xs font-semibold uppercase tracking-wide ${isLocked ? "text-muted-foreground/40" : "text-muted-foreground"}`}>
                   {section.title}
+                  {isLocked && <Lock className="inline ml-1 h-3 w-3 opacity-60" />}
                 </p>
                 {section.lessons.map((l) => {
                   const done = completedIds.has(l.id);
                   const active = l.id === lesson.id;
+                  if (isLocked) {
+                    return (
+                      <div
+                        key={l.id}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground/40 cursor-not-allowed"
+                      >
+                        <Lock className="h-4 w-4 shrink-0" />
+                        <span className="flex-1 truncate">{l.title}</span>
+                      </div>
+                    );
+                  }
                   return (
                     <Link
                       key={l.id}
@@ -742,7 +772,9 @@ export function LessonViewerClient({
                   </div>
                 )}
               </div>
-            ))}
+                );
+              });
+            })()}
           </div>
         </div>
       </aside>

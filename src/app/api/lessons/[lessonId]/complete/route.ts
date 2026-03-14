@@ -27,6 +27,15 @@ export async function POST(req: NextRequest, context: { params: Promise<{ lesson
       return NextResponse.json({ error: "No estás inscrito en este curso" }, { status: 403 });
     }
 
+    // Verificar que la lección pertenezca al curso (evita marcar lecciones de otros cursos)
+    const lesson = await prisma.lesson.findFirst({
+      where: { id: lessonId, section: { courseId } },
+      select: { id: true },
+    });
+    if (!lesson) {
+      return NextResponse.json({ error: "Lección no encontrada en este curso" }, { status: 404 });
+    }
+
     await prisma.lessonProgress.upsert({
       where: {
         enrollmentId_lessonId: {

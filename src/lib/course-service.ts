@@ -455,6 +455,26 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
 }
 
 export async function getLessonForStudent(lessonId: string, studentId: string) {
+  // Primero verificar que la lección existe y obtener el courseId con una query ligera
+  const lessonMeta = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    select: { section: { select: { courseId: true } } },
+  });
+  if (!lessonMeta) return null;
+
+  const courseId = lessonMeta.section.courseId;
+
+  // Verificar enrollment ANTES de cargar todo el curso (evita query pesada para usuarios no inscritos)
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { courseId_studentId: { courseId, studentId } },
+    include: {
+      lessonProgress: { select: { lessonId: true } },
+      sectionQuizSubmissions: { select: { sectionId: true, passed: true } },
+    },
+  });
+  if (!enrollment) return null;
+
+  // Ahora sí cargamos la lección completa con todo el contexto del curso
   const lesson = await prisma.lesson.findUnique({
     where: { id: lessonId },
     include: {
@@ -475,20 +495,8 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
 
   if (!lesson) return null;
 
-  const courseId = lesson.section.courseId;
-
-  const enrollment = await prisma.enrollment.findUnique({
-    where: { courseId_studentId: { courseId, studentId } },
-    include: {
-      lessonProgress: { select: { lessonId: true } },
-      sectionQuizSubmissions: { select: { sectionId: true, passed: true } },
-    },
-  });
-
-  if (!enrollment) return null;
-
   const completedIds = new Set(enrollment.lessonProgress.map((lp) => lp.lessonId));
-  const passedSectionQuizIds = new Set(
+  const passedSectionIds = new Set(
     enrollment.sectionQuizSubmissions.filter((s) => s.passed).map((s) => s.sectionId)
   );
 
@@ -503,18 +511,27 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   const sectionLessons = (currentSection?.lessons ?? []).slice().sort((a, b) => a.order - b.order);
   const isLastLessonInSection = sectionLessons[sectionLessons.length - 1]?.id === lessonId;
 
-  // Section quiz for current section
-  type SectionQuizData = { passingScore: number; questions: { question: string; options: string[]; correct: number }[] };
-  const sectionQuiz = (lesson.section.quiz as SectionQuizData | null) ?? null;
-  const sectionQuizPassed = passedSectionQuizIds.has(lesson.sectionId);
+  // Section quiz — validar estructura antes de exponer al cliente
+  const rawQuiz = lesson.section.quiz as Record<string, unknown> | null;
+  const sectionQuiz =
+    rawQuiz &&
+    typeof rawQuiz.passingScore === "number" &&
+    Array.isArray(rawQuiz.questions) &&
+    rawQuiz.questions.length > 0
+      ? (rawQuiz as { passingScore: number; questions: { question: string; options: string[]; correct: number }[] })
+      : null;
+  const sectionQuizPassed = passedSectionIds.has(lesson.sectionId);
 
-  // Section minigame for current section
-  type SectionMinigameData =
-    | { type: "memory"; pairs: { term: string; definition: string }[] }
-    | { type: "hangman"; words: { word: string; hint: string }[] }
-    | { type: "sort"; instruction: string; items: string[] };
-  const sectionMinigame = (lesson.section.minigame as SectionMinigameData | null) ?? null;
-  const sectionMinigamePassed = passedSectionQuizIds.has(lesson.sectionId);
+  // Section minigame — validar que tenga type reconocido
+  const rawMinigame = lesson.section.minigame as Record<string, unknown> | null;
+  const sectionMinigame =
+    rawMinigame && ["memory", "hangman", "sort"].includes(rawMinigame.type as string)
+      ? (rawMinigame as
+          | { type: "memory"; pairs: { term: string; definition: string }[] }
+          | { type: "hangman"; words: { word: string; hint: string }[] }
+          | { type: "sort"; instruction: string; items: string[] })
+      : null;
+  const sectionMinigamePassed = passedSectionIds.has(lesson.sectionId);
 
   // Next lesson's section ID (to detect cross-section navigation)
   const nextLessonSectionId = nextLesson
@@ -534,7 +551,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     sectionMinigame,
     sectionMinigamePassed,
     isLastLessonInSection,
-    passedSectionQuizIds,
+    passedSectionIds,
     nextLessonSectionId,
     currentSectionId: lesson.sectionId,
   };

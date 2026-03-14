@@ -21,6 +21,13 @@ export async function POST(
   });
   if (!enrollment) return NextResponse.json({ error: "Not enrolled" }, { status: 403 });
 
+  // Verificar que la sección pertenezca al curso
+  const section = await prisma.courseSection.findFirst({
+    where: { id: sectionId, courseId },
+    select: { id: true },
+  });
+  if (!section) return NextResponse.json({ error: "Sección no encontrada en este curso" }, { status: 404 });
+
   // Si ya aprobó, no sobreescribir el estado de aprobado
   const existing = await prisma.sectionQuizSubmission.findUnique({
     where: { enrollmentId_sectionId: { enrollmentId: enrollment.id, sectionId } },

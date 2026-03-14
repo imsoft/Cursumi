@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 
 function requireEnv(name: string) {
   const value = process.env[name];
@@ -11,6 +12,9 @@ function requireEnv(name: string) {
 
 export async function POST() {
   try {
+    const session = await requireSession();
+    await requireRole(session.user.id, ["instructor", "admin"]);
+
     const cloudName = requireEnv("CLOUDINARY_CLOUD_NAME");
     const apiKey = requireEnv("CLOUDINARY_API_KEY");
     const apiSecret = requireEnv("CLOUDINARY_API_SECRET");

@@ -16,6 +16,17 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const body = await req.json();
     const { role } = patchSchema.parse(body);
 
+    // Un admin no puede modificar su propio rol
+    if (id === session.user.id) {
+      return NextResponse.json({ error: "No puedes cambiar tu propio rol" }, { status: 403 });
+    }
+
+    // Un admin no puede modificar a otro admin
+    const target = await prisma.user.findUnique({ where: { id }, select: { role: true } });
+    if (target?.role === "admin") {
+      return NextResponse.json({ error: "No puedes cambiar el rol de otro administrador" }, { status: 403 });
+    }
+
     const user = await prisma.user.update({
       where: { id },
       data: { role },

@@ -12,6 +12,14 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ cours
       return NextResponse.json({ error: "Curso no encontrado o no publicado" }, { status: 404 });
     }
 
+    // Cursos de pago solo se inscriben vía webhook de Stripe
+    if (course.price > 0) {
+      return NextResponse.json(
+        { error: "Este curso requiere pago. Usa el flujo de checkout." },
+        { status: 403 }
+      );
+    }
+
     await prisma.enrollment.upsert({
       where: {
         courseId_studentId: {

@@ -30,6 +30,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ya estás inscrito en este curso" }, { status: 409 });
     }
 
+    // Si ya hay una sesión de pago pendiente, reutilizarla en lugar de crear otra
+    const pendingTransaction = await prisma.transaction.findFirst({
+      where: { userId: session.user.id, courseId, status: "pending" },
+      select: { stripeSessionId: true },
+      orderBy: { createdAt: "desc" },
+    });
+    if (pendingTransaction?.stripeSessionId) {
+      try {
+        const existingSession = await stripe.checkout.sessions.retrieve(
+          pendingTransaction.stripeSessionId
+        );
+        if (existingSession.status === "open" && existingSession.url) {
+          return NextResponse.json({ url: existingSession.url });
+        }
+      } catch {
+        // La sesión ya no existe en Stripe, continuar creando una nueva
+      }
+    }
+
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const amountCents = course.price; // price is already in cents (MXN)
     const { platformFee, instructorAmount } = calculateSplit(amountCents);

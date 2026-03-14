@@ -31,7 +31,9 @@ export async function POST(req: NextRequest) {
     });
 
     if (!transaction) {
-      return NextResponse.json({ error: "Transaction not found" }, { status: 404 });
+      // Retornar 200 para que Stripe no reintente — puede ser un evento duplicado
+      console.warn(`Webhook: transacción no encontrada para sesión ${session.id}`);
+      return NextResponse.json({ received: true });
     }
 
     await prisma.transaction.update({

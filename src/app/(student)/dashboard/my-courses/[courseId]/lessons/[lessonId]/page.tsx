@@ -27,7 +27,7 @@ export default async function LessonPage({
     sectionMinigame,
     sectionMinigamePassed,
     isLastLessonInSection,
-    passedSectionQuizIds,
+    passedSectionIds,
     nextLessonSectionId,
     currentSectionId,
   } = data;
@@ -49,9 +49,9 @@ export default async function LessonPage({
         id: s.id,
         title: s.title,
         hasQuiz: !!(s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length),
-        quizPassed: passedSectionQuizIds.has(s.id),
+        quizPassed: passedSectionIds.has(s.id),
         hasMinigame: !!(s.minigame && (s.minigame as { type?: string }).type),
-        minigamePassed: passedSectionQuizIds.has(s.id),
+        minigamePassed: passedSectionIds.has(s.id),
         lessons: s.lessons.map((l) => ({
           id: l.id,
           title: l.title,

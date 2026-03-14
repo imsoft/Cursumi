@@ -33,59 +33,58 @@ export async function PATCH(
   }
 
   if (body.data.action === "approve") {
-    // Actualizar solicitud, rol del usuario y crear perfil de instructor
-    await prisma.$transaction([
-      prisma.instructorApplication.update({
+    // Todo en una sola transacción para garantizar consistencia
+    await prisma.$transaction(async (tx) => {
+      await tx.instructorApplication.update({
         where: { id },
         data: { status: "approved" },
-      }),
-      prisma.user.update({
+      });
+      await tx.user.update({
         where: { id: application.userId },
         data: { role: "instructor" },
-      }),
-    ]);
-
-    // Crear InstructorProfile si no existe
-    await prisma.instructorProfile.upsert({
-      where: { userId: application.userId },
-      update: {
-        headline: application.headline ?? undefined,
-        bio: application.bio ?? undefined,
-      },
-      create: {
-        userId: application.userId,
-        headline: application.headline ?? undefined,
-        bio: application.bio ?? undefined,
-      },
+      });
+      // InstructorProfile dentro de la transacción
+      await tx.instructorProfile.upsert({
+        where: { userId: application.userId },
+        update: {
+          headline: application.headline ?? undefined,
+          bio: application.bio ?? undefined,
+        },
+        create: {
+          userId: application.userId,
+          headline: application.headline ?? undefined,
+          bio: application.bio ?? undefined,
+        },
+      });
+      await tx.notification.create({
+        data: {
+          userId: application.userId,
+          type: "instructor_approved",
+          title: "¡Solicitud aprobada!",
+          body: "Tu solicitud para convertirte en instructor ha sido aprobada. Ya puedes crear y publicar cursos.",
+          link: "/instructor",
+        },
+      });
     });
-
-    // Notificación al usuario
-    await prisma.notification.create({
-      data: {
-        userId: application.userId,
-        type: "instructor_approved",
-        title: "¡Solicitud aprobada!",
-        body: "Tu solicitud para convertirte en instructor ha sido aprobada. Ya puedes crear y publicar cursos.",
-        link: "/instructor",
-      },
-    });
-  } else {
-    await prisma.instructorApplication.update({
-      where: { id },
-      data: {
-        status: "rejected",
-        rejectionReason: body.data.rejectionReason,
-      },
-    });
-
-    await prisma.notification.create({
-      data: {
-        userId: application.userId,
-        type: "instructor_rejected",
-        title: "Solicitud de instructor rechazada",
-        body: `Tu solicitud no fue aprobada. Motivo: ${body.data.rejectionReason}`,
-        link: "/dashboard/become-instructor",
-      },
+  } else if (body.data.action === "reject") {
+    const { rejectionReason } = body.data;
+    await prisma.$transaction(async (tx) => {
+      await tx.instructorApplication.update({
+        where: { id },
+        data: {
+          status: "rejected",
+          rejectionReason,
+        },
+      });
+      await tx.notification.create({
+        data: {
+          userId: application.userId,
+          type: "instructor_rejected",
+          title: "Solicitud de instructor rechazada",
+          body: `Tu solicitud no fue aprobada. Motivo: ${rejectionReason}`,
+          link: "/dashboard/become-instructor",
+        },
+      });
     });
   }
 
