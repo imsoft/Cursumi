@@ -30,6 +30,7 @@ interface ExploreClientProps {
     category: string;
     modality: string;
     level: string;
+    sortBy: string;
   };
 }
 
@@ -46,6 +47,13 @@ const levelOptions = [
   { value: "avanzado", label: "Avanzado" },
 ];
 
+const sortOptions = [
+  { value: "newest", label: "Más recientes" },
+  { value: "popular", label: "Más populares" },
+  { value: "price-asc", label: "Precio: menor a mayor" },
+  { value: "price-desc", label: "Precio: mayor a menor" },
+];
+
 export function ExploreClient({
   courses,
   categories,
@@ -55,6 +63,7 @@ export function ExploreClient({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchInput, setSearchInput] = useState(initialFilters.q);
+  const [sortBy, setSortBy] = useState(initialFilters.sortBy);
 
   const categoryOptions = [
     { value: "all", label: "Todas las categorías" },
@@ -91,6 +100,7 @@ export function ExploreClient({
 
   const clearFilters = () => {
     setSearchInput("");
+    setSortBy("newest");
     router.push("/dashboard/explore");
   };
 
@@ -98,7 +108,8 @@ export function ExploreClient({
     searchInput !== "" ||
     initialFilters.category !== "all" ||
     initialFilters.modality !== "all" ||
-    initialFilters.level !== "all";
+    initialFilters.level !== "all" ||
+    sortBy !== "newest";
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -116,7 +127,7 @@ export function ExploreClient({
               onChange={(e) => setSearchInput(e.target.value)}
             />
           </div>
-          <div className="grid w-full gap-4 md:w-auto md:grid-cols-3">
+          <div className="grid w-full gap-4 md:w-auto md:grid-cols-4">
             <Select
               label="Categoría"
               options={categoryOptions}
@@ -134,6 +145,15 @@ export function ExploreClient({
               options={levelOptions}
               value={initialFilters.level}
               onChange={(e) => updateFilter("level", e.target.value)}
+            />
+            <Select
+              label="Ordenar por"
+              options={sortOptions}
+              value={sortBy}
+              onChange={(e) => {
+                setSortBy(e.target.value);
+                updateFilter("sortBy", e.target.value);
+              }}
             />
           </div>
           <div className="flex items-end">

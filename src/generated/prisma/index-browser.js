@@ -305,6 +305,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   stripeSessionId: 'stripeSessionId',
   platformFee: 'platformFee',
   instructorAmount: 'instructorAmount',
+  couponCode: 'couponCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -315,6 +316,7 @@ exports.Prisma.ReviewScalarFieldEnum = {
   userId: 'userId',
   rating: 'rating',
   comment: 'comment',
+  approved: 'approved',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -400,6 +402,19 @@ exports.Prisma.KpiScalarFieldEnum = {
   currentValue: 'currentValue',
   period: 'period',
   category: 'category',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  discountPct: 'discountPct',
+  maxUses: 'maxUses',
+  usedCount: 'usedCount',
+  active: 'active',
+  expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -512,7 +527,8 @@ exports.Prisma.ModelName = {
   QuizGameQuestion: 'QuizGameQuestion',
   QuizGameParticipant: 'QuizGameParticipant',
   QuizGameAnswer: 'QuizGameAnswer',
-  Kpi: 'Kpi'
+  Kpi: 'Kpi',
+  Coupon: 'Coupon'
 };
 
 /**

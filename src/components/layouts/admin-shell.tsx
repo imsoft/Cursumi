@@ -19,6 +19,8 @@ import {
   Tag,
   GraduationCap,
   Target,
+  MessageSquare,
+  Ticket,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -27,6 +29,8 @@ const adminNavItems = [
   { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
   { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },
   { title: "Categorías", href: "/admin/categories", icon: Tag },
+  { title: "Reseñas", href: "/admin/reviews", icon: MessageSquare },
+  { title: "Cupones", href: "/admin/coupons", icon: Ticket },
   { title: "KPIs", href: "/admin/kpis", icon: Target },
   { title: "Analíticas", href: "/admin/analytics", icon: BarChart3 },
   { title: "Finanzas", href: "/admin/finances", icon: DollarSign },

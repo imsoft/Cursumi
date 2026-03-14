@@ -8,6 +8,9 @@ interface SearchParams {
   category?: string;
   modality?: string;
   level?: string;
+  sortBy?: string;
+  minPrice?: string;
+  maxPrice?: string;
 }
 
 export default async function ExploreCoursesPage({
@@ -24,6 +27,9 @@ export default async function ExploreCoursesPage({
       category: filters.category,
       modality: filters.modality,
       level: filters.level,
+      sortBy: filters.sortBy,
+      minPrice: filters.minPrice ? parseInt(filters.minPrice) : undefined,
+      maxPrice: filters.maxPrice ? parseInt(filters.maxPrice) : undefined,
     }),
     prisma.category.findMany({ orderBy: { order: "asc" }, select: { slug: true, name: true } }),
     session
@@ -46,6 +52,7 @@ export default async function ExploreCoursesPage({
         category: filters.category ?? "all",
         modality: filters.modality ?? "all",
         level: filters.level ?? "all",
+        sortBy: filters.sortBy ?? "newest",
       }}
     />
   );

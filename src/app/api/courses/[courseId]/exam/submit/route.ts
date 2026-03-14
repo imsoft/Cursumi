@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
+import { sendCertificateEmail } from "@/lib/email";
 
 const bodySchema = z.object({
   answers: z.record(z.string(), z.number()),
@@ -83,6 +84,21 @@ export async function POST(
               link: `/dashboard/certificates/${certificate.id}`,
             },
           });
+
+          // Email de certificado
+          const courseData = await prisma.course.findUnique({
+            where: { id: courseId },
+            select: { title: true },
+          });
+          if (courseData && session.user.email) {
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+            await sendCertificateEmail({
+              to: session.user.email,
+              name: session.user.name || "Estudiante",
+              courseTitle: courseData.title,
+              certificateUrl: `${baseUrl}/dashboard/certificates/${certificate.id}`,
+            });
+          }
         }
       }
     }

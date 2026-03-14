@@ -374,6 +374,7 @@ model Transaction {
   stripeSessionId  String?           @unique
   platformFee      Int?
   instructorAmount Int?
+  couponCode       String? // cupón aplicado al momento del pago
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 
@@ -396,6 +397,7 @@ model Review {
   userId    String
   rating    Int // 1-5
   comment   String?
+  approved  Boolean  @default(false) // requiere aprobación del admin antes de publicarse
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -404,6 +406,7 @@ model Review {
 
   @@unique([courseId, userId])
   @@index([courseId])
+  @@index([approved])
 }
 
 // ─────────────────────────────────────────
@@ -555,4 +558,24 @@ model Kpi {
   updatedAt    DateTime @updatedAt
 
   @@index([category])
+}
+
+// ─────────────────────────────────────────
+// CUPONES DE DESCUENTO
+// ─────────────────────────────────────────
+
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique // código que escribe el usuario, ej. PROMO20
+  description String?
+  discountPct Int // 1-100 — porcentaje de descuento
+  maxUses     Int? // null = ilimitado
+  usedCount   Int       @default(0)
+  active      Boolean   @default(true)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([code])
+  @@index([active])
 }

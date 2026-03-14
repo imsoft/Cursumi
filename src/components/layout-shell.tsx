@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { PWARegister } from "@/components/pwa-register";
 
 interface LayoutShellProps {
   children: ReactNode;
@@ -19,6 +20,7 @@ export const LayoutShell = ({ children }: LayoutShellProps) => {
 
   return (
     <>
+      <PWARegister />
       {!hideGlobalShell && <Navbar />}
       {children}
       {!hideGlobalShell && <Footer />}

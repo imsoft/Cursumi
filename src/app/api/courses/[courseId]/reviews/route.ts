@@ -16,7 +16,7 @@ export async function GET(
   try {
     const { courseId } = await params;
     const reviews = await prisma.review.findMany({
-      where: { courseId },
+      where: { courseId, approved: true },
       orderBy: { createdAt: "desc" },
       select: {
         id: true,

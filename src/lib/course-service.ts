@@ -258,10 +258,22 @@ interface CourseFilters {
   category?: string;
   modality?: string;
   level?: string;
+  instructor?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  /** newest | price-asc | price-desc | popular */
+  sortBy?: string;
 }
 
 export async function listPublishedCourses(filters: CourseFilters = {}): Promise<Course[]> {
-  const { search, category, modality, level } = filters;
+  const { search, category, modality, level, instructor, minPrice, maxPrice, sortBy } = filters;
+
+  type PrismaOrderBy = { createdAt?: "asc" | "desc"; price?: "asc" | "desc"; enrollments?: { _count: "asc" | "desc" } };
+  const orderBy: PrismaOrderBy =
+    sortBy === "price-asc"  ? { price: "asc" }
+    : sortBy === "price-desc" ? { price: "desc" }
+    : sortBy === "popular"    ? { enrollments: { _count: "desc" } }
+    : { createdAt: "desc" };
 
   const courses = await prisma.course.findMany({
     where: {
@@ -270,13 +282,17 @@ export async function listPublishedCourses(filters: CourseFilters = {}): Promise
         OR: [
           { title: { contains: search, mode: "insensitive" } },
           { description: { contains: search, mode: "insensitive" } },
+          { instructor: { name: { contains: search, mode: "insensitive" } } },
         ],
       }),
       ...(category && { category: { contains: category, mode: "insensitive" } }),
       ...(modality && { modality: modality as Modality }),
       ...(level && { level: { contains: level, mode: "insensitive" } }),
+      ...(instructor && { instructor: { name: { contains: instructor, mode: "insensitive" } } }),
+      ...(minPrice !== undefined && { price: { gte: minPrice } }),
+      ...(maxPrice !== undefined && { price: { lte: maxPrice } }),
     },
-    orderBy: { createdAt: "desc" },
+    orderBy,
     select: {
       id: true,
       title: true,

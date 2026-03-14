@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { sendEnrollmentEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Notify instructor
+    // Notify instructor + send enrollment email to student
     const course = await prisma.course.findUnique({
       where: { id: courseId },
       select: { instructorId: true, title: true },
@@ -81,6 +82,21 @@ export async function POST(req: NextRequest) {
           link: `/instructor/courses/${courseId}`,
         },
       });
+
+      // Email de bienvenida al curso
+      const student = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { email: true, name: true },
+      });
+      if (student) {
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        await sendEnrollmentEmail({
+          to: student.email,
+          name: student.name || "Estudiante",
+          courseTitle: course.title,
+          courseUrl: `${baseUrl}/dashboard/my-courses/${courseId}`,
+        });
+      }
     }
   }
 

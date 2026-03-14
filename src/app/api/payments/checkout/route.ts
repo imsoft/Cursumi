@@ -7,6 +7,7 @@ import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const bodySchema = z.object({
   courseId: z.string().min(1),
+  couponCode: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
       windowSecs: 3600,
     });
     if (limited) return limited;
-    const { courseId } = bodySchema.parse(await req.json());
+    const { courseId, couponCode } = bodySchema.parse(await req.json());
 
     const course = await prisma.course.findUnique({
       where: { id: courseId, status: "published" },
@@ -59,7 +60,29 @@ export async function POST(req: NextRequest) {
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const amountCents = course.price; // price is already in cents (MXN)
+
+    // Validar cupón si se envió
+    let appliedCoupon: { code: string; discountPct: number } | null = null;
+    if (couponCode) {
+      const coupon = await prisma.coupon.findUnique({
+        where: { code: couponCode.toUpperCase().trim() },
+      });
+      if (
+        coupon &&
+        coupon.active &&
+        (!coupon.expiresAt || coupon.expiresAt > new Date()) &&
+        (coupon.maxUses === null || coupon.usedCount < coupon.maxUses)
+      ) {
+        appliedCoupon = { code: coupon.code, discountPct: coupon.discountPct };
+      }
+    }
+
+    const originalPrice = course.price;
+    const discountedPrice = appliedCoupon
+      ? Math.round(originalPrice * (1 - appliedCoupon.discountPct / 100))
+      : originalPrice;
+
+    const amountCents = discountedPrice;
     const { platformFee, instructorAmount } = calculateSplit(amountCents);
 
     const checkoutSession = await stripe.checkout.sessions.create({
@@ -96,10 +119,22 @@ export async function POST(req: NextRequest) {
         stripeSessionId: checkoutSession.id,
         platformFee,
         instructorAmount,
+        couponCode: appliedCoupon?.code ?? null,
       },
     });
 
-    return NextResponse.json({ url: checkoutSession.url });
+    // Incrementar contador de uso del cupón
+    if (appliedCoupon) {
+      await prisma.coupon.update({
+        where: { code: appliedCoupon.code },
+        data: { usedCount: { increment: 1 } },
+      });
+    }
+
+    return NextResponse.json({
+      url: checkoutSession.url,
+      discountPct: appliedCoupon?.discountPct ?? 0,
+    });
   } catch (error) {
     return handleApiError(error);
   }
