@@ -40,7 +40,8 @@ export async function listInstructorCourses(): Promise<InstructorCourseListItem[
 }
 
 export async function listPublicCourses(): Promise<Course[]> {
-  return listPublishedCourses();
+  const { courses } = await listPublishedCourses();
+  return courses;
 }
 
 export async function listMyCourses(): Promise<StudentCourse[]> {

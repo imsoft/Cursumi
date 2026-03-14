@@ -48,39 +48,48 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
   const now = new Date();
   const startOfRange = new Date(now.getFullYear(), now.getMonth() - 5, 1);
 
-  const [enrollmentsWithPrice, usersCreated] = await Promise.all([
-    prisma.enrollment.findMany({
-      where: { createdAt: { gte: startOfRange } },
-      select: { createdAt: true, course: { select: { price: true } } },
-    }),
-    prisma.user.findMany({
-      where: { createdAt: { gte: startOfRange } },
-      select: { createdAt: true },
-    }),
+  // SQL GROUP BY en lugar de traer todos los registros y filtrar en JS
+  const [revenueRows, userRows] = await Promise.all([
+    prisma.$queryRaw<{ month_label: string; month_key: string; amount: number }[]>`
+      SELECT
+        TO_CHAR(DATE_TRUNC('month', e."createdAt"), 'Mon') AS month_label,
+        TO_CHAR(DATE_TRUNC('month', e."createdAt"), 'YYYY-MM') AS month_key,
+        COALESCE(SUM(c.price), 0)::int AS amount
+      FROM "Enrollment" e
+      JOIN "Course" c ON c.id = e."courseId"
+      WHERE e."createdAt" >= ${startOfRange}
+      GROUP BY DATE_TRUNC('month', e."createdAt")
+      ORDER BY DATE_TRUNC('month', e."createdAt")
+    `,
+    prisma.$queryRaw<{ month_label: string; month_key: string; users: number }[]>`
+      SELECT
+        TO_CHAR(DATE_TRUNC('month', "createdAt"), 'Mon') AS month_label,
+        TO_CHAR(DATE_TRUNC('month', "createdAt"), 'YYYY-MM') AS month_key,
+        COUNT(*)::int AS users
+      FROM "User"
+      WHERE "createdAt" >= ${startOfRange}
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY DATE_TRUNC('month', "createdAt")
+    `,
   ]);
 
+  // Garantizar que los últimos 6 meses siempre aparezcan aunque no haya datos
   const revenueByMonth: { month: string; amount: number }[] = [];
   const usersByMonth: { month: string; users: number }[] = [];
 
   for (let i = 5; i >= 0; i--) {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
     const label = date.toLocaleDateString("es-MX", { month: "short" });
 
-    const amount = enrollmentsWithPrice
-      .filter((e) => isSameMonth(e.createdAt, date))
-      .reduce((sum, e) => sum + e.course.price, 0);
+    const rev = revenueRows.find((r) => r.month_key === key);
+    const usr = userRows.find((u) => u.month_key === key);
 
-    const usersCount = usersCreated.filter((u) => isSameMonth(u.createdAt, date)).length;
-
-    revenueByMonth.push({ month: label, amount });
-    usersByMonth.push({ month: label, users: usersCount });
+    revenueByMonth.push({ month: label, amount: Number(rev?.amount ?? 0) });
+    usersByMonth.push({ month: label, users: Number(usr?.users ?? 0) });
   }
 
   return { revenueByMonth, usersByMonth };
-}
-
-function isSameMonth(date: Date, ref: Date) {
-  return date.getMonth() === ref.getMonth() && date.getFullYear() === ref.getFullYear();
 }
 
 // ─────────────────────────────────────────

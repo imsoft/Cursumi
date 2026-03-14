@@ -31,12 +31,6 @@ export async function GET(
       include: { sender: { select: { name: true } } },
     });
 
-    // Mark unread messages as read
-    await prisma.message.updateMany({
-      where: { conversationId: id, read: false, senderId: { not: session.user.id } },
-      data: { read: true },
-    });
-
     return NextResponse.json(messages);
   } catch (error) {
     return handleApiError(error);

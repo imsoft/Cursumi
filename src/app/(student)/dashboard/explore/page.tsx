@@ -11,6 +11,7 @@ interface SearchParams {
   sortBy?: string;
   minPrice?: string;
   maxPrice?: string;
+  page?: string;
 }
 
 export default async function ExploreCoursesPage({
@@ -20,8 +21,9 @@ export default async function ExploreCoursesPage({
 }) {
   const filters = await searchParams;
   const session = await getCachedSession();
+  const page = filters.page ? parseInt(filters.page) : 1;
 
-  const [courses, categories, enrollments] = await Promise.all([
+  const [{ courses, total, hasMore }, categories, enrollments] = await Promise.all([
     listPublishedCourses({
       search: filters.q,
       category: filters.category,
@@ -30,7 +32,7 @@ export default async function ExploreCoursesPage({
       sortBy: filters.sortBy,
       minPrice: filters.minPrice ? parseInt(filters.minPrice) : undefined,
       maxPrice: filters.maxPrice ? parseInt(filters.maxPrice) : undefined,
-    }),
+    }, page),
     prisma.category.findMany({ orderBy: { order: "asc" }, select: { slug: true, name: true } }),
     session
       ? prisma.enrollment.findMany({
@@ -45,6 +47,9 @@ export default async function ExploreCoursesPage({
   return (
     <ExploreClient
       courses={courses}
+      total={total}
+      hasMore={hasMore}
+      currentPage={page}
       categories={categories}
       enrolledCourseIds={Array.from(enrolledCourseIds)}
       initialFilters={{

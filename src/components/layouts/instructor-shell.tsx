@@ -47,11 +47,12 @@ interface InstructorShellProps {
   userName: string;
   userInitials: string;
   children: ReactNode;
+  pageTitle?: string;
 }
 
-export function InstructorShell({ userName, userInitials, children }: InstructorShellProps) {
+export function InstructorShell({ userName, userInitials, children, pageTitle: pageTitleProp }: InstructorShellProps) {
   const pathname = usePathname();
-  const pageTitle = getPageTitle(pathname);
+  const pageTitle = pageTitleProp ?? getPageTitle(pathname);
 
   return (
     <SidebarProvider>

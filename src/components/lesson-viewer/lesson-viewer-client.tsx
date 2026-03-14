@@ -2,15 +2,12 @@
 
 import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import {
   CheckCircle,
-  Circle,
   ChevronLeft,
   ChevronRight,
   PlayCircle,
@@ -23,9 +20,11 @@ import {
   ClipboardCheck,
   Gamepad2,
 } from "lucide-react";
+// Note: PlayCircle, FileText, HelpCircle, ClipboardList used in lessonTypeIcon below
 import { MemoryGame } from "./minigames/memory-game";
 import { HangmanGame } from "./minigames/hangman-game";
 import { SortGame } from "./minigames/sort-game";
+import { LessonSidebar } from "./lesson-sidebar";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
@@ -161,13 +160,6 @@ export function LessonViewerClient({
 
   const isCompleted = completedIds.has(lesson.id);
 
-  const totalLessons = sections.reduce((acc, s) => acc + s.lessons.length, 0);
-  const completedCount = sections.reduce(
-    (acc, s) => acc + s.lessons.filter((l) => completedIds.has(l.id)).length,
-    0
-  );
-  const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
-
   // ¿El siguiente lesson es en otra sección y esa sección requiere pasar el test/minijuego?
   const nextIsInDifferentSection =
     nextLesson !== null && nextLessonSectionId !== null && nextLessonSectionId !== currentSectionId;
@@ -183,15 +175,29 @@ export function LessonViewerClient({
   const markComplete = useCallback(async () => {
     if (isCompleted || marking) return;
     setMarking(true);
+    // Optimistic update: marcar inmediatamente, rollback solo si falla
+    setCompletedIds((prev) => new Set([...prev, lesson.id]));
     try {
       const res = await fetch(`/api/lessons/${lesson.id}/complete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ courseId }),
       });
-      if (res.ok) {
-        setCompletedIds((prev) => new Set([...prev, lesson.id]));
+      if (!res.ok) {
+        // Rollback
+        setCompletedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(lesson.id);
+          return next;
+        });
       }
+    } catch {
+      // Rollback on network error
+      setCompletedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(lesson.id);
+        return next;
+      });
     } finally {
       setMarking(false);
     }
@@ -656,127 +662,16 @@ export function LessonViewerClient({
           sidebarOpen ? "block" : "hidden"
         } w-full shrink-0 border-r border-border bg-card md:block md:w-60 lg:w-72 xl:w-80`}
       >
-        <div className="sticky top-0 flex h-[calc(100svh-4rem)] flex-col overflow-hidden">
-          <div className="border-b border-border p-4">
-            <Link
-              href={`/dashboard/my-courses/${courseId}`}
-              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <ChevronLeft className="h-3 w-3" /> Volver al curso
-            </Link>
-            <p className="mt-2 text-xs font-medium text-muted-foreground">Progreso del curso</p>
-            <Progress value={progress} className="mt-1 h-1.5" />
-            <p className="mt-1 text-xs text-muted-foreground">
-              {completedCount}/{totalLessons} lecciones
-            </p>
-          </div>
-          <div className="flex-1 overflow-y-auto py-2">
-            {(() => {
-              // Calcular qué secciones están bloqueadas (hay una sección previa con evaluación no superada)
-              const lockedSectionIds = new Set<string>();
-              let gateFailed = false;
-              for (const s of sections) {
-                if (gateFailed) lockedSectionIds.add(s.id);
-                if (!gateFailed) {
-                  const sectionPassed = s.id === currentSectionId
-                    ? (s.hasQuiz ? sectionQuizPassed : s.hasMinigame ? sectionMinigamePassed : true)
-                    : (s.hasQuiz ? s.quizPassed : s.hasMinigame ? s.minigamePassed : true);
-                  if ((s.hasQuiz || s.hasMinigame) && !sectionPassed) gateFailed = true;
-                }
-              }
-              return sections.map((section) => {
-                const isLocked = lockedSectionIds.has(section.id);
-                return (
-              <div key={section.id}>
-                <p className={`px-4 py-2 text-xs font-semibold uppercase tracking-wide ${isLocked ? "text-muted-foreground/40" : "text-muted-foreground"}`}>
-                  {section.title}
-                  {isLocked && <Lock className="inline ml-1 h-3 w-3 opacity-60" />}
-                </p>
-                {section.lessons.map((l) => {
-                  const done = completedIds.has(l.id);
-                  const active = l.id === lesson.id;
-                  if (isLocked) {
-                    return (
-                      <div
-                        key={l.id}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground/40 cursor-not-allowed"
-                      >
-                        <Lock className="h-4 w-4 shrink-0" />
-                        <span className="flex-1 truncate">{l.title}</span>
-                      </div>
-                    );
-                  }
-                  return (
-                    <Link
-                      key={l.id}
-                      href={`/dashboard/my-courses/${courseId}/lessons/${l.id}`}
-                      onClick={() => setSidebarOpen(false)}
-                      className={`flex items-center gap-2 px-4 py-2 text-sm transition-colors ${
-                        active
-                          ? "bg-primary/10 text-primary"
-                          : "text-foreground hover:bg-muted"
-                      }`}
-                    >
-                      {done ? (
-                        <CheckCircle className="h-4 w-4 shrink-0 text-green-500" />
-                      ) : (
-                        <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />
-                      )}
-                      <span className="flex-1 truncate">{l.title}</span>
-                      {lessonTypeIcon[l.type]}
-                    </Link>
-                  );
-                })}
-                {/* Indicador de test de sección en sidebar */}
-                {section.hasQuiz && (
-                  <div
-                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
-                      section.id === currentSectionId && sectionQuizPassed
-                        ? "text-green-600 dark:text-green-400"
-                        : section.quizPassed
-                        ? "text-green-600 dark:text-green-400"
-                        : "text-amber-600 dark:text-amber-400"
-                    }`}
-                  >
-                    {(section.id === currentSectionId ? sectionQuizPassed : section.quizPassed) ? (
-                      <CheckCircle className="h-4 w-4 shrink-0" />
-                    ) : (
-                      <ClipboardCheck className="h-4 w-4 shrink-0" />
-                    )}
-                    <span className="flex-1 truncate text-xs font-medium">Test de sección</span>
-                    {!(section.id === currentSectionId ? sectionQuizPassed : section.quizPassed) && (
-                      <Lock className="h-3 w-3 shrink-0" />
-                    )}
-                  </div>
-                )}
-                {/* Indicador de minijuego en sidebar */}
-                {section.hasMinigame && (
-                  <div
-                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
-                      section.id === currentSectionId && sectionMinigamePassed
-                        ? "text-green-600 dark:text-green-400"
-                        : section.minigamePassed
-                        ? "text-green-600 dark:text-green-400"
-                        : "text-purple-600 dark:text-purple-400"
-                    }`}
-                  >
-                    {(section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed) ? (
-                      <CheckCircle className="h-4 w-4 shrink-0" />
-                    ) : (
-                      <Gamepad2 className="h-4 w-4 shrink-0" />
-                    )}
-                    <span className="flex-1 truncate text-xs font-medium">Minijuego</span>
-                    {!(section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed) && (
-                      <Lock className="h-3 w-3 shrink-0" />
-                    )}
-                  </div>
-                )}
-              </div>
-                );
-              });
-            })()}
-          </div>
-        </div>
+        <LessonSidebar
+          courseId={courseId}
+          sections={sections}
+          completedIds={completedIds}
+          currentLessonId={lesson.id}
+          currentSectionId={currentSectionId}
+          sectionQuizPassed={sectionQuizPassed}
+          sectionMinigamePassed={sectionMinigamePassed}
+          onLessonClick={() => setSidebarOpen(false)}
+        />
       </aside>
 
       {/* Main content */}

@@ -55,12 +55,18 @@ export function CourseChatClient({
     }
   }, [conversationId, initConversation]);
 
-  // Initial load + polling every 5s
+  // Initial load + polling every 20s
   useEffect(() => {
     loadMessages();
-    const interval = setInterval(loadMessages, 5_000);
+    const interval = setInterval(loadMessages, 20_000);
     return () => clearInterval(interval);
   }, [loadMessages]);
+
+  // Mark messages as read once when conversation is opened
+  useEffect(() => {
+    if (!conversationId) return;
+    fetch(`/api/conversations/${conversationId}/read`, { method: "PATCH" }).catch(() => {});
+  }, [conversationId]);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -131,7 +137,7 @@ export function CourseChatClient({
                     {msg.sender.name || "Instructor"}
                   </p>
                 )}
-                <p className="break-words">{msg.body}</p>
+                <p className="wrap-break-word">{msg.body}</p>
                 <p className={`mt-0.5 text-[10px] ${isMe ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                   {new Date(msg.createdAt).toLocaleTimeString("es-MX", {
                     hour: "2-digit",

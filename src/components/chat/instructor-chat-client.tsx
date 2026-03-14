@@ -55,9 +55,15 @@ export function InstructorChatClient({
   useEffect(() => {
     setMessages([]);
     loadMessages();
-    const interval = setInterval(loadMessages, 5_000);
+    const interval = setInterval(loadMessages, 20_000);
     return () => clearInterval(interval);
   }, [loadMessages]);
+
+  // Mark messages as read once when switching conversations
+  useEffect(() => {
+    if (!selectedConvId) return;
+    fetch(`/api/conversations/${selectedConvId}/read`, { method: "PATCH" }).catch(() => {});
+  }, [selectedConvId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -183,7 +189,7 @@ export function InstructorChatClient({
                             {msg.sender.name || "Estudiante"}
                           </p>
                         )}
-                        <p className="break-words">{msg.body}</p>
+                        <p className="wrap-break-word">{msg.body}</p>
                         <p className={`mt-0.5 text-[10px] ${isMe ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                           {new Date(msg.createdAt).toLocaleTimeString("es-MX", {
                             hour: "2-digit",

@@ -23,6 +23,9 @@ interface Category {
 
 interface ExploreClientProps {
   courses: Course[];
+  total: number;
+  hasMore: boolean;
+  currentPage: number;
   categories: Category[];
   enrolledCourseIds: string[];
   initialFilters: {
@@ -56,6 +59,9 @@ const sortOptions = [
 
 export function ExploreClient({
   courses,
+  total,
+  hasMore,
+  currentPage,
   categories,
   enrolledCourseIds,
   initialFilters,
@@ -101,7 +107,7 @@ export function ExploreClient({
   const clearFilters = () => {
     setSearchInput("");
     setSortBy("newest");
-    router.push("/dashboard/explore");
+    router.push("/dashboard/explore?page=1");
   };
 
   const hasActiveFilters =
@@ -172,7 +178,7 @@ export function ExploreClient({
 
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Mostrando {courses.length} {courses.length === 1 ? "curso" : "cursos"}
+          Mostrando {courses.length} de {total} {total === 1 ? "curso" : "cursos"}
         </p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {courses.length === 0 && (
@@ -201,6 +207,8 @@ export function ExploreClient({
                         fill
                         className="object-cover transition-transform group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTJlOGYwIi8+PC9zdmc+"
                       />
                     </div>
                   )}
@@ -242,6 +250,29 @@ export function ExploreClient({
             );
           })}
         </div>
+
+        {/* Paginación */}
+        {(hasMore || currentPage > 1) && (
+          <div className="flex items-center justify-center gap-3 pt-2">
+            {currentPage > 1 && (
+              <Button
+                variant="outline"
+                onClick={() => updateFilter("page", String(currentPage - 1))}
+              >
+                Anterior
+              </Button>
+            )}
+            <span className="text-sm text-muted-foreground">Página {currentPage}</span>
+            {hasMore && (
+              <Button
+                variant="outline"
+                onClick={() => updateFilter("page", String(currentPage + 1))}
+              >
+                Ver más cursos
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

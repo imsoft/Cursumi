@@ -265,7 +265,13 @@ interface CourseFilters {
   sortBy?: string;
 }
 
-export async function listPublishedCourses(filters: CourseFilters = {}): Promise<Course[]> {
+const COURSES_PER_PAGE = 12;
+
+export async function listPublishedCourses(
+  filters: CourseFilters = {},
+  page = 1,
+  limit = COURSES_PER_PAGE
+): Promise<{ courses: Course[]; total: number; hasMore: boolean }> {
   const { search, category, modality, level, instructor, minPrice, maxPrice, sortBy } = filters;
 
   type PrismaOrderBy = { createdAt?: "asc" | "desc"; price?: "asc" | "desc"; enrollments?: { _count: "asc" | "desc" } };
@@ -275,40 +281,47 @@ export async function listPublishedCourses(filters: CourseFilters = {}): Promise
     : sortBy === "popular"    ? { enrollments: { _count: "desc" } }
     : { createdAt: "desc" };
 
-  const courses = await prisma.course.findMany({
-    where: {
-      status: "published",
-      ...(search && {
-        OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { description: { contains: search, mode: "insensitive" } },
-          { instructor: { name: { contains: search, mode: "insensitive" } } },
-        ],
-      }),
-      ...(category && { category: { contains: category, mode: "insensitive" } }),
-      ...(modality && { modality: modality as Modality }),
-      ...(level && { level: { contains: level, mode: "insensitive" } }),
-      ...(instructor && { instructor: { name: { contains: instructor, mode: "insensitive" } } }),
-      ...(minPrice !== undefined && { price: { gte: minPrice } }),
-      ...(maxPrice !== undefined && { price: { lte: maxPrice } }),
-    },
-    orderBy,
-    select: {
-      id: true,
-      title: true,
-      modality: true,
-      category: true,
-      level: true,
-      city: true,
-      description: true,
-      duration: true,
-      price: true,
-      imageUrl: true,
-      instructor: { select: { name: true } },
-    },
-  });
+  const where = {
+    status: "published" as const,
+    ...(search && {
+      OR: [
+        { title: { contains: search, mode: "insensitive" as const } },
+        { description: { contains: search, mode: "insensitive" as const } },
+        { instructor: { name: { contains: search, mode: "insensitive" as const } } },
+      ],
+    }),
+    ...(category && { category: { contains: category, mode: "insensitive" as const } }),
+    ...(modality && { modality: modality as Modality }),
+    ...(level && { level: { contains: level, mode: "insensitive" as const } }),
+    ...(instructor && { instructor: { name: { contains: instructor, mode: "insensitive" as const } } }),
+    ...(minPrice !== undefined && { price: { gte: minPrice } }),
+    ...(maxPrice !== undefined && { price: { lte: maxPrice } }),
+  };
 
-  return courses.map((course) => ({
+  const [raw, total] = await Promise.all([
+    prisma.course.findMany({
+      where,
+      orderBy,
+      take: limit,
+      skip: (page - 1) * limit,
+      select: {
+        id: true,
+        title: true,
+        modality: true,
+        category: true,
+        level: true,
+        city: true,
+        description: true,
+        duration: true,
+        price: true,
+        imageUrl: true,
+        instructor: { select: { name: true } },
+      },
+    }),
+    prisma.course.count({ where }),
+  ]);
+
+  const courses = raw.map((course) => ({
     id: course.id,
     title: course.title,
     modality: course.modality,
@@ -323,6 +336,8 @@ export async function listPublishedCourses(filters: CourseFilters = {}): Promise
       course.imageUrl ||
       "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
   }));
+
+  return { courses, total, hasMore: page * limit < total };
 }
 
 /** Lightweight list for sitemap: only id and updatedAt of published courses */
@@ -490,24 +505,39 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   });
   if (!enrollment) return null;
 
-  // Ahora sí cargamos la lección completa con todo el contexto del curso
-  const lesson = await prisma.lesson.findUnique({
-    where: { id: lessonId },
-    include: {
-      section: {
-        include: {
-          course: {
-            include: {
-              sections: {
-                orderBy: { order: "asc" },
-                include: { lessons: { orderBy: { order: "asc" }, select: { id: true, title: true, type: true, duration: true, order: true } } },
-              },
-            },
+  // Carga en paralelo: datos de la lección + índice ligero del curso (sidebar)
+  const [lesson, courseSections] = await Promise.all([
+    prisma.lesson.findUnique({
+      where: { id: lessonId },
+      include: {
+        section: {
+          select: {
+            id: true,
+            title: true,
+            order: true,
+            quiz: true,
+            minigame: true,
+            courseId: true,
           },
         },
       },
-    },
-  });
+    }),
+    prisma.courseSection.findMany({
+      where: { courseId },
+      orderBy: { order: "asc" },
+      select: {
+        id: true,
+        title: true,
+        order: true,
+        quiz: true,
+        minigame: true,
+        lessons: {
+          orderBy: { order: "asc" },
+          select: { id: true, title: true, type: true, duration: true, order: true },
+        },
+      },
+    }),
+  ]);
 
   if (!lesson) return null;
 
@@ -517,13 +547,13 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   );
 
   // Flatten all lessons in order to find prev/next
-  const allLessons = lesson.section.course.sections.flatMap((s) => s.lessons);
+  const allLessons = courseSections.flatMap((s) => s.lessons);
   const idx = allLessons.findIndex((l) => l.id === lessonId);
   const prevLesson = idx > 0 ? allLessons[idx - 1] : null;
   const nextLesson = idx < allLessons.length - 1 ? allLessons[idx + 1] : null;
 
   // Current section info
-  const currentSection = lesson.section.course.sections.find((s) => s.id === lesson.sectionId);
+  const currentSection = courseSections.find((s) => s.id === lesson.sectionId);
   const sectionLessons = (currentSection?.lessons ?? []).slice().sort((a, b) => a.order - b.order);
   const isLastLessonInSection = sectionLessons[sectionLessons.length - 1]?.id === lessonId;
 
@@ -551,7 +581,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
 
   // Next lesson's section ID (to detect cross-section navigation)
   const nextLessonSectionId = nextLesson
-    ? lesson.section.course.sections.find((s) => s.lessons.some((l) => l.id === nextLesson.id))?.id ?? null
+    ? courseSections.find((s) => s.lessons.some((l) => l.id === nextLesson.id))?.id ?? null
     : null;
 
   return {
@@ -561,7 +591,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     prevLesson,
     nextLesson,
     courseId,
-    sections: lesson.section.course.sections,
+    sections: courseSections,
     sectionQuiz,
     sectionQuizPassed,
     sectionMinigame,

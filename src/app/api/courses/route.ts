@@ -7,7 +7,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = req.nextUrl;
     const minPriceRaw = searchParams.get("minPrice");
     const maxPriceRaw = searchParams.get("maxPrice");
-    const courses = await listPublishedCourses({
+    const page = parseInt(searchParams.get("page") ?? "1");
+    const result = await listPublishedCourses({
       search: searchParams.get("q") ?? undefined,
       category: searchParams.get("category") ?? undefined,
       modality: searchParams.get("modality") ?? undefined,
@@ -16,8 +17,8 @@ export async function GET(req: NextRequest) {
       sortBy: searchParams.get("sortBy") ?? undefined,
       minPrice: minPriceRaw ? parseInt(minPriceRaw) : undefined,
       maxPrice: maxPriceRaw ? parseInt(maxPriceRaw) : undefined,
-    });
-    return NextResponse.json(courses);
+    }, page);
+    return NextResponse.json(result);
   } catch (error) {
     return handleApiError(error);
   }
