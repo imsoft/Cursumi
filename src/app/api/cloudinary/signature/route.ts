@@ -22,7 +22,7 @@ export async function POST() {
 
     const timestamp = Math.round(new Date().getTime() / 1000);
     const paramsToSign = `timestamp=${timestamp}&upload_preset=${uploadPreset}`;
-    const signature = crypto.createHash("sha1").update(paramsToSign + apiSecret).digest("hex");
+    const signature = crypto.createHash("sha256").update(paramsToSign + apiSecret).digest("hex");
 
     return NextResponse.json({
       timestamp,
@@ -32,9 +32,9 @@ export async function POST() {
       uploadPreset,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Cloudinary signature error:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "No se pudo generar la firma" },
+      { error: "No se pudo generar la firma" },
       { status: 500 },
     );
   }

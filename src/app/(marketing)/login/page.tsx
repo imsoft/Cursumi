@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
 import { LoginForm } from "@/components/auth/login-form";
+import { safeRedirectTarget } from "@/lib/safe-redirect";
 
 export const metadata: Metadata = {
   title: "Iniciar sesión",
@@ -15,7 +16,7 @@ export default async function LoginPage({ searchParams }: Props) {
   const session = await getSessionSafe();
   const { returnUrl } = await searchParams;
   if (session) {
-    const target = returnUrl && returnUrl.startsWith("/") ? returnUrl : "/dashboard";
+    const target = safeRedirectTarget(returnUrl, "/dashboard");
     redirect(target);
   }
 

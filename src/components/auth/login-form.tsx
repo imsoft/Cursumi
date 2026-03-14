@@ -90,7 +90,8 @@ export const LoginForm = ({ returnUrl }: LoginFormProps) => {
 
       // Si el login fue exitoso, redirigir (returnUrl si es ruta segura)
       if (result.data) {
-        const target = returnUrl && returnUrl.startsWith("/") ? returnUrl : "/dashboard";
+        const isSafe = returnUrl?.startsWith("/") && !returnUrl.startsWith("//") && !returnUrl.startsWith("/\\");
+        const target = isSafe ? returnUrl! : "/dashboard";
         router.push(target);
       }
     } catch (err) {
@@ -104,7 +105,7 @@ export const LoginForm = ({ returnUrl }: LoginFormProps) => {
       <CardHeader className="flex flex-col gap-2 px-6 pt-6">
         <CardTitle className="text-3xl font-bold text-foreground">Iniciar sesión</CardTitle>
         <p className="text-sm text-muted-foreground">
-          {returnUrl && returnUrl.startsWith("/")
+          {returnUrl && returnUrl.startsWith("/") && !returnUrl.startsWith("//")
             ? "Después de iniciar sesión volverás al curso."
             : "Accede a tu cuenta para continuar aprendiendo en Cursumi"}
         </p>

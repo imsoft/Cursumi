@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 
@@ -21,10 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (event.type === "checkout.session.completed") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = event.data.object as any;
-    const courseId = session.metadata?.courseId as string;
-    const userId = session.metadata?.userId as string;
+    const session = event.data.object as Stripe.Checkout.Session;
 
     const transaction = await prisma.transaction.findUnique({
       where: { stripeSessionId: session.id },
@@ -35,6 +33,9 @@ export async function POST(req: NextRequest) {
       console.warn(`Webhook: transacción no encontrada para sesión ${session.id}`);
       return NextResponse.json({ received: true });
     }
+
+    // Usar courseId/userId de la transacción en BD (fuente de verdad), no del metadata
+    const { courseId, userId } = transaction;
 
     await prisma.transaction.update({
       where: { id: transaction.id },
@@ -83,8 +84,21 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  if (event.type === "checkout.session.expired") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    await prisma.transaction.updateMany({
+      where: { stripeSessionId: session.id, status: "pending" },
+      data: { status: "failed" },
+    });
+  }
+
   if (event.type === "payment_intent.payment_failed") {
-    const pi = event.data.object as { id: string };
+    const pi = event.data.object as Stripe.PaymentIntent;
+    // Marcar transacciones pendientes asociadas a este PaymentIntent como fallidas
+    await prisma.transaction.updateMany({
+      where: { stripeSessionId: pi.id, status: "pending" },
+      data: { status: "failed" },
+    });
     console.error("Payment failed:", pi.id);
   }
 

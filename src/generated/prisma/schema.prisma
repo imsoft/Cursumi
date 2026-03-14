@@ -167,7 +167,7 @@ model InstructorProfile {
   bio             String?
   city            String?
   specialties     String? // CSV de categorías/habilidades
-  stripeAccountId String? // Stripe Connect account ID
+  stripeAccountId String?  @unique // Stripe Connect account ID — un ID por instructor
   stripeOnboarded Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

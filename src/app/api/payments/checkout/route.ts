@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { stripe, calculateSplit } from "@/lib/stripe";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const bodySchema = z.object({
   courseId: z.string().min(1),
@@ -11,6 +12,14 @@ const bodySchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
+
+    // Máximo 5 checkouts por hora por usuario — evita abuso de sesiones Stripe
+    const limited = checkRateLimit({
+      key: `checkout:${session.user.id}`,
+      limit: 5,
+      windowSecs: 3600,
+    });
+    if (limited) return limited;
     const { courseId } = bodySchema.parse(await req.json());
 
     const course = await prisma.course.findUnique({

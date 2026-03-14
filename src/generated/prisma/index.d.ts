@@ -33763,6 +33763,7 @@ export namespace Prisma {
   export type InstructorProfileWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     userId?: string
+    stripeAccountId?: string
     AND?: InstructorProfileWhereInput | InstructorProfileWhereInput[]
     OR?: InstructorProfileWhereInput[]
     NOT?: InstructorProfileWhereInput | InstructorProfileWhereInput[]
@@ -33770,12 +33771,11 @@ export namespace Prisma {
     bio?: StringNullableFilter<"InstructorProfile"> | string | null
     city?: StringNullableFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableFilter<"InstructorProfile"> | string | null
-    stripeAccountId?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolFilter<"InstructorProfile"> | boolean
     createdAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "userId">
+  }, "id" | "userId" | "stripeAccountId">
 
   export type InstructorProfileOrderByWithAggregationInput = {
     id?: SortOrder

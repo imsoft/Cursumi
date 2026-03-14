@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
 import { RegisterForm } from "@/components/auth/register-form";
+import { safeRedirectTarget } from "@/lib/safe-redirect";
 
 export const metadata: Metadata = {
   title: "Registro",
@@ -15,7 +16,7 @@ export default async function RegisterPage({ searchParams }: Props) {
   const session = await getSessionSafe();
   const { returnUrl } = await searchParams;
   if (session) {
-    const target = returnUrl && returnUrl.startsWith("/") ? returnUrl : "/dashboard";
+    const target = safeRedirectTarget(returnUrl, "/dashboard");
     redirect(target);
   }
 

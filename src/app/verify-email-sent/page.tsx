@@ -13,7 +13,7 @@ interface VerifyEmailSentPageProps {
 export default async function VerifyEmailSentPage({ searchParams }: VerifyEmailSentPageProps) {
   const params = await searchParams;
   const email = params.email ?? null;
-  const returnUrl = params.returnUrl && params.returnUrl.startsWith("/") ? params.returnUrl : null;
+  const returnUrl = params.returnUrl && params.returnUrl.startsWith("/") && !params.returnUrl.startsWith("//") && !params.returnUrl.startsWith("/\\") ? params.returnUrl : null;
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const createSchema = z.object({
   rating: z.number().int().min(1).max(5),
@@ -43,6 +44,15 @@ export async function POST(
 ) {
   try {
     const session = await requireSession();
+
+    // Máximo 3 reseñas por hora por usuario — previene spam
+    const limited = checkRateLimit({
+      key: `reviews:${session.user.id}`,
+      limit: 3,
+      windowSecs: 3600,
+    });
+    if (limited) return limited;
+
     const { courseId } = await params;
     const body = createSchema.parse(await req.json());
 

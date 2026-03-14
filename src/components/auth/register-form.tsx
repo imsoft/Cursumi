@@ -66,7 +66,7 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
 
       // Si el registro fue exitoso, redirigir a la página de verificación de email
       const params = new URLSearchParams({ email: values.email });
-      if (returnUrl && returnUrl.startsWith("/")) params.set("returnUrl", returnUrl);
+      if (returnUrl && returnUrl.startsWith("/") && !returnUrl.startsWith("//") && !returnUrl.startsWith("/\\")) params.set("returnUrl", returnUrl);
       router.push(`/verify-email-sent?${params.toString()}`);
     } catch {
       setError("Ocurrió un error inesperado. Por favor, intenta de nuevo.");
@@ -78,7 +78,7 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
       <CardHeader className="flex flex-col gap-2 px-6 pt-6">
         <CardTitle className="text-3xl font-bold text-foreground">Crear cuenta</CardTitle>
         <p className="text-sm text-muted-foreground">
-          {returnUrl && returnUrl.startsWith("/")
+          {returnUrl && returnUrl.startsWith("/") && !returnUrl.startsWith("//")
             ? "Después de verificar tu correo podrás volver al curso."
             : "Únete a Cursumi y empieza a aprender o enseñar en minutos."}
         </p>

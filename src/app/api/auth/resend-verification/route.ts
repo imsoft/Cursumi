@@ -2,10 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
 import { randomBytes } from "crypto";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const TOKEN_EXPIRY_HOURS = 24;
 
 export async function POST(req: NextRequest) {
+  // Máximo 3 reenvíos por IP cada 10 minutos — evita spam de emails
+  const ip = getClientIp(req);
+  const limited = checkRateLimit({ key: `resend-verification:${ip}`, limit: 3, windowSecs: 600 });
+  if (limited) return limited;
+
   try {
     const body = await req.json();
     const email = typeof body.email === "string" ? body.email.trim() : null;
