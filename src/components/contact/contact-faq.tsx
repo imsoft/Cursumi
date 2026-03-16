@@ -25,7 +25,7 @@ const faqItems = [
 
 export const ContactFAQ = () => {
   return (
-    <section className="bg-muted/40 py-16 sm:py-20">
+    <section className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-5xl px-4">
         {/* Header */}
         <div className="mb-10">

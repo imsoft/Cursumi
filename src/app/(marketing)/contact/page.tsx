@@ -29,7 +29,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-background text-foreground">
       <main>
         {/* Hero */}
-        <section className="bg-muted/40 py-16 sm:py-20">
+        <section className="bg-background py-16 sm:py-20">
           <div className="mx-auto max-w-5xl px-4">
             <p className="text-sm font-semibold uppercase tracking-[0.4em] text-primary">
               Escríbenos

@@ -30,7 +30,7 @@ const faqItems = [
 
 export const HowItWorksFAQ = () => {
   return (
-    <section className="bg-muted/40 py-16 sm:py-20">
+    <section className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="mb-10">

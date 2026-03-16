@@ -1,6 +1,6 @@
 export const CoursesPageHeader = () => {
   return (
-    <section className="bg-muted/40 py-12 sm:py-16">
+    <section className="bg-background py-12 sm:py-16">
       <div className="mx-auto max-w-6xl px-4">
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
           Catálogo de cursos

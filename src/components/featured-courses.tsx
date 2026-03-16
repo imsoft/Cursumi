@@ -30,7 +30,7 @@ interface FeaturedCoursesProps {
 
 export const FeaturedCourses = ({ courses }: FeaturedCoursesProps) => {
   return (
-    <section className="bg-muted/20 py-16 sm:py-20">
+    <section className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header row */}
         <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">

@@ -9,7 +9,7 @@ export const Testimonials = ({ items }: TestimonialsProps) => {
   if (items.length === 0) return null;
 
   return (
-    <section className="bg-muted/30 py-16 sm:py-20">
+    <section className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="mb-10 flex flex-col gap-2 text-center">

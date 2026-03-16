@@ -35,7 +35,7 @@ const modalityCards = [
 
 export const CourseTypes = () => {
   return (
-    <section id="cursos" className="bg-muted/40 py-16 sm:py-20">
+    <section id="cursos" className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="flex flex-col gap-2 text-center">
