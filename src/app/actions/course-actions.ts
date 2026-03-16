@@ -67,6 +67,19 @@ export async function createCourseDraft(data: CourseFormData) {
 
 export async function publishCourse(data: CourseFormData) {
   const session = await requireSession();
+
+  // Validate before publishing
+  const { validateCourseForPublish } = await import("@/lib/course-completion");
+  const sectionsCount = data.sections?.length ?? 0;
+  const validation = validateCourseForPublish({
+    title: data.title ?? "",
+    imageUrl: data.imageUrl,
+    sectionsCount,
+  });
+  if (!validation.canPublish) {
+    throw new Error(validation.errors.join(" · "));
+  }
+
   if (data.id) {
     await updateCourse(data.id, session.user.id, { ...data, id: data.id, status: "published" });
     return { id: data.id };

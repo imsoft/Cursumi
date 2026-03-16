@@ -1,75 +1,82 @@
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Mail, Users, MapPin, Phone } from "lucide-react";
+import { Mail, Users, MapPin, Clock, MessageCircle } from "lucide-react";
 
 const contactItems = [
   {
     title: "Correo general",
-    description: "contacto@cursumi.com",
+    value: "contacto@cursumi.com",
     href: "mailto:contacto@cursumi.com",
     icon: Mail,
   },
   {
-    title: "Soporte",
-    description: "soporte@cursumi.com",
+    title: "Soporte técnico",
+    value: "soporte@cursumi.com",
     href: "mailto:soporte@cursumi.com",
-    icon: Phone,
+    icon: MessageCircle,
   },
   {
     title: "Para instructores",
-    description: "instructores@cursumi.com",
+    value: "instructores@cursumi.com",
     href: "mailto:instructores@cursumi.com",
     icon: Users,
   },
   {
-    title: "Ubicación",
-    description: "CDMX · Guadalajara · Monterrey",
-    href: "https://maps.google.com",
+    title: "Ciudades",
+    value: "CDMX · Guadalajara · Monterrey",
+    href: null,
     icon: MapPin,
   },
 ];
 
 export const ContactInfo = () => {
   return (
-    <section className="mx-auto max-w-5xl px-4 py-10 text-left">
-      <div className="space-y-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-          Contáctanos
+    <div className="flex flex-col gap-4">
+      {/* Response time highlight */}
+      <div className="rounded-2xl border border-primary/15 bg-primary/6 p-4">
+        <div className="flex items-center gap-2">
+          <Clock className="h-4 w-4 text-primary" aria-hidden />
+          <span className="text-sm font-semibold text-foreground">
+            Tiempo de respuesta
+          </span>
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Menos de 24 h hábiles. Lunes a viernes, 9 am – 6 pm.
         </p>
-        <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-          Estamos listos para escucharte
-        </h2>
       </div>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {contactItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Card key={item.title} className="text-left">
-              <CardHeader className="flex items-start gap-3">
-                <Icon className="h-6 w-6 text-primary" />
-                <CardTitle className="text-lg">{item.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 text-left">
-                <p className="text-sm text-muted-foreground">{item.description}</p>
-                <Link
-                  href={item.href}
-                  className="mt-3 inline-flex text-sm font-semibold text-primary underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {item.href.replace("mailto:", "").replace("https://", "")}
-                </Link>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-    </section>
+
+      {/* Contact items */}
+      {contactItems.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div
+            key={item.title}
+            className="rounded-2xl border border-border bg-card p-4 transition-all duration-200 hover:shadow-md"
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                <Icon className="h-4 w-4 text-primary" aria-hidden />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {item.title}
+                </p>
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="mt-0.5 text-sm text-primary transition-colors hover:underline"
+                  >
+                    {item.value}
+                  </Link>
+                ) : (
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    {item.value}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
-

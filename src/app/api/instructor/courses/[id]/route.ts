@@ -38,6 +38,23 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       return NextResponse.json({ error: "Estado inválido" }, { status: 400 });
     }
 
+    // Validate publish requirements when changing to published
+    if (status === "published") {
+      const { validateCourseForPublish } = await import("@/lib/course-completion");
+      const sectionsCount = await prisma.courseSection.count({ where: { courseId: id } });
+      const validation = validateCourseForPublish({
+        title: course.title ?? "",
+        imageUrl: course.imageUrl,
+        sectionsCount,
+      });
+      if (!validation.canPublish) {
+        return NextResponse.json(
+          { error: "El curso no cumple los requisitos para publicarse", details: validation.errors },
+          { status: 422 },
+        );
+      }
+    }
+
     const updated = await prisma.course.update({
       where: { id },
       data: { status },

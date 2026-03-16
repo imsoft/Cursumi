@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FiltersBar } from "@/components/courses/filters-bar";
 import { CoursesPageHeader } from "@/components/courses/courses-page-header";
 import { CoursesGrid } from "@/components/courses/courses-grid";
@@ -84,75 +85,88 @@ export function CoursesPageClient({ initialCourses }: CoursesPageClientProps) {
     setCurrentPage(1);
   };
 
-  const handleModalityChange = (value: string) => {
-    setModality(value);
-    setCurrentPage(1);
-  };
-
-  const handleCategoryChange = (value: string) => {
-    setCategory(value);
-    setCurrentPage(1);
-  };
-
-  const handleCityChange = (value: string) => {
-    setCity(value);
-    setCurrentPage(1);
-  };
-
-  const handleOrderChange = (value: string) => {
-    setOrder(value);
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="space-y-6 pb-16 pt-6">
+      <main>
         <CoursesPageHeader />
-        <FiltersBar
-          searchText={searchText}
-          modality={modality}
-          category={category}
-          city={city}
-          order={order}
-          onSearchChange={(value) => {
-            setSearchText(value);
-            setCurrentPage(1);
-          }}
-          onModalityChange={handleModalityChange}
-          onCategoryChange={handleCategoryChange}
-          onCityChange={handleCityChange}
-          onOrderChange={handleOrderChange}
-          onClear={handleClearFilters}
-        />
-        <CoursesGrid
-          courses={paginatedCourses}
-          hasFiltersApplied={hasFiltersApplied}
-          onClearFilters={handleClearFilters}
-        />
-        <section className="mx-auto max-w-6xl px-4">
-          <div className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
-              Página {safePage} de {totalPages}
-            </p>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={safePage <= 1}
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              >
-                Anterior
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={safePage >= totalPages}
-                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-              >
-                Siguiente
-              </Button>
-            </div>
-          </div>
-        </section>
+        <div className="space-y-6 pb-16 pt-6">
+          <FiltersBar
+            searchText={searchText}
+            modality={modality}
+            category={category}
+            city={city}
+            order={order}
+            totalResults={filteredCourses.length}
+            hasFiltersApplied={hasFiltersApplied}
+            onSearchChange={(value) => {
+              setSearchText(value);
+              setCurrentPage(1);
+            }}
+            onModalityChange={(value) => {
+              setModality(value);
+              setCurrentPage(1);
+            }}
+            onCategoryChange={(value) => {
+              setCategory(value);
+              setCurrentPage(1);
+            }}
+            onCityChange={(value) => {
+              setCity(value);
+              setCurrentPage(1);
+            }}
+            onOrderChange={setOrder}
+            onClear={handleClearFilters}
+          />
+          <CoursesGrid
+            courses={paginatedCourses}
+            hasFiltersApplied={hasFiltersApplied}
+            onClearFilters={handleClearFilters}
+          />
+
+          {/* Pagination — only show when more than 1 page */}
+          {totalPages > 1 && (
+            <section className="mx-auto max-w-6xl px-4">
+              <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 shadow-sm">
+                <p className="text-xs text-muted-foreground">
+                  Página{" "}
+                  <span className="font-semibold text-foreground">
+                    {safePage}
+                  </span>{" "}
+                  de{" "}
+                  <span className="font-semibold text-foreground">
+                    {totalPages}
+                  </span>
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={safePage <= 1}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(1, prev - 1))
+                    }
+                    className="gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Anterior
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={safePage >= totalPages}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                    }
+                    className="gap-1"
+                  >
+                    Siguiente
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </section>
+          )}
+        </div>
       </main>
     </div>
   );

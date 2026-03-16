@@ -37,6 +37,7 @@ import type {
   HangmanWord,
 } from "./course-types";
 import { LessonEditor } from "./lesson-editor";
+import { LessonStatusBadge } from "./lesson-status-badge";
 
 interface CourseSectionsManagerProps {
   sections: CourseSection[];
@@ -869,7 +870,7 @@ export const CourseSectionsManager = ({
                                         <div className="flex items-start gap-3">
                                           <GripVertical className="mt-1 h-4 w-4 text-muted-foreground" />
                                           <div className="flex-1">
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex flex-wrap items-center gap-2">
                                               <Icon className="h-4 w-4 text-muted-foreground" />
                                               <span className="font-medium text-foreground">
                                                 {lessonIndex + 1}. {lesson.title}
@@ -882,6 +883,7 @@ export const CourseSectionsManager = ({
                                                   {lesson.duration}
                                                 </span>
                                               )}
+                                              <LessonStatusBadge lesson={lesson} />
                                             </div>
                                             {lesson.description && (
                                               <p className="mt-1 text-sm text-muted-foreground">

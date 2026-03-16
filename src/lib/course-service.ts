@@ -360,6 +360,11 @@ export async function getPublishedCourse(courseId: string) {
         orderBy: { createdAt: "desc" },
         take: 10,
       },
+      sections: {
+        select: {
+          lessons: { select: { duration: true } },
+        },
+      },
     },
   });
 }

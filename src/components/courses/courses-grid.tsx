@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { SearchX } from "lucide-react";
 import { Course } from "./types";
 import { CourseCard } from "./course-card";
 
@@ -15,18 +16,26 @@ export const CoursesGrid = ({
 }: CoursesGridProps) => {
   if (!courses.length) {
     return (
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-8 text-center shadow-sm">
-          <p className="text-lg font-semibold text-muted-foreground">
-            No encontramos cursos con esos filtros.
-          </p>
-          <p className="max-w-lg text-sm text-muted-foreground">
-            Ajusta tu búsqueda para ver más resultados o limpia los filtros para
-            volver a ver todos los cursos disponibles.
-          </p>
-          <Button variant="outline" size="sm" onClick={onClearFilters}>
-            Ver todos los cursos
-          </Button>
+      <section className="mx-auto max-w-6xl px-4 py-8">
+        <div className="flex flex-col items-center gap-5 rounded-3xl border border-dashed border-border bg-card/60 py-20 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+            <SearchX className="h-8 w-8 text-muted-foreground/50" />
+          </div>
+          <div>
+            <p className="text-lg font-bold text-foreground">
+              Sin resultados para esa búsqueda
+            </p>
+            <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+              {hasFiltersApplied
+                ? "Intenta con otros filtros o limpia la búsqueda para ver todos los cursos disponibles."
+                : "Todavía no hay cursos publicados. Vuelve pronto."}
+            </p>
+          </div>
+          {hasFiltersApplied && (
+            <Button variant="outline" size="sm" onClick={onClearFilters}>
+              Ver todos los cursos
+            </Button>
+          )}
         </div>
       </section>
     );
@@ -39,12 +48,6 @@ export const CoursesGrid = ({
           <CourseCard key={course.id} course={course} priority={index === 0} />
         ))}
       </div>
-      {hasFiltersApplied && (
-        <div className="mt-8 flex items-center justify-center gap-3 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-          <span>Filtros activos</span>
-        </div>
-      )}
     </section>
   );
 };
-

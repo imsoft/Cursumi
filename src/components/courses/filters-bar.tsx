@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectOption } from "@/components/ui/select";
@@ -36,6 +37,8 @@ export interface FiltersBarProps {
   category: string;
   city: string;
   order: string;
+  totalResults: number;
+  hasFiltersApplied: boolean;
   onSearchChange: (value: string) => void;
   onModalityChange: (value: string) => void;
   onCategoryChange: (value: string) => void;
@@ -50,6 +53,8 @@ export const FiltersBar = ({
   category,
   city,
   order,
+  totalResults,
+  hasFiltersApplied,
   onSearchChange,
   onModalityChange,
   onCategoryChange,
@@ -58,16 +63,32 @@ export const FiltersBar = ({
   onClear,
 }: FiltersBarProps) => {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-6">
-      <div className="flex flex-col gap-6 rounded-3xl border border-border bg-card p-6 shadow-sm">
-        <div>
-          <Input
-            label="Buscar"
-            value={searchText}
-            onChange={(event) => onSearchChange(event.target.value)}
-          />
+    <section className="mx-auto max-w-6xl px-4">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+        {/* Search row */}
+        <div className="flex items-end gap-3">
+          <div className="flex-1">
+            <Input
+              label="Buscar cursos"
+              value={searchText}
+              onChange={(event) => onSearchChange(event.target.value)}
+            />
+          </div>
+          {hasFiltersApplied && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClear}
+              className="mb-0.5 shrink-0 gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+              Limpiar
+            </Button>
+          )}
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        {/* Filter selects */}
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Select
             label="Modalidad"
             options={modalityOptions}
@@ -87,19 +108,22 @@ export const FiltersBar = ({
             onChange={(event) => onCityChange(event.target.value)}
           />
           <Select
-            label="Ordenar"
+            label="Ordenar por"
             options={orderOptions}
             value={order}
             onChange={(event) => onOrderChange(event.target.value)}
           />
         </div>
-        <div className="flex justify-end">
-          <Button variant="ghost" size="sm" onClick={onClear}>
-            Limpiar filtros
-          </Button>
+
+        {/* Results count */}
+        <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+          <p className="text-xs text-muted-foreground">
+            <span className="font-semibold text-foreground">{totalResults}</span>{" "}
+            {totalResults === 1 ? "curso encontrado" : "cursos encontrados"}
+            {hasFiltersApplied && " con los filtros actuales"}
+          </p>
         </div>
       </div>
     </section>
   );
 };
-

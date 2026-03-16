@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { Course } from "./types";
 
 interface CourseCardProps {
@@ -10,47 +9,75 @@ interface CourseCardProps {
 }
 
 export const CourseCard = ({ course, priority }: CourseCardProps) => {
+  const isVirtual = course.modality === "virtual";
+
   return (
-    <Card className="flex h-full flex-col">
-      <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
+    <Link
+      href={`/courses/${course.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8"
+    >
+      {/* Image */}
+      <div className="relative aspect-video w-full overflow-hidden">
         <Image
           src={course.imageUrl}
           alt={course.title}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority}
         />
-        <span className="absolute top-3 left-3 rounded-full border border-white/80 bg-black/50 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-white">
-          {course.modality === "virtual" ? "Virtual" : "Presencial"}
+        {/* Modality badge */}
+        <span
+          className={`absolute top-3 left-3 rounded-full border px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.3em] backdrop-blur-sm ${
+            isVirtual
+              ? "border-blue-400/30 bg-blue-500/70 text-white"
+              : "border-primary/30 bg-primary/70 text-white"
+          }`}
+        >
+          {isVirtual ? "Virtual" : "Presencial"}
+        </span>
+        {/* Category badge */}
+        <span className="absolute top-3 right-3 rounded-full border border-white/20 bg-black/50 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-white/90 backdrop-blur-sm">
+          {course.category}
         </span>
       </div>
-      <CardHeader className="flex flex-col gap-2 pb-0">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-muted/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-            {course.city === "Online" ? "Online" : course.city}
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-5">
+        {/* Location */}
+        {course.city && course.city !== "Online" && (
+          <div className="mb-2.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <MapPin className="h-3 w-3" />
+            {course.city}
+          </div>
+        )}
+
+        {/* Title */}
+        <h3 className="text-lg font-bold leading-snug text-foreground transition-colors duration-200 group-hover:text-primary line-clamp-2">
+          {course.title}
+        </h3>
+
+        {/* Description */}
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+          {course.description}
+        </p>
+
+        {/* Footer */}
+        <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
+          {course.duration ? (
+            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+              <Clock className="h-3.5 w-3.5" />
+              {course.duration}
+            </span>
+          ) : (
+            <span />
+          )}
+          <span className="flex items-center gap-1 text-xs font-bold text-primary">
+            Ver detalles
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
           </span>
         </div>
-        <h3 className="text-lg font-semibold text-foreground">{course.title}</h3>
-        <p className="text-sm text-muted-foreground">{course.description}</p>
-      </CardHeader>
-      <CardContent className="mt-3 flex flex-col gap-3 pt-0">
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-          <span className="rounded-full bg-muted/20 px-3 py-1 text-muted-foreground">
-            {course.category}
-          </span>
-          <span className="rounded-full bg-muted/20 px-3 py-1 text-muted-foreground">
-            {course.duration}
-          </span>
-        </div>
-      </CardContent>
-      <CardFooter className="mt-auto border-t border-border/70 px-6 py-4">
-        <Button variant="outline" size="sm" className="w-full justify-between" asChild>
-          <Link href={`/courses/${course.id}`}>
-            Ver detalles del curso
-          </Link>
-        </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </Link>
   );
 };

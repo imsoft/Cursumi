@@ -81,7 +81,7 @@ export default function HowItWorksPage() {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <main className="space-y-4 pb-16">
+      <main>
         <HowItWorksHero />
         <HowItWorksStudents />
         <HowItWorksInstructors />

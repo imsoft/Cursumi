@@ -50,7 +50,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="space-y-12 pb-16 pt-8">
+      <main>
         <Hero stats={stats} />
         <CourseTypes />
         <HowItWorks />

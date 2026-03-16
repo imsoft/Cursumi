@@ -6,12 +6,14 @@ import { getSessionSafe } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Monitor, Users, Calendar } from "lucide-react";
+import { MapPin, Monitor, Users, Calendar, Clock } from "lucide-react";
 import { EnrollActionForm } from "@/components/student/enroll-action-form";
 import { CheckoutButton } from "@/components/student/checkout-button";
 import { ReviewSection } from "@/components/student/review-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { formatPriceMXN } from "@/lib/utils";
+import { formatDuration } from "@/lib/course-completion";
+import { parseDurationToMinutes } from "@/lib/utils";
 
 type Params = { params: Promise<{ id: string }> };
 const ogFallback =
@@ -95,6 +97,12 @@ export default async function PublicCourseDetailPage({
   const returnUrl = `/courses/${id}`;
   const isLoggedIn = !!session;
 
+  // Calculate total content duration from lesson durations
+  const totalDurationMinutes = (course.sections ?? []).reduce((total, section) =>
+    total + section.lessons.reduce((acc, l) => acc + parseDurationToMinutes(l.duration ?? undefined), 0), 0
+  );
+  const totalDurationFormatted = totalDurationMinutes > 0 ? formatDuration(totalDurationMinutes) : null;
+
   const baseUrl = getBaseUrl();
   const courseSchema = {
     "@context": "https://schema.org",
@@ -175,6 +183,12 @@ export default async function PublicCourseDetailPage({
             </div>
             {course.duration && (
               <div className="text-sm text-foreground">Duración: {course.duration}</div>
+            )}
+            {totalDurationFormatted && (
+              <div className="flex items-center gap-2 text-sm text-foreground">
+                <Clock className="h-4 w-4" />
+                <span>{totalDurationFormatted} de contenido en video</span>
+              </div>
             )}
           </div>
 

@@ -1,15 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, MapPin } from "lucide-react";
 
 export interface CourseCardProps {
   title: string;
@@ -30,44 +21,63 @@ export const CourseCard = ({
   imageSrc,
   imageAlt,
 }: CourseCardProps) => {
+  const modeColor =
+    mode === "Virtual"
+      ? "bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/20"
+      : mode === "Presencial"
+        ? "bg-primary/10 text-primary border-primary/20"
+        : "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/20";
+
   return (
-    <Card className="flex h-full flex-col">
-      <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
+    <Link
+      href={href}
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8"
+    >
+      {/* Image */}
+      <div className="relative aspect-video w-full overflow-hidden">
         <Image
           src={imageSrc}
           alt={imageAlt ?? `${title} - curso en Cursumi`}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
+        {/* Mode badge overlay */}
+        <span
+          className={`absolute top-3 left-3 rounded-full border px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.3em] backdrop-blur-sm ${modeColor}`}
+        >
+          {mode}
+        </span>
       </div>
-      <CardHeader className="gap-2 pb-2">
-        <div className="flex items-center gap-2">
-          <span className="rounded-full border border-primary/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            {mode}
-          </span>
-          <span className="text-xs font-medium tracking-[0.2em] text-muted-foreground">
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-5">
+        {/* Location */}
+        {location && location !== "Online" && (
+          <div className="mb-2 flex items-center gap-1 text-xs text-muted-foreground">
+            <MapPin className="h-3 w-3" />
             {location}
+          </div>
+        )}
+
+        {/* Title */}
+        <h3 className="text-lg font-bold leading-snug text-foreground transition-colors duration-200 group-hover:text-primary line-clamp-2">
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+          {description}
+        </p>
+
+        {/* Footer */}
+        <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Ver detalles
           </span>
+          <ArrowRight className="h-4 w-4 text-primary transition-transform duration-200 group-hover:translate-x-1" />
         </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex-1 pt-0">
-        <CardDescription>{description}</CardDescription>
-      </CardContent>
-      <CardFooter className="mt-8 border-t border-border/70 px-6 pt-6 pb-4">
-        <Link href={href} className="w-full">
-          <Button
-            size="sm"
-            variant="outline"
-            className="w-full justify-between"
-          >
-            Ver detalles del curso
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </Link>
   );
 };
-

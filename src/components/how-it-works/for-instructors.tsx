@@ -1,67 +1,85 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const instructorSteps = [
   {
-    title: "Cuenta de instructor",
+    step: "01",
+    title: "Crea tu perfil",
     description:
-      "Perfil profesional, verificación y configuración de cobro.",
+      "Perfil profesional, verificación y configuración de cobro en pocos pasos.",
   },
   {
-    title: "Diseñar tu curso",
+    step: "02",
+    title: "Diseña tu curso",
     description:
-      "Título, modalidad, fechas, duración, precio y logística.",
+      "Título, modalidad, fechas, duración, precio y logística todo desde el panel.",
   },
   {
-    title: "Publicar y compartir",
+    step: "03",
+    title: "Publica y comparte",
     description:
-      "Sube recursos, publica y comparte en redes o eventos.",
+      "Sube recursos, publica y llega a tu audiencia en redes o eventos.",
   },
   {
-    title: "Gestionar alumnos",
+    step: "04",
+    title: "Gestiona tu comunidad",
     description:
-      "Asistencia, mensajes y certificados digitales o físicos.",
+      "Asistencia, mensajes y certificados digitales o físicos para tus alumnos.",
   },
 ];
 
 export const HowItWorksInstructors = () => {
   return (
-    <section
-      id="instructores"
-      className="mx-auto max-w-6xl px-4 py-10"
-    >
-      <div className="space-y-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.4em] text-muted-foreground">
-          Para instructores
-        </p>
-        <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-          Publica cursos y crece tu comunidad
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Sigue el flujo diseñado para poner tus cursos frente a estudiantes reales.
-        </p>
-      </div>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {instructorSteps.map((step) => (
-          <Card key={step.title}>
-            <CardHeader className="pb-1 pt-4">
-              <CardTitle className="text-lg">{step.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-sm text-muted-foreground">{step.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-      <div className="mt-6 flex justify-end">
-        <Link href="/instructors">
-          <Button variant="outline" size="lg">
-            Publicar mi curso
-          </Button>
-        </Link>
+    <section id="instructores" className="bg-muted/40 py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4">
+        {/* Header */}
+        <div className="mb-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-primary">
+            Para instructores
+          </p>
+          <h2 className="mt-2 text-2xl font-bold text-foreground sm:text-3xl lg:text-4xl">
+            Publica y crece con tu comunidad
+          </h2>
+          <p className="mt-2 max-w-xl text-base text-muted-foreground">
+            Un flujo pensado para poner tus cursos frente a estudiantes reales.
+          </p>
+        </div>
+
+        {/* Steps */}
+        <div className="grid gap-5 md:grid-cols-2">
+          {instructorSteps.map((step) => (
+            <div
+              key={step.title}
+              className="group flex gap-4 rounded-3xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/8"
+            >
+              <span
+                aria-hidden
+                className="text-4xl font-black leading-none text-primary/15 transition-colors duration-300 group-hover:text-primary/25 select-none"
+              >
+                {step.step}
+              </span>
+              <div>
+                <h3 className="text-lg font-bold text-foreground">
+                  {step.title}
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8">
+          <Link href="/contact">
+            <Button variant="outline" size="lg" className="gap-2">
+              Publicar mi curso
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
       </div>
     </section>
   );
 };
-
