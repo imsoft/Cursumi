@@ -18,7 +18,7 @@ function toCardProps(course: FeaturedCourseItem): CourseCardProps {
     description:
       course.description.slice(0, 160) +
       (course.description.length > 160 ? "…" : ""),
-    href: `/courses/${course.id}`,
+    href: `/courses/${course.slug || course.id}`,
     imageSrc: course.imageUrl ?? DEFAULT_COURSE_IMAGE,
     imageAlt: `${course.title} - curso en Cursumi`,
   };

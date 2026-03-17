@@ -3,6 +3,7 @@ export type CourseModality = "virtual" | "presencial";
 
 export interface Course {
   id: string;
+  slug?: string;
   title: string;
   modality: CourseModality;
   category: CourseCategory;

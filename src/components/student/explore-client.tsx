@@ -195,7 +195,7 @@ export function ExploreClient({
             const isEnrolled = enrolledSet.has(course.id);
             const href = isEnrolled
               ? `/dashboard/my-courses/${course.id}`
-              : `/dashboard/explore/${course.id}`;
+              : `/dashboard/explore/${course.slug || course.id}`;
             return (
               <Link key={course.id} href={href} className="block h-full">
                 <Card className="group flex h-full flex-col border border-border bg-card/90 transition-all hover:shadow-lg hover:border-primary/20 cursor-pointer">

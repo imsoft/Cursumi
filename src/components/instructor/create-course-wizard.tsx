@@ -130,11 +130,12 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
       try {
         const result = await createCourseDraft(courseData);
         const id = result && typeof result === "object" && "id" in result ? result.id : undefined;
-        if (id && !courseData.id) {
+        const isNew = !courseData.id;
+        if (id && isNew) {
           setCourseData((prev) => ({ ...prev, id }));
         }
         setSaveStatus("saved");
-        router.push("/instructor/courses");
+        router.push(id && isNew ? `/instructor/courses/${id}/edit` : "/instructor/courses");
       } catch {
         setSaveStatus("idle");
       }

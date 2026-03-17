@@ -5,6 +5,31 @@ import type { CourseFormData, CourseSection } from "@/components/instructor/cour
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
 
+function toSlugPart(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+async function generateCourseSlug(title: string, instructorName: string, excludeId?: string): Promise<string> {
+  const base = `${toSlugPart(title)}-por-${toSlugPart(instructorName)}`;
+  let slug = base;
+  let counter = 2;
+  while (true) {
+    const existing = await prisma.course.findFirst({
+      where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
+      select: { id: true },
+    });
+    if (!existing) return slug;
+    slug = `${base}-${counter++}`;
+  }
+}
+
 export type InstructorCourseListItem = {
   id: string;
   title: string;
@@ -52,9 +77,12 @@ type CreateCourseInput = Omit<CourseFormData, "sections"> & {
 };
 
 export async function createCourse(instructorId: string, data: CreateCourseInput) {
+  const instructor = await prisma.user.findUnique({ where: { id: instructorId }, select: { name: true } });
+  const slug = await generateCourseSlug(data.title, instructor?.name || instructorId);
   return prisma.course.create({
     data: {
       instructorId,
+      slug,
       title: data.title,
       description: data.description,
       category: data.category,
@@ -108,6 +136,7 @@ export async function updateCourse(
   const existing = await prisma.course.findFirst({
     where: { id: courseId, instructorId },
     include: {
+      instructor: { select: { name: true } },
       sections: {
         orderBy: { order: "asc" },
         include: { lessons: { orderBy: { order: "asc" } } },
@@ -118,9 +147,15 @@ export async function updateCourse(
     throw new Error("Curso no encontrado o no autorizado");
   }
 
+  const titleChanged = data.title && data.title !== existing.title;
+  const slug = titleChanged
+    ? await generateCourseSlug(data.title, existing.instructor.name || instructorId, courseId)
+    : undefined;
+
   await prisma.course.update({
     where: { id: courseId },
     data: {
+      ...(slug ? { slug } : {}),
       title: data.title,
       description: data.description,
       category: data.category,
@@ -253,6 +288,132 @@ export async function getCourseDetail(courseId: string) {
   });
 }
 
+// ─── Individual section / lesson / exam operations ───────────────────────────
+
+export async function createSection(courseId: string, title: string, order: number) {
+  return prisma.courseSection.create({ data: { courseId, title, order } });
+}
+
+export async function deleteSection(sectionId: string) {
+  await prisma.courseSection.delete({ where: { id: sectionId } });
+}
+
+export async function updateSectionData(
+  sectionId: string,
+  data: { title?: string; description?: string; quiz?: object | null; minigame?: object | null }
+) {
+  await prisma.courseSection.update({
+    where: { id: sectionId },
+    data: {
+      ...(data.title !== undefined && { title: data.title }),
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.quiz !== undefined && { quiz: data.quiz ?? Prisma.JsonNull }),
+      ...(data.minigame !== undefined && { minigame: data.minigame ?? Prisma.JsonNull }),
+    },
+  });
+}
+
+export async function createLesson(
+  sectionId: string,
+  data: { title: string; type: LessonType; order: number }
+) {
+  return prisma.lesson.create({ data: { sectionId, ...data } });
+}
+
+export async function deleteLessonById(lessonId: string) {
+  await prisma.lesson.delete({ where: { id: lessonId } });
+}
+
+export async function getLessonById(lessonId: string) {
+  return prisma.lesson.findUnique({
+    where: { id: lessonId },
+    include: { section: { select: { courseId: true } } },
+  });
+}
+
+export async function updateLessonById(
+  lessonId: string,
+  data: {
+    title?: string;
+    description?: string | null;
+    type?: LessonType;
+    duration?: string | null;
+    videoUrl?: string | null;
+    content?: string | null;
+    attachments?: object[] | null;
+    resources?: object[] | null;
+  }
+) {
+  await prisma.lesson.update({
+    where: { id: lessonId },
+    data: {
+      ...(data.title !== undefined && { title: data.title }),
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.type !== undefined && { type: data.type }),
+      ...(data.duration !== undefined && { duration: data.duration }),
+      ...(data.videoUrl !== undefined && { videoUrl: data.videoUrl }),
+      ...(data.content !== undefined && { content: data.content }),
+      ...(data.attachments !== undefined && { attachments: data.attachments ?? Prisma.JsonNull }),
+      ...(data.resources !== undefined && { resources: data.resources ?? Prisma.JsonNull }),
+    },
+  });
+}
+
+export async function getCourseExam(courseId: string) {
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { finalExam: true },
+  });
+  return course?.finalExam ?? null;
+}
+
+export async function saveCourseExam(courseId: string, exam: object | null) {
+  await prisma.course.update({
+    where: { id: courseId },
+    data: { finalExam: exam ?? Prisma.JsonNull },
+  });
+}
+
+export async function updateCourseInfo(
+  courseId: string,
+  instructorId: string,
+  data: {
+    title?: string; description?: string; category?: string; level?: string;
+    modality?: string; city?: string | null; location?: string | null;
+    courseType?: string; startDate?: string | null; duration?: string | null;
+    price?: number; maxStudents?: number | null; imageUrl?: string | null;
+  }
+) {
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, instructorId },
+    include: { instructor: { select: { name: true } } },
+  });
+  if (!course) throw new Error("No autorizado");
+  const slug =
+    data.title && data.title !== course.title
+      ? await generateCourseSlug(data.title, course.instructor.name || instructorId, courseId)
+      : undefined;
+  await prisma.course.update({
+    where: { id: courseId },
+    data: {
+      ...(slug ? { slug } : {}),
+      ...(data.title !== undefined && { title: data.title }),
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.category !== undefined && { category: data.category }),
+      ...(data.level !== undefined && { level: data.level }),
+      ...(data.modality !== undefined && { modality: data.modality as Modality }),
+      ...(data.city !== undefined && { city: data.city }),
+      ...(data.location !== undefined && { location: data.location }),
+      ...(data.courseType !== undefined && { courseType: data.courseType as CourseType }),
+      ...(data.startDate !== undefined && { startDate: data.startDate ? new Date(data.startDate) : null }),
+      ...(data.duration !== undefined && { duration: data.duration }),
+      ...(data.price !== undefined && { price: data.price }),
+      ...(data.maxStudents !== undefined && { maxStudents: data.maxStudents }),
+      ...(data.imageUrl !== undefined && { imageUrl: data.imageUrl }),
+    },
+  });
+}
+
 interface CourseFilters {
   search?: string;
   category?: string;
@@ -306,6 +467,7 @@ export async function listPublishedCourses(
       skip: (page - 1) * limit,
       select: {
         id: true,
+        slug: true,
         title: true,
         modality: true,
         category: true,
@@ -323,6 +485,7 @@ export async function listPublishedCourses(
 
   const courses = raw.map((course) => ({
     id: course.id,
+    slug: course.slug ?? undefined,
     title: course.title,
     modality: course.modality,
     category: course.category,
@@ -340,18 +503,18 @@ export async function listPublishedCourses(
   return { courses, total, hasMore: page * limit < total };
 }
 
-/** Lightweight list for sitemap: only id and updatedAt of published courses */
-export async function getPublishedCourseIdsForSitemap(): Promise<{ id: string; updatedAt: Date }[]> {
+/** Lightweight list for sitemap: id, slug and updatedAt of published courses */
+export async function getPublishedCourseIdsForSitemap(): Promise<{ id: string; slug: string | null; updatedAt: Date }[]> {
   return prisma.course.findMany({
     where: { status: "published" },
-    select: { id: true, updatedAt: true },
+    select: { id: true, slug: true, updatedAt: true },
     orderBy: { updatedAt: "desc" },
   });
 }
 
-export async function getPublishedCourse(courseId: string) {
+export async function getPublishedCourse(slugOrId: string) {
   return prisma.course.findFirst({
-    where: { id: courseId, status: "published" },
+    where: { status: "published", OR: [{ id: slugOrId }, { slug: slugOrId }] },
     include: {
       instructor: { select: { name: true } },
       _count: { select: { enrollments: true } },
@@ -418,6 +581,7 @@ export async function listRecommendations(excludeCourseIds: string[]): Promise<R
     take: 5,
     select: {
       id: true,
+      slug: true,
       title: true,
       category: true,
       modality: true,
@@ -427,6 +591,7 @@ export async function listRecommendations(excludeCourseIds: string[]): Promise<R
 
   return courses.map((course) => ({
     id: course.id,
+    slug: course.slug ?? undefined,
     title: course.title,
     category: course.category,
     modality: course.modality,

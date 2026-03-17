@@ -13,7 +13,7 @@ export const CourseCard = ({ course, priority }: CourseCardProps) => {
 
   return (
     <Link
-      href={`/courses/${course.id}`}
+      href={`/courses/${course.slug || course.id}`}
       className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8"
     >
       {/* Image */}

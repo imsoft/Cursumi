@@ -72,7 +72,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
 
   if (error || !certificate) {
     return (
-      <div className="mx-auto max-w-4xl space-y-6">
+      <div className="space-y-6">
         <Link href="/dashboard/certificates">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -98,7 +98,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Link href="/dashboard/certificates">
           <Button variant="ghost" size="sm">

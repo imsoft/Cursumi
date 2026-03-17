@@ -201,6 +201,7 @@ exports.Prisma.CategoryScalarFieldEnum = {
 
 exports.Prisma.CourseScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   instructorId: 'instructorId',
   title: 'title',
   description: 'description',

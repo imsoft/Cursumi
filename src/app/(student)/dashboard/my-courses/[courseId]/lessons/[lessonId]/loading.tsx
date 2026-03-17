@@ -17,7 +17,7 @@ export default function LessonLoading() {
 
       {/* Main content skeleton */}
       <main className="flex-1 p-6 space-y-6">
-        <div className="mx-auto max-w-3xl space-y-6">
+        <div className="space-y-6">
           <div className="space-y-2">
             <div className="h-4 w-20 rounded bg-muted" />
             <div className="h-8 w-2/3 rounded-lg bg-muted" />

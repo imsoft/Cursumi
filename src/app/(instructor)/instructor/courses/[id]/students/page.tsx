@@ -10,14 +10,15 @@ import { ArrowLeft, Search, Mail, Calendar } from "lucide-react";
 export default async function CourseStudentsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const course = await getCourseDetailForUser(params.id).catch(() => null);
+  const { id } = await params;
+  const course = await getCourseDetailForUser(id).catch(() => null);
   const students = course ? await listStudentsForCourse(course.id).catch(() => []) : [];
 
   if (!course) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8">
+      <div className="space-y-6">
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-semibold text-foreground mb-2">Curso no encontrado</h2>
@@ -34,7 +35,7 @@ export default async function CourseStudentsPage({
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
           <Link href={`/instructor/courses/${course.id}`}>

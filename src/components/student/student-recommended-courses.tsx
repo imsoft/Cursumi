@@ -43,7 +43,7 @@ export const StudentRecommendedCourses = ({ recommendations }: StudentRecommenda
                 </div>
               </div>
               <div className="mt-auto">
-                <Link href={`/courses/${rec.id}`} className="w-full">
+                <Link href={`/courses/${rec.slug || rec.id}`} className="w-full">
                   <Button variant="outline" size="sm" className="w-full px-4 py-2">
                     Ver curso
                   </Button>

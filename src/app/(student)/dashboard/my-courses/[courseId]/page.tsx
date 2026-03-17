@@ -53,7 +53,7 @@ export default async function MyCourseDetailPage({
   const firstLesson = allLessons[0];
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
+    <div className="space-y-6">
       {enrolled === "true" && (
         <EnrolledWelcomeBanner courseId={courseId} firstLessonId={firstLesson?.id} />
       )}

@@ -80,7 +80,7 @@ export default function CertificatesPage() {
   const hasActiveFilters = searchTerm.trim() !== "" || categoryFilter !== "all" || modalityFilter !== "all";
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="space-y-6">
       <CertificatesHeader />
       {error && <p className="text-sm text-destructive">{error}</p>}
 

@@ -12,7 +12,7 @@ export default async function InstructorEarningsPage() {
   const earnings = await getInstructorEarnings(session.user.id);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+    <div className="space-y-6">
       <Suspense>
         <StripeConnectBanner />
       </Suspense>

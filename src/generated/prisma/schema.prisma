@@ -193,6 +193,7 @@ model Category {
 
 model Course {
   id           String       @id @default(cuid())
+  slug         String?      @unique // {título-slugificado}-por-{instructor-slug}
   instructorId String
   title        String
   description  String

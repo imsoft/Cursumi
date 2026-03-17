@@ -8,13 +8,14 @@ import { getCourseDetailForUser } from "@/app/actions/course-actions";
 export default async function CourseDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const course = await getCourseDetailForUser(params.id).catch(() => null);
+  const { id } = await params;
+  const course = await getCourseDetailForUser(id).catch(() => null);
 
   if (!course) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8">
+      <div className="space-y-6">
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-semibold text-foreground mb-2">Curso no encontrado</h2>
@@ -39,7 +40,7 @@ export default async function CourseDetailPage({
   const statusLabel = statusLabelMap[course.status] || statusLabelMap.draft;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/instructor/courses">

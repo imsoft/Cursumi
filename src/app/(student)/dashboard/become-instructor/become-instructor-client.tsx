@@ -66,7 +66,7 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
   // Estado: pendiente
   if (application?.status === "pending") {
     return (
-      <div className="mx-auto max-w-2xl space-y-6 py-8">
+      <div className="space-y-6">
         <PageHeader />
         <Card className="border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
           <CardContent className="flex items-start gap-4 p-6">
@@ -112,7 +112,7 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
   // Estado: rechazada
   if (application?.status === "rejected" && !showForm) {
     return (
-      <div className="mx-auto max-w-2xl space-y-6 py-8">
+      <div className="space-y-6">
         <PageHeader />
         <Card className="border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20">
           <CardContent className="flex items-start gap-4 p-6">
@@ -137,7 +137,7 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
 
   // Formulario (nueva solicitud o re-solicitud)
   return (
-    <div className="mx-auto max-w-2xl space-y-6 py-8">
+    <div className="space-y-6">
       <PageHeader />
 
       {application?.status === "rejected" && (

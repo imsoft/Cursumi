@@ -51,6 +51,7 @@ export async function getPublicTestimonials(limit: number = 6): Promise<PublicTe
 
 export type FeaturedCourseItem = {
   id: string;
+  slug: string | null;
   title: string;
   description: string;
   modality: "virtual" | "presencial";
@@ -65,6 +66,7 @@ export async function getFeaturedCourses(limit: number = 6): Promise<FeaturedCou
     take: limit,
     select: {
       id: true,
+      slug: true,
       title: true,
       description: true,
       modality: true,

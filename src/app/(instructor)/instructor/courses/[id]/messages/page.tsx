@@ -7,15 +7,16 @@ import { InstructorChatClient } from "@/components/chat/instructor-chat-client";
 export default async function InstructorCourseMessagesPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const session = await getCachedSession();
   if (!session) redirect("/login");
 
   await requireRole(session.user.id, ["instructor", "admin"]);
 
   const course = await prisma.course.findFirst({
-    where: { id: params.id, instructorId: session.user.id },
+    where: { id, instructorId: session.user.id },
     select: { id: true, title: true },
   });
 

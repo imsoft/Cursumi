@@ -42,6 +42,7 @@ export type Certificate = {
 
 export type Recommendation = {
   id: string;
+  slug?: string;
   title: string;
   category: string;
   modality: "virtual" | "presencial";

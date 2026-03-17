@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const courses = await getPublishedCourseIdsForSitemap();
     courseEntries = courses.map((course) => ({
-      url: `${siteUrl}/courses/${course.id}`,
+      url: `${siteUrl}/courses/${course.slug || course.id}`,
       lastModified: course.updatedAt,
     }));
   } catch {

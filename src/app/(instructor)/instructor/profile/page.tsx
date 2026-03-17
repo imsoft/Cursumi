@@ -5,7 +5,7 @@ import { InstructorProfileSummary } from "@/components/instructor/instructor-pro
 
 export default function InstructorProfilePage() {
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+    <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-foreground">Perfil de instructor</h1>
         <p className="text-sm text-muted-foreground">

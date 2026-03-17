@@ -1,6 +1,6 @@
 export default function ExploreLoading() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 animate-pulse">
+    <div className="space-y-6 animate-pulse">
       {/* Header */}
       <div className="space-y-2">
         <div className="h-8 w-48 rounded-lg bg-muted" />
