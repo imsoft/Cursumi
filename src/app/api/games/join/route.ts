@@ -7,8 +7,14 @@ export async function POST(req: NextRequest) {
     const session = await requireSession();
     const { code, nickname } = await req.json() as { code: string; nickname: string };
 
-    if (!code || !nickname) {
+    if (!code || typeof code !== "string") {
       return NextResponse.json({ error: "Código y nickname son requeridos" }, { status: 400 });
+    }
+    if (!nickname || typeof nickname !== "string" || nickname.trim().length === 0) {
+      return NextResponse.json({ error: "Nickname es requerido" }, { status: 400 });
+    }
+    if (nickname.length > 30) {
+      return NextResponse.json({ error: "Nickname no puede exceder 30 caracteres" }, { status: 400 });
     }
 
     const game = await prisma.quizGame.findUnique({ where: { code: code.toUpperCase() } });

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { stripe, calculateSplit } from "@/lib/stripe";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 
 const bodySchema = z.object({
   courseId: z.string().min(1),
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const session = await requireSession();
 
     // Máximo 5 checkouts por hora por usuario — evita abuso de sesiones Stripe
-    const limited = checkRateLimit({
+    const limited = await checkRateLimitAsync({
       key: `checkout:${session.user.id}`,
       limit: 5,
       windowSecs: 3600,
@@ -123,13 +123,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Incrementar contador de uso del cupón
-    if (appliedCoupon) {
-      await prisma.coupon.update({
-        where: { code: appliedCoupon.code },
-        data: { usedCount: { increment: 1 } },
-      });
-    }
+    // El contador de uso del cupón se incrementa en el webhook SOLO cuando
+    // el pago es confirmado, para evitar doble-consumo ante pagos abandonados.
 
     return NextResponse.json({
       url: checkoutSession.url,

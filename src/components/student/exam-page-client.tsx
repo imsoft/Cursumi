@@ -56,15 +56,15 @@ export function ExamPageClient({
 
   const handleSubmit = async (
     answers: Record<string, number>,
-    score: number,
-    passed: boolean
+    _clientScore: number,
+    _clientPassed: boolean
   ) => {
     setSubmitError(null);
     try {
       const res = await fetch(`/api/courses/${courseId}/exam/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers, score, passed }),
+        body: JSON.stringify({ answers }), // score/passed calculados en el servidor
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al enviar examen");

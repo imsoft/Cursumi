@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+
+const patchSchema = z.object({
+  fullName: z.string().trim().min(1).max(120).optional(),
+  email: z.string().email().max(255).optional(),
+}).refine((d) => d.fullName !== undefined || d.email !== undefined, {
+  message: "Se debe proporcionar al menos un campo para actualizar",
+});
 
 export async function GET() {
   try {
@@ -35,14 +43,18 @@ export async function GET() {
 export async function PATCH(req: Request) {
   try {
     const session = await requireSession();
-    const body = await req.json().catch(() => ({}));
-    const { fullName, email } = body as { fullName?: string; email?: string };
+    const raw = await req.json().catch(() => ({}));
+    const parsed = patchSchema.safeParse(raw);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
+    }
+    const { fullName, email } = parsed.data;
 
     const updated = await prisma.user.update({
       where: { id: session.user.id },
       data: {
-        name: fullName,
-        email,
+        ...(fullName !== undefined ? { name: fullName } : {}),
+        ...(email !== undefined ? { email } : {}),
       },
       select: { name: true, email: true },
     });

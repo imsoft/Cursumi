@@ -15,6 +15,9 @@ export async function POST(
   if (typeof courseId !== "string" || typeof score !== "number" || typeof passed !== "boolean") {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
+  if (score < 0 || score > 100) {
+    return NextResponse.json({ error: "Score debe estar entre 0 y 100" }, { status: 400 });
+  }
 
   const enrollment = await prisma.enrollment.findUnique({
     where: { courseId_studentId: { courseId, studentId: session.user.id } },

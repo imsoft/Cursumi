@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
 import { randomBytes } from "crypto";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { checkRateLimitAsync, getClientIp } from "@/lib/rate-limit";
 
 const TOKEN_EXPIRY_HOURS = 24;
 
 export async function POST(req: NextRequest) {
   // Máximo 3 reenvíos por IP cada 10 minutos — evita spam de emails
   const ip = getClientIp(req);
-  const limited = checkRateLimit({ key: `resend-verification:${ip}`, limit: 3, windowSecs: 600 });
+  const limited = await checkRateLimitAsync({ key: `resend-verification:${ip}`, limit: 3, windowSecs: 600 });
   if (limited) return limited;
 
   try {
@@ -23,11 +23,9 @@ export async function POST(req: NextRequest) {
       where: { email },
       select: { id: true, email: true, name: true, emailVerified: true },
     });
-    if (!user) {
-      return NextResponse.json({ error: "No encontrado" }, { status: 404 });
-    }
-    if (user.emailVerified) {
-      return NextResponse.json({ error: "El correo ya está verificado" }, { status: 400 });
+    // Respuesta genérica para evitar enumeración de emails
+    if (!user || user.emailVerified) {
+      return NextResponse.json({ success: true });
     }
 
     const token = randomBytes(32).toString("hex");

@@ -35,15 +35,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true });
     }
 
+    // Idempotency guard: si la transacción ya fue completada, no reenviar emails ni notificaciones
+    const alreadyCompleted = transaction.status === "completed";
+
     // Usar courseId/userId de la transacción en BD (fuente de verdad), no del metadata
     const { courseId, userId } = transaction;
 
-    await prisma.transaction.update({
-      where: { id: transaction.id },
-      data: { status: "completed" },
-    });
+    if (!alreadyCompleted) {
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: { status: "completed" },
+      });
+    }
 
-    // Enroll student
+    // Enroll student (upsert es seguro si se llama dos veces)
     const enrollment = await prisma.enrollment.upsert({
       where: { courseId_studentId: { courseId, studentId: userId } },
       update: {},
@@ -51,51 +56,61 @@ export async function POST(req: NextRequest) {
     });
 
     // Link transaction to enrollment
-    await prisma.transaction.update({
-      where: { id: transaction.id },
-      data: { enrollmentId: enrollment.id },
-    });
+    if (!alreadyCompleted) {
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: { enrollmentId: enrollment.id },
+      });
 
-    // Notify student
-    await prisma.notification.create({
-      data: {
-        userId,
-        type: "enrollment",
-        title: "Inscripción confirmada",
-        body: "Tu pago fue procesado exitosamente. ¡Ya puedes acceder al curso!",
-        link: `/dashboard/my-courses/${courseId}`,
-      },
-    });
+      // Incrementar cupón SOLO al confirmar el pago (evita doble-spend)
+      if (transaction.couponCode) {
+        await prisma.coupon.update({
+          where: { code: transaction.couponCode },
+          data: { usedCount: { increment: 1 } },
+        });
+      }
 
-    // Notify instructor + send enrollment email to student
-    const course = await prisma.course.findUnique({
-      where: { id: courseId },
-      select: { instructorId: true, title: true },
-    });
-    if (course) {
+      // Notify student
       await prisma.notification.create({
         data: {
-          userId: course.instructorId,
+          userId,
           type: "enrollment",
-          title: "Nueva inscripción",
-          body: `Un nuevo estudiante se inscribió en "${course.title}".`,
-          link: `/instructor/courses/${courseId}`,
+          title: "Inscripción confirmada",
+          body: "Tu pago fue procesado exitosamente. ¡Ya puedes acceder al curso!",
+          link: `/dashboard/my-courses/${courseId}`,
         },
       });
 
-      // Email de bienvenida al curso
-      const student = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { email: true, name: true },
+      // Notify instructor + send enrollment email to student
+      const course = await prisma.course.findUnique({
+        where: { id: courseId },
+        select: { instructorId: true, title: true },
       });
-      if (student) {
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-        await sendEnrollmentEmail({
-          to: student.email,
-          name: student.name || "Estudiante",
-          courseTitle: course.title,
-          courseUrl: `${baseUrl}/dashboard/my-courses/${courseId}`,
+      if (course) {
+        await prisma.notification.create({
+          data: {
+            userId: course.instructorId,
+            type: "enrollment",
+            title: "Nueva inscripción",
+            body: `Un nuevo estudiante se inscribió en "${course.title}".`,
+            link: `/instructor/courses/${courseId}`,
+          },
         });
+
+        // Email de bienvenida al curso
+        const student = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { email: true, name: true },
+        });
+        if (student) {
+          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+          await sendEnrollmentEmail({
+            to: student.email,
+            name: student.name || "Estudiante",
+            courseTitle: course.title,
+            courseUrl: `${baseUrl}/dashboard/my-courses/${courseId}`,
+          });
+        }
       }
     }
   }

@@ -9,10 +9,15 @@ export async function POST(
   try {
     const { id } = await params;
     const session = await requireSession();
-    const { questionId, selectedOption } = await req.json() as {
-      questionId: string;
-      selectedOption: number;
-    };
+    const body = await req.json();
+    const questionId = typeof body.questionId === "string" ? body.questionId : null;
+    const selectedOption = typeof body.selectedOption === "number" && Number.isFinite(body.selectedOption)
+      ? Math.floor(body.selectedOption)
+      : null;
+
+    if (!questionId || selectedOption === null || selectedOption < 0) {
+      return NextResponse.json({ error: "Payload inválido" }, { status: 400 });
+    }
 
     const game = await prisma.quizGame.findUnique({
       where: { id },
@@ -55,7 +60,8 @@ export async function POST(
     if (isCorrect && game.questionStartedAt) {
       const secondsElapsed = (Date.now() - game.questionStartedAt.getTime()) / 1000;
       const timeLeft = Math.max(0, currentQ.timeLimitSec - secondsElapsed);
-      pointsEarned = Math.round(currentQ.points * Math.max(0.1, timeLeft / currentQ.timeLimitSec));
+      const timeFraction = currentQ.timeLimitSec > 0 ? timeLeft / currentQ.timeLimitSec : 1;
+      pointsEarned = Math.round(currentQ.points * Math.max(0.1, timeFraction));
     }
 
     const answer = await prisma.$transaction(async (tx) => {
