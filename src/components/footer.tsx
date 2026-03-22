@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { SocialIcon } from "@/components/social-icon";
-import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links";
+import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links-config";
 
 const footerNav = [
   { label: "Cursos", href: "/courses" },

@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Save, Bell, Globe, Share2, Loader2, CheckCircle2 } from "lucide-react";
-import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links";
+import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links-config";
 import { SocialIcon } from "@/components/social-icon";
 
 export default function AdminSettingsPage() {
