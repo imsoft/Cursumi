@@ -16,14 +16,18 @@ const organizationJsonLd = {
   url: siteUrl,
   logo: `${siteUrl}/logos/cursumi.svg`,
   sameAs: [
-    "https://www.facebook.com/cursumi",
-    "https://www.instagram.com/cursumi",
-    "https://www.linkedin.com/company/cursumi",
+    "https://www.facebook.com/cursumi/",
+    "https://www.instagram.com/cursumi/",
+    "https://x.com/cursumi_",
+    "https://www.youtube.com/@cursumi",
+    "https://www.tiktok.com/@cursumi",
+    "https://www.threads.net/@cursumi",
+    "https://www.twitch.tv/cursumi",
   ],
   contactPoint: [
     {
       "@type": "ContactPoint",
-      email: "soporte@cursumi.com",
+      email: "cursumi.com@gmail.com",
       contactType: "customer support",
       areaServed: "MX",
       availableLanguage: ["es", "en"],

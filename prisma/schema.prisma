@@ -563,6 +563,16 @@ model Kpi {
 }
 
 // ─────────────────────────────────────────
+// CONFIGURACIÓN DEL SITIO
+// ─────────────────────────────────────────
+
+model SiteSetting {
+  key       String   @id           // ej: "social_links"
+  value     Json                    // valor serializado
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────
 // CUPONES DE DESCUENTO
 // ─────────────────────────────────────────
 

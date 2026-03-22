@@ -407,6 +407,12 @@ exports.Prisma.KpiScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SiteSettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.CouponScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -529,6 +535,7 @@ exports.Prisma.ModelName = {
   QuizGameParticipant: 'QuizGameParticipant',
   QuizGameAnswer: 'QuizGameAnswer',
   Kpi: 'Kpi',
+  SiteSetting: 'SiteSetting',
   Coupon: 'Coupon'
 };
 
