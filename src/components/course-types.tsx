@@ -7,9 +7,11 @@ const modalityCards = [
       "Sesiones en vivo y contenido grabado para aprender a tu ritmo, con soporte continuo de instructores.",
     badge: "Online",
     icon: Video,
-    accent: "from-blue-500/8 to-primary/8",
+    accent: "from-blue-500/8 to-blue-600/8",
     iconBg: "bg-blue-500/10",
     iconColor: "text-blue-600 dark:text-blue-400",
+    badgeBorder: "border-blue-500/25",
+    badgeText: "text-blue-600 dark:text-blue-400",
   },
   {
     title: "Cursos presenciales",
@@ -17,9 +19,11 @@ const modalityCards = [
       "Experiencias en aula con instructores certificados en ciudades clave de LatAm.",
     badge: "Presencial",
     icon: Globe,
-    accent: "from-primary/8 to-violet-500/8",
-    iconBg: "bg-primary/10",
-    iconColor: "text-primary",
+    accent: "from-emerald-500/8 to-emerald-600/8",
+    iconBg: "bg-emerald-500/10",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    badgeBorder: "border-emerald-500/25",
+    badgeText: "text-emerald-600 dark:text-emerald-400",
   },
   {
     title: "Talleres intensivos",
@@ -30,6 +34,8 @@ const modalityCards = [
     accent: "from-orange-500/8 to-yellow-500/8",
     iconBg: "bg-orange-500/10",
     iconColor: "text-orange-500",
+    badgeBorder: "border-orange-500/25",
+    badgeText: "text-orange-500",
   },
 ];
 
@@ -68,7 +74,7 @@ export const CourseTypes = () => {
                 </div>
 
                 {/* Badge */}
-                <span className="inline-block rounded-full border border-primary/25 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                <span className={`inline-block rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${card.badgeBorder} ${card.badgeText}`}>
                   {card.badge}
                 </span>
 

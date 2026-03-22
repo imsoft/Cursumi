@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Recommendation } from "@/components/student/types";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 
 interface StudentRecommendationsProps {
   recommendations: Recommendation[];
@@ -39,7 +40,7 @@ export const StudentRecommendedCourses = ({ recommendations }: StudentRecommenda
                 <h3 className="text-sm font-semibold text-foreground leading-tight">{rec.title}</h3>
                 <div className="flex items-center gap-2">
                   <p className="text-xs text-muted-foreground">{rec.category}</p>
-                  <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">{rec.modality}</span>
+                  <ModalityBadge modality={rec.modality} />
                 </div>
               </div>
               <div className="mt-auto">

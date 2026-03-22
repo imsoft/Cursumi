@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { InstructorCourse } from "@/components/instructor/types";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 
 interface CourseListItemProps {
   course: InstructorCourse;
@@ -20,14 +21,14 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
   const [archiving, setArchiving] = useState(false);
   const statusLabel = statusLabelMap[course.status];
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+    <div className={`flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between border-l-4 ${course.modality === "presencial" ? "border-l-emerald-500" : "border-l-blue-500"}`}>
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <h3 className="text-lg font-semibold text-foreground">{course.title}</h3>
           <Badge variant="outline">{course.category}</Badge>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <Badge variant="outline">{course.modality}</Badge>
+          <ModalityBadge modality={course.modality} />
           <Badge variant={statusLabel.variant}>{statusLabel.label}</Badge>
           <span>
             {course.studentsCount} estudiantes

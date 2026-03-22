@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
+import { ModalityOverlayBadge } from "@/components/ui/modality-badge";
 
 export interface CourseCardProps {
   title: string;
@@ -21,17 +22,12 @@ export const CourseCard = ({
   imageSrc,
   imageAlt,
 }: CourseCardProps) => {
-  const modeColor =
-    mode === "Virtual"
-      ? "bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/20"
-      : mode === "Presencial"
-        ? "bg-primary/10 text-primary border-primary/20"
-        : "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/20";
+  const isPresencial = mode === "Presencial";
 
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8"
+      className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8 border-l-4 ${isPresencial ? "border-l-emerald-500" : "border-l-blue-500"}`}
     >
       {/* Image */}
       <div className="relative aspect-video w-full overflow-hidden">
@@ -43,10 +39,8 @@ export const CourseCard = ({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         {/* Mode badge overlay */}
-        <span
-          className={`absolute top-3 left-3 rounded-full border px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.3em] backdrop-blur-sm ${modeColor}`}
-        >
-          {mode}
+        <span className="absolute top-3 left-3">
+          <ModalityOverlayBadge modality={mode.toLowerCase()} />
         </span>
       </div>
 

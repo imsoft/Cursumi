@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { StudentCourse } from "@/components/student/types";
 import { CheckCircle2, Clock, PlayCircle, Calendar } from "lucide-react";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 
 interface StudentCourseCardProps {
   course: StudentCourse;
@@ -41,7 +42,7 @@ const getStatusBadge = (status?: string) => {
 
 export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
   return (
-    <Card className="group flex h-full flex-col border border-border bg-card/90 transition-shadow hover:shadow-md">
+    <Card className={`group flex h-full flex-col border border-border bg-card/90 transition-shadow hover:shadow-md border-l-4 ${course.modality === "presencial" ? "border-l-emerald-500" : "border-l-blue-500"}`}>
       {course.imageUrl && (
         <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
           <Image
@@ -61,9 +62,7 @@ export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
           {getStatusBadge(course.status)}
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
-            {course.modality}
-          </span>
+          <ModalityBadge modality={course.modality} />
           <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
             {course.category}
           </span>

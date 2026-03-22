@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { BookOpenCheck } from "lucide-react";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 
 type CourseStatus = "published" | "draft" | "archived" | "pending";
 type Modality = "virtual" | "presencial";
@@ -189,7 +190,7 @@ export default function AdminCoursesPage() {
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-foreground">{course.title}</h3>
                         <Badge variant={statusBadge.variant}>{statusBadge.label}</Badge>
-                        <Badge variant="outline">{course.modality}</Badge>
+                        <ModalityBadge modality={course.modality} />
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Por {course.instructorName} · {course.category}

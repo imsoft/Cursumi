@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, ArrowLeft, Monitor, MapPin, TrendingUp } from "lucide-react";
+import { ArrowRight, ArrowLeft, TrendingUp } from "lucide-react";
 import type { CourseFormData } from "./course-types";
 import { formatPriceMXN } from "@/lib/utils";
+import { ModalityBadge } from "@/components/ui/modality-badge";
+import { MODALITY_CONFIG } from "@/lib/modality";
 
 const PLATFORM_FEE_PERCENT = 15; // debe coincidir con src/lib/stripe.ts
 
@@ -79,17 +81,12 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
       </div>
 
       {/* Modalidad Badge */}
-      <Card className="border border-border bg-muted/20">
+      <Card className={`border-2 ${MODALITY_CONFIG[modality === "presencial" ? "presencial" : "virtual"].color.border} bg-muted/20`}>
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
-            {isVirtual ? (
-              <Monitor className="h-5 w-5 text-primary" />
-            ) : (
-              <MapPin className="h-5 w-5 text-primary" />
-            )}
-            <div>
+            <div className="flex-1">
               <p className="font-semibold text-foreground">
-                Curso {isVirtual ? "Virtual" : "Presencial"}
+                {MODALITY_CONFIG[modality === "presencial" ? "presencial" : "virtual"].label}
               </p>
               <p className="text-sm text-muted-foreground">
                 {isVirtual
@@ -97,9 +94,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                   : `Ubicación: ${data.city || "No definida"}`}
               </p>
             </div>
-            <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground ml-auto">
-              {isVirtual ? "Virtual" : "Presencial"}
-            </span>
+            <ModalityBadge modality={modality} size="md" />
           </div>
         </CardContent>
       </Card>

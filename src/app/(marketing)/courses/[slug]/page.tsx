@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Monitor, Users, Calendar, Clock } from "lucide-react";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 import { EnrollActionForm } from "@/components/student/enroll-action-form";
 import { CheckoutButton } from "@/components/student/checkout-button";
 import { ReviewSection } from "@/components/student/review-section";
@@ -155,7 +156,7 @@ export default async function PublicCourseDetailPage({
       <Card className="border border-border bg-card/90">
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline">{course.modality === "virtual" ? "Virtual" : "Presencial"}</Badge>
+            <ModalityBadge modality={course.modality} size="md" />
             <Badge variant="outline">{course.category}</Badge>
           </div>
           <CardTitle className="text-3xl">{course.title}</CardTitle>

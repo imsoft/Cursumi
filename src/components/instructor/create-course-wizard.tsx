@@ -13,6 +13,9 @@ import { CoursePreview } from "@/components/instructor/course-preview";
 import { CheckCircle2, Save, Loader2 } from "lucide-react";
 import type { CourseFormData } from "@/components/instructor/course-types";
 import { createCourseDraft, publishCourse } from "@/app/actions/course-actions";
+import { ModalityBadge } from "@/components/ui/modality-badge";
+import { MODALITY_CONFIG } from "@/lib/modality";
+import type { Modality } from "@/lib/modality";
 
 const AUTO_SAVE_INTERVAL_MS = 30_000;
 
@@ -26,7 +29,9 @@ const steps = [
 
 type SaveStatus = "idle" | "saving" | "saved";
 
-export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormData }) => {
+export const CreateCourseWizard = ({ initialData, modality }: { initialData?: CourseFormData; modality?: Modality }) => {
+  const resolvedModality = modality || initialData?.modality || "virtual";
+  const modalityConfig = MODALITY_CONFIG[resolvedModality === "presencial" ? "presencial" : "virtual"];
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState("info");
   const [isPending, startTransition] = useTransition();
@@ -38,7 +43,7 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
     description: "",
     category: "programacion",
     level: "principiante",
-    modality: "virtual",
+    modality: resolvedModality,
     city: "",
     location: "",
     courseType: "fechado",
@@ -158,11 +163,16 @@ export const CreateCourseWizard = ({ initialData }: { initialData?: CourseFormDa
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Crear nuevo curso</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Completa los pasos para publicar tu curso
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">
+            Crear {modalityConfig.label.toLowerCase()}
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Completa los pasos para publicar tu curso
+          </p>
+        </div>
+        <ModalityBadge modality={resolvedModality} size="md" />
       </div>
 
       {/* Progress Steps */}

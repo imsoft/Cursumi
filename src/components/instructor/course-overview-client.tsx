@@ -12,6 +12,7 @@ import {
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
   CheckCircle2, AlertCircle, ExternalLink, Pencil,
 } from "lucide-react";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 import {
   addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo,
 } from "@/app/actions/course-actions";
@@ -163,10 +164,9 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground">{course.description}</p>
-              <div className="flex flex-wrap gap-3 text-sm text-muted-foreground pt-1">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground pt-1">
+                <ModalityBadge modality={course.modality} />
                 <span>{course.category}</span>
-                <span>·</span>
-                <span>{course.modality}</span>
                 <span>·</span>
                 <span>${(course.price / 100).toLocaleString()}</span>
                 <span>·</span>

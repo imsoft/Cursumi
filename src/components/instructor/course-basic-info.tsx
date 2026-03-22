@@ -10,9 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Upload, Monitor, MapPin } from "lucide-react";
+import { ArrowRight, Upload } from "lucide-react";
 import { useRef, useMemo, useEffect, useState } from "react";
 import type { CourseFormData } from "./course-types";
+import { ModalityBadge } from "@/components/ui/modality-badge";
+import { MODALITY_CONFIG } from "@/lib/modality";
 
 const createBasicInfoSchema = (modality: "virtual" | "presencial") => {
   const baseSchema = {
@@ -55,11 +57,6 @@ const levelOptions = [
   { value: "avanzado", label: "Avanzado" },
 ];
 
-const modalityOptions = [
-  { value: "virtual", label: "Virtual" },
-  { value: "presencial", label: "Presencial" },
-];
-
 interface CourseBasicInfoProps {
   data: CourseFormData;
   onUpdate: (data: Partial<CourseFormData>) => void;
@@ -97,27 +94,11 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
     },
   });
 
-  const modalityValue = form.watch("modality");
   const imageUrl = form.watch("imageUrl");
   const hasImage = useMemo(() => Boolean(imageUrl), [imageUrl]);
 
-  // Actualizar schema cuando cambia la modalidad
-  useEffect(() => {
-    if (modalityValue !== modality) {
-      form.clearErrors();
-      if (modalityValue === "virtual") {
-        form.setValue("city", "");
-        form.setValue("location", "");
-      }
-    }
-  }, [modalityValue, modality, form]);
-
   const handleSubmit = form.handleSubmit((values) => {
-    // Asegurar que los campos de presencial se limpien si es virtual
-    const updateData = modalityValue === "virtual" 
-      ? { ...values, city: "", location: "" }
-      : values;
-    onUpdate(updateData);
+    onUpdate(values);
     onNext();
   });
 
@@ -202,94 +183,42 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
 
         <Separator />
 
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold text-foreground">Modalidad del curso</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Selecciona si tu curso será virtual o presencial
-            </p>
-          </div>
-          <div>
-            <Select
-              label="Modalidad *"
-              options={modalityOptions}
-              value={form.watch("modality")}
-              onChange={(e) => {
-                const newModality = e.target.value as "virtual" | "presencial";
-                form.setValue("modality", newModality);
-                // Limpiar campos de presencial si cambia a virtual
-                if (newModality === "virtual") {
-                  form.setValue("city", "");
-                  form.setValue("location", "");
-                  onUpdate({ modality: newModality, city: "", location: "" });
-                } else {
-                  onUpdate({ modality: newModality });
-                }
-              }}
-            />
-            {form.formState.errors.modality && (
-              <p className="mt-1 text-xs text-destructive">
-                {form.formState.errors.modality.message}
+        {modality === "presencial" && (
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">Ubicación del curso</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Indica dónde se realizará el curso presencial
               </p>
-            )}
-          </div>
-
-          {modalityValue === "virtual" && (
-            <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-              <div className="flex items-start gap-3">
-                <Monitor className="h-5 w-5 text-primary mt-0.5" />
-                <div>
-                  <p className="font-semibold text-foreground">Curso Virtual</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Los estudiantes podrán acceder al contenido desde cualquier lugar.
-                    Podrás agregar links de sesión o plataforma más adelante.
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <Input
+                  label="Ciudad *"
+                  placeholder="Ej: Ciudad de México"
+                  {...form.register("city")}
+                />
+                {form.formState.errors.city && (
+                  <p className="mt-1 text-xs text-destructive">
+                    {form.formState.errors.city.message}
                   </p>
-                </div>
+                )}
+              </div>
+              <div>
+                <Input
+                  label="Dirección / Lugar *"
+                  placeholder="Ej: Av. Reforma 222, Col. Juárez"
+                  {...form.register("location")}
+                />
+                {form.formState.errors.location && (
+                  <p className="mt-1 text-xs text-destructive">
+                    {form.formState.errors.location.message}
+                  </p>
+                )}
               </div>
             </div>
-          )}
-
-          {modalityValue === "presencial" && (
-            <div className="space-y-4">
-              <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-primary mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-foreground">Curso Presencial</p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Los estudiantes asistirán físicamente a las sesiones.
-                      Necesitamos la ubicación exacta del curso.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <Input
-                    label="Ciudad *"
-                    {...form.register("city")}
-                  />
-                  {form.formState.errors.city && (
-                    <p className="mt-1 text-xs text-destructive">
-                      {form.formState.errors.city.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <Input
-                    label="Dirección / Lugar *"
-                    {...form.register("location")}
-                  />
-                  {form.formState.errors.location && (
-                    <p className="mt-1 text-xs text-destructive">
-                      {form.formState.errors.location.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <Separator />
 

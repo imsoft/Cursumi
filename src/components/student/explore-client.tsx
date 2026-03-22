@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { BookOpen, Search } from "lucide-react";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 
 const SEARCH_DEBOUNCE_MS = 350;
 import type { Course } from "@/components/courses/types";
@@ -220,9 +221,7 @@ export function ExploreClient({
                       {course.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="rounded-full border border-border bg-background px-3 py-1 font-semibold uppercase tracking-widest text-muted-foreground">
-                        {course.modality}
-                      </span>
+                      <ModalityBadge modality={course.modality} />
                       <span className="rounded-full border border-border bg-background px-3 py-1 font-semibold uppercase tracking-widest text-muted-foreground">
                         {course.category}
                       </span>

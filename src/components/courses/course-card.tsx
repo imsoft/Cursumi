@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { Course } from "./types";
+import { ModalityOverlayBadge } from "@/components/ui/modality-badge";
 
 interface CourseCardProps {
   course: Course;
@@ -9,12 +10,12 @@ interface CourseCardProps {
 }
 
 export const CourseCard = ({ course, priority }: CourseCardProps) => {
-  const isVirtual = course.modality === "virtual";
+  const isPresencial = course.modality === "presencial";
 
   return (
     <Link
       href={`/courses/${course.slug || course.id}`}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8"
+      className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8 border-l-4 ${isPresencial ? "border-l-emerald-500" : "border-l-blue-500"}`}
     >
       {/* Image */}
       <div className="relative aspect-video w-full overflow-hidden">
@@ -27,14 +28,8 @@ export const CourseCard = ({ course, priority }: CourseCardProps) => {
           priority={priority}
         />
         {/* Modality badge */}
-        <span
-          className={`absolute top-3 left-3 rounded-full border px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.3em] backdrop-blur-sm ${
-            isVirtual
-              ? "border-blue-400/30 bg-blue-500/70 text-white"
-              : "border-primary/30 bg-primary/70 text-white"
-          }`}
-        >
-          {isVirtual ? "Virtual" : "Presencial"}
+        <span className="absolute top-3 left-3">
+          <ModalityOverlayBadge modality={course.modality} />
         </span>
         {/* Category badge */}
         <span className="absolute top-3 right-3 rounded-full border border-white/20 bg-black/50 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-white/90 backdrop-blur-sm">
