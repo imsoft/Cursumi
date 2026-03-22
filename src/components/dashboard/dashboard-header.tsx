@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NotificationBell } from "@/components/notifications/notification-bell";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface DashboardHeaderProps {
   title?: string;
@@ -53,6 +54,7 @@ export function DashboardHeader({
       {action && <div className="ml-auto">{action}</div>}
       {user && (
         <div className="ml-auto flex items-center gap-3">
+          <ThemeToggle />
           <NotificationBell />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

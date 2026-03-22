@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { LayoutShell } from "@/components/layout-shell";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -114,9 +115,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className="antialiased">
-        <LayoutShell>{children}</LayoutShell>
+        <ThemeProvider>
+          <LayoutShell>{children}</LayoutShell>
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -127,6 +129,7 @@ export default function RootLayout({
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

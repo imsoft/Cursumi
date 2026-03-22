@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { label: "Cursos", href: "/courses" },
@@ -43,6 +44,7 @@ export const Navbar = () => {
           ))}
         </nav>
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <Link href="/login">
             <Button variant="ghost" className="px-4 py-2 text-xs" size="sm">
               Iniciar sesión
@@ -74,6 +76,10 @@ export const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            <div className="flex items-center justify-between border-t border-border pt-3">
+              <span className="text-sm text-muted-foreground">Tema</span>
+              <ThemeToggle />
+            </div>
             <div className="flex flex-col gap-2 pt-2">
               <Link href="/login">
                 <Button variant="outline" className="w-full" size="sm">
