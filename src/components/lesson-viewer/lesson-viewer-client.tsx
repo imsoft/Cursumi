@@ -160,14 +160,15 @@ export function LessonViewerClient({
 
   const isCompleted = completedIds.has(lesson.id);
 
-  // ¿El siguiente lesson es en otra sección y esa sección requiere pasar el test/minijuego?
+  // ¿El siguiente lesson es en otra sección?
   const nextIsInDifferentSection =
     nextLesson !== null && nextLessonSectionId !== null && nextLessonSectionId !== currentSectionId;
-  // Solo mostrar evaluación si hay una siguiente sección que desbloquear
+  // Mostrar quiz/minijuego en la última lección de la sección (aunque sea la última del curso)
   const sectionQuizRequired =
-    isLastLessonInSection && nextIsInDifferentSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
+    isLastLessonInSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
   const sectionMinigameRequired =
-    isLastLessonInSection && nextIsInDifferentSection && sectionMinigame !== null;
+    isLastLessonInSection && sectionMinigame !== null;
+  // Bloquear navegación solo si hay siguiente sección y falta quiz/minijuego
   const blockNextNavigation =
     nextIsInDifferentSection &&
     ((sectionQuizRequired && !sectionQuizPassed) || (sectionMinigameRequired && !sectionMinigamePassed));

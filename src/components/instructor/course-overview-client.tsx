@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
-  CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon,
+  CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon, Loader2,
 } from "lucide-react";
+import { useImageUpload } from "@/hooks/use-image-upload";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
@@ -106,6 +107,20 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   const [editSaved, setEditSaved] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
+
+  const handleCoverSuccess = useCallback(
+    (url: string) => {
+      setEditData((d) => ({ ...d, imageUrl: url }));
+      setCoverUploadError(null);
+    },
+    [],
+  );
+
+  const { upload: uploadCover, uploading: uploadingCover } = useImageUpload({
+    onSuccess: handleCoverSuccess,
+    onError: setCoverUploadError,
+  });
 
   const resetEditData = () => setEditData({
     title: course.title,
@@ -316,6 +331,11 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                           Cambiar imagen
                         </button>
                       </div>
+                    ) : uploadingCover ? (
+                      <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-muted/40">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <span className="text-sm font-semibold text-foreground">Subiendo imagen...</span>
+                      </div>
                     ) : (
                       <label className="flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-muted/40 text-center text-sm text-muted-foreground transition hover:border-primary/80">
                         <Upload className="h-6 w-6" />
@@ -327,16 +347,13 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                           className="hidden"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
-                            if (file) {
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                setEditData((d) => ({ ...d, imageUrl: reader.result as string }));
-                              };
-                              reader.readAsDataURL(file);
-                            }
+                            if (file) uploadCover(file);
                           }}
                         />
                       </label>
+                    )}
+                    {coverUploadError && (
+                      <p className="mt-1 text-xs text-destructive">{coverUploadError}</p>
                     )}
                   </div>
                 </div>

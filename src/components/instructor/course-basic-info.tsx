@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Upload } from "lucide-react";
-import { useRef, useMemo, useEffect, useState } from "react";
+import { ArrowRight, Upload, Loader2 } from "lucide-react";
+import { useRef, useMemo, useEffect, useState, useCallback } from "react";
+import { useImageUpload } from "@/hooks/use-image-upload";
 import type { CourseFormData } from "./course-types";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
@@ -96,6 +97,21 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
 
   const imageUrl = form.watch("imageUrl");
   const hasImage = useMemo(() => Boolean(imageUrl), [imageUrl]);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleUploadSuccess = useCallback(
+    (url: string) => {
+      form.setValue("imageUrl", url);
+      onUpdate({ imageUrl: url });
+      setUploadError(null);
+    },
+    [form, onUpdate],
+  );
+
+  const { upload, uploading } = useImageUpload({
+    onSuccess: handleUploadSuccess,
+    onError: setUploadError,
+  });
 
   const handleSubmit = form.handleSubmit((values) => {
     onUpdate(values);
@@ -104,14 +120,7 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        form.setValue("imageUrl", reader.result as string);
-        onUpdate({ imageUrl: reader.result as string });
-      };
-      reader.readAsDataURL(file);
-    }
+    if (file) upload(file);
   };
 
   return (
@@ -227,7 +236,12 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
           <div className="space-y-2">
             <div className="relative">
               <div className="group flex aspect-video w-full items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/40 text-center text-sm text-muted-foreground transition hover:border-primary/80">
-                {hasImage ? (
+                {uploading ? (
+                  <div className="flex flex-col items-center gap-2 p-6">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="font-semibold text-foreground">Subiendo imagen...</p>
+                  </div>
+                ) : hasImage ? (
                   <img
                     src={imageUrl}
                     alt="Portada del curso"
@@ -256,6 +270,9 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
                 onChange={handleImageUpload}
               />
             </div>
+            {uploadError && (
+              <p className="text-xs text-destructive">{uploadError}</p>
+            )}
             {hasImage && (
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <span>Imagen lista</span>
