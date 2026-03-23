@@ -6,7 +6,8 @@ import { handleApiError, requireSession } from "@/lib/api-helpers";
 const patchSchema = z.object({
   fullName: z.string().trim().min(1).max(120).optional(),
   email: z.string().email().max(255).optional(),
-}).refine((d) => d.fullName !== undefined || d.email !== undefined, {
+  avatar: z.string().max(2_000_000).nullable().optional(),
+}).refine((d) => d.fullName !== undefined || d.email !== undefined || d.avatar !== undefined, {
   message: "Se debe proporcionar al menos un campo para actualizar",
 });
 
@@ -48,15 +49,16 @@ export async function PATCH(req: Request) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
     }
-    const { fullName, email } = parsed.data;
+    const { fullName, email, avatar } = parsed.data;
 
     const updated = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         ...(fullName !== undefined ? { name: fullName } : {}),
         ...(email !== undefined ? { email } : {}),
+        ...(avatar !== undefined ? { image: avatar } : {}),
       },
-      select: { name: true, email: true },
+      select: { name: true, email: true, image: true },
     });
 
     return NextResponse.json({ updated });
