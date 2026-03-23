@@ -67,7 +67,7 @@ export function StudentShell({
 
   return (
     <SidebarProvider>
-      <AppSidebar navItems={studentNavItems} title="Cursumi" roleLabel="Panel de alumno" />
+      <AppSidebar navItems={studentNavItems} title="Cursumi" />
       <SidebarInset>
         <DashboardHeader
           title={pageTitle}

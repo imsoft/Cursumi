@@ -66,7 +66,7 @@ export function InstructorShell({
 
   return (
     <SidebarProvider>
-      <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" roleLabel="Panel de instructor" />
+      <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" />
       <SidebarInset>
         <DashboardHeader
           title={pageTitle}

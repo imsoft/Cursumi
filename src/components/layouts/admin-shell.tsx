@@ -50,7 +50,7 @@ interface AdminShellProps {
 export function AdminShell({ userName, userInitials, userImage, children }: AdminShellProps) {
   return (
     <SidebarProvider>
-      <AppSidebar navItems={adminNavItems} title="Cursumi Admin" roleLabel="Panel de administración" />
+      <AppSidebar navItems={adminNavItems} title="Cursumi Admin" />
       <SidebarInset>
         <DashboardHeader
           profileHref="/admin/settings"
