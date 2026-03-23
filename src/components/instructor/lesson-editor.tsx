@@ -103,10 +103,15 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const handleAddResource = () => {
     if (!newResourceTitle.trim() || !newResourceUrl.trim()) return;
 
+    let normalizedUrl = newResourceUrl.trim();
+    if (!/^https?:\/\//i.test(normalizedUrl)) {
+      normalizedUrl = `https://${normalizedUrl}`;
+    }
+
     const newResource: CourseResource = {
       id: crypto.randomUUID(),
       title: newResourceTitle.trim(),
-      url: newResourceUrl.trim(),
+      url: normalizedUrl,
       type: "link",
     };
 
