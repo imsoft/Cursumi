@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { CourseOverviewClient } from "@/components/instructor/course-overview-client";
+import { serializeInstructorCourseForOverview } from "@/lib/serialize-instructor-course-overview";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -30,14 +31,8 @@ export default async function EditCoursePage({ params }: Props) {
     );
   }
 
-  // Serialize Date → string for client component compatibility
-  const serializedCourse = {
-    ...course,
-    courseSessions: course.courseSessions?.map((s) => ({
-      ...s,
-      date: s.date.toISOString(),
-    })),
-  };
+  // Objeto plano serializable (sin Date/BigInt) — el spread ...course rompía tras router.refresh()
+  const serializedCourse = serializeInstructorCourseForOverview(course);
 
   return <CourseOverviewClient course={serializedCourse} />;
 }

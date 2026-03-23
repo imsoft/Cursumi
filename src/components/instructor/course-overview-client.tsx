@@ -22,6 +22,7 @@ import {
 import { SectionActivityEditor } from "@/components/instructor/section-activity-editor";
 import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
 import type { CourseSessionData } from "@/components/instructor/course-types";
+import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
@@ -54,25 +55,9 @@ interface CourseSessionItem {
   _count: { enrollments: number };
 }
 
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  level?: string | null;
-  modality: string;
-  courseType: string;
-  price: number;
-  imageUrl?: string | null;
-  status: string;
-  finalExam?: unknown;
-  sections: Section[];
-  courseSessions?: CourseSessionItem[];
-  _count: { enrollments: number };
-}
-
 interface CourseOverviewClientProps {
-  course: Course;
+  /** Curso serializado desde el servidor (sin objetos `Date`) */
+  course: SerializedInstructorCourseOverview;
 }
 
 const LESSON_TYPE_OPTIONS: { value: LessonType; label: string; icon: React.ReactNode }[] = [
