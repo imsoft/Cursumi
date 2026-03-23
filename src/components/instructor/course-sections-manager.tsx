@@ -38,6 +38,7 @@ import type {
 } from "./course-types";
 import { LessonEditor } from "./lesson-editor";
 import { LessonStatusBadge } from "./lesson-status-badge";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 
 interface CourseSectionsManagerProps {
   sections: CourseSection[];
@@ -778,13 +779,10 @@ export const CourseSectionsManager = ({
                           )}
                         </div>
                         <div className="flex shrink-0 items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteSection(section.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          <ConfirmDeleteButton
+                            onConfirm={() => deleteSection(section.id)}
+                            message={`Se eliminará la sección "${section.title}" y todas sus lecciones. Esta acción no se puede deshacer.`}
+                          />
                           <CollapsibleTrigger asChild>
                             <Button variant="ghost" size="sm">
                               {isExpanded ? (
@@ -904,13 +902,10 @@ export const CourseSectionsManager = ({
                                             >
                                               Editar
                                             </Button>
-                                            <Button
-                                              variant="ghost"
-                                              size="sm"
-                                              onClick={() => deleteLesson(section.id, lesson.id)}
-                                            >
-                                              <Trash2 className="h-4 w-4" />
-                                            </Button>
+                                            <ConfirmDeleteButton
+                                              onConfirm={() => deleteLesson(section.id, lesson.id)}
+                                              message={`Se eliminará la lección "${lesson.title}". Esta acción no se puede deshacer.`}
+                                            />
                                           </div>
                                         </div>
                                       </CardContent>

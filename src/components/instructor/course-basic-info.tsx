@@ -238,7 +238,7 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
                     <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
                     <p className="font-semibold text-foreground">Subir portada</p>
                     <p>Arrastra el archivo o haz clic para seleccionar</p>
-                    <p className="text-xs text-muted-foreground">1200x675 px recomendado (JPG/PNG)</p>
+                    <p className="text-xs text-muted-foreground">1920×1080 px recomendado (JPG/PNG/WebP)</p>
                   </div>
                 )}
                 <button

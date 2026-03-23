@@ -14,6 +14,7 @@ import {
   CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon,
 } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
   addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById,
 } from "@/app/actions/course-actions";
@@ -82,6 +83,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(course.sections.map((s) => s.id))
   );
+  const [addingSection, setAddingSection] = useState(false);
   const [addSectionTitle, setAddSectionTitle] = useState("");
   const [addLessonState, setAddLessonState] = useState<{ sectionId: string; title: string; type: LessonType } | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
@@ -145,6 +147,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     startTransition(async () => {
       await addSection(course.id, addSectionTitle.trim());
       setAddSectionTitle("");
+      setAddingSection(false);
       router.refresh();
     });
   };
@@ -314,7 +317,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                       <label className="flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-muted/40 text-center text-sm text-muted-foreground transition hover:border-primary/80">
                         <Upload className="h-6 w-6" />
                         <span>Haz clic para subir una imagen</span>
-                        <span className="text-xs">JPG, PNG o WebP</span>
+                        <span className="text-xs">JPG, PNG o WebP — Tamaño recomendado: 1920×1080</span>
                         <input
                           type="file"
                           accept="image/*"
@@ -393,23 +396,34 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
         </div>
 
         {/* Add section */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex gap-2">
+        {addingSection ? (
+          <Card className="border border-primary/30">
+            <CardContent className="p-4 space-y-3">
+              <p className="text-sm font-semibold text-foreground">Nueva sección</p>
               <Input
-                placeholder="Título de la nueva sección..."
+                placeholder="Título de la sección..."
                 value={addSectionTitle}
                 onChange={(e) => setAddSectionTitle(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddSection(); } }}
-                className="flex-1"
+                autoFocus
               />
-              <Button onClick={handleAddSection} disabled={!addSectionTitle.trim() || isPending}>
-                <Plus className="mr-2 h-4 w-4" />
-                Agregar sección
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              <div className="flex gap-2">
+                <Button size="sm" onClick={handleAddSection} disabled={!addSectionTitle.trim() || isPending}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Agregar sección
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => { setAddingSection(false); setAddSectionTitle(""); }}>
+                  Cancelar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Button variant="outline" className="w-full" onClick={() => setAddingSection(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Agregar sección
+          </Button>
+        )}
 
         {/* Sections list */}
         {course.sections.length === 0 ? (
@@ -439,14 +453,11 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                         </span>
                         <Badge variant="outline" className="ml-1">{section.lessons.length} lecciones</Badge>
                       </button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
+                      <ConfirmDeleteButton
                         disabled={isPending}
-                        onClick={() => handleRemoveSection(section.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                        onConfirm={() => handleRemoveSection(section.id)}
+                        message={`Se eliminará la sección "${section.title}" y todas sus lecciones. Esta acción no se puede deshacer.`}
+                      />
                     </div>
                   </CardHeader>
 
@@ -474,14 +485,11 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                               Editar
                             </Link>
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
+                          <ConfirmDeleteButton
                             disabled={isPending}
-                            onClick={() => handleRemoveLesson(lesson.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                            onConfirm={() => handleRemoveLesson(lesson.id)}
+                            message={`Se eliminará la lección "${lesson.title}". Esta acción no se puede deshacer.`}
+                          />
                         </div>
                       ))}
 

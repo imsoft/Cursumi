@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { CourseFinalExam, QuizQuestion } from "./course-types";
 import { saveCourseExamContent } from "@/app/actions/course-actions";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 
 interface ExamPageClientProps {
   courseId: string;
@@ -304,13 +305,10 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
                           onChange={(e) => updateQuestion(q.id, { points: Number(e.target.value) })}
                         />
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeQuestion(q.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <ConfirmDeleteButton
+                        onConfirm={() => removeQuestion(q.id)}
+                        message={`Se eliminará la pregunta ${qi + 1}. Esta acción no se puede deshacer.`}
+                      />
                     </div>
                   </div>
 
