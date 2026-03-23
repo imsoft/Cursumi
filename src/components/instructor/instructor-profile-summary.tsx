@@ -3,6 +3,7 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { UserAvatarUpload } from "@/components/profile/user-avatar-upload";
 
 interface InstructorProfileSummaryProps {
   fullName: string;
@@ -10,6 +11,9 @@ interface InstructorProfileSummaryProps {
   city: string;
   bio: string;
   specialties: string;
+  /** Si true, un solo avatar con opción de subir foto (evita duplicar la imagen arriba) */
+  editableAvatar?: boolean;
+  onAvatarUploaded?: () => void;
 }
 
 export const InstructorProfileSummary = ({
@@ -18,6 +22,8 @@ export const InstructorProfileSummary = ({
   city,
   bio,
   specialties,
+  editableAvatar = false,
+  onAvatarUploaded,
 }: InstructorProfileSummaryProps) => {
   const initials =
     fullName
@@ -34,20 +40,36 @@ export const InstructorProfileSummary = ({
 
   return (
     <Card className="border border-border bg-card/90">
-      <CardHeader className="flex flex-col gap-3 px-6 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 text-foreground">
-            {avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={avatarUrl} alt="" className="h-full w-full rounded-full object-cover" />
-            ) : (
-              initials
-            )}
-          </Avatar>
-          <div className="space-y-1">
+      <CardHeader className="flex flex-col gap-3 px-6 pt-6 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start gap-4">
+          {editableAvatar ? (
+            <UserAvatarUpload
+              name={fullName || "Instructor"}
+              avatarUrl={avatarUrl ?? null}
+              onUploaded={onAvatarUploaded}
+              sizeClass="h-16 w-16"
+              showHint={false}
+            />
+          ) : (
+            <Avatar className="h-16 w-16 shrink-0 text-foreground">
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarUrl} alt="" className="h-full w-full rounded-full object-cover" />
+              ) : (
+                initials
+              )}
+            </Avatar>
+          )}
+          <div className="min-w-0 space-y-1 pt-0.5">
             <h2 className="text-xl font-bold text-foreground">{fullName || "Instructor"}</h2>
             <p className="text-sm text-muted-foreground">Instructor</p>
             {city && <p className="text-xs text-muted-foreground">{city}</p>}
+            {editableAvatar && (
+              <p className="text-xs text-muted-foreground pt-1">
+                Esta foto se muestra en tus cursos y al hablar con estudiantes. Pasa el ratón sobre la
+                imagen para cambiarla.
+              </p>
+            )}
           </div>
         </div>
         {specialtiesList.length > 0 && (
