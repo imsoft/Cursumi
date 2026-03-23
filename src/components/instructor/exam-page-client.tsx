@@ -288,14 +288,17 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
                         <option value="true-false">Verdadero / Falso</option>
                         <option value="short-answer">Respuesta corta</option>
                       </select>
-                      <Input
-                        type="number"
-                        min={0}
-                        className="w-20"
-                        placeholder="pts"
-                        value={q.points ?? 1}
-                        onChange={(e) => updateQuestion(q.id, { points: Number(e.target.value) })}
-                      />
+                      <div className="flex items-center gap-1">
+                        <label className="text-xs text-muted-foreground whitespace-nowrap">Pts:</label>
+                        <Input
+                          type="number"
+                          min={0}
+                          className="w-20"
+                          placeholder="pts"
+                          value={q.points ?? 1}
+                          onChange={(e) => updateQuestion(q.id, { points: Number(e.target.value) })}
+                        />
+                      </div>
                       <Button
                         variant="ghost"
                         size="sm"
