@@ -6,7 +6,14 @@ import { handleApiError, requireSession } from "@/lib/api-helpers";
 const patchSchema = z.object({
   fullName: z.string().trim().min(1).max(120).optional(),
   email: z.string().email().max(255).optional(),
-  avatar: z.string().max(2_000_000).nullable().optional(),
+  /** Preferir POST /api/me/avatar para fotos; aquí aceptamos URL (p. ej. Cloudinary) o data URL corto */
+  avatar: z
+    .union([
+      z.string().url().max(2048),
+      z.string().regex(/^data:image\/(jpeg|png|webp|gif);base64,/).max(1_000_000),
+    ])
+    .nullable()
+    .optional(),
 }).refine((d) => d.fullName !== undefined || d.email !== undefined || d.avatar !== undefined, {
   message: "Se debe proporcionar al menos un campo para actualizar",
 });

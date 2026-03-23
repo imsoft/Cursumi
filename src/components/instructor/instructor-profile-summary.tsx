@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface InstructorProfileSummaryProps {
   fullName: string;
+  avatarUrl?: string | null;
   city: string;
   bio: string;
   specialties: string;
@@ -13,6 +14,7 @@ interface InstructorProfileSummaryProps {
 
 export const InstructorProfileSummary = ({
   fullName,
+  avatarUrl,
   city,
   bio,
   specialties,
@@ -34,7 +36,14 @@ export const InstructorProfileSummary = ({
     <Card className="border border-border bg-card/90">
       <CardHeader className="flex flex-col gap-3 px-6 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 text-foreground">{initials}</Avatar>
+          <Avatar className="h-16 w-16 text-foreground">
+            {avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={avatarUrl} alt="" className="h-full w-full rounded-full object-cover" />
+            ) : (
+              initials
+            )}
+          </Avatar>
           <div className="space-y-1">
             <h2 className="text-xl font-bold text-foreground">{fullName || "Instructor"}</h2>
             <p className="text-sm text-muted-foreground">Instructor</p>

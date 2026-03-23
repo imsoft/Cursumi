@@ -9,11 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Save, Camera } from "lucide-react";
+import { Save } from "lucide-react";
 import type { ProfileData } from "@/lib/profile-service";
+import { UserAvatarUpload } from "@/components/profile/user-avatar-upload";
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "El nombre es obligatorio"),
@@ -38,32 +38,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<ProfileData>(initialProfile);
   const [error, setError] = useState<string | null>(null);
-  const [avatarUploading, setAvatarUploading] = useState(false);
 
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAvatarUploading(true);
-    setError(null);
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const avatar = reader.result as string;
-        const res = await fetch("/api/me/profile", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ avatar }),
-        });
-        if (!res.ok) throw new Error("No pudimos actualizar tu foto");
-        setProfile((prev) => ({ ...prev, avatar }));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error al subir la foto");
-      } finally {
-        setAvatarUploading(false);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
   const form = useForm<ProfileFormValues>({
     resolver: createZodResolver(profileSchema),
     defaultValues: {
@@ -77,14 +52,6 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
       instagramUrl: "",
     },
   });
-  const initials =
-    profile.fullName
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2) || "U";
-
   const onSubmit = async (values: ProfileFormValues) => {
     try {
       setError(null);
@@ -120,32 +87,11 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <CardHeader className="flex flex-col items-center gap-4 pb-4">
-            <div className="relative group">
-              <Avatar className="h-24 w-24">
-                {profile.avatar ? (
-                  <img src={profile.avatar} alt={profile.fullName} className="h-full w-full rounded-full object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground">
-                    {initials}
-                  </div>
-                )}
-              </Avatar>
-              <label className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition group-hover:opacity-100">
-                <Camera className="h-6 w-6 text-white" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarChange}
-                  disabled={avatarUploading}
-                />
-              </label>
-              {avatarUploading && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50">
-                  <span className="text-xs font-medium text-white">Subiendo...</span>
-                </div>
-              )}
-            </div>
+            <UserAvatarUpload
+              name={profile.fullName}
+              avatarUrl={profile.avatar}
+              onUploaded={(url) => setProfile((prev) => ({ ...prev, avatar: url }))}
+            />
             <div className="text-center">
               <h3 className="text-xl font-bold text-foreground">{profile.fullName || "Estudiante"}</h3>
               <p className="text-sm text-muted-foreground">Estudiante</p>
