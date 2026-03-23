@@ -8,9 +8,11 @@ interface CheckoutButtonProps {
   courseId: string;
   price: number;
   label?: string;
+  sessionId?: string;
+  disabled?: boolean;
 }
 
-export function CheckoutButton({ courseId, price, label }: CheckoutButtonProps) {
+export function CheckoutButton({ courseId, price, label, sessionId, disabled }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +23,7 @@ export function CheckoutButton({ courseId, price, label }: CheckoutButtonProps) 
       const res = await fetch("/api/payments/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId }),
+        body: JSON.stringify({ courseId, ...(sessionId ? { sessionId } : {}) }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al iniciar el pago");
@@ -36,7 +38,7 @@ export function CheckoutButton({ courseId, price, label }: CheckoutButtonProps) 
 
   return (
     <div className="flex flex-col gap-2">
-      <Button size="lg" onClick={handleCheckout} disabled={loading}>
+      <Button size="lg" onClick={handleCheckout} disabled={disabled || loading}>
         {loading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (

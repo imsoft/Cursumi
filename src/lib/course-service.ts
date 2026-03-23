@@ -1,7 +1,7 @@
 import { prisma } from "./prisma";
 import { Prisma } from "@/generated/prisma";
 import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
-import type { CourseFormData, CourseSection } from "@/components/instructor/course-types";
+import type { CourseFormData, CourseSection, CourseSessionData } from "@/components/instructor/course-types";
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
 
@@ -43,6 +43,17 @@ export type InstructorCourseListItem = {
 function formatDateLabel(date: Date | null): string | undefined {
   if (!date) return undefined;
   return date.toISOString();
+}
+
+/** Calcula la próxima sesión futura a partir de un array de sesiones (para crear/actualizar cursos) */
+function computeNextSessionFromData(sessions?: CourseSessionData[]): Date | null {
+  if (!sessions?.length) return null;
+  const now = new Date();
+  const futureDates = sessions
+    .map((s) => new Date(s.date))
+    .filter((d) => d >= now)
+    .sort((a, b) => a.getTime() - b.getTime());
+  return futureDates[0] ?? null;
 }
 
 export async function getInstructorCourses(instructorId: string): Promise<InstructorCourseListItem[]> {
@@ -97,7 +108,20 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       maxStudents: data.maxStudents,
       imageUrl: data.imageUrl,
       status: data.status ?? "draft",
+      nextSession: computeNextSessionFromData(data.courseSessions),
       finalExam: data.finalExam ? (data.finalExam as object) : undefined,
+      courseSessions: data.courseSessions?.length
+        ? {
+            create: data.courseSessions.map((s) => ({
+              city: s.city,
+              location: s.location,
+              date: new Date(s.date),
+              startTime: s.startTime,
+              endTime: s.endTime,
+              maxStudents: s.maxStudents,
+            })),
+          }
+        : undefined,
       sections: data.sections
         ? {
             create: data.sections.map((section, index) => ({
@@ -282,6 +306,10 @@ export async function getCourseDetail(courseId: string) {
             orderBy: { order: "asc" },
           },
         },
+      },
+      courseSessions: {
+        orderBy: { date: "asc" },
+        include: { _count: { select: { enrollments: true } } },
       },
       _count: { select: { enrollments: true } },
     },
@@ -528,6 +556,19 @@ export async function getPublishedCourse(slugOrId: string) {
           lessons: { select: { duration: true } },
         },
       },
+      courseSessions: {
+        orderBy: { date: "asc" },
+        select: {
+          id: true,
+          city: true,
+          location: true,
+          date: true,
+          startTime: true,
+          endTime: true,
+          maxStudents: true,
+          _count: { select: { enrollments: true } },
+        },
+      },
     },
   });
 }
@@ -608,13 +649,16 @@ export type CourseStudent = {
   status: EnrollmentStatus;
   progress: number;
   enrolledDate: string;
+  sessionId?: string | null;
+  sessionLabel?: string;
 };
 
-export async function listCourseStudents(courseId: string): Promise<CourseStudent[]> {
+export async function listCourseStudents(courseId: string, sessionId?: string): Promise<CourseStudent[]> {
   const enrollments = await prisma.enrollment.findMany({
-    where: { courseId },
+    where: { courseId, ...(sessionId ? { sessionId } : {}) },
     include: {
       student: { select: { id: true, name: true, email: true } },
+      session: { select: { id: true, city: true, date: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -626,6 +670,10 @@ export async function listCourseStudents(courseId: string): Promise<CourseStuden
     status: enrollment.status,
     progress: enrollment.progress,
     enrolledDate: enrollment.createdAt.toISOString(),
+    sessionId: enrollment.sessionId,
+    sessionLabel: enrollment.session
+      ? `${enrollment.session.city} — ${enrollment.session.date.toLocaleDateString("es-MX")}`
+      : undefined,
   }));
 }
 
@@ -771,4 +819,99 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     nextLessonSectionId,
     currentSectionId: lesson.sectionId,
   };
+}
+
+// ─── Sesiones presenciales ─────────────────────────────────────────────────
+
+export async function upsertCourseSessions(
+  courseId: string,
+  sessions: CourseSessionData[]
+) {
+  // IDs que llegan del payload (existentes)
+  const payloadIds = sessions.filter((s) => s.id).map((s) => s.id!);
+
+  // Eliminar sesiones que ya no están en el payload
+  await prisma.courseSession.deleteMany({
+    where: { courseId, id: { notIn: payloadIds } },
+  });
+
+  // Upsert cada sesión
+  for (const s of sessions) {
+    const data = {
+      city: s.city,
+      location: s.location,
+      date: new Date(s.date),
+      startTime: s.startTime,
+      endTime: s.endTime,
+      maxStudents: s.maxStudents,
+    };
+    if (s.id) {
+      await prisma.courseSession.update({ where: { id: s.id }, data });
+    } else {
+      await prisma.courseSession.create({ data: { courseId, ...data } });
+    }
+  }
+
+  // Recompute nextSession on the course
+  const nextDate = await prisma.courseSession.findFirst({
+    where: { courseId, date: { gte: new Date() } },
+    orderBy: { date: "asc" },
+    select: { date: true },
+  });
+  await prisma.course.update({
+    where: { id: courseId },
+    data: { nextSession: nextDate?.date ?? null },
+  });
+}
+
+export async function getCourseSessions(courseId: string) {
+  return prisma.courseSession.findMany({
+    where: { courseId },
+    orderBy: { date: "asc" },
+    include: { _count: { select: { enrollments: true } } },
+  });
+}
+
+export type UpcomingSessionItem = {
+  sessionId: string;
+  courseId: string;
+  courseTitle: string;
+  city: string;
+  location: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  enrolledCount: number;
+  maxStudents: number;
+};
+
+export async function getUpcomingSessionsForInstructor(
+  instructorId: string,
+  limit = 10
+): Promise<UpcomingSessionItem[]> {
+  const sessions = await prisma.courseSession.findMany({
+    where: {
+      date: { gte: new Date() },
+      course: { instructorId },
+    },
+    orderBy: { date: "asc" },
+    take: limit,
+    include: {
+      course: { select: { id: true, title: true } },
+      _count: { select: { enrollments: true } },
+    },
+  });
+
+  return sessions.map((s) => ({
+    sessionId: s.id,
+    courseId: s.course.id,
+    courseTitle: s.course.title,
+    city: s.city,
+    location: s.location,
+    date: s.date.toISOString(),
+    startTime: s.startTime,
+    endTime: s.endTime,
+    enrolledCount: s._count.enrollments,
+    maxStudents: s.maxStudents,
+  }));
 }

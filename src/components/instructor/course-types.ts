@@ -1,3 +1,13 @@
+export type CourseSessionData = {
+  id?: string;        // presente al editar sesión existente
+  city: string;
+  location: string;   // dirección/sede
+  date: string;       // ISO date string
+  startTime: string;  // "HH:mm"
+  endTime: string;    // "HH:mm"
+  maxStudents: number;
+};
+
 export type CourseFormData = {
   id?: string; // presente al editar un curso existente
   title: string;
@@ -15,6 +25,7 @@ export type CourseFormData = {
   imageUrl?: string;
   sections: CourseSection[];
   finalExam?: CourseFinalExam;
+  courseSessions?: CourseSessionData[]; // solo para cursos presenciales
 };
 
 export type CourseFinalExam = {

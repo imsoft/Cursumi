@@ -24,8 +24,9 @@ import {
   getCourseExam,
   saveCourseExam,
   updateCourseInfo,
+  upsertCourseSessions,
 } from "@/lib/course-service";
-import type { CourseFormData, CourseLesson, CourseFinalExam, SectionQuiz, SectionMinigame } from "@/components/instructor/course-types";
+import type { CourseFormData, CourseLesson, CourseFinalExam, SectionQuiz, SectionMinigame, CourseSessionData } from "@/components/instructor/course-types";
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
 import type { CourseStudent, StudentCourseDetail } from "@/lib/course-service";
@@ -109,24 +110,36 @@ export async function getCourseDetailForUser(courseId: string) {
   return course;
 }
 
-export async function listStudentsForCourse(courseId: string): Promise<CourseStudent[]> {
+export async function listStudentsForCourse(courseId: string, sessionId?: string): Promise<CourseStudent[]> {
   const session = await requireSession();
   const course = await getCourseDetail(courseId);
   if (!course || course.instructorId !== session.user.id) {
     throw new Error("No autorizado");
   }
-  return listCourseStudents(courseId);
+  return listCourseStudents(courseId, sessionId);
 }
 
 export async function getPublishedCourseDetail(courseId: string) {
   return getPublishedCourse(courseId);
 }
 
-export async function enrollInCourse(courseId: string) {
+export async function enrollInCourse(courseId: string, sessionId?: string) {
   const session = await requireSession();
   const course = await getPublishedCourse(courseId);
   if (!course) {
     throw new Error("Curso no encontrado o no publicado");
+  }
+
+  // Para cursos presenciales con sesiones, validar la sesión
+  if (sessionId) {
+    const courseSession = await prisma.courseSession.findFirst({
+      where: { id: sessionId, courseId },
+      include: { _count: { select: { enrollments: true } } },
+    });
+    if (!courseSession) throw new Error("Sesión no encontrada");
+    if (courseSession._count.enrollments >= courseSession.maxStudents) {
+      throw new Error("Esta sesión ya está llena");
+    }
   }
 
   await prisma.enrollment.upsert({
@@ -138,10 +151,12 @@ export async function enrollInCourse(courseId: string) {
     },
     update: {
       status: "active",
+      ...(sessionId ? { sessionId } : {}),
     },
     create: {
       courseId,
       studentId: session.user.id,
+      sessionId: sessionId ?? null,
       status: "active",
       progress: 0,
     },
@@ -326,6 +341,13 @@ export async function deleteCourseById(courseId: string): Promise<{ success: boo
   await prisma.course.delete({ where: { id: courseId } });
   revalidatePath("/instructor/courses");
   return { success: true };
+}
+
+export async function saveCourseSessions(courseId: string, sessions: CourseSessionData[]) {
+  const session = await requireSession();
+  await verifyCourseOwner(courseId, session.user.id);
+  await upsertCourseSessions(courseId, sessions);
+  revalidatePath(`/instructor/courses/${courseId}/edit`);
 }
 
 export async function publishCourseById(courseId: string): Promise<{ success: boolean; error?: string }> {

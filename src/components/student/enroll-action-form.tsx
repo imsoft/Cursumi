@@ -13,9 +13,11 @@ type EnrollState = {
 interface EnrollActionFormProps {
   action: (prevState: EnrollState, formData: FormData) => Promise<EnrollState>;
   courseId: string;
+  sessionId?: string;
+  disabled?: boolean;
 }
 
-export function EnrollActionForm({ action, courseId }: EnrollActionFormProps) {
+export function EnrollActionForm({ action, courseId, sessionId, disabled }: EnrollActionFormProps) {
   const router = useRouter();
   const [optimisticStatus, setOptimisticStatus] = useOptimistic<EnrollState["status"], EnrollState["status"]>(
     "idle",
@@ -40,11 +42,12 @@ export function EnrollActionForm({ action, courseId }: EnrollActionFormProps) {
   return (
     <form action={formAction} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <input type="hidden" name="courseId" value={courseId} />
+      {sessionId && <input type="hidden" name="sessionId" value={sessionId} />}
       <div className="text-sm text-muted-foreground">
         Accede al curso y comienza a aprender de inmediato.
       </div>
       <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
-        <Button type="submit" size="lg" disabled={pending || displayStatus === "success"}>
+        <Button type="submit" size="lg" disabled={disabled || pending || displayStatus === "success"}>
           {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {displayStatus === "success" && <CheckCircle2 className="mr-2 h-4 w-4" />}
           {displayStatus === "success"

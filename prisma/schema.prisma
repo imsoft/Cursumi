@@ -218,6 +218,7 @@ model Course {
   instructor    User            @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
   categoryRef   Category?       @relation(fields: [categoryId], references: [id])
   sections      CourseSection[]
+  courseSessions CourseSession[]
   enrollments   Enrollment[]
   certificates  Certificate[]
   transactions  Transaction[]
@@ -282,6 +283,29 @@ model LessonProgress {
 }
 
 // ─────────────────────────────────────────
+// SESIONES PRESENCIALES
+// ─────────────────────────────────────────
+
+model CourseSession {
+  id          String   @id @default(cuid())
+  courseId    String
+  city        String
+  location    String   // dirección/sede
+  date        DateTime
+  startTime   String   // "09:00"
+  endTime     String   // "13:00"
+  maxStudents Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+
+  @@index([courseId])
+  @@index([courseId, date])
+}
+
+// ─────────────────────────────────────────
 // INSCRIPCIONES
 // ─────────────────────────────────────────
 
@@ -289,6 +313,7 @@ model Enrollment {
   id        String           @id @default(cuid())
   courseId  String
   studentId String
+  sessionId String?          // null para cursos virtuales; requerido para presenciales
   status    EnrollmentStatus @default(active)
   progress  Int              @default(0)
   createdAt DateTime         @default(now())
@@ -296,6 +321,7 @@ model Enrollment {
 
   course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   student        User             @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
+  session        CourseSession?   @relation(fields: [sessionId], references: [id])
   lessonProgress         LessonProgress[]
   certificate            Certificate?
   examSubmission         ExamSubmission?
@@ -304,6 +330,7 @@ model Enrollment {
 
   @@unique([courseId, studentId])
   @@index([studentId])
+  @@index([sessionId])
 }
 
 // ─────────────────────────────────────────

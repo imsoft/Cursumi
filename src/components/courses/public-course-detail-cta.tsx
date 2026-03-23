@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EnrollActionForm } from "@/components/student/enroll-action-form";
 import { CheckoutButton } from "@/components/student/checkout-button";
+import { SessionPicker, type PickableSession } from "./session-picker";
 
 type EnrollState = {
   status: "idle" | "success" | "error";
@@ -18,6 +20,8 @@ interface PublicCourseDetailCTAProps {
   price: number;
   enrollAction: EnrollAction;
   returnUrl: string;
+  /** Sesiones presenciales disponibles (solo para cursos presenciales) */
+  sessions?: PickableSession[];
 }
 
 export function PublicCourseDetailCTA({
@@ -26,12 +30,24 @@ export function PublicCourseDetailCTA({
   price,
   enrollAction,
   returnUrl,
+  sessions,
 }: PublicCourseDetailCTAProps) {
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const hasSessions = sessions && sessions.length > 0;
+  const requiresSession = hasSessions;
+
   if (!isLoggedIn) {
     const loginUrl = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
     const signupUrl = `/signup?returnUrl=${encodeURIComponent(returnUrl)}`;
     return (
       <div className="flex flex-col gap-3">
+        {hasSessions && (
+          <SessionPicker
+            sessions={sessions}
+            selectedSessionId={selectedSessionId}
+            onSelect={setSelectedSessionId}
+          />
+        )}
         <p className="text-sm text-muted-foreground">
           Inicia sesión o crea una cuenta para inscribirte a este curso.
         </p>
@@ -47,8 +63,30 @@ export function PublicCourseDetailCTA({
     );
   }
 
-  if (price === 0) {
-    return <EnrollActionForm action={enrollAction} courseId={courseId} />;
-  }
-  return <CheckoutButton courseId={courseId} price={price} />;
+  return (
+    <div className="flex flex-col gap-4 w-full">
+      {hasSessions && (
+        <SessionPicker
+          sessions={sessions}
+          selectedSessionId={selectedSessionId}
+          onSelect={setSelectedSessionId}
+        />
+      )}
+      {price === 0 ? (
+        <EnrollActionForm
+          action={enrollAction}
+          courseId={courseId}
+          sessionId={selectedSessionId ?? undefined}
+          disabled={requiresSession && !selectedSessionId}
+        />
+      ) : (
+        <CheckoutButton
+          courseId={courseId}
+          price={price}
+          sessionId={selectedSessionId ?? undefined}
+          disabled={requiresSession && !selectedSessionId}
+        />
+      )}
+    </div>
+  );
 }

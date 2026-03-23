@@ -8,6 +8,7 @@ import { checkRateLimitAsync } from "@/lib/rate-limit";
 const bodySchema = z.object({
   courseId: z.string().min(1),
   couponCode: z.string().optional(),
+  sessionId: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
       windowSecs: 3600,
     });
     if (limited) return limited;
-    const { courseId, couponCode } = bodySchema.parse(await req.json());
+    const { courseId, couponCode, sessionId } = bodySchema.parse(await req.json());
 
     const course = await prisma.course.findUnique({
       where: { id: courseId, status: "published" },
@@ -106,6 +107,7 @@ export async function POST(req: NextRequest) {
       metadata: {
         courseId,
         userId: session.user.id,
+        ...(sessionId ? { sessionId } : {}),
       },
     });
 

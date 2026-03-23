@@ -257,10 +257,24 @@ exports.Prisma.LessonProgressScalarFieldEnum = {
   completedAt: 'completedAt'
 };
 
+exports.Prisma.CourseSessionScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  city: 'city',
+  location: 'location',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  maxStudents: 'maxStudents',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EnrollmentScalarFieldEnum = {
   id: 'id',
   courseId: 'courseId',
   studentId: 'studentId',
+  sessionId: 'sessionId',
   status: 'status',
   progress: 'progress',
   createdAt: 'createdAt',
@@ -521,6 +535,7 @@ exports.Prisma.ModelName = {
   CourseSection: 'CourseSection',
   Lesson: 'Lesson',
   LessonProgress: 'LessonProgress',
+  CourseSession: 'CourseSession',
   Enrollment: 'Enrollment',
   SectionQuizSubmission: 'SectionQuizSubmission',
   ExamSubmission: 'ExamSubmission',

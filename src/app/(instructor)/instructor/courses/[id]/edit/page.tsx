@@ -30,5 +30,14 @@ export default async function EditCoursePage({ params }: Props) {
     );
   }
 
-  return <CourseOverviewClient course={course} />;
+  // Serialize Date → string for client component compatibility
+  const serializedCourse = {
+    ...course,
+    courseSessions: course.courseSessions?.map((s) => ({
+      ...s,
+      date: s.date.toISOString(),
+    })),
+  };
+
+  return <CourseOverviewClient course={serializedCourse} />;
 }

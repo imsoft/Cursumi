@@ -66,11 +66,12 @@ type EnrollState = {
 async function enrollCourseAction(_prev: EnrollState, formData: FormData): Promise<EnrollState> {
   "use server";
   const courseId = formData.get("courseId");
+  const sessionId = formData.get("sessionId") as string | null;
   if (!courseId || typeof courseId !== "string") {
     return { status: "error", message: "Curso inválido" };
   }
   try {
-    await enrollInCourse(courseId);
+    await enrollInCourse(courseId, sessionId || undefined);
     return { status: "success" };
   } catch (error) {
     return {
@@ -206,6 +207,20 @@ export default async function PublicCourseDetailPage({
               price={course.price}
               enrollAction={enrollCourseAction}
               returnUrl={returnUrl}
+              sessions={
+                course.modality === "presencial" && course.courseSessions?.length
+                  ? course.courseSessions.map((s) => ({
+                      id: s.id,
+                      city: s.city,
+                      location: s.location,
+                      date: s.date.toISOString(),
+                      startTime: s.startTime,
+                      endTime: s.endTime,
+                      maxStudents: s.maxStudents,
+                      enrolledCount: s._count.enrollments,
+                    }))
+                  : undefined
+              }
             />
           </div>
         </CardContent>

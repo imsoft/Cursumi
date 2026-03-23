@@ -17,9 +17,11 @@ import {
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
-  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection,
+  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions,
 } from "@/app/actions/course-actions";
 import { SectionActivityEditor } from "@/components/instructor/section-activity-editor";
+import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
+import type { CourseSessionData } from "@/components/instructor/course-types";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
@@ -41,6 +43,17 @@ interface Section {
   minigame?: unknown;
 }
 
+interface CourseSessionItem {
+  id: string;
+  city: string;
+  location: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  maxStudents: number;
+  _count: { enrollments: number };
+}
+
 interface Course {
   id: string;
   title: string;
@@ -54,6 +67,7 @@ interface Course {
   status: string;
   finalExam?: unknown;
   sections: Section[];
+  courseSessions?: CourseSessionItem[];
   _count: { enrollments: number };
 }
 
@@ -285,7 +299,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-sm font-medium text-foreground">Precio (centavos)</label>
+                  <label className="text-sm font-medium text-foreground">Precio</label>
                   <Input
                     className="mt-1"
                     type="number"
@@ -585,6 +599,40 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
           </div>
         )}
       </div>
+
+      {/* Sesiones presenciales */}
+      {course.modality === "presencial" && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Sesiones presenciales</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Configura los lugares, fechas y horarios donde se impartirá este curso.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <CourseSessionsManager
+              sessions={(course.courseSessions ?? []).map((s) => ({
+                id: s.id,
+                city: s.city,
+                location: s.location,
+                date: typeof s.date === "string" ? s.date : new Date(s.date).toISOString(),
+                startTime: s.startTime,
+                endTime: s.endTime,
+                maxStudents: s.maxStudents,
+              }))}
+              enrollmentCounts={Object.fromEntries(
+                (course.courseSessions ?? []).map((s) => [s.id, s._count.enrollments])
+              )}
+              onChange={(sessions) => {
+                startTransition(async () => {
+                  await saveCourseSessions(course.id, sessions);
+                  router.refresh();
+                });
+              }}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Final Exam */}
       <Card>

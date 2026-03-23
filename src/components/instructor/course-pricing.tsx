@@ -8,10 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, TrendingUp } from "lucide-react";
-import type { CourseFormData } from "./course-types";
+import type { CourseFormData, CourseSessionData } from "./course-types";
 import { formatPriceMXN } from "@/lib/utils";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
+import { CourseSessionsManager } from "./course-sessions-manager";
 
 const PLATFORM_FEE_PERCENT = 15; // debe coincidir con src/lib/stripe.ts
 
@@ -27,11 +28,10 @@ const createPricingSchema = (modality: "virtual" | "presencial") => {
       courseType: z.string().default("ondemand"),
     });
   } else {
+    // Para presencial, las fechas/capacidad se manejan por sesión, no aquí
     return z.object({
       ...baseSchema,
       courseType: z.literal("fechado"),
-      startDate: z.string().min(1, "Selecciona una fecha de inicio"),
-      maxStudents: z.coerce.number().int().positive("La capacidad debe ser mayor que 0").optional(),
     });
   }
 };
@@ -57,7 +57,6 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
       price: data.price,
       duration: data.duration,
       courseType: isPresencial ? "fechado" : (data.courseType || "ondemand"),
-      ...(isPresencial && { startDate: data.startDate, maxStudents: data.maxStudents }),
     } as PricingFormData,
   });
 
@@ -149,45 +148,24 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
           )}
         </div>
 
-        {/* Configuración presencial */}
+        {/* Sesiones presenciales */}
         {isPresencial && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">Configuración del curso presencial</h3>
+            <h3 className="text-lg font-semibold text-foreground">Sesiones presenciales</h3>
             <div className="rounded-lg border border-border bg-muted/20 p-4">
               <p className="text-sm text-muted-foreground">
-                Los cursos presenciales siempre tienen fechas definidas y requieren una capacidad máxima.
+                Agrega los lugares, fechas y horarios donde se impartirá tu curso. Cada sesión tiene su propia capacidad máxima.
               </p>
             </div>
-
-            <div>
-              <Input
-                label="Fecha de inicio *"
-                type="date"
-                {...form.register("startDate")}
-              />
-              {"startDate" in form.formState.errors && form.formState.errors.startDate && (
-                <p className="mt-1 text-xs text-destructive">
-                  {(form.formState.errors.startDate as { message?: string }).message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Input
-                label="Capacidad máxima *"
-                type="number"
-                min="1"
-                {...form.register("maxStudents", { valueAsNumber: true })}
-              />
-              <p className="mt-1 text-xs text-muted-foreground">
-                Número máximo de estudiantes que pueden inscribirse
+            <CourseSessionsManager
+              sessions={data.courseSessions ?? []}
+              onChange={(sessions) => onUpdate({ courseSessions: sessions })}
+            />
+            {(data.courseSessions ?? []).length === 0 && (
+              <p className="text-xs text-amber-600 dark:text-amber-400">
+                Agrega al menos una sesión para tu curso presencial.
               </p>
-              {"maxStudents" in form.formState.errors && form.formState.errors.maxStudents && (
-                <p className="mt-1 text-xs text-destructive">
-                  {(form.formState.errors.maxStudents as { message?: string }).message}
-                </p>
-              )}
-            </div>
+            )}
           </div>
         )}
 

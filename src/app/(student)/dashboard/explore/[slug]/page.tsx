@@ -6,9 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Monitor, Users, Calendar } from "lucide-react";
-import { EnrollActionForm } from "@/components/student/enroll-action-form";
-import { CheckoutButton } from "@/components/student/checkout-button";
 import { ReviewSection } from "@/components/student/review-section";
+import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { formatPriceMXN } from "@/lib/utils";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -34,11 +33,12 @@ type EnrollState = { status: "idle" | "success" | "error"; message?: string };
 async function enrollCourseAction(_prev: EnrollState, formData: FormData): Promise<EnrollState> {
   "use server";
   const courseId = formData.get("courseId");
+  const sessionId = formData.get("sessionId") as string | null;
   if (!courseId || typeof courseId !== "string") {
     return { status: "error", message: "Curso inválido" };
   }
   try {
-    await enrollInCourse(courseId);
+    await enrollInCourse(courseId, sessionId || undefined);
     return { status: "success" };
   } catch (error) {
     return {
@@ -124,11 +124,27 @@ export default async function ExploreCourseDetail({
               <p className="text-3xl font-bold text-foreground">{formatPriceMXN(course.price)}</p>
               <p className="text-xs text-muted-foreground">Pago único · acceso de por vida</p>
             </div>
-            {course.price === 0 ? (
-              <EnrollActionForm action={enrollCourseAction} courseId={course.id} />
-            ) : (
-              <CheckoutButton courseId={course.id} price={course.price} />
-            )}
+            <PublicCourseDetailCTA
+              isLoggedIn={true}
+              courseId={course.id}
+              price={course.price}
+              enrollAction={enrollCourseAction}
+              returnUrl={`/dashboard/explore/${slug}`}
+              sessions={
+                course.modality === "presencial" && course.courseSessions?.length
+                  ? course.courseSessions.map((s) => ({
+                      id: s.id,
+                      city: s.city,
+                      location: s.location,
+                      date: s.date.toISOString(),
+                      startTime: s.startTime,
+                      endTime: s.endTime,
+                      maxStudents: s.maxStudents,
+                      enrolledCount: s._count.enrollments,
+                    }))
+                  : undefined
+              }
+            />
           </div>
         </CardContent>
       </Card>

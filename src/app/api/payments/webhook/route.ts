@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
 
     // Usar courseId/userId de la transacción en BD (fuente de verdad), no del metadata
     const { courseId, userId } = transaction;
+    const sessionId = (session.metadata?.sessionId as string) || null;
 
     if (!alreadyCompleted) {
       await prisma.transaction.update({
@@ -51,8 +52,8 @@ export async function POST(req: NextRequest) {
     // Enroll student (upsert es seguro si se llama dos veces)
     const enrollment = await prisma.enrollment.upsert({
       where: { courseId_studentId: { courseId, studentId: userId } },
-      update: {},
-      create: { courseId, studentId: userId, status: "active" },
+      update: { ...(sessionId ? { sessionId } : {}) },
+      create: { courseId, studentId: userId, sessionId, status: "active" },
     });
 
     // Link transaction to enrollment
