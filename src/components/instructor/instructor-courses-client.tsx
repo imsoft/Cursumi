@@ -34,7 +34,7 @@ export function InstructorCoursesClient({ initialCourses }: InstructorCoursesCli
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
+    <div className="w-full space-y-6">
       <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card/90 p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-foreground">Mis cursos</h1>

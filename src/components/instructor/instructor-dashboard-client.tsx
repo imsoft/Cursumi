@@ -31,7 +31,7 @@ export function InstructorDashboardClient({ name, courses }: InstructorDashboard
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="mx-auto w-full max-w-6xl space-y-6 px-4">
+      <div className="w-full space-y-6">
         <InstructorDashboardHeader name={name} />
         <InstructorStatsCards stats={stats} />
         <Card className="border border-border bg-card/90">
