@@ -107,6 +107,11 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="ghost" asChild>
+            <Link href={`/instructor/courses/${courseId}/edit`}>
+              Cancelar
+            </Link>
+          </Button>
           <Button variant="outline" onClick={handleSave} disabled={saving}>
             <Save className="mr-2 h-4 w-4" />
             {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
@@ -242,7 +247,7 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
               <div>
                 <h2 className="text-lg font-semibold text-foreground">Preguntas</h2>
                 <p className="text-sm text-muted-foreground">
-                  {questions.length} pregunta{questions.length !== 1 ? "s" : ""}
+                  {questions.length} pregunta{questions.length !== 1 ? "s" : ""} · {questions.reduce((sum, q) => sum + (q.points ?? 1), 0)} puntos en total
                 </p>
               </div>
               <Button onClick={addQuestion} size="sm">
@@ -379,14 +384,26 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
       )}
 
       {/* Bottom actions */}
-      <div className="flex justify-end gap-2">
-        <Button variant="outline" onClick={handleSave} disabled={saving}>
-          <Save className="mr-2 h-4 w-4" />
-          {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
-        </Button>
-        <Button onClick={handleSaveAndBack} disabled={saving}>
-          Guardar y volver
-        </Button>
+      <div className="flex items-center justify-between">
+        {enabled && questions.length > 0 && (
+          <p className="text-sm font-medium text-muted-foreground">
+            Total: {questions.reduce((sum, q) => sum + (q.points ?? 1), 0)} puntos
+          </p>
+        )}
+        <div className="flex gap-2 ml-auto">
+          <Button variant="ghost" asChild>
+            <Link href={`/instructor/courses/${courseId}/edit`}>
+              Cancelar
+            </Link>
+          </Button>
+          <Button variant="outline" onClick={handleSave} disabled={saving}>
+            <Save className="mr-2 h-4 w-4" />
+            {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
+          </Button>
+          <Button onClick={handleSaveAndBack} disabled={saving}>
+            Guardar y volver
+          </Button>
+        </div>
       </div>
     </div>
   );
