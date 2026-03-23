@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Check, Users, HelpCircle, Play } from "lucide-react";
+import { Copy, Check, Users, HelpCircle, Play, Pencil, Trash2 } from "lucide-react";
 
 type GameStatus = "waiting" | "active" | "finished";
 
@@ -35,6 +35,7 @@ export default function InstructorGamesPage() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/games")
@@ -47,6 +48,19 @@ export default function InstructorGamesPage() {
     navigator.clipboard.writeText(code);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  }
+
+  async function deleteGame(id: string) {
+    if (!confirm("¿Eliminar este juego? Esta acción no se puede deshacer.")) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/games/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setGames((prev) => prev.filter((g) => g.id !== id));
+      }
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   if (loading) {
@@ -117,13 +131,32 @@ export default function InstructorGamesPage() {
                   </span>
                 </div>
 
-                <div className="mt-auto">
+                <div className="mt-auto flex flex-col gap-2">
                   <Button asChild className="w-full" size="sm">
                     <Link href={`/instructor/games/${game.id}/host`}>
                       <Play className="h-4 w-4 mr-1" />
                       Controlar
                     </Link>
                   </Button>
+                  <div className="flex gap-2">
+                    {game.status === "waiting" && (
+                      <Button asChild variant="outline" size="sm" className="flex-1">
+                        <Link href={`/instructor/games/${game.id}/edit`}>
+                          <Pencil className="h-3.5 w-3.5 mr-1" />
+                          Editar
+                        </Link>
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => deleteGame(game.id)}
+                      disabled={deletingId === game.id}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

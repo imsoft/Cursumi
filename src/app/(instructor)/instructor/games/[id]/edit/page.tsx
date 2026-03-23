@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,12 +15,56 @@ import {
   type QuestionType,
 } from "@/components/instructor/game-question-editor";
 
-export default function NewGamePage() {
+interface ApiQuestion {
+  question: string;
+  options: string[];
+  correct: number;
+  timeLimitSec: number;
+  points: number;
+}
+
+function inferType(q: ApiQuestion): QuestionType {
+  if (
+    q.options.length === 2 &&
+    q.options[0] === "Verdadero" &&
+    q.options[1] === "Falso"
+  ) {
+    return "truefalse";
+  }
+  return "multiple";
+}
+
+export default function EditGamePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState<QuestionForm[]>([emptyQuestion()]);
+  const [questions, setQuestions] = useState<QuestionForm[]>([]);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [gameStatus, setGameStatus] = useState<string>("waiting");
+
+  useEffect(() => {
+    fetch(`/api/games/${id}`)
+      .then((r) => r.json())
+      .then((data) => {
+        const game = data.game;
+        setTitle(game.title);
+        setGameStatus(game.status);
+        setQuestions(
+          game.questions.map((q: ApiQuestion) => ({
+            question: q.question,
+            type: inferType(q),
+            options: q.options,
+            correct: q.correct,
+            timeLimitSec: q.timeLimitSec,
+            points: q.points,
+          }))
+        );
+      })
+      .catch(() => setError("No se pudo cargar el juego"))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   function updateQuestion(index: number, updates: Partial<QuestionForm>) {
     setQuestions((prev) =>
@@ -71,17 +115,17 @@ export default function NewGamePage() {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/games", {
-        method: "POST",
+      const res = await fetch(`/api/games/${id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, questions }),
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Error al crear el juego");
+        setError(data.error ?? "Error al guardar");
         return;
       }
-      router.push(`/instructor/games/${data.game.id}/host`);
+      router.push("/instructor/games");
     } catch {
       setError("Error de conexión");
     } finally {
@@ -89,11 +133,35 @@ export default function NewGamePage() {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
+  if (gameStatus !== "waiting") {
+    return (
+      <div className="flex flex-col gap-6">
+        <PageHeader title="Editar juego" description="Solo se pueden editar juegos que aún no han iniciado" />
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-muted-foreground">Este juego ya fue iniciado o finalizado y no se puede editar.</p>
+            <Button className="mt-4" onClick={() => router.push("/instructor/games")}>
+              Volver a mis juegos
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Crear juego"
-        description="Define las preguntas de tu quiz en tiempo real"
+        title="Editar juego"
+        description="Modifica las preguntas de tu quiz"
       />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -140,9 +208,9 @@ export default function NewGamePage() {
 
         <div className="flex gap-3">
           <Button type="submit" disabled={submitting}>
-            {submitting ? "Creando..." : "Crear juego"}
+            {submitting ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button type="button" variant="outline" onClick={() => router.back()}>
+          <Button type="button" variant="outline" onClick={() => router.push("/instructor/games")}>
             Cancelar
           </Button>
         </div>
