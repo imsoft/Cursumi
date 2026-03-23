@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import {
-  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo,
+  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById,
 } from "@/app/actions/course-actions";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
@@ -99,6 +99,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   });
   const [editSaving, setEditSaving] = useState(false);
   const [editSaved, setEditSaved] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const resetEditData = () => setEditData({
     title: course.title,
@@ -608,6 +610,77 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
           </div>
         </CardContent>
       </Card>
+
+      {/* Zona de peligro */}
+      <Card className="border border-destructive/30">
+        <CardContent className="p-5 space-y-3">
+          <h3 className="text-sm font-semibold text-destructive">Zona de peligro</h3>
+          {deleteError && (
+            <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+              {deleteError}
+            </div>
+          )}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-foreground font-medium">Eliminar curso</p>
+              <p className="text-xs text-muted-foreground">
+                Esta acción es irreversible. No se puede eliminar si hay estudiantes inscritos.
+              </p>
+            </div>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setShowDeleteConfirm(true)}
+              disabled={isPending}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Eliminar curso
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Modal de confirmación de eliminación */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-sm rounded-lg border border-border bg-card p-6 shadow-lg">
+            <h2 className="mb-2 text-lg font-semibold text-foreground">¿Eliminar curso?</h2>
+            <p className="mb-6 text-sm text-muted-foreground">
+              Estás a punto de eliminar <strong>{course.title}</strong>. Se borrarán todas las secciones, lecciones y contenido asociado. Esta acción no se puede deshacer.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => { setShowDeleteConfirm(false); setDeleteError(null); }}
+                disabled={isPending}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                disabled={isPending}
+                onClick={() => {
+                  setDeleteError(null);
+                  startTransition(async () => {
+                    const result = await deleteCourseById(course.id);
+                    if (result.success) {
+                      router.push("/instructor/courses");
+                    } else {
+                      setDeleteError(result.error || "Error al eliminar el curso");
+                      setShowDeleteConfirm(false);
+                    }
+                  });
+                }}
+              >
+                {isPending ? "Eliminando..." : "Sí, eliminar"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

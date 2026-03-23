@@ -313,6 +313,21 @@ export async function updateCourseBasicInfo(courseId: string, data: Parameters<t
   revalidatePath(`/instructor/courses/${courseId}/edit`);
 }
 
+export async function deleteCourseById(courseId: string): Promise<{ success: boolean; error?: string }> {
+  const session = await requireSession();
+  await verifyCourseOwner(courseId, session.user.id);
+  const course = await prisma.course.findFirst({
+    where: { id: courseId },
+    select: { _count: { select: { enrollments: true } } },
+  });
+  if (course && course._count.enrollments > 0) {
+    return { success: false, error: "No puedes eliminar un curso con estudiantes inscritos" };
+  }
+  await prisma.course.delete({ where: { id: courseId } });
+  revalidatePath("/instructor/courses");
+  return { success: true };
+}
+
 export async function publishCourseById(courseId: string): Promise<{ success: boolean; error?: string }> {
   const session = await requireSession();
   await verifyCourseOwner(courseId, session.user.id);
