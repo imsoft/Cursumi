@@ -18,7 +18,7 @@ export function CourseCoverImage({ imageUrl, title, className, alt }: CourseCove
   const src = imageUrl?.trim() || FALLBACK_COVER;
   return (
     <div
-      className={`relative w-full overflow-hidden bg-muted ${className ?? "aspect-[21/9] min-h-[160px] max-h-[280px]"}`}
+      className={`relative w-full overflow-hidden bg-muted ${className ?? "aspect-video min-h-[200px]"}`}
     >
       <Image
         src={src}
