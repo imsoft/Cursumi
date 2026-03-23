@@ -1,9 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { InstructorProfileForm } from "@/components/instructor/instructor-profile-form";
 import { InstructorProfileSummary } from "@/components/instructor/instructor-profile-summary";
 
+interface ProfileData {
+  fullName: string;
+  email: string;
+  city: string;
+  headline: string;
+  bio: string;
+  specialties: string;
+}
+
 export default function InstructorProfilePage() {
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadProfile = async () => {
+    try {
+      const res = await fetch("/api/instructor/profile", { cache: "no-store" });
+      if (!res.ok) throw new Error("No pudimos cargar tu perfil");
+      const data = await res.json();
+      setProfile(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al cargar perfil");
+    }
+  };
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
   return (
     <div className="space-y-6">
       <div>
@@ -12,9 +40,14 @@ export default function InstructorProfilePage() {
           Cómo te ven los estudiantes en la plataforma
         </p>
       </div>
-      <InstructorProfileSummary />
-      <InstructorProfileForm />
+      {error && <p className="text-sm text-destructive">{error}</p>}
+      <InstructorProfileSummary
+        fullName={profile?.fullName || ""}
+        city={profile?.city || ""}
+        bio={profile?.bio || ""}
+        specialties={profile?.specialties || ""}
+      />
+      <InstructorProfileForm onSaved={loadProfile} />
     </div>
   );
 }
-

@@ -377,6 +377,17 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
           </div>
         </>
       )}
+
+      {/* Bottom actions */}
+      <div className="flex justify-end gap-2">
+        <Button variant="outline" onClick={handleSave} disabled={saving}>
+          <Save className="mr-2 h-4 w-4" />
+          {saving ? "Guardando..." : saved ? "Guardado" : "Guardar"}
+        </Button>
+        <Button onClick={handleSaveAndBack} disabled={saving}>
+          Guardar y volver
+        </Button>
+      </div>
     </div>
   );
 }

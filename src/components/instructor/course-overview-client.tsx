@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
-  CheckCircle2, AlertCircle, ExternalLink, Pencil,
+  CheckCircle2, AlertCircle, ExternalLink, Pencil, X,
 } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import {
@@ -85,6 +86,51 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   const [addLessonState, setAddLessonState] = useState<{ sectionId: string; title: string; type: LessonType } | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [publishSuccess, setPublishSuccess] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    title: course.title,
+    description: course.description,
+    category: course.category,
+    level: course.level || "principiante",
+    modality: course.modality,
+    courseType: course.courseType,
+    price: course.price,
+    imageUrl: course.imageUrl || "",
+  });
+  const [editSaving, setEditSaving] = useState(false);
+  const [editSaved, setEditSaved] = useState(false);
+
+  const resetEditData = () => setEditData({
+    title: course.title,
+    description: course.description,
+    category: course.category,
+    level: course.level || "principiante",
+    modality: course.modality,
+    courseType: course.courseType,
+    price: course.price,
+    imageUrl: course.imageUrl || "",
+  });
+
+  const handleSaveBasicInfo = () => {
+    setEditSaving(true);
+    startTransition(async () => {
+      await updateCourseBasicInfo(course.id, {
+        title: editData.title,
+        description: editData.description,
+        category: editData.category,
+        level: editData.level,
+        modality: editData.modality,
+        courseType: editData.courseType,
+        price: editData.price,
+        imageUrl: editData.imageUrl || null,
+      });
+      setEditSaving(false);
+      setEditSaved(true);
+      setEditing(false);
+      router.refresh();
+      setTimeout(() => setEditSaved(false), 3000);
+    });
+  };
 
   const toggleSection = (id: string) => {
     const next = new Set(expandedSections);
@@ -155,31 +201,146 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
       {/* Course info card */}
       <Card>
         <CardHeader>
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 space-y-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <CardTitle className="text-2xl">{course.title}</CardTitle>
-                <Badge variant={isPublished ? "default" : "outline"}>
-                  {isPublished ? "Publicado" : course.status === "archived" ? "Archivado" : "Borrador"}
-                </Badge>
+          {editing ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base">Editar información del curso</CardTitle>
+                <Button variant="ghost" size="sm" onClick={() => { resetEditData(); setEditing(false); }}>
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
-              <p className="text-sm text-muted-foreground">{course.description}</p>
-              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground pt-1">
-                <ModalityBadge modality={course.modality} />
-                <span>{course.category}</span>
-                <span>·</span>
-                <span>${(course.price / 100).toLocaleString()}</span>
-                <span>·</span>
-                <span>{course._count.enrollments} estudiantes</span>
+              <div>
+                <label className="text-sm font-medium text-foreground">Título</label>
+                <Input
+                  className="mt-1"
+                  value={editData.title}
+                  onChange={(e) => setEditData((d) => ({ ...d, title: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground">Descripción</label>
+                <Textarea
+                  className="mt-1"
+                  value={editData.description}
+                  onChange={(e) => setEditData((d) => ({ ...d, description: e.target.value }))}
+                  rows={3}
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-foreground">Categoría</label>
+                  <Input
+                    className="mt-1"
+                    value={editData.category}
+                    onChange={(e) => setEditData((d) => ({ ...d, category: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">Nivel</label>
+                  <select
+                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={editData.level}
+                    onChange={(e) => setEditData((d) => ({ ...d, level: e.target.value }))}
+                  >
+                    <option value="principiante">Principiante</option>
+                    <option value="intermedio">Intermedio</option>
+                    <option value="avanzado">Avanzado</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-foreground">Modalidad</label>
+                  <select
+                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={editData.modality}
+                    onChange={(e) => setEditData((d) => ({ ...d, modality: e.target.value }))}
+                  >
+                    <option value="virtual">Virtual</option>
+                    <option value="presencial">Presencial</option>
+                    <option value="hibrido">Híbrido</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">Tipo de curso</label>
+                  <select
+                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={editData.courseType}
+                    onChange={(e) => setEditData((d) => ({ ...d, courseType: e.target.value }))}
+                  >
+                    <option value="self-paced">A tu ritmo</option>
+                    <option value="live">En vivo</option>
+                    <option value="hybrid">Híbrido</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-foreground">Precio (centavos)</label>
+                  <Input
+                    className="mt-1"
+                    type="number"
+                    min={0}
+                    value={editData.price}
+                    onChange={(e) => setEditData((d) => ({ ...d, price: Number(e.target.value) }))}
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Equivale a ${(editData.price / 100).toLocaleString()}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">URL de imagen</label>
+                  <Input
+                    className="mt-1"
+                    value={editData.imageUrl}
+                    onChange={(e) => setEditData((d) => ({ ...d, imageUrl: e.target.value }))}
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" onClick={handleSaveBasicInfo} disabled={editSaving || !editData.title.trim()}>
+                  {editSaving ? "Guardando..." : "Guardar cambios"}
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => { resetEditData(); setEditing(false); }}>
+                  Cancelar
+                </Button>
               </div>
             </div>
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`/instructor/courses/${course.id}`}>
+          ) : (
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <CardTitle className="text-2xl">{course.title}</CardTitle>
+                  <Badge variant={isPublished ? "default" : "outline"}>
+                    {isPublished ? "Publicado" : course.status === "archived" ? "Archivado" : "Borrador"}
+                  </Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">{course.description}</p>
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground pt-1">
+                  <ModalityBadge modality={course.modality} />
+                  <span>{course.category}</span>
+                  <span>·</span>
+                  <span>${(course.price / 100).toLocaleString()}</span>
+                  <span>·</span>
+                  <span>{course._count.enrollments} estudiantes</span>
+                </div>
+                {editSaved && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-green-600 dark:text-green-400">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Información actualizada correctamente.
+                  </div>
+                )}
+              </div>
+              <Button variant="outline" size="sm" onClick={() => {
+                resetEditData();
+                setEditing(true);
+              }}>
                 <Pencil className="mr-2 h-4 w-4" />
-                Ver detalles
-              </Link>
-            </Button>
-          </div>
+                Editar información
+              </Button>
+            </div>
+          )}
         </CardHeader>
       </Card>
 

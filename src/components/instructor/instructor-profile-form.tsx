@@ -30,7 +30,11 @@ const instructorProfileSchema = z.object({
 
 export type InstructorProfileFormValues = z.infer<typeof instructorProfileSchema>;
 
-export const InstructorProfileForm = () => {
+interface InstructorProfileFormProps {
+  onSaved?: () => void;
+}
+
+export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) => {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const form = useForm<InstructorProfileFormValues>({
@@ -91,6 +95,7 @@ export const InstructorProfileForm = () => {
         throw new Error(body.error || "No pudimos actualizar el perfil");
       }
       setStatusMessage("Perfil actualizado");
+      onSaved?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al actualizar perfil");
     }
