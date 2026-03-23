@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { CourseOverviewClient } from "@/components/instructor/course-overview-client";
+import { getCourseDetailForEditPage } from "@/lib/get-instructor-course-for-edit";
 import { serializeInstructorCourseForOverview } from "@/lib/serialize-instructor-course-overview";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 export default async function EditCoursePage({ params }: Props) {
   const { id } = await params;
-  const course = await getCourseDetailForUser(id).catch(() => null);
+  const course = await getCourseDetailForEditPage(id);
 
   if (!course) {
     return (

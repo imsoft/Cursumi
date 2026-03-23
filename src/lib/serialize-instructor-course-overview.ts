@@ -1,17 +1,41 @@
+import { Prisma } from "@/generated/prisma";
+
 type CourseFromDb = NonNullable<
   Awaited<ReturnType<typeof import("@/lib/course-service").getCourseDetail>>
 >;
 
+/**
+ * Fechas inválidas hacían que `Date#toISOString()` lanzara RangeError → 500 en producción.
+ */
 function toIsoDateString(value: Date | string): string {
-  if (value instanceof Date) return value.toISOString();
-  const t = new Date(value);
-  if (Number.isNaN(t.getTime())) return new Date().toISOString();
+  const t = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(t.getTime())) {
+    return new Date(0).toISOString();
+  }
   return t.toISOString();
 }
 
 /**
+ * JSON de Prisma puede incluir sentinels no serializables en el protocolo RSC.
+ * Devolvemos solo datos JSON puros (null u objeto/array).
+ */
+function toPlainJson(value: unknown): unknown {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  if (value === Prisma.JsonNull || value === Prisma.DbNull) {
+    return null;
+  }
+  try {
+    return JSON.parse(JSON.stringify(value));
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Convierte el curso de Prisma en un objeto plano serializable para componentes cliente.
- * Next.js no permite pasar `Date`, `undefined` en ciertos casos, etc. a "use client".
+ * Next.js no permite pasar `Date`, `BigInt`, etc. a "use client".
  */
 export function serializeInstructorCourseForOverview(course: CourseFromDb) {
   return {
@@ -25,14 +49,14 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
     price: course.price,
     imageUrl: course.imageUrl,
     status: course.status,
-    finalExam: course.finalExam,
+    finalExam: toPlainJson(course.finalExam),
     sections: course.sections.map((s) => ({
       id: s.id,
       title: s.title,
       description: s.description,
       order: s.order,
-      quiz: s.quiz,
-      minigame: s.minigame,
+      quiz: toPlainJson(s.quiz),
+      minigame: toPlainJson(s.minigame),
       lessons: s.lessons.map((l) => ({
         id: l.id,
         title: l.title,
@@ -41,7 +65,7 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
         order: l.order,
       })),
     })),
-    courseSessions: course.courseSessions?.map((s) => ({
+    courseSessions: (course.courseSessions ?? []).map((s) => ({
       id: s.id,
       city: s.city,
       location: s.location,
