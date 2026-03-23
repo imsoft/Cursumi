@@ -14,9 +14,16 @@ import {
   HelpCircle,
   ClipboardList,
   CheckCircle,
+  MapPin,
+  Clock,
+  GraduationCap,
 } from "lucide-react";
 import type { LessonType } from "@/generated/prisma";
 import { EnrolledWelcomeBanner } from "@/components/student/enrolled-welcome-banner";
+import { CourseCoverImage } from "@/components/courses/course-cover-image";
+import { ModalityBadge } from "@/components/ui/modality-badge";
+import { formatPriceMXN } from "@/lib/utils";
+import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
 
 const lessonIcon = (type: LessonType) => {
   switch (type) {
@@ -41,7 +48,7 @@ export default async function MyCourseDetailPage({
     redirect("/dashboard/my-courses");
   }
 
-  const { course, progress, lessonProgress } = detail as typeof detail & {
+  const { course, progress, lessonProgress, session: enrolledSession } = detail as typeof detail & {
     lessonProgress?: { lessonId: string }[];
   };
 
@@ -65,16 +72,51 @@ export default async function MyCourseDetailPage({
         <span className="text-foreground">{course.title}</span>
       </div>
 
-      <Card className="border border-border bg-card/90">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline">{course.modality}</Badge>
+      <Card className="overflow-hidden border border-border bg-card/90">
+        <CourseCoverImage imageUrl={course.imageUrl} title={course.title} />
+        <CardHeader className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <ModalityBadge modality={course.modality} size="md" />
             <Badge variant="outline">{course.category}</Badge>
+            {course.level && (
+              <Badge variant="outline" className="gap-1">
+                <GraduationCap className="h-3 w-3" />
+                {course.level}
+              </Badge>
+            )}
           </div>
-          <CardTitle className="text-3xl">{course.title}</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Instructor: {course.instructor?.name || "Instructor"}
-          </p>
+          <div>
+            <CardTitle className="text-3xl">{course.title}</CardTitle>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+              {course.description}
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              {course.instructor?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element -- URL de proveedor OAuth / variada
+                <img
+                  src={course.instructor.image}
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="h-11 w-11 rounded-full border border-border object-cover"
+                />
+              ) : (
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground">
+                  {(course.instructor?.name || "I").slice(0, 1).toUpperCase()}
+                </div>
+              )}
+              <div>
+                <p className="text-xs text-muted-foreground">Instructor</p>
+                <p className="font-medium text-foreground">{course.instructor?.name || "Instructor"}</p>
+              </div>
+            </div>
+            <div className="text-sm">
+              <span className="text-muted-foreground">Valor del curso: </span>
+              <span className="font-semibold text-foreground">{formatPriceMXN(course.price)}</span>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -84,18 +126,73 @@ export default async function MyCourseDetailPage({
             </div>
             <Progress value={progress} className="h-2.5 rounded-full" />
           </div>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {course.duration && (
+              <div className="flex items-center gap-2 text-sm text-foreground">
+                <Clock className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span>Duración: {course.duration}</span>
+              </div>
+            )}
             {course.startDate && (
               <div className="flex items-center gap-2 text-sm text-foreground">
-                <Calendar className="h-4 w-4" />
-                <span>Inicio: {new Date(course.startDate).toLocaleDateString("es-MX")}</span>
+                <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span>Inicio: {formatDateShortMX(new Date(course.startDate))}</span>
               </div>
             )}
             <div className="flex items-center gap-2 text-sm text-foreground">
-              <Users className="h-4 w-4" />
-              <span>Inscritos: {course._count.enrollments}</span>
+              <Users className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <span>Inscritos en la plataforma: {course._count.enrollments}</span>
             </div>
+            {course.modality === "presencial" && (course.city || course.location) && (
+              <div className="flex items-start gap-2 text-sm text-foreground sm:col-span-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                <span>
+                  {[course.city, course.location].filter(Boolean).join(" · ")}
+                </span>
+              </div>
+            )}
           </div>
+
+          {enrolledSession && (
+            <div className="rounded-lg border border-primary/30 bg-primary/5 p-4">
+              <p className="text-sm font-semibold text-foreground">Tu sesión presencial</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {enrolledSession.city} — {enrolledSession.location}
+              </p>
+              <p className="mt-2 text-sm text-foreground">
+                <Calendar className="mr-1 inline h-4 w-4" />
+                {formatDateLongMX(new Date(enrolledSession.date))}
+                {enrolledSession.startTime && enrolledSession.endTime && (
+                  <span className="text-muted-foreground">
+                    {" "}
+                    · {enrolledSession.startTime} – {enrolledSession.endTime}
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
+
+          {course.modality === "presencial" &&
+            course.courseSessions &&
+            course.courseSessions.length > 0 &&
+            !enrolledSession && (
+              <div className="rounded-lg border border-border bg-muted/30 p-4">
+                <p className="text-sm font-medium text-foreground">Sesiones programadas</p>
+                <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
+                  {course.courseSessions.map((s) => (
+                    <li key={s.id} className="flex flex-wrap gap-x-2 gap-y-1">
+                      <span className="font-medium text-foreground">{s.city}</span>
+                      <span>·</span>
+                      <span>{formatDateShortMX(new Date(s.date))}</span>
+                      <span className="text-xs">
+                        ({s._count.enrollments}/{s.maxStudents} inscritos)
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
           <Separator />
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-foreground">Contenido del curso</h4>

@@ -8,7 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { MapPin, Monitor, Users, Calendar } from "lucide-react";
 import { ReviewSection } from "@/components/student/review-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
+import { CourseCoverImage } from "@/components/courses/course-cover-image";
+import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
+import { formatDateLongMX } from "@/lib/date-format";
 
 type Params = { params: Promise<{ slug: string }> };
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
@@ -87,14 +90,18 @@ export default async function ExploreCourseDetail({
         <span className="text-foreground">{course.title}</span>
       </div>
 
-      <Card className="border border-border bg-card/90">
+      <Card className="overflow-hidden border border-border bg-card/90">
+        <CourseCoverImage imageUrl={course.imageUrl} title={course.title} />
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline">{course.modality === "virtual" ? "Virtual" : "Presencial"}</Badge>
+            <ModalityBadge modality={course.modality} size="md" />
             <Badge variant="outline">{course.category}</Badge>
+            {course.level && <Badge variant="outline">{course.level}</Badge>}
           </div>
           <CardTitle className="text-3xl">{course.title}</CardTitle>
-          <p className="text-sm text-muted-foreground">{course.description}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+            {course.description}
+          </p>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
@@ -105,7 +112,7 @@ export default async function ExploreCourseDetail({
             {course.startDate && (
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <Calendar className="h-4 w-4" />
-                <span>Inicio: {course.startDate.toISOString()}</span>
+                <span>Inicio: {formatDateLongMX(course.startDate)}</span>
               </div>
             )}
             <div className="flex items-center gap-2 text-sm text-foreground">

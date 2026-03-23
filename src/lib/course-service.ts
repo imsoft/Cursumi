@@ -690,15 +690,31 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
     include: {
       course: {
         include: {
-          instructor: { select: { name: true } },
+          instructor: { select: { name: true, image: true } },
           sections: {
             orderBy: { order: "asc" },
             include: { lessons: { orderBy: { order: "asc" } } },
+          },
+          courseSessions: {
+            orderBy: { date: "asc" },
+            include: { _count: { select: { enrollments: true } } },
           },
           _count: { select: { enrollments: true } },
         },
       },
       lessonProgress: { select: { lessonId: true } },
+      session: {
+        select: {
+          id: true,
+          city: true,
+          location: true,
+          date: true,
+          startTime: true,
+          endTime: true,
+          maxStudents: true,
+          _count: { select: { enrollments: true } },
+        },
+      },
     },
   });
 }
