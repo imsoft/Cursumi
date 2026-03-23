@@ -26,9 +26,9 @@ export const Navbar = () => {
           <Image
             src="/logos/cursumi.svg"
             alt="Cursumi"
-            width={120}
-            height={40}
-            className="h-8 w-auto"
+            width={160}
+            height={48}
+            className="h-10 w-auto"
             priority
           />
         </Link>

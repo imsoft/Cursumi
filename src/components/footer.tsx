@@ -44,9 +44,9 @@ export const Footer = () => {
             <Image
               src="/logos/cursumi.svg"
               alt="Cursumi"
-              width={120}
-              height={40}
-              className="h-8 w-auto"
+              width={160}
+              height={48}
+              className="h-10 w-auto"
             />
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">

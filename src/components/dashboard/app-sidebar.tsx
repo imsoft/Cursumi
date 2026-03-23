@@ -62,9 +62,9 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
                   <Image
                     src="/logos/cursumi.svg"
                     alt="Cursumi"
-                    width={120}
-                    height={32}
-                    className="h-6 w-auto"
+                    width={160}
+                    height={40}
+                    className="h-8 w-auto"
                   />
                 </div>
               </Link>
