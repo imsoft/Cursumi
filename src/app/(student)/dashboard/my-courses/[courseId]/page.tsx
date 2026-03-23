@@ -17,6 +17,8 @@ import {
   MapPin,
   Clock,
   GraduationCap,
+  Award,
+  Lock,
 } from "lucide-react";
 import type { LessonType } from "@/generated/prisma";
 import { EnrolledWelcomeBanner } from "@/components/student/enrolled-welcome-banner";
@@ -48,16 +50,44 @@ export default async function MyCourseDetailPage({
     redirect("/dashboard/my-courses");
   }
 
-  const { course, progress, lessonProgress, session: enrolledSession } = detail as typeof detail & {
+  const {
+    course,
+    progress,
+    lessonProgress,
+    examSubmission,
+    sectionQuizSubmissions,
+    session: enrolledSession,
+  } = detail as typeof detail & {
     lessonProgress?: { lessonId: string }[];
+    examSubmission?: { passed: boolean; score: number } | null;
+    sectionQuizSubmissions?: { sectionId: string; passed: boolean }[];
   };
 
   const completedIds = new Set((lessonProgress ?? []).map((lp: { lessonId: string }) => lp.lessonId));
+  const passedSectionIds = new Set(
+    (sectionQuizSubmissions ?? []).filter((s) => s.passed).map((s) => s.sectionId),
+  );
 
   // Find first uncompleted lesson for "Continue" button
   const allLessons = course.sections.flatMap((s) => s.lessons);
   const nextLesson = allLessons.find((l) => !completedIds.has(l.id)) ?? allLessons[0];
   const firstLesson = allLessons[0];
+
+  // Final exam logic
+  const finalExam = course.finalExam as { questions?: unknown[] } | null;
+  const hasFinalExam = !!(finalExam?.questions?.length);
+  const allLessonsCompleted = allLessons.length > 0 && allLessons.every((l) => completedIds.has(l.id));
+
+  // Check all section gates are passed
+  const allGatesPassed = course.sections.every((s) => {
+    const hasQuiz = !!(s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length);
+    const hasMinigame = !!(s.minigame && (s.minigame as { type?: string }).type);
+    if (!hasQuiz && !hasMinigame) return true;
+    return passedSectionIds.has(s.id);
+  });
+
+  const canTakeExam = hasFinalExam && allLessonsCompleted && allGatesPassed;
+  const examPassed = examSubmission?.passed ?? false;
 
   return (
     <div className="space-y-6">
@@ -250,6 +280,45 @@ export default async function MyCourseDetailPage({
               </div>
             )}
           </div>
+          {/* Examen final */}
+          {hasFinalExam && (
+            <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-5">
+              <div className="flex items-center gap-3">
+                <Award className="h-6 w-6 text-primary shrink-0" />
+                <div className="flex-1">
+                  <p className="font-semibold text-foreground">Examen final</p>
+                  {examPassed ? (
+                    <p className="text-sm text-green-600">
+                      Aprobado con {examSubmission?.score}% — ¡Felicidades!
+                    </p>
+                  ) : canTakeExam ? (
+                    <p className="text-sm text-muted-foreground">
+                      Completaste todas las lecciones y actividades. Ya puedes presentar el examen final.
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Completa todas las lecciones, tests y minijuegos de cada sección para desbloquear el examen.
+                    </p>
+                  )}
+                </div>
+                {examPassed ? (
+                  <Badge variant="default" className="shrink-0 gap-1">
+                    <CheckCircle className="h-3 w-3" />
+                    Aprobado
+                  </Badge>
+                ) : canTakeExam ? (
+                  <Button asChild>
+                    <Link href={`/dashboard/my-courses/${courseId}/exam`}>
+                      Presentar examen
+                    </Link>
+                  </Button>
+                ) : (
+                  <Lock className="h-5 w-5 text-muted-foreground shrink-0" />
+                )}
+              </div>
+            </div>
+          )}
+
           {nextLesson && (
             <div className="flex justify-end">
               <Button asChild>

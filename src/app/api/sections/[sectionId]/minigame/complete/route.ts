@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCachedSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { recalculateProgress } from "@/app/actions/progress-actions";
 
 export async function POST(
   req: Request,
@@ -41,6 +42,8 @@ export async function POST(
     update: { score: 100, passed: true },
     create: { enrollmentId: enrollment.id, sectionId, score: 100, passed: true },
   });
+
+  await recalculateProgress(enrollment.id, courseId);
 
   return NextResponse.json({ passed: true });
 }

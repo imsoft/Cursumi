@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
 import { sendCertificateEmail } from "@/lib/email";
+import { recalculateProgress } from "@/app/actions/progress-actions";
 
 const bodySchema = z.object({
   answers: z.record(z.string(), z.number()),
@@ -88,10 +89,11 @@ export async function POST(
           },
         });
 
-        // Update enrollment progress to 100
+        // Recalcular progreso (debería llegar a 100 si todo está completo)
+        await recalculateProgress(enrollment.id, courseId);
         await prisma.enrollment.update({
           where: { id: enrollment.id },
-          data: { progress: 100, status: "completed" },
+          data: { status: "completed" },
         });
 
         // Notify the student

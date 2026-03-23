@@ -30,6 +30,7 @@ export default async function LessonPage({
     passedSectionIds,
     nextLessonSectionId,
     currentSectionId,
+    hasFinalExam,
   } = data;
 
   return (
@@ -70,6 +71,7 @@ export default async function LessonPage({
       isLastLessonInSection={isLastLessonInSection}
       nextLessonSectionId={nextLessonSectionId}
       currentSectionId={currentSectionId}
+      hasFinalExam={hasFinalExam}
     />
   );
 }

@@ -104,6 +104,7 @@ interface LessonViewerClientProps {
   isLastLessonInSection: boolean;
   nextLessonSectionId: string | null;
   currentSectionId: string;
+  hasFinalExam?: boolean;
 }
 
 const lessonTypeIcon: Record<LessonType, React.ReactNode> = {
@@ -139,6 +140,7 @@ export function LessonViewerClient({
   isLastLessonInSection,
   nextLessonSectionId,
   currentSectionId,
+  hasFinalExam = false,
 }: LessonViewerClientProps) {
   const router = useRouter();
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
@@ -784,6 +786,13 @@ export function LessonViewerClient({
             )}
             {nextLesson ? (
               nextButton("sm")
+            ) : hasFinalExam && isCompleted && !blockNextNavigation ? (
+              <Button
+                size="sm"
+                onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)}
+              >
+                Presentar examen final
+              </Button>
             ) : (
               <Button
                 size="sm"
@@ -829,6 +838,13 @@ export function LessonViewerClient({
                 )}
                 {nextLesson ? (
                   nextButton("sm")
+                ) : hasFinalExam && isCompleted && !blockNextNavigation ? (
+                  <Button
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)}
+                  >
+                    Presentar examen final
+                  </Button>
                 ) : (
                   <Button
                     size="sm"
