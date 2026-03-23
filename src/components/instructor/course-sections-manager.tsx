@@ -923,12 +923,17 @@ export const CourseSectionsManager = ({
 
                         <Separator />
 
-                        {/* Test de sección */}
+                        {/* Actividad de sección (test o minijuego) */}
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-foreground">Test de sección</h4>
-                          <SectionQuizEditor
+                          <h4 className="font-semibold text-foreground">Actividad al final de la sección</h4>
+                          <p className="text-xs text-muted-foreground">
+                            Elige un test o un minijuego que los estudiantes deben completar para avanzar.
+                          </p>
+                          <SectionActivityEditor
                             quiz={section.quiz}
-                            onChange={(quiz) => updateSection(section.id, { quiz })}
+                            minigame={section.minigame}
+                            onQuizChange={(quiz) => updateSection(section.id, { quiz, minigame: undefined })}
+                            onMinigameChange={(minigame) => updateSection(section.id, { minigame, quiz: undefined })}
                           />
                         </div>
                       </CardContent>
@@ -955,6 +960,12 @@ export const CourseSectionsManager = ({
                   <span>
                     {" "}·{" "}
                     {sections.filter((s) => s.quiz && s.quiz.questions.length > 0).length} con test
+                  </span>
+                )}
+                {sections.filter((s) => s.minigame).length > 0 && (
+                  <span>
+                    {" "}·{" "}
+                    {sections.filter((s) => s.minigame).length} con minijuego
                   </span>
                 )}
               </p>

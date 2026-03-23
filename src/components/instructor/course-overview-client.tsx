@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
-  CheckCircle2, AlertCircle, ExternalLink, Pencil, X,
+  CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon,
 } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import {
@@ -289,13 +289,48 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground">URL de imagen</label>
-                  <Input
-                    className="mt-1"
-                    value={editData.imageUrl}
-                    onChange={(e) => setEditData((d) => ({ ...d, imageUrl: e.target.value }))}
-                    placeholder="https://..."
-                  />
+                  <label className="text-sm font-medium text-foreground">Miniatura del curso</label>
+                  <div className="mt-1">
+                    {editData.imageUrl ? (
+                      <div className="space-y-2">
+                        <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border">
+                          <img
+                            src={editData.imageUrl}
+                            alt="Miniatura del curso"
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          className="text-sm text-primary underline"
+                          onClick={() => setEditData((d) => ({ ...d, imageUrl: "" }))}
+                        >
+                          Cambiar imagen
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border bg-muted/40 text-center text-sm text-muted-foreground transition hover:border-primary/80">
+                        <Upload className="h-6 w-6" />
+                        <span>Haz clic para subir una imagen</span>
+                        <span className="text-xs">JPG, PNG o WebP</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                setEditData((d) => ({ ...d, imageUrl: reader.result as string }));
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2">
