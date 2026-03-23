@@ -114,7 +114,7 @@ export default function AdminUsersPage() {
         if (statusFilter === "all") return true;
         return user.status === statusFilter;
       });
-  }, [searchTerm, roleFilter, statusFilter]);
+  }, [users, searchTerm, roleFilter, statusFilter]);
 
   const handleRoleChange = async () => {
     if (!roleTarget) return;
