@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
@@ -16,8 +17,9 @@ import {
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
-  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById,
+  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection,
 } from "@/app/actions/course-actions";
+import { SectionActivityEditor } from "@/components/instructor/section-activity-editor";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
@@ -35,6 +37,8 @@ interface Section {
   description?: string | null;
   order: number;
   lessons: Lesson[];
+  quiz?: unknown;
+  minigame?: unknown;
 }
 
 interface Course {
@@ -548,6 +552,31 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                           Agregar lección
                         </Button>
                       )}
+
+                      {/* Actividad de sección (test o minijuego) */}
+                      <Separator className="my-3" />
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-foreground">Actividad al final de la sección</h4>
+                        <p className="text-xs text-muted-foreground">
+                          Elige un test o un minijuego que los estudiantes deben completar para avanzar.
+                        </p>
+                        <SectionActivityEditor
+                          quiz={section.quiz as Parameters<typeof SectionActivityEditor>[0]["quiz"]}
+                          minigame={section.minigame as Parameters<typeof SectionActivityEditor>[0]["minigame"]}
+                          onQuizChange={(quiz) => {
+                            startTransition(async () => {
+                              await editSection(course.id, section.id, { quiz: quiz ?? null, minigame: null });
+                              router.refresh();
+                            });
+                          }}
+                          onMinigameChange={(minigame) => {
+                            startTransition(async () => {
+                              await editSection(course.id, section.id, { minigame: minigame ?? null, quiz: null });
+                              router.refresh();
+                            });
+                          }}
+                        />
+                      </div>
                     </CardContent>
                   )}
                 </Card>
