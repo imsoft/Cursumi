@@ -50,11 +50,18 @@ function getPageTitle(pathname: string | null): string {
 interface StudentShellProps {
   userName: string;
   userInitials: string;
+  userImage?: string | null;
   children: ReactNode;
   pageTitle?: string;
 }
 
-export function StudentShell({ userName, userInitials, children, pageTitle: pageTitleProp }: StudentShellProps) {
+export function StudentShell({
+  userName,
+  userInitials,
+  userImage,
+  children,
+  pageTitle: pageTitleProp,
+}: StudentShellProps) {
   const pathname = usePathname();
   const pageTitle = pageTitleProp ?? getPageTitle(pathname);
 
@@ -62,7 +69,11 @@ export function StudentShell({ userName, userInitials, children, pageTitle: page
     <SidebarProvider>
       <AppSidebar navItems={studentNavItems} title="Cursumi" roleLabel="Panel de alumno" />
       <SidebarInset>
-        <DashboardHeader title={pageTitle} user={{ name: userName, initials: userInitials }} />
+        <DashboardHeader
+          title={pageTitle}
+          profileHref="/dashboard/account?tab=profile"
+          user={{ name: userName, initials: userInitials, imageUrl: userImage }}
+        />
         <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
           <div className="flex w-full flex-1 flex-col gap-6">
             {children}

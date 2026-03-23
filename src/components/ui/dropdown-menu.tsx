@@ -71,20 +71,35 @@ export const DropdownMenu = ({ children }: DropdownMenuProps) => {
   );
 };
 
+function mergeRefs<T>(
+  targetRef: React.MutableRefObject<T | null>,
+  originalRef: React.Ref<T> | undefined,
+) {
+  return (node: T | null) => {
+    targetRef.current = node;
+    if (typeof originalRef === "function") {
+      originalRef(node);
+    } else if (originalRef && typeof originalRef === "object" && "current" in originalRef) {
+      (originalRef as React.MutableRefObject<T | null>).current = node;
+    }
+  };
+}
+
 export const DropdownMenuTrigger = ({ children, className, asChild }: DropdownMenuTriggerProps) => {
   const context = useContext(DropdownMenuContext);
   if (!context) return null;
   const { open, setOpen, triggerRef } = context;
 
   if (asChild && React.isValidElement(children)) {
-    const child = children as ClickableElement;
+    const child = children as ClickableElement & { ref?: React.Ref<HTMLElement> };
     return React.cloneElement(child, {
+      ref: mergeRefs(triggerRef as React.MutableRefObject<HTMLElement | null>, child.ref),
       onClick: (event: React.MouseEvent) => {
         event.stopPropagation();
         setOpen(!open);
         child.props.onClick?.(event);
       },
-    });
+    } as Partial<unknown>);
   }
 
   return (

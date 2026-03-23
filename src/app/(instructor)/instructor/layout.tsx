@@ -38,9 +38,10 @@ export default async function InstructorLayout({ children }: InstructorLayoutPro
       .join("")
       .toUpperCase()
       .slice(0, 2) || "IN";
+  const userImage = (session.user as { image?: string | null }).image ?? null;
 
   return (
-    <InstructorShell userName={userName} userInitials={userInitials}>
+    <InstructorShell userName={userName} userInitials={userInitials} userImage={userImage}>
       {children}
     </InstructorShell>
   );

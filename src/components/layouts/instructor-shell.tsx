@@ -49,11 +49,18 @@ function getPageTitle(pathname: string | null): string {
 interface InstructorShellProps {
   userName: string;
   userInitials: string;
+  userImage?: string | null;
   children: ReactNode;
   pageTitle?: string;
 }
 
-export function InstructorShell({ userName, userInitials, children, pageTitle: pageTitleProp }: InstructorShellProps) {
+export function InstructorShell({
+  userName,
+  userInitials,
+  userImage,
+  children,
+  pageTitle: pageTitleProp,
+}: InstructorShellProps) {
   const pathname = usePathname();
   const pageTitle = pageTitleProp ?? getPageTitle(pathname);
 
@@ -61,7 +68,11 @@ export function InstructorShell({ userName, userInitials, children, pageTitle: p
     <SidebarProvider>
       <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" roleLabel="Panel de instructor" />
       <SidebarInset>
-        <DashboardHeader title={pageTitle} user={{ name: userName, initials: userInitials }} />
+        <DashboardHeader
+          title={pageTitle}
+          profileHref="/instructor/profile"
+          user={{ name: userName, initials: userInitials, imageUrl: userImage }}
+        />
         <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
           <div className="flex w-full flex-1 flex-col gap-6">
             {children}

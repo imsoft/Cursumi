@@ -43,15 +43,19 @@ const adminNavItems = [
 interface AdminShellProps {
   userName: string;
   userInitials: string;
+  userImage?: string | null;
   children: ReactNode;
 }
 
-export function AdminShell({ userName, userInitials, children }: AdminShellProps) {
+export function AdminShell({ userName, userInitials, userImage, children }: AdminShellProps) {
   return (
     <SidebarProvider>
       <AppSidebar navItems={adminNavItems} title="Cursumi Admin" roleLabel="Panel de administración" />
       <SidebarInset>
-        <DashboardHeader user={{ name: userName, initials: userInitials }} />
+        <DashboardHeader
+          profileHref="/admin/settings"
+          user={{ name: userName, initials: userInitials, imageUrl: userImage }}
+        />
         <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
           <div className="flex w-full flex-1 flex-col gap-6">
             {children}

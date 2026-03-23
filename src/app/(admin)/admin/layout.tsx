@@ -38,9 +38,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         .join("")
         .toUpperCase()
         .slice(0, 2) || "AD";
+    const userImage = (session.user as { image?: string | null }).image ?? null;
 
     return (
-      <AdminShell userName={userName} userInitials={userInitials}>
+      <AdminShell userName={userName} userInitials={userInitials} userImage={userImage}>
         {children}
       </AdminShell>
     );

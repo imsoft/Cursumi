@@ -37,9 +37,10 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
       .join("")
       .toUpperCase()
       .slice(0, 2) || "U";
+  const userImage = (session.user as { image?: string | null }).image ?? null;
 
   return (
-    <StudentShell userName={userName} userInitials={userInitials}>
+    <StudentShell userName={userName} userInitials={userInitials} userImage={userImage}>
       {children}
     </StudentShell>
   );

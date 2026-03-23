@@ -4,7 +4,6 @@ import { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { signOut } from "@/lib/auth-client";
 import {
@@ -23,7 +22,11 @@ interface DashboardHeaderProps {
   user?: {
     name: string;
     initials: string;
+    /** Foto de perfil (sesión / BD); si no hay, se muestran iniciales */
+    imageUrl?: string | null;
   };
+  /** Enlace del ítem "Perfil" del menú (según rol: alumno, instructor, admin) */
+  profileHref?: string;
 }
 
 export function DashboardHeader({
@@ -31,6 +34,7 @@ export function DashboardHeader({
   description,
   action,
   user,
+  profileHref = "/dashboard/account?tab=profile",
 }: DashboardHeaderProps) {
   const router = useRouter();
 
@@ -57,18 +61,24 @@ export function DashboardHeader({
           <ThemeToggle />
           <NotificationBell />
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="!h-10 !w-10 !rounded-full !p-0 hover:!bg-muted/50 focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
-              >
-                <Avatar className="h-10 w-10 rounded-full">{user.initials}</Avatar>
-              </Button>
+            {/* Sin asChild: el trigger debe ser el <button> nativo para que el ref del menú funcione */}
+            <DropdownMenuTrigger className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground outline-none transition-colors hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+              <Avatar className="h-10 w-10 overflow-hidden rounded-full text-sm font-semibold">
+                {user.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- URL OAuth o Cloudinary
+                  <img
+                    src={user.imageUrl}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  user.initials
+                )}
+              </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/account?tab=profile" className="block w-full">
+                <Link href={profileHref} className="block w-full">
                   Perfil
                 </Link>
               </DropdownMenuItem>
