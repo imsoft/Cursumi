@@ -40,8 +40,8 @@ export const InstructorProfileSummary = ({
 
   return (
     <Card className="border border-border bg-card/90">
-      <CardHeader className="flex flex-col gap-3 px-6 pt-6 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-start gap-4">
+      <CardHeader className="flex flex-col gap-3 px-6 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
           {editableAvatar ? (
             <UserAvatarUpload
               name={fullName || "Instructor"}
@@ -49,6 +49,7 @@ export const InstructorProfileSummary = ({
               onUploaded={onAvatarUploaded}
               sizeClass="h-16 w-16"
               showHint={false}
+              layout="row"
             />
           ) : (
             <Avatar className="h-16 w-16 shrink-0 text-foreground">
@@ -60,7 +61,7 @@ export const InstructorProfileSummary = ({
               )}
             </Avatar>
           )}
-          <div className="min-w-0 space-y-1 pt-0.5">
+          <div className="min-w-0 space-y-1">
             <h2 className="text-xl font-bold text-foreground">{fullName || "Instructor"}</h2>
             <p className="text-sm text-muted-foreground">Instructor</p>
             {city && <p className="text-xs text-muted-foreground">{city}</p>}
