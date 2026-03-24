@@ -417,7 +417,7 @@ const ImagePreviewSection = ({ imageUrl, onFileSelect, onClear }: ImagePreviewSe
             <div className="space-y-2">
               <p className="font-semibold text-foreground">Portada del curso</p>
               <p>Arrastra el archivo o haz clic para seleccionar.</p>
-              <p className="text-xs text-muted-foreground">1200x675 px recomendado (JPG/PNG)</p>
+              <p className="text-xs text-muted-foreground">1920×1080 px recomendado (JPG/PNG/WebP)</p>
             </div>
           )}
           <button
@@ -437,7 +437,7 @@ const ImagePreviewSection = ({ imageUrl, onFileSelect, onClear }: ImagePreviewSe
       </div>
       {hasImage && (
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>Imagen lista</span>
+          <span>Imagen lista — Tamaño recomendado: 1920×1080 px (16:9)</span>
           <button type="button" className="text-primary underline" onClick={onClear}>
             Cambiar imagen
           </button>

@@ -275,7 +275,7 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
             )}
             {hasImage && (
               <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span>Imagen lista</span>
+                <span>Imagen lista — Tamaño recomendado: 1920×1080 px (16:9)</span>
                 <button
                   type="button"
                   className="text-primary underline"
