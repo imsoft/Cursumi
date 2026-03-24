@@ -3,19 +3,27 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = () => process.env.RESEND_FROM_EMAIL || "Cursumi <onboarding@resend.dev>";
+const LOGO_URL = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com"}/logos/cursumi.svg`;
+const SITE_URL = () => process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com";
 
 function emailWrapper(title: string, body: string): string {
   return `<!DOCTYPE html>
 <html>
   <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title}</title></head>
-  <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:0 auto;padding:20px;">
+  <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:0 auto;padding:20px;background-color:#f5f5f5;">
     <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:30px;text-align:center;border-radius:10px 10px 0 0;">
-      <h1 style="color:white;margin:0;font-size:28px;">${title}</h1>
+      <a href="${SITE_URL()}" style="text-decoration:none;">
+        <img src="${LOGO_URL()}" alt="Cursumi" width="140" height="40" style="display:inline-block;margin-bottom:16px;" />
+      </a>
+      <h1 style="color:white;margin:0;font-size:24px;font-weight:700;">${title}</h1>
     </div>
     <div style="background:#ffffff;padding:40px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;">
       ${body}
       <hr style="border:none;border-top:1px solid #e5e7eb;margin:30px 0;">
-      <p style="font-size:12px;color:#9ca3af;text-align:center;margin:0;">© ${new Date().getFullYear()} Cursumi. Todos los derechos reservados.</p>
+      <div style="text-align:center;">
+        <a href="${SITE_URL()}" style="color:#667eea;text-decoration:none;font-size:13px;font-weight:600;">cursumi.com</a>
+        <p style="font-size:12px;color:#9ca3af;margin:8px 0 0;">© ${new Date().getFullYear()} Cursumi. Todos los derechos reservados.</p>
+      </div>
     </div>
   </body>
 </html>`;
@@ -43,51 +51,29 @@ export async function sendPasswordResetEmail({
     throw new Error("Configuración de email no disponible");
   }
 
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      Recibimos una solicitud para restablecer la contraseña de tu cuenta en Cursumi. Si fuiste tú, haz clic en el siguiente botón:
+    </p>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${resetLink}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Restablecer contraseña
+      </a>
+    </div>
+    <p style="font-size:12px;color:#9ca3af;word-break:break-all;background:#f9fafb;padding:10px;border-radius:4px;">
+      ${resetLink}
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin-top:20px;">
+      Este enlace expirará en 1 hora. Si no solicitaste restablecer tu contraseña, puedes ignorar este correo.
+    </p>`;
+
   try {
     const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "Cursumi <onboarding@resend.dev>",
+      from: FROM(),
       to: [to],
       subject: "Restablece tu contraseña - Cursumi",
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Restablece tu contraseña</title>
-          </head>
-          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-              <h1 style="color: white; margin: 0; font-size: 28px;">Restablece tu contraseña</h1>
-            </div>
-            <div style="background: #ffffff; padding: 40px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px;">
-              <p style="font-size: 16px; margin-bottom: 20px;">Hola ${name},</p>
-              <p style="font-size: 16px; margin-bottom: 20px;">
-                Recibimos una solicitud para restablecer la contraseña de tu cuenta en Cursumi. Si fuiste tú, haz clic en el siguiente botón para crear una nueva contraseña:
-              </p>
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="${resetLink}" 
-                   style="display: inline-block; background: #667eea; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
-                  Restablecer contraseña
-                </a>
-              </div>
-              <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
-                O copia y pega este enlace en tu navegador:
-              </p>
-              <p style="font-size: 12px; color: #9ca3af; word-break: break-all; background: #f9fafb; padding: 10px; border-radius: 4px;">
-                ${resetLink}
-              </p>
-              <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
-                Este enlace expirará en 1 hora. Si no solicitaste restablecer tu contraseña, puedes ignorar este correo de forma segura.
-              </p>
-              <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-              <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
-                © ${new Date().getFullYear()} Cursumi. Todos los derechos reservados.
-              </p>
-            </div>
-          </body>
-        </html>
-      `,
+      html: emailWrapper("Restablece tu contraseña", body),
     });
 
     if (error) {
@@ -112,51 +98,29 @@ export async function sendVerificationEmail({
     throw new Error("Configuración de email no disponible");
   }
 
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      Gracias por registrarte en Cursumi. Para completar tu registro, verifica tu correo electrónico:
+    </p>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${verificationLink}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Verificar correo electrónico
+      </a>
+    </div>
+    <p style="font-size:12px;color:#9ca3af;word-break:break-all;background:#f9fafb;padding:10px;border-radius:4px;">
+      ${verificationLink}
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin-top:20px;">
+      Este enlace expirará en 24 horas. Si no solicitaste este correo, puedes ignorarlo.
+    </p>`;
+
   try {
     const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "Cursumi <onboarding@resend.dev>",
+      from: FROM(),
       to: [to],
       subject: "Verifica tu correo electrónico - Cursumi",
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Verifica tu correo electrónico</title>
-          </head>
-          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-              <h1 style="color: white; margin: 0; font-size: 28px;">¡Bienvenido a Cursumi!</h1>
-            </div>
-            <div style="background: #ffffff; padding: 40px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px;">
-              <p style="font-size: 16px; margin-bottom: 20px;">Hola ${name},</p>
-              <p style="font-size: 16px; margin-bottom: 20px;">
-                Gracias por registrarte en Cursumi. Para completar tu registro, por favor verifica tu correo electrónico haciendo clic en el siguiente botón:
-              </p>
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="${verificationLink}" 
-                   style="display: inline-block; background: #667eea; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
-                  Verificar correo electrónico
-                </a>
-              </div>
-              <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
-                O copia y pega este enlace en tu navegador:
-              </p>
-              <p style="font-size: 12px; color: #9ca3af; word-break: break-all; background: #f9fafb; padding: 10px; border-radius: 4px;">
-                ${verificationLink}
-              </p>
-              <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
-                Este enlace expirará en 24 horas. Si no solicitaste este correo, puedes ignorarlo de forma segura.
-              </p>
-              <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-              <p style="font-size: 12px; color: #9ca3af; text-align: center; margin: 0;">
-                © ${new Date().getFullYear()} Cursumi. Todos los derechos reservados.
-              </p>
-            </div>
-          </body>
-        </html>
-      `,
+      html: emailWrapper("¡Bienvenido a Cursumi!", body),
     });
 
     if (error) {
@@ -313,4 +277,40 @@ export async function sendOrgInviteEmail({ to, orgName, inviterName, inviteLink 
   } catch (err) {
     console.error("Error al enviar email de invitación org:", err);
   }
+}
+
+// ─────────────────────────────────────────
+// CONTACTO
+// ─────────────────────────────────────────
+
+const CONTACT_EMAIL = "cursumi.com@gmail.com";
+
+interface SendContactEmailParams {
+  name: string;
+  email: string;
+  subject: string;
+  reason: string;
+  message: string;
+}
+
+export async function sendContactEmail({ name, email, subject, reason, message }: SendContactEmailParams) {
+  if (!process.env.RESEND_API_KEY) throw new Error("Email no configurado");
+  const body = `
+    <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+      <tr><td style="padding:8px 12px;font-weight:600;color:#374151;width:100px;">Nombre</td><td style="padding:8px 12px;">${name}</td></tr>
+      <tr style="background:#f9fafb;"><td style="padding:8px 12px;font-weight:600;color:#374151;">Correo</td><td style="padding:8px 12px;"><a href="mailto:${email}" style="color:#667eea;">${email}</a></td></tr>
+      <tr><td style="padding:8px 12px;font-weight:600;color:#374151;">Motivo</td><td style="padding:8px 12px;">${reason}</td></tr>
+      <tr style="background:#f9fafb;"><td style="padding:8px 12px;font-weight:600;color:#374151;">Asunto</td><td style="padding:8px 12px;">${subject}</td></tr>
+    </table>
+    <div style="background:#f3f4f6;padding:16px;border-radius:8px;white-space:pre-wrap;font-size:14px;color:#1f2937;">
+      ${message}
+    </div>
+    <p style="font-size:12px;color:#9ca3af;margin-top:20px;">Puedes responder directamente a este correo para contestar al usuario.</p>`;
+  await resend.emails.send({
+    from: FROM(),
+    to: [CONTACT_EMAIL],
+    replyTo: email,
+    subject: `[Contacto - ${reason}] ${subject}`,
+    html: emailWrapper("Nuevo mensaje de contacto", body),
+  });
 }
