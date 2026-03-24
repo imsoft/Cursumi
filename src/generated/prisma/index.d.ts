@@ -312,6 +312,14 @@ export const CourseVisibility: {
 export type CourseVisibility = (typeof CourseVisibility)[keyof typeof CourseVisibility]
 
 
+export const CertificateType: {
+  accreditation: 'accreditation',
+  participation: 'participation'
+};
+
+export type CertificateType = (typeof CertificateType)[keyof typeof CertificateType]
+
+
 export const GameStatus: {
   waiting: 'waiting',
   active: 'active',
@@ -369,6 +377,10 @@ export const OrgSubscriptionStatus: typeof $Enums.OrgSubscriptionStatus
 export type CourseVisibility = $Enums.CourseVisibility
 
 export const CourseVisibility: typeof $Enums.CourseVisibility
+
+export type CertificateType = $Enums.CertificateType
+
+export const CertificateType: typeof $Enums.CertificateType
 
 export type GameStatus = $Enums.GameStatus
 
@@ -22931,6 +22943,7 @@ export namespace Prisma {
     userId: string | null
     courseId: string | null
     number: string | null
+    type: $Enums.CertificateType | null
     issuedAt: Date | null
   }
 
@@ -22940,6 +22953,7 @@ export namespace Prisma {
     userId: string | null
     courseId: string | null
     number: string | null
+    type: $Enums.CertificateType | null
     issuedAt: Date | null
   }
 
@@ -22949,6 +22963,7 @@ export namespace Prisma {
     userId: number
     courseId: number
     number: number
+    type: number
     issuedAt: number
     _all: number
   }
@@ -22960,6 +22975,7 @@ export namespace Prisma {
     userId?: true
     courseId?: true
     number?: true
+    type?: true
     issuedAt?: true
   }
 
@@ -22969,6 +22985,7 @@ export namespace Prisma {
     userId?: true
     courseId?: true
     number?: true
+    type?: true
     issuedAt?: true
   }
 
@@ -22978,6 +22995,7 @@ export namespace Prisma {
     userId?: true
     courseId?: true
     number?: true
+    type?: true
     issuedAt?: true
     _all?: true
   }
@@ -23060,6 +23078,7 @@ export namespace Prisma {
     userId: string
     courseId: string
     number: string
+    type: $Enums.CertificateType
     issuedAt: Date
     _count: CertificateCountAggregateOutputType | null
     _min: CertificateMinAggregateOutputType | null
@@ -23086,6 +23105,7 @@ export namespace Prisma {
     userId?: boolean
     courseId?: boolean
     number?: boolean
+    type?: boolean
     issuedAt?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -23098,6 +23118,7 @@ export namespace Prisma {
     userId?: boolean
     courseId?: boolean
     number?: boolean
+    type?: boolean
     issuedAt?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -23110,6 +23131,7 @@ export namespace Prisma {
     userId?: boolean
     courseId?: boolean
     number?: boolean
+    type?: boolean
     issuedAt?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -23122,10 +23144,11 @@ export namespace Prisma {
     userId?: boolean
     courseId?: boolean
     number?: boolean
+    type?: boolean
     issuedAt?: boolean
   }
 
-  export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "userId" | "courseId" | "number" | "issuedAt", ExtArgs["result"]["certificate"]>
+  export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "userId" | "courseId" | "number" | "type" | "issuedAt", ExtArgs["result"]["certificate"]>
   export type CertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -23155,6 +23178,7 @@ export namespace Prisma {
       userId: string
       courseId: string
       number: string
+      type: $Enums.CertificateType
       issuedAt: Date
     }, ExtArgs["result"]["certificate"]>
     composites: {}
@@ -23587,6 +23611,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Certificate", 'String'>
     readonly courseId: FieldRef<"Certificate", 'String'>
     readonly number: FieldRef<"Certificate", 'String'>
+    readonly type: FieldRef<"Certificate", 'CertificateType'>
     readonly issuedAt: FieldRef<"Certificate", 'DateTime'>
   }
     
@@ -47870,6 +47895,7 @@ export namespace Prisma {
     userId: 'userId',
     courseId: 'courseId',
     number: 'number',
+    type: 'type',
     issuedAt: 'issuedAt'
   };
 
@@ -48383,6 +48409,20 @@ export namespace Prisma {
    * Reference to a field of type 'EnrollmentStatus[]'
    */
   export type ListEnumEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnrollmentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CertificateType'
+   */
+  export type EnumCertificateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CertificateType'>
+    
+
+
+  /**
+   * Reference to a field of type 'CertificateType[]'
+   */
+  export type ListEnumCertificateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CertificateType[]'>
     
 
 
@@ -49746,6 +49786,7 @@ export namespace Prisma {
     userId?: StringFilter<"Certificate"> | string
     courseId?: StringFilter<"Certificate"> | string
     number?: StringFilter<"Certificate"> | string
+    type?: EnumCertificateTypeFilter<"Certificate"> | $Enums.CertificateType
     issuedAt?: DateTimeFilter<"Certificate"> | Date | string
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49758,6 +49799,7 @@ export namespace Prisma {
     userId?: SortOrder
     courseId?: SortOrder
     number?: SortOrder
+    type?: SortOrder
     issuedAt?: SortOrder
     enrollment?: EnrollmentOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
@@ -49773,6 +49815,7 @@ export namespace Prisma {
     NOT?: CertificateWhereInput | CertificateWhereInput[]
     userId?: StringFilter<"Certificate"> | string
     courseId?: StringFilter<"Certificate"> | string
+    type?: EnumCertificateTypeFilter<"Certificate"> | $Enums.CertificateType
     issuedAt?: DateTimeFilter<"Certificate"> | Date | string
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49785,6 +49828,7 @@ export namespace Prisma {
     userId?: SortOrder
     courseId?: SortOrder
     number?: SortOrder
+    type?: SortOrder
     issuedAt?: SortOrder
     _count?: CertificateCountOrderByAggregateInput
     _max?: CertificateMaxOrderByAggregateInput
@@ -49800,6 +49844,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Certificate"> | string
     courseId?: StringWithAggregatesFilter<"Certificate"> | string
     number?: StringWithAggregatesFilter<"Certificate"> | string
+    type?: EnumCertificateTypeWithAggregatesFilter<"Certificate"> | $Enums.CertificateType
     issuedAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
   }
 
@@ -52709,6 +52754,7 @@ export namespace Prisma {
   export type CertificateCreateInput = {
     id?: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
     enrollment: EnrollmentCreateNestedOneWithoutCertificateInput
     user: UserCreateNestedOneWithoutCertificatesInput
@@ -52721,12 +52767,14 @@ export namespace Prisma {
     userId: string
     courseId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
   export type CertificateUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneRequiredWithoutCertificateNestedInput
     user?: UserUpdateOneRequiredWithoutCertificatesNestedInput
@@ -52739,6 +52787,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -52748,12 +52797,14 @@ export namespace Prisma {
     userId: string
     courseId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
   export type CertificateUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -52763,6 +52814,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -55637,12 +55689,20 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type EnumCertificateTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateType | EnumCertificateTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateTypeFilter<$PrismaModel> | $Enums.CertificateType
+  }
+
   export type CertificateCountOrderByAggregateInput = {
     id?: SortOrder
     enrollmentId?: SortOrder
     userId?: SortOrder
     courseId?: SortOrder
     number?: SortOrder
+    type?: SortOrder
     issuedAt?: SortOrder
   }
 
@@ -55652,6 +55712,7 @@ export namespace Prisma {
     userId?: SortOrder
     courseId?: SortOrder
     number?: SortOrder
+    type?: SortOrder
     issuedAt?: SortOrder
   }
 
@@ -55661,7 +55722,18 @@ export namespace Prisma {
     userId?: SortOrder
     courseId?: SortOrder
     number?: SortOrder
+    type?: SortOrder
     issuedAt?: SortOrder
+  }
+
+  export type EnumCertificateTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateType | EnumCertificateTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateTypeWithAggregatesFilter<$PrismaModel> | $Enums.CertificateType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCertificateTypeFilter<$PrismaModel>
+    _max?: NestedEnumCertificateTypeFilter<$PrismaModel>
   }
 
   export type EnumTransactionStatusFilter<$PrismaModel = never> = {
@@ -58442,6 +58514,10 @@ export namespace Prisma {
     connect?: CourseWhereUniqueInput
   }
 
+  export type EnumCertificateTypeFieldUpdateOperationsInput = {
+    set?: $Enums.CertificateType
+  }
+
   export type EnrollmentUpdateOneRequiredWithoutCertificateNestedInput = {
     create?: XOR<EnrollmentCreateWithoutCertificateInput, EnrollmentUncheckedCreateWithoutCertificateInput>
     connectOrCreate?: EnrollmentCreateOrConnectWithoutCertificateInput
@@ -59961,6 +60037,23 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumCertificateTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateType | EnumCertificateTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateTypeFilter<$PrismaModel> | $Enums.CertificateType
+  }
+
+  export type NestedEnumCertificateTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateType | EnumCertificateTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateType[] | ListEnumCertificateTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateTypeWithAggregatesFilter<$PrismaModel> | $Enums.CertificateType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCertificateTypeFilter<$PrismaModel>
+    _max?: NestedEnumCertificateTypeFilter<$PrismaModel>
+  }
+
   export type NestedEnumTransactionStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
@@ -60311,6 +60404,7 @@ export namespace Prisma {
   export type CertificateCreateWithoutUserInput = {
     id?: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
     enrollment: EnrollmentCreateNestedOneWithoutCertificateInput
     course: CourseCreateNestedOneWithoutCertificatesInput
@@ -60321,6 +60415,7 @@ export namespace Prisma {
     enrollmentId: string
     courseId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
@@ -60844,6 +60939,7 @@ export namespace Prisma {
     userId?: StringFilter<"Certificate"> | string
     courseId?: StringFilter<"Certificate"> | string
     number?: StringFilter<"Certificate"> | string
+    type?: EnumCertificateTypeFilter<"Certificate"> | $Enums.CertificateType
     issuedAt?: DateTimeFilter<"Certificate"> | Date | string
   }
 
@@ -61864,6 +61960,7 @@ export namespace Prisma {
   export type CertificateCreateWithoutCourseInput = {
     id?: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
     enrollment: EnrollmentCreateNestedOneWithoutCertificateInput
     user: UserCreateNestedOneWithoutCertificatesInput
@@ -61874,6 +61971,7 @@ export namespace Prisma {
     enrollmentId: string
     userId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
@@ -63300,6 +63398,7 @@ export namespace Prisma {
   export type CertificateCreateWithoutEnrollmentInput = {
     id?: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
     user: UserCreateNestedOneWithoutCertificatesInput
     course: CourseCreateNestedOneWithoutCertificatesInput
@@ -63310,6 +63409,7 @@ export namespace Prisma {
     userId: string
     courseId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
@@ -63658,6 +63758,7 @@ export namespace Prisma {
   export type CertificateUpdateWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCertificatesNestedInput
     course?: CourseUpdateOneRequiredWithoutCertificatesNestedInput
@@ -63668,6 +63769,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -68192,6 +68294,7 @@ export namespace Prisma {
     enrollmentId: string
     courseId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
@@ -68495,6 +68598,7 @@ export namespace Prisma {
   export type CertificateUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneRequiredWithoutCertificateNestedInput
     course?: CourseUpdateOneRequiredWithoutCertificatesNestedInput
@@ -68505,6 +68609,7 @@ export namespace Prisma {
     enrollmentId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -68513,6 +68618,7 @@ export namespace Prisma {
     enrollmentId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -68943,6 +69049,7 @@ export namespace Prisma {
     enrollmentId: string
     userId: string
     number: string
+    type?: $Enums.CertificateType
     issuedAt?: Date | string
   }
 
@@ -69107,6 +69214,7 @@ export namespace Prisma {
   export type CertificateUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneRequiredWithoutCertificateNestedInput
     user?: UserUpdateOneRequiredWithoutCertificatesNestedInput
@@ -69117,6 +69225,7 @@ export namespace Prisma {
     enrollmentId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -69125,6 +69234,7 @@ export namespace Prisma {
     enrollmentId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     number?: StringFieldUpdateOperationsInput | string
+    type?: EnumCertificateTypeFieldUpdateOperationsInput | $Enums.CertificateType
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -151,45 +151,53 @@ export const LessonSidebar = memo(function LessonSidebar({
                 );
               })}
 
-              {section.hasQuiz && (
-                <div
-                  className={`flex items-center gap-2 px-4 py-2 text-sm ${
-                    (section.id === currentSectionId ? sectionQuizPassed : section.quizPassed)
-                      ? "text-green-600 dark:text-green-400"
-                      : "text-amber-600 dark:text-amber-400"
-                  }`}
-                >
-                  {(section.id === currentSectionId ? sectionQuizPassed : section.quizPassed) ? (
-                    <CheckCircle className="h-4 w-4 shrink-0" />
-                  ) : (
-                    <ClipboardCheck className="h-4 w-4 shrink-0" />
-                  )}
-                  <span className="flex-1 truncate text-xs font-medium">Test de sección</span>
-                  {!(section.id === currentSectionId ? sectionQuizPassed : section.quizPassed) && (
-                    <Lock className="h-3 w-3 shrink-0" />
-                  )}
-                </div>
-              )}
+              {section.hasQuiz && (() => {
+                const passed = section.id === currentSectionId ? sectionQuizPassed : section.quizPassed;
+                const isActive = section.id === currentSectionId && !passed && section.lessons.every((l) => completedIds.has(l.id));
+                return (
+                  <div
+                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : passed
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-amber-600 dark:text-amber-400"
+                    }`}
+                  >
+                    {passed ? (
+                      <CheckCircle className="h-4 w-4 shrink-0" />
+                    ) : (
+                      <ClipboardCheck className="h-4 w-4 shrink-0" />
+                    )}
+                    <span className="flex-1 truncate text-xs font-medium">Test de sección</span>
+                    {!passed && <Lock className="h-3 w-3 shrink-0" />}
+                  </div>
+                );
+              })()}
 
-              {section.hasMinigame && (
-                <div
-                  className={`flex items-center gap-2 px-4 py-2 text-sm ${
-                    (section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed)
-                      ? "text-green-600 dark:text-green-400"
-                      : "text-purple-600 dark:text-purple-400"
-                  }`}
-                >
-                  {(section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed) ? (
-                    <CheckCircle className="h-4 w-4 shrink-0" />
-                  ) : (
-                    <Gamepad2 className="h-4 w-4 shrink-0" />
-                  )}
-                  <span className="flex-1 truncate text-xs font-medium">Minijuego</span>
-                  {!(section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed) && (
-                    <Lock className="h-3 w-3 shrink-0" />
-                  )}
-                </div>
-              )}
+              {section.hasMinigame && (() => {
+                const passed = section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed;
+                const isActive = section.id === currentSectionId && !passed && section.lessons.every((l) => completedIds.has(l.id));
+                return (
+                  <div
+                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : passed
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-purple-600 dark:text-purple-400"
+                    }`}
+                  >
+                    {passed ? (
+                      <CheckCircle className="h-4 w-4 shrink-0" />
+                    ) : (
+                      <Gamepad2 className="h-4 w-4 shrink-0" />
+                    )}
+                    <span className="flex-1 truncate text-xs font-medium">Minijuego</span>
+                    {!passed && <Lock className="h-3 w-3 shrink-0" />}
+                  </div>
+                );
+              })()}
             </div>
           );
         })}

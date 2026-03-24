@@ -74,9 +74,13 @@ export const CertificateCard = ({ certificate }: CertificateCardProps) => {
           <CardTitle className="text-lg font-semibold text-foreground">
             {certificate.courseTitle}
           </CardTitle>
-          <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground shrink-0">
+          <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border shrink-0 ${
+            certificate.type === "participation"
+              ? "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-400"
+              : "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950/30 dark:text-green-400"
+          }`}>
             <Award className="mr-1 h-3 w-3" />
-            Certificado
+            {certificate.type === "participation" ? "Participación" : "Acreditación"}
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">

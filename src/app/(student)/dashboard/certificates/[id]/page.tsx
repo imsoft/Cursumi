@@ -148,8 +148,16 @@ export default function CertificatePage({ params }: CertificatePageProps) {
                 </div>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">CERTIFICADO DE COMPLETACIÓN</h1>
-                <p className="text-muted-foreground">Este certificado acredita que</p>
+                <h1 className="text-3xl font-bold text-foreground mb-2">
+                  {certificate.type === "participation"
+                    ? "RECONOCIMIENTO DE PARTICIPACIÓN"
+                    : "CERTIFICADO DE ACREDITACIÓN"}
+                </h1>
+                <p className="text-muted-foreground">
+                  {certificate.type === "participation"
+                    ? "Este reconocimiento certifica que"
+                    : "Este certificado acredita que"}
+                </p>
               </div>
             </div>
 
@@ -158,7 +166,11 @@ export default function CertificatePage({ params }: CertificatePageProps) {
               <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {certificate.studentName}
               </h2>
-              <p className="text-lg text-muted-foreground">ha completado exitosamente el curso</p>
+              <p className="text-lg text-muted-foreground">
+                {certificate.type === "participation"
+                  ? "ha participado en el curso"
+                  : "ha completado exitosamente el curso"}
+              </p>
             </div>
 
             {/* Información del curso */}

@@ -307,6 +307,7 @@ exports.Prisma.CertificateScalarFieldEnum = {
   userId: 'userId',
   courseId: 'courseId',
   number: 'number',
+  type: 'type',
   issuedAt: 'issuedAt'
 };
 
@@ -603,6 +604,11 @@ exports.EnrollmentStatus = exports.$Enums.EnrollmentStatus = {
   active: 'active',
   completed: 'completed',
   cancelled: 'cancelled'
+};
+
+exports.CertificateType = exports.$Enums.CertificateType = {
+  accreditation: 'accreditation',
+  participation: 'participation'
 };
 
 exports.TransactionStatus = exports.$Enums.TransactionStatus = {

@@ -165,35 +165,46 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
           </h3>
 
           {/* Opciones */}
-          {currentQuestion.type === "multiple-choice" && currentQuestion.options && (
-            <div className="space-y-3">
-              {currentQuestion.options.map((option, index) => {
-                const isSelected = answers[currentQuestion.id] === index;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleSelectAnswer(currentQuestion.id, index)}
-                    className={`flex w-full items-center gap-4 rounded-lg border-2 p-4 text-left transition-all ${
-                      isSelected
-                        ? "border-primary bg-primary/10"
-                        : "border-border bg-card hover:border-primary/50 hover:bg-muted/50"
-                    }`}
-                  >
-                    <div className="shrink-0">
-                      {isSelected ? (
-                        <CheckCircle2 className="h-6 w-6 text-primary" />
-                      ) : (
-                        <Circle className="h-6 w-6 text-muted-foreground" />
-                      )}
-                    </div>
-                    <span className={`text-base ${isSelected ? "font-semibold text-primary" : "text-foreground"}`}>
-                      {option}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          {(() => {
+            const rawOptions =
+              currentQuestion.type === "true-false"
+                ? ["Verdadero", "Falso"]
+                : currentQuestion.options ?? [];
+            // Filtrar opciones vacías pero conservar su índice original para que coincida con correctAnswer
+            const options = rawOptions
+              .map((opt, i) => ({ label: opt, index: i }))
+              .filter((o) => o.label.trim() !== "");
+
+            return options.length > 0 && (
+              <div className="space-y-3">
+                {options.map(({ label: option, index }) => {
+                  const isSelected = answers[currentQuestion.id] === index;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleSelectAnswer(currentQuestion.id, index)}
+                      className={`flex w-full items-center gap-4 rounded-lg border-2 p-4 text-left transition-all ${
+                        isSelected
+                          ? "border-primary bg-primary/10"
+                          : "border-border bg-card hover:border-primary/50 hover:bg-muted/50"
+                      }`}
+                    >
+                      <div className="shrink-0">
+                        {isSelected ? (
+                          <CheckCircle2 className="h-6 w-6 text-primary" />
+                        ) : (
+                          <Circle className="h-6 w-6 text-muted-foreground" />
+                        )}
+                      </div>
+                      <span className={`text-base ${isSelected ? "font-semibold text-primary" : "text-foreground"}`}>
+                        {option}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 

@@ -64,7 +64,7 @@ export function ExamPageClient({
       const res = await fetch(`/api/courses/${courseId}/exam/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers }), // score/passed calculados en el servidor
+        body: JSON.stringify({ answers }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al enviar examen");
@@ -109,7 +109,7 @@ function ResultCard({
           {passed ? (
             <CheckCircle2 className="h-16 w-16 text-green-500" />
           ) : (
-            <XCircle className="h-16 w-16 text-red-500" />
+            <XCircle className="h-16 w-16 text-amber-500" />
           )}
         </div>
         <CardTitle className="text-2xl">
@@ -120,14 +120,14 @@ function ResultCard({
         <p className="text-5xl font-bold text-foreground">{Math.round(score)}%</p>
         <p className="text-muted-foreground">
           {passed
-            ? "Felicidades, has completado el curso exitosamente."
-            : "Sigue practicando. Solo se permite un intento por curso."}
+            ? "Felicidades, has completado el curso exitosamente. Tu certificado de acreditación ya está disponible."
+            : "No alcanzaste la calificación mínima, pero tu reconocimiento de participación ya está disponible."}
         </p>
-        {passed && certificateId && (
+        {certificateId && (
           <Button asChild>
             <Link href={`/dashboard/certificates/${certificateId}`}>
               <Award className="mr-2 h-4 w-4" />
-              Ver mi certificado
+              {passed ? "Ver certificado de acreditación" : "Ver reconocimiento de participación"}
             </Link>
           </Button>
         )}

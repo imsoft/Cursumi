@@ -71,52 +71,56 @@ export async function POST(
       },
     });
 
-    let certificate = null;
-    if (passed) {
-      // Check if already has a certificate (guard against duplicate calls)
-      const existing = await prisma.certificate.findUnique({
-        where: { enrollmentId: enrollment.id },
+    // Check if already has a certificate (guard against duplicate calls)
+    const existing = await prisma.certificate.findUnique({
+      where: { enrollmentId: enrollment.id },
+    });
+
+    let certificate = existing;
+    if (!existing) {
+      const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+      const certType = passed ? "accreditation" : "participation";
+      certificate = await prisma.certificate.create({
+        data: {
+          enrollmentId: enrollment.id,
+          userId: session.user.id,
+          courseId,
+          number: certNumber,
+          type: certType,
+        },
       });
 
-      if (!existing) {
-        const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-        certificate = await prisma.certificate.create({
-          data: {
-            enrollmentId: enrollment.id,
-            userId: session.user.id,
-            courseId,
-            number: certNumber,
-          },
-        });
-
-        // Recalcular progreso (debería llegar a 100 si todo está completo)
-        await recalculateProgress(enrollment.id, courseId);
+      // Recalcular progreso
+      await recalculateProgress(enrollment.id, courseId);
+      if (passed) {
         await prisma.enrollment.update({
           where: { id: enrollment.id },
           data: { status: "completed" },
         });
+      }
 
-        // Notify the student
-        await prisma.notification.create({
-          data: {
-            userId: session.user.id,
-            type: "certificate",
-            title: "Certificado generado",
-            body: "Has aprobado el examen final. Tu certificado ya está disponible.",
-            link: `/dashboard/certificates/${certificate.id}`,
-          },
+      // Notify the student
+      await prisma.notification.create({
+        data: {
+          userId: session.user.id,
+          type: "certificate",
+          title: passed ? "Certificado de acreditación" : "Reconocimiento de participación",
+          body: passed
+            ? "Has aprobado el examen final. Tu certificado de acreditación ya está disponible."
+            : "Completaste el curso. Tu reconocimiento de participación ya está disponible.",
+          link: `/dashboard/certificates/${certificate.id}`,
+        },
+      });
+
+      // Email de certificado
+      if (course?.title && session.user.email) {
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        await sendCertificateEmail({
+          to: session.user.email,
+          name: session.user.name || "Estudiante",
+          courseTitle: course.title,
+          certificateUrl: `${baseUrl}/dashboard/certificates/${certificate.id}`,
         });
-
-        // Email de certificado
-        if (course?.title && session.user.email) {
-          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-          await sendCertificateEmail({
-            to: session.user.email,
-            name: session.user.name || "Estudiante",
-            courseTitle: course.title,
-            certificateUrl: `${baseUrl}/dashboard/certificates/${certificate.id}`,
-          });
-        }
       }
     }
 

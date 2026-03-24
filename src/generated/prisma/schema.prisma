@@ -405,13 +405,19 @@ model ExamSubmission {
 // CERTIFICADOS
 // ─────────────────────────────────────────
 
+enum CertificateType {
+  accreditation // Aprobó el examen
+  participation // Completó el curso pero no aprobó el examen
+}
+
 model Certificate {
-  id           String   @id @default(cuid())
-  enrollmentId String   @unique
+  id           String          @id @default(cuid())
+  enrollmentId String          @unique
   userId       String
   courseId     String
-  number       String   @unique // CUR-XXXXXXXXXX
-  issuedAt     DateTime @default(now())
+  number       String          @unique // CUR-XXXXXXXXXX
+  type         CertificateType @default(accreditation)
+  issuedAt     DateTime        @default(now())
 
   enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)

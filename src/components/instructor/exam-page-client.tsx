@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowLeft, Save, Plus, Trash2, CheckCircle2,
+  ArrowLeft, Save, Plus, Minus, Trash2, CheckCircle2,
 } from "lucide-react";
 import type { CourseFinalExam, QuizQuestion } from "./course-types";
 import { saveCourseExamContent } from "@/app/actions/course-actions";
@@ -25,7 +25,7 @@ function newQuestion(): QuizQuestion {
     id: crypto.randomUUID(),
     question: "",
     type: "multiple-choice",
-    options: ["", "", "", ""],
+    options: ["", ""],
     correctAnswer: 0,
     points: 1,
   };
@@ -86,6 +86,27 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
           ? { ...q, options: q.options?.map((o, i) => (i === idx ? value : o)) }
           : q
       )
+    );
+
+  const addOption = (qId: string) =>
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === qId && q.options && q.options.length < 5
+          ? { ...q, options: [...q.options, ""] }
+          : q
+      )
+    );
+
+  const removeOption = (qId: string, idx: number) =>
+    setQuestions((prev) =>
+      prev.map((q) => {
+        if (q.id !== qId || !q.options || q.options.length <= 2) return q;
+        const newOptions = q.options.filter((_, i) => i !== idx);
+        let newCorrect = q.correctAnswer as number;
+        if (newCorrect === idx) newCorrect = 0;
+        else if (newCorrect > idx) newCorrect -= 1;
+        return { ...q, options: newOptions, correctAnswer: newCorrect };
+      })
     );
 
   return (
@@ -285,7 +306,7 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
                         onChange={(e) =>
                           updateQuestion(q.id, {
                             type: e.target.value as QuizQuestion["type"],
-                            options: e.target.value === "multiple-choice" ? ["", "", "", ""] : undefined,
+                            options: e.target.value === "multiple-choice" ? ["", ""] : undefined,
                             correctAnswer: 0,
                           })
                         }
@@ -330,11 +351,33 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
                             value={opt}
                             onChange={(e) => updateOption(q.id, oi, e.target.value)}
                           />
+                          {(q.options?.length ?? 0) > 2 && (
+                            <button
+                              type="button"
+                              onClick={() => removeOption(q.id, oi)}
+                              className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                              title="Eliminar opción"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </button>
+                          )}
                         </div>
                       ))}
-                      <p className="text-xs text-muted-foreground">
-                        Haz clic en el círculo para marcar la respuesta correcta.
-                      </p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-muted-foreground">
+                          Haz clic en el círculo para marcar la respuesta correcta.
+                        </p>
+                        {(q.options?.length ?? 0) < 5 && (
+                          <button
+                            type="button"
+                            onClick={() => addOption(q.id)}
+                            className="flex items-center gap-1 text-xs text-primary hover:underline"
+                          >
+                            <Plus className="h-3 w-3" />
+                            Agregar opción
+                          </button>
+                        )}
+                      </div>
                     </div>
                   )}
 
