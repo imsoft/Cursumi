@@ -12,6 +12,7 @@ interface StudentDashboardClientProps {
   courses: StudentCourse[];
   recommendations: Recommendation[];
   hoursWatched?: string;
+  orgName?: string | null;
 }
 
 export function StudentDashboardClient({
@@ -19,6 +20,7 @@ export function StudentDashboardClient({
   courses,
   recommendations,
   hoursWatched = "0h",
+  orgName,
 }: StudentDashboardClientProps) {
   const stats = [
     { title: "Cursos activos", value: courses.length, subtitle: "Actualmente en progreso" },
@@ -44,6 +46,12 @@ export function StudentDashboardClient({
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
       <StudentDashboardHeader name={name} />
+      {orgName && (
+        <div className="rounded-lg border bg-primary/5 px-4 py-3 text-sm">
+          <span className="font-medium">{orgName}</span>{" "}
+          <span className="text-muted-foreground">— Acceso empresarial</span>
+        </div>
+      )}
       <StudentStatsCards stats={stats} />
       <StudentCoursesInProgress courses={courses} />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">

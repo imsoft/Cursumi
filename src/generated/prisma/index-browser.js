@@ -218,6 +218,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   maxStudents: 'maxStudents',
   imageUrl: 'imageUrl',
   status: 'status',
+  visibility: 'visibility',
   nextSession: 'nextSession',
   finalExam: 'finalExam',
   createdAt: 'createdAt',
@@ -275,6 +276,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   courseId: 'courseId',
   studentId: 'studentId',
   sessionId: 'sessionId',
+  organizationId: 'organizationId',
   status: 'status',
   progress: 'progress',
   createdAt: 'createdAt',
@@ -408,6 +410,93 @@ exports.Prisma.QuizGameAnswerScalarFieldEnum = {
   answeredAt: 'answeredAt'
 };
 
+exports.Prisma.OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrgMemberScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  orgRole: 'orgRole',
+  joinedAt: 'joinedAt'
+};
+
+exports.Prisma.OrgInviteScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  email: 'email',
+  orgRole: 'orgRole',
+  token: 'token',
+  status: 'status',
+  invitedBy: 'invitedBy',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TeamScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TeamMemberScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  memberId: 'memberId'
+};
+
+exports.Prisma.OrgSubscriptionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  stripeCustomerId: 'stripeCustomerId',
+  stripeSubscriptionId: 'stripeSubscriptionId',
+  status: 'status',
+  maxSeats: 'maxSeats',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrgCourseAccessScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  courseId: 'courseId',
+  grantedAt: 'grantedAt'
+};
+
+exports.Prisma.TeamCourseAccessScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  courseId: 'courseId',
+  grantedAt: 'grantedAt'
+};
+
+exports.Prisma.OrgMaterialScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  name: 'name',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.KpiScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -497,6 +586,12 @@ exports.CourseStatus = exports.$Enums.CourseStatus = {
   archived: 'archived'
 };
 
+exports.CourseVisibility = exports.$Enums.CourseVisibility = {
+  public: 'public',
+  business_only: 'business_only',
+  both: 'both'
+};
+
 exports.LessonType = exports.$Enums.LessonType = {
   video: 'video',
   text: 'text',
@@ -521,6 +616,25 @@ exports.GameStatus = exports.$Enums.GameStatus = {
   waiting: 'waiting',
   active: 'active',
   finished: 'finished'
+};
+
+exports.OrgRole = exports.$Enums.OrgRole = {
+  owner: 'owner',
+  admin: 'admin',
+  member: 'member'
+};
+
+exports.OrgInviteStatus = exports.$Enums.OrgInviteStatus = {
+  pending: 'pending',
+  accepted: 'accepted',
+  expired: 'expired'
+};
+
+exports.OrgSubscriptionStatus = exports.$Enums.OrgSubscriptionStatus = {
+  active: 'active',
+  past_due: 'past_due',
+  canceled: 'canceled',
+  trialing: 'trialing'
 };
 
 exports.Prisma.ModelName = {
@@ -549,6 +663,15 @@ exports.Prisma.ModelName = {
   QuizGameQuestion: 'QuizGameQuestion',
   QuizGameParticipant: 'QuizGameParticipant',
   QuizGameAnswer: 'QuizGameAnswer',
+  Organization: 'Organization',
+  OrgMember: 'OrgMember',
+  OrgInvite: 'OrgInvite',
+  Team: 'Team',
+  TeamMember: 'TeamMember',
+  OrgSubscription: 'OrgSubscription',
+  OrgCourseAccess: 'OrgCourseAccess',
+  TeamCourseAccess: 'TeamCourseAccess',
+  OrgMaterial: 'OrgMaterial',
   Kpi: 'Kpi',
   SiteSetting: 'SiteSetting',
   Coupon: 'Coupon'

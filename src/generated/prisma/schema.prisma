@@ -38,6 +38,7 @@ model User {
   sentMessages            Message[]
   hostedGames             QuizGame[]
   gameParticipations      QuizGameParticipant[]
+  orgMemberships          OrgMember[]
 }
 
 model Account {
@@ -140,6 +141,33 @@ enum TransactionStatus {
   refunded
 }
 
+// ── CURSUMI BUSINESS ──
+
+enum OrgRole {
+  owner
+  admin
+  member
+}
+
+enum OrgInviteStatus {
+  pending
+  accepted
+  expired
+}
+
+enum OrgSubscriptionStatus {
+  active
+  past_due
+  canceled
+  trialing
+}
+
+enum CourseVisibility {
+  public
+  business_only
+  both
+}
+
 // ─────────────────────────────────────────
 // INSTRUCTORES
 // ─────────────────────────────────────────
@@ -192,8 +220,8 @@ model Category {
 // ─────────────────────────────────────────
 
 model Course {
-  id           String       @id @default(cuid())
-  slug         String?      @unique // {título-slugificado}-por-{instructor-slug}
+  id           String           @id @default(cuid())
+  slug         String?          @unique // {título-slugificado}-por-{instructor-slug}
   instructorId String
   title        String
   description  String
@@ -209,21 +237,24 @@ model Course {
   price        Int
   maxStudents  Int?
   imageUrl     String?
-  status       CourseStatus @default(draft)
+  status       CourseStatus     @default(draft)
+  visibility   CourseVisibility @default(public)
   nextSession  DateTime?
   finalExam    Json? // CourseFinalExam serializado
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
-  instructor     User            @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
-  categoryRef    Category?       @relation(fields: [categoryId], references: [id])
-  sections       CourseSection[]
-  courseSessions CourseSession[]
-  enrollments    Enrollment[]
-  certificates   Certificate[]
-  transactions   Transaction[]
-  reviews        Review[]
-  conversations  Conversation[]
+  instructor       User               @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  categoryRef      Category?          @relation(fields: [categoryId], references: [id])
+  sections         CourseSection[]
+  courseSessions   CourseSession[]
+  enrollments      Enrollment[]
+  certificates     Certificate[]
+  transactions     Transaction[]
+  reviews          Review[]
+  conversations    Conversation[]
+  orgCourseAccess  OrgCourseAccess[]
+  teamCourseAccess TeamCourseAccess[]
 
   @@index([instructorId])
   @@index([status])
@@ -310,18 +341,20 @@ model CourseSession {
 // ─────────────────────────────────────────
 
 model Enrollment {
-  id        String           @id @default(cuid())
-  courseId  String
-  studentId String
-  sessionId String? // null para cursos virtuales; requerido para presenciales
-  status    EnrollmentStatus @default(active)
-  progress  Int              @default(0)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id             String           @id @default(cuid())
+  courseId       String
+  studentId      String
+  sessionId      String? // null para cursos virtuales; requerido para presenciales
+  organizationId String? // null para compras individuales; set para inscripciones org
+  status         EnrollmentStatus @default(active)
+  progress       Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 
   course                 Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   student                User                    @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
   session                CourseSession?          @relation(fields: [sessionId], references: [id])
+  organization           Organization?           @relation(fields: [organizationId], references: [id])
   lessonProgress         LessonProgress[]
   certificate            Certificate?
   examSubmission         ExamSubmission?
@@ -331,6 +364,7 @@ model Enrollment {
   @@unique([courseId, studentId])
   @@index([studentId])
   @@index([sessionId])
+  @@index([organizationId])
 }
 
 // ─────────────────────────────────────────
@@ -572,6 +606,151 @@ model QuizGameAnswer {
   @@unique([questionId, participantId])
   @@index([gameId])
   @@index([participantId])
+}
+
+// ─────────────────────────────────────────
+// CURSUMI BUSINESS
+// ─────────────────────────────────────────
+
+model Organization {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  logoUrl      String?
+  contactEmail String
+  contactPhone String?
+  address      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  members      OrgMember[]
+  invitations  OrgInvite[]
+  teams        Team[]
+  subscription OrgSubscription?
+  courseAccess OrgCourseAccess[]
+  materials    OrgMaterial[]
+  enrollments  Enrollment[]
+
+  @@index([slug])
+}
+
+model OrgMember {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  orgRole        OrgRole  @default(member)
+  joinedAt       DateTime @default(now())
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamMemberships TeamMember[]
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@index([organizationId])
+}
+
+model OrgInvite {
+  id             String          @id @default(cuid())
+  organizationId String
+  email          String
+  orgRole        OrgRole         @default(member)
+  token          String          @unique @default(cuid())
+  status         OrgInviteStatus @default(pending)
+  invitedBy      String // userId
+  expiresAt      DateTime
+  createdAt      DateTime        @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+  @@index([token])
+}
+
+model Team {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  members      TeamMember[]
+  courseAccess TeamCourseAccess[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+}
+
+model TeamMember {
+  id       String @id @default(cuid())
+  teamId   String
+  memberId String // FK a OrgMember.id
+
+  team   Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  member OrgMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, memberId])
+}
+
+model OrgSubscription {
+  id                   String                @id @default(cuid())
+  organizationId       String                @unique
+  stripeCustomerId     String                @unique
+  stripeSubscriptionId String?               @unique
+  status               OrgSubscriptionStatus @default(active)
+  maxSeats             Int
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model OrgCourseAccess {
+  id             String   @id @default(cuid())
+  organizationId String
+  courseId       String
+  grantedAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  course       Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, courseId])
+  @@index([organizationId])
+  @@index([courseId])
+}
+
+model TeamCourseAccess {
+  id        String   @id @default(cuid())
+  teamId    String
+  courseId  String
+  grantedAt DateTime @default(now())
+
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, courseId])
+}
+
+model OrgMaterial {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  description    String?
+  fileUrl        String // Cloudinary URL
+  fileType       String // "pdf", "docx", etc.
+  fileSize       Int? // bytes
+  uploadedBy     String // userId
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
 }
 
 model Kpi {

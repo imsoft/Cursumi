@@ -16,8 +16,12 @@ export default async function StudentDashboardPage() {
   const excludeIds = courses.map((c) => c.id);
 
   // Parallel: recommendations + hours watched via SQL SUM (no findMany + JS reduce)
-  const [recommendations, hoursResult] = await Promise.all([
+  const [recommendations, orgMembership, hoursResult] = await Promise.all([
     listRecommendations(excludeIds),
+    prisma.orgMember.findFirst({
+      where: { userId: session.user.id },
+      select: { organization: { select: { name: true } } },
+    }),
     prisma.$queryRaw<[{ total_minutes: number | null }]>`
       SELECT COALESCE(SUM(
         CASE
@@ -51,6 +55,7 @@ export default async function StudentDashboardPage() {
       courses={courses}
       recommendations={recommendations}
       hoursWatched={hoursWatched}
+      orgName={orgMembership?.organization.name}
     />
   );
 }

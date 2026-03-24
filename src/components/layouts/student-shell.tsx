@@ -17,6 +17,7 @@ import {
   UserCircle,
   GraduationCap,
   Gamepad2,
+  FileText,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -39,6 +40,7 @@ const pathnameToTitle: Record<string, string> = {
   "/dashboard/profile": "Perfil",
   "/dashboard/settings": "Configuración",
   "/dashboard/become-instructor": "Ser instructor",
+  "/dashboard/org-materials": "Materiales",
 };
 
 function getPageTitle(pathname: string | null): string {
@@ -53,6 +55,7 @@ interface StudentShellProps {
   userImage?: string | null;
   children: ReactNode;
   pageTitle?: string;
+  hasOrg?: boolean;
 }
 
 export function StudentShell({
@@ -61,13 +64,18 @@ export function StudentShell({
   userImage,
   children,
   pageTitle: pageTitleProp,
+  hasOrg,
 }: StudentShellProps) {
   const pathname = usePathname();
   const pageTitle = pageTitleProp ?? getPageTitle(pathname);
 
+  const navItems = hasOrg
+    ? [...studentNavItems.slice(0, 3), { title: "Materiales", href: "/dashboard/org-materials", icon: FileText }, ...studentNavItems.slice(3)]
+    : studentNavItems;
+
   return (
     <SidebarProvider>
-      <AppSidebar navItems={studentNavItems} title="Cursumi" />
+      <AppSidebar navItems={navItems} title="Cursumi" />
       <SidebarInset>
         <DashboardHeader
           title={pageTitle}

@@ -272,3 +272,45 @@ export async function sendProgressReminderEmail({ to, name, courseTitle, progres
     console.error("Error al enviar email de recordatorio:", err);
   }
 }
+
+// ─────────────────────────────────────────
+// CURSUMI BUSINESS
+// ─────────────────────────────────────────
+
+interface SendOrgInviteEmailParams {
+  to: string;
+  orgName: string;
+  inviterName: string;
+  inviteLink: string;
+}
+
+export async function sendOrgInviteEmail({ to, orgName, inviterName, inviteLink }: SendOrgInviteEmailParams) {
+  if (!process.env.RESEND_API_KEY) return;
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola,</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      <strong>${inviterName}</strong> te ha invitado a unirte al equipo de <strong>${orgName}</strong> en Cursumi Business.
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:20px;">
+      Tendrás acceso a los cursos y materiales de capacitación de tu empresa.
+      La invitación expira en 7 días.
+    </p>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${inviteLink}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Aceptar invitación
+      </a>
+    </div>
+    <p style="font-size:12px;color:#9ca3af;word-break:break-all;background:#f9fafb;padding:10px;border-radius:4px;">
+      ${inviteLink}
+    </p>`;
+  try {
+    await resend.emails.send({
+      from: FROM(),
+      to: [to],
+      subject: `${orgName} te invita a Cursumi Business`,
+      html: emailWrapper(`Invitación de ${orgName}`, body),
+    });
+  } catch (err) {
+    console.error("Error al enviar email de invitación org:", err);
+  }
+}

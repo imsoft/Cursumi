@@ -1,0 +1,59 @@
+import { redirect, unstable_rethrow } from "next/navigation";
+import type { Metadata } from "next";
+import { ReactNode } from "react";
+import { getSessionSafe } from "@/lib/session";
+import { getOrgForUser } from "@/lib/org-service";
+import { BusinessShell } from "@/components/layouts/business-shell";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
+
+export default async function BusinessDashboardLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  try {
+    const session = await getSessionSafe();
+    if (!session?.user?.id) {
+      redirect("/login");
+    }
+
+    const result = await getOrgForUser(session.user.id);
+    if (!result) {
+      redirect("/business");
+    }
+
+    const { membership, org } = result;
+
+    // Only owners and admins can access the business dashboard
+    if (membership.orgRole === "member") {
+      redirect("/dashboard");
+    }
+
+    const userName = session.user.name ?? "Admin";
+    const userInitials =
+      session.user.name
+        ?.split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2) || "BI";
+    const userImage = (session.user as { image?: string | null }).image ?? null;
+
+    return (
+      <BusinessShell
+        userName={userName}
+        userInitials={userInitials}
+        userImage={userImage}
+        orgName={org.name}
+      >
+        {children}
+      </BusinessShell>
+    );
+  } catch (e) {
+    unstable_rethrow(e);
+    redirect("/login");
+  }
+}
