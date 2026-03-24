@@ -1,32 +1,5 @@
 import Link from "next/link";
-import { Mail, Users, MapPin, Clock, MessageCircle } from "lucide-react";
-
-const contactItems = [
-  {
-    title: "Correo general",
-    value: "contacto@cursumi.com",
-    href: "mailto:contacto@cursumi.com",
-    icon: Mail,
-  },
-  {
-    title: "Soporte técnico",
-    value: "soporte@cursumi.com",
-    href: "mailto:soporte@cursumi.com",
-    icon: MessageCircle,
-  },
-  {
-    title: "Para instructores",
-    value: "instructores@cursumi.com",
-    href: "mailto:instructores@cursumi.com",
-    icon: Users,
-  },
-  {
-    title: "Ciudades",
-    value: "CDMX · Guadalajara · Monterrey",
-    href: null,
-    icon: MapPin,
-  },
-];
+import { Mail, MapPin, Clock } from "lucide-react";
 
 export const ContactInfo = () => {
   return (
@@ -44,39 +17,42 @@ export const ContactInfo = () => {
         </p>
       </div>
 
-      {/* Contact items */}
-      {contactItems.map((item) => {
-        const Icon = item.icon;
-        return (
-          <div
-            key={item.title}
-            className="rounded-2xl border border-border bg-card p-4 transition-all duration-200 hover:shadow-md"
-          >
-            <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                <Icon className="h-4 w-4 text-primary" aria-hidden />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  {item.title}
-                </p>
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="mt-0.5 text-sm text-primary transition-colors hover:underline"
-                  >
-                    {item.value}
-                  </Link>
-                ) : (
-                  <p className="mt-0.5 text-sm text-muted-foreground">
-                    {item.value}
-                  </p>
-                )}
-              </div>
-            </div>
+      {/* Email */}
+      <div className="rounded-2xl border border-border bg-card p-4 transition-all duration-200 hover:shadow-md">
+        <div className="flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <Mail className="h-4 w-4 text-primary" aria-hidden />
           </div>
-        );
-      })}
+          <div>
+            <p className="text-sm font-semibold text-foreground">
+              Escríbenos
+            </p>
+            <Link
+              href="mailto:cursumi.com@gmail.com"
+              className="mt-0.5 text-sm text-primary transition-colors hover:underline"
+            >
+              Enviar correo electrónico
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Ciudades */}
+      <div className="rounded-2xl border border-border bg-card p-4 transition-all duration-200 hover:shadow-md">
+        <div className="flex items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <MapPin className="h-4 w-4 text-primary" aria-hidden />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground">
+              Ciudades
+            </p>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              CDMX · Guadalajara · Monterrey
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

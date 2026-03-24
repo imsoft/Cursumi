@@ -112,9 +112,9 @@ export default function SubscriptionPage() {
 
           <Card>
             <CardContent className="py-6 text-center text-sm text-muted-foreground">
-              Para cambiar tu plan o método de pago, contacta a{" "}
-              <a href="mailto:soporte@cursumi.com" className="text-primary underline">
-                soporte@cursumi.com
+              Para cambiar tu plan o método de pago,{" "}
+              <a href="mailto:cursumi.com@gmail.com" className="text-primary underline">
+                contáctanos por correo
               </a>
             </CardContent>
           </Card>

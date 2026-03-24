@@ -99,7 +99,7 @@ export default function AdminSettingsPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="support-email">Email de soporte</Label>
-              <Input id="support-email" type="email" defaultValue="soporte@cursumi.com" />
+              <Input id="support-email" type="email" defaultValue="cursumi.com@gmail.com" />
             </div>
             <Button>
               <Save className="mr-2 h-4 w-4" />
