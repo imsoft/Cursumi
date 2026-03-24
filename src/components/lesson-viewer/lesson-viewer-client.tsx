@@ -170,10 +170,12 @@ export function LessonViewerClient({
     isLastLessonInSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
   const sectionMinigameRequired =
     isLastLessonInSection && sectionMinigame !== null;
-  // Bloquear navegación solo si hay siguiente sección y falta quiz/minijuego
+  // Bloquear navegación si falta quiz/minijuego de la sección actual
+  // (aplica tanto si hay siguiente sección como si es la última y hay examen final)
+  const sectionGatePending =
+    (sectionQuizRequired && !sectionQuizPassed) || (sectionMinigameRequired && !sectionMinigamePassed);
   const blockNextNavigation =
-    nextIsInDifferentSection &&
-    ((sectionQuizRequired && !sectionQuizPassed) || (sectionMinigameRequired && !sectionMinigamePassed));
+    (nextIsInDifferentSection || (nextLesson === null && hasFinalExam)) && sectionGatePending;
 
   const markComplete = useCallback(async () => {
     if (isCompleted || marking) return;
@@ -751,18 +753,21 @@ export function LessonViewerClient({
               )}
               {lesson.resources && lesson.resources.length > 0 && (
                 <div className="space-y-2">
-                  {lesson.resources.map((res) => (
-                    <a
-                      key={res.id}
-                      href={res.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-primary transition-colors hover:bg-muted"
-                    >
-                      <ChevronRight className="h-4 w-4 shrink-0" />
-                      <span className="flex-1 truncate">{res.title}</span>
-                    </a>
-                  ))}
+                  {lesson.resources.map((res) => {
+                    const href = /^https?:\/\//i.test(res.url) ? res.url : `https://${res.url}`;
+                    return (
+                      <a
+                        key={res.id}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-primary transition-colors hover:bg-muted"
+                      >
+                        <ChevronRight className="h-4 w-4 shrink-0" />
+                        <span className="flex-1 truncate">{res.title}</span>
+                      </a>
+                    );
+                  })}
                 </div>
               )}
             </div>

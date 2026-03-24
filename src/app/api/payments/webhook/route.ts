@@ -134,6 +134,56 @@ export async function POST(req: NextRequest) {
     console.error("Payment failed:", pi.id);
   }
 
+  // ─── Business subscription events ───────────────────────────────────
+  if (
+    event.type === "customer.subscription.created" ||
+    event.type === "customer.subscription.updated"
+  ) {
+    const sub = event.data.object as Stripe.Subscription & {
+      current_period_start?: number;
+      current_period_end?: number;
+    };
+    const stripeCustomerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+
+    const periodStart = sub.current_period_start
+      ? new Date(sub.current_period_start * 1000)
+      : undefined;
+    const periodEnd = sub.current_period_end
+      ? new Date(sub.current_period_end * 1000)
+      : undefined;
+
+    await prisma.orgSubscription.upsert({
+      where: { stripeCustomerId },
+      update: {
+        stripeSubscriptionId: sub.id,
+        status: sub.status === "active" ? "active" : sub.status === "trialing" ? "trialing" : sub.status === "past_due" ? "past_due" : "canceled",
+        ...(periodStart && { currentPeriodStart: periodStart }),
+        ...(periodEnd && { currentPeriodEnd: periodEnd }),
+        cancelAtPeriodEnd: sub.cancel_at_period_end,
+      },
+      create: {
+        stripeCustomerId,
+        stripeSubscriptionId: sub.id,
+        status: "active",
+        maxSeats: 10,
+        ...(periodStart && { currentPeriodStart: periodStart }),
+        ...(periodEnd && { currentPeriodEnd: periodEnd }),
+        cancelAtPeriodEnd: sub.cancel_at_period_end,
+        organization: { connect: { id: (sub.metadata?.organizationId as string) || "" } },
+      },
+    });
+  }
+
+  if (event.type === "customer.subscription.deleted") {
+    const sub = event.data.object as Stripe.Subscription;
+    const stripeCustomerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+
+    await prisma.orgSubscription.updateMany({
+      where: { stripeCustomerId },
+      data: { status: "canceled" },
+    });
+  }
+
   // Instructor completó el onboarding de Stripe Connect
   if (event.type === "account.updated") {
     const account = event.data.object as { id: string; details_submitted: boolean; charges_enabled: boolean };
