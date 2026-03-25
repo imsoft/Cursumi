@@ -9,7 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
 import { ArrowLeft, Download, Share2, Award, Check } from "lucide-react";
 import { CertificateView } from "@/components/certificates/certificate-view";
-import { CertificatePdfHint } from "@/components/certificates/certificate-pdf-hint";
 
 interface CertificatePageProps {
   params: Promise<{ id: string }>;
@@ -184,8 +183,6 @@ export default function CertificatePage({ params }: CertificatePageProps) {
           </Button>
         </div>
       </div>
-
-      <CertificatePdfHint />
 
       <CertificateView certificate={certificate} />
 

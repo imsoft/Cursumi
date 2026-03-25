@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CertificateView } from "@/components/certificates/certificate-view";
-import { CertificatePdfHint } from "@/components/certificates/certificate-pdf-hint";
 import { PartyPopper, Download } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 
@@ -162,8 +161,6 @@ export default function CertificatePreviewPage() {
           </div>
         </CardContent>
       </Card>
-
-      <CertificatePdfHint />
 
       {/* Certificate */}
       <CertificateView certificate={cert} />
