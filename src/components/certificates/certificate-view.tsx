@@ -10,7 +10,7 @@ interface CertificateViewProps {
 
 export function CertificateView({ certificate }: CertificateViewProps) {
   return (
-    <Card className="border-2 border-primary/20 bg-gradient-to-br from-background to-primary/5 shadow-xl print:shadow-none print:border-0">
+    <Card data-certificate className="border-2 border-primary/20 bg-gradient-to-br from-background to-primary/5 shadow-xl print:shadow-none print:border-0">
       <CardContent className="p-8 md:p-12">
         <div className="space-y-8">
           {/* Header del certificado */}

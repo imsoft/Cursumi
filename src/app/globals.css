@@ -122,3 +122,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Print: solo mostrar el certificado */
+@media print {
+  /* Ocultar todo excepto el certificado */
+  body * {
+    visibility: hidden;
+  }
+  [data-certificate],
+  [data-certificate] * {
+    visibility: visible;
+  }
+  [data-certificate] {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: white !important;
+  }
+  /* Forzar colores para impresión */
+  @page {
+    margin: 1cm;
+    size: landscape;
+  }
+}
