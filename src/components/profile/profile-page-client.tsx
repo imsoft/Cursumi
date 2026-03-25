@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
@@ -20,7 +21,7 @@ const profileSchema = z.object({
   email: z.string().email("Correo electrónico inválido"),
   phone: z.string().optional(),
   city: z.string().optional(),
-  bio: z.string().min(10, "La biografía debe tener al menos 10 caracteres").optional(),
+  bio: z.string().optional(),
   website: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
   linkedinUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
   instagramUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
@@ -38,18 +39,38 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<ProfileData>(initialProfile);
   const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const focusField = searchParams.get("focus");
+  const focusHandled = useRef(false);
+
+  useEffect(() => {
+    if (focusField && !focusHandled.current) {
+      focusHandled.current = true;
+      setIsEditing(true);
+      // Wait for DOM to update after enabling editing
+      setTimeout(() => {
+        const el = document.getElementById(`profile-${focusField}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            el.focus();
+          }
+        }
+      }, 200);
+    }
+  }, [focusField]);
 
   const form = useForm<ProfileFormValues>({
     resolver: createZodResolver(profileSchema),
     defaultValues: {
       fullName: initialProfile.fullName,
       email: initialProfile.email,
-      phone: "",
-      city: "",
-      bio: "",
-      website: "",
-      linkedinUrl: "",
-      instagramUrl: "",
+      phone: initialProfile.phone || "",
+      city: initialProfile.city || "",
+      bio: initialProfile.bio || "",
+      website: initialProfile.website || "",
+      linkedinUrl: initialProfile.linkedinUrl || "",
+      instagramUrl: initialProfile.instagramUrl || "",
     },
   });
   const onSubmit = async (values: ProfileFormValues) => {
@@ -58,7 +79,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
       const res = await fetch("/api/me/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName: values.fullName, email: values.email }),
+        body: JSON.stringify(values),
       });
       if (!res.ok) {
         throw new Error("No pudimos actualizar tu perfil");
@@ -67,6 +88,12 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
         ...prev,
         fullName: values.fullName,
         email: values.email,
+        phone: values.phone || "",
+        city: values.city || "",
+        bio: values.bio || "",
+        website: values.website || "",
+        linkedinUrl: values.linkedinUrl || "",
+        instagramUrl: values.instagramUrl || "",
       }));
       setIsEditing(false);
     } catch (err) {
@@ -86,7 +113,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
-          <CardHeader className="flex flex-col items-center gap-4 pb-4">
+          <CardHeader id="profile-image" className="flex flex-col items-center gap-4 pb-4">
             <UserAvatarUpload
               name={profile.fullName}
               avatarUrl={profile.avatar}
@@ -132,6 +159,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <Input
+                    id="profile-fullName"
                     label="Nombre completo"
                     disabled={!isEditing}
                     {...form.register("fullName")}
@@ -160,6 +188,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <Input
+                    id="profile-phone"
                     label="Teléfono"
                     disabled={!isEditing}
                     {...form.register("phone")}
@@ -172,6 +201,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                 </div>
                 <div>
                   <Input
+                    id="profile-city"
                     label="Ciudad"
                     disabled={!isEditing}
                     {...form.register("city")}
@@ -186,6 +216,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
 
               <div>
                 <Textarea
+                  id="profile-bio"
                   label="Biografía"
                   rows={4}
                   disabled={!isEditing}
@@ -205,6 +236,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                 <div className="space-y-4">
                   <div>
                     <Input
+                      id="profile-website"
                       label="Sitio web"
                       disabled={!isEditing}
                       {...form.register("website")}
@@ -218,6 +250,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
                       <Input
+                        id="profile-linkedinUrl"
                         label="LinkedIn"
                         disabled={!isEditing}
                         {...form.register("linkedinUrl")}
@@ -230,6 +263,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                     </div>
                     <div>
                       <Input
+                        id="profile-instagramUrl"
                         label="Instagram"
                         disabled={!isEditing}
                         {...form.register("instagramUrl")}

@@ -6,6 +6,7 @@ import { StudentCoursesInProgress } from "@/components/student/student-courses-i
 import { StudentUpcomingClasses } from "@/components/student/student-upcoming-classes";
 import { StudentRecommendedCourses } from "@/components/student/student-recommended-courses";
 import type { StudentCourse, Recommendation, UpcomingClass } from "@/components/student/types";
+import { ProfileCompleteness, type ProfileField } from "@/components/student/profile-completeness";
 
 interface StudentDashboardClientProps {
   name: string;
@@ -13,6 +14,7 @@ interface StudentDashboardClientProps {
   recommendations: Recommendation[];
   hoursWatched?: string;
   orgName?: string | null;
+  profileFields?: ProfileField[];
 }
 
 export function StudentDashboardClient({
@@ -21,6 +23,7 @@ export function StudentDashboardClient({
   recommendations,
   hoursWatched = "0h",
   orgName,
+  profileFields,
 }: StudentDashboardClientProps) {
   const stats = [
     { title: "Cursos activos", value: courses.length, subtitle: "Actualmente en progreso" },
@@ -53,6 +56,7 @@ export function StudentDashboardClient({
         </div>
       )}
       <StudentStatsCards stats={stats} />
+      {profileFields && <ProfileCompleteness fields={profileFields} />}
       <StudentCoursesInProgress courses={courses} />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch">
         <StudentUpcomingClasses classes={upcoming} />

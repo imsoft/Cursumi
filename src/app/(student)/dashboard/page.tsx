@@ -4,6 +4,7 @@ import { listMyCourses } from "@/app/actions/course-actions";
 import { StudentDashboardClient } from "@/components/student/student-dashboard-client";
 import { prisma } from "@/lib/prisma";
 import { listRecommendations } from "@/lib/course-service";
+import type { ProfileField } from "@/components/student/profile-completeness";
 
 export default async function StudentDashboardPage() {
   const session = await getCachedSession();
@@ -15,8 +16,8 @@ export default async function StudentDashboardPage() {
   const courses = await listMyCourses();
   const excludeIds = courses.map((c) => c.id);
 
-  // Parallel: recommendations + hours watched via SQL SUM (no findMany + JS reduce)
-  const [recommendations, orgMembership, hoursResult] = await Promise.all([
+  // Parallel: recommendations + hours watched + user profile for completeness
+  const [recommendations, orgMembership, hoursResult, userProfile] = await Promise.all([
     listRecommendations(excludeIds),
     prisma.orgMember.findFirst({
       where: { userId: session.user.id },
@@ -40,6 +41,10 @@ export default async function StudentDashboardPage() {
       JOIN "Enrollment" e ON e.id = lp."enrollmentId"
       WHERE e."studentId" = ${session.user.id}
     `,
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true, image: true, phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true },
+    }),
   ]);
 
   const totalMinutes = Number(hoursResult[0]?.total_minutes ?? 0);
@@ -49,6 +54,17 @@ export default async function StudentDashboardPage() {
     ? `${totalMinutes}m`
     : "0h";
 
+  const profileFields: ProfileField[] = [
+    { key: "fullName", label: "Nombre completo", filled: !!userProfile?.name, anchor: "fullName" },
+    { key: "image", label: "Foto de perfil", filled: !!userProfile?.image, anchor: "image" },
+    { key: "phone", label: "Teléfono", filled: !!userProfile?.phone, anchor: "phone" },
+    { key: "city", label: "Ciudad", filled: !!userProfile?.city, anchor: "city" },
+    { key: "bio", label: "Biografía", filled: !!userProfile?.bio, anchor: "bio" },
+    { key: "website", label: "Sitio web", filled: !!userProfile?.website, anchor: "website" },
+    { key: "linkedinUrl", label: "LinkedIn", filled: !!userProfile?.linkedinUrl, anchor: "linkedinUrl" },
+    { key: "instagramUrl", label: "Instagram", filled: !!userProfile?.instagramUrl, anchor: "instagramUrl" },
+  ];
+
   return (
     <StudentDashboardClient
       name={session.user.name || "Usuario"}
@@ -56,6 +72,7 @@ export default async function StudentDashboardPage() {
       recommendations={recommendations}
       hoursWatched={hoursWatched}
       orgName={orgMembership?.organization.name}
+      profileFields={profileFields}
     />
   );
 }

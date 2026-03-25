@@ -5,6 +5,12 @@ export type ProfileData = {
   email: string;
   joinDate: string;
   avatar: string | null;
+  phone: string;
+  city: string;
+  bio: string;
+  website: string;
+  linkedinUrl: string;
+  instagramUrl: string;
   coursesCompleted: number;
   coursesInProgress: number;
 };
@@ -13,7 +19,10 @@ export async function getProfileData(userId: string): Promise<ProfileData> {
   const [user, enrollments] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
-      select: { name: true, email: true, createdAt: true, image: true },
+      select: {
+        name: true, email: true, createdAt: true, image: true,
+        phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
+      },
     }),
     prisma.enrollment.findMany({
       where: { studentId: userId },
@@ -33,6 +42,12 @@ export async function getProfileData(userId: string): Promise<ProfileData> {
     email: user?.email || "",
     joinDate: user?.createdAt?.toISOString() ?? "",
     avatar: user?.image || null,
+    phone: user?.phone || "",
+    city: user?.city || "",
+    bio: user?.bio || "",
+    website: user?.website || "",
+    linkedinUrl: user?.linkedinUrl || "",
+    instagramUrl: user?.instagramUrl || "",
     coursesCompleted,
     coursesInProgress,
   };

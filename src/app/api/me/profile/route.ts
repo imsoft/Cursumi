@@ -6,6 +6,12 @@ import { handleApiError, requireSession } from "@/lib/api-helpers";
 const patchSchema = z.object({
   fullName: z.string().trim().min(1).max(120).optional(),
   email: z.string().email().max(255).optional(),
+  phone: z.string().max(30).optional().nullable(),
+  city: z.string().max(120).optional().nullable(),
+  bio: z.string().max(500).optional().nullable(),
+  website: z.union([z.string().url().max(500), z.literal("")]).optional().nullable(),
+  linkedinUrl: z.union([z.string().url().max(500), z.literal("")]).optional().nullable(),
+  instagramUrl: z.union([z.string().url().max(500), z.literal("")]).optional().nullable(),
   /** Preferir POST /api/me/avatar para fotos; aquí aceptamos URL (p. ej. Cloudinary) o data URL corto */
   avatar: z
     .union([
@@ -14,8 +20,6 @@ const patchSchema = z.object({
     ])
     .nullable()
     .optional(),
-}).refine((d) => d.fullName !== undefined || d.email !== undefined || d.avatar !== undefined, {
-  message: "Se debe proporcionar al menos un campo para actualizar",
 });
 
 export async function GET() {
@@ -24,7 +28,10 @@ export async function GET() {
     const [user, enrollments] = await Promise.all([
       prisma.user.findUnique({
         where: { id: session.user.id },
-        select: { name: true, email: true, createdAt: true, image: true },
+        select: {
+          name: true, email: true, createdAt: true, image: true,
+          phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
+        },
       }),
       prisma.enrollment.findMany({
         where: { studentId: session.user.id },
@@ -40,6 +47,12 @@ export async function GET() {
       email: user?.email || "",
       joinDate: user?.createdAt?.toISOString() ?? "",
       avatar: user?.image || null,
+      phone: user?.phone || "",
+      city: user?.city || "",
+      bio: user?.bio || "",
+      website: user?.website || "",
+      linkedinUrl: user?.linkedinUrl || "",
+      instagramUrl: user?.instagramUrl || "",
       coursesCompleted,
       coursesInProgress,
     });
@@ -56,7 +69,7 @@ export async function PATCH(req: Request) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
     }
-    const { fullName, email, avatar } = parsed.data;
+    const { fullName, email, avatar, phone, city, bio, website, linkedinUrl, instagramUrl } = parsed.data;
 
     const updated = await prisma.user.update({
       where: { id: session.user.id },
@@ -64,8 +77,14 @@ export async function PATCH(req: Request) {
         ...(fullName !== undefined ? { name: fullName } : {}),
         ...(email !== undefined ? { email } : {}),
         ...(avatar !== undefined ? { image: avatar } : {}),
+        ...(phone !== undefined ? { phone: phone || null } : {}),
+        ...(city !== undefined ? { city: city || null } : {}),
+        ...(bio !== undefined ? { bio: bio || null } : {}),
+        ...(website !== undefined ? { website: website || null } : {}),
+        ...(linkedinUrl !== undefined ? { linkedinUrl: linkedinUrl || null } : {}),
+        ...(instagramUrl !== undefined ? { instagramUrl: instagramUrl || null } : {}),
       },
-      select: { name: true, email: true, image: true },
+      select: { name: true, email: true, image: true, phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true },
     });
 
     return NextResponse.json({ updated });

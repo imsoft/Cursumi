@@ -7,6 +7,12 @@ const defaultProfile: ProfileData = {
   email: "",
   joinDate: "",
   avatar: null,
+  phone: "",
+  city: "",
+  bio: "",
+  website: "",
+  linkedinUrl: "",
+  instagramUrl: "",
   coursesCompleted: 0,
   coursesInProgress: 0,
 };
