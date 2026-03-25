@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
 import { ArrowLeft, Download, Share2, Award, Check } from "lucide-react";
-import { CertificateView } from "@/components/certificates/certificate-view";
+import { CertificateView, printCertificate } from "@/components/certificates/certificate-view";
 
 interface CertificatePageProps {
   params: Promise<{ id: string }>;
@@ -76,10 +76,11 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   }, [id, isNew, fireConfetti]);
 
   const handleDownload = () => {
+    const el = document.querySelector("[data-certificate]") as HTMLElement | null;
+    if (!el) return;
     setIsDownloading(true);
-    // Use browser's print-to-PDF. A global @media print CSS hides nav elements.
-    window.print();
-    setTimeout(() => setIsDownloading(false), 1000);
+    printCertificate(el);
+    setTimeout(() => setIsDownloading(false), 1500);
   };
 
   const handleShare = async () => {

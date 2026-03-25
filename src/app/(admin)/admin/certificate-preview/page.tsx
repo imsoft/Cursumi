@@ -5,7 +5,7 @@ import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { CertificateView } from "@/components/certificates/certificate-view";
+import { CertificateView, printCertificate } from "@/components/certificates/certificate-view";
 import { PartyPopper, Download } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 
@@ -145,7 +145,10 @@ export default function CertificatePreviewPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => window.print()}
+              onClick={() => {
+                const el = document.querySelector("[data-certificate]") as HTMLElement | null;
+                if (el) printCertificate(el);
+              }}
             >
               <Download className="mr-2 h-4 w-4" />
               Probar descarga PDF

@@ -125,26 +125,47 @@
 
 /* Print: solo mostrar el certificado */
 @media print {
-  /* Ocultar todo excepto el certificado */
+  @page {
+    margin: 0;
+    size: landscape;
+  }
+
+  /* Ocultar todo por defecto */
   body * {
     visibility: hidden;
   }
+
+  /* Mostrar solo el certificado y su contenido */
   [data-certificate],
   [data-certificate] * {
-    visibility: visible;
+    visibility: visible !important;
   }
+
   [data-certificate] {
-    position: absolute;
+    position: fixed;
     inset: 0;
+    width: 100vw;
+    height: 100vh;
     margin: 0;
+    padding: 2cm;
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     background: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
   }
-  /* Forzar colores para impresión */
-  @page {
-    margin: 1cm;
-    size: landscape;
+
+  /* Forzar que el grid se mantenga en 2 columnas */
+  [data-certificate] .grid.md\:grid-cols-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Asegurar que las firmas se muestren lado a lado */
+  [data-certificate] .flex.items-center.justify-between {
+    display: flex !important;
   }
 }

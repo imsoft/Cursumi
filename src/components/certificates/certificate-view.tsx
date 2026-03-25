@@ -8,9 +8,50 @@ interface CertificateViewProps {
   certificate: Certificate;
 }
 
+export function printCertificate(el: HTMLElement) {
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.inset = "0";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "none";
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentDocument!;
+  doc.open();
+  doc.write(`<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<style>
+  @page { margin: 0; size: landscape; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    width: 100vw; height: 100vh; padding: 1.5cm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .cert { width: 100%; max-width: 900px; }
+</style>
+</head><body><div class="cert">${el.innerHTML}</div></body></html>`);
+  doc.close();
+
+  iframe.contentWindow!.onafterprint = () => {
+    document.body.removeChild(iframe);
+  };
+  // Pequeña espera para que el navegador renderice el contenido del iframe
+  setTimeout(() => {
+    iframe.contentWindow!.print();
+    // Fallback cleanup por si onafterprint no se dispara
+    setTimeout(() => {
+      if (iframe.parentNode) document.body.removeChild(iframe);
+    }, 5000);
+  }, 200);
+}
+
 export function CertificateView({ certificate }: CertificateViewProps) {
   return (
-    <Card data-certificate className="border-2 border-primary/20 bg-gradient-to-br from-background to-primary/5 shadow-xl print:shadow-none print:border-0">
+    <Card data-certificate className="border-2 border-primary/20 bg-linear-to-br from-background to-primary/5 shadow-xl print:shadow-none print:border-0">
       <CardContent className="p-8 md:p-12">
         <div className="space-y-8">
           {/* Header del certificado */}
