@@ -93,6 +93,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   const [addLessonState, setAddLessonState] = useState<{ sectionId: string; title: string; type: LessonType } | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [publishSuccess, setPublishSuccess] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState({
     title: course.title,
@@ -138,22 +139,28 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
 
   const handleSaveBasicInfo = () => {
     setEditSaving(true);
+    setActionError(null);
     startTransition(async () => {
-      await updateCourseBasicInfo(course.id, {
-        title: editData.title,
-        description: editData.description,
-        category: editData.category,
-        level: editData.level,
-        modality: editData.modality,
-        courseType: editData.courseType,
-        price: editData.price,
-        imageUrl: editData.imageUrl || null,
-      });
-      setEditSaving(false);
-      setEditSaved(true);
-      setEditing(false);
-      router.refresh();
-      setTimeout(() => setEditSaved(false), 3000);
+      try {
+        await updateCourseBasicInfo(course.id, {
+          title: editData.title,
+          description: editData.description,
+          category: editData.category,
+          level: editData.level,
+          modality: editData.modality,
+          courseType: editData.courseType,
+          price: editData.price,
+          imageUrl: editData.imageUrl || null,
+        });
+        setEditSaved(true);
+        setEditing(false);
+        router.refresh();
+        setTimeout(() => setEditSaved(false), 3000);
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al guardar");
+      } finally {
+        setEditSaving(false);
+      }
     });
   };
 
@@ -168,64 +175,99 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     if (newIndex < 0 || newIndex >= course.sections.length) return;
     const ids = course.sections.map((s) => s.id);
     [ids[index], ids[newIndex]] = [ids[newIndex], ids[index]];
+    setActionError(null);
     startTransition(async () => {
-      await reorderSections(course.id, ids);
-      router.refresh();
+      try {
+        await reorderSections(course.id, ids);
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al reordenar");
+      }
     });
   };
 
   const handleEditSectionTitle = (sectionId: string) => {
     if (!editSectionTitle.trim()) return;
+    setActionError(null);
     startTransition(async () => {
-      await editSection(course.id, sectionId, { title: editSectionTitle.trim() });
-      setEditingSectionId(null);
-      setEditSectionTitle("");
-      router.refresh();
+      try {
+        await editSection(course.id, sectionId, { title: editSectionTitle.trim() });
+        setEditingSectionId(null);
+        setEditSectionTitle("");
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al editar sección");
+      }
     });
   };
 
   const handleAddSection = () => {
     if (!addSectionTitle.trim()) return;
+    setActionError(null);
     startTransition(async () => {
-      await addSection(course.id, addSectionTitle.trim());
-      setAddSectionTitle("");
-      setAddingSection(false);
-      router.refresh();
+      try {
+        await addSection(course.id, addSectionTitle.trim());
+        setAddSectionTitle("");
+        setAddingSection(false);
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al agregar sección");
+      }
     });
   };
 
   const handleRemoveSection = (sectionId: string) => {
+    setActionError(null);
     startTransition(async () => {
-      await removeSection(course.id, sectionId);
-      router.refresh();
+      try {
+        await removeSection(course.id, sectionId);
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al eliminar sección");
+      }
     });
   };
 
   const handleAddLesson = () => {
     if (!addLessonState?.title.trim()) return;
+    setActionError(null);
     startTransition(async () => {
-      const result = await addLesson(course.id, addLessonState.sectionId, addLessonState.title.trim(), addLessonState.type);
-      setAddLessonState(null);
-      router.push(`/instructor/courses/${course.id}/lessons/${result.id}`);
+      try {
+        const result = await addLesson(course.id, addLessonState.sectionId, addLessonState.title.trim(), addLessonState.type);
+        setAddLessonState(null);
+        router.push(`/instructor/courses/${course.id}/lessons/${result.id}`);
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al agregar lección");
+      }
     });
   };
 
   const handleRemoveLesson = (lessonId: string) => {
+    setActionError(null);
     startTransition(async () => {
-      await removeLesson(course.id, lessonId);
-      router.refresh();
+      try {
+        await removeLesson(course.id, lessonId);
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al eliminar lección");
+      }
     });
   };
 
   const handlePublish = () => {
     setPublishError(null);
+    setActionError(null);
     startTransition(async () => {
-      const result = await publishCourseById(course.id);
-      if (result.success) {
-        setPublishSuccess(true);
-        router.refresh();
-      } else {
-        setPublishError(result.error || "Error al publicar");
+      try {
+        const result = await publishCourseById(course.id);
+        if (result.success) {
+          setPublishSuccess(true);
+          router.refresh();
+        } else {
+          setPublishError(result.error || "Error al publicar");
+        }
+      } catch (err) {
+        setPublishError(err instanceof Error ? err.message : "Error al publicar");
       }
     });
   };
@@ -244,6 +286,14 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
           </Link>
         </Button>
       </div>
+
+      {actionError && (
+        <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {actionError}
+          <button className="ml-auto text-xs underline" onClick={() => setActionError(null)}>Cerrar</button>
+        </div>
+      )}
 
       {/* Course info card */}
       <Card>
@@ -656,15 +706,25 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                           quiz={section.quiz as Parameters<typeof SectionActivityEditor>[0]["quiz"]}
                           minigame={section.minigame as Parameters<typeof SectionActivityEditor>[0]["minigame"]}
                           onQuizChange={(quiz) => {
+                            setActionError(null);
                             startTransition(async () => {
-                              await editSection(course.id, section.id, { quiz: quiz ?? null, minigame: null });
-                              router.refresh();
+                              try {
+                                await editSection(course.id, section.id, { quiz: quiz ?? null, minigame: null });
+                                router.refresh();
+                              } catch (err) {
+                                setActionError(err instanceof Error ? err.message : "Error al guardar actividad");
+                              }
                             });
                           }}
                           onMinigameChange={(minigame) => {
+                            setActionError(null);
                             startTransition(async () => {
-                              await editSection(course.id, section.id, { minigame: minigame ?? null, quiz: null });
-                              router.refresh();
+                              try {
+                                await editSection(course.id, section.id, { minigame: minigame ?? null, quiz: null });
+                                router.refresh();
+                              } catch (err) {
+                                setActionError(err instanceof Error ? err.message : "Error al guardar actividad");
+                              }
                             });
                           }}
                         />
@@ -702,9 +762,14 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                 (course.courseSessions ?? []).map((s) => [s.id, s._count.enrollments])
               )}
               onChange={(sessions) => {
+                setActionError(null);
                 startTransition(async () => {
-                  await saveCourseSessions(course.id, sessions);
-                  router.refresh();
+                  try {
+                    await saveCourseSessions(course.id, sessions);
+                    router.refresh();
+                  } catch (err) {
+                    setActionError(err instanceof Error ? err.message : "Error al guardar sesiones");
+                  }
                 });
               }}
             />
@@ -828,11 +893,16 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                 onClick={() => {
                   setDeleteError(null);
                   startTransition(async () => {
-                    const result = await deleteCourseById(course.id);
-                    if (result.success) {
-                      router.push("/instructor/courses");
-                    } else {
-                      setDeleteError(result.error || "Error al eliminar el curso");
+                    try {
+                      const result = await deleteCourseById(course.id);
+                      if (result.success) {
+                        router.push("/instructor/courses");
+                      } else {
+                        setDeleteError(result.error || "Error al eliminar el curso");
+                        setShowDeleteConfirm(false);
+                      }
+                    } catch (err) {
+                      setDeleteError(err instanceof Error ? err.message : "Error al eliminar");
                       setShowDeleteConfirm(false);
                     }
                   });

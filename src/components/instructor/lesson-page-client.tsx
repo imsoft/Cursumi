@@ -70,8 +70,11 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [editResourceTitle, setEditResourceTitle] = useState("");
   const [editResourceUrl, setEditResourceUrl] = useState("");
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(null);
     try {
       await saveLessonContent(courseId, lesson.id, {
         title, description, type, duration, content, videoUrl,
@@ -83,6 +86,8 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Error al guardar lección");
     } finally {
       setSaving(false);
     }
@@ -90,7 +95,9 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
 
   const handleSaveAndBack = async () => {
     await handleSave();
-    router.push(`/instructor/courses/${courseId}/edit`);
+    if (!saveError) {
+      router.push(`/instructor/courses/${courseId}/edit`);
+    }
   };
 
   // ── Video ───────────────────────────────────────────────────────────────────
@@ -211,6 +218,11 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
           </Link>
         </Button>
         <div className="flex gap-2">
+          {saveError && (
+            <span className="flex items-center gap-1 text-sm text-destructive">
+              {saveError}
+            </span>
+          )}
           {saved && (
             <span className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
               <CheckCircle2 className="h-4 w-4" />

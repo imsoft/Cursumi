@@ -1,7 +1,6 @@
 import "server-only";
 
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/session";
 import { getCourseDetail } from "@/lib/course-service";
 
 /**
@@ -10,22 +9,25 @@ import { getCourseDetail } from "@/lib/course-service";
  * invocar desde Server Components.
  */
 export async function getCourseDetailForEditPage(courseId: string) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  try {
+    const session = await getCachedSession();
 
-  if (!session) {
+    if (!session) {
+      return null;
+    }
+
+    const course = await getCourseDetail(courseId);
+    if (!course) {
+      return null;
+    }
+
+    if (course.instructorId !== session.user.id) {
+      return null;
+    }
+
+    return course;
+  } catch (error) {
+    console.error("[getCourseDetailForEditPage] Error:", error);
     return null;
   }
-
-  const course = await getCourseDetail(courseId);
-  if (!course) {
-    return null;
-  }
-
-  if (course.instructorId !== session.user.id) {
-    return null;
-  }
-
-  return course;
 }
