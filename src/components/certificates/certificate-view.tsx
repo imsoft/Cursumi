@@ -11,8 +11,8 @@ interface CertificateViewProps {
 export function CertificateView({ certificate }: CertificateViewProps) {
   return (
     <Card data-certificate className="border-2 border-primary/20 bg-linear-to-br from-background to-primary/5 shadow-xl">
-      <CardContent className="p-8 md:p-12">
-        <div className="space-y-8">
+      <CardContent className="p-8 md:p-12 print:p-4">
+        <div className="space-y-8 print:space-y-4">
           {/* Header del certificado */}
           <div className="text-center space-y-4">
             <div className="flex justify-center">
@@ -72,21 +72,28 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </div>
           </div>
 
-          {/* Detalles adicionales */}
-          <div className="grid gap-6 md:grid-cols-2 pt-6 border-t border-border">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <User className="h-4 w-4" />
-                <span className="font-medium">Instructor:</span>
+          {/* Detalles adicionales: siempre 2 columnas (impresión no usa breakpoint md) */}
+          <div
+            data-certificate-meta
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-6 border-t border-border print:grid-cols-2 print:gap-8 print:pt-4"
+          >
+            <div className="min-w-0 text-left">
+              <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                <User className="h-4 w-4 mt-0.5 shrink-0" />
+                <div className="min-w-0">
+                  <span className="font-medium">Instructor:</span>{" "}
+                  <span className="text-foreground font-medium">{certificate.instructorName}</span>
+                </div>
               </div>
-              <p className="text-foreground font-medium">{certificate.instructorName}</p>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span className="font-medium">Fecha de emisión:</span>
+            <div className="min-w-0 text-left">
+              <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                <Calendar className="h-4 w-4 mt-0.5 shrink-0" />
+                <div className="min-w-0">
+                  <span className="font-medium">Fecha de emisión:</span>{" "}
+                  <span className="text-foreground font-medium">{certificate.issueDate}</span>
+                </div>
               </div>
-              <p className="text-foreground font-medium">{certificate.issueDate}</p>
             </div>
           </div>
 
@@ -99,15 +106,15 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           </div>
 
           {/* Footer */}
-          <div className="pt-6 border-t border-border">
-            <div className="flex items-center justify-between">
-              <div className="text-center flex-1">
-                <div className="h-16 border-b border-foreground/20 mb-2"></div>
+          <div className="pt-6 border-t border-border print:pt-3">
+            <div className="flex items-end justify-between gap-4 print:gap-6">
+              <div className="text-center flex-1 min-w-0">
+                <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
                 <p className="text-xs text-muted-foreground">{certificate.instructorName}</p>
                 <p className="text-xs text-muted-foreground">Instructor</p>
               </div>
-              <div className="text-center flex-1">
-                <div className="h-16 border-b border-foreground/20 mb-2"></div>
+              <div className="text-center flex-1 min-w-0">
+                <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
                 <p className="text-xs text-muted-foreground">Cursumi</p>
                 <p className="text-xs text-muted-foreground">Plataforma de Educación</p>
               </div>

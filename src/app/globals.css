@@ -126,7 +126,7 @@
 /* Print: solo mostrar el certificado */
 @media print {
   @page {
-    margin: 0;
+    margin: 10mm 12mm;
     size: landscape;
   }
 
@@ -147,25 +147,50 @@
     margin: 0 !important;
   }
 
-  /* El certificado ocupa toda la página */
+  /* Certificado: flujo natural en la página (evita recorte por 100vh + overflow) */
   [data-certificate] {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    padding: 1.5cm !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     background: white !important;
-    z-index: 99999;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    z-index: 1;
+    overflow: visible !important;
+    page-break-inside: avoid;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+  [data-certificate] > div {
+    padding: 0 !important;
+  }
+  [data-certificate] .space-y-8 > * + * {
+    margin-top: 0.65rem !important;
+  }
+
+  /* Instructor + fecha: siempre dos columnas al imprimir */
+  [data-certificate] [data-certificate-meta] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem !important;
+  }
+
+  [data-certificate] .flex {
+    display: flex !important;
+  }
+
+  [data-certificate] h1 { font-size: 1.35rem !important; line-height: 1.2 !important; }
+  [data-certificate] h2 { font-size: 1.75rem !important; line-height: 1.15 !important; }
+  [data-certificate] h3 { font-size: 1.15rem !important; line-height: 1.2 !important; }
+  [data-certificate] .py-6 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
+  [data-certificate] .pt-6 { padding-top: 0.4rem !important; }
 
   /* Forzar colores en impresión */
   [data-certificate] * {
