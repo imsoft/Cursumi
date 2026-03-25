@@ -65,6 +65,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
   const [newQuestionCorrectAnswers, setNewQuestionCorrectAnswers] = useState<Set<number>>(new Set());
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
   const [newCriterionText, setNewCriterionText] = useState("");
   const [editingResourceId, setEditingResourceId] = useState<string | null>(null);
   const [editResourceTitle, setEditResourceTitle] = useState("");
@@ -155,37 +156,60 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   };
 
   // ── Quiz ──────────────────────────────────────────────────────────────────
-  const handleAddQuestion = () => {
-    if (!newQuestionTitle.trim()) return;
-
-    if (newQuestionType === "true-false") {
-      if (newQuestionCorrectAnswer === null) return;
-      setQuizQuestions((prev) => [...prev, {
-        id: crypto.randomUUID(), question: newQuestionTitle.trim(), type: "true-false",
-        options: ["Verdadero", "Falso"], correctAnswer: newQuestionCorrectAnswer, points: newQuestionPoints,
-      }]);
-    } else if (newQuestionType === "checkbox") {
-      const validOptions = newQuestionOptions.filter((o) => o.trim());
-      if (validOptions.length < 1 || newQuestionCorrectAnswers.size === 0) return;
-      setQuizQuestions((prev) => [...prev, {
-        id: crypto.randomUUID(), question: newQuestionTitle.trim(), type: "checkbox",
-        options: validOptions, correctAnswers: Array.from(newQuestionCorrectAnswers).sort(), points: newQuestionPoints,
-      }]);
-    } else {
-      const validOptions = newQuestionOptions.filter((o) => o.trim());
-      if (validOptions.length < 1 || newQuestionCorrectAnswer === null) return;
-      setQuizQuestions((prev) => [...prev, {
-        id: crypto.randomUUID(), question: newQuestionTitle.trim(), type: "multiple-choice",
-        options: validOptions, correctAnswer: newQuestionCorrectAnswer, points: newQuestionPoints,
-      }]);
-    }
-
+  const resetQuestionForm = () => {
+    setEditingQuestionId(null);
     setNewQuestionTitle("");
     setNewQuestionType("multiple-choice");
     setNewQuestionOptions(["", ""]);
     setNewQuestionCorrectAnswer(null);
     setNewQuestionCorrectAnswers(new Set());
     setNewQuestionPoints(10);
+  };
+
+  const startEditQuestion = (q: QuizQuestion) => {
+    setEditingQuestionId(q.id);
+    setNewQuestionTitle(q.question);
+    setNewQuestionType((q.type === "true-false" || q.type === "checkbox") ? q.type : "multiple-choice");
+    setNewQuestionOptions(q.options ? [...q.options] : ["", ""]);
+    setNewQuestionCorrectAnswer(typeof q.correctAnswer === "number" ? q.correctAnswer : null);
+    setNewQuestionCorrectAnswers(new Set(q.correctAnswers ?? []));
+    setNewQuestionPoints(q.points ?? 10);
+  };
+
+  const handleAddQuestion = () => {
+    if (!newQuestionTitle.trim()) return;
+
+    let newQuestion: QuizQuestion;
+
+    if (newQuestionType === "true-false") {
+      if (newQuestionCorrectAnswer === null) return;
+      newQuestion = {
+        id: editingQuestionId ?? crypto.randomUUID(), question: newQuestionTitle.trim(), type: "true-false",
+        options: ["Verdadero", "Falso"], correctAnswer: newQuestionCorrectAnswer, points: newQuestionPoints,
+      };
+    } else if (newQuestionType === "checkbox") {
+      const validOptions = newQuestionOptions.filter((o) => o.trim());
+      if (validOptions.length < 1 || newQuestionCorrectAnswers.size === 0) return;
+      newQuestion = {
+        id: editingQuestionId ?? crypto.randomUUID(), question: newQuestionTitle.trim(), type: "checkbox",
+        options: validOptions, correctAnswers: Array.from(newQuestionCorrectAnswers).sort(), points: newQuestionPoints,
+      };
+    } else {
+      const validOptions = newQuestionOptions.filter((o) => o.trim());
+      if (validOptions.length < 1 || newQuestionCorrectAnswer === null) return;
+      newQuestion = {
+        id: editingQuestionId ?? crypto.randomUUID(), question: newQuestionTitle.trim(), type: "multiple-choice",
+        options: validOptions, correctAnswer: newQuestionCorrectAnswer, points: newQuestionPoints,
+      };
+    }
+
+    if (editingQuestionId) {
+      setQuizQuestions((prev) => prev.map((q) => q.id === editingQuestionId ? newQuestion : q));
+    } else {
+      setQuizQuestions((prev) => [...prev, newQuestion]);
+    }
+
+    resetQuestionForm();
   };
 
   const handleRemoveOption = (index: number) => {
@@ -407,7 +431,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                         question.type === "checkbox" ? question.correctAnswers?.includes(idx) : question.correctAnswer === idx;
                       const typeLabel = question.type === "true-false" ? "V / F" : question.type === "checkbox" ? "Casillas" : "Opción múltiple";
                       return (
-                        <div key={question.id} className="rounded-lg border border-border bg-card p-4 space-y-2">
+                        <div key={question.id} className={`rounded-lg border p-4 space-y-2 ${editingQuestionId === question.id ? "border-primary bg-primary/5" : "border-border bg-card"}`}>
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <p className="text-sm font-medium text-foreground">{question.question}</p>
@@ -427,9 +451,14 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                                 {question.points && <span className="text-xs text-muted-foreground">{question.points} puntos</span>}
                               </div>
                             </div>
-                            <Button variant="ghost" size="sm" onClick={() => setQuizQuestions((prev) => prev.filter((x) => x.id !== question.id))} className="ml-2">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="flex items-center gap-1 ml-2">
+                              <Button variant="ghost" size="sm" onClick={() => startEditQuestion(question)} title="Editar pregunta">
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" onClick={() => setQuizQuestions((prev) => prev.filter((x) => x.id !== question.id))} title="Eliminar pregunta">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       );
@@ -437,8 +466,16 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                   </div>
                 )}
 
-                {/* New question form */}
+                {/* New/Edit question form */}
                 <div className="space-y-4 pt-4 border-t border-border">
+                  {editingQuestionId && (
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-primary">Editando pregunta</p>
+                      <Button variant="ghost" size="sm" onClick={resetQuestionForm}>
+                        <X className="h-4 w-4 mr-1" />Cancelar
+                      </Button>
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="mb-2 block text-sm font-medium text-foreground">Tipo de pregunta</label>
@@ -549,8 +586,11 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                     }
                     className="w-full"
                   >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Agregar pregunta
+                    {editingQuestionId ? (
+                      <><Check className="mr-2 h-4 w-4" />Guardar cambios</>
+                    ) : (
+                      <><Plus className="mr-2 h-4 w-4" />Agregar pregunta</>
+                    )}
                   </Button>
                 </div>
               </div>
