@@ -5,7 +5,7 @@ import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { CertificateView, printCertificate } from "@/components/certificates/certificate-view";
+import { CertificateView } from "@/components/certificates/certificate-view";
 import { PartyPopper, Download } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 
@@ -48,7 +48,7 @@ export default function CertificatePreviewPage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="print:hidden">
         <h1 className="text-2xl font-semibold text-foreground">Preview de certificado</h1>
         <p className="text-sm text-muted-foreground">
           Modifica los campos para ver como se ve el certificado con distintos datos.
@@ -56,7 +56,7 @@ export default function CertificatePreviewPage() {
       </div>
 
       {/* Controls */}
-      <Card>
+      <Card className="print:hidden">
         <CardContent className="p-5 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -145,10 +145,7 @@ export default function CertificatePreviewPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => {
-                const el = document.querySelector("[data-certificate]") as HTMLElement | null;
-                if (el) printCertificate(el);
-              }}
+              onClick={() => window.print()}
             >
               <Download className="mr-2 h-4 w-4" />
               Probar descarga PDF

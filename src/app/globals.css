@@ -130,42 +130,46 @@
     size: landscape;
   }
 
-  /* Ocultar todo por defecto */
-  body * {
-    visibility: hidden;
+  /* Ocultar sidebar, header, controles, y todo lo que no sea el certificado */
+  [data-sidebar="sidebar"],
+  [data-slot="sidebar-inset"] > header,
+  nav,
+  button,
+  a[href] {
+    display: none !important;
   }
 
-  /* Mostrar solo el certificado y su contenido */
-  [data-certificate],
-  [data-certificate] * {
-    visibility: visible !important;
+  /* Quitar padding/margin del layout para que el certificado ocupe toda la página */
+  body,
+  [data-slot="sidebar-inset"],
+  [data-slot="sidebar-inset"] > div {
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
+  /* El certificado ocupa toda la página */
   [data-certificate] {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 2cm;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 1.5cm !important;
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     background: white !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     z-index: 99999;
-  }
-
-  /* Forzar que el grid se mantenga en 2 columnas */
-  [data-certificate] .grid.md\:grid-cols-2 {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-  }
-
-  /* Asegurar que las firmas se muestren lado a lado */
-  [data-certificate] .flex.items-center.justify-between {
     display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Forzar colores en impresión */
+  [data-certificate] * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
 import { ArrowLeft, Download, Share2, Award, Check } from "lucide-react";
-import { CertificateView, printCertificate } from "@/components/certificates/certificate-view";
+import { CertificateView } from "@/components/certificates/certificate-view";
 
 interface CertificatePageProps {
   params: Promise<{ id: string }>;
@@ -76,11 +76,9 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   }, [id, isNew, fireConfetti]);
 
   const handleDownload = () => {
-    const el = document.querySelector("[data-certificate]") as HTMLElement | null;
-    if (!el) return;
     setIsDownloading(true);
-    printCertificate(el);
-    setTimeout(() => setIsDownloading(false), 1500);
+    window.print();
+    setTimeout(() => setIsDownloading(false), 1000);
   };
 
   const handleShare = async () => {
@@ -140,7 +138,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between print:hidden">
         <Link href="/dashboard/certificates">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -181,7 +179,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
       <CertificateView certificate={certificate} />
 
       {/* Información adicional */}
-      <Card className="border border-border bg-card/90">
+      <Card className="border border-border bg-card/90 print:hidden">
         <CardContent className="p-6">
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Información del certificado</h3>
