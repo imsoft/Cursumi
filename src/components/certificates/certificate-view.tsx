@@ -107,17 +107,43 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </p>
           </div>
 
-          {/* Firmas: instructor + diseñador */}
+          {/* Firmas: instructor + administrador */}
           <div className="pt-6 border-t border-border print:pt-3">
             <div className="flex items-end justify-between gap-4 print:gap-6">
               <div className="text-center flex-1 min-w-0">
-                <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
-                <p className="text-xs text-muted-foreground">{certificate.instructorName}</p>
-                <p className="text-xs text-muted-foreground">Instructor</p>
+                {certificate.instructorSignatureUrl ? (
+                  <div className="flex items-end justify-center h-12 print:h-10 mb-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={certificate.instructorSignatureUrl}
+                      alt={`Firma de ${certificate.instructorName}`}
+                      className="max-h-12 print:max-h-10 w-auto object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
+                )}
+                <div className="border-t border-foreground/20 pt-1">
+                  <p className="text-xs text-muted-foreground">{certificate.instructorName}</p>
+                  <p className="text-xs text-muted-foreground">Instructor</p>
+                </div>
               </div>
               <div className="text-center flex-1 min-w-0">
-                <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
-                <p className="text-xs text-muted-foreground">Diseñador del taller</p>
+                {certificate.adminSignatureUrl ? (
+                  <div className="flex items-end justify-center h-12 print:h-10 mb-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={certificate.adminSignatureUrl}
+                      alt="Firma del administrador"
+                      className="max-h-12 print:max-h-10 w-auto object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
+                )}
+                <div className="border-t border-foreground/20 pt-1">
+                  <p className="text-xs text-muted-foreground">Diseñador del taller</p>
+                </div>
               </div>
             </div>
 

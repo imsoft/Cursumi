@@ -378,7 +378,9 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                             setUploadingVideo(true);
                             setVideoError(null);
                             try {
-                              const { uploadUrl, uploadId } = await createMuxUploadUrl("*");
+                              const { uploadUrl, uploadId } = await createMuxUploadUrl("*", {
+                                lessonTitle: title,
+                              });
                               setUploadId(uploadId);
                               const res = await fetch(uploadUrl, {
                                 method: "PUT",

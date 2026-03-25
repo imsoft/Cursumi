@@ -36,12 +36,28 @@ async function requireSession() {
 /**
  * Crea un URL de carga directa en Mux para subir videos desde el cliente.
  * Retorna upload URL e ID; debes usarlo con fetch PUT desde el frontend.
+ *
+ * @param corsOrigin — dominio permitido para CORS
+ * @param metadata — info para identificar el video en el dashboard de Mux
  */
-export async function createMuxUploadUrl(corsOrigin = "*") {
+export async function createMuxUploadUrl(
+  corsOrigin = "*",
+  metadata?: { courseId?: string; lessonId?: string; lessonTitle?: string },
+) {
   await requireSession(); // asegurar usuario
   const { tokenId, tokenSecret } = requireMuxEnv();
 
   const authHeader = Buffer.from(`${tokenId}:${tokenSecret}`).toString("base64");
+
+  // passthrough es un string libre que aparece en el dashboard de Mux
+  const passthrough = metadata
+    ? JSON.stringify({
+        platform: "cursumi",
+        courseId: metadata.courseId,
+        lessonId: metadata.lessonId,
+        lessonTitle: metadata.lessonTitle,
+      })
+    : JSON.stringify({ platform: "cursumi" });
 
   const response = await fetch(MUX_UPLOAD_ENDPOINT, {
     method: "POST",
@@ -53,6 +69,7 @@ export async function createMuxUploadUrl(corsOrigin = "*") {
       cors_origin: corsOrigin,
       new_asset_settings: {
         playback_policy: ["public"],
+        passthrough,
       },
     }),
   });

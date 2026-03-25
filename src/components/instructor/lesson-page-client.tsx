@@ -236,7 +236,11 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                     setUploadingVideo(true);
                     setVideoError(null);
                     try {
-                      const { uploadUrl, uploadId } = await createMuxUploadUrl("*");
+                      const { uploadUrl, uploadId } = await createMuxUploadUrl("*", {
+                        courseId,
+                        lessonId: lesson.id,
+                        lessonTitle: title,
+                      });
                       setUploadId(uploadId);
                       const res = await fetch(uploadUrl, { method: "PUT", headers: { "Content-Type": file.type }, body: file });
                       if (!res.ok) throw new Error("Mux upload failed");

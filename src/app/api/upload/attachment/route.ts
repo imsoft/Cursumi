@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 
+const ALLOWED_FOLDERS: Record<string, string> = {
+  attachments: "cursumi/attachments",
+  materials: "cursumi/materials",
+};
+
 export async function POST(req: NextRequest) {
   try {
-    await requireSession();
-    await requireRole((await requireSession()).user.id, ["instructor", "admin"]);
+    const session = await requireSession();
+    await requireRole(session.user.id, ["instructor", "admin"]);
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
@@ -19,8 +24,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Cloudinary no configurado" }, { status: 500 });
     }
 
+    const folderKey = req.nextUrl.searchParams.get("folder") || "attachments";
+    const folder = ALLOWED_FOLDERS[folderKey] || "cursumi/attachments";
     const timestamp = Math.round(Date.now() / 1000);
-    const folder = "cursumi/attachments";
     const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
     const { createHash } = await import("crypto");
     const signature = createHash("sha1").update(paramsToSign + apiSecret).digest("hex");

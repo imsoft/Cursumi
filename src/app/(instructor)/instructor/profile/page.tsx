@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { InstructorProfileForm } from "@/components/instructor/instructor-profile-form";
 import { InstructorProfileSummary } from "@/components/instructor/instructor-profile-summary";
+import { SignatureUpload } from "@/components/profile/signature-upload";
 
 interface ProfileData {
   fullName: string;
   email: string;
   avatar: string | null;
+  signatureUrl: string | null;
   city: string;
   headline: string;
   bio: string;
@@ -52,6 +54,10 @@ export default function InstructorProfilePage() {
         onAvatarUploaded={() => void loadProfile()}
       />
       <InstructorProfileForm onSaved={loadProfile} />
+      <SignatureUpload
+        signatureUrl={profile?.signatureUrl ?? null}
+        onUploaded={() => void loadProfile()}
+      />
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function MaterialsPage() {
       // Upload to Cloudinary via existing attachment endpoint
       const formData = new FormData();
       formData.append("file", file);
-      const uploadRes = await fetch("/api/upload/attachment", {
+      const uploadRes = await fetch("/api/upload/attachment?folder=materials", {
         method: "POST",
         body: formData,
       });

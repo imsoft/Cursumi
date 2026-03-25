@@ -40,6 +40,8 @@ export type Certificate = {
   modality: "virtual" | "presencial";
   hours?: number;
   imageUrl?: string;
+  instructorSignatureUrl?: string | null;
+  adminSignatureUrl?: string | null;
 };
 
 export type Recommendation = {

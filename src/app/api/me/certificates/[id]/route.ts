@@ -18,7 +18,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
             category: true,
             modality: true,
             duration: true,
-            instructor: { select: { name: true } },
+            instructor: { select: { name: true, signatureUrl: true } },
             imageUrl: true,
           },
         },
@@ -26,11 +26,18 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     });
 
     if (dbCert) {
-      // Fetch exam score for this enrollment
-      const examSubmission = await prisma.examSubmission.findUnique({
-        where: { enrollmentId: dbCert.enrollmentId },
-        select: { score: true },
-      });
+      // Fetch exam score + admin signature in parallel
+      const [examSubmission, adminUser] = await Promise.all([
+        prisma.examSubmission.findUnique({
+          where: { enrollmentId: dbCert.enrollmentId },
+          select: { score: true },
+        }),
+        prisma.user.findFirst({
+          where: { role: "admin", signatureUrl: { not: null } },
+          select: { signatureUrl: true },
+          orderBy: { createdAt: "asc" },
+        }),
+      ]);
 
       return NextResponse.json({
         id: dbCert.id,
@@ -46,6 +53,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         modality: dbCert.course.modality,
         hours: dbCert.course.duration ? parseInt(dbCert.course.duration, 10) || undefined : undefined,
         imageUrl: dbCert.course.imageUrl || null,
+        instructorSignatureUrl: dbCert.course.instructor?.signatureUrl || null,
+        adminSignatureUrl: adminUser?.signatureUrl || null,
       });
     }
 
@@ -64,7 +73,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
             category: true,
             modality: true,
             duration: true,
-            instructor: { select: { name: true } },
+            instructor: { select: { name: true, signatureUrl: true } },
             imageUrl: true,
           },
         },
@@ -74,6 +83,12 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (!enrollment) {
       return NextResponse.json({ error: "Certificado no encontrado" }, { status: 404 });
     }
+
+    const adminUser = await prisma.user.findFirst({
+      where: { role: "admin", signatureUrl: { not: null } },
+      select: { signatureUrl: true },
+      orderBy: { createdAt: "asc" },
+    });
 
     return NextResponse.json({
       id: enrollment.id,
@@ -88,6 +103,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       modality: enrollment.course.modality,
       hours: enrollment.course.duration ? parseInt(enrollment.course.duration, 10) || undefined : undefined,
       imageUrl: enrollment.course.imageUrl || null,
+      instructorSignatureUrl: enrollment.course.instructor?.signatureUrl || null,
+      adminSignatureUrl: adminUser?.signatureUrl || null,
     });
   } catch (error) {
     return handleApiError(error);

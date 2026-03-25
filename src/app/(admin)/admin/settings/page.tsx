@@ -12,14 +12,20 @@ import { Separator } from "@/components/ui/separator";
 import { Save, Bell, Globe, Share2, Loader2, CheckCircle2 } from "lucide-react";
 import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links-config";
 import { SocialIcon } from "@/components/social-icon";
+import { SignatureUpload } from "@/components/profile/signature-upload";
 
 export default function AdminSettingsPage() {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    fetch("/api/me/signature")
+      .then((r) => r.json())
+      .then((data: { url: string | null }) => setSignatureUrl(data.url))
+      .catch(() => {});
     fetch("/api/admin/social-links")
       .then((r) => r.json())
       .then((data: SocialLink[]) => {
@@ -155,6 +161,12 @@ export default function AdminSettingsPage() {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Firma digital del administrador */}
+        <SignatureUpload
+          signatureUrl={signatureUrl}
+          onUploaded={(url) => setSignatureUrl(url)}
+        />
 
         {/* Redes Sociales — ocupa ancho completo */}
         <Card className="border border-border bg-card/90 lg:col-span-2">

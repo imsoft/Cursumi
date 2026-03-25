@@ -25,6 +25,7 @@ model User {
   website       String?
   linkedinUrl   String?
   instagramUrl  String?
+  signatureUrl  String?
   role          Role      @default(student)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
