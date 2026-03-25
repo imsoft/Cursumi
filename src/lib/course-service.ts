@@ -5,6 +5,65 @@ import type { CourseFormData, CourseSection, CourseSessionData } from "@/compone
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
 
+/**
+ * Recalcula el progreso de TODOS los enrollments de un curso.
+ * Se usa cuando el instructor modifica la estructura del curso (agrega/elimina lecciones, secciones, etc.)
+ */
+async function recalculateAllEnrollments(courseId: string) {
+  const enrollments = await prisma.enrollment.findMany({
+    where: { courseId },
+    select: { id: true },
+  });
+  if (enrollments.length === 0) return;
+
+  const [totalLessons, sections, course] = await Promise.all([
+    prisma.lesson.count({ where: { section: { courseId } } }),
+    prisma.courseSection.findMany({
+      where: { courseId },
+      select: { id: true, quiz: true, minigame: true },
+    }),
+    prisma.course.findUnique({
+      where: { id: courseId },
+      select: { finalExam: true },
+    }),
+  ]);
+
+  const gatedSections = sections.filter(
+    (s) =>
+      (s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length) ||
+      (s.minigame && (s.minigame as { type?: string }).type),
+  ).length;
+
+  const hasFinalExam = !!(
+    course?.finalExam &&
+    (course.finalExam as { questions?: unknown[] }).questions?.length
+  );
+
+  const totalUnits = totalLessons + gatedSections + (hasFinalExam ? 1 : 0);
+
+  for (const enrollment of enrollments) {
+    const [completedLessons, passedGates, examSubmission] = await Promise.all([
+      prisma.lessonProgress.count({ where: { enrollmentId: enrollment.id } }),
+      prisma.sectionQuizSubmission.count({
+        where: { enrollmentId: enrollment.id, passed: true },
+      }),
+      prisma.examSubmission.findUnique({
+        where: { enrollmentId: enrollment.id },
+        select: { passed: true },
+      }),
+    ]);
+
+    const completedUnits =
+      completedLessons + passedGates + (examSubmission?.passed ? 1 : 0);
+    const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
+
+    await prisma.enrollment.update({
+      where: { id: enrollment.id },
+      data: { progress },
+    });
+  }
+}
+
 function toSlugPart(text: string): string {
   return text
     .toLowerCase()
@@ -294,6 +353,9 @@ export async function updateCourse(
   for (const s of sectionsToDelete) {
     await prisma.courseSection.delete({ where: { id: s.id } });
   }
+
+  // Recalculate progress for all enrolled students (structure may have changed)
+  await recalculateAllEnrollments(courseId);
 
   return getCourseDetail(courseId);
 }

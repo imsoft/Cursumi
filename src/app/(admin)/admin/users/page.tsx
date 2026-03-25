@@ -8,10 +8,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
-import { Users, UserPlus, ShieldCheck } from "lucide-react";
+import { Users, UserPlus, ShieldCheck, ChevronDown, ChevronUp, BookOpen, GraduationCap } from "lucide-react";
 
 type UserRole = "student" | "instructor" | "admin";
 type UserStatus = "active" | "inactive" | "suspended";
+
+interface EnrolledCourse {
+  enrollmentId: string;
+  courseId: string;
+  courseTitle: string;
+  modality: string;
+  progress: number;
+  status: string;
+  enrolledAt: string;
+}
+
+interface TeachingCourse {
+  courseId: string;
+  courseTitle: string;
+  modality: string;
+  status: string;
+  studentsCount: number;
+}
 
 interface User {
   id: string;
@@ -21,6 +39,8 @@ interface User {
   status: UserStatus;
   createdAt: string;
   coursesCount?: number;
+  enrolledCourses?: EnrolledCourse[];
+  teachingCourses?: TeachingCourse[];
 }
 
 const roleOptions = [
@@ -76,6 +96,7 @@ export default function AdminUsersPage() {
   const [error, setError] = useState<string | null>(null);
   const [roleTarget, setRoleTarget] = useState<RoleTarget>(null);
   const [changingRole, setChangingRole] = useState(false);
+  const [expandedUser, setExpandedUser] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -229,60 +250,147 @@ export default function AdminUsersPage() {
               {filteredUsers.map((user) => {
                 const roleBadge = getRoleBadge(user.role);
                 const statusBadge = getStatusBadge(user.status);
+                const isExpanded = expandedUser === user.id;
+                const hasEnrolled = (user.enrolledCourses?.length ?? 0) > 0;
+                const hasTeaching = (user.teachingCourses?.length ?? 0) > 0;
+                const hasCourses = hasEnrolled || hasTeaching;
                 return (
                   <div
                     key={user.id}
-                    className="flex flex-col gap-4 rounded-lg border border-border bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
+                    className="rounded-lg border border-border bg-background overflow-hidden"
                   >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-foreground">{user.name}</h3>
-                        <Badge variant={roleBadge.variant}>{roleBadge.label}</Badge>
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold text-white ${statusBadge.color}`}>
-                          {statusBadge.label}
-                        </span>
+                    <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="space-y-1 flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-foreground">{user.name}</h3>
+                          <Badge variant={roleBadge.variant}>{roleBadge.label}</Badge>
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold text-white ${statusBadge.color}`}>
+                            {statusBadge.label}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                          <span>Registrado: {new Date(user.createdAt).toLocaleDateString("es-MX")}</span>
+                          {hasEnrolled && (
+                            <span className="flex items-center gap-1">
+                              <GraduationCap className="h-3 w-3" />
+                              {user.enrolledCourses!.length} {user.enrolledCourses!.length === 1 ? "taller inscrito" : "talleres inscritos"}
+                            </span>
+                          )}
+                          {hasTeaching && (
+                            <span className="flex items-center gap-1">
+                              <BookOpen className="h-3 w-3" />
+                              {user.teachingCourses!.length} {user.teachingCourses!.length === 1 ? "taller como instructor" : "talleres como instructor"}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-sm text-muted-foreground">{user.email}</p>
-                      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                        <span>Registrado: {user.createdAt}</span>
-                        {user.coursesCount !== undefined && (
-                          <span>{user.coursesCount} cursos</span>
+                      <div className="flex gap-2 items-center">
+                        {hasCourses && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setExpandedUser(isExpanded ? null : user.id)}
+                          >
+                            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                            <span className="ml-1 text-xs">Talleres</span>
+                          </Button>
+                        )}
+                        {user.role !== "instructor" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              setRoleTarget({
+                                id: user.id,
+                                name: user.name,
+                                newRole: "instructor",
+                              })
+                            }
+                          >
+                            <ShieldCheck className="mr-1 h-3 w-3" />
+                            Hacer instructor
+                          </Button>
+                        )}
+                        {user.role !== "student" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              setRoleTarget({
+                                id: user.id,
+                                name: user.name,
+                                newRole: "student",
+                              })
+                            }
+                          >
+                            Hacer estudiante
+                          </Button>
                         )}
                       </div>
                     </div>
-                    <div className="flex gap-2">
-                      {user.role !== "instructor" && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            setRoleTarget({
-                              id: user.id,
-                              name: user.name,
-                              newRole: "instructor",
-                            })
-                          }
-                        >
-                          <ShieldCheck className="mr-1 h-3 w-3" />
-                          Hacer instructor
-                        </Button>
-                      )}
-                      {user.role !== "student" && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            setRoleTarget({
-                              id: user.id,
-                              name: user.name,
-                              newRole: "student",
-                            })
-                          }
-                        >
-                          Hacer estudiante
-                        </Button>
-                      )}
-                    </div>
+
+                    {/* Expanded course details */}
+                    {isExpanded && (
+                      <div className="border-t border-border bg-muted/30 px-4 py-3 space-y-3">
+                        {hasEnrolled && (
+                          <div>
+                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                              Talleres inscritos
+                            </p>
+                            <div className="space-y-2">
+                              {user.enrolledCourses!.map((ec) => (
+                                <div key={ec.enrollmentId} className="flex items-center justify-between rounded-md border border-border bg-background px-3 py-2">
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-foreground truncate">{ec.courseTitle}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                      Inscrito: {new Date(ec.enrolledAt).toLocaleDateString("es-MX")} · {ec.modality}
+                                    </p>
+                                  </div>
+                                  <div className="flex items-center gap-3 ml-4 shrink-0">
+                                    <div className="text-right">
+                                      <p className="text-sm font-semibold text-foreground">{ec.progress}%</p>
+                                      <p className="text-xs text-muted-foreground">progreso</p>
+                                    </div>
+                                    <div className="w-16 h-2 rounded-full bg-muted overflow-hidden">
+                                      <div
+                                        className="h-full rounded-full bg-primary transition-all"
+                                        style={{ width: `${Math.min(ec.progress, 100)}%` }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {hasTeaching && (
+                          <div>
+                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                              Talleres como instructor
+                            </p>
+                            <div className="space-y-2">
+                              {user.teachingCourses!.map((tc) => (
+                                <div key={tc.courseId} className="flex items-center justify-between rounded-md border border-border bg-background px-3 py-2">
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-foreground truncate">{tc.courseTitle}</p>
+                                    <p className="text-xs text-muted-foreground">{tc.modality} · {tc.status}</p>
+                                  </div>
+                                  <div className="flex items-center gap-1 ml-4 shrink-0">
+                                    <Users className="h-3 w-3 text-muted-foreground" />
+                                    <span className="text-sm font-medium">{tc.studentsCount}</span>
+                                    <span className="text-xs text-muted-foreground">inscritos</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {!hasCourses && (
+                          <p className="text-sm text-muted-foreground">Sin talleres registrados.</p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               })}
