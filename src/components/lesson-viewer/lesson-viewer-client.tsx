@@ -49,6 +49,7 @@ interface LessonResource {
 interface LessonData {
   id: string;
   title: string;
+  description?: string | null;
   type: LessonType;
   content: string | null;
   videoUrl: string | null;
@@ -450,10 +451,14 @@ export function LessonViewerClient({
     }
 
     if (lesson.type === "text") {
+      // Preserve line breaks: convert single newlines to Markdown line breaks (two trailing spaces + newline)
+      const formattedContent = lesson.content
+        ? lesson.content.replace(/(?<!\n)\n(?!\n)/g, "  \n")
+        : "";
       return (
         <div className="prose prose-neutral dark:prose-invert max-w-none rounded-lg border border-border bg-card p-6">
-          {lesson.content ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content}</ReactMarkdown>
+          {formattedContent ? (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{formattedContent}</ReactMarkdown>
           ) : (
             <p className="text-muted-foreground">No hay contenido disponible.</p>
           )}
@@ -908,6 +913,9 @@ export function LessonViewerClient({
               {lesson.duration && <span>· {lesson.duration}</span>}
             </div>
             <h1 className="mt-1 text-2xl font-bold text-foreground">{lesson.title}</h1>
+            {lesson.description && (
+              <p className="mt-2 text-sm text-muted-foreground whitespace-pre-line">{lesson.description}</p>
+            )}
           </div>
 
           {/* Content */}

@@ -38,6 +38,7 @@ export default async function LessonPage({
       lesson={{
         id: lesson.id,
         title: lesson.title,
+        description: lesson.description ?? null,
         type: lesson.type,
         content: lesson.content ?? null,
         videoUrl: lesson.videoUrl ?? null,
