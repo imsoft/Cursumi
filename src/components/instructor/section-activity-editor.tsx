@@ -15,6 +15,7 @@ import type {
   SectionMinigame,
   MemoryPair,
   HangmanWord,
+  MatchPair,
 } from "./course-types";
 
 // ─── Quiz editor ─────────────────────────────────────────────────────────────
@@ -417,9 +418,79 @@ function SortMinigameEditor({
   );
 }
 
+function MatchMinigameEditor({
+  instruction,
+  pairs,
+  onInstructionChange,
+  onPairsChange,
+}: {
+  instruction: string;
+  pairs: MatchPair[];
+  onInstructionChange: (v: string) => void;
+  onPairsChange: (v: MatchPair[]) => void;
+}) {
+  const [left, setLeft] = useState("");
+  const [right, setRight] = useState("");
+
+  const addPair = () => {
+    if (!left.trim() || !right.trim()) return;
+    if (pairs.length >= 8) return;
+    onPairsChange([...pairs, { left: left.trim(), right: right.trim() }]);
+    setLeft("");
+    setRight("");
+  };
+
+  const removePair = (i: number) => onPairsChange(pairs.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="space-y-3">
+      <div className="space-y-1">
+        <Label className="text-sm font-medium">Instrucción para el alumno</Label>
+        <Input
+          placeholder="Ej: Conecta cada concepto con su definición"
+          value={instruction}
+          onChange={(e) => onInstructionChange(e.target.value)}
+        />
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Define los pares correctos (4–8 pares). Se mostrarán desordenados al alumno.
+      </p>
+      {pairs.map((p, i) => (
+        <div key={i} className="flex items-center gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 text-sm">
+          <span className="flex-1 truncate">
+            <span className="font-medium">{p.left}</span>
+            <span className="text-muted-foreground"> → </span>
+            <span className="font-medium">{p.right}</span>
+          </span>
+          <Button variant="ghost" size="sm" onClick={() => removePair(i)}>
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ))}
+      {pairs.length < 8 && (
+        <div className="space-y-2 rounded-lg border border-dashed border-border p-3">
+          <div className="grid grid-cols-2 gap-2">
+            <Input placeholder="Columna A (concepto)" value={left} onChange={(e) => setLeft(e.target.value)} />
+            <Input placeholder="Columna B (definición)" value={right} onChange={(e) => setRight(e.target.value)} />
+          </div>
+          <Button size="sm" onClick={addPair} disabled={!left.trim() || !right.trim() || pairs.length >= 8}>
+            <Plus className="mr-1 h-3.5 w-3.5" />
+            Añadir par
+          </Button>
+        </div>
+      )}
+      {pairs.length < 4 && (
+        <p className="text-xs text-amber-600 dark:text-amber-400">
+          Añade al menos {4 - pairs.length} par{4 - pairs.length !== 1 ? "es" : ""} más.
+        </p>
+      )}
+    </div>
+  );
+}
+
 // ─── Main activity editor ────────────────────────────────────────────────────
 
-type ActivityType = "none" | "quiz" | "memory" | "hangman" | "sort";
+type ActivityType = "none" | "quiz" | "memory" | "hangman" | "sort" | "match";
 
 const ACTIVITY_OPTIONS: { type: ActivityType; label: string; icon: React.ReactNode; description: string }[] = [
   { type: "none", label: "Ninguna", icon: <Circle className="h-4 w-4" />, description: "Sin actividad" },
@@ -427,6 +498,7 @@ const ACTIVITY_OPTIONS: { type: ActivityType; label: string; icon: React.ReactNo
   { type: "memory", label: "Memoria", icon: <Gamepad2 className="h-4 w-4" />, description: "Emparejar tarjetas" },
   { type: "hangman", label: "Ahorcado", icon: <Gamepad2 className="h-4 w-4" />, description: "Adivinar palabras" },
   { type: "sort", label: "Ordenar", icon: <Gamepad2 className="h-4 w-4" />, description: "Ordenar elementos" },
+  { type: "match", label: "Conectar", icon: <Gamepad2 className="h-4 w-4" />, description: "Conectar columnas" },
 ];
 
 export function SectionActivityEditor({
@@ -462,12 +534,15 @@ export function SectionActivityEditor({
     } else if (type === "sort") {
       onQuizChange(undefined);
       onMinigameChange({ type: "sort", instruction: "", items: [] });
+    } else if (type === "match") {
+      onQuizChange(undefined);
+      onMinigameChange({ type: "match", instruction: "", pairs: [] });
     }
   };
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
         {ACTIVITY_OPTIONS.map((opt) => (
           <button
             key={opt.type}
@@ -516,6 +591,19 @@ export function SectionActivityEditor({
           }
           onItemsChange={(items) =>
             onMinigameChange({ type: "sort", instruction: minigame.instruction, items })
+          }
+        />
+      )}
+
+      {currentType === "match" && minigame?.type === "match" && (
+        <MatchMinigameEditor
+          instruction={minigame.instruction}
+          pairs={minigame.pairs}
+          onInstructionChange={(instruction) =>
+            onMinigameChange({ type: "match", instruction, pairs: minigame.pairs })
+          }
+          onPairsChange={(pairs) =>
+            onMinigameChange({ type: "match", instruction: minigame.instruction, pairs })
           }
         />
       )}

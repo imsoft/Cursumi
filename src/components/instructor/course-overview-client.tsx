@@ -13,12 +13,13 @@ import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
   CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon, Loader2,
+  ArrowUp, ArrowDown, Check,
 } from "lucide-react";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
-  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions,
+  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions, reorderSections,
 } from "@/app/actions/course-actions";
 import { SectionActivityEditor } from "@/components/instructor/section-activity-editor";
 import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
@@ -108,6 +109,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
+  const [editSectionTitle, setEditSectionTitle] = useState("");
 
   const handleCoverSuccess = useCallback(
     (url: string) => {
@@ -158,6 +161,27 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     const next = new Set(expandedSections);
     next.has(id) ? next.delete(id) : next.add(id);
     setExpandedSections(next);
+  };
+
+  const handleMoveSection = (index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= course.sections.length) return;
+    const ids = course.sections.map((s) => s.id);
+    [ids[index], ids[newIndex]] = [ids[newIndex], ids[index]];
+    startTransition(async () => {
+      await reorderSections(course.id, ids);
+      router.refresh();
+    });
+  };
+
+  const handleEditSectionTitle = (sectionId: string) => {
+    if (!editSectionTitle.trim()) return;
+    startTransition(async () => {
+      await editSection(course.id, sectionId, { title: editSectionTitle.trim() });
+      setEditingSectionId(null);
+      setEditSectionTitle("");
+      router.refresh();
+    });
   };
 
   const handleAddSection = () => {
@@ -462,17 +486,69 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                   {/* Section header */}
                   <CardHeader className="pb-0 pt-4">
                     <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => toggleSection(section.id)}
-                        className="flex flex-1 items-center gap-2 text-left"
-                      >
-                        {isOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
-                        <span className="font-semibold text-foreground">
-                          {si + 1}. {section.title}
-                        </span>
-                        <Badge variant="outline" className="ml-1">{section.lessons.length} lecciones</Badge>
-                      </button>
+                      {/* Move up/down */}
+                      <div className="flex flex-col">
+                        <button
+                          type="button"
+                          disabled={si === 0 || isPending}
+                          onClick={() => handleMoveSection(si, "up")}
+                          className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+                          title="Mover arriba"
+                        >
+                          <ArrowUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={si === course.sections.length - 1 || isPending}
+                          onClick={() => handleMoveSection(si, "down")}
+                          className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+                          title="Mover abajo"
+                        >
+                          <ArrowDown className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+
+                      {editingSectionId === section.id ? (
+                        <div className="flex flex-1 items-center gap-2">
+                          <Input
+                            value={editSectionTitle}
+                            onChange={(e) => setEditSectionTitle(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleEditSectionTitle(section.id); } if (e.key === "Escape") setEditingSectionId(null); }}
+                            className="h-8 text-sm"
+                            autoFocus
+                          />
+                          <Button size="sm" variant="ghost" onClick={() => handleEditSectionTitle(section.id)} disabled={!editSectionTitle.trim() || isPending}>
+                            <Check className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => setEditingSectionId(null)}>
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => toggleSection(section.id)}
+                          className="flex flex-1 items-center gap-2 text-left"
+                        >
+                          {isOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+                          <span className="font-semibold text-foreground">
+                            {si + 1}. {section.title}
+                          </span>
+                          <Badge variant="outline" className="ml-1">{section.lessons.length} lecciones</Badge>
+                        </button>
+                      )}
+
+                      {editingSectionId !== section.id && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => { setEditingSectionId(section.id); setEditSectionTitle(section.title); }}
+                          disabled={isPending}
+                          title="Editar título"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                      )}
                       <ConfirmDeleteButton
                         disabled={isPending}
                         onConfirm={() => handleRemoveSection(section.id)}

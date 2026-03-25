@@ -22,6 +22,7 @@ const DEFAULTS: Certificate = {
   }),
   certificateNumber: "CUR-PREVIEW-ABCD",
   type: "accreditation",
+  score: 85,
   category: "Tecnologia",
   modality: "virtual",
   hours: 40,
@@ -32,7 +33,7 @@ export default function CertificatePreviewPage() {
 
   useEffect(() => {
     const prevTitle = document.title;
-    document.title = "Vista previa certificado · Cursumi";
+    document.title = "Vista previa constancia · Cursumi";
     return () => {
       document.title = prevTitle;
     };
@@ -57,9 +58,9 @@ export default function CertificatePreviewPage() {
   return (
     <div className="space-y-6">
       <div className="print:hidden">
-        <h1 className="text-2xl font-semibold text-foreground">Preview de certificado</h1>
+        <h1 className="text-2xl font-semibold text-foreground">Preview de constancia</h1>
         <p className="text-sm text-muted-foreground">
-          Modifica los campos para ver como se ve el certificado con distintos datos.
+          Modifica los campos para ver cómo se ve la constancia con distintos datos.
         </p>
       </div>
 
@@ -137,7 +138,18 @@ export default function CertificatePreviewPage() {
               </select>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">No. de certificado</label>
+              <label className="text-sm font-medium text-foreground">Calificación (pts)</label>
+              <Input
+                className="mt-1"
+                type="number"
+                value={cert.score ?? ""}
+                onChange={(e) =>
+                  update({ score: e.target.value ? Number(e.target.value) : undefined })
+                }
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground">No. de constancia</label>
               <Input
                 className="mt-1"
                 value={cert.certificateNumber}

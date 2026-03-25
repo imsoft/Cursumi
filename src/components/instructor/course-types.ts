@@ -70,7 +70,14 @@ export type SortMinigame = {
   items: string[]; // Items in correct order
 };
 
-export type SectionMinigame = MemoryMinigame | HangmanMinigame | SortMinigame;
+export type MatchPair = { left: string; right: string };
+export type MatchMinigame = {
+  type: "match";
+  instruction: string; // e.g. "Conecta cada concepto con su definición"
+  pairs: MatchPair[]; // 4–8 pairs
+};
+
+export type SectionMinigame = MemoryMinigame | HangmanMinigame | SortMinigame | MatchMinigame;
 
 export type CourseSection = {
   id: string;
@@ -85,9 +92,10 @@ export type CourseSection = {
 export type QuizQuestion = {
   id: string;
   question: string;
-  type: "multiple-choice" | "true-false" | "short-answer";
-  options?: string[]; // Para multiple-choice
-  correctAnswer?: string | number; // Para multiple-choice y true-false
+  type: "multiple-choice" | "true-false" | "checkbox" | "short-answer";
+  options?: string[]; // Para multiple-choice y checkbox
+  correctAnswer?: string | number; // Para multiple-choice y true-false (índice)
+  correctAnswers?: number[]; // Para checkbox (múltiples índices correctos)
   points?: number;
 };
 
@@ -111,6 +119,11 @@ export type CourseLesson = {
   resources?: CourseResource[];
   quizQuestions?: QuizQuestion[];
   evaluationCriteria?: EvaluationCriterion[];
+  // Quiz config (optional)
+  quizTimeLimit?: number; // minutos
+  quizAttempts?: number; // intentos permitidos
+  quizPassingRequired?: boolean; // ¿requiere aprobar para continuar?
+  quizPassingScore?: number; // porcentaje mínimo (0-100)
 };
 
 export type CourseFile = {

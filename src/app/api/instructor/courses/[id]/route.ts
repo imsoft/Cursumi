@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getCourseDetail } from "@/lib/course-service";
 import { prisma } from "@/lib/prisma";
 import type { CourseStatus } from "@/generated/prisma";
@@ -59,6 +60,9 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       where: { id },
       data: { status },
     });
+
+    revalidatePath("/instructor/courses");
+    revalidatePath("/dashboard/my-courses");
 
     return NextResponse.json(updated);
   } catch (error) {

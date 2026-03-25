@@ -221,6 +221,25 @@ export async function editSection(
   revalidatePath(`/instructor/courses/${courseId}/edit`);
 }
 
+export async function reorderSections(
+  courseId: string,
+  sectionIds: string[],
+) {
+  const session = await requireSession();
+  await verifyCourseOwner(courseId, session.user.id);
+
+  await Promise.all(
+    sectionIds.map((id, index) =>
+      prisma.courseSection.update({
+        where: { id },
+        data: { order: index + 1 },
+      }),
+    ),
+  );
+
+  revalidatePath(`/instructor/courses/${courseId}/edit`);
+}
+
 export async function addLesson(courseId: string, sectionId: string, title: string, type: CourseLesson["type"]) {
   const session = await requireSession();
   await verifyCourseOwner(courseId, session.user.id);
@@ -250,12 +269,20 @@ export async function getLessonForEdit(courseId: string, lessonId: string): Prom
   let content = lesson.content || "";
   let quizQuestions: CourseLesson["quizQuestions"];
   let evaluationCriteria: CourseLesson["evaluationCriteria"];
+  let quizTimeLimit: number | undefined;
+  let quizAttempts: number | undefined;
+  let quizPassingRequired: boolean | undefined;
+  let quizPassingScore: number | undefined;
 
   if (lesson.type === "quiz" && lesson.content) {
     try {
       const p = JSON.parse(lesson.content);
       content = p.instructions || "";
       quizQuestions = p.questions || [];
+      quizTimeLimit = p.timeLimit;
+      quizAttempts = p.attempts;
+      quizPassingRequired = p.passingRequired;
+      quizPassingScore = p.passingScore;
     } catch {}
   } else if (lesson.type === "assignment" && lesson.content) {
     try {
@@ -278,6 +305,10 @@ export async function getLessonForEdit(courseId: string, lessonId: string): Prom
     resources: Array.isArray(lesson.resources) ? (lesson.resources as any[]) : [],
     quizQuestions,
     evaluationCriteria,
+    quizTimeLimit,
+    quizAttempts,
+    quizPassingRequired,
+    quizPassingScore,
   };
 }
 
@@ -289,7 +320,14 @@ export async function saveLessonContent(courseId: string, lessonId: string, data
 
   let content: string | null = null;
   if (data.type === "quiz") {
-    content = JSON.stringify({ instructions: data.content || "", questions: data.quizQuestions || [] });
+    content = JSON.stringify({
+      instructions: data.content || "",
+      questions: data.quizQuestions || [],
+      timeLimit: data.quizTimeLimit || undefined,
+      attempts: data.quizAttempts || undefined,
+      passingRequired: data.quizPassingRequired || false,
+      passingScore: data.quizPassingScore || 70,
+    });
   } else if (data.type === "assignment") {
     content = JSON.stringify({ instructions: data.content || "", criteria: data.evaluationCriteria || [] });
   } else {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -24,6 +24,7 @@ import {
 import { MemoryGame } from "./minigames/memory-game";
 import { HangmanGame } from "./minigames/hangman-game";
 import { SortGame } from "./minigames/sort-game";
+import { MatchGame } from "./minigames/match-game";
 import { LessonSidebar } from "./lesson-sidebar";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
@@ -88,7 +89,8 @@ interface SectionQuiz {
 type SectionMinigameData =
   | { type: "memory"; pairs: { term: string; definition: string }[] }
   | { type: "hangman"; words: { word: string; hint: string }[] }
-  | { type: "sort"; instruction: string; items: string[] };
+  | { type: "sort"; instruction: string; items: string[] }
+  | { type: "match"; instruction: string; pairs: { left: string; right: string }[] };
 
 interface LessonViewerClientProps {
   lesson: LessonData;
@@ -147,9 +149,30 @@ export function LessonViewerClient({
   const [marking, setMarking] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
+  const [quizCheckboxAnswers, setQuizCheckboxAnswers] = useState<Record<number, Set<number>>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [quizAttemptCount, setQuizAttemptCount] = useState(0);
+  const [quizTimeLeft, setQuizTimeLeft] = useState<number | null>(null); // seconds
+  const [quizTimerStarted, setQuizTimerStarted] = useState(false);
   const [assignmentText, setAssignmentText] = useState("");
   const [assignmentSaved, setAssignmentSaved] = useState(false);
+
+  // Parse quiz config early so hooks can reference it
+  const quizConfig = useMemo(() => {
+    if (lesson.type !== "quiz" || !lesson.content) return { timeLimit: 0, maxAttempts: 0, passingRequired: false, passingScore: 70 };
+    try {
+      const p = JSON.parse(lesson.content);
+      if (p && typeof p === "object" && !Array.isArray(p)) {
+        return {
+          timeLimit: p.timeLimit || 0,
+          maxAttempts: p.attempts || 0,
+          passingRequired: p.passingRequired || false,
+          passingScore: p.passingScore || 70,
+        };
+      }
+    } catch {}
+    return { timeLimit: 0, maxAttempts: 0, passingRequired: false, passingScore: 70 };
+  }, [lesson.type, lesson.content]);
 
   // Estado del test de sección
   const [sectionQuizPassed, setSectionQuizPassed] = useState(initialSectionQuizPassed);
@@ -159,6 +182,44 @@ export function LessonViewerClient({
   const [sectionQuizSubmitted, setSectionQuizSubmitted] = useState(false);
   const [sectionQuizScore, setSectionQuizScore] = useState(0);
   const [sectionQuizSubmitting, setSectionQuizSubmitting] = useState(false);
+
+  // Quiz timer
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => {
+    if (quizTimerStarted && quizTimeLeft !== null && quizTimeLeft > 0 && !quizSubmitted) {
+      timerRef.current = setInterval(() => {
+        setQuizTimeLeft((t) => {
+          if (t !== null && t <= 1) {
+            // Auto-submit on time out
+            setQuizSubmitted(true);
+            setQuizAttemptCount((c) => c + 1);
+            return 0;
+          }
+          return t !== null ? t - 1 : null;
+        });
+      }, 1000);
+      return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    }
+  }, [quizTimerStarted, quizSubmitted, quizTimeLeft]);
+
+  const startQuizTimer = useCallback(() => {
+    if (quizConfig.timeLimit > 0 && !quizTimerStarted) {
+      setQuizTimeLeft(quizConfig.timeLimit * 60);
+      setQuizTimerStarted(true);
+    }
+  }, [quizConfig.timeLimit, quizTimerStarted]);
+
+  const resetQuiz = useCallback(() => {
+    setQuizAnswers({});
+    setQuizCheckboxAnswers({});
+    setQuizSubmitted(false);
+    if (quizConfig.timeLimit > 0) {
+      setQuizTimeLeft(quizConfig.timeLimit * 60);
+      setQuizTimerStarted(true);
+    }
+  }, [quizConfig.timeLimit]);
+
+  const quizAttemptsExhausted = quizConfig.maxAttempts > 0 && quizAttemptCount >= quizConfig.maxAttempts;
 
   const isCompleted = completedIds.has(lesson.id);
 
@@ -209,27 +270,69 @@ export function LessonViewerClient({
   }, [isCompleted, marking, lesson.id, courseId]);
 
   // Parse quiz questions from content JSON (lección tipo quiz)
-  let quizQuestions: { question: string; options: string[]; correct: number }[] = [];
+  type ParsedQuizQuestion = {
+    question: string;
+    options: string[];
+    correct: number;
+    type?: "multiple-choice" | "true-false" | "checkbox";
+    correctAnswers?: number[];
+  };
+  let quizQuestions: ParsedQuizQuestion[] = [];
+  let quizInstructions = "";
   if (lesson.type === "quiz" && lesson.content) {
     try {
-      quizQuestions = JSON.parse(lesson.content);
+      const parsed = JSON.parse(lesson.content);
+      if (parsed && typeof parsed === "object" && Array.isArray(parsed.questions)) {
+        quizInstructions = parsed.instructions || "";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        quizQuestions = parsed.questions.map((q: any) => ({
+          question: q.question,
+          options: q.options || (q.type === "true-false" ? ["Verdadero", "Falso"] : []),
+          correct: typeof q.correctAnswer === "number" ? q.correctAnswer : 0,
+          type: q.type || "multiple-choice",
+          correctAnswers: q.correctAnswers,
+        }));
+      } else if (Array.isArray(parsed)) {
+        quizQuestions = parsed;
+      }
     } catch {
       // not valid JSON, treat as text
     }
   }
 
+  const { timeLimit: quizTimeLimit, maxAttempts: quizMaxAttempts, passingRequired: quizPassingRequired, passingScore: quizPassingScorePercent } = quizConfig;
+
   const quizScore =
     quizSubmitted && quizQuestions.length > 0
-      ? quizQuestions.reduce(
-          (acc, q, i) => acc + (quizAnswers[i] === q.correct ? 1 : 0),
-          0
-        )
+      ? quizQuestions.reduce((acc, q, i) => {
+          if (q.type === "checkbox" && q.correctAnswers) {
+            const selected = quizCheckboxAnswers[i] || new Set();
+            const correct = new Set(q.correctAnswers);
+            const match = correct.size === selected.size && [...correct].every((v) => selected.has(v));
+            return acc + (match ? 1 : 0);
+          }
+          return acc + (quizAnswers[i] === q.correct ? 1 : 0);
+        }, 0)
       : 0;
-  const quizPassed = quizSubmitted && quizScore >= Math.ceil(quizQuestions.length * 0.7);
+  const quizScorePercent = quizQuestions.length > 0 ? Math.round((quizScore / quizQuestions.length) * 100) : 0;
+  const quizPassed = quizSubmitted && quizScorePercent >= (quizPassingRequired ? quizPassingScorePercent : 70);
 
   const handleQuizSubmit = async () => {
+    if (timerRef.current) clearInterval(timerRef.current);
     setQuizSubmitted(true);
-    if (quizPassed) {
+    setQuizAttemptCount((c) => c + 1);
+    // Compute pass inline since state hasn't updated yet
+    const score = quizQuestions.reduce((acc, q, i) => {
+      if (q.type === "checkbox" && q.correctAnswers) {
+        const selected = quizCheckboxAnswers[i] || new Set();
+        const correct = new Set(q.correctAnswers);
+        return acc + (correct.size === selected.size && [...correct].every((v) => selected.has(v)) ? 1 : 0);
+      }
+      return acc + (quizAnswers[i] === q.correct ? 1 : 0);
+    }, 0);
+    const pct = quizQuestions.length > 0 ? Math.round((score / quizQuestions.length) * 100) : 0;
+    const passed = pct >= (quizPassingRequired ? quizPassingScorePercent : 70);
+    if (passed || !quizPassingRequired) {
       await markComplete();
     }
   };
@@ -366,60 +469,166 @@ export function LessonViewerClient({
           </div>
         );
       }
+
+      // For timed quizzes, show start screen first
+      if (quizTimeLimit > 0 && !quizTimerStarted && !quizSubmitted) {
+        return (
+          <div className="space-y-4 rounded-lg border border-border bg-card p-6 text-center">
+            <h2 className="text-xl font-semibold">Quiz</h2>
+            {quizInstructions && (
+              <p className="text-sm text-muted-foreground">{quizInstructions}</p>
+            )}
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <p>{quizQuestions.length} preguntas</p>
+              <p>Tiempo límite: {quizTimeLimit} minuto{quizTimeLimit !== 1 ? "s" : ""}</p>
+              {quizMaxAttempts > 0 && <p>Intentos permitidos: {quizMaxAttempts}</p>}
+              {quizPassingRequired && <p>Puntaje mínimo para aprobar: {quizPassingScorePercent}%</p>}
+            </div>
+            <Button onClick={startQuizTimer} disabled={quizAttemptsExhausted}>
+              {quizAttemptsExhausted ? "Sin intentos disponibles" : "Comenzar quiz"}
+            </Button>
+          </div>
+        );
+      }
+
+      const formatTime = (secs: number) => {
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        return `${m}:${s.toString().padStart(2, "0")}`;
+      };
+
       return (
         <div className="space-y-6 rounded-lg border border-border bg-card p-6">
-          <h2 className="text-xl font-semibold">Quiz</h2>
-          {quizQuestions.map((q, i) => (
-            <div key={i} className="space-y-3">
-              <p className="font-medium text-foreground">
-                {i + 1}. {q.question}
-              </p>
-              <div className="space-y-2">
-                {q.options.map((opt, j) => {
-                  const isSelected = quizAnswers[i] === j;
-                  const isCorrect = quizSubmitted && j === q.correct;
-                  const isWrong = quizSubmitted && isSelected && j !== q.correct;
-                  return (
-                    <button
-                      key={j}
-                      onClick={() => !quizSubmitted && setQuizAnswers((prev) => ({ ...prev, [i]: j }))}
-                      disabled={quizSubmitted}
-                      className={`w-full rounded-md border px-4 py-2 text-left text-sm transition-colors ${
-                        isCorrect
-                          ? "border-green-500 bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                          : isWrong
-                          ? "border-red-500 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                          : isSelected
-                          ? "border-primary bg-primary/10 text-foreground"
-                          : "border-border bg-background text-foreground hover:bg-muted"
-                      }`}
-                    >
-                      {opt}
-                    </button>
-                  );
-                })}
-              </div>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Quiz</h2>
+            <div className="flex items-center gap-3">
+              {quizMaxAttempts > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  Intento {Math.min(quizAttemptCount + (quizSubmitted ? 0 : 1), quizMaxAttempts)}/{quizMaxAttempts}
+                </span>
+              )}
+              {quizTimeLeft !== null && !quizSubmitted && (
+                <span className={`text-sm font-mono font-semibold ${quizTimeLeft <= 30 ? "text-red-500 animate-pulse" : "text-foreground"}`}>
+                  {formatTime(quizTimeLeft)}
+                </span>
+              )}
             </div>
-          ))}
+          </div>
+          {quizInstructions && (
+            <p className="text-sm text-muted-foreground">{quizInstructions}</p>
+          )}
+          {(quizPassingRequired || quizTimeLimit > 0) && !quizSubmitted && (
+            <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+              {quizPassingRequired && <span>Puntaje mínimo: {quizPassingScorePercent}%</span>}
+            </div>
+          )}
+          {quizQuestions.map((q, i) => {
+            const isCheckbox = q.type === "checkbox";
+            const selectedCheckboxes = quizCheckboxAnswers[i] || new Set<number>();
+
+            return (
+              <div key={i} className="space-y-3">
+                <p className="font-medium text-foreground">
+                  {i + 1}. {q.question}
+                  {isCheckbox && (
+                    <span className="ml-2 text-xs text-muted-foreground font-normal">(selecciona todas las correctas)</span>
+                  )}
+                </p>
+                <div className="space-y-2">
+                  {q.options.map((opt, j) => {
+                    const isSelectedRadio = quizAnswers[i] === j;
+                    const isSelectedCheckbox = selectedCheckboxes.has(j);
+                    const isSelected = isCheckbox ? isSelectedCheckbox : isSelectedRadio;
+
+                    let isCorrect = false;
+                    let isWrong = false;
+                    if (quizSubmitted) {
+                      if (isCheckbox && q.correctAnswers) {
+                        isCorrect = q.correctAnswers.includes(j);
+                        isWrong = isSelectedCheckbox && !q.correctAnswers.includes(j);
+                      } else {
+                        isCorrect = j === q.correct;
+                        isWrong = isSelectedRadio && j !== q.correct;
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={j}
+                        onClick={() => {
+                          if (quizSubmitted) return;
+                          if (isCheckbox) {
+                            setQuizCheckboxAnswers((prev) => {
+                              const next = new Set(prev[i] || []);
+                              if (next.has(j)) next.delete(j);
+                              else next.add(j);
+                              return { ...prev, [i]: next };
+                            });
+                          } else {
+                            setQuizAnswers((prev) => ({ ...prev, [i]: j }));
+                          }
+                        }}
+                        disabled={quizSubmitted}
+                        className={`w-full rounded-md border px-4 py-2 text-left text-sm transition-colors ${
+                          isCorrect
+                            ? "border-green-500 bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                            : isWrong
+                            ? "border-red-500 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                            : isSelected
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border bg-background text-foreground hover:bg-muted"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          {isCheckbox ? (
+                            <span className={`inline-block h-4 w-4 rounded border-2 shrink-0 ${isSelected ? "border-primary bg-primary" : "border-muted-foreground"}`} />
+                          ) : (
+                            <span className={`inline-block h-4 w-4 rounded-full border-2 shrink-0 ${isSelected ? "border-primary bg-primary" : "border-muted-foreground"}`} />
+                          )}
+                          {opt}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
           {!quizSubmitted && (
             <Button
               onClick={handleQuizSubmit}
-              disabled={Object.keys(quizAnswers).length < quizQuestions.length}
+              disabled={
+                quizQuestions.some((q, i) => {
+                  if (q.type === "checkbox") return !(quizCheckboxAnswers[i]?.size > 0);
+                  return quizAnswers[i] === undefined;
+                })
+              }
             >
               Enviar respuestas
             </Button>
           )}
           {quizSubmitted && (
-            <div
-              className={`rounded-lg p-4 text-sm font-medium ${
-                quizPassed
-                  ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                  : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-              }`}
-            >
-              {quizPassed
-                ? `Aprobado: ${quizScore}/${quizQuestions.length} respuestas correctas.`
-                : `No aprobado: ${quizScore}/${quizQuestions.length}. Necesitas al menos el 70%.`}
+            <div className="space-y-3">
+              <div
+                className={`rounded-lg p-4 text-sm font-medium ${
+                  quizPassed
+                    ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                    : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                }`}
+              >
+                {quizPassed
+                  ? `Aprobado: ${quizScore}/${quizQuestions.length} (${quizScorePercent}%) respuestas correctas.`
+                  : `No aprobado: ${quizScore}/${quizQuestions.length} (${quizScorePercent}%).${quizPassingRequired ? ` Necesitas al menos ${quizPassingScorePercent}%.` : ""}`}
+                {quizTimeLeft === 0 && !quizPassed && " Se agotó el tiempo."}
+              </div>
+              {!quizPassed && !quizAttemptsExhausted && (
+                <Button variant="outline" size="sm" onClick={resetQuiz}>
+                  Reintentar quiz
+                </Button>
+              )}
+              {quizAttemptsExhausted && !quizPassed && (
+                <p className="text-xs text-muted-foreground">Has agotado todos los intentos disponibles.</p>
+              )}
             </div>
           )}
         </div>
@@ -582,6 +791,8 @@ export function LessonViewerClient({
         ? "Memoria"
         : sectionMinigame.type === "hangman"
         ? "Ahorcado"
+        : sectionMinigame.type === "match"
+        ? "Conectar columnas"
         : "Ordenar";
 
     return (
@@ -615,6 +826,13 @@ export function LessonViewerClient({
               <SortGame
                 instruction={sectionMinigame.instruction}
                 items={sectionMinigame.items}
+                onComplete={handleMinigameComplete}
+              />
+            )}
+            {sectionMinigame.type === "match" && (
+              <MatchGame
+                instruction={sectionMinigame.instruction}
+                pairs={sectionMinigame.pairs}
                 onComplete={handleMinigameComplete}
               />
             )}
@@ -695,9 +913,9 @@ export function LessonViewerClient({
           {/* Content */}
           {renderContent()}
 
-          {/* Mark complete button (for video/text) */}
+          {/* Mark complete button (for video/text) — hidden on lg where sticky bar shows */}
           {(lesson.type === "video" || lesson.type === "text") && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 lg:hidden">
               <Button
                 onClick={markComplete}
                 disabled={isCompleted || marking}
@@ -773,8 +991,8 @@ export function LessonViewerClient({
             </div>
           )}
 
-          {/* Prev / Next navigation */}
-          <div className="flex items-center justify-between border-t border-border pt-4">
+          {/* Prev / Next navigation — hidden on lg for video/text where sticky bar shows */}
+          <div className={`flex items-center justify-between border-t border-border pt-4 ${(lesson.type === "video" || lesson.type === "text") ? "lg:hidden" : ""}`}>
             {prevLesson ? (
               <Button
                 variant="outline"

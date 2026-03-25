@@ -46,10 +46,18 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const [videoError, setVideoError] = useState<string | null>(null);
   const [, setUploadId] = useState<string | null>(null);
   
-  // Estados para crear pregunta de opción múltiple
+  // Quiz config
+  const [quizTimeLimit, setQuizTimeLimit] = useState<number | undefined>(lesson.quizTimeLimit);
+  const [quizAttempts, setQuizAttempts] = useState<number | undefined>(lesson.quizAttempts);
+  const [quizPassingRequired, setQuizPassingRequired] = useState(lesson.quizPassingRequired ?? false);
+  const [quizPassingScore, setQuizPassingScore] = useState(lesson.quizPassingScore ?? 70);
+
+  // Estados para crear pregunta
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
+  const [newQuestionType, setNewQuestionType] = useState<"multiple-choice" | "true-false" | "checkbox">("multiple-choice");
   const [newQuestionOptions, setNewQuestionOptions] = useState<string[]>(["", ""]);
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
+  const [newQuestionCorrectAnswers, setNewQuestionCorrectAnswers] = useState<Set<number>>(new Set());
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
 
   const handleSave = () => {
@@ -64,6 +72,10 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
       resources,
       quizQuestions: type === "quiz" ? quizQuestions : undefined,
       evaluationCriteria: type === "assignment" ? evaluationCriteria : undefined,
+      quizTimeLimit: type === "quiz" ? quizTimeLimit : undefined,
+      quizAttempts: type === "quiz" ? quizAttempts : undefined,
+      quizPassingRequired: type === "quiz" ? quizPassingRequired : undefined,
+      quizPassingScore: type === "quiz" && quizPassingRequired ? quizPassingScore : undefined,
     });
   };
 
@@ -146,27 +158,67 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
 
   const handleAddQuestion = () => {
     if (!newQuestionTitle.trim()) return;
-    if (newQuestionOptions.filter((opt) => opt.trim()).length < 2) {
-      alert("Debes agregar al menos 2 opciones");
-      return;
+
+    if (newQuestionType === "true-false") {
+      if (newQuestionCorrectAnswer === null) {
+        alert("Debes seleccionar la respuesta correcta");
+        return;
+      }
+      const newQuestion: QuizQuestion = {
+        id: crypto.randomUUID(),
+        question: newQuestionTitle.trim(),
+        type: "true-false",
+        options: ["Verdadero", "Falso"],
+        correctAnswer: newQuestionCorrectAnswer,
+        points: newQuestionPoints,
+      };
+      setQuizQuestions([...quizQuestions, newQuestion]);
+    } else if (newQuestionType === "checkbox") {
+      const validOptions = newQuestionOptions.filter((opt) => opt.trim());
+      if (validOptions.length < 1) {
+        alert("Debes agregar al menos 1 opción");
+        return;
+      }
+      if (newQuestionCorrectAnswers.size === 0) {
+        alert("Debes seleccionar al menos una respuesta correcta");
+        return;
+      }
+      const newQuestion: QuizQuestion = {
+        id: crypto.randomUUID(),
+        question: newQuestionTitle.trim(),
+        type: "checkbox",
+        options: validOptions,
+        correctAnswers: Array.from(newQuestionCorrectAnswers).sort(),
+        points: newQuestionPoints,
+      };
+      setQuizQuestions([...quizQuestions, newQuestion]);
+    } else {
+      // multiple-choice
+      const validOptions = newQuestionOptions.filter((opt) => opt.trim());
+      if (validOptions.length < 1) {
+        alert("Debes agregar al menos 1 opción");
+        return;
+      }
+      if (newQuestionCorrectAnswer === null) {
+        alert("Debes seleccionar la respuesta correcta");
+        return;
+      }
+      const newQuestion: QuizQuestion = {
+        id: crypto.randomUUID(),
+        question: newQuestionTitle.trim(),
+        type: "multiple-choice",
+        options: validOptions,
+        correctAnswer: newQuestionCorrectAnswer,
+        points: newQuestionPoints,
+      };
+      setQuizQuestions([...quizQuestions, newQuestion]);
     }
-    if (newQuestionCorrectAnswer === null) {
-      alert("Debes seleccionar la respuesta correcta");
-      return;
-    }
-    
-    const newQuestion: QuizQuestion = {
-      id: crypto.randomUUID(),
-      question: newQuestionTitle.trim(),
-      type: "multiple-choice",
-      options: newQuestionOptions.filter((opt) => opt.trim()),
-      correctAnswer: newQuestionCorrectAnswer,
-      points: newQuestionPoints,
-    };
-    setQuizQuestions([...quizQuestions, newQuestion]);
+
     setNewQuestionTitle("");
+    setNewQuestionType("multiple-choice");
     setNewQuestionOptions(["", ""]);
     setNewQuestionCorrectAnswer(null);
+    setNewQuestionCorrectAnswers(new Set());
     setNewQuestionPoints(10);
   };
 
@@ -181,10 +233,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   };
 
   const handleRemoveOption = (index: number) => {
-    if (newQuestionOptions.length <= 2) {
-      alert("Debes tener al menos 2 opciones");
-      return;
-    }
+    if (newQuestionOptions.length <= 1) return;
     const updated = newQuestionOptions.filter((_, i) => i !== index);
     setNewQuestionOptions(updated);
     if (newQuestionCorrectAnswer === index) {
@@ -192,6 +241,13 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
     } else if (newQuestionCorrectAnswer !== null && newQuestionCorrectAnswer > index) {
       setNewQuestionCorrectAnswer(newQuestionCorrectAnswer - 1);
     }
+    // Update checkbox correct answers
+    const newCorrects = new Set<number>();
+    newQuestionCorrectAnswers.forEach((i) => {
+      if (i < index) newCorrects.add(i);
+      else if (i > index) newCorrects.add(i - 1);
+    });
+    setNewQuestionCorrectAnswers(newCorrects);
   };
 
   const handleDeleteQuestion = (questionId: string) => {
@@ -451,6 +507,64 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                   rows={4}
                 />
               </div>
+
+              {/* Quiz config */}
+              <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-4">
+                <h5 className="text-sm font-semibold text-foreground">Configuración del quiz (opcional)</h5>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-foreground">
+                      Tiempo límite (minutos)
+                    </label>
+                    <Input
+                      type="number"
+                      min="1"
+                      placeholder="Sin límite"
+                      value={quizTimeLimit ?? ""}
+                      onChange={(e) => setQuizTimeLimit(e.target.value ? Number(e.target.value) : undefined)}
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-foreground">
+                      Intentos permitidos
+                    </label>
+                    <Input
+                      type="number"
+                      min="1"
+                      placeholder="Ilimitados"
+                      value={quizAttempts ?? ""}
+                      onChange={(e) => setQuizAttempts(e.target.value ? Number(e.target.value) : undefined)}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={quizPassingRequired}
+                      onChange={(e) => setQuizPassingRequired(e.target.checked)}
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm text-foreground">Requiere aprobar para continuar</span>
+                  </label>
+                  {quizPassingRequired && (
+                    <div className="ml-6">
+                      <label className="mb-1 block text-xs font-medium text-foreground">
+                        Puntaje mínimo (%)
+                      </label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={quizPassingScore}
+                        onChange={(e) => setQuizPassingScore(Number(e.target.value))}
+                        className="w-32"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -465,132 +579,105 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                 {/* Lista de preguntas */}
                 {quizQuestions.length > 0 && (
                   <div className="space-y-3">
-                    {quizQuestions.map((question) => (
-                      <div
-                        key={question.id}
-                        className="rounded-lg border border-border bg-card p-4 space-y-2"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-foreground">{question.question}</p>
-                            {question.options && question.options.length > 0 && (
-                              <div className="mt-2 space-y-1">
-                                {question.options.map((option, idx) => (
-                                  <div
-                                    key={idx}
-                                    className={`flex items-center gap-2 rounded-md p-2 text-sm ${
-                                      question.correctAnswer === idx
-                                        ? "bg-primary/10 border border-primary/30"
-                                        : "bg-muted/30"
-                                    }`}
-                                  >
-                                    {question.correctAnswer === idx ? (
-                                      <CheckCircle2 className="h-4 w-4 text-primary" />
-                                    ) : (
-                                      <Circle className="h-4 w-4 text-muted-foreground" />
-                                    )}
-                                    <span className={question.correctAnswer === idx ? "font-medium text-primary" : "text-foreground"}>
-                                      {option}
-                                    </span>
-                                    {question.correctAnswer === idx && (
-                                      <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">
-                                        Correcta
+                    {quizQuestions.map((question) => {
+                      const isCorrect = (idx: number) =>
+                        question.type === "checkbox"
+                          ? question.correctAnswers?.includes(idx)
+                          : question.correctAnswer === idx;
+                      const typeLabel =
+                        question.type === "true-false" ? "V / F"
+                        : question.type === "checkbox" ? "Casillas"
+                        : "Opción múltiple";
+
+                      return (
+                        <div
+                          key={question.id}
+                          className="rounded-lg border border-border bg-card p-4 space-y-2"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-foreground">{question.question}</p>
+                              {question.options && question.options.length > 0 && (
+                                <div className="mt-2 space-y-1">
+                                  {question.options.map((option, idx) => (
+                                    <div
+                                      key={idx}
+                                      className={`flex items-center gap-2 rounded-md p-2 text-sm ${
+                                        isCorrect(idx)
+                                          ? "bg-primary/10 border border-primary/30"
+                                          : "bg-muted/30"
+                                      }`}
+                                    >
+                                      {isCorrect(idx) ? (
+                                        <CheckCircle2 className="h-4 w-4 text-primary" />
+                                      ) : (
+                                        <Circle className="h-4 w-4 text-muted-foreground" />
+                                      )}
+                                      <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>
+                                        {option}
                                       </span>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                            <div className="mt-2 flex items-center gap-2">
-                              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
-                                Opción múltiple
-                              </span>
-                              {question.points && (
-                                <span className="text-xs text-muted-foreground">
-                                  {question.points} puntos
-                                </span>
+                                      {isCorrect(idx) && (
+                                        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">
+                                          Correcta
+                                        </span>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
                               )}
+                              <div className="mt-2 flex items-center gap-2">
+                                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
+                                  {typeLabel}
+                                </span>
+                                {question.points && (
+                                  <span className="text-xs text-muted-foreground">
+                                    {question.points} puntos
+                                  </span>
+                                )}
+                              </div>
                             </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteQuestion(question.id)}
+                              className="ml-2"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteQuestion(question.id)}
-                            className="ml-2"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
 
                 {/* Formulario para agregar nueva pregunta */}
                 <div className="space-y-4 pt-4 border-t border-border">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-foreground">
-                      Nueva pregunta de opción múltiple
-                    </label>
-                    <Input
-                      value={newQuestionTitle}
-                      onChange={(e) => setNewQuestionTitle(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <div className="mb-2 flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">Opciones de respuesta</label>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleAddOption}
-                        className="h-7 text-xs"
-                      >
-                        <Plus className="mr-1 h-3 w-3" />
-                        Agregar opción
-                      </Button>
-                    </div>
-                    <div className="space-y-2">
-                      {newQuestionOptions.map((option, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setNewQuestionCorrectAnswer(index)}
-                            className="flex-shrink-0"
-                          >
-                            {newQuestionCorrectAnswer === index ? (
-                              <CheckCircle2 className="h-5 w-5 text-primary" />
-                            ) : (
-                              <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
-                            )}
-                          </button>
-                          <Input
-                            value={option}
-                            onChange={(e) => handleUpdateOption(index, e.target.value)}
-                            className="flex-1"
-                          />
-                          {newQuestionOptions.length > 2 && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveOption(index)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <X className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Haz clic en el círculo para marcar la respuesta correcta
-                    </p>
-                  </div>
-
                   <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">
+                        Tipo de pregunta
+                      </label>
+                      <Select
+                        value={newQuestionType}
+                        onChange={(e) => {
+                          const val = e.target.value as typeof newQuestionType;
+                          setNewQuestionType(val);
+                          setNewQuestionCorrectAnswer(null);
+                          setNewQuestionCorrectAnswers(new Set());
+                          if (val === "true-false") {
+                            setNewQuestionOptions(["Verdadero", "Falso"]);
+                          } else {
+                            setNewQuestionOptions(["", ""]);
+                          }
+                        }}
+                        options={[
+                          { value: "multiple-choice", label: "Opción múltiple" },
+                          { value: "true-false", label: "Verdadero / Falso" },
+                          { value: "checkbox", label: "Casillas (varias correctas)" },
+                        ]}
+                      />
+                    </div>
                     <div>
                       <label className="mb-2 block text-sm font-medium text-foreground">
                         Puntos
@@ -604,11 +691,122 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                     </div>
                   </div>
 
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-foreground">
+                      Pregunta
+                    </label>
+                    <Input
+                      value={newQuestionTitle}
+                      onChange={(e) => setNewQuestionTitle(e.target.value)}
+                    />
+                  </div>
+
+                  {newQuestionType === "true-false" ? (
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">Respuesta correcta</label>
+                      <div className="flex gap-4">
+                        {["Verdadero", "Falso"].map((label, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setNewQuestionCorrectAnswer(idx)}
+                            className={`flex items-center gap-2 rounded-lg border-2 px-4 py-2 text-sm font-medium transition-colors ${
+                              newQuestionCorrectAnswer === idx
+                                ? "border-primary bg-primary/10 text-primary"
+                                : "border-border bg-background text-foreground hover:border-primary/50"
+                            }`}
+                          >
+                            {newQuestionCorrectAnswer === idx ? (
+                              <CheckCircle2 className="h-4 w-4" />
+                            ) : (
+                              <Circle className="h-4 w-4" />
+                            )}
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="text-sm font-medium text-foreground">Opciones de respuesta</label>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={handleAddOption}
+                          className="h-7 text-xs"
+                        >
+                          <Plus className="mr-1 h-3 w-3" />
+                          Agregar opción
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {newQuestionOptions.map((option, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (newQuestionType === "checkbox") {
+                                  const next = new Set(newQuestionCorrectAnswers);
+                                  if (next.has(index)) next.delete(index);
+                                  else next.add(index);
+                                  setNewQuestionCorrectAnswers(next);
+                                } else {
+                                  setNewQuestionCorrectAnswer(index);
+                                }
+                              }}
+                              className="shrink-0"
+                            >
+                              {newQuestionType === "checkbox" ? (
+                                newQuestionCorrectAnswers.has(index) ? (
+                                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                                ) : (
+                                  <div className="h-5 w-5 rounded border-2 border-muted-foreground hover:border-primary transition-colors" />
+                                )
+                              ) : newQuestionCorrectAnswer === index ? (
+                                <CheckCircle2 className="h-5 w-5 text-primary" />
+                              ) : (
+                                <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                              )}
+                            </button>
+                            <Input
+                              value={option}
+                              onChange={(e) => handleUpdateOption(index, e.target.value)}
+                              className="flex-1"
+                            />
+                            {newQuestionOptions.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRemoveOption(index)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        {newQuestionType === "checkbox"
+                          ? "Haz clic en las casillas para marcar las respuestas correctas"
+                          : "Haz clic en el círculo para marcar la respuesta correcta"}
+                      </p>
+                    </div>
+                  )}
+
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleAddQuestion}
-                    disabled={!newQuestionTitle.trim() || newQuestionOptions.filter((opt) => opt.trim()).length < 2 || newQuestionCorrectAnswer === null}
+                    disabled={
+                      !newQuestionTitle.trim() ||
+                      (newQuestionType === "true-false" && newQuestionCorrectAnswer === null) ||
+                      (newQuestionType === "multiple-choice" && (newQuestionOptions.filter((opt) => opt.trim()).length < 1 || newQuestionCorrectAnswer === null)) ||
+                      (newQuestionType === "checkbox" && (newQuestionOptions.filter((opt) => opt.trim()).length < 1 || newQuestionCorrectAnswers.size === 0))
+                    }
                     className="w-full"
                   >
                     <Plus className="mr-2 h-4 w-4" />

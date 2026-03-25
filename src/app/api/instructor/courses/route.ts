@@ -6,9 +6,10 @@ import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 const quizQuestionSchema = z.object({
   id: z.string(),
   question: z.string().min(1),
-  type: z.enum(["multiple-choice", "true-false", "short-answer"]),
+  type: z.enum(["multiple-choice", "true-false", "short-answer", "checkbox"]),
   options: z.array(z.string()).optional(),
   correctAnswer: z.union([z.string(), z.number()]).optional(),
+  correctAnswers: z.array(z.number()).optional(),
   points: z.number().nonnegative().optional(),
 });
 

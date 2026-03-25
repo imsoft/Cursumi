@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { ArrowLeft, Search, Mail, Calendar } from "lucide-react";
+import { UnenrollButton } from "@/components/instructor/unenroll-button";
 
 export default async function CourseStudentsPage({
   params,
@@ -110,6 +111,11 @@ export default async function CourseStudentsPage({
                     <Badge variant={student.status === "active" ? "default" : "outline"}>
                       {student.status === "active" ? "Activo" : "Inactivo"}
                     </Badge>
+                    <UnenrollButton
+                      courseId={course.id}
+                      enrollmentId={student.enrollmentId}
+                      studentName={student.name || student.email}
+                    />
                   </div>
                 </div>
               ))}

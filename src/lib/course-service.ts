@@ -42,7 +42,11 @@ export type InstructorCourseListItem = {
 
 function formatDateLabel(date: Date | null): string | undefined {
   if (!date) return undefined;
-  return date.toISOString();
+  return date.toLocaleDateString("es-MX", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 /** Calcula la próxima sesión futura a partir de un array de sesiones (para crear/actualizar cursos) */
@@ -575,7 +579,10 @@ export async function getPublishedCourse(slugOrId: string) {
 
 export async function listStudentCourses(studentId: string): Promise<StudentCourse[]> {
   const enrollments = await prisma.enrollment.findMany({
-    where: { studentId },
+    where: {
+      studentId,
+      course: { status: { not: "archived" } },
+    },
     include: {
       course: {
         select: {
@@ -644,6 +651,7 @@ export async function listRecommendations(excludeCourseIds: string[]): Promise<R
 
 export type CourseStudent = {
   id: string;
+  enrollmentId: string;
   name: string | null;
   email: string;
   status: EnrollmentStatus;
@@ -665,6 +673,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
 
   return enrollments.map((enrollment) => ({
     id: enrollment.student.id,
+    enrollmentId: enrollment.id,
     name: enrollment.student.name,
     email: enrollment.student.email,
     status: enrollment.status,
@@ -816,11 +825,12 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   // Section minigame — validar que tenga type reconocido
   const rawMinigame = lesson.section.minigame as Record<string, unknown> | null;
   const sectionMinigame =
-    rawMinigame && ["memory", "hangman", "sort"].includes(rawMinigame.type as string)
+    rawMinigame && ["memory", "hangman", "sort", "match"].includes(rawMinigame.type as string)
       ? (rawMinigame as
           | { type: "memory"; pairs: { term: string; definition: string }[] }
           | { type: "hangman"; words: { word: string; hint: string }[] }
-          | { type: "sort"; instruction: string; items: string[] })
+          | { type: "sort"; instruction: string; items: string[] }
+          | { type: "match"; instruction: string; pairs: { left: string; right: string }[] })
       : null;
   const sectionMinigamePassed = passedSectionIds.has(lesson.sectionId);
 

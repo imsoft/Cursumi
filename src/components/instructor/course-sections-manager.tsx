@@ -216,7 +216,7 @@ export const CourseSectionsManager = ({
                             )}
                             {section.minigame && (
                               <span className="inline-flex items-center gap-1 rounded-full border border-purple-400/40 px-2 py-0.5 text-xs font-medium text-purple-600 dark:text-purple-400">
-                                {section.minigame.type === "memory" ? "Memoria" : section.minigame.type === "hangman" ? "Ahorcado" : "Ordenar"}
+                                {section.minigame.type === "memory" ? "Memoria" : section.minigame.type === "hangman" ? "Ahorcado" : section.minigame.type === "match" ? "Conectar" : "Ordenar"}
                               </span>
                             )}
                           </div>

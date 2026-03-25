@@ -26,6 +26,12 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     });
 
     if (dbCert) {
+      // Fetch exam score for this enrollment
+      const examSubmission = await prisma.examSubmission.findUnique({
+        where: { enrollmentId: dbCert.enrollmentId },
+        select: { score: true },
+      });
+
       return NextResponse.json({
         id: dbCert.id,
         courseId: dbCert.course.id,
@@ -35,6 +41,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         issueDate: dbCert.issuedAt.toISOString(),
         certificateNumber: dbCert.number,
         type: dbCert.type,
+        score: examSubmission?.score ?? undefined,
         category: dbCert.course.category,
         modality: dbCert.course.modality,
         hours: dbCert.course.duration ? parseInt(dbCert.course.duration, 10) || undefined : undefined,

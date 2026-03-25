@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
-import { BookOpenCheck } from "lucide-react";
+import { BookOpenCheck, ExternalLink, Pencil } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
+import Link from "next/link";
 
 type CourseStatus = "published" | "draft" | "archived" | "pending";
 type Modality = "virtual" | "presencial";
@@ -18,6 +19,8 @@ type Modality = "virtual" | "presencial";
 interface AdminCourse {
   id: string;
   title: string;
+  slug?: string;
+  instructorId?: string;
   instructorName: string;
   category: string;
   modality: Modality;
@@ -96,7 +99,7 @@ export default function AdminCoursesPage() {
         if (modalityFilter === "all") return true;
         return course.modality === modalityFilter;
       });
-  }, [searchTerm, statusFilter, modalityFilter]);
+  }, [courses, searchTerm, statusFilter, modalityFilter]);
 
   const handleClearFilters = () => {
     setSearchTerm("");
@@ -202,12 +205,20 @@ export default function AdminCoursesPage() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        Ver detalles
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        {course.status === "pending" ? "Revisar" : "Editar"}
-                      </Button>
+                      {course.slug && (
+                        <Link href={`/courses/${course.slug}`} target="_blank">
+                          <Button variant="outline" size="sm">
+                            <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+                            Ver
+                          </Button>
+                        </Link>
+                      )}
+                      <Link href={`/instructor/courses/${course.id}/edit`}>
+                        <Button variant="outline" size="sm">
+                          <Pencil className="mr-1.5 h-3.5 w-3.5" />
+                          {course.status === "pending" ? "Revisar" : "Editar"}
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 );

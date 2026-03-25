@@ -35,6 +35,7 @@ export type Certificate = {
   issueDate: string;
   certificateNumber: string;
   type: "accreditation" | "participation";
+  score?: number;
   category: string;
   modality: "virtual" | "presencial";
   hours?: number;

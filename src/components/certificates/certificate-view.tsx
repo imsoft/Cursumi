@@ -9,11 +9,13 @@ interface CertificateViewProps {
 }
 
 export function CertificateView({ certificate }: CertificateViewProps) {
+  const isAccreditation = certificate.type === "accreditation";
+
   return (
     <Card data-certificate className="border-2 border-primary/20 bg-linear-to-br from-background to-primary/5 shadow-xl">
       <CardContent className="p-8 md:p-14 print:p-0">
         <div className="space-y-8 md:space-y-10">
-          {/* Header del certificado */}
+          {/* Header */}
           <div className="text-center space-y-4">
             <div className="flex justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,14 +29,14 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-foreground mb-2">
-                {certificate.type === "participation"
-                  ? "RECONOCIMIENTO DE PARTICIPACIÓN"
-                  : "CERTIFICADO DE ACREDITACIÓN"}
+                {isAccreditation
+                  ? "CONSTANCIA DE ACREDITACIÓN"
+                  : "CONSTANCIA DE PARTICIPACIÓN"}
               </h1>
               <p className="text-muted-foreground">
-                {certificate.type === "participation"
-                  ? "Este reconocimiento certifica que"
-                  : "Este certificado acredita que"}
+                {isAccreditation
+                  ? "Esta constancia acredita que"
+                  : "Esta constancia certifica que"}
               </p>
             </div>
           </div>
@@ -45,9 +47,9 @@ export function CertificateView({ certificate }: CertificateViewProps) {
               {certificate.studentName}
             </h2>
             <p className="text-lg text-muted-foreground">
-              {certificate.type === "participation"
-                ? "ha participado en el curso"
-                : "ha completado exitosamente el curso"}
+              {isAccreditation
+                ? <>ha acreditado con una calificación de <span className="font-semibold text-foreground">{certificate.score ?? 0} pts</span> el taller</>
+                : "ha participado en el taller"}
             </p>
           </div>
 
@@ -72,7 +74,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </div>
           </div>
 
-          {/* Detalles adicionales: siempre 2 columnas (impresión no usa breakpoint md) */}
+          {/* Detalles: instructor + fecha en 2 columnas */}
           <div
             data-certificate-meta
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-6 border-t border-border print:grid-cols-2 print:gap-8 print:pt-4"
@@ -99,13 +101,13 @@ export function CertificateView({ certificate }: CertificateViewProps) {
 
           {/* Número de certificado */}
           <div className="text-center pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-1">Número de certificado</p>
+            <p className="text-xs text-muted-foreground mb-1">Número de constancia</p>
             <p className="text-sm font-mono font-semibold text-foreground">
               {certificate.certificateNumber}
             </p>
           </div>
 
-          {/* Footer */}
+          {/* Firmas: instructor + diseñador */}
           <div className="pt-6 border-t border-border print:pt-3">
             <div className="flex items-end justify-between gap-4 print:gap-6">
               <div className="text-center flex-1 min-w-0">
@@ -115,9 +117,14 @@ export function CertificateView({ certificate }: CertificateViewProps) {
               </div>
               <div className="text-center flex-1 min-w-0">
                 <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
-                <p className="text-xs text-muted-foreground">Cursumi</p>
-                <p className="text-xs text-muted-foreground">Plataforma de Educación</p>
+                <p className="text-xs text-muted-foreground">Diseñador del taller</p>
               </div>
+            </div>
+
+            {/* CURSUMI centrado debajo de las firmas */}
+            <div className="text-center mt-6 print:mt-4">
+              <p className="text-sm font-bold text-foreground tracking-wide">CURSUMI</p>
+              <p className="text-xs text-muted-foreground">Plataforma educativa</p>
             </div>
           </div>
         </div>

@@ -28,6 +28,7 @@ import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
+import { ReviewSection } from "@/components/student/review-section";
 
 const lessonIcon = (type: LessonType) => {
   switch (type) {
@@ -97,6 +98,15 @@ export default async function MyCourseDetailPage({
     ? await prisma.certificate.findFirst({
         where: { courseId, userId: session.user.id },
         select: { id: true, type: true },
+      })
+    : null;
+
+  // Review eligibility: enrolled + >= 50% progress
+  const canReview = progress >= 50;
+  const userReview = session
+    ? await prisma.review.findUnique({
+        where: { courseId_userId: { courseId, userId: session.user.id } },
+        select: { id: true },
       })
     : null;
 
@@ -367,6 +377,13 @@ export default async function MyCourseDetailPage({
           )}
         </CardContent>
       </Card>
+
+      {/* Reseñas */}
+      <ReviewSection
+        courseId={courseId}
+        canReview={canReview}
+        userHasReviewed={!!userReview}
+      />
     </div>
   );
 }

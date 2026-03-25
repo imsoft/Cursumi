@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ const statusLabelMap: Record<InstructorCourse["status"], { label: string; varian
 };
 
 export const CourseListItem = ({ course }: CourseListItemProps) => {
+  const router = useRouter();
   const [archiving, setArchiving] = useState(false);
   const statusLabel = statusLabelMap[course.status];
   return (
@@ -56,11 +58,12 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
                 if (archiving) return;
                 try {
                   setArchiving(true);
-                  await fetch(`/api/instructor/courses/${course.id}`, {
+                  const res = await fetch(`/api/instructor/courses/${course.id}`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ status: "archived" }),
                   });
+                  if (res.ok) router.refresh();
                 } finally {
                   setArchiving(false);
                 }

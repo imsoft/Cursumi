@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Save, Video, FileQuestion, BookOpen,
   Plus, Trash2, CheckCircle2, Circle, Upload,
-  FileText, Image as ImageIcon, File, Link as LinkIcon, X,
+  FileText, Image as ImageIcon, File, Link as LinkIcon, X, Pencil, Check,
 } from "lucide-react";
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
@@ -58,6 +58,9 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
   const [newCriterionText, setNewCriterionText] = useState("");
+  const [editingResourceId, setEditingResourceId] = useState<string | null>(null);
+  const [editResourceTitle, setEditResourceTitle] = useState("");
+  const [editResourceUrl, setEditResourceUrl] = useState("");
 
   const handleSave = async () => {
     setSaving(true);
@@ -458,13 +461,53 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
             {resources.map((r) => (
               <div key={r.id} className="flex items-center gap-3 rounded-lg border border-border bg-muted/20 px-3 py-2">
                 <LinkIcon className="h-4 w-4 text-muted-foreground shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">{r.title}</p>
-                  <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline truncate block">{r.url}</a>
-                </div>
-                <Button variant="ghost" size="sm" onClick={() => setResources((prev) => prev.filter((x) => x.id !== r.id))}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                {editingResourceId === r.id ? (
+                  <div className="flex-1 min-w-0 space-y-1.5">
+                    <Input
+                      value={editResourceTitle}
+                      onChange={(e) => setEditResourceTitle(e.target.value)}
+                      className="h-8 text-sm"
+                      autoFocus
+                    />
+                    <Input
+                      value={editResourceUrl}
+                      onChange={(e) => setEditResourceUrl(e.target.value)}
+                      className="h-8 text-sm"
+                      type="url"
+                    />
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost" size="sm"
+                        onClick={() => {
+                          if (!editResourceTitle.trim() || !editResourceUrl.trim()) return;
+                          setResources((prev) => prev.map((x) => x.id === r.id ? { ...x, title: editResourceTitle.trim(), url: editResourceUrl.trim() } : x));
+                          setEditingResourceId(null);
+                        }}
+                        disabled={!editResourceTitle.trim() || !editResourceUrl.trim()}
+                      >
+                        <Check className="h-4 w-4 mr-1" /> Guardar
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => setEditingResourceId(null)}>
+                        <X className="h-4 w-4 mr-1" /> Cancelar
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium">{r.title}</p>
+                    <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline truncate block">{r.url}</a>
+                  </div>
+                )}
+                {editingResourceId !== r.id && (
+                  <>
+                    <Button variant="ghost" size="sm" onClick={() => { setEditingResourceId(r.id); setEditResourceTitle(r.title); setEditResourceUrl(r.url); }}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => setResources((prev) => prev.filter((x) => x.id !== r.id))}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </>
+                )}
               </div>
             ))}
             <div className="space-y-2">
@@ -489,15 +532,23 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
       </Card>
 
       {/* Bottom save */}
-      <div className="flex justify-end gap-3 pb-6">
-        <Button variant="outline" onClick={handleSave} disabled={saving}>
-          <Save className="mr-2 h-4 w-4" />
-          Guardar
+      <div className="flex justify-between pb-6">
+        <Button variant="ghost" asChild>
+          <Link href={`/instructor/courses/${courseId}/edit`}>
+            <X className="mr-2 h-4 w-4" />
+            Cancelar
+          </Link>
         </Button>
-        <Button onClick={handleSaveAndBack} disabled={saving}>
-          <Save className="mr-2 h-4 w-4" />
-          Guardar y volver al curso
-        </Button>
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={handleSave} disabled={saving}>
+            <Save className="mr-2 h-4 w-4" />
+            Guardar
+          </Button>
+          <Button onClick={handleSaveAndBack} disabled={saving}>
+            <Save className="mr-2 h-4 w-4" />
+            Guardar y volver al curso
+          </Button>
+        </div>
       </div>
     </div>
   );

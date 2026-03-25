@@ -24,7 +24,13 @@ export async function GET() {
       status: course.status,
       studentsCount: course._count.enrollments,
       price: course.price,
-      createdAt: course.createdAt.toISOString(),
+      slug: course.slug,
+      instructorId: course.instructorId,
+      createdAt: course.createdAt.toLocaleDateString("es-MX", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
     }));
 
     return NextResponse.json(data);
