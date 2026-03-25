@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Clock, User, Calendar } from "lucide-react";
+import { Clock, User, Calendar } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 
 interface CertificateViewProps {
@@ -16,15 +16,20 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           {/* Header del certificado */}
           <div className="text-center space-y-4">
             <div className="flex justify-center">
-              <div className="rounded-full bg-primary/10 p-4">
-                <Award className="h-12 w-12 text-primary" />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logos/cursumi.svg"
+                alt="Cursumi"
+                width={160}
+                height={46}
+                className="h-12 w-auto"
+              />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-foreground mb-2">
                 {certificate.type === "participation"
-                  ? "RECONOCIMIENTO DE PARTICIPACI\u00D3N"
-                  : "CERTIFICADO DE ACREDITACI\u00D3N"}
+                  ? "RECONOCIMIENTO DE PARTICIPACIÓN"
+                  : "CERTIFICADO DE ACREDITACIÓN"}
               </h1>
               <p className="text-muted-foreground">
                 {certificate.type === "participation"
@@ -46,7 +51,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </p>
           </div>
 
-          {/* Informaci\u00F3n del curso */}
+          {/* Información del curso */}
           <div className="text-center space-y-4">
             <h3 className="text-2xl md:text-3xl font-semibold text-foreground">
               {certificate.courseTitle}
@@ -79,15 +84,15 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Calendar className="h-4 w-4" />
-                <span className="font-medium">Fecha de emisi\u00F3n:</span>
+                <span className="font-medium">Fecha de emisión:</span>
               </div>
               <p className="text-foreground font-medium">{certificate.issueDate}</p>
             </div>
           </div>
 
-          {/* N\u00FAmero de certificado */}
+          {/* Número de certificado */}
           <div className="text-center pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-1">N\u00FAmero de certificado</p>
+            <p className="text-xs text-muted-foreground mb-1">Número de certificado</p>
             <p className="text-sm font-mono font-semibold text-foreground">
               {certificate.certificateNumber}
             </p>
@@ -104,7 +109,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
               <div className="text-center flex-1">
                 <div className="h-16 border-b border-foreground/20 mb-2"></div>
                 <p className="text-xs text-muted-foreground">Cursumi</p>
-                <p className="text-xs text-muted-foreground">Plataforma de Educaci\u00F3n</p>
+                <p className="text-xs text-muted-foreground">Plataforma de Educación</p>
               </div>
             </div>
           </div>

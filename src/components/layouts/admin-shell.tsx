@@ -22,6 +22,7 @@ import {
   MessageSquare,
   Ticket,
   FileDown,
+  Award,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -37,6 +38,7 @@ const adminNavItems = [
   { title: "Finanzas", href: "/admin/finances", icon: DollarSign },
   { title: "Simulador", href: "/admin/simulator", icon: Calculator },
   { title: "Plantillas", href: "/admin/templates", icon: FileDown },
+  { title: "Certificado", href: "/admin/certificate-preview", icon: Award },
   { title: "Configuración", href: "/admin/settings", icon: Settings },
 ];
 
