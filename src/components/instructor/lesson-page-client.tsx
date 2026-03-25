@@ -53,9 +53,17 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [, setUploadId] = useState<string | null>(null);
   const [newResourceTitle, setNewResourceTitle] = useState("");
   const [newResourceUrl, setNewResourceUrl] = useState("");
+  // Quiz config
+  const [quizTimeLimit, setQuizTimeLimit] = useState<number | undefined>(lesson.quizTimeLimit);
+  const [quizAttempts, setQuizAttempts] = useState<number | undefined>(lesson.quizAttempts);
+  const [quizPassingRequired, setQuizPassingRequired] = useState(lesson.quizPassingRequired ?? false);
+  const [quizPassingScore, setQuizPassingScore] = useState(lesson.quizPassingScore ?? 70);
+  // New question form
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
+  const [newQuestionType, setNewQuestionType] = useState<"multiple-choice" | "true-false" | "checkbox">("multiple-choice");
   const [newQuestionOptions, setNewQuestionOptions] = useState<string[]>(["", ""]);
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
+  const [newQuestionCorrectAnswers, setNewQuestionCorrectAnswers] = useState<Set<number>>(new Set());
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
   const [newCriterionText, setNewCriterionText] = useState("");
   const [editingResourceId, setEditingResourceId] = useState<string | null>(null);
@@ -68,6 +76,10 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
       await saveLessonContent(courseId, lesson.id, {
         title, description, type, duration, content, videoUrl,
         files, resources, quizQuestions, evaluationCriteria,
+        quizTimeLimit: type === "quiz" ? quizTimeLimit : undefined,
+        quizAttempts: type === "quiz" ? quizAttempts : undefined,
+        quizPassingRequired: type === "quiz" ? quizPassingRequired : undefined,
+        quizPassingScore: type === "quiz" && quizPassingRequired ? quizPassingScore : undefined,
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
@@ -138,20 +150,45 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   // ── Quiz ──────────────────────────────────────────────────────────────────
   const handleAddQuestion = () => {
     if (!newQuestionTitle.trim()) return;
-    if (newQuestionOptions.filter((o) => o.trim()).length < 2) return;
-    if (newQuestionCorrectAnswer === null) return;
-    setQuizQuestions((prev) => [...prev, {
-      id: crypto.randomUUID(),
-      question: newQuestionTitle.trim(),
-      type: "multiple-choice",
-      options: newQuestionOptions.filter((o) => o.trim()),
-      correctAnswer: newQuestionCorrectAnswer,
-      points: newQuestionPoints,
-    }]);
+
+    if (newQuestionType === "true-false") {
+      if (newQuestionCorrectAnswer === null) return;
+      setQuizQuestions((prev) => [...prev, {
+        id: crypto.randomUUID(), question: newQuestionTitle.trim(), type: "true-false",
+        options: ["Verdadero", "Falso"], correctAnswer: newQuestionCorrectAnswer, points: newQuestionPoints,
+      }]);
+    } else if (newQuestionType === "checkbox") {
+      const validOptions = newQuestionOptions.filter((o) => o.trim());
+      if (validOptions.length < 1 || newQuestionCorrectAnswers.size === 0) return;
+      setQuizQuestions((prev) => [...prev, {
+        id: crypto.randomUUID(), question: newQuestionTitle.trim(), type: "checkbox",
+        options: validOptions, correctAnswers: Array.from(newQuestionCorrectAnswers).sort(), points: newQuestionPoints,
+      }]);
+    } else {
+      const validOptions = newQuestionOptions.filter((o) => o.trim());
+      if (validOptions.length < 1 || newQuestionCorrectAnswer === null) return;
+      setQuizQuestions((prev) => [...prev, {
+        id: crypto.randomUUID(), question: newQuestionTitle.trim(), type: "multiple-choice",
+        options: validOptions, correctAnswer: newQuestionCorrectAnswer, points: newQuestionPoints,
+      }]);
+    }
+
     setNewQuestionTitle("");
+    setNewQuestionType("multiple-choice");
     setNewQuestionOptions(["", ""]);
     setNewQuestionCorrectAnswer(null);
+    setNewQuestionCorrectAnswers(new Set());
     setNewQuestionPoints(10);
+  };
+
+  const handleRemoveOption = (index: number) => {
+    if (newQuestionOptions.length <= 1) return;
+    setNewQuestionOptions((prev) => prev.filter((_, i) => i !== index));
+    if (newQuestionCorrectAnswer === index) setNewQuestionCorrectAnswer(null);
+    else if (newQuestionCorrectAnswer !== null && newQuestionCorrectAnswer > index) setNewQuestionCorrectAnswer(newQuestionCorrectAnswer - 1);
+    const newCorrects = new Set<number>();
+    newQuestionCorrectAnswers.forEach((i) => { if (i < index) newCorrects.add(i); else if (i > index) newCorrects.add(i - 1); });
+    setNewQuestionCorrectAnswers(newCorrects);
   };
 
   // ── Assignment ──────────────────────────────────────────────────────────────
@@ -308,66 +345,201 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
           {type === "quiz" && (
             <div className="space-y-4">
               <Textarea
-                label="Instrucciones del quiz"
+                label="Instrucciones del quiz *"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                rows={3}
+                rows={4}
               />
+
+              {/* Quiz config */}
+              <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-4">
+                <h5 className="text-sm font-semibold text-foreground">Configuración del quiz (opcional)</h5>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-foreground">Tiempo límite (minutos)</label>
+                    <Input type="number" min="1" placeholder="Sin límite" value={quizTimeLimit ?? ""} onChange={(e) => setQuizTimeLimit(e.target.value ? Number(e.target.value) : undefined)} />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-foreground">Intentos permitidos</label>
+                    <Input type="number" min="1" placeholder="Ilimitados" value={quizAttempts ?? ""} onChange={(e) => setQuizAttempts(e.target.value ? Number(e.target.value) : undefined)} />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={quizPassingRequired} onChange={(e) => setQuizPassingRequired(e.target.checked)} className="h-4 w-4 rounded border-border text-primary focus:ring-primary" />
+                    <span className="text-sm text-foreground">Requiere aprobar para continuar</span>
+                  </label>
+                  {quizPassingRequired && (
+                    <div className="ml-6">
+                      <label className="mb-1 block text-xs font-medium text-foreground">Puntaje mínimo (%)</label>
+                      <Input type="number" min="1" max="100" value={quizPassingScore} onChange={(e) => setQuizPassingScore(Number(e.target.value))} className="w-32" />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Questions list */}
               <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-4">
                 <div className="flex items-center gap-2">
                   <FileQuestion className="h-5 w-5 text-primary" />
-                  <h5 className="font-semibold text-foreground">Preguntas</h5>
-                  <span className="text-xs text-muted-foreground">({quizQuestions.length})</span>
+                  <h5 className="font-semibold text-foreground">Preguntas del quiz</h5>
+                  <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
+                    {quizQuestions.length} {quizQuestions.length === 1 ? "pregunta" : "preguntas"}
+                  </span>
                 </div>
-                {quizQuestions.map((q) => (
-                  <div key={q.id} className="rounded-lg border border-border bg-card p-4 space-y-2">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{q.question}</p>
-                        <div className="mt-2 space-y-1">
-                          {q.options?.map((opt, idx) => (
-                            <div key={idx} className={`flex items-center gap-2 rounded px-2 py-1 text-sm ${q.correctAnswer === idx ? "bg-primary/10 text-primary font-medium" : "text-foreground"}`}>
-                              {q.correctAnswer === idx ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4 text-muted-foreground" />}
-                              {opt}
+
+                {quizQuestions.length > 0 && (
+                  <div className="space-y-3">
+                    {quizQuestions.map((question) => {
+                      const isCorrect = (idx: number) =>
+                        question.type === "checkbox" ? question.correctAnswers?.includes(idx) : question.correctAnswer === idx;
+                      const typeLabel = question.type === "true-false" ? "V / F" : question.type === "checkbox" ? "Casillas" : "Opción múltiple";
+                      return (
+                        <div key={question.id} className="rounded-lg border border-border bg-card p-4 space-y-2">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-foreground">{question.question}</p>
+                              {question.options && question.options.length > 0 && (
+                                <div className="mt-2 space-y-1">
+                                  {question.options.map((option, idx) => (
+                                    <div key={idx} className={`flex items-center gap-2 rounded-md p-2 text-sm ${isCorrect(idx) ? "bg-primary/10 border border-primary/30" : "bg-muted/30"}`}>
+                                      {isCorrect(idx) ? <CheckCircle2 className="h-4 w-4 text-primary" /> : <Circle className="h-4 w-4 text-muted-foreground" />}
+                                      <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>{option}</span>
+                                      {isCorrect(idx) && <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">Correcta</span>}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              <div className="mt-2 flex items-center gap-2">
+                                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">{typeLabel}</span>
+                                {question.points && <span className="text-xs text-muted-foreground">{question.points} puntos</span>}
+                              </div>
                             </div>
-                          ))}
+                            <Button variant="ghost" size="sm" onClick={() => setQuizQuestions((prev) => prev.filter((x) => x.id !== question.id))} className="ml-2">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                      <Button variant="ghost" size="sm" onClick={() => setQuizQuestions((prev) => prev.filter((x) => x.id !== q.id))}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* New question form */}
+                <div className="space-y-4 pt-4 border-t border-border">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">Tipo de pregunta</label>
+                      <Select
+                        value={newQuestionType}
+                        onChange={(e) => {
+                          const val = e.target.value as typeof newQuestionType;
+                          setNewQuestionType(val);
+                          setNewQuestionCorrectAnswer(null);
+                          setNewQuestionCorrectAnswers(new Set());
+                          if (val === "true-false") setNewQuestionOptions(["Verdadero", "Falso"]);
+                          else setNewQuestionOptions(["", ""]);
+                        }}
+                        options={[
+                          { value: "multiple-choice", label: "Opción múltiple" },
+                          { value: "true-false", label: "Verdadero / Falso" },
+                          { value: "checkbox", label: "Casillas (varias correctas)" },
+                        ]}
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">Puntos</label>
+                      <Input type="number" min="1" value={newQuestionPoints} onChange={(e) => setNewQuestionPoints(Number(e.target.value))} />
                     </div>
                   </div>
-                ))}
-                <div className="space-y-3 pt-3 border-t border-border">
-                  <Input placeholder="Pregunta..." value={newQuestionTitle} onChange={(e) => setNewQuestionTitle(e.target.value)} />
-                  <div className="space-y-2">
-                    {newQuestionOptions.map((opt, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <button type="button" onClick={() => setNewQuestionCorrectAnswer(idx)}>
-                          {newQuestionCorrectAnswer === idx ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
-                        </button>
-                        <Input value={opt} onChange={(e) => { const u = [...newQuestionOptions]; u[idx] = e.target.value; setNewQuestionOptions(u); }} className="flex-1" />
-                        {newQuestionOptions.length > 2 && (
-                          <Button variant="ghost" size="sm" onClick={() => setNewQuestionOptions((prev) => prev.filter((_, i) => i !== idx))}>
-                            <X className="h-4 w-4" />
-                          </Button>
-                        )}
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-foreground">Pregunta</label>
+                    <Input value={newQuestionTitle} onChange={(e) => setNewQuestionTitle(e.target.value)} />
+                  </div>
+
+                  {newQuestionType === "true-false" ? (
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-foreground">Respuesta correcta</label>
+                      <div className="flex gap-4">
+                        {["Verdadero", "Falso"].map((label, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setNewQuestionCorrectAnswer(idx)}
+                            className={`flex items-center gap-2 rounded-lg border-2 px-4 py-2 text-sm font-medium transition-colors ${
+                              newQuestionCorrectAnswer === idx ? "border-primary bg-primary/10 text-primary" : "border-border bg-background text-foreground hover:border-primary/50"
+                            }`}
+                          >
+                            {newQuestionCorrectAnswer === idx ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+                            {label}
+                          </button>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setNewQuestionOptions((prev) => [...prev, ""])}>
-                      <Plus className="mr-1 h-3 w-3" />Opción
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={handleAddQuestion}
-                      disabled={!newQuestionTitle.trim() || newQuestionOptions.filter((o) => o.trim()).length < 2 || newQuestionCorrectAnswer === null}
-                    >
-                      Agregar pregunta
-                    </Button>
-                  </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="text-sm font-medium text-foreground">Opciones de respuesta</label>
+                        <Button type="button" variant="outline" size="sm" onClick={() => setNewQuestionOptions((prev) => [...prev, ""])} className="h-7 text-xs">
+                          <Plus className="mr-1 h-3 w-3" />Agregar opción
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {newQuestionOptions.map((opt, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (newQuestionType === "checkbox") {
+                                  const next = new Set(newQuestionCorrectAnswers);
+                                  if (next.has(idx)) next.delete(idx); else next.add(idx);
+                                  setNewQuestionCorrectAnswers(next);
+                                } else {
+                                  setNewQuestionCorrectAnswer(idx);
+                                }
+                              }}
+                              className="shrink-0"
+                            >
+                              {newQuestionType === "checkbox" ? (
+                                newQuestionCorrectAnswers.has(idx)
+                                  ? <CheckCircle2 className="h-5 w-5 text-primary" />
+                                  : <div className="h-5 w-5 rounded border-2 border-muted-foreground hover:border-primary transition-colors" />
+                              ) : newQuestionCorrectAnswer === idx
+                                ? <CheckCircle2 className="h-5 w-5 text-primary" />
+                                : <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                              }
+                            </button>
+                            <Input value={opt} onChange={(e) => { const u = [...newQuestionOptions]; u[idx] = e.target.value; setNewQuestionOptions(u); }} className="flex-1" />
+                            {newQuestionOptions.length > 1 && (
+                              <Button type="button" variant="ghost" size="sm" onClick={() => handleRemoveOption(idx)} className="h-8 w-8 p-0">
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        {newQuestionType === "checkbox" ? "Haz clic en las casillas para marcar las respuestas correctas" : "Haz clic en el círculo para marcar la respuesta correcta"}
+                      </p>
+                    </div>
+                  )}
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddQuestion}
+                    disabled={
+                      !newQuestionTitle.trim() ||
+                      (newQuestionType === "true-false" && newQuestionCorrectAnswer === null) ||
+                      (newQuestionType === "multiple-choice" && (newQuestionOptions.filter((o) => o.trim()).length < 1 || newQuestionCorrectAnswer === null)) ||
+                      (newQuestionType === "checkbox" && (newQuestionOptions.filter((o) => o.trim()).length < 1 || newQuestionCorrectAnswers.size === 0))
+                    }
+                    className="w-full"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Agregar pregunta
+                  </Button>
                 </div>
               </div>
             </div>
