@@ -238,6 +238,53 @@ export async function sendProgressReminderEmail({ to, name, courseTitle, progres
 }
 
 // ─────────────────────────────────────────
+// PROFILE COMPLETENESS REMINDER
+// ─────────────────────────────────────────
+
+interface SendProfileReminderEmailParams {
+  to: string;
+  name: string;
+  percent: number;
+  missingFields: string[];
+  profileUrl: string;
+}
+
+export async function sendProfileReminderEmail({ to, name, percent, missingFields, profileUrl }: SendProfileReminderEmailParams) {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const fieldsList = missingFields
+    .map((f) => `<li style="padding:4px 0;color:#374151;">${f}</li>`)
+    .join("");
+
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      Tu perfil en Cursumi está al <strong>${percent}%</strong>. Completar tu información nos ayuda a ofrecerte una mejor experiencia y permite que los instructores te conozcan mejor.
+    </p>
+    <p style="font-size:14px;margin-bottom:8px;font-weight:600;color:#374151;">Te falta completar:</p>
+    <ul style="font-size:14px;margin-bottom:24px;padding-left:20px;">
+      ${fieldsList}
+    </ul>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${profileUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Completar mi perfil
+      </a>
+    </div>
+    <p style="font-size:13px;color:#9ca3af;">Solo toma un par de minutos.</p>`;
+
+  try {
+    await resend.emails.send({
+      from: FROM(),
+      to: [to],
+      subject: `Tu perfil está al ${percent}% — Complétalo en Cursumi`,
+      html: emailWrapper("Completa tu perfil", body),
+    });
+  } catch (err) {
+    console.error("Error al enviar email de perfil incompleto:", err);
+  }
+}
+
+// ─────────────────────────────────────────
 // CURSUMI BUSINESS
 // ─────────────────────────────────────────
 
