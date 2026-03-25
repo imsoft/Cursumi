@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getMyCourseDetail } from "@/app/actions/course-actions";
+import { prisma } from "@/lib/prisma";
+import { getCachedSession } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -88,6 +90,15 @@ export default async function MyCourseDetailPage({
 
   const canTakeExam = hasFinalExam && allLessonsCompleted && allGatesPassed;
   const examPassed = examSubmission?.passed ?? false;
+
+  // Fetch certificate if exam was submitted
+  const session = await getCachedSession();
+  const certificate = session
+    ? await prisma.certificate.findFirst({
+        where: { courseId, userId: session.user.id },
+        select: { id: true, type: true },
+      })
+    : null;
 
   return (
     <div className="space-y-6">
@@ -315,6 +326,32 @@ export default async function MyCourseDetailPage({
                 ) : (
                   <Lock className="h-5 w-5 text-muted-foreground shrink-0" />
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Certificado */}
+          {certificate && (
+            <div className="rounded-lg border-2 border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20 p-5">
+              <div className="flex items-center gap-3">
+                <Award className="h-6 w-6 text-green-600 dark:text-green-400 shrink-0" />
+                <div className="flex-1">
+                  <p className="font-semibold text-foreground">
+                    {certificate.type === "accreditation"
+                      ? "Certificado de acreditación"
+                      : "Reconocimiento de participación"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {certificate.type === "accreditation"
+                      ? "Has aprobado el curso exitosamente. Descarga tu certificado."
+                      : "Completaste el curso. Descarga tu reconocimiento de participación."}
+                  </p>
+                </div>
+                <Button asChild>
+                  <Link href={`/dashboard/certificates/${certificate.id}`}>
+                    Ver certificado
+                  </Link>
+                </Button>
               </div>
             </div>
           )}

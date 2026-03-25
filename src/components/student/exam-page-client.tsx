@@ -125,7 +125,7 @@ function ResultCard({
         </p>
         {certificateId && (
           <Button asChild>
-            <Link href={`/dashboard/certificates/${certificateId}`}>
+            <Link href={`/dashboard/certificates/${certificateId}?new=1`}>
               <Award className="mr-2 h-4 w-4" />
               {passed ? "Ver certificado de acreditación" : "Ver reconocimiento de participación"}
             </Link>

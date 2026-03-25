@@ -1,7 +1,9 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
@@ -13,11 +15,44 @@ interface CertificatePageProps {
 
 export default function CertificatePage({ params }: CertificatePageProps) {
   const { id } = use(params);
+  const searchParams = useSearchParams();
+  const isNew = searchParams.get("new") === "1";
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const fireConfetti = useCallback(() => {
+    const duration = 3000;
+    const end = Date.now() + duration;
+    const colors = ["#667eea", "#764ba2", "#f59e0b", "#10b981", "#ef4444"];
+    const frame = () => {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors,
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors,
+      });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    };
+    frame();
+    // Big burst in the center
+    confetti({
+      particleCount: 100,
+      spread: 100,
+      origin: { y: 0.6 },
+      colors,
+    });
+  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -28,12 +63,16 @@ export default function CertificatePage({ params }: CertificatePageProps) {
         }
         const data = (await res.json()) as Certificate;
         setCertificate(data);
+        if (isNew) {
+          // Small delay so the page renders first
+          setTimeout(() => fireConfetti(), 300);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "No pudimos cargar el certificado");
       }
     };
     load();
-  }, [id]);
+  }, [id, isNew, fireConfetti]);
 
   const handleDownload = () => {
     setIsDownloading(true);
