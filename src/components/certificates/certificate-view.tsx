@@ -11,8 +11,8 @@ interface CertificateViewProps {
 export function CertificateView({ certificate }: CertificateViewProps) {
   return (
     <Card data-certificate className="border-2 border-primary/20 bg-linear-to-br from-background to-primary/5 shadow-xl">
-      <CardContent className="p-8 md:p-12 print:p-4">
-        <div className="space-y-8 print:space-y-4">
+      <CardContent className="p-8 md:p-14 print:p-0">
+        <div className="space-y-8 md:space-y-10">
           {/* Header del certificado */}
           <div className="text-center space-y-4">
             <div className="flex justify-center">

@@ -126,7 +126,7 @@
 /* Print: solo mostrar el certificado */
 @media print {
   @page {
-    margin: 10mm 12mm;
+    margin: 12mm 14mm;
     size: landscape;
   }
 
@@ -168,29 +168,31 @@
     print-color-adjust: exact;
   }
 
+  /* Relleno interior del certificado (antes estaba en 0 y apretaba todo) */
   [data-certificate] > div {
-    padding: 0 !important;
+    padding: 1.1cm 1.35cm !important;
   }
   [data-certificate] .space-y-8 > * + * {
-    margin-top: 0.65rem !important;
+    margin-top: 1.35rem !important;
   }
 
   /* Instructor + fecha: siempre dos columnas al imprimir */
   [data-certificate] [data-certificate-meta] {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 1rem !important;
+    gap: 1.35rem !important;
+    padding-top: 0.75rem !important;
   }
 
   [data-certificate] .flex {
     display: flex !important;
   }
 
-  [data-certificate] h1 { font-size: 1.35rem !important; line-height: 1.2 !important; }
-  [data-certificate] h2 { font-size: 1.75rem !important; line-height: 1.15 !important; }
-  [data-certificate] h3 { font-size: 1.15rem !important; line-height: 1.2 !important; }
-  [data-certificate] .py-6 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
-  [data-certificate] .pt-6 { padding-top: 0.4rem !important; }
+  [data-certificate] h1 { font-size: 1.45rem !important; line-height: 1.25 !important; margin-bottom: 0.35rem !important; }
+  [data-certificate] h2 { font-size: 1.85rem !important; line-height: 1.2 !important; }
+  [data-certificate] h3 { font-size: 1.25rem !important; line-height: 1.3 !important; }
+  [data-certificate] .py-6 { padding-top: 0.85rem !important; padding-bottom: 0.85rem !important; }
+  [data-certificate] .pt-6 { padding-top: 0.75rem !important; }
 
   /* Forzar colores en impresión */
   [data-certificate] * {

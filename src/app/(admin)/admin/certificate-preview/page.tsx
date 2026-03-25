@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CertificateView } from "@/components/certificates/certificate-view";
+import { CertificatePdfHint } from "@/components/certificates/certificate-pdf-hint";
 import { PartyPopper, Download } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 
@@ -29,6 +30,14 @@ const DEFAULTS: Certificate = {
 
 export default function CertificatePreviewPage() {
   const [cert, setCert] = useState<Certificate>(DEFAULTS);
+
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = "Vista previa certificado · Cursumi";
+    return () => {
+      document.title = prevTitle;
+    };
+  }, []);
 
   const update = (patch: Partial<Certificate>) =>
     setCert((prev) => ({ ...prev, ...patch }));
@@ -153,6 +162,8 @@ export default function CertificatePreviewPage() {
           </div>
         </CardContent>
       </Card>
+
+      <CertificatePdfHint />
 
       {/* Certificate */}
       <CertificateView certificate={cert} />
