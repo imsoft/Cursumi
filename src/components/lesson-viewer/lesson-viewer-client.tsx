@@ -156,6 +156,11 @@ export function LessonViewerClient({
   const [marking, setMarking] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Scroll al inicio al entrar a una lección
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [lesson.id]);
+
   // Restore saved quiz answers if they exist
   const hasSavedQuiz = savedQuizScore !== null && savedQuizAnswers !== null;
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>(() => {
