@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import {
   Plus, Trash2, ClipboardCheck, CheckCircle2, Circle, Gamepad2, ChevronUp, ChevronDown,
 } from "lucide-react";
+import { stripHtml } from "@/lib/utils";
 import type {
   SectionQuiz,
   SectionQuizQuestion,
@@ -120,7 +121,7 @@ function SectionQuizEditor({
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 space-y-1">
                         <p className="text-sm font-medium">
-                          {i + 1}. {q.question}
+                          {i + 1}. {stripHtml(q.question)}
                         </p>
                         <div className="space-y-1">
                           {q.options.map((opt, j) => (
@@ -137,7 +138,7 @@ function SectionQuizEditor({
                               ) : (
                                 <Circle className="h-3 w-3 shrink-0" />
                               )}
-                              {opt}
+                              {stripHtml(opt)}
                             </div>
                           ))}
                         </div>

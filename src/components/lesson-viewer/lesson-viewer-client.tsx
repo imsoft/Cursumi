@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
+import { stripHtml } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   CheckCircle,
@@ -571,7 +572,7 @@ export function LessonViewerClient({
             return (
               <div key={i} className="space-y-3">
                 <p className="font-medium text-foreground">
-                  {i + 1}. {q.question}
+                  {i + 1}. {stripHtml(q.question)}
                   {isCheckbox && (
                     <span className="ml-2 text-xs text-muted-foreground font-normal">(selecciona todas las correctas)</span>
                   )}
@@ -627,7 +628,7 @@ export function LessonViewerClient({
                           ) : (
                             <span className={`inline-block h-4 w-4 rounded-full border-2 shrink-0 ${isSelected ? "border-primary bg-primary" : "border-muted-foreground"}`} />
                           )}
-                          {opt}
+                          {stripHtml(opt)}
                         </span>
                       </button>
                     );
@@ -752,7 +753,7 @@ export function LessonViewerClient({
             {sectionQuiz.questions.map((q, i) => (
               <div key={i} className="space-y-3">
                 <p className="font-medium text-foreground">
-                  {i + 1}. {q.question}
+                  {i + 1}. {stripHtml(q.question)}
                 </p>
                 <div className="space-y-2">
                   {q.options.map((opt, j) => {
@@ -777,7 +778,7 @@ export function LessonViewerClient({
                             : "border-border bg-background text-foreground hover:bg-muted"
                         }`}
                       >
-                        {opt}
+                        {stripHtml(opt)}
                       </button>
                     );
                   })}

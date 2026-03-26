@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon } from "lucide-react";
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { stripHtml } from "@/lib/utils";
 import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
 
 interface LessonEditorProps {
@@ -600,7 +601,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <p className="text-sm font-medium text-foreground">{question.question}</p>
+                              <p className="text-sm font-medium text-foreground">{stripHtml(question.question)}</p>
                               {question.options && question.options.length > 0 && (
                                 <div className="mt-2 space-y-1">
                                   {question.options.map((option, idx) => (
@@ -618,7 +619,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                                         <Circle className="h-4 w-4 text-muted-foreground" />
                                       )}
                                       <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>
-                                        {option}
+                                        {stripHtml(option)}
                                       </span>
                                       {isCorrect(idx) && (
                                         <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">

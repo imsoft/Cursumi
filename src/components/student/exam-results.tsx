@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Trophy, AlertCircle, Circle } from "lucide-react";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
+import { stripHtml } from "@/lib/utils";
 
 interface ExamResultsProps {
   exam: CourseFinalExam;
@@ -140,7 +141,7 @@ export const ExamResults = ({
                         <Badge variant="outline">{question.points} puntos</Badge>
                       </div>
                       <p className="text-base font-semibold text-foreground">
-                        {question.question}
+                        {stripHtml(question.question)}
                       </p>
                     </div>
                   </div>
@@ -178,7 +179,7 @@ export const ExamResults = ({
                                   : "text-muted-foreground"
                               }`}
                             >
-                              {option}
+                              {stripHtml(option)}
                             </span>
                             {isCorrectAnswer && (
                               <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">

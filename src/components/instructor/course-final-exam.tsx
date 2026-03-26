@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { ArrowRight, ArrowLeft, Plus, Trash2, CheckCircle2, Circle, FileQuestion, Clock, Target, AlertCircle } from "lucide-react";
 import type { CourseFinalExam, QuizQuestion, CourseFormData } from "./course-types";
+import { stripHtml } from "@/lib/utils";
 
 interface CourseFinalExamProps {
   data: CourseFormData;
@@ -318,7 +319,7 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <p className="text-sm font-semibold text-foreground">
-                              {index + 1}. {question.question}
+                              {index + 1}. {stripHtml(question.question)}
                             </p>
                             {question.options && question.options.length > 0 && (
                               <div className="mt-2 space-y-1">
@@ -337,7 +338,7 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                                       <Circle className="h-4 w-4 text-muted-foreground" />
                                     )}
                                     <span className={question.correctAnswer === idx ? "font-medium text-green-900 dark:text-green-100" : ""}>
-                                      {option}
+                                      {stripHtml(option)}
                                     </span>
                                   </div>
                                 ))}

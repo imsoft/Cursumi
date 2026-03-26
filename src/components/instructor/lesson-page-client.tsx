@@ -17,6 +17,7 @@ import {
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
 import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
 import { saveLessonContent } from "@/app/actions/course-actions";
+import { stripHtml } from "@/lib/utils";
 
 interface LessonPageClientProps {
   courseId: string;
@@ -445,13 +446,13 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                         <div key={question.id} className={`rounded-lg border p-4 space-y-2 ${editingQuestionId === question.id ? "border-primary bg-primary/5" : "border-border bg-card"}`}>
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <p className="text-sm font-medium text-foreground">{question.question}</p>
+                              <p className="text-sm font-medium text-foreground">{stripHtml(question.question)}</p>
                               {question.options && question.options.length > 0 && (
                                 <div className="mt-2 space-y-1">
                                   {question.options.map((option, idx) => (
                                     <div key={idx} className={`flex items-center gap-2 rounded-md p-2 text-sm ${isCorrect(idx) ? "bg-primary/10 border border-primary/30" : "bg-muted/30"}`}>
                                       {isCorrect(idx) ? <CheckCircle2 className="h-4 w-4 text-primary" /> : <Circle className="h-4 w-4 text-muted-foreground" />}
-                                      <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>{option}</span>
+                                      <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>{stripHtml(option)}</span>
                                       {isCorrect(idx) && <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">Correcta</span>}
                                     </div>
                                   ))}

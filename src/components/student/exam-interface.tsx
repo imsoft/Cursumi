@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ArrowLeft, Send } from "lucide-react";
+import { stripHtml } from "@/lib/utils";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
@@ -162,7 +163,7 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
         </CardHeader>
         <CardContent className="p-6">
           <h3 className="text-xl font-semibold text-foreground mb-6">
-            {currentQuestion.question}
+            {stripHtml(currentQuestion.question)}
           </h3>
 
           {/* Opciones */}
@@ -335,9 +336,7 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
             <CardTitle className="text-sm">Instrucciones</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-              {exam.instructions}
-            </p>
+            <RichTextRenderer content={exam.instructions} className="text-sm text-muted-foreground" />
           </CardContent>
         </Card>
       )}
