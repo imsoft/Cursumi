@@ -10,28 +10,33 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true, // Habilitar verificación de email
+    requireEmailVerification: false, // Deshabilitado temporalmente: usuarios no pueden entrar si el email de verificación falla
     sendVerificationEmail: async ({ user, token }: { user: { email: string; name?: string | null }; url: string; token: string }) => {
-      // Construir la URL completa de verificación
       const baseURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const verificationLink = `${baseURL}/verify-email?token=${token}`;
-      
-      await sendVerificationEmail({
-        to: user.email,
-        name: user.name || "Usuario",
-        verificationLink,
-      });
+      try {
+        await sendVerificationEmail({
+          to: user.email,
+          name: user.name || "Usuario",
+          verificationLink,
+        });
+      } catch (err) {
+        // No lanzar error para que el registro no falle si el email no se envía
+        console.error("Error enviando email de verificación:", err);
+      }
     },
     sendPasswordResetEmail: async ({ user, token }: { user: { email: string; name?: string | null }; url: string; token: string }) => {
-      // Construir la URL completa de reset de contraseña
       const baseURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const resetLink = `${baseURL}/reset-password?token=${token}`;
-      
-      await sendPasswordResetEmail({
-        to: user.email,
-        name: user.name || "Usuario",
-        resetLink,
-      });
+      try {
+        await sendPasswordResetEmail({
+          to: user.email,
+          name: user.name || "Usuario",
+          resetLink,
+        });
+      } catch (err) {
+        console.error("Error enviando email de reset:", err);
+      }
     },
   },
   socialProviders: {
