@@ -1029,3 +1029,108 @@ export async function getUpcomingSessionsForInstructor(
     maxStudents: s.maxStudents,
   }));
 }
+
+// ── Detalle de progreso de estudiantes para instructor ──
+
+export type StudentProgressDetail = {
+  id: string;
+  enrollmentId: string;
+  name: string | null;
+  email: string;
+  status: EnrollmentStatus;
+  progress: number;
+  enrolledDate: string;
+  sessionLabel?: string;
+  completedLessonIds: string[];
+  lessonScores: Record<string, number>; // lessonId → score
+  sectionQuizzes: { sectionId: string; score: number; passed: boolean }[];
+  examSubmission: { score: number; passed: boolean; submittedAt: string } | null;
+  certificateType: string | null;
+};
+
+export type CourseProgressOverview = {
+  sections: {
+    id: string;
+    title: string;
+    hasQuiz: boolean;
+    lessons: { id: string; title: string; type: string }[];
+  }[];
+  hasFinalExam: boolean;
+  students: StudentProgressDetail[];
+};
+
+/** Fetch detailed progress for all students in a course (instructor view). */
+export async function getCourseStudentsProgress(courseId: string): Promise<CourseProgressOverview> {
+  const [course, enrollments] = await Promise.all([
+    prisma.course.findUnique({
+      where: { id: courseId },
+      select: {
+        finalExam: true,
+        sections: {
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            title: true,
+            quiz: true,
+            lessons: {
+              orderBy: { order: "asc" },
+              select: { id: true, title: true, type: true },
+            },
+          },
+        },
+      },
+    }),
+    prisma.enrollment.findMany({
+      where: { courseId },
+      include: {
+        student: { select: { id: true, name: true, email: true } },
+        session: { select: { city: true, date: true } },
+        lessonProgress: { select: { lessonId: true, score: true } },
+        sectionQuizSubmissions: { select: { sectionId: true, score: true, passed: true } },
+        examSubmission: { select: { score: true, passed: true, submittedAt: true } },
+        certificate: { select: { type: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
+
+  const hasFinalExam = !!(
+    course?.finalExam &&
+    (course.finalExam as { questions?: unknown[] }).questions?.length
+  );
+
+  const sections = (course?.sections ?? []).map((s) => ({
+    id: s.id,
+    title: s.title,
+    hasQuiz: !!(s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length),
+    lessons: s.lessons.map((l) => ({ id: l.id, title: l.title, type: l.type })),
+  }));
+
+  const students: StudentProgressDetail[] = enrollments.map((e) => ({
+    id: e.student.id,
+    enrollmentId: e.id,
+    name: e.student.name,
+    email: e.student.email,
+    status: e.status,
+    progress: e.progress,
+    enrolledDate: e.createdAt.toISOString(),
+    sessionLabel: e.session
+      ? `${e.session.city} — ${e.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
+      : undefined,
+    completedLessonIds: e.lessonProgress.map((lp) => lp.lessonId),
+    lessonScores: Object.fromEntries(
+      e.lessonProgress.filter((lp) => lp.score != null).map((lp) => [lp.lessonId, lp.score!])
+    ),
+    sectionQuizzes: e.sectionQuizSubmissions.map((sq) => ({
+      sectionId: sq.sectionId,
+      score: sq.score,
+      passed: sq.passed,
+    })),
+    examSubmission: e.examSubmission
+      ? { score: e.examSubmission.score, passed: e.examSubmission.passed, submittedAt: e.examSubmission.submittedAt.toISOString() }
+      : null,
+    certificateType: e.certificate?.type ?? null,
+  }));
+
+  return { sections, hasFinalExam, students };
+}
