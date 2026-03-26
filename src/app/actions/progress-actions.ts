@@ -57,8 +57,10 @@ export async function recalculateProgress(enrollmentId: string, courseId: string
   );
 
   const totalUnits = totalLessons + gatedSections + (hasFinalExam ? 1 : 0);
+  // El examen cuenta como completado si fue enviado (aprobado o no).
+  // El tipo de certificado se decide por si aprobó.
   const completedUnits =
-    completedLessons + passedGates + (examSubmission?.passed ? 1 : 0);
+    completedLessons + passedGates + (examSubmission ? 1 : 0);
 
   const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
 
