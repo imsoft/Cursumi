@@ -52,6 +52,11 @@ export function CertificateView({ certificate }: CertificateViewProps) {
                 ? <>ha acreditado satisfactoriamente el taller</>
                 : "ha participado en el taller"}
             </p>
+            {isAccreditation && certificate.score != null && (
+              <p className="text-lg text-muted-foreground mt-1">
+                con una calificación de <span className="font-semibold text-foreground">{certificate.score}</span>
+              </p>
+            )}
           </div>
 
           {/* Información del curso */}
