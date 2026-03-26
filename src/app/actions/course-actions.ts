@@ -119,6 +119,16 @@ export async function listStudentsForCourse(courseId: string, sessionId?: string
   return listCourseStudents(courseId, sessionId);
 }
 
+export async function getStudentsProgressForCourse(courseId: string) {
+  const session = await requireSession();
+  const course = await getCourseDetail(courseId);
+  if (!course || course.instructorId !== session.user.id) {
+    throw new Error("No autorizado");
+  }
+  const { getCourseStudentsProgress } = await import("@/lib/course-service");
+  return getCourseStudentsProgress(courseId);
+}
+
 export async function getPublishedCourseDetail(courseId: string) {
   return getPublishedCourse(courseId);
 }
