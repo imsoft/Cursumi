@@ -49,7 +49,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </h2>
             <p className="text-lg text-muted-foreground">
               {isAccreditation
-                ? <>ha acreditado con una calificación de <span className="font-semibold text-foreground">{certificate.score ?? 0} pts</span> el taller</>
+                ? <>ha acreditado satisfactoriamente el taller</>
                 : "ha participado en el taller"}
             </p>
           </div>
