@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Save, Send, AlertCircle, MapPin } from "lucide-react";
 import type { CourseFormData } from "./course-types";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
 import { CourseStatusPanel } from "./course-status-panel";
@@ -62,7 +63,7 @@ export const CoursePreview = ({
                 )}
                 <div>
                   <h3 className="text-xl font-bold text-foreground">{courseData.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{courseData.description}</p>
+                  <RichTextRenderer content={courseData.description} className="mt-2 text-sm text-muted-foreground" />
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <ModalityBadge modality={courseData.modality} size="sm" />
@@ -142,7 +143,7 @@ export const CoursePreview = ({
                           <Badge variant="outline">{section.lessons.length} lecciones</Badge>
                         </div>
                         {section.description && (
-                          <p className="text-sm text-muted-foreground mb-3">{section.description}</p>
+                          <RichTextRenderer content={section.description} className="text-sm text-muted-foreground mb-3" />
                         )}
                         <div className="space-y-2">
                           {section.lessons.map((lesson, lessonIndex) => (

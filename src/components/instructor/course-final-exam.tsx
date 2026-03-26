@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -186,20 +186,24 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
               </div>
 
               <div>
-                <Textarea
-                  label="Descripción"
+                <label className="text-sm font-medium text-foreground">Descripción</label>
+                <RichTextEditor
                   value={examDescription}
-                  onChange={(e) => setExamDescription(e.target.value)}
-                  rows={2}
+                  onChange={setExamDescription}
+                  placeholder="Descripción del examen…"
+                  minHeight="80px"
+                  className="mt-1"
                 />
               </div>
 
               <div>
-                <Textarea
-                  label="Instrucciones para el estudiante"
+                <label className="text-sm font-medium text-foreground">Instrucciones para el estudiante</label>
+                <RichTextEditor
                   value={examInstructions}
-                  onChange={(e) => setExamInstructions(e.target.value)}
-                  rows={3}
+                  onChange={setExamInstructions}
+                  placeholder="Instrucciones que verá el estudiante…"
+                  minHeight="100px"
+                  className="mt-1"
                 />
               </div>
 

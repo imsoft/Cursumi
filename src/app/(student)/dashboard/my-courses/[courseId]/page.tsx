@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import {
   Calendar,
   Users,
@@ -138,9 +139,7 @@ export default async function MyCourseDetailPage({
           </div>
           <div>
             <CardTitle className="text-3xl">{course.title}</CardTitle>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
-              {course.description}
-            </p>
+            <RichTextRenderer content={course.description} className="mt-3 text-sm leading-relaxed text-muted-foreground" />
           </div>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
@@ -265,7 +264,7 @@ export default async function MyCourseDetailPage({
                       <div>
                         <p className="font-semibold text-foreground">{section.title}</p>
                         {section.description && (
-                          <p className="text-xs text-muted-foreground">{section.description}</p>
+                          <RichTextRenderer content={section.description} className="text-xs text-muted-foreground" />
                         )}
                       </div>
                     </div>

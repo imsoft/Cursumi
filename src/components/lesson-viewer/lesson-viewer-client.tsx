@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { Button } from "@/components/ui/button";
 import {
   CheckCircle,
@@ -484,14 +485,17 @@ export function LessonViewerClient({
     }
 
     if (lesson.type === "text") {
-      // Preserve line breaks: convert single newlines to Markdown line breaks (two trailing spaces + newline)
-      const formattedContent = lesson.content
-        ? lesson.content.replace(/(?<!\n)\n(?!\n)/g, "  \n")
-        : "";
+      const isHtml = lesson.content?.includes("<");
       return (
         <div className="prose prose-neutral dark:prose-invert max-w-none rounded-lg border border-border bg-card p-6">
-          {formattedContent ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{formattedContent}</ReactMarkdown>
+          {lesson.content ? (
+            isHtml ? (
+              <RichTextRenderer content={lesson.content} />
+            ) : (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {lesson.content.replace(/(?<!\n)\n(?!\n)/g, "  \n")}
+              </ReactMarkdown>
+            )
           ) : (
             <p className="text-muted-foreground">No hay contenido disponible.</p>
           )}
@@ -679,7 +683,11 @@ export function LessonViewerClient({
           <h2 className="text-xl font-semibold">Tarea</h2>
           {lesson.content && (
             <div className="prose prose-neutral dark:prose-invert max-w-none text-sm">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content}</ReactMarkdown>
+              {lesson.content.includes("<") ? (
+                <RichTextRenderer content={lesson.content} />
+              ) : (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content}</ReactMarkdown>
+              )}
             </div>
           )}
           <div className="space-y-2">

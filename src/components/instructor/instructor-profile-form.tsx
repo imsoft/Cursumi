@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 const instructorProfileSchema = z.object({
   fullName: z.string().min(2, "El nombre es obligatorio"),
@@ -135,7 +135,13 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
             </div>
           </div>
           <div>
-            <Textarea label="Biografía *" {...form.register("bio")} />
+            <label className="text-sm font-medium text-foreground">Biografía</label>
+            <RichTextEditor
+              value={form.watch("bio") ?? ""}
+              onChange={(html) => form.setValue("bio", html, { shouldValidate: true })}
+              placeholder="Cuéntales a tus estudiantes sobre ti…"
+              className="mt-1"
+            />
             {form.formState.errors.bio && (
               <p className="text-xs text-destructive">{form.formState.errors.bio.message}</p>
             )}

@@ -15,6 +15,7 @@ import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDuration } from "@/lib/course-completion";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { parseDurationToMinutes } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
 
@@ -165,9 +166,7 @@ export default async function PublicCourseDetailPage({
             {course.level && <Badge variant="outline">{course.level}</Badge>}
           </div>
           <CardTitle className="text-3xl">{course.title}</CardTitle>
-          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
-            {course.description}
-          </p>
+          <RichTextRenderer content={course.description} className="text-sm leading-relaxed text-muted-foreground" />
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">

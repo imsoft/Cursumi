@@ -9,6 +9,7 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
 import { Separator } from "@/components/ui/separator";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
 export default async function CourseDetailPage({
   params,
@@ -78,9 +79,7 @@ export default async function CourseDetailPage({
             <Badge variant="outline">{course.category}</Badge>
             {course.level && <Badge variant="outline">{course.level}</Badge>}
           </div>
-          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
-            {course.description}
-          </p>
+          <RichTextRenderer content={course.description} className="text-sm leading-relaxed text-muted-foreground" />
         </CardHeader>
       </Card>
 

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
@@ -316,11 +316,11 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground">Descripción</label>
-                <Textarea
+                <RichTextEditor
+                  value={editData.description ?? ""}
+                  onChange={(html) => setEditData((d) => ({ ...d, description: html }))}
+                  placeholder="Describe tu curso…"
                   className="mt-1"
-                  value={editData.description}
-                  onChange={(e) => setEditData((d) => ({ ...d, description: e.target.value }))}
-                  rows={3}
                 />
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

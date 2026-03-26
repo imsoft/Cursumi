@@ -7,7 +7,7 @@ import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ArrowRight, Upload, Loader2 } from "lucide-react";
@@ -147,10 +147,12 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
           </div>
 
           <div>
-            <Textarea
-              label="Descripción *"
-              rows={5}
-              {...form.register("description")}
+            <label className="text-sm font-medium text-foreground">Descripción *</label>
+            <RichTextEditor
+              value={form.watch("description") ?? ""}
+              onChange={(html) => form.setValue("description", html, { shouldValidate: true })}
+              placeholder="Describe tu curso…"
+              className="mt-1"
             />
             {form.formState.errors.description && (
               <p className="mt-1 text-xs text-destructive">

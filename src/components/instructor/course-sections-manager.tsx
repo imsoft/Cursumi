@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -221,7 +222,7 @@ export const CourseSectionsManager = ({
                             )}
                           </div>
                           {section.description && (
-                            <p className="text-sm text-muted-foreground">{section.description}</p>
+                            <RichTextRenderer content={section.description} className="text-sm text-muted-foreground" />
                           )}
                         </div>
                         <div className="flex shrink-0 items-center gap-2">
@@ -251,11 +252,12 @@ export const CourseSectionsManager = ({
                             value={section.title}
                             onChange={(e) => updateSection(section.id, { title: e.target.value })}
                           />
-                          <Textarea
-                            label="Descripción (opcional)"
+                          <label className="text-sm font-medium text-foreground">Descripción (opcional)</label>
+                          <RichTextEditor
                             value={section.description || ""}
-                            onChange={(e) => updateSection(section.id, { description: e.target.value })}
-                            rows={2}
+                            onChange={(html) => updateSection(section.id, { description: html })}
+                            placeholder="Describe esta sección…"
+                            minHeight="80px"
                           />
                         </div>
 

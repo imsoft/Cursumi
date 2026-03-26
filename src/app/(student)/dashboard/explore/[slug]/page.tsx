@@ -12,6 +12,7 @@ import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
 type Params = { params: Promise<{ slug: string }> };
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
@@ -99,9 +100,7 @@ export default async function ExploreCourseDetail({
             {course.level && <Badge variant="outline">{course.level}</Badge>}
           </div>
           <CardTitle className="text-3xl">{course.title}</CardTitle>
-          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
-            {course.description}
-          </p>
+          <RichTextRenderer content={course.description} className="text-sm leading-relaxed text-muted-foreground" />
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">

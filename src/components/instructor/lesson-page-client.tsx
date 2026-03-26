@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -15,7 +15,6 @@ import {
   FileText, Image as ImageIcon, File, Link as LinkIcon, X, Pencil, Check,
 } from "lucide-react";
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
-import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
 import { saveLessonContent } from "@/app/actions/course-actions";
 
@@ -288,12 +287,16 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
             />
           </div>
 
-          <Textarea
-            label="Descripción"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-          />
+          <div>
+            <label className="text-sm font-medium text-foreground">Descripción</label>
+            <RichTextEditor
+              value={description}
+              onChange={setDescription}
+              placeholder="Describe esta lección…"
+              minHeight="80px"
+              className="mt-1"
+            />
+          </div>
 
           {/* ── Video ── */}
           {type === "video" && (
@@ -369,23 +372,31 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
 
           {/* ── Text ── */}
           {type === "text" && (
-            <Textarea
-              label="Contenido de la lección *"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={12}
-            />
+            <div>
+              <label className="text-sm font-medium text-foreground">Contenido de la lección *</label>
+              <RichTextEditor
+                value={content}
+                onChange={setContent}
+                placeholder="Escribe el contenido de la lección…"
+                minHeight="250px"
+                className="mt-1"
+              />
+            </div>
           )}
 
           {/* ── Quiz ── */}
           {type === "quiz" && (
             <div className="space-y-4">
-              <Textarea
-                label="Instrucciones del quiz *"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={4}
-              />
+              <div>
+                <label className="text-sm font-medium text-foreground">Instrucciones del quiz *</label>
+                <RichTextEditor
+                  value={content}
+                  onChange={setContent}
+                  placeholder="Escribe las instrucciones del quiz…"
+                  minHeight="100px"
+                  className="mt-1"
+                />
+              </div>
 
               {/* Quiz config */}
               <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-4">

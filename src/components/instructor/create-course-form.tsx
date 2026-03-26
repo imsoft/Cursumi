@@ -10,7 +10,7 @@ import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
@@ -159,9 +159,12 @@ export const CreateCourseForm = () => {
                 )}
               </div>
               <div>
-                <Textarea
-                  label="Descripción *"
-                  {...form.register("description")}
+                <label className="text-sm font-medium text-foreground">Descripción *</label>
+                <RichTextEditor
+                  value={form.watch("description") ?? ""}
+                  onChange={(html) => form.setValue("description", html, { shouldValidate: true })}
+                  placeholder="Describe tu curso…"
+                  className="mt-1"
                 />
                 {form.formState.errors.description && (
                   <p className="mt-1 text-xs text-destructive">

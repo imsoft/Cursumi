@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CourseCard, type CourseCardProps } from "@/components/course-card";
+import { stripHtml } from "@/components/ui/rich-text-renderer";
 import type { FeaturedCourseItem } from "@/lib/public-stats";
 
 const DEFAULT_COURSE_IMAGE =
@@ -15,9 +16,10 @@ function toCardProps(course: FeaturedCourseItem): CourseCardProps {
     title: course.title,
     mode,
     location,
-    description:
-      course.description.slice(0, 160) +
-      (course.description.length > 160 ? "…" : ""),
+    description: (() => {
+      const plain = stripHtml(course.description);
+      return plain.length > 160 ? plain.slice(0, 160) + "…" : plain;
+    })(),
     href: `/courses/${course.slug || course.id}`,
     imageSrc: course.imageUrl ?? DEFAULT_COURSE_IMAGE,
     imageAlt: `${course.title} - curso en Cursumi`,

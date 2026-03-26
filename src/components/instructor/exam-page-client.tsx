@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -197,22 +197,22 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground">Descripción</label>
-                <Textarea
-                  className="mt-1"
+                <RichTextEditor
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={setDescription}
                   placeholder="Descripción opcional del examen..."
-                  rows={2}
+                  minHeight="80px"
+                  className="mt-1"
                 />
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground">Instrucciones</label>
-                <Textarea
-                  className="mt-1"
+                <RichTextEditor
                   value={instructions}
-                  onChange={(e) => setInstructions(e.target.value)}
+                  onChange={setInstructions}
                   placeholder="Instrucciones que verá el estudiante antes de comenzar..."
-                  rows={3}
+                  minHeight="100px"
+                  className="mt-1"
                 />
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

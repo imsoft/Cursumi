@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { Course } from "./types";
 import { ModalityOverlayBadge } from "@/components/ui/modality-badge";
+import { stripHtml } from "@/components/ui/rich-text-renderer";
 
 interface CourseCardProps {
   course: Course;
@@ -54,7 +55,7 @@ export const CourseCard = ({ course, priority }: CourseCardProps) => {
 
         {/* Description */}
         <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-2">
-          {course.description}
+          {stripHtml(course.description)}
         </p>
 
         {/* Footer */}

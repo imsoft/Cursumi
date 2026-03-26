@@ -4,6 +4,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { UserAvatarUpload } from "@/components/profile/user-avatar-upload";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
 interface InstructorProfileSummaryProps {
   fullName: string;
@@ -85,7 +86,7 @@ export const InstructorProfileSummary = ({
       </CardHeader>
       {bio && (
         <CardContent className="px-6 pb-6 pt-0">
-          <p className="text-sm text-muted-foreground">{bio}</p>
+          <RichTextRenderer content={bio} className="text-sm text-muted-foreground" />
         </CardContent>
       )}
     </Card>

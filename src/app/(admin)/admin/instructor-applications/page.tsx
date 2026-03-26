@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
 import {
@@ -183,7 +184,7 @@ export default function InstructorApplicationsPage() {
                       {app.bio && (
                         <div>
                           <p className="font-medium text-muted-foreground mb-1">Sobre el solicitante</p>
-                          <p className="text-foreground whitespace-pre-wrap">{app.bio}</p>
+                          <RichTextRenderer content={app.bio} className="text-foreground" />
                         </div>
                       )}
                       <div>

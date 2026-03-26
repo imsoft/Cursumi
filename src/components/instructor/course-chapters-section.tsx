@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 type Chapter = {
   id: string;
@@ -93,12 +93,12 @@ export const CourseChaptersSection = () => {
             />
           </div>
           <div>
-            <Textarea
-              label="Resumen"
+            <label className="text-sm font-medium text-foreground">Resumen</label>
+            <RichTextEditor
               value={formData.summary}
-              onChange={(event) =>
-                setFormData((prev) => ({ ...prev, summary: event.target.value }))
-              }
+              onChange={(html) => setFormData((prev) => ({ ...prev, summary: html }))}
+              placeholder="Resumen del capítulo…"
+              minHeight="80px"
             />
           </div>
           <div className="space-y-3">

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { ModalityOverlayBadge } from "@/components/ui/modality-badge";
+import { stripHtml } from "@/components/ui/rich-text-renderer";
 
 export interface CourseCardProps {
   title: string;
@@ -61,7 +62,7 @@ export const CourseCard = ({
 
         {/* Description */}
         <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-3">
-          {description}
+          {stripHtml(description)}
         </p>
 
         {/* Footer */}

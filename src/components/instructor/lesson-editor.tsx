@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -344,11 +343,13 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
           </div>
 
           <div>
-            <Textarea
-              label="Descripción"
+            <label className="text-sm font-medium text-foreground">Descripción</label>
+            <RichTextEditor
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
+              onChange={setDescription}
+              placeholder="Describe esta lección…"
+              minHeight="80px"
+              className="mt-1"
             />
           </div>
 
@@ -487,26 +488,27 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
 
           {type === "text" && (
             <div>
-              <Textarea
-                label="Contenido de la lección *"
+              <label className="text-sm font-medium text-foreground">Contenido de la lección *</label>
+              <RichTextEditor
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={12}
+                onChange={setContent}
+                placeholder="Escribe el contenido de la lección…"
+                minHeight="250px"
+                className="mt-1"
               />
-              <p className="mt-1 text-xs text-muted-foreground">
-                Usa Markdown para formatear el texto (negritas, listas, enlaces, etc.)
-              </p>
             </div>
           )}
 
           {type === "quiz" && (
             <div className="space-y-4">
               <div>
-                <Textarea
-                  label="Instrucciones del quiz *"
+                <label className="text-sm font-medium text-foreground">Instrucciones del quiz *</label>
+                <RichTextEditor
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  rows={4}
+                  onChange={setContent}
+                  placeholder="Escribe las instrucciones del quiz…"
+                  minHeight="100px"
+                  className="mt-1"
                 />
               </div>
 
