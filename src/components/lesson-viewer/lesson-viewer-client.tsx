@@ -985,7 +985,7 @@ export function LessonViewerClient({
             </div>
             <h1 className="mt-1 text-2xl font-bold text-foreground">{lesson.title}</h1>
             {lesson.description && (
-              <p className="mt-2 text-sm text-muted-foreground whitespace-pre-line">{lesson.description}</p>
+              <RichTextRenderer content={lesson.description} className="mt-2 text-sm text-muted-foreground" />
             )}
           </div>
 

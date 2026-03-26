@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, Circle, Clock, AlertTriangle, ArrowRight, ArrowLeft, Send } from "lucide-react";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
 interface ExamInterfaceProps {
   exam: CourseFinalExam;
@@ -102,7 +103,7 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
             <div>
               <CardTitle className="text-2xl">{exam.title}</CardTitle>
               {exam.description && (
-                <p className="mt-1 text-sm text-muted-foreground">{exam.description}</p>
+                <RichTextRenderer content={exam.description} className="mt-1 text-sm text-muted-foreground" />
               )}
             </div>
             {timeRemaining !== null && (

@@ -332,9 +332,7 @@ export const CourseSectionsManager = ({
                                               <LessonStatusBadge lesson={lesson} />
                                             </div>
                                             {lesson.description && (
-                                              <p className="mt-1 text-sm text-muted-foreground">
-                                                {lesson.description}
-                                              </p>
+                                              <RichTextRenderer content={lesson.description} className="mt-1 text-sm text-muted-foreground" />
                                             )}
                                           </div>
                                           <div className="flex gap-1">

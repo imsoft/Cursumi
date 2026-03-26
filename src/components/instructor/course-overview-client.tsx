@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
@@ -448,7 +449,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     {isPublished ? "Publicado" : course.status === "archived" ? "Archivado" : "Borrador"}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{course.description}</p>
+                <RichTextRenderer content={course.description} className="text-sm text-muted-foreground" />
                 <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground pt-1">
                   <ModalityBadge modality={course.modality} />
                   <span>{course.category}</span>

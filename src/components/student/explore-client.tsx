@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PageHeader } from "@/components/shared/page-header";
-import { formatPriceMXN } from "@/lib/utils";
+import { formatPriceMXN, stripHtml } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -218,7 +218,7 @@ export function ExploreClient({
                       {course.title}
                     </CardTitle>
                     <p className="line-clamp-2 text-sm text-muted-foreground">
-                      {course.description}
+                      {stripHtml(course.description)}
                     </p>
                     <div className="flex flex-wrap items-center gap-2 text-xs">
                       <ModalityBadge modality={course.modality} />
