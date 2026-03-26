@@ -1141,6 +1141,13 @@ export function LessonViewerClient({
                 )}
                 {nextLesson ? (
                   nextButton("sm")
+                ) : hasFinalExam && isCompleted && !blockNextNavigation ? (
+                  <Button
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)}
+                  >
+                    Presentar examen final
+                  </Button>
                 ) : (
                   <Button
                     size="sm"
