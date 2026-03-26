@@ -84,7 +84,7 @@ export function HangmanGame({ words, onComplete }: HangmanGameProps) {
   );
   const isWordLost = wrongGuesses >= MAX_WRONG;
 
-  const advanceWord = useCallback(() => {
+  const advanceWord = () => {
     if (wordIndex < words.length - 1) {
       setWordIndex((i) => i + 1);
       setGuessedLetters(new Set());
@@ -92,8 +92,9 @@ export function HangmanGame({ words, onComplete }: HangmanGameProps) {
     } else {
       setAllDone(true);
     }
-  }, [wordIndex, words.length]);
+  };
 
+  // Mark word status when won/lost
   useEffect(() => {
     if ((isWordWon || isWordLost) && !transitioning) {
       setTransitioning(true);
@@ -103,13 +104,8 @@ export function HangmanGame({ words, onComplete }: HangmanGameProps) {
         next[wordIndex] = status;
         return next;
       });
-      const delay = isWordWon ? 1500 : 2000;
-      const timer = setTimeout(() => {
-        advanceWord();
-      }, delay);
-      return () => clearTimeout(timer);
     }
-  }, [isWordWon, isWordLost, transitioning, advanceWord, wordIndex]);
+  }, [isWordWon, isWordLost, transitioning, wordIndex]);
 
   const handleGuess = (letter: string) => {
     if (guessedLetters.has(letter) || transitioning) return;
@@ -213,17 +209,27 @@ export function HangmanGame({ words, onComplete }: HangmanGameProps) {
             })}
           </div>
 
-          {/* Status message */}
+          {/* Status message + advance button */}
           {transitioning && isWordWon && (
-            <div className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-900/20 px-4 py-2 text-green-800 dark:text-green-400 text-sm font-medium">
-              <CheckCircle className="h-4 w-4" />
-              ¡Correcto!
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-900/20 px-4 py-2 text-green-800 dark:text-green-400 text-sm font-medium">
+                <CheckCircle className="h-4 w-4" />
+                ¡Correcto!
+              </div>
+              <Button onClick={advanceWord} size="sm">
+                {wordIndex < words.length - 1 ? "Siguiente palabra →" : "Ver resultados"}
+              </Button>
             </div>
           )}
           {transitioning && isWordLost && (
-            <div className="rounded-lg bg-red-50 dark:bg-red-900/20 px-4 py-2 text-red-800 dark:text-red-400 text-sm font-medium text-center">
-              La palabra era:{" "}
-              <span className="font-bold">{currentWord}</span>
+            <div className="flex flex-col items-center gap-3">
+              <div className="rounded-lg bg-red-50 dark:bg-red-900/20 px-4 py-2 text-red-800 dark:text-red-400 text-sm font-medium text-center">
+                La palabra era:{" "}
+                <span className="font-bold">{currentWord}</span>
+              </div>
+              <Button onClick={advanceWord} size="sm" variant="outline">
+                {wordIndex < words.length - 1 ? "Siguiente palabra →" : "Ver resultados"}
+              </Button>
             </div>
           )}
         </div>
