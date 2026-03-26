@@ -1035,10 +1035,7 @@ export function LessonViewerClient({
                   {lesson.attachments.map((att) => (
                     <a
                       key={att.id}
-                      href={att.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download={att.name}
+                      href={`/api/download?url=${encodeURIComponent(att.url)}&name=${encodeURIComponent(att.name)}`}
                       className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
                     >
                       <FileText className="h-4 w-4 shrink-0 text-primary" />
