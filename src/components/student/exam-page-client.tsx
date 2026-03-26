@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ExamInterface } from "@/components/student/exam-interface";
+import { ExamResults } from "@/components/student/exam-results";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Award } from "lucide-react";
@@ -12,7 +13,11 @@ interface ExamPageClientProps {
   courseId: string;
   courseTitle: string;
   exam: CourseFinalExam;
-  existingSubmission: { score: number; passed: boolean } | null;
+  existingSubmission: {
+    score: number;
+    passed: boolean;
+    answers: Record<string, number>;
+  } | null;
 }
 
 export function ExamPageClient({
@@ -24,32 +29,70 @@ export function ExamPageClient({
   const [result, setResult] = useState<{
     score: number;
     passed: boolean;
+    answers: Record<string, number>;
     certificate: { id: string; number: string } | null;
   } | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // Already submitted (from server) — show detailed results
   if (existingSubmission) {
     return (
-      <div className="mx-auto max-w-xl space-y-6 py-12">
-        <ResultCard
+      <div className="space-y-6 py-6">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground max-w-4xl mx-auto px-4">
+          <Link href={`/dashboard/my-courses/${courseId}`} className="underline">
+            {courseTitle}
+          </Link>
+          <span>/</span>
+          <span className="text-foreground">Resultados del examen</span>
+        </div>
+        <ExamResults
+          exam={exam}
+          userAnswers={existingSubmission.answers}
           score={existingSubmission.score}
           passed={existingSubmission.passed}
-          courseId={courseId}
-          certificateId={null}
+          attemptsUsed={1}
+          onContinue={undefined}
         />
+        <div className="mx-auto max-w-4xl px-4">
+          <Button variant="outline" asChild>
+            <Link href={`/dashboard/my-courses/${courseId}`}>Volver al curso</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
+  // Just submitted — show detailed results with certificate link
   if (result) {
     return (
-      <div className="mx-auto max-w-xl space-y-6 py-12">
-        <ResultCard
+      <div className="space-y-6 py-6">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground max-w-4xl mx-auto px-4">
+          <Link href={`/dashboard/my-courses/${courseId}`} className="underline">
+            {courseTitle}
+          </Link>
+          <span>/</span>
+          <span className="text-foreground">Resultados del examen</span>
+        </div>
+        <ExamResults
+          exam={exam}
+          userAnswers={result.answers}
           score={result.score}
           passed={result.passed}
-          courseId={courseId}
-          certificateId={result.certificate?.id ?? null}
+          attemptsUsed={1}
         />
+        <div className="mx-auto max-w-4xl px-4 flex gap-3">
+          {result.certificate && (
+            <Button asChild>
+              <Link href={`/dashboard/certificates/${result.certificate.id}?new=1`}>
+                <Award className="mr-2 h-4 w-4" />
+                {result.passed ? "Ver certificado de acreditación" : "Ver reconocimiento de participación"}
+              </Link>
+            </Button>
+          )}
+          <Button variant="outline" asChild>
+            <Link href={`/dashboard/my-courses/${courseId}`}>Volver al curso</Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -68,7 +111,7 @@ export function ExamPageClient({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al enviar examen");
-      setResult(data);
+      setResult({ ...data, answers });
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Error inesperado");
     }
@@ -88,55 +131,5 @@ export function ExamPageClient({
       )}
       <ExamInterface exam={exam} onSubmit={handleSubmit} />
     </div>
-  );
-}
-
-function ResultCard({
-  score,
-  passed,
-  courseId,
-  certificateId,
-}: {
-  score: number;
-  passed: boolean;
-  courseId: string;
-  certificateId: string | null;
-}) {
-  return (
-    <Card>
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-2">
-          {passed ? (
-            <CheckCircle2 className="h-16 w-16 text-green-500" />
-          ) : (
-            <XCircle className="h-16 w-16 text-amber-500" />
-          )}
-        </div>
-        <CardTitle className="text-2xl">
-          {passed ? "¡Aprobaste el examen!" : "No aprobaste esta vez"}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6 text-center">
-        <p className="text-5xl font-bold text-foreground">{Math.round(score)}%</p>
-        <p className="text-muted-foreground">
-          {passed
-            ? "Felicidades, has completado el curso exitosamente. Tu certificado de acreditación ya está disponible."
-            : "No alcanzaste la calificación mínima, pero tu reconocimiento de participación ya está disponible."}
-        </p>
-        {certificateId && (
-          <Button asChild>
-            <Link href={`/dashboard/certificates/${certificateId}?new=1`}>
-              <Award className="mr-2 h-4 w-4" />
-              {passed ? "Ver certificado de acreditación" : "Ver reconocimiento de participación"}
-            </Link>
-          </Button>
-        )}
-        <div>
-          <Button variant="outline" asChild>
-            <Link href={`/dashboard/my-courses/${courseId}`}>Volver al curso</Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
   );
 }

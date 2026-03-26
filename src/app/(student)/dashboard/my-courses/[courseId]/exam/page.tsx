@@ -36,6 +36,7 @@ export default async function ExamPage({
           ? {
               score: enrollment.examSubmission.score,
               passed: enrollment.examSubmission.passed,
+              answers: enrollment.examSubmission.answers as Record<string, number>,
             }
           : null
       }
