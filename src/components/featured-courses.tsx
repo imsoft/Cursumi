@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CourseCard, type CourseCardProps } from "@/components/course-card";
-import { stripHtml } from "@/components/ui/rich-text-renderer";
+import { stripHtml } from "@/lib/utils";
 import type { FeaturedCourseItem } from "@/lib/public-stats";
 
 const DEFAULT_COURSE_IMAGE =

@@ -11,11 +11,8 @@ interface RichTextRendererProps {
   className?: string;
 }
 
-/** Strips HTML tags and returns plain text. Useful for cards with line-clamp. */
-export function stripHtml(html: string | null | undefined): string {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
-}
+// Re-export from utils so existing client imports keep working
+export { stripHtml } from "@/lib/utils";
 
 export function RichTextRenderer({ content, className = "" }: RichTextRendererProps) {
   if (!content) return null;

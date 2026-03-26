@@ -30,6 +30,12 @@ export function parseDurationToMinutes(duration: string | null | undefined): num
  * @param showDecimals - Si se deben mostrar decimales (default: false)
  * @returns String formateado como "$1,234.56" o "$1,234"
  */
+/** Strips HTML tags and returns plain text. Useful for cards with line-clamp. */
+export function stripHtml(html: string | null | undefined): string {
+  if (!html) return "";
+  return html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+}
+
 export function formatPriceMXN(price: number, showDecimals: boolean = false): string {
   return new Intl.NumberFormat("es-MX", {
     style: "currency",

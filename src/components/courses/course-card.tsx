@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { Course } from "./types";
 import { ModalityOverlayBadge } from "@/components/ui/modality-badge";
-import { stripHtml } from "@/components/ui/rich-text-renderer";
+import { stripHtml } from "@/lib/utils";
 
 interface CourseCardProps {
   course: Course;

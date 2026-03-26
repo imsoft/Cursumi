@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { ModalityOverlayBadge } from "@/components/ui/modality-badge";
-import { stripHtml } from "@/components/ui/rich-text-renderer";
+import { stripHtml } from "@/lib/utils";
 
 export interface CourseCardProps {
   title: string;
