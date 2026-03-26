@@ -524,7 +524,7 @@ export function LessonViewerClient({
           <div className="space-y-4 rounded-lg border border-border bg-card p-6 text-center">
             <h2 className="text-xl font-semibold">Quiz</h2>
             {quizInstructions && (
-              <p className="text-sm text-muted-foreground">{quizInstructions}</p>
+              <RichTextRenderer content={quizInstructions} className="text-sm text-muted-foreground" />
             )}
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>{quizQuestions.length} preguntas</p>
@@ -563,7 +563,7 @@ export function LessonViewerClient({
             </div>
           </div>
           {quizInstructions && (
-            <p className="text-sm text-muted-foreground">{quizInstructions}</p>
+            <RichTextRenderer content={quizInstructions} className="text-sm text-muted-foreground" />
           )}
           {(quizPassingRequired || quizTimeLimit > 0) && !quizSubmitted && (
             <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
