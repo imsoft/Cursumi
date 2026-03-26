@@ -25,6 +25,7 @@ import {
   saveCourseExam,
   updateCourseInfo,
   upsertCourseSessions,
+  getCourseStudentsProgress,
 } from "@/lib/course-service";
 import type { CourseFormData, CourseLesson, CourseFinalExam, SectionQuiz, SectionMinigame, CourseSessionData } from "@/components/instructor/course-types";
 import type { Course } from "@/components/courses/types";
@@ -125,7 +126,6 @@ export async function getStudentsProgressForCourse(courseId: string) {
   if (!course || course.instructorId !== session.user.id) {
     throw new Error("No autorizado");
   }
-  const { getCourseStudentsProgress } = await import("@/lib/course-service");
   return getCourseStudentsProgress(courseId);
 }
 
