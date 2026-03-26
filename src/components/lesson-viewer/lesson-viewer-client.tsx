@@ -765,9 +765,22 @@ export function LessonViewerClient({
                 }`}
               >
                 {sectionQuizPassed ? (
-                  <span>
-                    Aprobado: {sectionQuizScore}%. Puedes continuar con la siguiente sección.
-                  </span>
+                  <div className="flex flex-col gap-3">
+                    <span>
+                      Aprobado: {sectionQuizScore}%. Puedes continuar con la siguiente sección.
+                    </span>
+                    {nextLesson ? (
+                      <Button size="sm" onClick={handleNext} className="w-fit">
+                        Siguiente lección
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    ) : hasFinalExam ? (
+                      <Button size="sm" onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)} className="w-fit">
+                        Presentar examen final
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    ) : null}
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     <p>
@@ -815,9 +828,26 @@ export function LessonViewerClient({
         </div>
 
         {sectionMinigamePassed ? (
-          <div className="flex items-center gap-2 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-            <CheckCircle className="h-5 w-5 shrink-0" />
-            <p className="text-sm font-medium">¡Minijuego completado! Puedes continuar.</p>
+          <div className="flex flex-col gap-3 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 shrink-0" />
+              <p className="text-sm font-medium">¡Minijuego completado! Puedes continuar.</p>
+            </div>
+            {nextLesson ? (
+              <Button size="sm" onClick={handleNext} className="w-fit">
+                Siguiente lección
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            ) : hasFinalExam ? (
+              <Button size="sm" onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)} className="w-fit">
+                Presentar examen final
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            ) : (
+              <Button size="sm" variant="outline" onClick={() => router.push(`/dashboard/my-courses/${courseId}`)} className="w-fit">
+                Volver al curso
+              </Button>
+            )}
           </div>
         ) : (
           <>
