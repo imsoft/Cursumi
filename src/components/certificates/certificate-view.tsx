@@ -10,6 +10,7 @@ interface CertificateViewProps {
 
 export function CertificateView({ certificate }: CertificateViewProps) {
   const isAccreditation = certificate.type === "accreditation";
+  const sigH = certificate.signatureHeight ?? 64; // default 64px (4rem)
 
   return (
     <Card data-certificate className="border-2 border-primary/20 bg-linear-to-br from-background to-primary/5 shadow-xl">
@@ -112,16 +113,18 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             <div className="flex items-end justify-between gap-4 print:gap-6">
               <div className="text-center flex-1 min-w-0">
                 {certificate.instructorSignatureUrl ? (
-                  <div className="flex items-end justify-center h-12 print:h-10 mb-1">
+                  <div className="flex items-end justify-center mb-1" style={{ height: sigH }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={certificate.instructorSignatureUrl}
                       alt={`Firma de ${certificate.instructorName}`}
-                      className="max-h-12 print:max-h-10 w-auto object-contain"
+                      data-signature
+                      className="w-auto object-contain"
+                      style={{ maxHeight: sigH }}
                     />
                   </div>
                 ) : (
-                  <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
+                  <div className="border-b border-foreground/20 mb-1" style={{ height: sigH }}></div>
                 )}
                 <div className="border-t border-foreground/20 pt-1">
                   <p className="text-xs text-muted-foreground">{certificate.instructorName}</p>
@@ -130,16 +133,18 @@ export function CertificateView({ certificate }: CertificateViewProps) {
               </div>
               <div className="text-center flex-1 min-w-0">
                 {certificate.adminSignatureUrl ? (
-                  <div className="flex items-end justify-center h-12 print:h-10 mb-1">
+                  <div className="flex items-end justify-center mb-1" style={{ height: sigH }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={certificate.adminSignatureUrl}
                       alt="Firma del administrador"
-                      className="max-h-12 print:max-h-10 w-auto object-contain"
+                      data-signature
+                      className="w-auto object-contain"
+                      style={{ maxHeight: sigH }}
                     />
                   </div>
                 ) : (
-                  <div className="h-12 print:h-10 border-b border-foreground/20 mb-1"></div>
+                  <div className="border-b border-foreground/20 mb-1" style={{ height: sigH }}></div>
                 )}
                 <div className="border-t border-foreground/20 pt-1">
                   <p className="text-xs text-muted-foreground">Diseñador del taller</p>

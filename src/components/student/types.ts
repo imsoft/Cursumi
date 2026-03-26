@@ -42,6 +42,8 @@ export type Certificate = {
   imageUrl?: string;
   instructorSignatureUrl?: string | null;
   adminSignatureUrl?: string | null;
+  /** Altura de la firma en px (default 48 → 3rem) */
+  signatureHeight?: number;
 };
 
 export type Recommendation = {

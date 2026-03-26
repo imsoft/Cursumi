@@ -167,6 +167,20 @@
     display: none !important;
   }
 
+  /* Forzar tema claro en el certificado para impresión */
+  [data-certificate],
+  [data-certificate] * {
+    --foreground: oklch(0.141 0.005 285.823);
+    --background: oklch(1 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.141 0.005 285.823);
+    --primary: oklch(0.541 0.281 293.009);
+    --primary-foreground: oklch(0.969 0.016 293.756);
+    --muted-foreground: oklch(0.552 0.016 285.938);
+    --border: oklch(0.92 0.004 286.32);
+    color: oklch(0.141 0.005 285.823);
+  }
+
   /* Certificado: forzar que ocupe exactamente una página */
   [data-certificate] {
     position: fixed !important;
@@ -234,10 +248,10 @@
   /* Logo más pequeño */
   [data-certificate] img.h-12 { height: 2rem !important; }
 
-  /* Firmas compactas */
-  [data-certificate] .h-12 { height: 1.8rem !important; }
-  [data-certificate] .max-h-12,
-  [data-certificate] .print\:max-h-10 { max-height: 1.8rem !important; }
+  /* Firmas: respetar tamaño inline, reducir proporcionalmente para print */
+  [data-certificate] [data-signature] {
+    max-height: inherit !important;
+  }
 
   /* Badges compactos */
   [data-certificate] .rounded-md { padding: 0.1rem 0.5rem !important; font-size: 0.65rem !important; }

@@ -156,6 +156,20 @@ export default function CertificatePreviewPage() {
                 onChange={(e) => update({ certificateNumber: e.target.value })}
               />
             </div>
+            <div>
+              <label className="text-sm font-medium text-foreground">
+                Altura de firma (px): {cert.signatureHeight ?? 64}
+              </label>
+              <input
+                type="range"
+                min={32}
+                max={120}
+                step={4}
+                className="mt-1 w-full"
+                value={cert.signatureHeight ?? 64}
+                onChange={(e) => update({ signatureHeight: Number(e.target.value) })}
+              />
+            </div>
           </div>
 
           <div className="flex gap-2 pt-2">
