@@ -22,7 +22,14 @@ interface SessionPickerProps {
 }
 
 export function SessionPicker({ sessions, selectedSessionId, onSelect }: SessionPickerProps) {
-  const futureSessions = sessions.filter((s) => new Date(s.date) >= new Date());
+  // Comparar solo la fecha (sin hora) para evitar problemas de zona horaria
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const futureSessions = sessions.filter((s) => {
+    const sessionDate = new Date(s.date);
+    sessionDate.setHours(0, 0, 0, 0);
+    return sessionDate >= today;
+  });
 
   if (futureSessions.length === 0) {
     return (
@@ -44,6 +51,7 @@ export function SessionPicker({ sessions, selectedSessionId, onSelect }: Session
           year: "numeric",
           month: "long",
           day: "numeric",
+          timeZone: "UTC",
         });
 
         return (

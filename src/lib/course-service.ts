@@ -105,6 +105,7 @@ function formatDateLabel(date: Date | null): string | undefined {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -743,7 +744,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
     enrolledDate: enrollment.createdAt.toISOString(),
     sessionId: enrollment.sessionId,
     sessionLabel: enrollment.session
-      ? `${enrollment.session.city} — ${enrollment.session.date.toLocaleDateString("es-MX")}`
+      ? `${enrollment.session.city} — ${enrollment.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
       : undefined,
   }));
 }

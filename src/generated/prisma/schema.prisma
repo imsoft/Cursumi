@@ -202,6 +202,10 @@ model InstructorProfile {
   bio             String?
   city            String?
   specialties     String? // CSV de categorías/habilidades
+  teachingYears   Int?
+  website         String?
+  linkedinUrl     String?
+  instagramUrl    String?
   stripeAccountId String?  @unique // Stripe Connect account ID — un ID por instructor
   stripeOnboarded Boolean  @default(false)
   createdAt       DateTime @default(now())
@@ -311,6 +315,8 @@ model LessonProgress {
   enrollmentId String
   lessonId     String
   completedAt  DateTime @default(now())
+  score        Int? // 0-100, para lecciones tipo quiz
+  answers      Json? // Respuestas del quiz guardadas
 
   enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
   lesson     Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)

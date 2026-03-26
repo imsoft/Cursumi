@@ -123,76 +123,113 @@
   }
 }
 
-/* Print: solo mostrar el certificado */
+/* Print: solo mostrar el certificado en una sola página horizontal */
 @media print {
   @page {
-    margin: 12mm 14mm;
+    margin: 8mm 10mm;
     size: landscape;
   }
 
-  /* Ocultar sidebar, header, controles, y todo lo que no sea el certificado */
+  /* Ocultar TODO excepto el certificado */
+  body * {
+    visibility: hidden;
+  }
+  [data-certificate],
+  [data-certificate] * {
+    visibility: visible;
+  }
+
+  /* Quitar padding/margin de todos los contenedores ancestros */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  body > *,
   [data-sidebar="sidebar"],
   [data-slot="sidebar-inset"] > header,
-  nav,
-  button,
-  a[href] {
+  nav {
+    display: contents !important;
+  }
+  .print\:hidden {
     display: none !important;
   }
 
-  /* Quitar padding/margin del layout para que el certificado ocupe toda la página */
-  body,
-  [data-slot="sidebar-inset"],
-  [data-slot="sidebar-inset"] > div {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Certificado: flujo natural en la página (evita recorte por 100vh + overflow) */
+  /* Certificado: forzar que ocupe exactamente una página */
   [data-certificate] {
-    position: relative !important;
-    inset: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
-    margin: 0 auto !important;
+    margin: 0 !important;
     padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     background: white !important;
-    z-index: 1;
     overflow: visible !important;
     page-break-inside: avoid;
+    page-break-after: avoid;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  /* Relleno interior del certificado (antes estaba en 0 y apretaba todo) */
+  /* Relleno interior compacto para caber en una hoja */
   [data-certificate] > div {
-    padding: 1.1cm 1.35cm !important;
-  }
-  [data-certificate] .space-y-8 > * + * {
-    margin-top: 1.35rem !important;
+    padding: 0.6cm 1cm !important;
   }
 
-  /* Instructor + fecha: siempre dos columnas al imprimir */
+  /* Reducir espaciado vertical entre secciones */
+  [data-certificate] .space-y-8 > * + *,
+  [data-certificate] .space-y-10 > * + *,
+  [data-certificate] .md\:space-y-10 > * + * {
+    margin-top: 0.55rem !important;
+  }
+  [data-certificate] .space-y-4 > * + * {
+    margin-top: 0.3rem !important;
+  }
+
+  /* Instructor + fecha: siempre dos columnas */
   [data-certificate] [data-certificate-meta] {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 1.35rem !important;
-    padding-top: 0.75rem !important;
+    gap: 0.75rem !important;
+    padding-top: 0.35rem !important;
   }
 
   [data-certificate] .flex {
     display: flex !important;
   }
 
-  [data-certificate] h1 { font-size: 1.45rem !important; line-height: 1.25 !important; margin-bottom: 0.35rem !important; }
-  [data-certificate] h2 { font-size: 1.85rem !important; line-height: 1.2 !important; }
-  [data-certificate] h3 { font-size: 1.25rem !important; line-height: 1.3 !important; }
-  [data-certificate] .py-6 { padding-top: 0.85rem !important; padding-bottom: 0.85rem !important; }
-  [data-certificate] .pt-6 { padding-top: 0.75rem !important; }
+  /* Tipografía compacta */
+  [data-certificate] h1 { font-size: 1.2rem !important; line-height: 1.2 !important; margin-bottom: 0.15rem !important; }
+  [data-certificate] h2 { font-size: 1.5rem !important; line-height: 1.15 !important; }
+  [data-certificate] h3 { font-size: 1.1rem !important; line-height: 1.2 !important; }
+  [data-certificate] p { font-size: 0.8rem !important; }
+  [data-certificate] .text-lg { font-size: 0.85rem !important; }
+  [data-certificate] .text-xs { font-size: 0.65rem !important; }
+  [data-certificate] .text-sm { font-size: 0.7rem !important; }
+
+  /* Secciones con bordes: menos padding */
+  [data-certificate] .py-6 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
+  [data-certificate] .pt-6 { padding-top: 0.35rem !important; }
+  [data-certificate] .mt-6 { margin-top: 0.35rem !important; }
+
+  /* Logo más pequeño */
+  [data-certificate] img.h-12 { height: 2rem !important; }
+
+  /* Firmas compactas */
+  [data-certificate] .h-12 { height: 1.8rem !important; }
+  [data-certificate] .max-h-12,
+  [data-certificate] .print\:max-h-10 { max-height: 1.8rem !important; }
+
+  /* Badges compactos */
+  [data-certificate] .rounded-md { padding: 0.1rem 0.5rem !important; font-size: 0.65rem !important; }
 
   /* Forzar colores en impresión */
   [data-certificate] * {

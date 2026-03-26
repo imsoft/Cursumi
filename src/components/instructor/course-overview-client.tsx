@@ -355,7 +355,6 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                   >
                     <option value="virtual">Virtual</option>
                     <option value="presencial">Presencial</option>
-                    <option value="hibrido">Híbrido</option>
                   </select>
                 </div>
                 <div>
@@ -365,9 +364,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     value={editData.courseType}
                     onChange={(e) => setEditData((d) => ({ ...d, courseType: e.target.value }))}
                   >
-                    <option value="self-paced">A tu ritmo</option>
-                    <option value="live">En vivo</option>
-                    <option value="hybrid">Híbrido</option>
+                    <option value="ondemand">A tu ritmo (on demand)</option>
+                    <option value="fechado">Con fechas definidas</option>
                   </select>
                 </div>
               </div>

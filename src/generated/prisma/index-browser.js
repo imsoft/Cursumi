@@ -193,6 +193,10 @@ exports.Prisma.InstructorProfileScalarFieldEnum = {
   bio: 'bio',
   city: 'city',
   specialties: 'specialties',
+  teachingYears: 'teachingYears',
+  website: 'website',
+  linkedinUrl: 'linkedinUrl',
+  instagramUrl: 'instagramUrl',
   stripeAccountId: 'stripeAccountId',
   stripeOnboarded: 'stripeOnboarded',
   createdAt: 'createdAt',
@@ -262,7 +266,9 @@ exports.Prisma.LessonProgressScalarFieldEnum = {
   id: 'id',
   enrollmentId: 'enrollmentId',
   lessonId: 'lessonId',
-  completedAt: 'completedAt'
+  completedAt: 'completedAt',
+  score: 'score',
+  answers: 'answers'
 };
 
 exports.Prisma.CourseSessionScalarFieldEnum = {

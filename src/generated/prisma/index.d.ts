@@ -11030,8 +11030,18 @@ export namespace Prisma {
 
   export type AggregateInstructorProfile = {
     _count: InstructorProfileCountAggregateOutputType | null
+    _avg: InstructorProfileAvgAggregateOutputType | null
+    _sum: InstructorProfileSumAggregateOutputType | null
     _min: InstructorProfileMinAggregateOutputType | null
     _max: InstructorProfileMaxAggregateOutputType | null
+  }
+
+  export type InstructorProfileAvgAggregateOutputType = {
+    teachingYears: number | null
+  }
+
+  export type InstructorProfileSumAggregateOutputType = {
+    teachingYears: number | null
   }
 
   export type InstructorProfileMinAggregateOutputType = {
@@ -11041,6 +11051,10 @@ export namespace Prisma {
     bio: string | null
     city: string | null
     specialties: string | null
+    teachingYears: number | null
+    website: string | null
+    linkedinUrl: string | null
+    instagramUrl: string | null
     stripeAccountId: string | null
     stripeOnboarded: boolean | null
     createdAt: Date | null
@@ -11054,6 +11068,10 @@ export namespace Prisma {
     bio: string | null
     city: string | null
     specialties: string | null
+    teachingYears: number | null
+    website: string | null
+    linkedinUrl: string | null
+    instagramUrl: string | null
     stripeAccountId: string | null
     stripeOnboarded: boolean | null
     createdAt: Date | null
@@ -11067,6 +11085,10 @@ export namespace Prisma {
     bio: number
     city: number
     specialties: number
+    teachingYears: number
+    website: number
+    linkedinUrl: number
+    instagramUrl: number
     stripeAccountId: number
     stripeOnboarded: number
     createdAt: number
@@ -11075,6 +11097,14 @@ export namespace Prisma {
   }
 
 
+  export type InstructorProfileAvgAggregateInputType = {
+    teachingYears?: true
+  }
+
+  export type InstructorProfileSumAggregateInputType = {
+    teachingYears?: true
+  }
+
   export type InstructorProfileMinAggregateInputType = {
     id?: true
     userId?: true
@@ -11082,6 +11112,10 @@ export namespace Prisma {
     bio?: true
     city?: true
     specialties?: true
+    teachingYears?: true
+    website?: true
+    linkedinUrl?: true
+    instagramUrl?: true
     stripeAccountId?: true
     stripeOnboarded?: true
     createdAt?: true
@@ -11095,6 +11129,10 @@ export namespace Prisma {
     bio?: true
     city?: true
     specialties?: true
+    teachingYears?: true
+    website?: true
+    linkedinUrl?: true
+    instagramUrl?: true
     stripeAccountId?: true
     stripeOnboarded?: true
     createdAt?: true
@@ -11108,6 +11146,10 @@ export namespace Prisma {
     bio?: true
     city?: true
     specialties?: true
+    teachingYears?: true
+    website?: true
+    linkedinUrl?: true
+    instagramUrl?: true
     stripeAccountId?: true
     stripeOnboarded?: true
     createdAt?: true
@@ -11153,6 +11195,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: InstructorProfileAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InstructorProfileSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: InstructorProfileMinAggregateInputType
@@ -11183,6 +11237,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: InstructorProfileCountAggregateInputType | true
+    _avg?: InstructorProfileAvgAggregateInputType
+    _sum?: InstructorProfileSumAggregateInputType
     _min?: InstructorProfileMinAggregateInputType
     _max?: InstructorProfileMaxAggregateInputType
   }
@@ -11194,11 +11250,17 @@ export namespace Prisma {
     bio: string | null
     city: string | null
     specialties: string | null
+    teachingYears: number | null
+    website: string | null
+    linkedinUrl: string | null
+    instagramUrl: string | null
     stripeAccountId: string | null
     stripeOnboarded: boolean
     createdAt: Date
     updatedAt: Date
     _count: InstructorProfileCountAggregateOutputType | null
+    _avg: InstructorProfileAvgAggregateOutputType | null
+    _sum: InstructorProfileSumAggregateOutputType | null
     _min: InstructorProfileMinAggregateOutputType | null
     _max: InstructorProfileMaxAggregateOutputType | null
   }
@@ -11224,6 +11286,10 @@ export namespace Prisma {
     bio?: boolean
     city?: boolean
     specialties?: boolean
+    teachingYears?: boolean
+    website?: boolean
+    linkedinUrl?: boolean
+    instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
     createdAt?: boolean
@@ -11238,6 +11304,10 @@ export namespace Prisma {
     bio?: boolean
     city?: boolean
     specialties?: boolean
+    teachingYears?: boolean
+    website?: boolean
+    linkedinUrl?: boolean
+    instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
     createdAt?: boolean
@@ -11252,6 +11322,10 @@ export namespace Prisma {
     bio?: boolean
     city?: boolean
     specialties?: boolean
+    teachingYears?: boolean
+    website?: boolean
+    linkedinUrl?: boolean
+    instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
     createdAt?: boolean
@@ -11266,13 +11340,17 @@ export namespace Prisma {
     bio?: boolean
     city?: boolean
     specialties?: boolean
+    teachingYears?: boolean
+    website?: boolean
+    linkedinUrl?: boolean
+    instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InstructorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "city" | "specialties" | "stripeAccountId" | "stripeOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorProfile"]>
+  export type InstructorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "city" | "specialties" | "teachingYears" | "website" | "linkedinUrl" | "instagramUrl" | "stripeAccountId" | "stripeOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorProfile"]>
   export type InstructorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -11295,6 +11373,10 @@ export namespace Prisma {
       bio: string | null
       city: string | null
       specialties: string | null
+      teachingYears: number | null
+      website: string | null
+      linkedinUrl: string | null
+      instagramUrl: string | null
       stripeAccountId: string | null
       stripeOnboarded: boolean
       createdAt: Date
@@ -11729,6 +11811,10 @@ export namespace Prisma {
     readonly bio: FieldRef<"InstructorProfile", 'String'>
     readonly city: FieldRef<"InstructorProfile", 'String'>
     readonly specialties: FieldRef<"InstructorProfile", 'String'>
+    readonly teachingYears: FieldRef<"InstructorProfile", 'Int'>
+    readonly website: FieldRef<"InstructorProfile", 'String'>
+    readonly linkedinUrl: FieldRef<"InstructorProfile", 'String'>
+    readonly instagramUrl: FieldRef<"InstructorProfile", 'String'>
     readonly stripeAccountId: FieldRef<"InstructorProfile", 'String'>
     readonly stripeOnboarded: FieldRef<"InstructorProfile", 'Boolean'>
     readonly createdAt: FieldRef<"InstructorProfile", 'DateTime'>
@@ -17237,8 +17323,18 @@ export namespace Prisma {
 
   export type AggregateLessonProgress = {
     _count: LessonProgressCountAggregateOutputType | null
+    _avg: LessonProgressAvgAggregateOutputType | null
+    _sum: LessonProgressSumAggregateOutputType | null
     _min: LessonProgressMinAggregateOutputType | null
     _max: LessonProgressMaxAggregateOutputType | null
+  }
+
+  export type LessonProgressAvgAggregateOutputType = {
+    score: number | null
+  }
+
+  export type LessonProgressSumAggregateOutputType = {
+    score: number | null
   }
 
   export type LessonProgressMinAggregateOutputType = {
@@ -17246,6 +17342,7 @@ export namespace Prisma {
     enrollmentId: string | null
     lessonId: string | null
     completedAt: Date | null
+    score: number | null
   }
 
   export type LessonProgressMaxAggregateOutputType = {
@@ -17253,6 +17350,7 @@ export namespace Prisma {
     enrollmentId: string | null
     lessonId: string | null
     completedAt: Date | null
+    score: number | null
   }
 
   export type LessonProgressCountAggregateOutputType = {
@@ -17260,15 +17358,26 @@ export namespace Prisma {
     enrollmentId: number
     lessonId: number
     completedAt: number
+    score: number
+    answers: number
     _all: number
   }
 
+
+  export type LessonProgressAvgAggregateInputType = {
+    score?: true
+  }
+
+  export type LessonProgressSumAggregateInputType = {
+    score?: true
+  }
 
   export type LessonProgressMinAggregateInputType = {
     id?: true
     enrollmentId?: true
     lessonId?: true
     completedAt?: true
+    score?: true
   }
 
   export type LessonProgressMaxAggregateInputType = {
@@ -17276,6 +17385,7 @@ export namespace Prisma {
     enrollmentId?: true
     lessonId?: true
     completedAt?: true
+    score?: true
   }
 
   export type LessonProgressCountAggregateInputType = {
@@ -17283,6 +17393,8 @@ export namespace Prisma {
     enrollmentId?: true
     lessonId?: true
     completedAt?: true
+    score?: true
+    answers?: true
     _all?: true
   }
 
@@ -17324,6 +17436,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: LessonProgressAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LessonProgressSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: LessonProgressMinAggregateInputType
@@ -17354,6 +17478,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: LessonProgressCountAggregateInputType | true
+    _avg?: LessonProgressAvgAggregateInputType
+    _sum?: LessonProgressSumAggregateInputType
     _min?: LessonProgressMinAggregateInputType
     _max?: LessonProgressMaxAggregateInputType
   }
@@ -17363,7 +17489,11 @@ export namespace Prisma {
     enrollmentId: string
     lessonId: string
     completedAt: Date
+    score: number | null
+    answers: JsonValue | null
     _count: LessonProgressCountAggregateOutputType | null
+    _avg: LessonProgressAvgAggregateOutputType | null
+    _sum: LessonProgressSumAggregateOutputType | null
     _min: LessonProgressMinAggregateOutputType | null
     _max: LessonProgressMaxAggregateOutputType | null
   }
@@ -17387,6 +17517,8 @@ export namespace Prisma {
     enrollmentId?: boolean
     lessonId?: boolean
     completedAt?: boolean
+    score?: boolean
+    answers?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lessonProgress"]>
@@ -17396,6 +17528,8 @@ export namespace Prisma {
     enrollmentId?: boolean
     lessonId?: boolean
     completedAt?: boolean
+    score?: boolean
+    answers?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lessonProgress"]>
@@ -17405,6 +17539,8 @@ export namespace Prisma {
     enrollmentId?: boolean
     lessonId?: boolean
     completedAt?: boolean
+    score?: boolean
+    answers?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lessonProgress"]>
@@ -17414,9 +17550,11 @@ export namespace Prisma {
     enrollmentId?: boolean
     lessonId?: boolean
     completedAt?: boolean
+    score?: boolean
+    answers?: boolean
   }
 
-  export type LessonProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "lessonId" | "completedAt", ExtArgs["result"]["lessonProgress"]>
+  export type LessonProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "lessonId" | "completedAt" | "score" | "answers", ExtArgs["result"]["lessonProgress"]>
   export type LessonProgressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     lesson?: boolean | LessonDefaultArgs<ExtArgs>
@@ -17441,6 +17579,8 @@ export namespace Prisma {
       enrollmentId: string
       lessonId: string
       completedAt: Date
+      score: number | null
+      answers: Prisma.JsonValue | null
     }, ExtArgs["result"]["lessonProgress"]>
     composites: {}
   }
@@ -17870,6 +18010,8 @@ export namespace Prisma {
     readonly enrollmentId: FieldRef<"LessonProgress", 'String'>
     readonly lessonId: FieldRef<"LessonProgress", 'String'>
     readonly completedAt: FieldRef<"LessonProgress", 'DateTime'>
+    readonly score: FieldRef<"LessonProgress", 'Int'>
+    readonly answers: FieldRef<"LessonProgress", 'Json'>
   }
     
 
@@ -47842,6 +47984,10 @@ export namespace Prisma {
     bio: 'bio',
     city: 'city',
     specialties: 'specialties',
+    teachingYears: 'teachingYears',
+    website: 'website',
+    linkedinUrl: 'linkedinUrl',
+    instagramUrl: 'instagramUrl',
     stripeAccountId: 'stripeAccountId',
     stripeOnboarded: 'stripeOnboarded',
     createdAt: 'createdAt',
@@ -47926,7 +48072,9 @@ export namespace Prisma {
     id: 'id',
     enrollmentId: 'enrollmentId',
     lessonId: 'lessonId',
-    completedAt: 'completedAt'
+    completedAt: 'completedAt',
+    score: 'score',
+    answers: 'answers'
   };
 
   export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
@@ -49069,6 +49217,10 @@ export namespace Prisma {
     bio?: StringNullableFilter<"InstructorProfile"> | string | null
     city?: StringNullableFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableFilter<"InstructorProfile"> | string | null
+    teachingYears?: IntNullableFilter<"InstructorProfile"> | number | null
+    website?: StringNullableFilter<"InstructorProfile"> | string | null
+    linkedinUrl?: StringNullableFilter<"InstructorProfile"> | string | null
+    instagramUrl?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeAccountId?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolFilter<"InstructorProfile"> | boolean
     createdAt?: DateTimeFilter<"InstructorProfile"> | Date | string
@@ -49083,6 +49235,10 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     specialties?: SortOrderInput | SortOrder
+    teachingYears?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    linkedinUrl?: SortOrderInput | SortOrder
+    instagramUrl?: SortOrderInput | SortOrder
     stripeAccountId?: SortOrderInput | SortOrder
     stripeOnboarded?: SortOrder
     createdAt?: SortOrder
@@ -49101,6 +49257,10 @@ export namespace Prisma {
     bio?: StringNullableFilter<"InstructorProfile"> | string | null
     city?: StringNullableFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableFilter<"InstructorProfile"> | string | null
+    teachingYears?: IntNullableFilter<"InstructorProfile"> | number | null
+    website?: StringNullableFilter<"InstructorProfile"> | string | null
+    linkedinUrl?: StringNullableFilter<"InstructorProfile"> | string | null
+    instagramUrl?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolFilter<"InstructorProfile"> | boolean
     createdAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorProfile"> | Date | string
@@ -49114,13 +49274,19 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     specialties?: SortOrderInput | SortOrder
+    teachingYears?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    linkedinUrl?: SortOrderInput | SortOrder
+    instagramUrl?: SortOrderInput | SortOrder
     stripeAccountId?: SortOrderInput | SortOrder
     stripeOnboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InstructorProfileCountOrderByAggregateInput
+    _avg?: InstructorProfileAvgOrderByAggregateInput
     _max?: InstructorProfileMaxOrderByAggregateInput
     _min?: InstructorProfileMinOrderByAggregateInput
+    _sum?: InstructorProfileSumOrderByAggregateInput
   }
 
   export type InstructorProfileScalarWhereWithAggregatesInput = {
@@ -49133,6 +49299,10 @@ export namespace Prisma {
     bio?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     city?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
+    teachingYears?: IntNullableWithAggregatesFilter<"InstructorProfile"> | number | null
+    website?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
+    linkedinUrl?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
+    instagramUrl?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     stripeAccountId?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolWithAggregatesFilter<"InstructorProfile"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"InstructorProfile"> | Date | string
@@ -49549,6 +49719,8 @@ export namespace Prisma {
     enrollmentId?: StringFilter<"LessonProgress"> | string
     lessonId?: StringFilter<"LessonProgress"> | string
     completedAt?: DateTimeFilter<"LessonProgress"> | Date | string
+    score?: IntNullableFilter<"LessonProgress"> | number | null
+    answers?: JsonNullableFilter<"LessonProgress">
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
     lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
   }
@@ -49558,6 +49730,8 @@ export namespace Prisma {
     enrollmentId?: SortOrder
     lessonId?: SortOrder
     completedAt?: SortOrder
+    score?: SortOrderInput | SortOrder
+    answers?: SortOrderInput | SortOrder
     enrollment?: EnrollmentOrderByWithRelationInput
     lesson?: LessonOrderByWithRelationInput
   }
@@ -49571,6 +49745,8 @@ export namespace Prisma {
     enrollmentId?: StringFilter<"LessonProgress"> | string
     lessonId?: StringFilter<"LessonProgress"> | string
     completedAt?: DateTimeFilter<"LessonProgress"> | Date | string
+    score?: IntNullableFilter<"LessonProgress"> | number | null
+    answers?: JsonNullableFilter<"LessonProgress">
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
     lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
   }, "id" | "enrollmentId_lessonId">
@@ -49580,9 +49756,13 @@ export namespace Prisma {
     enrollmentId?: SortOrder
     lessonId?: SortOrder
     completedAt?: SortOrder
+    score?: SortOrderInput | SortOrder
+    answers?: SortOrderInput | SortOrder
     _count?: LessonProgressCountOrderByAggregateInput
+    _avg?: LessonProgressAvgOrderByAggregateInput
     _max?: LessonProgressMaxOrderByAggregateInput
     _min?: LessonProgressMinOrderByAggregateInput
+    _sum?: LessonProgressSumOrderByAggregateInput
   }
 
   export type LessonProgressScalarWhereWithAggregatesInput = {
@@ -49593,6 +49773,8 @@ export namespace Prisma {
     enrollmentId?: StringWithAggregatesFilter<"LessonProgress"> | string
     lessonId?: StringWithAggregatesFilter<"LessonProgress"> | string
     completedAt?: DateTimeWithAggregatesFilter<"LessonProgress"> | Date | string
+    score?: IntNullableWithAggregatesFilter<"LessonProgress"> | number | null
+    answers?: JsonNullableWithAggregatesFilter<"LessonProgress">
   }
 
   export type CourseSessionWhereInput = {
@@ -52024,6 +52206,10 @@ export namespace Prisma {
     bio?: string | null
     city?: string | null
     specialties?: string | null
+    teachingYears?: number | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
     createdAt?: Date | string
@@ -52038,6 +52224,10 @@ export namespace Prisma {
     bio?: string | null
     city?: string | null
     specialties?: string | null
+    teachingYears?: number | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
     createdAt?: Date | string
@@ -52050,6 +52240,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52064,6 +52258,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52077,6 +52275,10 @@ export namespace Prisma {
     bio?: string | null
     city?: string | null
     specialties?: string | null
+    teachingYears?: number | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
     createdAt?: Date | string
@@ -52089,6 +52291,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52102,6 +52308,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52572,6 +52782,8 @@ export namespace Prisma {
   export type LessonProgressCreateInput = {
     id?: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
     enrollment: EnrollmentCreateNestedOneWithoutLessonProgressInput
     lesson: LessonCreateNestedOneWithoutProgressInput
   }
@@ -52581,11 +52793,15 @@ export namespace Prisma {
     enrollmentId: string
     lessonId: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
     enrollment?: EnrollmentUpdateOneRequiredWithoutLessonProgressNestedInput
     lesson?: LessonUpdateOneRequiredWithoutProgressNestedInput
   }
@@ -52595,6 +52811,8 @@ export namespace Prisma {
     enrollmentId?: StringFieldUpdateOperationsInput | string
     lessonId?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressCreateManyInput = {
@@ -52602,11 +52820,15 @@ export namespace Prisma {
     enrollmentId: string
     lessonId: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressUncheckedUpdateManyInput = {
@@ -52614,6 +52836,8 @@ export namespace Prisma {
     enrollmentId?: StringFieldUpdateOperationsInput | string
     lessonId?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CourseSessionCreateInput = {
@@ -55083,6 +55307,17 @@ export namespace Prisma {
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type InstructorProfileCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -55090,10 +55325,18 @@ export namespace Prisma {
     bio?: SortOrder
     city?: SortOrder
     specialties?: SortOrder
+    teachingYears?: SortOrder
+    website?: SortOrder
+    linkedinUrl?: SortOrder
+    instagramUrl?: SortOrder
     stripeAccountId?: SortOrder
     stripeOnboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InstructorProfileAvgOrderByAggregateInput = {
+    teachingYears?: SortOrder
   }
 
   export type InstructorProfileMaxOrderByAggregateInput = {
@@ -55103,6 +55346,10 @@ export namespace Prisma {
     bio?: SortOrder
     city?: SortOrder
     specialties?: SortOrder
+    teachingYears?: SortOrder
+    website?: SortOrder
+    linkedinUrl?: SortOrder
+    instagramUrl?: SortOrder
     stripeAccountId?: SortOrder
     stripeOnboarded?: SortOrder
     createdAt?: SortOrder
@@ -55116,10 +55363,34 @@ export namespace Prisma {
     bio?: SortOrder
     city?: SortOrder
     specialties?: SortOrder
+    teachingYears?: SortOrder
+    website?: SortOrder
+    linkedinUrl?: SortOrder
+    instagramUrl?: SortOrder
     stripeAccountId?: SortOrder
     stripeOnboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InstructorProfileSumOrderByAggregateInput = {
+    teachingYears?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -55190,17 +55461,6 @@ export namespace Prisma {
     in?: $Enums.CourseType[] | ListEnumCourseTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.CourseType[] | ListEnumCourseTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumCourseTypeFilter<$PrismaModel> | $Enums.CourseType
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type EnumCourseStatusFilter<$PrismaModel = never> = {
@@ -55389,22 +55649,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCourseTypeFilter<$PrismaModel>
     _max?: NestedEnumCourseTypeFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumCourseStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -55616,6 +55860,12 @@ export namespace Prisma {
     enrollmentId?: SortOrder
     lessonId?: SortOrder
     completedAt?: SortOrder
+    score?: SortOrder
+    answers?: SortOrder
+  }
+
+  export type LessonProgressAvgOrderByAggregateInput = {
+    score?: SortOrder
   }
 
   export type LessonProgressMaxOrderByAggregateInput = {
@@ -55623,6 +55873,7 @@ export namespace Prisma {
     enrollmentId?: SortOrder
     lessonId?: SortOrder
     completedAt?: SortOrder
+    score?: SortOrder
   }
 
   export type LessonProgressMinOrderByAggregateInput = {
@@ -55630,6 +55881,11 @@ export namespace Prisma {
     enrollmentId?: SortOrder
     lessonId?: SortOrder
     completedAt?: SortOrder
+    score?: SortOrder
+  }
+
+  export type LessonProgressSumOrderByAggregateInput = {
+    score?: SortOrder
   }
 
   export type CourseSessionCountOrderByAggregateInput = {
@@ -57681,6 +57937,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutInstructorProfileNestedInput = {
     create?: XOR<UserCreateWithoutInstructorProfileInput, UserUncheckedCreateWithoutInstructorProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutInstructorProfileInput
@@ -57883,14 +58147,6 @@ export namespace Prisma {
 
   export type EnumCourseTypeFieldUpdateOperationsInput = {
     set?: $Enums.CourseType
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumCourseStatusFieldUpdateOperationsInput = {
@@ -60038,6 +60294,33 @@ export namespace Prisma {
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -60111,33 +60394,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCourseTypeFilter<$PrismaModel>
     _max?: NestedEnumCourseTypeFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumCourseStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -60434,6 +60690,10 @@ export namespace Prisma {
     bio?: string | null
     city?: string | null
     specialties?: string | null
+    teachingYears?: number | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
     createdAt?: Date | string
@@ -60446,6 +60706,10 @@ export namespace Prisma {
     bio?: string | null
     city?: string | null
     specialties?: string | null
+    teachingYears?: number | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
     createdAt?: Date | string
@@ -60990,6 +61254,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -61002,6 +61270,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
+    teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63066,6 +63338,8 @@ export namespace Prisma {
   export type LessonProgressCreateWithoutLessonInput = {
     id?: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
     enrollment: EnrollmentCreateNestedOneWithoutLessonProgressInput
   }
 
@@ -63073,6 +63347,8 @@ export namespace Prisma {
     id?: string
     enrollmentId: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressCreateOrConnectWithoutLessonInput = {
@@ -63142,6 +63418,8 @@ export namespace Prisma {
     enrollmentId?: StringFilter<"LessonProgress"> | string
     lessonId?: StringFilter<"LessonProgress"> | string
     completedAt?: DateTimeFilter<"LessonProgress"> | Date | string
+    score?: IntNullableFilter<"LessonProgress"> | number | null
+    answers?: JsonNullableFilter<"LessonProgress">
   }
 
   export type EnrollmentCreateWithoutLessonProgressInput = {
@@ -63733,6 +64011,8 @@ export namespace Prisma {
   export type LessonProgressCreateWithoutEnrollmentInput = {
     id?: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
     lesson: LessonCreateNestedOneWithoutProgressInput
   }
 
@@ -63740,6 +64020,8 @@ export namespace Prisma {
     id?: string
     lessonId: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressCreateOrConnectWithoutEnrollmentInput = {
@@ -70127,11 +70409,15 @@ export namespace Prisma {
     id?: string
     enrollmentId: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressUpdateWithoutLessonInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
     enrollment?: EnrollmentUpdateOneRequiredWithoutLessonProgressNestedInput
   }
 
@@ -70139,12 +70425,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressUncheckedUpdateManyWithoutLessonInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type EnrollmentCreateManySessionInput = {
@@ -70205,6 +70495,8 @@ export namespace Prisma {
     id?: string
     lessonId: string
     completedAt?: Date | string
+    score?: number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SectionQuizSubmissionCreateManyEnrollmentInput = {
@@ -70218,6 +70510,8 @@ export namespace Prisma {
   export type LessonProgressUpdateWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
     lesson?: LessonUpdateOneRequiredWithoutProgressNestedInput
   }
 
@@ -70225,12 +70519,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     lessonId?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonProgressUncheckedUpdateManyWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     lessonId?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SectionQuizSubmissionUpdateWithoutEnrollmentInput = {

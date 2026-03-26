@@ -59,16 +59,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ lesson
       },
     });
 
-    // Recalcular progreso incluyendo lecciones, gates de sección y examen final
+    // Recalcular progreso (marca completado y genera certificado si llega a 100%)
     const progress = await recalculateProgress(enrollment.id, courseId);
-
-    // Si el progreso llega al 100% y el enrollment no está ya completado, marcar como completado
-    if (progress === 100 && enrollment.status !== "completed") {
-      await prisma.enrollment.update({
-        where: { id: enrollment.id },
-        data: { status: "completed" },
-      });
-    }
 
     const totalLessons = await prisma.lesson.count({
       where: { section: { courseId } },

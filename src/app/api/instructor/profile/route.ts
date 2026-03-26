@@ -10,6 +10,13 @@ const patchSchema = z.object({
   headline: z.string().trim().max(200).optional(),
   bio: z.string().trim().max(2000).optional(),
   specialties: z.string().trim().max(500).optional(),
+  teachingYears: z.preprocess(
+    (val) => (val === "" || val === undefined || val === null || Number.isNaN(Number(val)) ? undefined : Number(val)),
+    z.number().int().min(0).optional(),
+  ),
+  website: z.union([z.string().url(), z.literal("")]).optional(),
+  linkedinUrl: z.union([z.string().url(), z.literal("")]).optional(),
+  instagramUrl: z.union([z.string().url(), z.literal("")]).optional(),
 });
 
 export async function GET() {
@@ -36,6 +43,10 @@ export async function GET() {
       headline: profile?.headline || "",
       bio: profile?.bio || "",
       specialties: profile?.specialties || "",
+      teachingYears: profile?.teachingYears ?? null,
+      website: profile?.website || "",
+      linkedinUrl: profile?.linkedinUrl || "",
+      instagramUrl: profile?.instagramUrl || "",
     });
   } catch (error) {
     return handleApiError(error);
@@ -51,7 +62,18 @@ export async function PATCH(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
     }
-    const { fullName, email, city, headline, bio, specialties } = parsed.data;
+    const { fullName, email, city, headline, bio, specialties, teachingYears, website, linkedinUrl, instagramUrl } = parsed.data;
+
+    const profileData = {
+      city,
+      headline,
+      bio,
+      specialties,
+      teachingYears: teachingYears ?? null,
+      website: website || null,
+      linkedinUrl: linkedinUrl || null,
+      instagramUrl: instagramUrl || null,
+    };
 
     await Promise.all([
       prisma.user.update({
@@ -63,13 +85,10 @@ export async function PATCH(req: NextRequest) {
       }),
       prisma.instructorProfile.upsert({
         where: { userId: session.user.id },
-        update: { city, headline, bio, specialties },
+        update: profileData,
         create: {
           userId: session.user.id,
-          city,
-          headline,
-          bio,
-          specialties,
+          ...profileData,
         },
       }),
     ]);

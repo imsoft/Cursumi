@@ -16,13 +16,12 @@ const instructorProfileSchema = z.object({
   email: z.string().email("Correo electrónico inválido"),
   city: z.string().optional(),
   headline: z.string().optional(),
-  bio: z.string().min(20, "La biografía debe tener al menos 20 caracteres"),
+  bio: z.string().optional(),
   specialties: z.string().optional(),
-  teachingYears: z
-    .coerce.number()
-    .int()
-    .min(0, "No puede ser negativo")
-    .optional(),
+  teachingYears: z.preprocess(
+    (val) => (val === "" || val === undefined || val === null || Number.isNaN(Number(val)) ? undefined : Number(val)),
+    z.number().int().min(0, "No puede ser negativo").optional(),
+  ),
   website: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
   linkedinUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
   instagramUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
@@ -154,7 +153,7 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
                 label="Años enseñando"
                 type="number"
                 min="0"
-                {...form.register("teachingYears", { valueAsNumber: true })}
+                {...form.register("teachingYears")}
               />
               {form.formState.errors.teachingYears && (
                 <p className="text-xs text-destructive">

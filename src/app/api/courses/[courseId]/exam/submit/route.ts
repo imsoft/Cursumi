@@ -71,57 +71,22 @@ export async function POST(
       },
     });
 
-    // Check if already has a certificate (guard against duplicate calls)
-    const existing = await prisma.certificate.findUnique({
+    // Recalcular progreso (genera certificado + notificación + marca completado si llega a 100%)
+    await recalculateProgress(enrollment.id, courseId);
+
+    // Email de certificado
+    const certificate = await prisma.certificate.findUnique({
       where: { enrollmentId: enrollment.id },
     });
 
-    let certificate = existing;
-    if (!existing) {
-      const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-      const certType = passed ? "accreditation" : "participation";
-      certificate = await prisma.certificate.create({
-        data: {
-          enrollmentId: enrollment.id,
-          userId: session.user.id,
-          courseId,
-          number: certNumber,
-          type: certType,
-        },
+    if (certificate && course?.title && session.user.email) {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      await sendCertificateEmail({
+        to: session.user.email,
+        name: session.user.name || "Estudiante",
+        courseTitle: course.title,
+        certificateUrl: `${baseUrl}/dashboard/certificates/${certificate.id}`,
       });
-
-      // Recalcular progreso
-      await recalculateProgress(enrollment.id, courseId);
-      if (passed) {
-        await prisma.enrollment.update({
-          where: { id: enrollment.id },
-          data: { status: "completed" },
-        });
-      }
-
-      // Notify the student
-      await prisma.notification.create({
-        data: {
-          userId: session.user.id,
-          type: "certificate",
-          title: passed ? "Certificado de acreditación" : "Reconocimiento de participación",
-          body: passed
-            ? "Has aprobado el examen final. Tu certificado de acreditación ya está disponible."
-            : "Completaste el curso. Tu reconocimiento de participación ya está disponible.",
-          link: `/dashboard/certificates/${certificate.id}`,
-        },
-      });
-
-      // Email de certificado
-      if (course?.title && session.user.email) {
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-        await sendCertificateEmail({
-          to: session.user.email,
-          name: session.user.name || "Estudiante",
-          courseTitle: course.title,
-          certificateUrl: `${baseUrl}/dashboard/certificates/${certificate.id}`,
-        });
-      }
     }
 
     return NextResponse.json({
