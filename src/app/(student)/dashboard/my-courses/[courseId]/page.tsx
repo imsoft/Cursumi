@@ -311,6 +311,10 @@ export default async function MyCourseDetailPage({
                     <p className="text-sm text-green-600">
                       Aprobado con {examSubmission?.score}% — ¡Felicidades!
                     </p>
+                  ) : examSubmission ? (
+                    <p className="text-sm text-muted-foreground">
+                      Obtuviste {examSubmission.score}%. Puedes revisar tus respuestas.
+                    </p>
                   ) : canTakeExam ? (
                     <p className="text-sm text-muted-foreground">
                       Completaste todas las lecciones y actividades. Ya puedes presentar el examen final.
@@ -326,6 +330,12 @@ export default async function MyCourseDetailPage({
                     <CheckCircle className="h-3 w-3" />
                     Aprobado
                   </Badge>
+                ) : examSubmission ? (
+                  <Button variant="outline" asChild>
+                    <Link href={`/dashboard/my-courses/${courseId}/exam`}>
+                      Ver respuestas
+                    </Link>
+                  </Button>
                 ) : canTakeExam ? (
                   <Button asChild>
                     <Link href={`/dashboard/my-courses/${courseId}/exam`}>
