@@ -1,11 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Plus, MapPin, Calendar, Clock, Users, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { CourseSessionData } from "./course-types";
+
+/**
+ * Input nativo para date/time que NO es controlado por React en cada keystroke.
+ * Solo propaga el valor al padre en onChange del nativo (que en date/time
+ * se dispara al completar la edición de un segmento) y en onBlur.
+ */
+function NativeDateTimeInput({
+  type,
+  value,
+  onChange,
+  className,
+}: {
+  type: "date" | "time";
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+
+  // Sync external value → DOM only when the input is NOT focused
+  useEffect(() => {
+    if (ref.current && document.activeElement !== ref.current) {
+      ref.current.value = value;
+    }
+  }, [value]);
+
+  const commit = useCallback(() => {
+    if (ref.current && ref.current.value !== value) {
+      onChange(ref.current.value);
+    }
+  }, [onChange, value]);
+
+  return (
+    <input
+      ref={ref}
+      type={type}
+      defaultValue={value}
+      onChange={commit}
+      onBlur={commit}
+      className={cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        className,
+      )}
+    />
+  );
+}
 
 interface CourseSessionsManagerProps {
   sessions: CourseSessionData[];
@@ -100,33 +148,33 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
                   <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
                     <Calendar className="h-3 w-3" /> Fecha
                   </label>
-                  <Input
-                    className="mt-1"
+                  <NativeDateTimeInput
                     type="date"
+                    className="mt-1"
                     value={session.date ? session.date.substring(0, 10) : ""}
-                    onChange={(e) => handleUpdate(i, { date: e.target.value })}
+                    onChange={(v) => handleUpdate(i, { date: v })}
                   />
                 </div>
                 <div>
                   <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
                     <Clock className="h-3 w-3" /> Hora inicio
                   </label>
-                  <Input
-                    className="mt-1"
+                  <NativeDateTimeInput
                     type="time"
+                    className="mt-1"
                     value={session.startTime}
-                    onChange={(e) => handleUpdate(i, { startTime: e.target.value })}
+                    onChange={(v) => handleUpdate(i, { startTime: v })}
                   />
                 </div>
                 <div>
                   <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
                     <Clock className="h-3 w-3" /> Hora fin
                   </label>
-                  <Input
-                    className="mt-1"
+                  <NativeDateTimeInput
                     type="time"
+                    className="mt-1"
                     value={session.endTime}
-                    onChange={(e) => handleUpdate(i, { endTime: e.target.value })}
+                    onChange={(v) => handleUpdate(i, { endTime: v })}
                   />
                 </div>
               </div>
@@ -185,29 +233,29 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Fecha *</label>
-                <Input
-                  className="mt-1"
+                <NativeDateTimeInput
                   type="date"
+                  className="mt-1"
                   value={draft.date}
-                  onChange={(e) => setDraft((d) => ({ ...d, date: e.target.value }))}
+                  onChange={(v) => setDraft((d) => ({ ...d, date: v }))}
                 />
               </div>
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Hora inicio</label>
-                <Input
-                  className="mt-1"
+                <NativeDateTimeInput
                   type="time"
+                  className="mt-1"
                   value={draft.startTime}
-                  onChange={(e) => setDraft((d) => ({ ...d, startTime: e.target.value }))}
+                  onChange={(v) => setDraft((d) => ({ ...d, startTime: v }))}
                 />
               </div>
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Hora fin</label>
-                <Input
-                  className="mt-1"
+                <NativeDateTimeInput
                   type="time"
+                  className="mt-1"
                   value={draft.endTime}
-                  onChange={(e) => setDraft((d) => ({ ...d, endTime: e.target.value }))}
+                  onChange={(v) => setDraft((d) => ({ ...d, endTime: v }))}
                 />
               </div>
             </div>
