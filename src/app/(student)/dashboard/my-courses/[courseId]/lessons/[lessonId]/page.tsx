@@ -31,6 +31,8 @@ export default async function LessonPage({
     nextLessonSectionId,
     currentSectionId,
     hasFinalExam,
+    savedQuizScore,
+    savedQuizAnswers,
   } = data;
 
   return (
@@ -73,6 +75,8 @@ export default async function LessonPage({
       nextLessonSectionId={nextLessonSectionId}
       currentSectionId={currentSectionId}
       hasFinalExam={hasFinalExam}
+      savedQuizScore={savedQuizScore}
+      savedQuizAnswers={savedQuizAnswers as Record<string, number | number[]> | null}
     />
   );
 }

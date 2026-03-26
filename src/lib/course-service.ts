@@ -806,7 +806,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   const enrollment = await prisma.enrollment.findUnique({
     where: { courseId_studentId: { courseId, studentId } },
     include: {
-      lessonProgress: { select: { lessonId: true } },
+      lessonProgress: { select: { lessonId: true, score: true, answers: true } },
       sectionQuizSubmissions: { select: { sectionId: true, passed: true } },
     },
   });
@@ -901,6 +901,11 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     ? courseSections.find((s) => s.lessons.some((l) => l.id === nextLesson.id))?.id ?? null
     : null;
 
+  // Quiz submission for the current lesson (if it's a quiz type)
+  const currentLessonProgress = enrollment.lessonProgress.find((lp) => lp.lessonId === lessonId);
+  const savedQuizScore = currentLessonProgress?.score ?? null;
+  const savedQuizAnswers = currentLessonProgress?.answers ?? null;
+
   return {
     lesson,
     enrollment,
@@ -918,6 +923,8 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     nextLessonSectionId,
     currentSectionId: lesson.sectionId,
     hasFinalExam,
+    savedQuizScore,
+    savedQuizAnswers,
   };
 }
 

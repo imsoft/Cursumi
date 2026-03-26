@@ -37,6 +37,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ lesson
       return NextResponse.json({ error: "Lección no encontrada en este curso" }, { status: 404 });
     }
 
+    const score = typeof body.score === "number" ? body.score : undefined;
+    const answers = body.answers != null ? body.answers : undefined;
+
     await prisma.lessonProgress.upsert({
       where: {
         enrollmentId_lessonId: {
@@ -44,10 +47,15 @@ export async function POST(req: NextRequest, context: { params: Promise<{ lesson
           lessonId,
         },
       },
-      update: {},
+      update: {
+        ...(score !== undefined && { score }),
+        ...(answers !== undefined && { answers }),
+      },
       create: {
         enrollmentId: enrollment.id,
         lessonId,
+        ...(score !== undefined && { score }),
+        ...(answers !== undefined && { answers }),
       },
     });
 

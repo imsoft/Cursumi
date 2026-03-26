@@ -108,6 +108,8 @@ interface LessonViewerClientProps {
   nextLessonSectionId: string | null;
   currentSectionId: string;
   hasFinalExam?: boolean;
+  savedQuizScore?: number | null;
+  savedQuizAnswers?: Record<string, number | number[]> | null;
 }
 
 const lessonTypeIcon: Record<LessonType, React.ReactNode> = {
@@ -144,15 +146,34 @@ export function LessonViewerClient({
   nextLessonSectionId,
   currentSectionId,
   hasFinalExam = false,
+  savedQuizScore = null,
+  savedQuizAnswers = null,
 }: LessonViewerClientProps) {
   const router = useRouter();
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
   const [marking, setMarking] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
-  const [quizCheckboxAnswers, setQuizCheckboxAnswers] = useState<Record<number, Set<number>>>({});
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-  const [quizAttemptCount, setQuizAttemptCount] = useState(0);
+
+  // Restore saved quiz answers if they exist
+  const hasSavedQuiz = savedQuizScore !== null && savedQuizAnswers !== null;
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>(() => {
+    if (!hasSavedQuiz || !savedQuizAnswers) return {};
+    const restored: Record<number, number> = {};
+    for (const [key, val] of Object.entries(savedQuizAnswers)) {
+      if (typeof val === "number") restored[Number(key)] = val;
+    }
+    return restored;
+  });
+  const [quizCheckboxAnswers, setQuizCheckboxAnswers] = useState<Record<number, Set<number>>>(() => {
+    if (!hasSavedQuiz || !savedQuizAnswers) return {};
+    const restored: Record<number, Set<number>> = {};
+    for (const [key, val] of Object.entries(savedQuizAnswers)) {
+      if (Array.isArray(val)) restored[Number(key)] = new Set(val);
+    }
+    return restored;
+  });
+  const [quizSubmitted, setQuizSubmitted] = useState(hasSavedQuiz);
+  const [quizAttemptCount, setQuizAttemptCount] = useState(hasSavedQuiz ? 1 : 0);
   const [quizTimeLeft, setQuizTimeLeft] = useState<number | null>(null); // seconds
   const [quizTimerStarted, setQuizTimerStarted] = useState(false);
   const [assignmentText, setAssignmentText] = useState("");
@@ -239,7 +260,7 @@ export function LessonViewerClient({
   const blockNextNavigation =
     (nextIsInDifferentSection || (nextLesson === null && hasFinalExam)) && sectionGatePending;
 
-  const markComplete = useCallback(async () => {
+  const markComplete = useCallback(async (extra?: { score?: number; answers?: Record<string, number | number[]> }) => {
     if (isCompleted || marking) return;
     setMarking(true);
     // Optimistic update: marcar inmediatamente, rollback solo si falla
@@ -248,7 +269,7 @@ export function LessonViewerClient({
       const res = await fetch(`/api/lessons/${lesson.id}/complete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId }),
+        body: JSON.stringify({ courseId, ...extra }),
       });
       if (!res.ok) {
         // Rollback
@@ -333,8 +354,20 @@ export function LessonViewerClient({
     }, 0);
     const pct = quizQuestions.length > 0 ? Math.round((score / quizQuestions.length) * 100) : 0;
     const passed = pct >= (quizPassingRequired ? quizPassingScorePercent : 70);
+
+    // Build answers map to save: index -> answer (number for radio, number[] for checkbox)
+    const answersToSave: Record<string, number | number[]> = {};
+    quizQuestions.forEach((q, i) => {
+      if (q.type === "checkbox") {
+        const selected = quizCheckboxAnswers[i];
+        if (selected) answersToSave[String(i)] = Array.from(selected);
+      } else if (quizAnswers[i] !== undefined) {
+        answersToSave[String(i)] = quizAnswers[i];
+      }
+    });
+
     if (passed || !quizPassingRequired) {
-      await markComplete();
+      await markComplete({ score: pct, answers: answersToSave });
     }
   };
 
@@ -413,7 +446,7 @@ export function LessonViewerClient({
                 playbackId={muxId}
                 streamType="on-demand"
                 className="h-full w-full"
-                onEnded={markComplete}
+                onEnded={() => markComplete()}
               />
             </div>
           );
@@ -438,7 +471,7 @@ export function LessonViewerClient({
               src={lesson.videoUrl}
               controls
               className="h-full w-full"
-              onEnded={markComplete}
+              onEnded={() => markComplete()}
             />
           </div>
         );
@@ -955,7 +988,7 @@ export function LessonViewerClient({
           {(lesson.type === "video" || lesson.type === "text") && (
             <div className="flex items-center gap-3 lg:hidden">
               <Button
-                onClick={markComplete}
+                onClick={() => markComplete()}
                 disabled={isCompleted || marking}
                 variant={isCompleted ? "outline" : "default"}
               >
@@ -1069,7 +1102,7 @@ export function LessonViewerClient({
           {(lesson.type === "video" || lesson.type === "text") && (
             <div className="hidden lg:flex sticky bottom-0 mt-6 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-3 items-center justify-between gap-4 border-t border-border bg-background/95 backdrop-blur">
               <Button
-                onClick={markComplete}
+                onClick={() => markComplete()}
                 disabled={isCompleted || marking}
                 variant={isCompleted ? "outline" : "default"}
               >
