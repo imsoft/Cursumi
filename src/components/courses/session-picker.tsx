@@ -22,13 +22,18 @@ interface SessionPickerProps {
 }
 
 export function SessionPicker({ sessions, selectedSessionId, onSelect }: SessionPickerProps) {
-  // Comparar solo la fecha (sin hora) para evitar problemas de zona horaria
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Comparar en UTC para evitar problemas de zona horaria.
+  // Permitir inscripción hasta 1 hora después de la hora de fin del taller.
+  const now = new Date();
   const futureSessions = sessions.filter((s) => {
-    const sessionDate = new Date(s.date);
-    sessionDate.setHours(0, 0, 0, 0);
-    return sessionDate >= today;
+    // La fecha se guarda como YYYY-MM-DDT00:00:00.000Z (UTC)
+    const dateStr = s.date.slice(0, 10); // "2026-03-26"
+    // Construir deadline: fecha del taller + endTime + 1 hora (en hora local de México, UTC-6)
+    const [endH, endM] = (s.endTime || "23:59").split(":").map(Number);
+    const deadline = new Date(`${dateStr}T${String(endH).padStart(2, "0")}:${String(endM).padStart(2, "0")}:00`);
+    // Sumar 1 hora de gracia
+    deadline.setHours(deadline.getHours() + 1);
+    return now <= deadline;
   });
 
   if (futureSessions.length === 0) {

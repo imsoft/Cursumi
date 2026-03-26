@@ -109,13 +109,19 @@ function formatDateLabel(date: Date | null): string | undefined {
   });
 }
 
+/** Inicio del día actual en UTC (para comparar contra fechas de sesiones guardadas como YYYY-MM-DDT00:00:00Z) */
+function startOfTodayUTC(): Date {
+  const now = new Date();
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+}
+
 /** Calcula la próxima sesión futura a partir de un array de sesiones (para crear/actualizar cursos) */
 function computeNextSessionFromData(sessions?: CourseSessionData[]): Date | null {
   if (!sessions?.length) return null;
-  const now = new Date();
+  const todayStart = startOfTodayUTC();
   const futureDates = sessions
     .map((s) => new Date(s.date))
-    .filter((d) => d >= now)
+    .filter((d) => d >= todayStart)
     .sort((a, b) => a.getTime() - b.getTime());
   return futureDates[0] ?? null;
 }
@@ -960,9 +966,9 @@ export async function upsertCourseSessions(
     }
   }
 
-  // Recompute nextSession on the course
+  // Recompute nextSession on the course (incluye sesiones de hoy)
   const nextDate = await prisma.courseSession.findFirst({
-    where: { courseId, date: { gte: new Date() } },
+    where: { courseId, date: { gte: startOfTodayUTC() } },
     orderBy: { date: "asc" },
     select: { date: true },
   });
@@ -999,7 +1005,7 @@ export async function getUpcomingSessionsForInstructor(
 ): Promise<UpcomingSessionItem[]> {
   const sessions = await prisma.courseSession.findMany({
     where: {
-      date: { gte: new Date() },
+      date: { gte: startOfTodayUTC() },
       course: { instructorId },
     },
     orderBy: { date: "asc" },
