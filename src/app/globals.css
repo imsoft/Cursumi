@@ -141,28 +141,28 @@
     size: landscape;
   }
 
-  /* Ocultar TODO excepto el certificado */
-  body * {
-    visibility: hidden;
-  }
-  [data-certificate],
-  [data-certificate] * {
-    visibility: visible;
-  }
-
-  /* Quitar padding/margin de todos los contenedores ancestros */
+  /* Resetear todo el documento */
   html, body {
     margin: 0 !important;
     padding: 0 !important;
     height: auto !important;
     overflow: visible !important;
+    background: white !important;
   }
-  body > *,
-  [data-sidebar="sidebar"],
-  [data-slot="sidebar-inset"] > header,
-  nav {
-    display: contents !important;
+
+  /*
+   * Esconder todo el contenido excepto el certificado.
+   * El certificado usa position:fixed, así que solo necesitamos
+   * que el body no genere altura extra (páginas vacías).
+   */
+  body > * {
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
   }
+
   .print\:hidden {
     display: none !important;
   }
