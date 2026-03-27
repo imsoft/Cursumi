@@ -10,7 +10,7 @@ interface CertificateViewProps {
 
 export function CertificateView({ certificate }: CertificateViewProps) {
   const isAccreditation = certificate.type === "accreditation";
-  const sigH = certificate.signatureHeight ?? 64; // default 64px (4rem)
+  const sigH = certificate.signatureHeight ?? 64;
 
   return (
     <Card data-certificate className="border-2 border-primary/20 bg-linear-to-br from-background to-primary/5 shadow-xl">
@@ -43,7 +43,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           </div>
 
           {/* Nombre del estudiante */}
-          <div className="text-center py-6 border-y-2 border-primary/30">
+          <div className="text-center py-6">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">
               {certificate.studentName}
             </h2>
@@ -83,7 +83,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           {/* Detalles: instructor + fecha en 2 columnas */}
           <div
             data-certificate-meta
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-6 border-t border-border print:grid-cols-2 print:gap-8 print:pt-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-6 print:grid-cols-2 print:gap-8 print:pt-4"
           >
             <div className="min-w-0 text-left">
               <div className="flex items-start gap-2 text-sm text-muted-foreground">
@@ -106,7 +106,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           </div>
 
           {/* Número de certificado */}
-          <div className="text-center pt-6 border-t border-border">
+          <div className="text-center pt-6">
             <p className="text-xs text-muted-foreground mb-1">Número de constancia</p>
             <p className="text-sm font-mono font-semibold text-foreground">
               {certificate.certificateNumber}
@@ -114,7 +114,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           </div>
 
           {/* Firmas: instructor + administrador */}
-          <div className="pt-6 border-t border-border print:pt-3">
+          <div className="pt-6 print:pt-3">
             <div className="flex items-end justify-between gap-4 print:gap-6">
               <div className="text-center flex-1 min-w-0">
                 {certificate.instructorSignatureUrl ? (
@@ -129,9 +129,9 @@ export function CertificateView({ certificate }: CertificateViewProps) {
                     />
                   </div>
                 ) : (
-                  <div className="border-b border-foreground/20 mb-1" style={{ height: sigH }}></div>
+                  <div className="mb-1" style={{ height: sigH }}></div>
                 )}
-                <div className="border-t border-foreground/20 pt-1">
+                <div className="border-t border-foreground/30 pt-1">
                   <p className="text-xs text-muted-foreground">{certificate.instructorName}</p>
                   <p className="text-xs text-muted-foreground">Instructor</p>
                 </div>
@@ -149,9 +149,9 @@ export function CertificateView({ certificate }: CertificateViewProps) {
                     />
                   </div>
                 ) : (
-                  <div className="border-b border-foreground/20 mb-1" style={{ height: sigH }}></div>
+                  <div className="mb-1" style={{ height: sigH }}></div>
                 )}
-                <div className="border-t border-foreground/20 pt-1">
+                <div className="border-t border-foreground/30 pt-1">
                   <p className="text-xs text-muted-foreground">Diseñador del taller</p>
                 </div>
               </div>
