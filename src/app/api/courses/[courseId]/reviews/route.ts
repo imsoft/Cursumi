@@ -56,21 +56,14 @@ export async function POST(
     const { courseId } = await params;
     const body = createSchema.parse(await req.json());
 
-    // Verify enrollment and min 50% progress
+    // Verify enrollment — any enrolled student can leave a review
     const enrollment = await prisma.enrollment.findUnique({
       where: { courseId_studentId: { courseId, studentId: session.user.id } },
-      select: { id: true, progress: true },
+      select: { id: true },
     });
 
     if (!enrollment) {
       return NextResponse.json({ error: "No estás inscrito en este curso" }, { status: 403 });
-    }
-
-    if (enrollment.progress < 50) {
-      return NextResponse.json(
-        { error: "Debes completar al menos el 50% del curso para dejar una reseña" },
-        { status: 403 }
-      );
     }
 
     const review = await prisma.review.upsert({

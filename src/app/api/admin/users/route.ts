@@ -14,6 +14,7 @@ export async function GET() {
         name: true,
         email: true,
         role: true,
+        emailVerified: true,
         createdAt: true,
         enrollments: {
           select: {
@@ -50,6 +51,7 @@ export async function GET() {
       name: user.name || "Usuario",
       email: user.email,
       role: user.role,
+      emailVerified: user.emailVerified,
       createdAt: user.createdAt.toISOString(),
       coursesCount: user.enrollments.length,
       enrolledCourses: user.enrollments.map((e) => ({

@@ -102,8 +102,8 @@ export default async function MyCourseDetailPage({
       })
     : null;
 
-  // Review eligibility: enrolled + >= 50% progress
-  const canReview = progress >= 50;
+  // Review eligibility: only requires enrollment
+  const canReview = true;
   const userReview = session
     ? await prisma.review.findUnique({
         where: { courseId_userId: { courseId, userId: session.user.id } },
