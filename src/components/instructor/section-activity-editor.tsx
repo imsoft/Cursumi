@@ -37,9 +37,11 @@ function SectionQuizEditor({
   const [newCorrect, setNewCorrect] = useState<number | null>(null);
 
   const syncUp = (enabled: boolean, qs: SectionQuizQuestion[], score: number) => {
-    if (!enabled || qs.length === 0) {
+    if (!enabled) {
       onChange(undefined);
     } else {
+      // Always emit the quiz object while enabled, even with 0 questions,
+      // so the parent keeps "quiz" mode selected while the instructor configures it.
       onChange({ passingScore: score, questions: qs });
     }
   };

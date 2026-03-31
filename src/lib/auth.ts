@@ -10,7 +10,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Deshabilitado temporalmente: usuarios no pueden entrar si el email de verificación falla
+    requireEmailVerification: true,
     sendVerificationEmail: async ({ user, token }: { user: { email: string; name?: string | null }; url: string; token: string }) => {
       const baseURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const verificationLink = `${baseURL}/verify-email?token=${token}`;

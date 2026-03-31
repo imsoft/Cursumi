@@ -1049,10 +1049,14 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
               {/* Agregar recurso */}
               <div className="space-y-3 pt-2 border-t border-border">
                 <Input
+                  label="Nombre del enlace"
+                  placeholder="Ej: Material de apoyo - Clase 1"
                   value={newResourceTitle}
                   onChange={(e) => setNewResourceTitle(e.target.value)}
                 />
                 <Input
+                  label="Liga (URL)"
+                  placeholder="Ej: https://drive.google.com/drive/folders/..."
                   value={newResourceUrl}
                   onChange={(e) => setNewResourceUrl(e.target.value)}
                   type="url"
