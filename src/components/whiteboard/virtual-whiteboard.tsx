@@ -47,7 +47,7 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     if (!wrap || !canvas) return null;
     const rect = wrap.getBoundingClientRect();
     const w = Math.max(320, Math.floor(rect.width));
-    const h = Math.max(280, Math.min(720, Math.floor(rect.height)));
+    const h = Math.max(260, Math.min(520, Math.floor(rect.height)));
     return { w, h };
   }, []);
 
@@ -277,7 +277,7 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
 
       <div
         ref={wrapRef}
-        className="relative min-h-[min(70vh,720px)] w-full flex-1 overflow-hidden rounded-xl border border-border bg-muted/30"
+        className="relative h-[min(56vh,520px)] min-h-[260px] w-full shrink-0 overflow-hidden rounded-xl border border-border bg-muted/30"
       >
         <canvas
           ref={canvasRef}
