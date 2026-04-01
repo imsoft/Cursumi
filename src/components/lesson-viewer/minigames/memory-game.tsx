@@ -175,7 +175,7 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
               `}
             >
               {isFlipped || isMatched ? (
-                <span className="leading-tight break-words">{card.content}</span>
+                <span className="leading-tight wrap-break-words">{card.content}</span>
               ) : (
                 <span className="text-2xl font-bold opacity-30">?</span>
               )}
