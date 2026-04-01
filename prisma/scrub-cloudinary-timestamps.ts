@@ -4,7 +4,12 @@ function scrubUrl(url: string | null): string | null {
   if (!url) return null;
   // Match cloudinary secure urls and remove the /v123456/ version segment
   if (url.includes("res.cloudinary.com") && /\/v\d+\//.test(url)) {
-    return url.replace(/\/v\d+\//, "/");
+    return url.replace(/\/v\d+\//, "/v1/");
+  }
+  
+  // Auto-heal logic: Si la URL ya fue corrompida sin el "v1", la reparamos inyectándolo
+  if (url.includes("res.cloudinary.com") && !/\/v\d+\//.test(url)) {
+    return url.replace(/\/upload\//, "/upload/v1/");
   }
   return url;
 }
@@ -84,9 +89,15 @@ async function main() {
   for (const lesson of lessons) {
     if (lesson.attachments) {
       const attachmentsStr = JSON.stringify(lesson.attachments);
-      if (attachmentsStr.includes("res.cloudinary.com") && /\\?\/v\d+\\?\//.test(attachmentsStr)) {
-        // Safe global replace in stringified JSON
-        const scrubbedStr = attachmentsStr.replace(/(\/|\\\/)v\d+(\/|\\\/)/g, "$1");
+      let scrubbedStr = attachmentsStr;
+      if (scrubbedStr.includes("res.cloudinary.com") && /\\?\/v\d+\\?\//.test(scrubbedStr)) {
+        scrubbedStr = scrubbedStr.replace(/(\/|\\\/)v\d+(\/|\\\/)/g, "$1v1$2");
+      }
+      if (scrubbedStr.includes("res.cloudinary.com") && !/\\?\/v\d+\\?\//.test(scrubbedStr)) {
+        scrubbedStr = scrubbedStr.replace(/(\/|\\\/)(upload|authenticated|private)(\/|\\\/)/g, "$1$2$3v1$3");
+      }
+      
+      if (scrubbedStr !== attachmentsStr) {
         await prisma.lesson.update({
           where: { id: lesson.id },
           data: { attachments: JSON.parse(scrubbedStr) }
