@@ -14,7 +14,7 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import Link from "next/link";
 
 type CourseStatus = "published" | "draft" | "archived" | "pending";
-type Modality = "virtual" | "presencial";
+type Modality = "virtual" | "presencial" | "live";
 
 interface AdminCourse {
   id: string;
@@ -41,6 +41,7 @@ const statusOptions = [
 const modalityOptions = [
   { value: "all", label: "Todas" },
   { value: "virtual", label: "Virtual" },
+  { value: "live", label: "En vivo" },
   { value: "presencial", label: "Presencial" },
 ];
 

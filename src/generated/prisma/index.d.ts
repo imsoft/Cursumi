@@ -229,7 +229,8 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const Modality: {
   virtual: 'virtual',
-  presencial: 'presencial'
+  presencial: 'presencial',
+  live: 'live'
 };
 
 export type Modality = (typeof Modality)[keyof typeof Modality]
@@ -5413,6 +5414,7 @@ export namespace Prisma {
     image: string | null
     phone: string | null
     city: string | null
+    state: string | null
     bio: string | null
     website: string | null
     linkedinUrl: string | null
@@ -5431,6 +5433,7 @@ export namespace Prisma {
     image: string | null
     phone: string | null
     city: string | null
+    state: string | null
     bio: string | null
     website: string | null
     linkedinUrl: string | null
@@ -5449,6 +5452,7 @@ export namespace Prisma {
     image: number
     phone: number
     city: number
+    state: number
     bio: number
     website: number
     linkedinUrl: number
@@ -5469,6 +5473,7 @@ export namespace Prisma {
     image?: true
     phone?: true
     city?: true
+    state?: true
     bio?: true
     website?: true
     linkedinUrl?: true
@@ -5487,6 +5492,7 @@ export namespace Prisma {
     image?: true
     phone?: true
     city?: true
+    state?: true
     bio?: true
     website?: true
     linkedinUrl?: true
@@ -5505,6 +5511,7 @@ export namespace Prisma {
     image?: true
     phone?: true
     city?: true
+    state?: true
     bio?: true
     website?: true
     linkedinUrl?: true
@@ -5596,6 +5603,7 @@ export namespace Prisma {
     image: string | null
     phone: string | null
     city: string | null
+    state: string | null
     bio: string | null
     website: string | null
     linkedinUrl: string | null
@@ -5631,6 +5639,7 @@ export namespace Prisma {
     image?: boolean
     phone?: boolean
     city?: boolean
+    state?: boolean
     bio?: boolean
     website?: boolean
     linkedinUrl?: boolean
@@ -5669,6 +5678,7 @@ export namespace Prisma {
     image?: boolean
     phone?: boolean
     city?: boolean
+    state?: boolean
     bio?: boolean
     website?: boolean
     linkedinUrl?: boolean
@@ -5687,6 +5697,7 @@ export namespace Prisma {
     image?: boolean
     phone?: boolean
     city?: boolean
+    state?: boolean
     bio?: boolean
     website?: boolean
     linkedinUrl?: boolean
@@ -5705,6 +5716,7 @@ export namespace Prisma {
     image?: boolean
     phone?: boolean
     city?: boolean
+    state?: boolean
     bio?: boolean
     website?: boolean
     linkedinUrl?: boolean
@@ -5715,7 +5727,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phone" | "city" | "bio" | "website" | "linkedinUrl" | "instagramUrl" | "signatureUrl" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phone" | "city" | "state" | "bio" | "website" | "linkedinUrl" | "instagramUrl" | "signatureUrl" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -5772,6 +5784,10 @@ export namespace Prisma {
       image: string | null
       phone: string | null
       city: string | null
+      /**
+       * Entidad federativa (México), va con `city` (municipio)
+       */
+      state: string | null
       bio: string | null
       website: string | null
       linkedinUrl: string | null
@@ -6229,6 +6245,7 @@ export namespace Prisma {
     readonly image: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
     readonly city: FieldRef<"User", 'String'>
+    readonly state: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
     readonly website: FieldRef<"User", 'String'>
     readonly linkedinUrl: FieldRef<"User", 'String'>
@@ -11492,6 +11509,7 @@ export namespace Prisma {
     headline: string | null
     bio: string | null
     city: string | null
+    state: string | null
     specialties: string | null
     teachingYears: number | null
     website: string | null
@@ -11509,6 +11527,7 @@ export namespace Prisma {
     headline: string | null
     bio: string | null
     city: string | null
+    state: string | null
     specialties: string | null
     teachingYears: number | null
     website: string | null
@@ -11526,6 +11545,7 @@ export namespace Prisma {
     headline: number
     bio: number
     city: number
+    state: number
     specialties: number
     teachingYears: number
     website: number
@@ -11553,6 +11573,7 @@ export namespace Prisma {
     headline?: true
     bio?: true
     city?: true
+    state?: true
     specialties?: true
     teachingYears?: true
     website?: true
@@ -11570,6 +11591,7 @@ export namespace Prisma {
     headline?: true
     bio?: true
     city?: true
+    state?: true
     specialties?: true
     teachingYears?: true
     website?: true
@@ -11587,6 +11609,7 @@ export namespace Prisma {
     headline?: true
     bio?: true
     city?: true
+    state?: true
     specialties?: true
     teachingYears?: true
     website?: true
@@ -11691,6 +11714,7 @@ export namespace Prisma {
     headline: string | null
     bio: string | null
     city: string | null
+    state: string | null
     specialties: string | null
     teachingYears: number | null
     website: string | null
@@ -11727,6 +11751,7 @@ export namespace Prisma {
     headline?: boolean
     bio?: boolean
     city?: boolean
+    state?: boolean
     specialties?: boolean
     teachingYears?: boolean
     website?: boolean
@@ -11745,6 +11770,7 @@ export namespace Prisma {
     headline?: boolean
     bio?: boolean
     city?: boolean
+    state?: boolean
     specialties?: boolean
     teachingYears?: boolean
     website?: boolean
@@ -11763,6 +11789,7 @@ export namespace Prisma {
     headline?: boolean
     bio?: boolean
     city?: boolean
+    state?: boolean
     specialties?: boolean
     teachingYears?: boolean
     website?: boolean
@@ -11781,6 +11808,7 @@ export namespace Prisma {
     headline?: boolean
     bio?: boolean
     city?: boolean
+    state?: boolean
     specialties?: boolean
     teachingYears?: boolean
     website?: boolean
@@ -11792,7 +11820,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type InstructorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "city" | "specialties" | "teachingYears" | "website" | "linkedinUrl" | "instagramUrl" | "stripeAccountId" | "stripeOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorProfile"]>
+  export type InstructorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "city" | "state" | "specialties" | "teachingYears" | "website" | "linkedinUrl" | "instagramUrl" | "stripeAccountId" | "stripeOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorProfile"]>
   export type InstructorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -11814,6 +11842,7 @@ export namespace Prisma {
       headline: string | null
       bio: string | null
       city: string | null
+      state: string | null
       specialties: string | null
       teachingYears: number | null
       website: string | null
@@ -12252,6 +12281,7 @@ export namespace Prisma {
     readonly headline: FieldRef<"InstructorProfile", 'String'>
     readonly bio: FieldRef<"InstructorProfile", 'String'>
     readonly city: FieldRef<"InstructorProfile", 'String'>
+    readonly state: FieldRef<"InstructorProfile", 'String'>
     readonly specialties: FieldRef<"InstructorProfile", 'String'>
     readonly teachingYears: FieldRef<"InstructorProfile", 'Int'>
     readonly website: FieldRef<"InstructorProfile", 'String'>
@@ -13799,6 +13829,7 @@ export namespace Prisma {
     level: string | null
     modality: $Enums.Modality | null
     city: string | null
+    state: string | null
     location: string | null
     courseType: $Enums.CourseType | null
     startDate: Date | null
@@ -13825,6 +13856,7 @@ export namespace Prisma {
     level: string | null
     modality: $Enums.Modality | null
     city: string | null
+    state: string | null
     location: string | null
     courseType: $Enums.CourseType | null
     startDate: Date | null
@@ -13851,6 +13883,7 @@ export namespace Prisma {
     level: number
     modality: number
     city: number
+    state: number
     location: number
     courseType: number
     startDate: number
@@ -13890,6 +13923,7 @@ export namespace Prisma {
     level?: true
     modality?: true
     city?: true
+    state?: true
     location?: true
     courseType?: true
     startDate?: true
@@ -13916,6 +13950,7 @@ export namespace Prisma {
     level?: true
     modality?: true
     city?: true
+    state?: true
     location?: true
     courseType?: true
     startDate?: true
@@ -13942,6 +13977,7 @@ export namespace Prisma {
     level?: true
     modality?: true
     city?: true
+    state?: true
     location?: true
     courseType?: true
     startDate?: true
@@ -14056,6 +14092,7 @@ export namespace Prisma {
     level: string | null
     modality: $Enums.Modality
     city: string | null
+    state: string | null
     location: string | null
     courseType: $Enums.CourseType
     startDate: Date | null
@@ -14102,6 +14139,7 @@ export namespace Prisma {
     level?: boolean
     modality?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
     courseType?: boolean
     startDate?: boolean
@@ -14144,6 +14182,7 @@ export namespace Prisma {
     level?: boolean
     modality?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
     courseType?: boolean
     startDate?: boolean
@@ -14173,6 +14212,7 @@ export namespace Prisma {
     level?: boolean
     modality?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
     courseType?: boolean
     startDate?: boolean
@@ -14202,6 +14242,7 @@ export namespace Prisma {
     level?: boolean
     modality?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
     courseType?: boolean
     startDate?: boolean
@@ -14218,7 +14259,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "location" | "courseType" | "startDate" | "duration" | "price" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "state" | "location" | "courseType" | "startDate" | "duration" | "price" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     categoryRef?: boolean | Course$categoryRefArgs<ExtArgs>
@@ -14274,6 +14315,7 @@ export namespace Prisma {
       level: string | null
       modality: $Enums.Modality
       city: string | null
+      state: string | null
       location: string | null
       courseType: $Enums.CourseType
       startDate: Date | null
@@ -14738,6 +14780,7 @@ export namespace Prisma {
     readonly level: FieldRef<"Course", 'String'>
     readonly modality: FieldRef<"Course", 'Modality'>
     readonly city: FieldRef<"Course", 'String'>
+    readonly state: FieldRef<"Course", 'String'>
     readonly location: FieldRef<"Course", 'String'>
     readonly courseType: FieldRef<"Course", 'CourseType'>
     readonly startDate: FieldRef<"Course", 'DateTime'>
@@ -19020,7 +19063,9 @@ export namespace Prisma {
     id: string | null
     courseId: string | null
     city: string | null
+    state: string | null
     location: string | null
+    meetingUrl: string | null
     date: Date | null
     startTime: string | null
     endTime: string | null
@@ -19033,7 +19078,9 @@ export namespace Prisma {
     id: string | null
     courseId: string | null
     city: string | null
+    state: string | null
     location: string | null
+    meetingUrl: string | null
     date: Date | null
     startTime: string | null
     endTime: string | null
@@ -19046,7 +19093,9 @@ export namespace Prisma {
     id: number
     courseId: number
     city: number
+    state: number
     location: number
+    meetingUrl: number
     date: number
     startTime: number
     endTime: number
@@ -19069,7 +19118,9 @@ export namespace Prisma {
     id?: true
     courseId?: true
     city?: true
+    state?: true
     location?: true
+    meetingUrl?: true
     date?: true
     startTime?: true
     endTime?: true
@@ -19082,7 +19133,9 @@ export namespace Prisma {
     id?: true
     courseId?: true
     city?: true
+    state?: true
     location?: true
+    meetingUrl?: true
     date?: true
     startTime?: true
     endTime?: true
@@ -19095,7 +19148,9 @@ export namespace Prisma {
     id?: true
     courseId?: true
     city?: true
+    state?: true
     location?: true
+    meetingUrl?: true
     date?: true
     startTime?: true
     endTime?: true
@@ -19195,7 +19250,9 @@ export namespace Prisma {
     id: string
     courseId: string
     city: string
+    state: string | null
     location: string
+    meetingUrl: string | null
     date: Date
     startTime: string
     endTime: string
@@ -19227,7 +19284,9 @@ export namespace Prisma {
     id?: boolean
     courseId?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
+    meetingUrl?: boolean
     date?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -19244,7 +19303,9 @@ export namespace Prisma {
     id?: boolean
     courseId?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
+    meetingUrl?: boolean
     date?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -19258,7 +19319,9 @@ export namespace Prisma {
     id?: boolean
     courseId?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
+    meetingUrl?: boolean
     date?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -19272,7 +19335,9 @@ export namespace Prisma {
     id?: boolean
     courseId?: boolean
     city?: boolean
+    state?: boolean
     location?: boolean
+    meetingUrl?: boolean
     date?: boolean
     startTime?: boolean
     endTime?: boolean
@@ -19281,7 +19346,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "city" | "location" | "date" | "startTime" | "endTime" | "maxStudents" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
+  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
   export type CourseSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     enrollments?: boolean | CourseSession$enrollmentsArgs<ExtArgs>
@@ -19306,7 +19371,12 @@ export namespace Prisma {
       id: string
       courseId: string
       city: string
+      state: string | null
       location: string
+      /**
+       * Meet, Zoom, Teams, etc. — principalmente para modalidad live
+       */
+      meetingUrl: string | null
       date: Date
       startTime: string
       endTime: string
@@ -19742,7 +19812,9 @@ export namespace Prisma {
     readonly id: FieldRef<"CourseSession", 'String'>
     readonly courseId: FieldRef<"CourseSession", 'String'>
     readonly city: FieldRef<"CourseSession", 'String'>
+    readonly state: FieldRef<"CourseSession", 'String'>
     readonly location: FieldRef<"CourseSession", 'String'>
+    readonly meetingUrl: FieldRef<"CourseSession", 'String'>
     readonly date: FieldRef<"CourseSession", 'DateTime'>
     readonly startTime: FieldRef<"CourseSession", 'String'>
     readonly endTime: FieldRef<"CourseSession", 'String'>
@@ -51896,6 +51968,7 @@ export namespace Prisma {
     image: 'image',
     phone: 'phone',
     city: 'city',
+    state: 'state',
     bio: 'bio',
     website: 'website',
     linkedinUrl: 'linkedinUrl',
@@ -51975,6 +52048,7 @@ export namespace Prisma {
     headline: 'headline',
     bio: 'bio',
     city: 'city',
+    state: 'state',
     specialties: 'specialties',
     teachingYears: 'teachingYears',
     website: 'website',
@@ -52010,6 +52084,7 @@ export namespace Prisma {
     level: 'level',
     modality: 'modality',
     city: 'city',
+    state: 'state',
     location: 'location',
     courseType: 'courseType',
     startDate: 'startDate',
@@ -52077,7 +52152,9 @@ export namespace Prisma {
     id: 'id',
     courseId: 'courseId',
     city: 'city',
+    state: 'state',
     location: 'location',
+    meetingUrl: 'meetingUrl',
     date: 'date',
     startTime: 'startTime',
     endTime: 'endTime',
@@ -52820,6 +52897,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     city?: StringNullableFilter<"User"> | string | null
+    state?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     website?: StringNullableFilter<"User"> | string | null
     linkedinUrl?: StringNullableFilter<"User"> | string | null
@@ -52857,6 +52935,7 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
     linkedinUrl?: SortOrderInput | SortOrder
@@ -52897,6 +52976,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     city?: StringNullableFilter<"User"> | string | null
+    state?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     website?: StringNullableFilter<"User"> | string | null
     linkedinUrl?: StringNullableFilter<"User"> | string | null
@@ -52934,6 +53014,7 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
     linkedinUrl?: SortOrderInput | SortOrder
@@ -52958,6 +53039,7 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     city?: StringNullableWithAggregatesFilter<"User"> | string | null
+    state?: StringNullableWithAggregatesFilter<"User"> | string | null
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     website?: StringNullableWithAggregatesFilter<"User"> | string | null
     linkedinUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -53275,6 +53357,7 @@ export namespace Prisma {
     headline?: StringNullableFilter<"InstructorProfile"> | string | null
     bio?: StringNullableFilter<"InstructorProfile"> | string | null
     city?: StringNullableFilter<"InstructorProfile"> | string | null
+    state?: StringNullableFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableFilter<"InstructorProfile"> | string | null
     teachingYears?: IntNullableFilter<"InstructorProfile"> | number | null
     website?: StringNullableFilter<"InstructorProfile"> | string | null
@@ -53293,6 +53376,7 @@ export namespace Prisma {
     headline?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     specialties?: SortOrderInput | SortOrder
     teachingYears?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
@@ -53315,6 +53399,7 @@ export namespace Prisma {
     headline?: StringNullableFilter<"InstructorProfile"> | string | null
     bio?: StringNullableFilter<"InstructorProfile"> | string | null
     city?: StringNullableFilter<"InstructorProfile"> | string | null
+    state?: StringNullableFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableFilter<"InstructorProfile"> | string | null
     teachingYears?: IntNullableFilter<"InstructorProfile"> | number | null
     website?: StringNullableFilter<"InstructorProfile"> | string | null
@@ -53332,6 +53417,7 @@ export namespace Prisma {
     headline?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     specialties?: SortOrderInput | SortOrder
     teachingYears?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
@@ -53357,6 +53443,7 @@ export namespace Prisma {
     headline?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     bio?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     city?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
+    state?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     specialties?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     teachingYears?: IntNullableWithAggregatesFilter<"InstructorProfile"> | number | null
     website?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
@@ -53434,6 +53521,7 @@ export namespace Prisma {
     level?: StringNullableFilter<"Course"> | string | null
     modality?: EnumModalityFilter<"Course"> | $Enums.Modality
     city?: StringNullableFilter<"Course"> | string | null
+    state?: StringNullableFilter<"Course"> | string | null
     location?: StringNullableFilter<"Course"> | string | null
     courseType?: EnumCourseTypeFilter<"Course"> | $Enums.CourseType
     startDate?: DateTimeNullableFilter<"Course"> | Date | string | null
@@ -53475,6 +53563,7 @@ export namespace Prisma {
     level?: SortOrderInput | SortOrder
     modality?: SortOrder
     city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     courseType?: SortOrder
     startDate?: SortOrderInput | SortOrder
@@ -53519,6 +53608,7 @@ export namespace Prisma {
     level?: StringNullableFilter<"Course"> | string | null
     modality?: EnumModalityFilter<"Course"> | $Enums.Modality
     city?: StringNullableFilter<"Course"> | string | null
+    state?: StringNullableFilter<"Course"> | string | null
     location?: StringNullableFilter<"Course"> | string | null
     courseType?: EnumCourseTypeFilter<"Course"> | $Enums.CourseType
     startDate?: DateTimeNullableFilter<"Course"> | Date | string | null
@@ -53560,6 +53650,7 @@ export namespace Prisma {
     level?: SortOrderInput | SortOrder
     modality?: SortOrder
     city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     courseType?: SortOrder
     startDate?: SortOrderInput | SortOrder
@@ -53595,6 +53686,7 @@ export namespace Prisma {
     level?: StringNullableWithAggregatesFilter<"Course"> | string | null
     modality?: EnumModalityWithAggregatesFilter<"Course"> | $Enums.Modality
     city?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Course"> | string | null
     location?: StringNullableWithAggregatesFilter<"Course"> | string | null
     courseType?: EnumCourseTypeWithAggregatesFilter<"Course"> | $Enums.CourseType
     startDate?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
@@ -53860,7 +53952,9 @@ export namespace Prisma {
     id?: StringFilter<"CourseSession"> | string
     courseId?: StringFilter<"CourseSession"> | string
     city?: StringFilter<"CourseSession"> | string
+    state?: StringNullableFilter<"CourseSession"> | string | null
     location?: StringFilter<"CourseSession"> | string
+    meetingUrl?: StringNullableFilter<"CourseSession"> | string | null
     date?: DateTimeFilter<"CourseSession"> | Date | string
     startTime?: StringFilter<"CourseSession"> | string
     endTime?: StringFilter<"CourseSession"> | string
@@ -53876,7 +53970,9 @@ export namespace Prisma {
     id?: SortOrder
     courseId?: SortOrder
     city?: SortOrder
+    state?: SortOrderInput | SortOrder
     location?: SortOrder
+    meetingUrl?: SortOrderInput | SortOrder
     date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -53895,7 +53991,9 @@ export namespace Prisma {
     NOT?: CourseSessionWhereInput | CourseSessionWhereInput[]
     courseId?: StringFilter<"CourseSession"> | string
     city?: StringFilter<"CourseSession"> | string
+    state?: StringNullableFilter<"CourseSession"> | string | null
     location?: StringFilter<"CourseSession"> | string
+    meetingUrl?: StringNullableFilter<"CourseSession"> | string | null
     date?: DateTimeFilter<"CourseSession"> | Date | string
     startTime?: StringFilter<"CourseSession"> | string
     endTime?: StringFilter<"CourseSession"> | string
@@ -53911,7 +54009,9 @@ export namespace Prisma {
     id?: SortOrder
     courseId?: SortOrder
     city?: SortOrder
+    state?: SortOrderInput | SortOrder
     location?: SortOrder
+    meetingUrl?: SortOrderInput | SortOrder
     date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -53932,7 +54032,9 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"CourseSession"> | string
     courseId?: StringWithAggregatesFilter<"CourseSession"> | string
     city?: StringWithAggregatesFilter<"CourseSession"> | string
+    state?: StringNullableWithAggregatesFilter<"CourseSession"> | string | null
     location?: StringWithAggregatesFilter<"CourseSession"> | string
+    meetingUrl?: StringNullableWithAggregatesFilter<"CourseSession"> | string | null
     date?: DateTimeWithAggregatesFilter<"CourseSession"> | Date | string
     startTime?: StringWithAggregatesFilter<"CourseSession"> | string
     endTime?: StringWithAggregatesFilter<"CourseSession"> | string
@@ -56000,6 +56102,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -56037,6 +56140,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -56074,6 +56178,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56111,6 +56216,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56148,6 +56254,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -56166,6 +56273,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56184,6 +56292,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56532,6 +56641,7 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     city?: string | null
+    state?: string | null
     specialties?: string | null
     teachingYears?: number | null
     website?: string | null
@@ -56550,6 +56660,7 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     city?: string | null
+    state?: string | null
     specialties?: string | null
     teachingYears?: number | null
     website?: string | null
@@ -56566,6 +56677,7 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
     teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56584,6 +56696,7 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
     teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56601,6 +56714,7 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     city?: string | null
+    state?: string | null
     specialties?: string | null
     teachingYears?: number | null
     website?: string | null
@@ -56617,6 +56731,7 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
     teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56634,6 +56749,7 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
     teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56707,6 +56823,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -56748,6 +56865,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -56785,6 +56903,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56826,6 +56945,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56865,6 +56985,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -56890,6 +57011,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56917,6 +57039,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57193,7 +57316,9 @@ export namespace Prisma {
   export type CourseSessionCreateInput = {
     id?: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -57209,7 +57334,9 @@ export namespace Prisma {
     id?: string
     courseId: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -57223,7 +57350,9 @@ export namespace Prisma {
   export type CourseSessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -57239,7 +57368,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -57254,7 +57385,9 @@ export namespace Prisma {
     id?: string
     courseId: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -57266,7 +57399,9 @@ export namespace Prisma {
   export type CourseSessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -57279,7 +57414,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -59614,6 +59751,7 @@ export namespace Prisma {
     image?: SortOrder
     phone?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     bio?: SortOrder
     website?: SortOrder
     linkedinUrl?: SortOrder
@@ -59632,6 +59770,7 @@ export namespace Prisma {
     image?: SortOrder
     phone?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     bio?: SortOrder
     website?: SortOrder
     linkedinUrl?: SortOrder
@@ -59650,6 +59789,7 @@ export namespace Prisma {
     image?: SortOrder
     phone?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     bio?: SortOrder
     website?: SortOrder
     linkedinUrl?: SortOrder
@@ -59941,6 +60081,7 @@ export namespace Prisma {
     headline?: SortOrder
     bio?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     specialties?: SortOrder
     teachingYears?: SortOrder
     website?: SortOrder
@@ -59962,6 +60103,7 @@ export namespace Prisma {
     headline?: SortOrder
     bio?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     specialties?: SortOrder
     teachingYears?: SortOrder
     website?: SortOrder
@@ -59979,6 +60121,7 @@ export namespace Prisma {
     headline?: SortOrder
     bio?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     specialties?: SortOrder
     teachingYears?: SortOrder
     website?: SortOrder
@@ -60173,6 +60316,7 @@ export namespace Prisma {
     level?: SortOrder
     modality?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     location?: SortOrder
     courseType?: SortOrder
     startDate?: SortOrder
@@ -60205,6 +60349,7 @@ export namespace Prisma {
     level?: SortOrder
     modality?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     location?: SortOrder
     courseType?: SortOrder
     startDate?: SortOrder
@@ -60231,6 +60376,7 @@ export namespace Prisma {
     level?: SortOrder
     modality?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     location?: SortOrder
     courseType?: SortOrder
     startDate?: SortOrder
@@ -60512,7 +60658,9 @@ export namespace Prisma {
     id?: SortOrder
     courseId?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     location?: SortOrder
+    meetingUrl?: SortOrder
     date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -60529,7 +60677,9 @@ export namespace Prisma {
     id?: SortOrder
     courseId?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     location?: SortOrder
+    meetingUrl?: SortOrder
     date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -60542,7 +60692,9 @@ export namespace Prisma {
     id?: SortOrder
     courseId?: SortOrder
     city?: SortOrder
+    state?: SortOrder
     location?: SortOrder
+    meetingUrl?: SortOrder
     date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
@@ -65960,6 +66112,7 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     city?: string | null
+    state?: string | null
     specialties?: string | null
     teachingYears?: number | null
     website?: string | null
@@ -65976,6 +66129,7 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     city?: string | null
+    state?: string | null
     specialties?: string | null
     teachingYears?: number | null
     website?: string | null
@@ -66028,6 +66182,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -66067,6 +66222,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -66626,6 +66782,7 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
     teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66642,6 +66799,7 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     specialties?: NullableStringFieldUpdateOperationsInput | string | null
     teachingYears?: NullableIntFieldUpdateOperationsInput | number | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66716,6 +66874,7 @@ export namespace Prisma {
     level?: StringNullableFilter<"Course"> | string | null
     modality?: EnumModalityFilter<"Course"> | $Enums.Modality
     city?: StringNullableFilter<"Course"> | string | null
+    state?: StringNullableFilter<"Course"> | string | null
     location?: StringNullableFilter<"Course"> | string | null
     courseType?: EnumCourseTypeFilter<"Course"> | $Enums.CourseType
     startDate?: DateTimeNullableFilter<"Course"> | Date | string | null
@@ -67145,6 +67304,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67181,6 +67341,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67233,6 +67394,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67269,6 +67431,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67305,6 +67468,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67341,6 +67505,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67393,6 +67558,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67429,6 +67595,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67465,6 +67632,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67501,6 +67669,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67553,6 +67722,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67589,6 +67759,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67625,6 +67796,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67661,6 +67833,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67713,6 +67886,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67749,6 +67923,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67786,6 +67961,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -67825,6 +68001,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -67887,6 +68064,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -67923,6 +68101,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -68010,7 +68189,9 @@ export namespace Prisma {
   export type CourseSessionCreateWithoutCourseInput = {
     id?: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -68024,7 +68205,9 @@ export namespace Prisma {
   export type CourseSessionUncheckedCreateWithoutCourseInput = {
     id?: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -68372,6 +68555,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68408,6 +68592,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68513,7 +68698,9 @@ export namespace Prisma {
     id?: StringFilter<"CourseSession"> | string
     courseId?: StringFilter<"CourseSession"> | string
     city?: StringFilter<"CourseSession"> | string
+    state?: StringNullableFilter<"CourseSession"> | string | null
     location?: StringFilter<"CourseSession"> | string
+    meetingUrl?: StringNullableFilter<"CourseSession"> | string | null
     date?: DateTimeFilter<"CourseSession"> | Date | string
     startTime?: StringFilter<"CourseSession"> | string
     endTime?: StringFilter<"CourseSession"> | string
@@ -68711,6 +68898,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -68751,6 +68939,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -68873,6 +69062,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -68913,6 +69103,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69342,6 +69533,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -69382,6 +69574,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -69514,6 +69707,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69554,6 +69748,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69616,7 +69811,9 @@ export namespace Prisma {
   export type CourseSessionCreateWithoutAnonymousQuestionsInput = {
     id?: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -69631,7 +69828,9 @@ export namespace Prisma {
     id?: string
     courseId: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -69655,6 +69854,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -69695,6 +69895,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -69735,6 +69936,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -69771,6 +69973,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -69818,7 +70021,9 @@ export namespace Prisma {
   export type CourseSessionUpdateWithoutAnonymousQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -69833,7 +70038,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -69863,6 +70070,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69903,6 +70111,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69949,6 +70158,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69985,6 +70195,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70022,6 +70233,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -70062,6 +70274,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -70102,6 +70315,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -70138,6 +70352,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -70174,7 +70389,9 @@ export namespace Prisma {
   export type CourseSessionCreateWithoutEnrollmentsInput = {
     id?: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -70189,7 +70406,9 @@ export namespace Prisma {
     id?: string
     courseId: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -70421,6 +70640,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70461,6 +70681,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70507,6 +70728,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70543,6 +70765,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70585,7 +70808,9 @@ export namespace Prisma {
   export type CourseSessionUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -70600,7 +70825,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -70867,6 +71094,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -70907,6 +71135,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -70947,6 +71176,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -70983,6 +71213,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -71083,6 +71314,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71123,6 +71355,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71169,6 +71402,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71205,6 +71439,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71518,6 +71753,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -71554,6 +71790,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -71596,6 +71833,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -71636,6 +71874,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -71734,6 +71973,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71770,6 +72010,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71818,6 +72059,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71858,6 +72100,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71934,6 +72177,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -71970,6 +72214,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72012,6 +72257,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -72052,6 +72298,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -72150,6 +72397,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72186,6 +72434,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72234,6 +72483,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72274,6 +72524,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72310,6 +72561,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -72350,6 +72602,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -72390,6 +72643,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72426,6 +72680,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72479,6 +72734,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72519,6 +72775,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72565,6 +72822,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72601,6 +72859,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72637,6 +72896,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72673,6 +72933,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72725,6 +72986,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72761,6 +73023,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72798,6 +73061,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -72838,6 +73102,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -72878,6 +73143,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72914,6 +73180,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72955,6 +73222,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -72991,6 +73259,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -73070,6 +73339,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -73110,6 +73380,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -73156,6 +73427,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73192,6 +73464,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73239,6 +73512,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73275,6 +73549,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73350,6 +73625,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -73386,6 +73662,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -73467,6 +73744,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73503,6 +73781,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73539,6 +73818,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -73575,6 +73855,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -73717,6 +73998,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73753,6 +74035,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74016,6 +74299,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -74052,6 +74336,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -74173,6 +74458,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74209,6 +74495,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74880,6 +75167,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -74916,6 +75204,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -75035,6 +75324,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75071,6 +75361,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75616,6 +75907,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -75656,6 +75948,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -75755,6 +76048,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75795,6 +76089,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75856,6 +76151,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -75896,6 +76192,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -75979,6 +76276,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76019,6 +76317,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76142,6 +76441,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -76178,6 +76478,7 @@ export namespace Prisma {
     image?: string | null
     phone?: string | null
     city?: string | null
+    state?: string | null
     bio?: string | null
     website?: string | null
     linkedinUrl?: string | null
@@ -76220,6 +76521,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -76260,6 +76562,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -76350,6 +76653,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76386,6 +76690,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76434,6 +76739,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76474,6 +76780,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76581,6 +76888,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -76818,6 +77126,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76857,6 +77166,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76895,6 +77205,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77358,6 +77669,7 @@ export namespace Prisma {
     level?: string | null
     modality: $Enums.Modality
     city?: string | null
+    state?: string | null
     location?: string | null
     courseType: $Enums.CourseType
     startDate?: Date | string | null
@@ -77383,6 +77695,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77422,6 +77735,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77460,6 +77774,7 @@ export namespace Prisma {
     level?: NullableStringFieldUpdateOperationsInput | string | null
     modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
     city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77488,7 +77803,9 @@ export namespace Prisma {
   export type CourseSessionCreateManyCourseInput = {
     id?: string
     city: string
+    state?: string | null
     location: string
+    meetingUrl?: string | null
     date: Date | string
     startTime: string
     endTime: string
@@ -77628,7 +77945,9 @@ export namespace Prisma {
   export type CourseSessionUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -77642,7 +77961,9 @@ export namespace Prisma {
   export type CourseSessionUncheckedUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
@@ -77656,7 +77977,9 @@ export namespace Prisma {
   export type CourseSessionUncheckedUpdateManyWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     city?: StringFieldUpdateOperationsInput | string
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string

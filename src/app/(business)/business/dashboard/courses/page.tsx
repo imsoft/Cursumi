@@ -146,7 +146,11 @@ export default function BusinessCoursesPage() {
                       <div className="flex gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">{course.category}</Badge>
                         <Badge variant="outline" className="text-xs">
-                          {course.modality === "virtual" ? "Virtual" : "Presencial"}
+                          {course.modality === "virtual"
+                            ? "Virtual"
+                            : course.modality === "live"
+                              ? "En vivo"
+                              : "Presencial"}
                         </Badge>
                         {course.visibility === "business_only" && (
                           <Badge className="text-xs bg-primary/10 text-primary">Exclusivo Business</Badge>

@@ -10,10 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
+import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
 const instructorProfileSchema = z.object({
   fullName: z.string().min(2, "El nombre es obligatorio"),
   email: z.string().email("Correo electrónico inválido"),
+  state: z.string().optional(),
   city: z.string().optional(),
   headline: z.string().optional(),
   bio: z.string().optional(),
@@ -41,6 +44,7 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
     defaultValues: {
       fullName: "",
       email: "",
+      state: "",
       city: "",
       headline: "",
       bio: "",
@@ -64,6 +68,7 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
         form.reset({
           fullName: data.fullName || "",
           email: data.email || "",
+          state: data.state || "",
           city: data.city || "",
           headline: data.headline || "",
           bio: data.bio || "",
@@ -79,6 +84,15 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
     };
     load();
   }, [form]);
+
+  const state = form.watch("state");
+  const city = form.watch("city");
+  useEffect(() => {
+    if (!(state ?? "").trim() && (city ?? "").trim()) {
+      const inferred = findStateForMunicipality(city ?? "");
+      if (inferred) form.setValue("state", inferred);
+    }
+  }, [state, city, form]);
 
   const onSubmit = async (values: InstructorProfileFormValues) => {
     try {
@@ -128,12 +142,17 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Input label="Ciudad / ubicación" {...form.register("city")} />
-            </div>
-            <div>
               <Input label="Título profesional" {...form.register("headline")} />
             </div>
           </div>
+          <MexicoStateCityFields
+            state={form.watch("state") ?? ""}
+            city={form.watch("city") ?? ""}
+            onStateChange={(v) => form.setValue("state", v, { shouldValidate: true })}
+            onCityChange={(v) => form.setValue("city", v, { shouldValidate: true })}
+            stateLabel="Estado"
+            cityLabel="Ciudad o municipio"
+          />
           <div>
             <label className="text-sm font-medium text-foreground">Biografía</label>
             <RichTextEditor

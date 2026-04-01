@@ -15,11 +15,14 @@ import { Separator } from "@/components/ui/separator";
 import { Save } from "lucide-react";
 import type { ProfileData } from "@/lib/profile-service";
 import { UserAvatarUpload } from "@/components/profile/user-avatar-upload";
+import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
+import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "El nombre es obligatorio"),
   email: z.string().email("Correo electrónico inválido"),
   phone: z.string().optional(),
+  state: z.string().optional(),
   city: z.string().optional(),
   bio: z.string().optional(),
   website: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
@@ -66,6 +69,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
       fullName: initialProfile.fullName,
       email: initialProfile.email,
       phone: initialProfile.phone || "",
+      state: initialProfile.state || "",
       city: initialProfile.city || "",
       bio: initialProfile.bio || "",
       website: initialProfile.website || "",
@@ -73,6 +77,14 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
       instagramUrl: initialProfile.instagramUrl || "",
     },
   });
+
+  useEffect(() => {
+    if (!(initialProfile.state ?? "").trim() && (initialProfile.city ?? "").trim()) {
+      const inferred = findStateForMunicipality(initialProfile.city);
+      if (inferred) form.setValue("state", inferred);
+    }
+  }, [initialProfile.state, initialProfile.city, form]);
+
   const onSubmit = async (values: ProfileFormValues) => {
     try {
       setError(null);
@@ -89,6 +101,7 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
         fullName: values.fullName,
         email: values.email,
         phone: values.phone || "",
+        state: values.state || "",
         city: values.city || "",
         bio: values.bio || "",
         website: values.website || "",
@@ -199,20 +212,16 @@ export function ProfilePageClient({ initialProfile, showHeader = true }: Profile
                     </p>
                   )}
                 </div>
-                <div>
-                  <Input
-                    id="profile-city"
-                    label="Ciudad"
-                    disabled={!isEditing}
-                    {...form.register("city")}
-                  />
-                  {form.formState.errors.city && (
-                    <p className="mt-1 text-xs text-destructive">
-                      {form.formState.errors.city.message}
-                    </p>
-                  )}
-                </div>
               </div>
+              <MexicoStateCityFields
+                state={form.watch("state") ?? ""}
+                city={form.watch("city") ?? ""}
+                onStateChange={(v) => form.setValue("state", v, { shouldValidate: true })}
+                onCityChange={(v) => form.setValue("city", v, { shouldValidate: true })}
+                disabled={!isEditing}
+                stateLabel="Estado"
+                cityLabel="Ciudad o municipio"
+              />
 
               <div>
                 <Textarea

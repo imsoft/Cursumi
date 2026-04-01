@@ -23,7 +23,15 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
   const [archiving, setArchiving] = useState(false);
   const statusLabel = statusLabelMap[course.status];
   return (
-    <div className={`flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between border-l-4 ${course.modality === "presencial" ? "border-l-emerald-500" : "border-l-blue-500"}`}>
+    <div
+      className={`flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between border-l-4 ${
+        course.modality === "presencial"
+          ? "border-l-emerald-500"
+          : course.modality === "live"
+            ? "border-l-violet-500"
+            : "border-l-blue-500"
+      }`}
+    >
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <h3 className="text-lg font-semibold text-foreground">{course.title}</h3>

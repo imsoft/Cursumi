@@ -2,7 +2,8 @@ import { prisma } from "./prisma";
 import { Prisma } from "@/generated/prisma";
 import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
 import type { CourseFormData, CourseSection, CourseSessionData } from "@/components/instructor/course-types";
-import { hashJoinCode, shouldUseFreePresencialJoinCode } from "@/lib/join-code";
+import { hashJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
 
@@ -162,7 +163,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
   const instructor = await prisma.user.findUnique({ where: { id: instructorId }, select: { name: true } });
   const slug = await generateCourseSlug(data.title, instructor?.name || instructorId);
   let joinCodeHash: string | null = null;
-  if (shouldUseFreePresencialJoinCode(data.modality, data.price) && data.freeJoinCode?.trim()) {
+  if (shouldUseFreeJoinCode(data.modality, data.price) && data.freeJoinCode?.trim()) {
     joinCodeHash = await hashJoinCode(data.freeJoinCode.trim());
   }
   return prisma.course.create({
@@ -175,6 +176,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       level: data.level || "principiante",
       modality: data.modality as Modality,
       city: data.city,
+      state: data.state,
       location: data.location,
       courseType: data.courseType as CourseType,
       startDate: data.startDate ? new Date(data.startDate) : null,
@@ -190,7 +192,9 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
         ? {
             create: data.courseSessions.map((s) => ({
               city: s.city,
+              state: s.state,
               location: s.location,
+              meetingUrl: s.meetingUrl?.trim() || null,
               date: new Date(s.date),
               startTime: s.startTime,
               endTime: s.endTime,
@@ -255,7 +259,7 @@ export async function updateCourse(
   const nextModality = data.modality ?? existing.modality;
   const nextPrice = data.price !== undefined ? data.price : existing.price;
   let joinCodeHash: string | null | undefined = undefined;
-  if (nextModality !== "presencial" || nextPrice > 0) {
+  if (nextModality === "virtual" || nextPrice > 0) {
     joinCodeHash = null;
   } else if (data.clearFreeJoinCode) {
     joinCodeHash = null;
@@ -273,6 +277,7 @@ export async function updateCourse(
       level: data.level || "principiante",
       modality: data.modality as Modality,
       city: data.city,
+      state: data.state,
       location: data.location,
       courseType: data.courseType as CourseType,
       startDate: data.startDate ? new Date(data.startDate) : null,
@@ -498,7 +503,7 @@ export async function updateCourseInfo(
   instructorId: string,
   data: {
     title?: string; description?: string; category?: string; level?: string;
-    modality?: string; city?: string | null; location?: string | null;
+    modality?: string; city?: string | null; state?: string | null; location?: string | null;
     courseType?: string; startDate?: string | null; duration?: string | null;
     price?: number; maxStudents?: number | null; imageUrl?: string | null;
     freeJoinCode?: string;
@@ -518,7 +523,7 @@ export async function updateCourseInfo(
   const nextModality = (data.modality ?? course.modality) as Modality;
   const nextPrice = data.price !== undefined ? data.price : course.price;
   let joinCodeHash: string | null | undefined = undefined;
-  if (nextModality !== "presencial" || nextPrice > 0) {
+  if (nextModality === "virtual" || nextPrice > 0) {
     joinCodeHash = null;
   } else if (data.clearFreeJoinCode) {
     joinCodeHash = null;
@@ -536,6 +541,7 @@ export async function updateCourseInfo(
       ...(data.level !== undefined && { level: data.level }),
       ...(data.modality !== undefined && { modality: data.modality as Modality }),
       ...(data.city !== undefined && { city: data.city }),
+      ...(data.state !== undefined && { state: data.state }),
       ...(data.location !== undefined && { location: data.location }),
       ...(data.courseType !== undefined && { courseType: data.courseType as CourseType }),
       ...(data.startDate !== undefined && { startDate: data.startDate ? new Date(data.startDate) : null }),
@@ -607,6 +613,7 @@ export async function listPublishedCourses(
         category: true,
         level: true,
         city: true,
+        state: true,
         description: true,
         duration: true,
         price: true,
@@ -624,7 +631,7 @@ export async function listPublishedCourses(
     modality: course.modality,
     category: course.category,
     level: course.level ?? undefined,
-    city: course.city || "Online",
+    city: formatMexicoLocation(course.city, course.state) || "Online",
     description: course.description,
     duration: course.duration || "A tu ritmo",
     price: course.price,
@@ -668,6 +675,7 @@ export async function getPublishedCourse(slugOrId: string) {
           id: true,
           city: true,
           location: true,
+          meetingUrl: true,
           date: true,
           startTime: true,
           endTime: true,
@@ -683,7 +691,9 @@ export async function getPublishedCourse(slugOrId: string) {
     // @ts-ignore
     delete course.finalExam;
     const requiresJoinCode =
-      course.modality === "presencial" && course.price === 0 && !!course.joinCodeHash;
+      (course.modality === "presencial" || course.modality === "live") &&
+      course.price === 0 &&
+      !!course.joinCodeHash;
     // @ts-expect-error no exponer hash
     delete course.joinCodeHash;
     return { ...course, requiresJoinCode };
@@ -781,7 +791,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
     where: { courseId, ...(sessionId ? { sessionId } : {}) },
     include: {
       student: { select: { id: true, name: true, email: true } },
-      session: { select: { id: true, city: true, date: true } },
+      session: { select: { id: true, city: true, state: true, date: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -796,7 +806,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
     enrolledDate: enrollment.createdAt.toISOString(),
     sessionId: enrollment.sessionId,
     sessionLabel: enrollment.session
-      ? `${enrollment.session.city} — ${enrollment.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
+      ? `${formatMexicoLocation(enrollment.session.city, enrollment.session.state)} — ${enrollment.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
       : undefined,
   }));
 }
@@ -833,7 +843,9 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
         select: {
           id: true,
           city: true,
+          state: true,
           location: true,
+          meetingUrl: true,
           date: true,
           startTime: true,
           endTime: true,
@@ -1024,7 +1036,9 @@ export async function upsertCourseSessions(
   for (const s of sessions) {
     const data = {
       city: s.city,
+      state: s.state,
       location: s.location,
+      meetingUrl: s.meetingUrl?.trim() || null,
       date: new Date(s.date),
       startTime: s.startTime,
       endTime: s.endTime,
@@ -1155,7 +1169,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
       where: { courseId },
       include: {
         student: { select: { id: true, name: true, email: true } },
-        session: { select: { city: true, date: true } },
+        session: { select: { city: true, state: true, date: true } },
         lessonProgress: { select: { lessonId: true, score: true } },
         sectionQuizSubmissions: { select: { sectionId: true, score: true, passed: true } },
         examSubmission: { select: { score: true, passed: true, submittedAt: true } },
@@ -1186,7 +1200,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
     progress: e.progress,
     enrolledDate: e.createdAt.toISOString(),
     sessionLabel: e.session
-      ? `${e.session.city} — ${e.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
+      ? `${formatMexicoLocation(e.session.city, e.session.state)} — ${e.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
       : undefined,
     completedLessonIds: e.lessonProgress.map((lp) => lp.lessonId),
     lessonScores: Object.fromEntries(

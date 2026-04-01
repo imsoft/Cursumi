@@ -5,10 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { UserAvatarUpload } from "@/components/profile/user-avatar-upload";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 
 interface InstructorProfileSummaryProps {
   fullName: string;
   avatarUrl?: string | null;
+  state?: string;
   city: string;
   bio: string;
   specialties: string;
@@ -20,6 +22,7 @@ interface InstructorProfileSummaryProps {
 export const InstructorProfileSummary = ({
   fullName,
   avatarUrl,
+  state,
   city,
   bio,
   specialties,
@@ -65,7 +68,9 @@ export const InstructorProfileSummary = ({
           <div className="min-w-0 space-y-1">
             <h2 className="text-xl font-bold text-foreground">{fullName || "Instructor"}</h2>
             <p className="text-sm text-muted-foreground">Instructor</p>
-            {city && <p className="text-xs text-muted-foreground">{city}</p>}
+            {(city || state) && (
+              <p className="text-xs text-muted-foreground">{formatMexicoLocation(city, state)}</p>
+            )}
             {editableAvatar && (
               <p className="text-xs text-muted-foreground pt-1">
                 Esta foto se muestra en tus cursos y al hablar con estudiantes. Pasa el ratón sobre la

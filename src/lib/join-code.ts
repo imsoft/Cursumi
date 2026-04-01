@@ -24,9 +24,10 @@ export async function verifyJoinCode(plain: string, stored: string | null): Prom
   return timingSafeEqual(derived, expected);
 }
 
-export function shouldUseFreePresencialJoinCode(
-  modality: string,
-  price: number
-): boolean {
-  return modality === "presencial" && price === 0;
+/** Cursos con sesiones (presencial o en vivo) gratuitos pueden usar código de inscripción */
+export function shouldUseFreeJoinCode(modality: string, price: number): boolean {
+  return (modality === "presencial" || modality === "live") && price === 0;
 }
+
+/** @deprecated usar shouldUseFreeJoinCode */
+export const shouldUseFreePresencialJoinCode = shouldUseFreeJoinCode;

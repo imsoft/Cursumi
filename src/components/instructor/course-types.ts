@@ -1,7 +1,10 @@
 export type CourseSessionData = {
   id?: string;        // presente al editar sesión existente
+  state?: string;
   city: string;
-  location: string;   // dirección/sede
+  location: string;   // dirección/sede o texto corto en vivo
+  /** Meet, Zoom, Teams… — obligatorio en modalidad live al publicar sesiones */
+  meetingUrl?: string;
   date: string;       // ISO date string
   startTime: string;  // "HH:mm"
   endTime: string;    // "HH:mm"
@@ -14,7 +17,9 @@ export type CourseFormData = {
   description: string;
   category: string;
   level: string;
-  modality: "virtual" | "presencial";
+  modality: "virtual" | "presencial" | "live";
+  /** Entidad federativa (México) */
+  state?: string;
   city?: string;
   location?: string;
   courseType: string;

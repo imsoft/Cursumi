@@ -6,6 +6,7 @@ import { Select, SelectOption } from "@/components/ui/select";
 const modalityOptions: SelectOption[] = [
   { value: "all", label: "Todas las modalidades" },
   { value: "virtual", label: "Virtual" },
+  { value: "live", label: "En vivo" },
   { value: "presencial", label: "Presencial" },
 ];
 

@@ -21,6 +21,8 @@ model User {
   image         String?
   phone         String?
   city          String?
+  /// Entidad federativa (México), va con `city` (municipio)
+  state         String?
   bio           String?
   website       String?
   linkedinUrl   String?
@@ -112,6 +114,7 @@ enum Role {
 enum Modality {
   virtual
   presencial
+  live
 }
 
 enum CourseType {
@@ -204,6 +207,7 @@ model InstructorProfile {
   headline         String?
   bio              String?
   city             String?
+  state            String?
   specialties      String?  // CSV de categorías/habilidades
   teachingYears    Int?
   website          String?
@@ -244,6 +248,7 @@ model Course {
   level       String?
   modality    Modality
   city        String?
+  state       String?
   location    String?
   courseType  CourseType
   startDate   DateTime?
@@ -343,7 +348,10 @@ model CourseSession {
   id          String   @id @default(cuid())
   courseId    String
   city        String
-  location    String   // dirección/sede
+  state       String?
+  location    String   // dirección/sede (presencial) o texto corto (en vivo)
+  /// Meet, Zoom, Teams, etc. — principalmente para modalidad live
+  meetingUrl  String?
   date        DateTime
   startTime   String   // "09:00"
   endTime     String   // "13:00"

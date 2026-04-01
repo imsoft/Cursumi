@@ -22,6 +22,7 @@ import {
   GraduationCap,
   Award,
   Lock,
+  Video,
 } from "lucide-react";
 import type { LessonType } from "@/generated/prisma";
 import { EnrolledWelcomeBanner } from "@/components/student/enrolled-welcome-banner";
@@ -29,6 +30,7 @@ import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { ReviewSection } from "@/components/student/review-section";
 import { AnonymousQuestionsPanel } from "@/components/student/anonymous-questions-panel";
 
@@ -197,22 +199,42 @@ export default async function MyCourseDetailPage({
               <Users className="h-4 w-4 shrink-0 text-muted-foreground" />
               <span>Inscritos en la plataforma: {course._count.enrollments}</span>
             </div>
-            {course.modality === "presencial" && (course.city || course.location) && (
+            {course.modality === "presencial" && (course.city || course.state || course.location) && (
               <div className="flex items-start gap-2 text-sm text-foreground sm:col-span-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                 <span>
-                  {[course.city, course.location].filter(Boolean).join(" · ")}
+                  {[formatMexicoLocation(course.city, course.state), course.location].filter(Boolean).join(" · ")}
                 </span>
+              </div>
+            )}
+            {course.modality === "live" && (
+              <div className="flex items-start gap-2 text-sm text-foreground sm:col-span-2">
+                <Video className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
+                <span>Clases en vivo por videollamada (enlace en tu sesión inscrita)</span>
               </div>
             )}
           </div>
 
           {enrolledSession && (
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-4">
-              <p className="text-sm font-semibold text-foreground">Tu sesión presencial</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {enrolledSession.city} — {enrolledSession.location}
+              <p className="text-sm font-semibold text-foreground">
+                {course.modality === "live" ? "Tu sesión en vivo" : "Tu sesión presencial"}
               </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {formatMexicoLocation(enrolledSession.city, enrolledSession.state)} — {enrolledSession.location}
+              </p>
+              {course.modality === "live" && enrolledSession.meetingUrl && (
+                <p className="mt-2">
+                  <a
+                    href={enrolledSession.meetingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-primary underline underline-offset-2"
+                  >
+                    Abrir enlace de la reunión
+                  </a>
+                </p>
+              )}
               <p className="mt-2 text-sm text-foreground">
                 <Calendar className="mr-1 inline h-4 w-4" />
                 {formatDateLongMX(new Date(enrolledSession.date))}
@@ -245,7 +267,7 @@ export default async function MyCourseDetailPage({
             </div>
           )}
 
-          {course.modality === "presencial" &&
+          {(course.modality === "presencial" || course.modality === "live") &&
             course.courseSessions &&
             course.courseSessions.length > 0 &&
             !enrolledSession && (
@@ -254,7 +276,7 @@ export default async function MyCourseDetailPage({
                 <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
                   {course.courseSessions.map((s) => (
                     <li key={s.id} className="flex flex-wrap gap-x-2 gap-y-1">
-                      <span className="font-medium text-foreground">{s.city}</span>
+                      <span className="font-medium text-foreground">{formatMexicoLocation(s.city, s.state)}</span>
                       <span>·</span>
                       <span>{formatDateShortMX(new Date(s.date))}</span>
                       <span className="text-xs">

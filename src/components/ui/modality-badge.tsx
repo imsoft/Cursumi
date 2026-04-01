@@ -1,6 +1,18 @@
-import { Monitor, MapPin } from "lucide-react";
+import { Monitor, MapPin, Video } from "lucide-react";
 import { MODALITY_CONFIG, type Modality } from "@/lib/modality";
 import { cn } from "@/lib/utils";
+
+function modalityKey(modality: string): Modality {
+  if (modality === "presencial") return "presencial";
+  if (modality === "live") return "live";
+  return "virtual";
+}
+
+function ModalityIcon({ modalityKey: k, className }: { modalityKey: Modality; className?: string }) {
+  if (k === "virtual") return <Monitor className={className} />;
+  if (k === "live") return <Video className={className} />;
+  return <MapPin className={className} />;
+}
 
 interface ModalityBadgeProps {
   modality: Modality | string;
@@ -9,9 +21,8 @@ interface ModalityBadgeProps {
 }
 
 export function ModalityBadge({ modality, size = "sm", className }: ModalityBadgeProps) {
-  const key = modality === "presencial" ? "presencial" : "virtual";
+  const key = modalityKey(modality);
   const config = MODALITY_CONFIG[key];
-  const Icon = key === "virtual" ? Monitor : MapPin;
 
   return (
     <span
@@ -26,16 +37,15 @@ export function ModalityBadge({ modality, size = "sm", className }: ModalityBadg
         className,
       )}
     >
-      <Icon className={size === "sm" ? "h-3 w-3" : "h-4 w-4"} />
+      <ModalityIcon modalityKey={key} className={size === "sm" ? "h-3 w-3" : "h-4 w-4"} />
       {config.shortLabel}
     </span>
   );
 }
 
 export function ModalityOverlayBadge({ modality }: { modality: Modality | string }) {
-  const key = modality === "presencial" ? "presencial" : "virtual";
+  const key = modalityKey(modality);
   const config = MODALITY_CONFIG[key];
-  const Icon = key === "virtual" ? Monitor : MapPin;
 
   return (
     <span
@@ -44,7 +54,7 @@ export function ModalityOverlayBadge({ modality }: { modality: Modality | string
         config.color.badgeBg,
       )}
     >
-      <Icon className="h-3 w-3" />
+      <ModalityIcon modalityKey={key} className="h-3 w-3" />
       {config.shortLabel}
     </span>
   );

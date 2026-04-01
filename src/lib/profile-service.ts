@@ -6,6 +6,7 @@ export type ProfileData = {
   joinDate: string;
   avatar: string | null;
   phone: string;
+  state: string;
   city: string;
   bio: string;
   website: string;
@@ -21,7 +22,7 @@ export async function getProfileData(userId: string): Promise<ProfileData> {
       where: { id: userId },
       select: {
         name: true, email: true, createdAt: true, image: true,
-        phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
+        phone: true, state: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
       },
     }),
     prisma.enrollment.findMany({
@@ -43,6 +44,7 @@ export async function getProfileData(userId: string): Promise<ProfileData> {
     joinDate: user?.createdAt?.toISOString() ?? "",
     avatar: user?.image || null,
     phone: user?.phone || "",
+    state: user?.state || "",
     city: user?.city || "",
     bio: user?.bio || "",
     website: user?.website || "",

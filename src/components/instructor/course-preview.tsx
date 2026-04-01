@@ -11,6 +11,7 @@ import type { CourseFormData } from "./course-types";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { CourseStatusPanel } from "./course-status-panel";
 import { getCourseCompletion } from "@/lib/course-completion";
 
@@ -49,7 +50,15 @@ export const CoursePreview = ({
         <div className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             {/* Course Info */}
-            <Card className={`border border-border bg-card/90 border-t-4 ${courseData.modality === "presencial" ? "border-t-emerald-500" : "border-t-blue-500"}`}>
+            <Card
+              className={`border border-border bg-card/90 border-t-4 ${
+                courseData.modality === "presencial"
+                  ? "border-t-emerald-500"
+                  : courseData.modality === "live"
+                    ? "border-t-violet-500"
+                    : "border-t-blue-500"
+              }`}
+            >
               <CardHeader>
                 <CardTitle>Información del curso</CardTitle>
               </CardHeader>
@@ -70,10 +79,13 @@ export const CoursePreview = ({
                   <Badge>{courseData.category}</Badge>
                   <Badge variant="outline">{courseData.level}</Badge>
                 </div>
-                {courseData.modality === "presencial" && courseData.city && (
+                {(courseData.modality === "presencial" || courseData.modality === "live") && courseData.city && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4 text-emerald-600" />
-                    <span>{courseData.city}{courseData.location ? ` — ${courseData.location}` : ""}</span>
+                    <span>
+                      {formatMexicoLocation(courseData.city, courseData.state)}
+                      {courseData.location ? ` — ${courseData.location}` : ""}
+                    </span>
                   </div>
                 )}
               </CardContent>

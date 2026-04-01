@@ -11,12 +11,17 @@ interface CourseCardProps {
 }
 
 export const CourseCard = ({ course, priority }: CourseCardProps) => {
-  const isPresencial = course.modality === "presencial";
+  const borderClass =
+    course.modality === "presencial"
+      ? "border-l-emerald-500"
+      : course.modality === "live"
+        ? "border-l-violet-500"
+        : "border-l-blue-500";
 
   return (
     <Link
       href={`/courses/${course.slug || course.id}`}
-      className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8 border-l-4 ${isPresencial ? "border-l-emerald-500" : "border-l-blue-500"}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8 border-l-4 ${borderClass}`}
     >
       {/* Image */}
       <div className="relative aspect-video w-full overflow-hidden">

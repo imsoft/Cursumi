@@ -9,8 +9,8 @@ const DEFAULT_COURSE_IMAGE =
   "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=80";
 
 function toCardProps(course: FeaturedCourseItem): CourseCardProps {
-  const mode: "Virtual" | "Presencial" | "Híbrido" =
-    course.modality === "virtual" ? "Virtual" : "Presencial";
+  const mode: "Virtual" | "Presencial" | "En vivo" =
+    course.modality === "virtual" ? "Virtual" : course.modality === "live" ? "En vivo" : "Presencial";
   const location = course.city?.trim() ? course.city : "Online";
   return {
     title: course.title,

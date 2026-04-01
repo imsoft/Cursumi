@@ -5,13 +5,14 @@ import { getPublishedCourseDetail, enrollInCourse } from "@/app/actions/course-a
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Monitor, Users, Calendar } from "lucide-react";
+import { MapPin, Monitor, Users, Calendar, Video } from "lucide-react";
 import { ReviewSection } from "@/components/student/review-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -110,8 +111,14 @@ export default async function ExploreCourseDetail({
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex items-center gap-2 text-sm text-foreground">
-              {course.modality === "virtual" ? <Monitor className="h-4 w-4" /> : <MapPin className="h-4 w-4" />}
-              <span>{course.city || "Online"}</span>
+              {course.modality === "virtual" ? (
+                <Monitor className="h-4 w-4" />
+              ) : course.modality === "live" ? (
+                <Video className="h-4 w-4 text-violet-500" />
+              ) : (
+                <MapPin className="h-4 w-4" />
+              )}
+              <span>{formatMexicoLocation(course.city, course.state) || "Online"}</span>
             </div>
             {course.startDate && (
               <div className="flex items-center gap-2 text-sm text-foreground">
@@ -140,11 +147,15 @@ export default async function ExploreCourseDetail({
               returnUrl={`/dashboard/explore/${slug}`}
               requiresJoinCode={course.requiresJoinCode}
               sessions={
-                course.modality === "presencial" && course.courseSessions?.length
+                (course.modality === "presencial" || course.modality === "live") &&
+                course.courseSessions?.length
                   ? course.courseSessions.map((s) => ({
                       id: s.id,
                       city: s.city,
-                      location: "Sede confirmada al inscribirte",
+                      location:
+                        course.modality === "live"
+                          ? "Videollamada (enlace tras inscribirte)"
+                          : "Sede confirmada al inscribirte",
                       date: s.date.toISOString(),
                       startTime: s.startTime,
                       endTime: s.endTime,

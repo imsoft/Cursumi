@@ -24,7 +24,7 @@ type AnalyticsResponse = {
 type InstructorCourse = {
   id: string;
   title: string;
-  modality: "virtual" | "presencial";
+  modality: "virtual" | "presencial" | "live";
   status: "draft" | "published" | "archived";
   studentsCount: number;
   category: string;

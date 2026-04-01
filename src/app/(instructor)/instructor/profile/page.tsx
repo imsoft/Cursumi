@@ -10,6 +10,7 @@ interface ProfileData {
   email: string;
   avatar: string | null;
   signatureUrl: string | null;
+  state: string;
   city: string;
   headline: string;
   bio: string;
@@ -47,6 +48,7 @@ export default function InstructorProfilePage() {
       <InstructorProfileSummary
         fullName={profile?.fullName || ""}
         avatarUrl={profile?.avatar ?? null}
+        state={profile?.state || ""}
         city={profile?.city || ""}
         bio={profile?.bio || ""}
         specialties={profile?.specialties || ""}

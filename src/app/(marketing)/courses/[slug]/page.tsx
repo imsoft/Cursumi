@@ -6,7 +6,7 @@ import { getSessionSafe } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Monitor, Users, Calendar, Clock } from "lucide-react";
+import { MapPin, Monitor, Users, Calendar, Clock, Video } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { EnrollActionForm } from "@/components/student/enroll-action-form";
 import { CheckoutButton } from "@/components/student/checkout-button";
@@ -19,6 +19,7 @@ import { formatDuration } from "@/lib/course-completion";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { parseDurationToMinutes } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 
 type Params = { params: Promise<{ slug: string }> };
 const ogFallback =
@@ -179,10 +180,12 @@ export default async function PublicCourseDetailPage({
             <div className="flex items-center gap-2 text-sm text-foreground">
               {course.modality === "virtual" ? (
                 <Monitor className="h-4 w-4" />
+              ) : course.modality === "live" ? (
+                <Video className="h-4 w-4 text-violet-500" />
               ) : (
                 <MapPin className="h-4 w-4" />
               )}
-              <span>{course.city || "Online"}</span>
+              <span>{formatMexicoLocation(course.city, course.state) || "Online"}</span>
             </div>
             {course.startDate && (
               <div className="flex items-center gap-2 text-sm text-foreground">
@@ -217,11 +220,15 @@ export default async function PublicCourseDetailPage({
               returnUrl={returnUrl}
               requiresJoinCode={course.requiresJoinCode}
               sessions={
-                course.modality === "presencial" && course.courseSessions?.length
+                (course.modality === "presencial" || course.modality === "live") &&
+                course.courseSessions?.length
                   ? course.courseSessions.map((s) => ({
                       id: s.id,
                       city: s.city,
-                      location: "Sede confirmada al inscribirte",
+                      location:
+                        course.modality === "live"
+                          ? "Videollamada (enlace tras inscribirte)"
+                          : "Sede confirmada al inscribirte",
                       date: s.date.toISOString(),
                       startTime: s.startTime,
                       endTime: s.endTime,

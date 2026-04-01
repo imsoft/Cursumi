@@ -6,6 +6,7 @@ import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 const patchSchema = z.object({
   fullName: z.string().trim().min(1).max(120).optional(),
   email: z.string().email().max(255).optional(),
+  state: z.string().trim().max(80).optional(),
   city: z.string().trim().max(100).optional(),
   headline: z.string().trim().max(200).optional(),
   bio: z.string().trim().max(2000).optional(),
@@ -39,6 +40,7 @@ export async function GET() {
       email: user?.email || "",
       avatar: user?.image || null,
       signatureUrl: user?.signatureUrl || null,
+      state: profile?.state || "",
       city: profile?.city || "",
       headline: profile?.headline || "",
       bio: profile?.bio || "",
@@ -62,9 +64,10 @@ export async function PATCH(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
     }
-    const { fullName, email, city, headline, bio, specialties, teachingYears, website, linkedinUrl, instagramUrl } = parsed.data;
+    const { fullName, email, state, city, headline, bio, specialties, teachingYears, website, linkedinUrl, instagramUrl } = parsed.data;
 
     const profileData = {
+      state,
       city,
       headline,
       bio,

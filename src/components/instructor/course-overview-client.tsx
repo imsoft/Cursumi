@@ -26,6 +26,7 @@ import { SectionActivityEditor } from "@/components/instructor/section-activity-
 import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
 import type { CourseSessionData } from "@/components/instructor/course-types";
 import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
+import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
 
@@ -49,6 +50,7 @@ interface Section {
 
 interface CourseSessionItem {
   id: string;
+  state?: string;
   city: string;
   location: string;
   date: string;
@@ -360,7 +362,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     value={editData.modality}
                     onChange={(e) => setEditData((d) => ({ ...d, modality: e.target.value }))}
                   >
-                    <option value="virtual">Virtual</option>
+                    <option value="virtual">Virtual (vídeo a demanda)</option>
+                    <option value="live">En vivo (Meet, Zoom…)</option>
                     <option value="presencial">Presencial</option>
                   </select>
                 </div>
@@ -390,7 +393,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     Equivale a ${(editData.price / 100).toLocaleString()}
                   </p>
                 </div>
-                {editData.modality === "presencial" && editData.price === 0 && (
+                {(editData.modality === "presencial" || editData.modality === "live") && editData.price === 0 && (
                   <div className="sm:col-span-2 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
                     <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                       <Lock className="h-4 w-4" />
@@ -783,21 +786,28 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
         )}
       </div>
 
-      {/* Sesiones presenciales */}
-      {course.modality === "presencial" && (
+      {/* Sesiones presenciales o en vivo */}
+      {(course.modality === "presencial" || course.modality === "live") && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Sesiones presenciales</CardTitle>
+            <CardTitle className="text-base">
+              {course.modality === "live" ? "Sesiones en vivo" : "Sesiones presenciales"}
+            </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Configura los lugares, fechas y horarios donde se impartirá este curso.
+              {course.modality === "live"
+                ? "Fecha, hora, cupo y enlace de videollamada por sesión."
+                : "Configura los lugares, fechas y horarios donde se impartirá este curso."}
             </p>
           </CardHeader>
           <CardContent>
             <CourseSessionsManager
+              variant={course.modality === "live" ? "live" : "presencial"}
               sessions={(course.courseSessions ?? []).map((s) => ({
                 id: s.id,
+                state: s.state ?? findStateForMunicipality(s.city) ?? "",
                 city: s.city,
                 location: s.location,
+                meetingUrl: s.meetingUrl ?? undefined,
                 date: typeof s.date === "string" ? s.date : new Date(s.date).toISOString(),
                 startTime: s.startTime,
                 endTime: s.endTime,

@@ -20,7 +20,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
   const title = course?.title || "Curso en Cursumi";
   const category = course?.category || "Curso";
-  const modality = course?.modality === "virtual" ? "Virtual" : "Presencial";
+  const modality =
+    course?.modality === "virtual" ? "Virtual" : course?.modality === "live" ? "En vivo" : "Presencial";
   const instructor = course?.instructor?.name || "Instructor de Cursumi";
 
   return new ImageResponse(

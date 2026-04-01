@@ -42,7 +42,15 @@ const getStatusBadge = (status?: string) => {
 
 export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
   return (
-    <Card className={`group flex h-full flex-col border border-border bg-card/90 transition-shadow hover:shadow-md border-l-4 ${course.modality === "presencial" ? "border-l-emerald-500" : "border-l-blue-500"}`}>
+    <Card
+      className={`group flex h-full flex-col border border-border bg-card/90 transition-shadow hover:shadow-md border-l-4 ${
+        course.modality === "presencial"
+          ? "border-l-emerald-500"
+          : course.modality === "live"
+            ? "border-l-violet-500"
+            : "border-l-blue-500"
+      }`}
+    >
       {course.imageUrl && (
         <div className="relative aspect-video w-full overflow-hidden rounded-t-2xl">
           <Image

@@ -8,6 +8,7 @@ import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { Separator } from "@/components/ui/separator";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
@@ -123,13 +124,13 @@ export default async function CourseDetailPage({
                     <p className="text-foreground">{course.maxStudents} estudiantes</p>
                   </div>
                 )}
-                {(course.city || course.location) && (
+                {(course.city || course.state || course.location) && (
                   <div className="sm:col-span-2 flex items-start gap-2">
                     <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Ubicación</p>
                       <p className="text-foreground">
-                        {[course.city, course.location].filter(Boolean).join(" · ") || "—"}
+                        {[formatMexicoLocation(course.city, course.state), course.location].filter(Boolean).join(" · ") || "—"}
                       </p>
                     </div>
                   </div>
@@ -158,15 +159,24 @@ export default async function CourseDetailPage({
                 <>
                   <Separator />
                   <div>
-                    <p className="text-sm font-medium text-foreground">Sesiones presenciales</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {course.modality === "live" ? "Sesiones en vivo" : "Sesiones presenciales"}
+                    </p>
                     <ul className="mt-3 space-y-3">
                       {course.courseSessions.map((s) => (
                         <li
                           key={s.id}
                           className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm"
                         >
-                          <span className="font-medium text-foreground">{s.city}</span>
+                          <span className="font-medium text-foreground">{formatMexicoLocation(s.city, s.state)}</span>
                           <span className="text-muted-foreground"> — {s.location}</span>
+                          {course.modality === "live" && s.meetingUrl && (
+                            <div className="mt-1 truncate text-xs text-primary">
+                              <a href={s.meetingUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                                {s.meetingUrl}
+                              </a>
+                            </div>
+                          )}
                           <div className="mt-1 text-muted-foreground">
                             {formatDateShortMX(s.date)} · {s.startTime} – {s.endTime} ·{" "}
                             {s._count.enrollments}/{s.maxStudents} inscritos

@@ -1,5 +1,5 @@
 export type CourseCategory = string;
-export type CourseModality = "virtual" | "presencial";
+export type CourseModality = "virtual" | "presencial" | "live";
 
 export interface Course {
   id: string;

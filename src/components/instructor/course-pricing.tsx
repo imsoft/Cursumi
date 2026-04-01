@@ -12,11 +12,12 @@ import type { CourseFormData, CourseSessionData } from "./course-types";
 import { formatPriceMXN } from "@/lib/utils";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
+import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { CourseSessionsManager } from "./course-sessions-manager";
 
 const PLATFORM_FEE_PERCENT = 15; // debe coincidir con src/lib/stripe.ts
 
-const createPricingSchema = (modality: "virtual" | "presencial") => {
+const createPricingSchema = (modality: "virtual" | "presencial" | "live") => {
   const baseSchema = {
     price: z.coerce.number().min(0, "El precio no puede ser negativo"),
     duration: z.string().min(1, "Ingresa la duración"),
@@ -27,13 +28,12 @@ const createPricingSchema = (modality: "virtual" | "presencial") => {
       ...baseSchema,
       courseType: z.string().default("ondemand"),
     });
-  } else {
-    // Para presencial, las fechas/capacidad se manejan por sesión, no aquí
-    return z.object({
-      ...baseSchema,
-      courseType: z.literal("fechado"),
-    });
   }
+  // presencial o en vivo: sesiones fechadas
+  return z.object({
+    ...baseSchema,
+    courseType: z.literal("fechado"),
+  });
 };
 
 type PricingFormData = z.infer<ReturnType<typeof createPricingSchema>>;
@@ -49,14 +49,17 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
   const modality = data.modality || "virtual";
   const pricingSchema = createPricingSchema(modality);
   const isPresencial = modality === "presencial";
+  const isLive = modality === "live";
   const isVirtual = modality === "virtual";
+  const usesSessions = isPresencial || isLive;
+  const modalityUi = modality === "presencial" ? "presencial" : modality === "live" ? "live" : "virtual";
 
   const form = useForm<PricingFormData>({
     resolver: createZodResolver(pricingSchema),
     defaultValues: {
       price: data.price,
       duration: data.duration,
-      courseType: isPresencial ? "fechado" : (data.courseType || "ondemand"),
+      courseType: usesSessions ? "fechado" : (data.courseType || "ondemand"),
     } as PricingFormData,
   });
 
@@ -77,24 +80,25 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
       <div>
         <h2 className="text-2xl font-bold text-foreground">Precio y configuración</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          {isVirtual
-            ? "Define el precio de tu curso virtual"
-            : "Define el precio, fechas y capacidad de tu curso presencial"}
+          {isVirtual && "Define el precio de tu curso con vídeos a demanda"}
+          {isPresencial && "Define el precio, sedes y sesiones de tu curso presencial"}
+          {isLive && "Define el precio y las sesiones en vivo con enlace de reunión"}
         </p>
       </div>
 
       {/* Modalidad Badge */}
-      <Card className={`border-2 ${MODALITY_CONFIG[modality === "presencial" ? "presencial" : "virtual"].color.border} bg-muted/20`}>
+      <Card className={`border-2 ${MODALITY_CONFIG[modalityUi].color.border} bg-muted/20`}>
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <div className="flex-1">
               <p className="font-semibold text-foreground">
-                {MODALITY_CONFIG[modality === "presencial" ? "presencial" : "virtual"].label}
+                {MODALITY_CONFIG[modalityUi].label}
               </p>
               <p className="text-sm text-muted-foreground">
-                {isVirtual
-                  ? "Los estudiantes podrán acceder desde cualquier lugar"
-                  : `Ubicación: ${data.city || "No definida"}`}
+                {isVirtual && "Los estudiantes avanzan el contenido a su ritmo"}
+                {isPresencial &&
+                  `Ubicación general: ${formatMexicoLocation(data.city, data.state) || "—"}${data.location ? ` · ${data.location}` : ""}`}
+                {isLive && "Cada sesión incluye fecha, hora y enlace de videollamada"}
               </p>
             </div>
             <ModalityBadge modality={modality} size="md" />
@@ -134,7 +138,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 </span>
               </div>
             )}
-            {isPresencial && watchedPrice === 0 && (
+            {usesSessions && watchedPrice === 0 && (
               <div className="mt-4 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
                 <p className="text-sm font-medium text-foreground">Inscripción gratuita</p>
                 <p className="text-xs text-muted-foreground">
@@ -181,22 +185,28 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
           )}
         </div>
 
-        {/* Sesiones presenciales */}
-        {isPresencial && (
+        {usesSessions && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">Sesiones presenciales</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              {isLive ? "Sesiones en vivo" : "Sesiones presenciales"}
+            </h3>
             <div className="rounded-lg border border-border bg-muted/20 p-4">
               <p className="text-sm text-muted-foreground">
-                Agrega los lugares, fechas y horarios donde se impartirá tu curso. Cada sesión tiene su propia capacidad máxima.
+                {isLive
+                  ? "Para cada sesión indica fecha, horario, cupo y el enlace de Meet, Zoom, Teams u otra herramienta."
+                  : "Agrega los lugares, fechas y horarios donde se impartirá tu curso. Cada sesión tiene su propia capacidad máxima."}
               </p>
             </div>
             <CourseSessionsManager
+              variant={isLive ? "live" : "presencial"}
               sessions={data.courseSessions ?? []}
               onChange={(sessions) => onUpdate({ courseSessions: sessions })}
             />
             {(data.courseSessions ?? []).length === 0 && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
-                Agrega al menos una sesión para tu curso presencial.
+                {isLive
+                  ? "Agrega al menos una sesión en vivo con enlace de reunión."
+                  : "Agrega al menos una sesión para tu curso presencial."}
               </p>
             )}
           </div>

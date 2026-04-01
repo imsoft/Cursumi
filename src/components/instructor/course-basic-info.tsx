@@ -16,27 +16,32 @@ import { useImageUpload } from "@/hooks/use-image-upload";
 import type { CourseFormData } from "./course-types";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
+import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
+import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
-const createBasicInfoSchema = (modality: "virtual" | "presencial") => {
+const createBasicInfoSchema = (modality: "virtual" | "presencial" | "live") => {
   const baseSchema = {
     title: z.string().min(3, "El título debe tener al menos 3 caracteres"),
     description: z.string().min(10, "La descripción debe tener al menos 10 caracteres"),
     category: z.string().min(1, "Selecciona una categoría"),
     level: z.string().min(1, "Selecciona un nivel"),
-    modality: z.enum(["virtual", "presencial"]),
+    modality: z.enum(["virtual", "presencial", "live"]),
     imageUrl: z.string().optional(),
   };
 
   if (modality === "presencial") {
     return z.object({
       ...baseSchema,
-      city: z.string().min(1, "La ciudad es obligatoria para cursos presenciales"),
+      state: z.string().min(1, "Selecciona un estado"),
+      city: z.string().min(1, "Selecciona una ciudad o municipio"),
       location: z.string().min(1, "La dirección es obligatoria para cursos presenciales"),
     });
   }
 
+  // virtual y en vivo: sin sede obligatoria (en vivo define enlace por sesión)
   return z.object({
     ...baseSchema,
+    state: z.string().optional(),
     city: z.string().optional(),
     location: z.string().optional(),
   });
@@ -89,11 +94,19 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
       category: data.category,
       level: data.level,
       modality: data.modality,
+      state: data.state ?? "",
       city: data.city,
       location: data.location,
       imageUrl: data.imageUrl,
     },
   });
+
+  useEffect(() => {
+    if (modality === "presencial" && !(data.state ?? "").trim() && (data.city ?? "").trim()) {
+      const inferred = findStateForMunicipality(data.city!);
+      if (inferred) form.setValue("state", inferred);
+    }
+  }, [modality, data.state, data.city, form]);
 
   const imageUrl = form.watch("imageUrl");
   const hasImage = useMemo(() => Boolean(imageUrl), [imageUrl]);
@@ -194,6 +207,15 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
 
         <Separator />
 
+        {modality === "live" && (
+          <div className="rounded-lg border border-violet-500/25 bg-violet-500/5 p-4">
+            <h3 className="text-sm font-semibold text-foreground">Clases en vivo</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              En el paso de precio y sesiones podrás agregar cada fecha y el enlace de Meet, Zoom, Teams u otra herramienta.
+            </p>
+          </div>
+        )}
+
         {modality === "presencial" && (
           <div className="space-y-4">
             <div>
@@ -202,31 +224,25 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
                 Indica dónde se realizará el curso presencial
               </p>
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <Input
-                  label="Ciudad *"
-                  placeholder="Ej: Ciudad de México"
-                  {...form.register("city")}
-                />
-                {form.formState.errors.city && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {form.formState.errors.city.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <Input
-                  label="Dirección / Lugar *"
-                  placeholder="Ej: Av. Reforma 222, Col. Juárez"
-                  {...form.register("location")}
-                />
-                {form.formState.errors.location && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {form.formState.errors.location.message}
-                  </p>
-                )}
-              </div>
+            <MexicoStateCityFields
+              state={form.watch("state") ?? ""}
+              city={form.watch("city") ?? ""}
+              onStateChange={(v) => form.setValue("state", v, { shouldValidate: true })}
+              onCityChange={(v) => form.setValue("city", v, { shouldValidate: true })}
+              stateError={form.formState.errors.state?.message}
+              cityError={form.formState.errors.city?.message}
+            />
+            <div>
+              <Input
+                label="Dirección / Lugar *"
+                placeholder="Ej: Av. Reforma 222, Col. Juárez"
+                {...form.register("location")}
+              />
+              {form.formState.errors.location && (
+                <p className="mt-1 text-xs text-destructive">
+                  {form.formState.errors.location.message}
+                </p>
+              )}
             </div>
           </div>
         )}

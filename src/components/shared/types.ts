@@ -1,6 +1,6 @@
 // Tipos compartidos comunes
 
-export type Modality = "virtual" | "presencial";
+export type Modality = "virtual" | "presencial" | "live";
 
 export type CourseStatus = "published" | "draft" | "archived" | "in-progress" | "completed" | "not-started";
 

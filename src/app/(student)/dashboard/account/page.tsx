@@ -8,6 +8,7 @@ const defaultProfile: ProfileData = {
   joinDate: "",
   avatar: null,
   phone: "",
+  state: "",
   city: "",
   bio: "",
   website: "",

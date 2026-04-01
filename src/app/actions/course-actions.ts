@@ -33,7 +33,7 @@ import type { StudentCourse, Recommendation } from "@/components/student/types";
 import type { CourseStudent, StudentCourseDetail } from "@/lib/course-service";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { verifyJoinCode, shouldUseFreePresencialJoinCode } from "@/lib/join-code";
+import { verifyJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
 
 async function requireSession() {
   const session = await auth.api.getSession({
@@ -147,7 +147,7 @@ export async function enrollInCourse(courseId: string, sessionId?: string, joinC
   });
   if (
     enrollmentRules &&
-    shouldUseFreePresencialJoinCode(enrollmentRules.modality, enrollmentRules.price) &&
+    shouldUseFreeJoinCode(enrollmentRules.modality, enrollmentRules.price) &&
     enrollmentRules.joinCodeHash
   ) {
     const trimmed = joinCode?.trim() ?? "";

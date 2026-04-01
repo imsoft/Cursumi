@@ -4,9 +4,10 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Plus, MapPin, Calendar, Clock, Users, Trash2 } from "lucide-react";
+import { Plus, MapPin, Calendar, Clock, Users, Trash2, Video, Link2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CourseSessionData } from "./course-types";
+import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
 
 /**
  * Input nativo para date/time que NO es controlado por React en cada keystroke.
@@ -58,26 +59,50 @@ function NativeDateTimeInput({
 interface CourseSessionsManagerProps {
   sessions: CourseSessionData[];
   onChange: (sessions: CourseSessionData[]) => void;
+  /** presencial: sede física; live: enlace de reunión obligatorio por sesión */
+  variant?: "presencial" | "live";
   /** Si true, cada sesión muestra inscritos / capacidad (modo edición de curso existente) */
   enrollmentCounts?: Record<string, number>;
 }
 
 const EMPTY_SESSION: Omit<CourseSessionData, "id"> = {
+  state: "",
   city: "",
   location: "",
+  meetingUrl: "",
   date: "",
   startTime: "09:00",
   endTime: "13:00",
   maxStudents: 30,
 };
 
-export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: CourseSessionsManagerProps) {
+export function CourseSessionsManager({
+  sessions,
+  onChange,
+  enrollmentCounts,
+  variant = "presencial",
+}: CourseSessionsManagerProps) {
+  const isLive = variant === "live";
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState<Omit<CourseSessionData, "id">>(EMPTY_SESSION);
 
   const handleAdd = () => {
-    if (!draft.city.trim() || !draft.location.trim() || !draft.date) return;
-    onChange([...sessions, { ...draft }]);
+    if (!draft.date) return;
+    if (isLive) {
+      if (!draft.meetingUrl?.trim()) return;
+      onChange([
+        ...sessions,
+        {
+          ...draft,
+          city: draft.city.trim() || "En línea",
+          location: draft.location.trim() || "Videollamada",
+          meetingUrl: draft.meetingUrl.trim(),
+        },
+      ]);
+    } else {
+      if (!draft.state?.trim() || !draft.city.trim() || !draft.location.trim()) return;
+      onChange([...sessions, { ...draft, meetingUrl: draft.meetingUrl?.trim() || undefined }]);
+    }
     setDraft(EMPTY_SESSION);
     setAdding(false);
   };
@@ -94,9 +119,15 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
     <div className="space-y-3">
       {sessions.length === 0 && !adding && (
         <div className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center">
-          <MapPin className="mx-auto h-8 w-8 text-muted-foreground/50" />
+          {isLive ? (
+            <Video className="mx-auto h-8 w-8 text-muted-foreground/50" />
+          ) : (
+            <MapPin className="mx-auto h-8 w-8 text-muted-foreground/50" />
+          )}
           <p className="mt-2 text-sm text-muted-foreground">
-            No hay sesiones configuradas. Agrega al menos una sesión con lugar, fecha y horario.
+            {isLive
+              ? "Agrega sesiones con fecha, hora y enlace de videollamada (Meet, Zoom, etc.)."
+              : "Agrega al menos una sesión con lugar, fecha y horario."}
           </p>
         </div>
       )}
@@ -108,7 +139,11 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
             <CardContent className="p-4 space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                  <MapPin className="h-4 w-4 text-emerald-500" />
+                  {isLive ? (
+                    <Video className="h-4 w-4 text-violet-500" />
+                  ) : (
+                    <MapPin className="h-4 w-4 text-emerald-500" />
+                  )}
                   Sesión {i + 1}
                 </div>
                 <Button
@@ -122,26 +157,53 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="text-xs font-medium text-muted-foreground">Ciudad</label>
-                  <Input
-                    className="mt-1"
-                    placeholder="Ej. CDMX"
-                    value={session.city}
-                    onChange={(e) => handleUpdate(i, { city: e.target.value })}
-                  />
+              {isLive ? (
+                <div className="space-y-3">
+                  <div>
+                    <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                      <Link2 className="h-3 w-3" /> Enlace de reunión *
+                    </label>
+                    <Input
+                      className="mt-1"
+                      type="url"
+                      placeholder="https://meet.google.com/..."
+                      value={session.meetingUrl ?? ""}
+                      onChange={(e) => handleUpdate(i, { meetingUrl: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground">Etiqueta (opcional)</label>
+                      <Input
+                        className="mt-1"
+                        placeholder="Ej. Módulo 1"
+                        value={session.location}
+                        onChange={(e) => handleUpdate(i, { location: e.target.value })}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-muted-foreground">Dirección / Sede</label>
-                  <Input
-                    className="mt-1"
-                    placeholder="Ej. Av. Reforma 123, Col. Centro"
-                    value={session.location}
-                    onChange={(e) => handleUpdate(i, { location: e.target.value })}
+              ) : (
+                <div className="space-y-3">
+                  <MexicoStateCityFields
+                    state={session.state ?? ""}
+                    city={session.city}
+                    onStateChange={(v) => handleUpdate(i, { state: v })}
+                    onCityChange={(v) => handleUpdate(i, { city: v })}
+                    stateLabel="Estado"
+                    cityLabel="Ciudad o municipio"
                   />
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground">Dirección / Sede</label>
+                    <Input
+                      className="mt-1"
+                      placeholder="Ej. Av. Reforma 123, Col. Centro"
+                      value={session.location}
+                      onChange={(e) => handleUpdate(i, { location: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
@@ -209,27 +271,52 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
         <Card className="border border-primary/30">
           <CardContent className="p-4 space-y-3">
             <p className="text-sm font-semibold text-foreground">Nueva sesión</p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-xs font-medium text-muted-foreground">Ciudad *</label>
-                <Input
-                  className="mt-1"
-                  placeholder="Ej. CDMX"
-                  value={draft.city}
-                  onChange={(e) => setDraft((d) => ({ ...d, city: e.target.value }))}
-                  autoFocus
+            {isLive ? (
+              <>
+                <div>
+                  <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                    <Link2 className="h-3 w-3" /> Enlace de reunión *
+                  </label>
+                  <Input
+                    className="mt-1"
+                    type="url"
+                    placeholder="https://zoom.us/j/..."
+                    value={draft.meetingUrl ?? ""}
+                    onChange={(e) => setDraft((d) => ({ ...d, meetingUrl: e.target.value }))}
+                    autoFocus
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">Nombre o nota (opcional)</label>
+                  <Input
+                    className="mt-1"
+                    placeholder="Ej. Sesión 1"
+                    value={draft.location}
+                    onChange={(e) => setDraft((d) => ({ ...d, location: e.target.value }))}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="space-y-3">
+                <MexicoStateCityFields
+                  state={draft.state ?? ""}
+                  city={draft.city}
+                  onStateChange={(v) => setDraft((d) => ({ ...d, state: v }))}
+                  onCityChange={(v) => setDraft((d) => ({ ...d, city: v }))}
+                  stateLabel="Estado *"
+                  cityLabel="Ciudad o municipio *"
                 />
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">Dirección / Sede *</label>
+                  <Input
+                    className="mt-1"
+                    placeholder="Ej. Av. Reforma 123"
+                    value={draft.location}
+                    onChange={(e) => setDraft((d) => ({ ...d, location: e.target.value }))}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="text-xs font-medium text-muted-foreground">Dirección / Sede *</label>
-                <Input
-                  className="mt-1"
-                  placeholder="Ej. Av. Reforma 123"
-                  value={draft.location}
-                  onChange={(e) => setDraft((d) => ({ ...d, location: e.target.value }))}
-                />
-              </div>
-            </div>
+            )}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Fecha *</label>
@@ -273,7 +360,12 @@ export function CourseSessionsManager({ sessions, onChange, enrollmentCounts }: 
               <Button
                 size="sm"
                 onClick={handleAdd}
-                disabled={!draft.city.trim() || !draft.location.trim() || !draft.date}
+                disabled={
+                  !draft.date ||
+                  (isLive
+                    ? !draft.meetingUrl?.trim()
+                    : !draft.state?.trim() || !draft.city.trim() || !draft.location.trim())
+                }
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Agregar sesión

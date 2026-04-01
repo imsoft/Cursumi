@@ -7,6 +7,7 @@ const patchSchema = z.object({
   fullName: z.string().trim().min(1).max(120).optional(),
   email: z.string().email().max(255).optional(),
   phone: z.string().max(30).optional().nullable(),
+  state: z.string().max(80).optional().nullable(),
   city: z.string().max(120).optional().nullable(),
   bio: z.string().max(500).optional().nullable(),
   website: z.union([z.string().url().max(500), z.literal("")]).optional().nullable(),
@@ -30,7 +31,7 @@ export async function GET() {
         where: { id: session.user.id },
         select: {
           name: true, email: true, createdAt: true, image: true,
-          phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
+          phone: true, state: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
         },
       }),
       prisma.enrollment.findMany({
@@ -48,6 +49,7 @@ export async function GET() {
       joinDate: user?.createdAt?.toISOString() ?? "",
       avatar: user?.image || null,
       phone: user?.phone || "",
+      state: user?.state || "",
       city: user?.city || "",
       bio: user?.bio || "",
       website: user?.website || "",
@@ -69,7 +71,7 @@ export async function PATCH(req: Request) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
     }
-    const { fullName, email, avatar, phone, city, bio, website, linkedinUrl, instagramUrl } = parsed.data;
+    const { fullName, email, avatar, phone, state, city, bio, website, linkedinUrl, instagramUrl } = parsed.data;
 
     const updated = await prisma.user.update({
       where: { id: session.user.id },
@@ -78,13 +80,14 @@ export async function PATCH(req: Request) {
         ...(email !== undefined ? { email } : {}),
         ...(avatar !== undefined ? { image: avatar } : {}),
         ...(phone !== undefined ? { phone: phone || null } : {}),
+        ...(state !== undefined ? { state: state || null } : {}),
         ...(city !== undefined ? { city: city || null } : {}),
         ...(bio !== undefined ? { bio: bio || null } : {}),
         ...(website !== undefined ? { website: website || null } : {}),
         ...(linkedinUrl !== undefined ? { linkedinUrl: linkedinUrl || null } : {}),
         ...(instagramUrl !== undefined ? { instagramUrl: instagramUrl || null } : {}),
       },
-      select: { name: true, email: true, image: true, phone: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true },
+      select: { name: true, email: true, image: true, phone: true, state: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true },
     });
 
     return NextResponse.json({ updated });

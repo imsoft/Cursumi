@@ -41,6 +41,7 @@ interface ExploreClientProps {
 const modalityOptions = [
   { value: "all", label: "Todas" },
   { value: "virtual", label: "Virtual" },
+  { value: "live", label: "En vivo" },
   { value: "presencial", label: "Presencial" },
 ];
 

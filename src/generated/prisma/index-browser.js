@@ -128,6 +128,7 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image',
   phone: 'phone',
   city: 'city',
+  state: 'state',
   bio: 'bio',
   website: 'website',
   linkedinUrl: 'linkedinUrl',
@@ -192,6 +193,7 @@ exports.Prisma.InstructorProfileScalarFieldEnum = {
   headline: 'headline',
   bio: 'bio',
   city: 'city',
+  state: 'state',
   specialties: 'specialties',
   teachingYears: 'teachingYears',
   website: 'website',
@@ -221,6 +223,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   level: 'level',
   modality: 'modality',
   city: 'city',
+  state: 'state',
   location: 'location',
   courseType: 'courseType',
   startDate: 'startDate',
@@ -276,7 +279,9 @@ exports.Prisma.CourseSessionScalarFieldEnum = {
   id: 'id',
   courseId: 'courseId',
   city: 'city',
+  state: 'state',
   location: 'location',
+  meetingUrl: 'meetingUrl',
   date: 'date',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -621,7 +626,8 @@ exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
 
 exports.Modality = exports.$Enums.Modality = {
   virtual: 'virtual',
-  presencial: 'presencial'
+  presencial: 'presencial',
+  live: 'live'
 };
 
 exports.CourseType = exports.$Enums.CourseType = {

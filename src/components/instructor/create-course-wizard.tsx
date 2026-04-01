@@ -29,9 +29,15 @@ const steps = [
 
 type SaveStatus = "idle" | "saving" | "saved";
 
+function wizardModalityKey(m: Modality | string): Modality {
+  if (m === "presencial") return "presencial";
+  if (m === "live") return "live";
+  return "virtual";
+}
+
 export const CreateCourseWizard = ({ initialData, modality }: { initialData?: CourseFormData; modality?: Modality }) => {
   const resolvedModality = modality || initialData?.modality || "virtual";
-  const modalityConfig = MODALITY_CONFIG[resolvedModality === "presencial" ? "presencial" : "virtual"];
+  const modalityConfig = MODALITY_CONFIG[wizardModalityKey(resolvedModality)];
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState("info");
   const [isPending, startTransition] = useTransition();
@@ -44,9 +50,10 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
     category: "programacion",
     level: "principiante",
     modality: resolvedModality,
+    state: "",
     city: "",
     location: "",
-    courseType: "fechado",
+    courseType: resolvedModality === "virtual" ? "ondemand" : "fechado",
     startDate: "",
     duration: "",
     price: 0,
