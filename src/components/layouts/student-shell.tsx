@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
+import { firstNameFromFullName } from "@/lib/utils";
 
 import {
   LayoutDashboard,
@@ -18,11 +19,13 @@ import {
   GraduationCap,
   Gamepad2,
   FileText,
+  BookOpen,
 } from "lucide-react";
 
 const studentNavItems = [
-  { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { title: "Inicio", href: "/dashboard", icon: LayoutDashboard },
   { title: "Mis cursos", href: "/dashboard/my-courses", icon: BookOpenCheck },
+  { title: "Mis notas", href: "/dashboard/notes", icon: BookOpen },
   { title: "Certificados", href: "/dashboard/certificates", icon: Award },
   { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
   { title: "Juegos", href: "/dashboard/games", icon: Gamepad2 },
@@ -31,8 +34,8 @@ const studentNavItems = [
 ];
 
 const pathnameToTitle: Record<string, string> = {
-  "/dashboard": "Dashboard",
   "/dashboard/my-courses": "Mis cursos",
+  "/dashboard/notes": "Mis notas",
   "/dashboard/certificates": "Certificados",
   "/dashboard/explore": "Explorar cursos",
   "/dashboard/games": "Juegos",
@@ -43,10 +46,20 @@ const pathnameToTitle: Record<string, string> = {
   "/dashboard/org-materials": "Materiales",
 };
 
-function getPageTitle(pathname: string | null): string {
-  if (!pathname) return "Dashboard";
+function greetingTitle(userName: string) {
+  return `Hola, ${firstNameFromFullName(userName)}`;
+}
+
+function getPageTitle(pathname: string | null, userName: string): string {
+  if (!pathname) return greetingTitle(userName);
+  if (pathname === "/dashboard" || pathname === "/dashboard/") return greetingTitle(userName);
+  if (pathname.includes("/que-aprendiste")) return "¿Qué aprendiste?";
   const base = pathname.split("/").slice(0, 4).join("/");
-  return pathnameToTitle[base] ?? studentNavItems.find((n) => pathname.startsWith(n.href))?.title ?? "Dashboard";
+  return (
+    pathnameToTitle[base] ??
+    studentNavItems.find((n) => pathname.startsWith(n.href))?.title ??
+    greetingTitle(userName)
+  );
 }
 
 interface StudentShellProps {
@@ -67,7 +80,7 @@ export function StudentShell({
   hasOrg,
 }: StudentShellProps) {
   const pathname = usePathname();
-  const pageTitle = pageTitleProp ?? getPageTitle(pathname);
+  const pageTitle = pageTitleProp ?? getPageTitle(pathname, userName);
 
   const navItems = hasOrg
     ? [...studentNavItems.slice(0, 3), { title: "Materiales", href: "/dashboard/org-materials", icon: FileText }, ...studentNavItems.slice(3)]

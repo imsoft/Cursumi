@@ -12,11 +12,8 @@ export const StudentDashboardHeader = ({ name }: DashboardHeaderProps) => {
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card/90 p-6 shadow-sm lg:flex-row lg:items-center lg:justify-between">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-          Dashboard
-        </p>
         <h1 className="text-3xl font-bold text-foreground">Hola, {name}</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Resumen de tu actividad y próximos pasos.
         </p>
       </div>

@@ -5,6 +5,7 @@ import { StudentDashboardClient } from "@/components/student/student-dashboard-c
 import { prisma } from "@/lib/prisma";
 import { listRecommendations } from "@/lib/course-service";
 import type { ProfileField } from "@/components/student/profile-completeness";
+import { firstNameFromFullName } from "@/lib/utils";
 
 export default async function StudentDashboardPage() {
   const session = await getCachedSession();
@@ -67,7 +68,7 @@ export default async function StudentDashboardPage() {
 
   return (
     <StudentDashboardClient
-      name={session.user.name || "Usuario"}
+      name={firstNameFromFullName(session.user.name)}
       courses={courses}
       recommendations={recommendations}
       hoursWatched={hoursWatched}

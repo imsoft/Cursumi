@@ -2,6 +2,7 @@ import { prisma } from "./prisma";
 import { Prisma } from "@/generated/prisma";
 import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
 import type { CourseFormData, CourseSection, CourseSessionData } from "@/components/instructor/course-types";
+import { hashJoinCode, shouldUseFreePresencialJoinCode } from "@/lib/join-code";
 import type { Course } from "@/components/courses/types";
 import type { StudentCourse, Recommendation } from "@/components/student/types";
 
@@ -160,6 +161,10 @@ type CreateCourseInput = Omit<CourseFormData, "sections"> & {
 export async function createCourse(instructorId: string, data: CreateCourseInput) {
   const instructor = await prisma.user.findUnique({ where: { id: instructorId }, select: { name: true } });
   const slug = await generateCourseSlug(data.title, instructor?.name || instructorId);
+  let joinCodeHash: string | null = null;
+  if (shouldUseFreePresencialJoinCode(data.modality, data.price) && data.freeJoinCode?.trim()) {
+    joinCodeHash = await hashJoinCode(data.freeJoinCode.trim());
+  }
   return prisma.course.create({
     data: {
       instructorId,
@@ -177,6 +182,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       price: data.price,
       maxStudents: data.maxStudents,
       imageUrl: data.imageUrl,
+      joinCodeHash,
       status: data.status ?? "draft",
       nextSession: computeNextSessionFromData(data.courseSessions),
       finalExam: data.finalExam ? (data.finalExam as object) : undefined,
@@ -246,6 +252,17 @@ export async function updateCourse(
     ? await generateCourseSlug(data.title, existing.instructor.name || instructorId, courseId)
     : undefined;
 
+  const nextModality = data.modality ?? existing.modality;
+  const nextPrice = data.price !== undefined ? data.price : existing.price;
+  let joinCodeHash: string | null | undefined = undefined;
+  if (nextModality !== "presencial" || nextPrice > 0) {
+    joinCodeHash = null;
+  } else if (data.clearFreeJoinCode) {
+    joinCodeHash = null;
+  } else if (data.freeJoinCode !== undefined && data.freeJoinCode.trim().length > 0) {
+    joinCodeHash = await hashJoinCode(data.freeJoinCode.trim());
+  }
+
   await prisma.course.update({
     where: { id: courseId },
     data: {
@@ -265,6 +282,7 @@ export async function updateCourse(
       imageUrl: data.imageUrl,
       status: data.status ?? existing.status,
       finalExam: data.finalExam ? (data.finalExam as object) : undefined,
+      ...(joinCodeHash !== undefined ? { joinCodeHash } : {}),
     },
   });
 
@@ -483,6 +501,8 @@ export async function updateCourseInfo(
     modality?: string; city?: string | null; location?: string | null;
     courseType?: string; startDate?: string | null; duration?: string | null;
     price?: number; maxStudents?: number | null; imageUrl?: string | null;
+    freeJoinCode?: string;
+    clearFreeJoinCode?: boolean;
   }
 ) {
   const course = await prisma.course.findFirst({
@@ -494,6 +514,18 @@ export async function updateCourseInfo(
     data.title && data.title !== course.title
       ? await generateCourseSlug(data.title, course.instructor.name || instructorId, courseId)
       : undefined;
+
+  const nextModality = (data.modality ?? course.modality) as Modality;
+  const nextPrice = data.price !== undefined ? data.price : course.price;
+  let joinCodeHash: string | null | undefined = undefined;
+  if (nextModality !== "presencial" || nextPrice > 0) {
+    joinCodeHash = null;
+  } else if (data.clearFreeJoinCode) {
+    joinCodeHash = null;
+  } else if (data.freeJoinCode !== undefined && data.freeJoinCode.trim().length > 0) {
+    joinCodeHash = await hashJoinCode(data.freeJoinCode.trim());
+  }
+
   await prisma.course.update({
     where: { id: courseId },
     data: {
@@ -511,6 +543,7 @@ export async function updateCourseInfo(
       ...(data.price !== undefined && { price: data.price }),
       ...(data.maxStudents !== undefined && { maxStudents: data.maxStudents }),
       ...(data.imageUrl !== undefined && { imageUrl: data.imageUrl }),
+      ...(joinCodeHash !== undefined ? { joinCodeHash } : {}),
     },
   });
 }
@@ -649,6 +682,11 @@ export async function getPublishedCourse(slugOrId: string) {
     // SECURITY: Delete finalExam to prevent leaking correct answers to the public API
     // @ts-ignore
     delete course.finalExam;
+    const requiresJoinCode =
+      course.modality === "presencial" && course.price === 0 && !!course.joinCodeHash;
+    // @ts-expect-error no exponer hash
+    delete course.joinCodeHash;
+    return { ...course, requiresJoinCode };
   }
 
   return course;

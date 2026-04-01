@@ -30,6 +30,7 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
 import { ReviewSection } from "@/components/student/review-section";
+import { AnonymousQuestionsPanel } from "@/components/student/anonymous-questions-panel";
 
 const lessonIcon = (type: LessonType) => {
   switch (type) {
@@ -49,8 +50,8 @@ export default async function MyCourseDetailPage({
 }) {
   const { courseId } = await params;
   const { enrolled } = await searchParams;
-  const detail = await getMyCourseDetail(courseId);
-  if (!detail) {
+  const enrollmentDetail = await getMyCourseDetail(courseId);
+  if (!enrollmentDetail) {
     redirect("/dashboard/my-courses");
   }
 
@@ -61,7 +62,7 @@ export default async function MyCourseDetailPage({
     examSubmission,
     sectionQuizSubmissions,
     session: enrolledSession,
-  } = detail as typeof detail & {
+  } = enrollmentDetail as typeof enrollmentDetail & {
     lessonProgress?: { lessonId: string }[];
     examSubmission?: { passed: boolean; score: number } | null;
     sectionQuizSubmissions?: { sectionId: string; passed: boolean }[];
@@ -110,6 +111,9 @@ export default async function MyCourseDetailPage({
         select: { id: true },
       })
     : null;
+
+  const canShareLearning =
+    enrollmentDetail.status === "completed" || !!enrollmentDetail.learningReflectionEmailSentAt;
 
   return (
     <div className="space-y-6">
@@ -219,6 +223,25 @@ export default async function MyCourseDetailPage({
                   </span>
                 )}
               </p>
+            </div>
+          )}
+
+          {course.modality === "presencial" && enrolledSession && (
+            <AnonymousQuestionsPanel sessionId={enrolledSession.id} />
+          )}
+
+          {canShareLearning && (
+            <div className="rounded-lg border border-violet-500/25 bg-violet-500/5 p-4">
+              <p className="text-sm font-semibold text-foreground">¿Qué aprendiste?</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Puedes compartirlo en la ficha pública del curso; solo mostraremos tu nombre de pila.
+              </p>
+              <Link
+                href={`/dashboard/my-courses/${courseId}/que-aprendiste`}
+                className="mt-2 inline-block text-sm font-medium text-primary underline underline-offset-2"
+              >
+                Escribir qué aprendí
+              </Link>
             </div>
           )}
 

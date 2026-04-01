@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import {
   SidebarProvider,
   SidebarInset,
@@ -23,10 +24,12 @@ import {
   Ticket,
   FileDown,
   Award,
+  PenLine,
 } from "lucide-react";
 
 const adminNavItems = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Pizarrón virtual", href: "/admin/whiteboard", icon: PenLine },
   { title: "Usuarios", href: "/admin/users", icon: Users },
   { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
   { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },
@@ -50,11 +53,15 @@ interface AdminShellProps {
 }
 
 export function AdminShell({ userName, userInitials, userImage, children }: AdminShellProps) {
+  const pathname = usePathname();
+  const headerTitle = pathname?.startsWith("/admin/whiteboard") ? "Pizarrón virtual" : undefined;
+
   return (
     <SidebarProvider>
       <AppSidebar navItems={adminNavItems} title="Cursumi Admin" />
       <SidebarInset>
         <DashboardHeader
+          title={headerTitle}
           profileHref="/admin/settings"
           user={{ name: userName, initials: userInitials, imageUrl: userImage }}
         />

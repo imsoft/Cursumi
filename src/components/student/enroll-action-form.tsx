@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useOptimistic } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
 type EnrollState = {
@@ -15,9 +16,17 @@ interface EnrollActionFormProps {
   courseId: string;
   sessionId?: string;
   disabled?: boolean;
+  /** Curso presencial gratuito con código configurado por el instructor */
+  requiresJoinCode?: boolean;
 }
 
-export function EnrollActionForm({ action, courseId, sessionId, disabled }: EnrollActionFormProps) {
+export function EnrollActionForm({
+  action,
+  courseId,
+  sessionId,
+  disabled,
+  requiresJoinCode,
+}: EnrollActionFormProps) {
   const router = useRouter();
   const [optimisticStatus, setOptimisticStatus] = useOptimistic<EnrollState["status"], EnrollState["status"]>(
     "idle",
@@ -43,6 +52,18 @@ export function EnrollActionForm({ action, courseId, sessionId, disabled }: Enro
     <form action={formAction} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <input type="hidden" name="courseId" value={courseId} />
       {sessionId && <input type="hidden" name="sessionId" value={sessionId} />}
+      {requiresJoinCode && (
+        <div className="w-full sm:max-w-xs">
+          <Input
+            label="Código de inscripción"
+            name="joinCode"
+            type="password"
+            autoComplete="off"
+            placeholder="Código que te dio el instructor"
+            required
+          />
+        </div>
+      )}
       <div className="text-sm text-muted-foreground">
         Accede al curso y comienza a aprender de inmediato.
       </div>

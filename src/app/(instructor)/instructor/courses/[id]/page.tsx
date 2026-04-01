@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit, Users, MessageSquare, MapPin, Calendar, Clock, DollarSign } from "lucide-react";
+import { ArrowLeft, Edit, Users, MessageSquare, MapPin, Calendar, Clock, DollarSign, MessageCircleQuestion } from "lucide-react";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
@@ -231,6 +231,14 @@ export default async function CourseDetailPage({
                   Mensajes
                 </Link>
               </Button>
+              {course.modality === "presencial" && (
+                <Button variant="outline" className="w-full justify-start" asChild>
+                  <Link href={`/instructor/courses/${course.id}/anonymous-questions`}>
+                    <MessageCircleQuestion className="mr-2 h-4 w-4" />
+                    Preguntas anónimas
+                  </Link>
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>

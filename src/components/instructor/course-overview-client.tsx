@@ -105,6 +105,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     courseType: course.courseType,
     price: course.price,
     imageUrl: course.imageUrl || "",
+    freeJoinCode: "",
+    clearFreeJoinCode: false,
   });
   const [editSaving, setEditSaving] = useState(false);
   const [editSaved, setEditSaved] = useState(false);
@@ -136,6 +138,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     courseType: course.courseType,
     price: course.price,
     imageUrl: course.imageUrl || "",
+    freeJoinCode: "",
+    clearFreeJoinCode: false,
   });
 
   const handleSaveBasicInfo = () => {
@@ -152,6 +156,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
           courseType: editData.courseType,
           price: editData.price,
           imageUrl: editData.imageUrl || null,
+          freeJoinCode: editData.freeJoinCode || undefined,
+          clearFreeJoinCode: editData.clearFreeJoinCode,
         });
         setEditSaved(true);
         setEditing(false);
@@ -384,6 +390,46 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     Equivale a ${(editData.price / 100).toLocaleString()}
                   </p>
                 </div>
+                {editData.modality === "presencial" && editData.price === 0 && (
+                  <div className="sm:col-span-2 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+                    <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Lock className="h-4 w-4" />
+                      Inscripción gratuita con código (opcional)
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Si defines un código, solo quienes lo ingresen podrán inscribirse sin pagar.
+                      {course.hasJoinCode ? " Ya hay un código guardado." : ""}
+                    </p>
+                    <Input
+                      label="Nuevo código"
+                      type="password"
+                      autoComplete="new-password"
+                      className="mt-1"
+                      value={editData.freeJoinCode}
+                      onChange={(e) =>
+                        setEditData((d) => ({
+                          ...d,
+                          freeJoinCode: e.target.value,
+                          clearFreeJoinCode: false,
+                        }))
+                      }
+                      placeholder={course.hasJoinCode ? "Vacío = no cambiar el código actual" : "Ej. TALLER2025"}
+                    />
+                    {course.hasJoinCode && (
+                      <label className="flex cursor-pointer items-start gap-2 text-sm text-foreground">
+                        <input
+                          type="checkbox"
+                          className="mt-1 rounded border-input"
+                          checked={editData.clearFreeJoinCode}
+                          onChange={(e) =>
+                            setEditData((d) => ({ ...d, clearFreeJoinCode: e.target.checked }))
+                          }
+                        />
+                        <span>Quitar el código (inscripción abierta para todos)</span>
+                      </label>
+                    )}
+                  </div>
+                )}
                 <div>
                   <label className="text-sm font-medium text-foreground">Miniatura del curso</label>
                   <div className="mt-1">

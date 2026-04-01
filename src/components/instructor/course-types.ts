@@ -23,6 +23,12 @@ export type CourseFormData = {
   price: number;
   maxStudents?: number;
   imageUrl?: string;
+  /** Solo presencial + precio 0: nuevo código (se guarda como hash). Vacío = no cambiar (al editar). */
+  freeJoinCode?: string;
+  /** Quitar protección por código al guardar */
+  clearFreeJoinCode?: boolean;
+  /** Solo UI: ya existe código guardado (wizard / edición) */
+  hasJoinCode?: boolean;
   sections: CourseSection[];
   finalExam?: CourseFinalExam;
   courseSessions?: CourseSessionData[]; // solo para cursos presenciales

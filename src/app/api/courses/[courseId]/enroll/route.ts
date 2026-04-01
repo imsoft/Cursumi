@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getPublishedCourse } from "@/lib/course-service";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { enrollInCourse } from "@/app/actions/course-actions";
 
-export async function POST(_req: NextRequest, context: { params: Promise<{ courseId: string }> }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ courseId: string }> }) {
   try {
     const { courseId } = await context.params;
-    const session = await requireSession();
+    await requireSession();
     const course = await getPublishedCourse(courseId);
     if (!course) {
       return NextResponse.json({ error: "Curso no encontrado o no publicado" }, { status: 404 });
     }
 
-    // Cursos de pago solo se inscriben vía webhook de Stripe
     if (course.price > 0) {
       return NextResponse.json(
         { error: "Este curso requiere pago. Usa el flujo de checkout." },
@@ -20,21 +19,16 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ cours
       );
     }
 
-    await prisma.enrollment.upsert({
-      where: {
-        courseId_studentId: {
-          courseId,
-          studentId: session.user.id,
-        },
-      },
-      update: { status: "active" },
-      create: {
-        courseId,
-        studentId: session.user.id,
-        status: "active",
-        progress: 0,
-      },
-    });
+    let body: { sessionId?: string; joinCode?: string } = {};
+    try {
+      body = (await req.json()) as typeof body;
+    } catch {
+      /* form sin JSON */
+    }
+    const sessionId = typeof body.sessionId === "string" ? body.sessionId : undefined;
+    const joinCode = typeof body.joinCode === "string" ? body.joinCode : undefined;
+
+    await enrollInCourse(courseId, sessionId, joinCode);
 
     return NextResponse.json({ enrolled: true });
   } catch (error) {

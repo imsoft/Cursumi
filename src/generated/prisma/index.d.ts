@@ -74,10 +74,20 @@ export type LessonProgress = $Result.DefaultSelection<Prisma.$LessonProgressPayl
  */
 export type CourseSession = $Result.DefaultSelection<Prisma.$CourseSessionPayload>
 /**
+ * Model SessionAnonymousQuestion
+ * 
+ */
+export type SessionAnonymousQuestion = $Result.DefaultSelection<Prisma.$SessionAnonymousQuestionPayload>
+/**
  * Model Enrollment
  * 
  */
 export type Enrollment = $Result.DefaultSelection<Prisma.$EnrollmentPayload>
+/**
+ * Model LearningReflection
+ * 
+ */
+export type LearningReflection = $Result.DefaultSelection<Prisma.$LearningReflectionPayload>
 /**
  * Model SectionQuizSubmission
  * 
@@ -198,6 +208,11 @@ export type SiteSetting = $Result.DefaultSelection<Prisma.$SiteSettingPayload>
  * 
  */
 export type Coupon = $Result.DefaultSelection<Prisma.$CouponPayload>
+/**
+ * Model CourseNote
+ * 
+ */
+export type CourseNote = $Result.DefaultSelection<Prisma.$CourseNotePayload>
 
 /**
  * Enums
@@ -312,6 +327,15 @@ export const CourseVisibility: {
 export type CourseVisibility = (typeof CourseVisibility)[keyof typeof CourseVisibility]
 
 
+export const SessionAnonymousQuestionStatus: {
+  open: 'open',
+  answered: 'answered',
+  dismissed: 'dismissed'
+};
+
+export type SessionAnonymousQuestionStatus = (typeof SessionAnonymousQuestionStatus)[keyof typeof SessionAnonymousQuestionStatus]
+
+
 export const CertificateType: {
   accreditation: 'accreditation',
   participation: 'participation'
@@ -377,6 +401,10 @@ export const OrgSubscriptionStatus: typeof $Enums.OrgSubscriptionStatus
 export type CourseVisibility = $Enums.CourseVisibility
 
 export const CourseVisibility: typeof $Enums.CourseVisibility
+
+export type SessionAnonymousQuestionStatus = $Enums.SessionAnonymousQuestionStatus
+
+export const SessionAnonymousQuestionStatus: typeof $Enums.SessionAnonymousQuestionStatus
 
 export type CertificateType = $Enums.CertificateType
 
@@ -624,6 +652,16 @@ export class PrismaClient<
   get courseSession(): Prisma.CourseSessionDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.sessionAnonymousQuestion`: Exposes CRUD operations for the **SessionAnonymousQuestion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SessionAnonymousQuestions
+    * const sessionAnonymousQuestions = await prisma.sessionAnonymousQuestion.findMany()
+    * ```
+    */
+  get sessionAnonymousQuestion(): Prisma.SessionAnonymousQuestionDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.enrollment`: Exposes CRUD operations for the **Enrollment** model.
     * Example usage:
     * ```ts
@@ -632,6 +670,16 @@ export class PrismaClient<
     * ```
     */
   get enrollment(): Prisma.EnrollmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.learningReflection`: Exposes CRUD operations for the **LearningReflection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LearningReflections
+    * const learningReflections = await prisma.learningReflection.findMany()
+    * ```
+    */
+  get learningReflection(): Prisma.LearningReflectionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.sectionQuizSubmission`: Exposes CRUD operations for the **SectionQuizSubmission** model.
@@ -872,6 +920,16 @@ export class PrismaClient<
     * ```
     */
   get coupon(): Prisma.CouponDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.courseNote`: Exposes CRUD operations for the **CourseNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CourseNotes
+    * const courseNotes = await prisma.courseNote.findMany()
+    * ```
+    */
+  get courseNote(): Prisma.CourseNoteDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1318,7 +1376,9 @@ export namespace Prisma {
     Lesson: 'Lesson',
     LessonProgress: 'LessonProgress',
     CourseSession: 'CourseSession',
+    SessionAnonymousQuestion: 'SessionAnonymousQuestion',
     Enrollment: 'Enrollment',
+    LearningReflection: 'LearningReflection',
     SectionQuizSubmission: 'SectionQuizSubmission',
     ExamSubmission: 'ExamSubmission',
     Certificate: 'Certificate',
@@ -1342,7 +1402,8 @@ export namespace Prisma {
     OrgMaterial: 'OrgMaterial',
     Kpi: 'Kpi',
     SiteSetting: 'SiteSetting',
-    Coupon: 'Coupon'
+    Coupon: 'Coupon',
+    CourseNote: 'CourseNote'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1358,7 +1419,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "enrollment" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2250,6 +2311,80 @@ export namespace Prisma {
           }
         }
       }
+      SessionAnonymousQuestion: {
+        payload: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>
+        fields: Prisma.SessionAnonymousQuestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SessionAnonymousQuestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SessionAnonymousQuestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>
+          }
+          findFirst: {
+            args: Prisma.SessionAnonymousQuestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SessionAnonymousQuestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>
+          }
+          findMany: {
+            args: Prisma.SessionAnonymousQuestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>[]
+          }
+          create: {
+            args: Prisma.SessionAnonymousQuestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>
+          }
+          createMany: {
+            args: Prisma.SessionAnonymousQuestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SessionAnonymousQuestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>[]
+          }
+          delete: {
+            args: Prisma.SessionAnonymousQuestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>
+          }
+          update: {
+            args: Prisma.SessionAnonymousQuestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SessionAnonymousQuestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SessionAnonymousQuestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SessionAnonymousQuestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SessionAnonymousQuestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionAnonymousQuestionPayload>
+          }
+          aggregate: {
+            args: Prisma.SessionAnonymousQuestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSessionAnonymousQuestion>
+          }
+          groupBy: {
+            args: Prisma.SessionAnonymousQuestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SessionAnonymousQuestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SessionAnonymousQuestionCountArgs<ExtArgs>
+            result: $Utils.Optional<SessionAnonymousQuestionCountAggregateOutputType> | number
+          }
+        }
+      }
       Enrollment: {
         payload: Prisma.$EnrollmentPayload<ExtArgs>
         fields: Prisma.EnrollmentFieldRefs
@@ -2321,6 +2456,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EnrollmentCountArgs<ExtArgs>
             result: $Utils.Optional<EnrollmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      LearningReflection: {
+        payload: Prisma.$LearningReflectionPayload<ExtArgs>
+        fields: Prisma.LearningReflectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LearningReflectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LearningReflectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>
+          }
+          findFirst: {
+            args: Prisma.LearningReflectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LearningReflectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>
+          }
+          findMany: {
+            args: Prisma.LearningReflectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>[]
+          }
+          create: {
+            args: Prisma.LearningReflectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>
+          }
+          createMany: {
+            args: Prisma.LearningReflectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LearningReflectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>[]
+          }
+          delete: {
+            args: Prisma.LearningReflectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>
+          }
+          update: {
+            args: Prisma.LearningReflectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.LearningReflectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LearningReflectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LearningReflectionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>[]
+          }
+          upsert: {
+            args: Prisma.LearningReflectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LearningReflectionPayload>
+          }
+          aggregate: {
+            args: Prisma.LearningReflectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLearningReflection>
+          }
+          groupBy: {
+            args: Prisma.LearningReflectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LearningReflectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LearningReflectionCountArgs<ExtArgs>
+            result: $Utils.Optional<LearningReflectionCountAggregateOutputType> | number
           }
         }
       }
@@ -4100,6 +4309,80 @@ export namespace Prisma {
           }
         }
       }
+      CourseNote: {
+        payload: Prisma.$CourseNotePayload<ExtArgs>
+        fields: Prisma.CourseNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CourseNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CourseNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>
+          }
+          findFirst: {
+            args: Prisma.CourseNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CourseNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>
+          }
+          findMany: {
+            args: Prisma.CourseNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>[]
+          }
+          create: {
+            args: Prisma.CourseNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>
+          }
+          createMany: {
+            args: Prisma.CourseNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CourseNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>[]
+          }
+          delete: {
+            args: Prisma.CourseNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>
+          }
+          update: {
+            args: Prisma.CourseNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.CourseNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CourseNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CourseNoteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>[]
+          }
+          upsert: {
+            args: Prisma.CourseNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseNotePayload>
+          }
+          aggregate: {
+            args: Prisma.CourseNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCourseNote>
+          }
+          groupBy: {
+            args: Prisma.CourseNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CourseNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CourseNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<CourseNoteCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4220,7 +4503,9 @@ export namespace Prisma {
     lesson?: LessonOmit
     lessonProgress?: LessonProgressOmit
     courseSession?: CourseSessionOmit
+    sessionAnonymousQuestion?: SessionAnonymousQuestionOmit
     enrollment?: EnrollmentOmit
+    learningReflection?: LearningReflectionOmit
     sectionQuizSubmission?: SectionQuizSubmissionOmit
     examSubmission?: ExamSubmissionOmit
     certificate?: CertificateOmit
@@ -4245,6 +4530,7 @@ export namespace Prisma {
     kpi?: KpiOmit
     siteSetting?: SiteSettingOmit
     coupon?: CouponOmit
+    courseNote?: CourseNoteOmit
   }
 
   /* Types for Logging */
@@ -4339,6 +4625,9 @@ export namespace Prisma {
     hostedGames: number
     gameParticipations: number
     orgMemberships: number
+    courseNotes: number
+    sessionAnonymousQuestions: number
+    learningReflections: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4356,6 +4645,9 @@ export namespace Prisma {
     hostedGames?: boolean | UserCountOutputTypeCountHostedGamesArgs
     gameParticipations?: boolean | UserCountOutputTypeCountGameParticipationsArgs
     orgMemberships?: boolean | UserCountOutputTypeCountOrgMembershipsArgs
+    courseNotes?: boolean | UserCountOutputTypeCountCourseNotesArgs
+    sessionAnonymousQuestions?: boolean | UserCountOutputTypeCountSessionAnonymousQuestionsArgs
+    learningReflections?: boolean | UserCountOutputTypeCountLearningReflectionsArgs
   }
 
   // Custom InputTypes
@@ -4467,6 +4759,27 @@ export namespace Prisma {
     where?: OrgMemberWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCourseNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseNoteWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSessionAnonymousQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionAnonymousQuestionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLearningReflectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LearningReflectionWhereInput
+  }
+
 
   /**
    * Count Type CategoryCountOutputType
@@ -4513,6 +4826,9 @@ export namespace Prisma {
     conversations: number
     orgCourseAccess: number
     teamCourseAccess: number
+    notes: number
+    sessionAnonymousQuestions: number
+    learningReflections: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4525,6 +4841,9 @@ export namespace Prisma {
     conversations?: boolean | CourseCountOutputTypeCountConversationsArgs
     orgCourseAccess?: boolean | CourseCountOutputTypeCountOrgCourseAccessArgs
     teamCourseAccess?: boolean | CourseCountOutputTypeCountTeamCourseAccessArgs
+    notes?: boolean | CourseCountOutputTypeCountNotesArgs
+    sessionAnonymousQuestions?: boolean | CourseCountOutputTypeCountSessionAnonymousQuestionsArgs
+    learningReflections?: boolean | CourseCountOutputTypeCountLearningReflectionsArgs
   }
 
   // Custom InputTypes
@@ -4601,6 +4920,27 @@ export namespace Prisma {
     where?: TeamCourseAccessWhereInput
   }
 
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseNoteWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountSessionAnonymousQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionAnonymousQuestionWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountLearningReflectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LearningReflectionWhereInput
+  }
+
 
   /**
    * Count Type CourseSectionCountOutputType
@@ -4648,10 +4988,12 @@ export namespace Prisma {
 
   export type LessonCountOutputType = {
     progress: number
+    notes: number
   }
 
   export type LessonCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     progress?: boolean | LessonCountOutputTypeCountProgressArgs
+    notes?: boolean | LessonCountOutputTypeCountNotesArgs
   }
 
   // Custom InputTypes
@@ -4672,6 +5014,13 @@ export namespace Prisma {
     where?: LessonProgressWhereInput
   }
 
+  /**
+   * LessonCountOutputType without action
+   */
+  export type LessonCountOutputTypeCountNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseNoteWhereInput
+  }
+
 
   /**
    * Count Type CourseSessionCountOutputType
@@ -4679,10 +5028,12 @@ export namespace Prisma {
 
   export type CourseSessionCountOutputType = {
     enrollments: number
+    anonymousQuestions: number
   }
 
   export type CourseSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | CourseSessionCountOutputTypeCountEnrollmentsArgs
+    anonymousQuestions?: boolean | CourseSessionCountOutputTypeCountAnonymousQuestionsArgs
   }
 
   // Custom InputTypes
@@ -4701,6 +5052,13 @@ export namespace Prisma {
    */
   export type CourseSessionCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnrollmentWhereInput
+  }
+
+  /**
+   * CourseSessionCountOutputType without action
+   */
+  export type CourseSessionCountOutputTypeCountAnonymousQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionAnonymousQuestionWhereInput
   }
 
 
@@ -5297,6 +5655,9 @@ export namespace Prisma {
     hostedGames?: boolean | User$hostedGamesArgs<ExtArgs>
     gameParticipations?: boolean | User$gameParticipationsArgs<ExtArgs>
     orgMemberships?: boolean | User$orgMembershipsArgs<ExtArgs>
+    courseNotes?: boolean | User$courseNotesArgs<ExtArgs>
+    sessionAnonymousQuestions?: boolean | User$sessionAnonymousQuestionsArgs<ExtArgs>
+    learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5372,6 +5733,9 @@ export namespace Prisma {
     hostedGames?: boolean | User$hostedGamesArgs<ExtArgs>
     gameParticipations?: boolean | User$gameParticipationsArgs<ExtArgs>
     orgMemberships?: boolean | User$orgMembershipsArgs<ExtArgs>
+    courseNotes?: boolean | User$courseNotesArgs<ExtArgs>
+    sessionAnonymousQuestions?: boolean | User$sessionAnonymousQuestionsArgs<ExtArgs>
+    learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5396,6 +5760,9 @@ export namespace Prisma {
       hostedGames: Prisma.$QuizGamePayload<ExtArgs>[]
       gameParticipations: Prisma.$QuizGameParticipantPayload<ExtArgs>[]
       orgMemberships: Prisma.$OrgMemberPayload<ExtArgs>[]
+      courseNotes: Prisma.$CourseNotePayload<ExtArgs>[]
+      sessionAnonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
+      learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5823,6 +6190,9 @@ export namespace Prisma {
     hostedGames<T extends User$hostedGamesArgs<ExtArgs> = {}>(args?: Subset<T, User$hostedGamesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizGamePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     gameParticipations<T extends User$gameParticipationsArgs<ExtArgs> = {}>(args?: Subset<T, User$gameParticipationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizGameParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orgMemberships<T extends User$orgMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$orgMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    courseNotes<T extends User$courseNotesArgs<ExtArgs> = {}>(args?: Subset<T, User$courseNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sessionAnonymousQuestions<T extends User$sessionAnonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionAnonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    learningReflections<T extends User$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6626,6 +6996,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OrgMemberScalarFieldEnum | OrgMemberScalarFieldEnum[]
+  }
+
+  /**
+   * User.courseNotes
+   */
+  export type User$courseNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    where?: CourseNoteWhereInput
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    cursor?: CourseNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
+  }
+
+  /**
+   * User.sessionAnonymousQuestions
+   */
+  export type User$sessionAnonymousQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    where?: SessionAnonymousQuestionWhereInput
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SessionAnonymousQuestionScalarFieldEnum | SessionAnonymousQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * User.learningReflections
+   */
+  export type User$learningReflectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    where?: LearningReflectionWhereInput
+    orderBy?: LearningReflectionOrderByWithRelationInput | LearningReflectionOrderByWithRelationInput[]
+    cursor?: LearningReflectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
   }
 
   /**
@@ -13367,6 +13809,7 @@ export namespace Prisma {
     status: $Enums.CourseStatus | null
     visibility: $Enums.CourseVisibility | null
     nextSession: Date | null
+    joinCodeHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13392,6 +13835,7 @@ export namespace Prisma {
     status: $Enums.CourseStatus | null
     visibility: $Enums.CourseVisibility | null
     nextSession: Date | null
+    joinCodeHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13418,6 +13862,7 @@ export namespace Prisma {
     visibility: number
     nextSession: number
     finalExam: number
+    joinCodeHash: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13455,6 +13900,7 @@ export namespace Prisma {
     status?: true
     visibility?: true
     nextSession?: true
+    joinCodeHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13480,6 +13926,7 @@ export namespace Prisma {
     status?: true
     visibility?: true
     nextSession?: true
+    joinCodeHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13506,6 +13953,7 @@ export namespace Prisma {
     visibility?: true
     nextSession?: true
     finalExam?: true
+    joinCodeHash?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13619,6 +14067,7 @@ export namespace Prisma {
     visibility: $Enums.CourseVisibility
     nextSession: Date | null
     finalExam: JsonValue | null
+    joinCodeHash: string | null
     createdAt: Date
     updatedAt: Date
     _count: CourseCountAggregateOutputType | null
@@ -13664,6 +14113,7 @@ export namespace Prisma {
     visibility?: boolean
     nextSession?: boolean
     finalExam?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -13677,6 +14127,9 @@ export namespace Prisma {
     conversations?: boolean | Course$conversationsArgs<ExtArgs>
     orgCourseAccess?: boolean | Course$orgCourseAccessArgs<ExtArgs>
     teamCourseAccess?: boolean | Course$teamCourseAccessArgs<ExtArgs>
+    notes?: boolean | Course$notesArgs<ExtArgs>
+    sessionAnonymousQuestions?: boolean | Course$sessionAnonymousQuestionsArgs<ExtArgs>
+    learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -13702,6 +14155,7 @@ export namespace Prisma {
     visibility?: boolean
     nextSession?: boolean
     finalExam?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -13730,6 +14184,7 @@ export namespace Prisma {
     visibility?: boolean
     nextSession?: boolean
     finalExam?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -13758,11 +14213,12 @@ export namespace Prisma {
     visibility?: boolean
     nextSession?: boolean
     finalExam?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "location" | "courseType" | "startDate" | "duration" | "price" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "location" | "courseType" | "startDate" | "duration" | "price" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     categoryRef?: boolean | Course$categoryRefArgs<ExtArgs>
@@ -13775,6 +14231,9 @@ export namespace Prisma {
     conversations?: boolean | Course$conversationsArgs<ExtArgs>
     orgCourseAccess?: boolean | Course$orgCourseAccessArgs<ExtArgs>
     teamCourseAccess?: boolean | Course$teamCourseAccessArgs<ExtArgs>
+    notes?: boolean | Course$notesArgs<ExtArgs>
+    sessionAnonymousQuestions?: boolean | Course$sessionAnonymousQuestionsArgs<ExtArgs>
+    learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13800,6 +14259,9 @@ export namespace Prisma {
       conversations: Prisma.$ConversationPayload<ExtArgs>[]
       orgCourseAccess: Prisma.$OrgCourseAccessPayload<ExtArgs>[]
       teamCourseAccess: Prisma.$TeamCourseAccessPayload<ExtArgs>[]
+      notes: Prisma.$CourseNotePayload<ExtArgs>[]
+      sessionAnonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
+      learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13823,6 +14285,10 @@ export namespace Prisma {
       visibility: $Enums.CourseVisibility
       nextSession: Date | null
       finalExam: Prisma.JsonValue | null
+      /**
+       * Hash (scrypt) del código de inscripción para cursos presenciales gratuitos; null = abierto
+       */
+      joinCodeHash: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["course"]>
@@ -14230,6 +14696,9 @@ export namespace Prisma {
     conversations<T extends Course$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, Course$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orgCourseAccess<T extends Course$orgCourseAccessArgs<ExtArgs> = {}>(args?: Subset<T, Course$orgCourseAccessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgCourseAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     teamCourseAccess<T extends Course$teamCourseAccessArgs<ExtArgs> = {}>(args?: Subset<T, Course$teamCourseAccessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCourseAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notes<T extends Course$notesArgs<ExtArgs> = {}>(args?: Subset<T, Course$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sessionAnonymousQuestions<T extends Course$sessionAnonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$sessionAnonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    learningReflections<T extends Course$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14280,6 +14749,7 @@ export namespace Prisma {
     readonly visibility: FieldRef<"Course", 'CourseVisibility'>
     readonly nextSession: FieldRef<"Course", 'DateTime'>
     readonly finalExam: FieldRef<"Course", 'Json'>
+    readonly joinCodeHash: FieldRef<"Course", 'String'>
     readonly createdAt: FieldRef<"Course", 'DateTime'>
     readonly updatedAt: FieldRef<"Course", 'DateTime'>
   }
@@ -14910,6 +15380,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TeamCourseAccessScalarFieldEnum | TeamCourseAccessScalarFieldEnum[]
+  }
+
+  /**
+   * Course.notes
+   */
+  export type Course$notesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    where?: CourseNoteWhereInput
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    cursor?: CourseNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
+  }
+
+  /**
+   * Course.sessionAnonymousQuestions
+   */
+  export type Course$sessionAnonymousQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    where?: SessionAnonymousQuestionWhereInput
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SessionAnonymousQuestionScalarFieldEnum | SessionAnonymousQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Course.learningReflections
+   */
+  export type Course$learningReflectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    where?: LearningReflectionWhereInput
+    orderBy?: LearningReflectionOrderByWithRelationInput | LearningReflectionOrderByWithRelationInput[]
+    cursor?: LearningReflectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
   }
 
   /**
@@ -16355,6 +16897,7 @@ export namespace Prisma {
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
     progress?: boolean | Lesson$progressArgs<ExtArgs>
+    notes?: boolean | Lesson$notesArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lesson"]>
 
@@ -16412,6 +16955,7 @@ export namespace Prisma {
   export type LessonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
     progress?: boolean | Lesson$progressArgs<ExtArgs>
+    notes?: boolean | Lesson$notesArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LessonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16426,6 +16970,7 @@ export namespace Prisma {
     objects: {
       section: Prisma.$CourseSectionPayload<ExtArgs>
       progress: Prisma.$LessonProgressPayload<ExtArgs>[]
+      notes: Prisma.$CourseNotePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16837,6 +17382,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     section<T extends CourseSectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseSectionDefaultArgs<ExtArgs>>): Prisma__CourseSectionClient<$Result.GetResult<Prisma.$CourseSectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     progress<T extends Lesson$progressArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$progressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notes<T extends Lesson$notesArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17296,6 +17842,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LessonProgressScalarFieldEnum | LessonProgressScalarFieldEnum[]
+  }
+
+  /**
+   * Lesson.notes
+   */
+  export type Lesson$notesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    where?: CourseNoteWhereInput
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    cursor?: CourseNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
   }
 
   /**
@@ -18666,6 +19236,7 @@ export namespace Prisma {
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     enrollments?: boolean | CourseSession$enrollmentsArgs<ExtArgs>
+    anonymousQuestions?: boolean | CourseSession$anonymousQuestionsArgs<ExtArgs>
     _count?: boolean | CourseSessionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["courseSession"]>
 
@@ -18714,6 +19285,7 @@ export namespace Prisma {
   export type CourseSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     enrollments?: boolean | CourseSession$enrollmentsArgs<ExtArgs>
+    anonymousQuestions?: boolean | CourseSession$anonymousQuestionsArgs<ExtArgs>
     _count?: boolean | CourseSessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18728,6 +19300,7 @@ export namespace Prisma {
     objects: {
       course: Prisma.$CoursePayload<ExtArgs>
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+      anonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19136,6 +19709,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     enrollments<T extends CourseSession$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, CourseSession$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    anonymousQuestions<T extends CourseSession$anonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, CourseSession$anonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19595,6 +20169,30 @@ export namespace Prisma {
   }
 
   /**
+   * CourseSession.anonymousQuestions
+   */
+  export type CourseSession$anonymousQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    where?: SessionAnonymousQuestionWhereInput
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SessionAnonymousQuestionScalarFieldEnum | SessionAnonymousQuestionScalarFieldEnum[]
+  }
+
+  /**
    * CourseSession without action
    */
   export type CourseSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19610,6 +20208,1145 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CourseSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SessionAnonymousQuestion
+   */
+
+  export type AggregateSessionAnonymousQuestion = {
+    _count: SessionAnonymousQuestionCountAggregateOutputType | null
+    _min: SessionAnonymousQuestionMinAggregateOutputType | null
+    _max: SessionAnonymousQuestionMaxAggregateOutputType | null
+  }
+
+  export type SessionAnonymousQuestionMinAggregateOutputType = {
+    id: string | null
+    courseSessionId: string | null
+    courseId: string | null
+    authorId: string | null
+    content: string | null
+    status: $Enums.SessionAnonymousQuestionStatus | null
+    answer: string | null
+    answeredAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SessionAnonymousQuestionMaxAggregateOutputType = {
+    id: string | null
+    courseSessionId: string | null
+    courseId: string | null
+    authorId: string | null
+    content: string | null
+    status: $Enums.SessionAnonymousQuestionStatus | null
+    answer: string | null
+    answeredAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SessionAnonymousQuestionCountAggregateOutputType = {
+    id: number
+    courseSessionId: number
+    courseId: number
+    authorId: number
+    content: number
+    status: number
+    answer: number
+    answeredAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SessionAnonymousQuestionMinAggregateInputType = {
+    id?: true
+    courseSessionId?: true
+    courseId?: true
+    authorId?: true
+    content?: true
+    status?: true
+    answer?: true
+    answeredAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SessionAnonymousQuestionMaxAggregateInputType = {
+    id?: true
+    courseSessionId?: true
+    courseId?: true
+    authorId?: true
+    content?: true
+    status?: true
+    answer?: true
+    answeredAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SessionAnonymousQuestionCountAggregateInputType = {
+    id?: true
+    courseSessionId?: true
+    courseId?: true
+    authorId?: true
+    content?: true
+    status?: true
+    answer?: true
+    answeredAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SessionAnonymousQuestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SessionAnonymousQuestion to aggregate.
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SessionAnonymousQuestions to fetch.
+     */
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SessionAnonymousQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SessionAnonymousQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SessionAnonymousQuestions
+    **/
+    _count?: true | SessionAnonymousQuestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SessionAnonymousQuestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SessionAnonymousQuestionMaxAggregateInputType
+  }
+
+  export type GetSessionAnonymousQuestionAggregateType<T extends SessionAnonymousQuestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSessionAnonymousQuestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSessionAnonymousQuestion[P]>
+      : GetScalarType<T[P], AggregateSessionAnonymousQuestion[P]>
+  }
+
+
+
+
+  export type SessionAnonymousQuestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionAnonymousQuestionWhereInput
+    orderBy?: SessionAnonymousQuestionOrderByWithAggregationInput | SessionAnonymousQuestionOrderByWithAggregationInput[]
+    by: SessionAnonymousQuestionScalarFieldEnum[] | SessionAnonymousQuestionScalarFieldEnum
+    having?: SessionAnonymousQuestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SessionAnonymousQuestionCountAggregateInputType | true
+    _min?: SessionAnonymousQuestionMinAggregateInputType
+    _max?: SessionAnonymousQuestionMaxAggregateInputType
+  }
+
+  export type SessionAnonymousQuestionGroupByOutputType = {
+    id: string
+    courseSessionId: string
+    courseId: string
+    authorId: string
+    content: string
+    status: $Enums.SessionAnonymousQuestionStatus
+    answer: string | null
+    answeredAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SessionAnonymousQuestionCountAggregateOutputType | null
+    _min: SessionAnonymousQuestionMinAggregateOutputType | null
+    _max: SessionAnonymousQuestionMaxAggregateOutputType | null
+  }
+
+  type GetSessionAnonymousQuestionGroupByPayload<T extends SessionAnonymousQuestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SessionAnonymousQuestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SessionAnonymousQuestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SessionAnonymousQuestionGroupByOutputType[P]>
+            : GetScalarType<T[P], SessionAnonymousQuestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SessionAnonymousQuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseSessionId?: boolean
+    courseId?: boolean
+    authorId?: boolean
+    content?: boolean
+    status?: boolean
+    answer?: boolean
+    answeredAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    session?: boolean | CourseSessionDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sessionAnonymousQuestion"]>
+
+  export type SessionAnonymousQuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseSessionId?: boolean
+    courseId?: boolean
+    authorId?: boolean
+    content?: boolean
+    status?: boolean
+    answer?: boolean
+    answeredAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    session?: boolean | CourseSessionDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sessionAnonymousQuestion"]>
+
+  export type SessionAnonymousQuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseSessionId?: boolean
+    courseId?: boolean
+    authorId?: boolean
+    content?: boolean
+    status?: boolean
+    answer?: boolean
+    answeredAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    session?: boolean | CourseSessionDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sessionAnonymousQuestion"]>
+
+  export type SessionAnonymousQuestionSelectScalar = {
+    id?: boolean
+    courseSessionId?: boolean
+    courseId?: boolean
+    authorId?: boolean
+    content?: boolean
+    status?: boolean
+    answer?: boolean
+    answeredAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SessionAnonymousQuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseSessionId" | "courseId" | "authorId" | "content" | "status" | "answer" | "answeredAt" | "createdAt" | "updatedAt", ExtArgs["result"]["sessionAnonymousQuestion"]>
+  export type SessionAnonymousQuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | CourseSessionDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SessionAnonymousQuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | CourseSessionDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SessionAnonymousQuestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | CourseSessionDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SessionAnonymousQuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SessionAnonymousQuestion"
+    objects: {
+      session: Prisma.$CourseSessionPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      courseSessionId: string
+      courseId: string
+      authorId: string
+      content: string
+      status: $Enums.SessionAnonymousQuestionStatus
+      answer: string | null
+      answeredAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["sessionAnonymousQuestion"]>
+    composites: {}
+  }
+
+  type SessionAnonymousQuestionGetPayload<S extends boolean | null | undefined | SessionAnonymousQuestionDefaultArgs> = $Result.GetResult<Prisma.$SessionAnonymousQuestionPayload, S>
+
+  type SessionAnonymousQuestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SessionAnonymousQuestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SessionAnonymousQuestionCountAggregateInputType | true
+    }
+
+  export interface SessionAnonymousQuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SessionAnonymousQuestion'], meta: { name: 'SessionAnonymousQuestion' } }
+    /**
+     * Find zero or one SessionAnonymousQuestion that matches the filter.
+     * @param {SessionAnonymousQuestionFindUniqueArgs} args - Arguments to find a SessionAnonymousQuestion
+     * @example
+     * // Get one SessionAnonymousQuestion
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SessionAnonymousQuestionFindUniqueArgs>(args: SelectSubset<T, SessionAnonymousQuestionFindUniqueArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SessionAnonymousQuestion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SessionAnonymousQuestionFindUniqueOrThrowArgs} args - Arguments to find a SessionAnonymousQuestion
+     * @example
+     * // Get one SessionAnonymousQuestion
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SessionAnonymousQuestionFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionAnonymousQuestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SessionAnonymousQuestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionFindFirstArgs} args - Arguments to find a SessionAnonymousQuestion
+     * @example
+     * // Get one SessionAnonymousQuestion
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SessionAnonymousQuestionFindFirstArgs>(args?: SelectSubset<T, SessionAnonymousQuestionFindFirstArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SessionAnonymousQuestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionFindFirstOrThrowArgs} args - Arguments to find a SessionAnonymousQuestion
+     * @example
+     * // Get one SessionAnonymousQuestion
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SessionAnonymousQuestionFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionAnonymousQuestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SessionAnonymousQuestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SessionAnonymousQuestions
+     * const sessionAnonymousQuestions = await prisma.sessionAnonymousQuestion.findMany()
+     * 
+     * // Get first 10 SessionAnonymousQuestions
+     * const sessionAnonymousQuestions = await prisma.sessionAnonymousQuestion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sessionAnonymousQuestionWithIdOnly = await prisma.sessionAnonymousQuestion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SessionAnonymousQuestionFindManyArgs>(args?: SelectSubset<T, SessionAnonymousQuestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SessionAnonymousQuestion.
+     * @param {SessionAnonymousQuestionCreateArgs} args - Arguments to create a SessionAnonymousQuestion.
+     * @example
+     * // Create one SessionAnonymousQuestion
+     * const SessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.create({
+     *   data: {
+     *     // ... data to create a SessionAnonymousQuestion
+     *   }
+     * })
+     * 
+     */
+    create<T extends SessionAnonymousQuestionCreateArgs>(args: SelectSubset<T, SessionAnonymousQuestionCreateArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SessionAnonymousQuestions.
+     * @param {SessionAnonymousQuestionCreateManyArgs} args - Arguments to create many SessionAnonymousQuestions.
+     * @example
+     * // Create many SessionAnonymousQuestions
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SessionAnonymousQuestionCreateManyArgs>(args?: SelectSubset<T, SessionAnonymousQuestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SessionAnonymousQuestions and returns the data saved in the database.
+     * @param {SessionAnonymousQuestionCreateManyAndReturnArgs} args - Arguments to create many SessionAnonymousQuestions.
+     * @example
+     * // Create many SessionAnonymousQuestions
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SessionAnonymousQuestions and only return the `id`
+     * const sessionAnonymousQuestionWithIdOnly = await prisma.sessionAnonymousQuestion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SessionAnonymousQuestionCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionAnonymousQuestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SessionAnonymousQuestion.
+     * @param {SessionAnonymousQuestionDeleteArgs} args - Arguments to delete one SessionAnonymousQuestion.
+     * @example
+     * // Delete one SessionAnonymousQuestion
+     * const SessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.delete({
+     *   where: {
+     *     // ... filter to delete one SessionAnonymousQuestion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SessionAnonymousQuestionDeleteArgs>(args: SelectSubset<T, SessionAnonymousQuestionDeleteArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SessionAnonymousQuestion.
+     * @param {SessionAnonymousQuestionUpdateArgs} args - Arguments to update one SessionAnonymousQuestion.
+     * @example
+     * // Update one SessionAnonymousQuestion
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SessionAnonymousQuestionUpdateArgs>(args: SelectSubset<T, SessionAnonymousQuestionUpdateArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SessionAnonymousQuestions.
+     * @param {SessionAnonymousQuestionDeleteManyArgs} args - Arguments to filter SessionAnonymousQuestions to delete.
+     * @example
+     * // Delete a few SessionAnonymousQuestions
+     * const { count } = await prisma.sessionAnonymousQuestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SessionAnonymousQuestionDeleteManyArgs>(args?: SelectSubset<T, SessionAnonymousQuestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SessionAnonymousQuestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SessionAnonymousQuestions
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SessionAnonymousQuestionUpdateManyArgs>(args: SelectSubset<T, SessionAnonymousQuestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SessionAnonymousQuestions and returns the data updated in the database.
+     * @param {SessionAnonymousQuestionUpdateManyAndReturnArgs} args - Arguments to update many SessionAnonymousQuestions.
+     * @example
+     * // Update many SessionAnonymousQuestions
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SessionAnonymousQuestions and only return the `id`
+     * const sessionAnonymousQuestionWithIdOnly = await prisma.sessionAnonymousQuestion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SessionAnonymousQuestionUpdateManyAndReturnArgs>(args: SelectSubset<T, SessionAnonymousQuestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SessionAnonymousQuestion.
+     * @param {SessionAnonymousQuestionUpsertArgs} args - Arguments to update or create a SessionAnonymousQuestion.
+     * @example
+     * // Update or create a SessionAnonymousQuestion
+     * const sessionAnonymousQuestion = await prisma.sessionAnonymousQuestion.upsert({
+     *   create: {
+     *     // ... data to create a SessionAnonymousQuestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SessionAnonymousQuestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SessionAnonymousQuestionUpsertArgs>(args: SelectSubset<T, SessionAnonymousQuestionUpsertArgs<ExtArgs>>): Prisma__SessionAnonymousQuestionClient<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SessionAnonymousQuestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionCountArgs} args - Arguments to filter SessionAnonymousQuestions to count.
+     * @example
+     * // Count the number of SessionAnonymousQuestions
+     * const count = await prisma.sessionAnonymousQuestion.count({
+     *   where: {
+     *     // ... the filter for the SessionAnonymousQuestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SessionAnonymousQuestionCountArgs>(
+      args?: Subset<T, SessionAnonymousQuestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SessionAnonymousQuestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SessionAnonymousQuestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SessionAnonymousQuestionAggregateArgs>(args: Subset<T, SessionAnonymousQuestionAggregateArgs>): Prisma.PrismaPromise<GetSessionAnonymousQuestionAggregateType<T>>
+
+    /**
+     * Group by SessionAnonymousQuestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAnonymousQuestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SessionAnonymousQuestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SessionAnonymousQuestionGroupByArgs['orderBy'] }
+        : { orderBy?: SessionAnonymousQuestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SessionAnonymousQuestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSessionAnonymousQuestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SessionAnonymousQuestion model
+   */
+  readonly fields: SessionAnonymousQuestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SessionAnonymousQuestion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SessionAnonymousQuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    session<T extends CourseSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseSessionDefaultArgs<ExtArgs>>): Prisma__CourseSessionClient<$Result.GetResult<Prisma.$CourseSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SessionAnonymousQuestion model
+   */
+  interface SessionAnonymousQuestionFieldRefs {
+    readonly id: FieldRef<"SessionAnonymousQuestion", 'String'>
+    readonly courseSessionId: FieldRef<"SessionAnonymousQuestion", 'String'>
+    readonly courseId: FieldRef<"SessionAnonymousQuestion", 'String'>
+    readonly authorId: FieldRef<"SessionAnonymousQuestion", 'String'>
+    readonly content: FieldRef<"SessionAnonymousQuestion", 'String'>
+    readonly status: FieldRef<"SessionAnonymousQuestion", 'SessionAnonymousQuestionStatus'>
+    readonly answer: FieldRef<"SessionAnonymousQuestion", 'String'>
+    readonly answeredAt: FieldRef<"SessionAnonymousQuestion", 'DateTime'>
+    readonly createdAt: FieldRef<"SessionAnonymousQuestion", 'DateTime'>
+    readonly updatedAt: FieldRef<"SessionAnonymousQuestion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SessionAnonymousQuestion findUnique
+   */
+  export type SessionAnonymousQuestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which SessionAnonymousQuestion to fetch.
+     */
+    where: SessionAnonymousQuestionWhereUniqueInput
+  }
+
+  /**
+   * SessionAnonymousQuestion findUniqueOrThrow
+   */
+  export type SessionAnonymousQuestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which SessionAnonymousQuestion to fetch.
+     */
+    where: SessionAnonymousQuestionWhereUniqueInput
+  }
+
+  /**
+   * SessionAnonymousQuestion findFirst
+   */
+  export type SessionAnonymousQuestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which SessionAnonymousQuestion to fetch.
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SessionAnonymousQuestions to fetch.
+     */
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SessionAnonymousQuestions.
+     */
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SessionAnonymousQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SessionAnonymousQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SessionAnonymousQuestions.
+     */
+    distinct?: SessionAnonymousQuestionScalarFieldEnum | SessionAnonymousQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * SessionAnonymousQuestion findFirstOrThrow
+   */
+  export type SessionAnonymousQuestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which SessionAnonymousQuestion to fetch.
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SessionAnonymousQuestions to fetch.
+     */
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SessionAnonymousQuestions.
+     */
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SessionAnonymousQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SessionAnonymousQuestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SessionAnonymousQuestions.
+     */
+    distinct?: SessionAnonymousQuestionScalarFieldEnum | SessionAnonymousQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * SessionAnonymousQuestion findMany
+   */
+  export type SessionAnonymousQuestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which SessionAnonymousQuestions to fetch.
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SessionAnonymousQuestions to fetch.
+     */
+    orderBy?: SessionAnonymousQuestionOrderByWithRelationInput | SessionAnonymousQuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SessionAnonymousQuestions.
+     */
+    cursor?: SessionAnonymousQuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SessionAnonymousQuestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SessionAnonymousQuestions.
+     */
+    skip?: number
+    distinct?: SessionAnonymousQuestionScalarFieldEnum | SessionAnonymousQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * SessionAnonymousQuestion create
+   */
+  export type SessionAnonymousQuestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SessionAnonymousQuestion.
+     */
+    data: XOR<SessionAnonymousQuestionCreateInput, SessionAnonymousQuestionUncheckedCreateInput>
+  }
+
+  /**
+   * SessionAnonymousQuestion createMany
+   */
+  export type SessionAnonymousQuestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SessionAnonymousQuestions.
+     */
+    data: SessionAnonymousQuestionCreateManyInput | SessionAnonymousQuestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SessionAnonymousQuestion createManyAndReturn
+   */
+  export type SessionAnonymousQuestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many SessionAnonymousQuestions.
+     */
+    data: SessionAnonymousQuestionCreateManyInput | SessionAnonymousQuestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SessionAnonymousQuestion update
+   */
+  export type SessionAnonymousQuestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SessionAnonymousQuestion.
+     */
+    data: XOR<SessionAnonymousQuestionUpdateInput, SessionAnonymousQuestionUncheckedUpdateInput>
+    /**
+     * Choose, which SessionAnonymousQuestion to update.
+     */
+    where: SessionAnonymousQuestionWhereUniqueInput
+  }
+
+  /**
+   * SessionAnonymousQuestion updateMany
+   */
+  export type SessionAnonymousQuestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SessionAnonymousQuestions.
+     */
+    data: XOR<SessionAnonymousQuestionUpdateManyMutationInput, SessionAnonymousQuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which SessionAnonymousQuestions to update
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * Limit how many SessionAnonymousQuestions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SessionAnonymousQuestion updateManyAndReturn
+   */
+  export type SessionAnonymousQuestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * The data used to update SessionAnonymousQuestions.
+     */
+    data: XOR<SessionAnonymousQuestionUpdateManyMutationInput, SessionAnonymousQuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which SessionAnonymousQuestions to update
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * Limit how many SessionAnonymousQuestions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SessionAnonymousQuestion upsert
+   */
+  export type SessionAnonymousQuestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SessionAnonymousQuestion to update in case it exists.
+     */
+    where: SessionAnonymousQuestionWhereUniqueInput
+    /**
+     * In case the SessionAnonymousQuestion found by the `where` argument doesn't exist, create a new SessionAnonymousQuestion with this data.
+     */
+    create: XOR<SessionAnonymousQuestionCreateInput, SessionAnonymousQuestionUncheckedCreateInput>
+    /**
+     * In case the SessionAnonymousQuestion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SessionAnonymousQuestionUpdateInput, SessionAnonymousQuestionUncheckedUpdateInput>
+  }
+
+  /**
+   * SessionAnonymousQuestion delete
+   */
+  export type SessionAnonymousQuestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
+    /**
+     * Filter which SessionAnonymousQuestion to delete.
+     */
+    where: SessionAnonymousQuestionWhereUniqueInput
+  }
+
+  /**
+   * SessionAnonymousQuestion deleteMany
+   */
+  export type SessionAnonymousQuestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SessionAnonymousQuestions to delete
+     */
+    where?: SessionAnonymousQuestionWhereInput
+    /**
+     * Limit how many SessionAnonymousQuestions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SessionAnonymousQuestion without action
+   */
+  export type SessionAnonymousQuestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SessionAnonymousQuestion
+     */
+    select?: SessionAnonymousQuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SessionAnonymousQuestion
+     */
+    omit?: SessionAnonymousQuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionAnonymousQuestionInclude<ExtArgs> | null
   }
 
 
@@ -19643,6 +21380,7 @@ export namespace Prisma {
     progress: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    learningReflectionEmailSentAt: Date | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -19655,6 +21393,7 @@ export namespace Prisma {
     progress: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    learningReflectionEmailSentAt: Date | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -19667,6 +21406,7 @@ export namespace Prisma {
     progress: number
     createdAt: number
     updatedAt: number
+    learningReflectionEmailSentAt: number
     _all: number
   }
 
@@ -19689,6 +21429,7 @@ export namespace Prisma {
     progress?: true
     createdAt?: true
     updatedAt?: true
+    learningReflectionEmailSentAt?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -19701,6 +21442,7 @@ export namespace Prisma {
     progress?: true
     createdAt?: true
     updatedAt?: true
+    learningReflectionEmailSentAt?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -19713,6 +21455,7 @@ export namespace Prisma {
     progress?: true
     createdAt?: true
     updatedAt?: true
+    learningReflectionEmailSentAt?: true
     _all?: true
   }
 
@@ -19812,6 +21555,7 @@ export namespace Prisma {
     progress: number
     createdAt: Date
     updatedAt: Date
+    learningReflectionEmailSentAt: Date | null
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
     _sum: EnrollmentSumAggregateOutputType | null
@@ -19843,6 +21587,7 @@ export namespace Prisma {
     progress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    learningReflectionEmailSentAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     student?: boolean | UserDefaultArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
@@ -19852,6 +21597,7 @@ export namespace Prisma {
     examSubmission?: boolean | Enrollment$examSubmissionArgs<ExtArgs>
     transaction?: boolean | Enrollment$transactionArgs<ExtArgs>
     sectionQuizSubmissions?: boolean | Enrollment$sectionQuizSubmissionsArgs<ExtArgs>
+    learningReflection?: boolean | Enrollment$learningReflectionArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
@@ -19865,6 +21611,7 @@ export namespace Prisma {
     progress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    learningReflectionEmailSentAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     student?: boolean | UserDefaultArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
@@ -19881,6 +21628,7 @@ export namespace Prisma {
     progress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    learningReflectionEmailSentAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     student?: boolean | UserDefaultArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
@@ -19897,9 +21645,10 @@ export namespace Prisma {
     progress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    learningReflectionEmailSentAt?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "studentId" | "sessionId" | "organizationId" | "status" | "progress" | "createdAt" | "updatedAt", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "studentId" | "sessionId" | "organizationId" | "status" | "progress" | "createdAt" | "updatedAt" | "learningReflectionEmailSentAt", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     student?: boolean | UserDefaultArgs<ExtArgs>
@@ -19910,6 +21659,7 @@ export namespace Prisma {
     examSubmission?: boolean | Enrollment$examSubmissionArgs<ExtArgs>
     transaction?: boolean | Enrollment$transactionArgs<ExtArgs>
     sectionQuizSubmissions?: boolean | Enrollment$sectionQuizSubmissionsArgs<ExtArgs>
+    learningReflection?: boolean | Enrollment$learningReflectionArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EnrollmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19937,6 +21687,7 @@ export namespace Prisma {
       examSubmission: Prisma.$ExamSubmissionPayload<ExtArgs> | null
       transaction: Prisma.$TransactionPayload<ExtArgs> | null
       sectionQuizSubmissions: Prisma.$SectionQuizSubmissionPayload<ExtArgs>[]
+      learningReflection: Prisma.$LearningReflectionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19948,6 +21699,7 @@ export namespace Prisma {
       progress: number
       createdAt: Date
       updatedAt: Date
+      learningReflectionEmailSentAt: Date | null
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -20351,6 +22103,7 @@ export namespace Prisma {
     examSubmission<T extends Enrollment$examSubmissionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$examSubmissionArgs<ExtArgs>>): Prisma__ExamSubmissionClient<$Result.GetResult<Prisma.$ExamSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transaction<T extends Enrollment$transactionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sectionQuizSubmissions<T extends Enrollment$sectionQuizSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$sectionQuizSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionQuizSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    learningReflection<T extends Enrollment$learningReflectionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$learningReflectionArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20389,6 +22142,7 @@ export namespace Prisma {
     readonly progress: FieldRef<"Enrollment", 'Int'>
     readonly createdAt: FieldRef<"Enrollment", 'DateTime'>
     readonly updatedAt: FieldRef<"Enrollment", 'DateTime'>
+    readonly learningReflectionEmailSentAt: FieldRef<"Enrollment", 'DateTime'>
   }
     
 
@@ -20928,6 +22682,25 @@ export namespace Prisma {
   }
 
   /**
+   * Enrollment.learningReflection
+   */
+  export type Enrollment$learningReflectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    where?: LearningReflectionWhereInput
+  }
+
+  /**
    * Enrollment without action
    */
   export type EnrollmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20943,6 +22716,1106 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EnrollmentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LearningReflection
+   */
+
+  export type AggregateLearningReflection = {
+    _count: LearningReflectionCountAggregateOutputType | null
+    _min: LearningReflectionMinAggregateOutputType | null
+    _max: LearningReflectionMaxAggregateOutputType | null
+  }
+
+  export type LearningReflectionMinAggregateOutputType = {
+    id: string | null
+    enrollmentId: string | null
+    courseId: string | null
+    userId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LearningReflectionMaxAggregateOutputType = {
+    id: string | null
+    enrollmentId: string | null
+    courseId: string | null
+    userId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LearningReflectionCountAggregateOutputType = {
+    id: number
+    enrollmentId: number
+    courseId: number
+    userId: number
+    content: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LearningReflectionMinAggregateInputType = {
+    id?: true
+    enrollmentId?: true
+    courseId?: true
+    userId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LearningReflectionMaxAggregateInputType = {
+    id?: true
+    enrollmentId?: true
+    courseId?: true
+    userId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LearningReflectionCountAggregateInputType = {
+    id?: true
+    enrollmentId?: true
+    courseId?: true
+    userId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LearningReflectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LearningReflection to aggregate.
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LearningReflections to fetch.
+     */
+    orderBy?: LearningReflectionOrderByWithRelationInput | LearningReflectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LearningReflectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LearningReflections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LearningReflections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LearningReflections
+    **/
+    _count?: true | LearningReflectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LearningReflectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LearningReflectionMaxAggregateInputType
+  }
+
+  export type GetLearningReflectionAggregateType<T extends LearningReflectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateLearningReflection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLearningReflection[P]>
+      : GetScalarType<T[P], AggregateLearningReflection[P]>
+  }
+
+
+
+
+  export type LearningReflectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LearningReflectionWhereInput
+    orderBy?: LearningReflectionOrderByWithAggregationInput | LearningReflectionOrderByWithAggregationInput[]
+    by: LearningReflectionScalarFieldEnum[] | LearningReflectionScalarFieldEnum
+    having?: LearningReflectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LearningReflectionCountAggregateInputType | true
+    _min?: LearningReflectionMinAggregateInputType
+    _max?: LearningReflectionMaxAggregateInputType
+  }
+
+  export type LearningReflectionGroupByOutputType = {
+    id: string
+    enrollmentId: string
+    courseId: string
+    userId: string
+    content: string
+    createdAt: Date
+    updatedAt: Date
+    _count: LearningReflectionCountAggregateOutputType | null
+    _min: LearningReflectionMinAggregateOutputType | null
+    _max: LearningReflectionMaxAggregateOutputType | null
+  }
+
+  type GetLearningReflectionGroupByPayload<T extends LearningReflectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LearningReflectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LearningReflectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LearningReflectionGroupByOutputType[P]>
+            : GetScalarType<T[P], LearningReflectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LearningReflectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    enrollmentId?: boolean
+    courseId?: boolean
+    userId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["learningReflection"]>
+
+  export type LearningReflectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    enrollmentId?: boolean
+    courseId?: boolean
+    userId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["learningReflection"]>
+
+  export type LearningReflectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    enrollmentId?: boolean
+    courseId?: boolean
+    userId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["learningReflection"]>
+
+  export type LearningReflectionSelectScalar = {
+    id?: boolean
+    enrollmentId?: boolean
+    courseId?: boolean
+    userId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LearningReflectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "courseId" | "userId" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["learningReflection"]>
+  export type LearningReflectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LearningReflectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LearningReflectionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LearningReflectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LearningReflection"
+    objects: {
+      enrollment: Prisma.$EnrollmentPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      enrollmentId: string
+      courseId: string
+      userId: string
+      content: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["learningReflection"]>
+    composites: {}
+  }
+
+  type LearningReflectionGetPayload<S extends boolean | null | undefined | LearningReflectionDefaultArgs> = $Result.GetResult<Prisma.$LearningReflectionPayload, S>
+
+  type LearningReflectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LearningReflectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LearningReflectionCountAggregateInputType | true
+    }
+
+  export interface LearningReflectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LearningReflection'], meta: { name: 'LearningReflection' } }
+    /**
+     * Find zero or one LearningReflection that matches the filter.
+     * @param {LearningReflectionFindUniqueArgs} args - Arguments to find a LearningReflection
+     * @example
+     * // Get one LearningReflection
+     * const learningReflection = await prisma.learningReflection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LearningReflectionFindUniqueArgs>(args: SelectSubset<T, LearningReflectionFindUniqueArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LearningReflection that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LearningReflectionFindUniqueOrThrowArgs} args - Arguments to find a LearningReflection
+     * @example
+     * // Get one LearningReflection
+     * const learningReflection = await prisma.learningReflection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LearningReflectionFindUniqueOrThrowArgs>(args: SelectSubset<T, LearningReflectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LearningReflection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionFindFirstArgs} args - Arguments to find a LearningReflection
+     * @example
+     * // Get one LearningReflection
+     * const learningReflection = await prisma.learningReflection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LearningReflectionFindFirstArgs>(args?: SelectSubset<T, LearningReflectionFindFirstArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LearningReflection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionFindFirstOrThrowArgs} args - Arguments to find a LearningReflection
+     * @example
+     * // Get one LearningReflection
+     * const learningReflection = await prisma.learningReflection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LearningReflectionFindFirstOrThrowArgs>(args?: SelectSubset<T, LearningReflectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LearningReflections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LearningReflections
+     * const learningReflections = await prisma.learningReflection.findMany()
+     * 
+     * // Get first 10 LearningReflections
+     * const learningReflections = await prisma.learningReflection.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const learningReflectionWithIdOnly = await prisma.learningReflection.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LearningReflectionFindManyArgs>(args?: SelectSubset<T, LearningReflectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LearningReflection.
+     * @param {LearningReflectionCreateArgs} args - Arguments to create a LearningReflection.
+     * @example
+     * // Create one LearningReflection
+     * const LearningReflection = await prisma.learningReflection.create({
+     *   data: {
+     *     // ... data to create a LearningReflection
+     *   }
+     * })
+     * 
+     */
+    create<T extends LearningReflectionCreateArgs>(args: SelectSubset<T, LearningReflectionCreateArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LearningReflections.
+     * @param {LearningReflectionCreateManyArgs} args - Arguments to create many LearningReflections.
+     * @example
+     * // Create many LearningReflections
+     * const learningReflection = await prisma.learningReflection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LearningReflectionCreateManyArgs>(args?: SelectSubset<T, LearningReflectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LearningReflections and returns the data saved in the database.
+     * @param {LearningReflectionCreateManyAndReturnArgs} args - Arguments to create many LearningReflections.
+     * @example
+     * // Create many LearningReflections
+     * const learningReflection = await prisma.learningReflection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LearningReflections and only return the `id`
+     * const learningReflectionWithIdOnly = await prisma.learningReflection.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LearningReflectionCreateManyAndReturnArgs>(args?: SelectSubset<T, LearningReflectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LearningReflection.
+     * @param {LearningReflectionDeleteArgs} args - Arguments to delete one LearningReflection.
+     * @example
+     * // Delete one LearningReflection
+     * const LearningReflection = await prisma.learningReflection.delete({
+     *   where: {
+     *     // ... filter to delete one LearningReflection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LearningReflectionDeleteArgs>(args: SelectSubset<T, LearningReflectionDeleteArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LearningReflection.
+     * @param {LearningReflectionUpdateArgs} args - Arguments to update one LearningReflection.
+     * @example
+     * // Update one LearningReflection
+     * const learningReflection = await prisma.learningReflection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LearningReflectionUpdateArgs>(args: SelectSubset<T, LearningReflectionUpdateArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LearningReflections.
+     * @param {LearningReflectionDeleteManyArgs} args - Arguments to filter LearningReflections to delete.
+     * @example
+     * // Delete a few LearningReflections
+     * const { count } = await prisma.learningReflection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LearningReflectionDeleteManyArgs>(args?: SelectSubset<T, LearningReflectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LearningReflections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LearningReflections
+     * const learningReflection = await prisma.learningReflection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LearningReflectionUpdateManyArgs>(args: SelectSubset<T, LearningReflectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LearningReflections and returns the data updated in the database.
+     * @param {LearningReflectionUpdateManyAndReturnArgs} args - Arguments to update many LearningReflections.
+     * @example
+     * // Update many LearningReflections
+     * const learningReflection = await prisma.learningReflection.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LearningReflections and only return the `id`
+     * const learningReflectionWithIdOnly = await prisma.learningReflection.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LearningReflectionUpdateManyAndReturnArgs>(args: SelectSubset<T, LearningReflectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LearningReflection.
+     * @param {LearningReflectionUpsertArgs} args - Arguments to update or create a LearningReflection.
+     * @example
+     * // Update or create a LearningReflection
+     * const learningReflection = await prisma.learningReflection.upsert({
+     *   create: {
+     *     // ... data to create a LearningReflection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LearningReflection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LearningReflectionUpsertArgs>(args: SelectSubset<T, LearningReflectionUpsertArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LearningReflections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionCountArgs} args - Arguments to filter LearningReflections to count.
+     * @example
+     * // Count the number of LearningReflections
+     * const count = await prisma.learningReflection.count({
+     *   where: {
+     *     // ... the filter for the LearningReflections we want to count
+     *   }
+     * })
+    **/
+    count<T extends LearningReflectionCountArgs>(
+      args?: Subset<T, LearningReflectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LearningReflectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LearningReflection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LearningReflectionAggregateArgs>(args: Subset<T, LearningReflectionAggregateArgs>): Prisma.PrismaPromise<GetLearningReflectionAggregateType<T>>
+
+    /**
+     * Group by LearningReflection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LearningReflectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LearningReflectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LearningReflectionGroupByArgs['orderBy'] }
+        : { orderBy?: LearningReflectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LearningReflectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLearningReflectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LearningReflection model
+   */
+  readonly fields: LearningReflectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LearningReflection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LearningReflectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    enrollment<T extends EnrollmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EnrollmentDefaultArgs<ExtArgs>>): Prisma__EnrollmentClient<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LearningReflection model
+   */
+  interface LearningReflectionFieldRefs {
+    readonly id: FieldRef<"LearningReflection", 'String'>
+    readonly enrollmentId: FieldRef<"LearningReflection", 'String'>
+    readonly courseId: FieldRef<"LearningReflection", 'String'>
+    readonly userId: FieldRef<"LearningReflection", 'String'>
+    readonly content: FieldRef<"LearningReflection", 'String'>
+    readonly createdAt: FieldRef<"LearningReflection", 'DateTime'>
+    readonly updatedAt: FieldRef<"LearningReflection", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LearningReflection findUnique
+   */
+  export type LearningReflectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * Filter, which LearningReflection to fetch.
+     */
+    where: LearningReflectionWhereUniqueInput
+  }
+
+  /**
+   * LearningReflection findUniqueOrThrow
+   */
+  export type LearningReflectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * Filter, which LearningReflection to fetch.
+     */
+    where: LearningReflectionWhereUniqueInput
+  }
+
+  /**
+   * LearningReflection findFirst
+   */
+  export type LearningReflectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * Filter, which LearningReflection to fetch.
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LearningReflections to fetch.
+     */
+    orderBy?: LearningReflectionOrderByWithRelationInput | LearningReflectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LearningReflections.
+     */
+    cursor?: LearningReflectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LearningReflections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LearningReflections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LearningReflections.
+     */
+    distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * LearningReflection findFirstOrThrow
+   */
+  export type LearningReflectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * Filter, which LearningReflection to fetch.
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LearningReflections to fetch.
+     */
+    orderBy?: LearningReflectionOrderByWithRelationInput | LearningReflectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LearningReflections.
+     */
+    cursor?: LearningReflectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LearningReflections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LearningReflections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LearningReflections.
+     */
+    distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * LearningReflection findMany
+   */
+  export type LearningReflectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * Filter, which LearningReflections to fetch.
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LearningReflections to fetch.
+     */
+    orderBy?: LearningReflectionOrderByWithRelationInput | LearningReflectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LearningReflections.
+     */
+    cursor?: LearningReflectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LearningReflections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LearningReflections.
+     */
+    skip?: number
+    distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * LearningReflection create
+   */
+  export type LearningReflectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LearningReflection.
+     */
+    data: XOR<LearningReflectionCreateInput, LearningReflectionUncheckedCreateInput>
+  }
+
+  /**
+   * LearningReflection createMany
+   */
+  export type LearningReflectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LearningReflections.
+     */
+    data: LearningReflectionCreateManyInput | LearningReflectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LearningReflection createManyAndReturn
+   */
+  export type LearningReflectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * The data used to create many LearningReflections.
+     */
+    data: LearningReflectionCreateManyInput | LearningReflectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LearningReflection update
+   */
+  export type LearningReflectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LearningReflection.
+     */
+    data: XOR<LearningReflectionUpdateInput, LearningReflectionUncheckedUpdateInput>
+    /**
+     * Choose, which LearningReflection to update.
+     */
+    where: LearningReflectionWhereUniqueInput
+  }
+
+  /**
+   * LearningReflection updateMany
+   */
+  export type LearningReflectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LearningReflections.
+     */
+    data: XOR<LearningReflectionUpdateManyMutationInput, LearningReflectionUncheckedUpdateManyInput>
+    /**
+     * Filter which LearningReflections to update
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * Limit how many LearningReflections to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LearningReflection updateManyAndReturn
+   */
+  export type LearningReflectionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * The data used to update LearningReflections.
+     */
+    data: XOR<LearningReflectionUpdateManyMutationInput, LearningReflectionUncheckedUpdateManyInput>
+    /**
+     * Filter which LearningReflections to update
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * Limit how many LearningReflections to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LearningReflection upsert
+   */
+  export type LearningReflectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LearningReflection to update in case it exists.
+     */
+    where: LearningReflectionWhereUniqueInput
+    /**
+     * In case the LearningReflection found by the `where` argument doesn't exist, create a new LearningReflection with this data.
+     */
+    create: XOR<LearningReflectionCreateInput, LearningReflectionUncheckedCreateInput>
+    /**
+     * In case the LearningReflection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LearningReflectionUpdateInput, LearningReflectionUncheckedUpdateInput>
+  }
+
+  /**
+   * LearningReflection delete
+   */
+  export type LearningReflectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
+    /**
+     * Filter which LearningReflection to delete.
+     */
+    where: LearningReflectionWhereUniqueInput
+  }
+
+  /**
+   * LearningReflection deleteMany
+   */
+  export type LearningReflectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LearningReflections to delete
+     */
+    where?: LearningReflectionWhereInput
+    /**
+     * Limit how many LearningReflections to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LearningReflection without action
+   */
+  export type LearningReflectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LearningReflection
+     */
+    select?: LearningReflectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LearningReflection
+     */
+    omit?: LearningReflectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LearningReflectionInclude<ExtArgs> | null
   }
 
 
@@ -47883,6 +50756,1125 @@ export namespace Prisma {
 
 
   /**
+   * Model CourseNote
+   */
+
+  export type AggregateCourseNote = {
+    _count: CourseNoteCountAggregateOutputType | null
+    _min: CourseNoteMinAggregateOutputType | null
+    _max: CourseNoteMaxAggregateOutputType | null
+  }
+
+  export type CourseNoteMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    lessonId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CourseNoteMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    lessonId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CourseNoteCountAggregateOutputType = {
+    id: number
+    userId: number
+    courseId: number
+    lessonId: number
+    content: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CourseNoteMinAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    lessonId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CourseNoteMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    lessonId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CourseNoteCountAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    lessonId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CourseNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseNote to aggregate.
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseNotes to fetch.
+     */
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CourseNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CourseNotes
+    **/
+    _count?: true | CourseNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CourseNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CourseNoteMaxAggregateInputType
+  }
+
+  export type GetCourseNoteAggregateType<T extends CourseNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateCourseNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCourseNote[P]>
+      : GetScalarType<T[P], AggregateCourseNote[P]>
+  }
+
+
+
+
+  export type CourseNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseNoteWhereInput
+    orderBy?: CourseNoteOrderByWithAggregationInput | CourseNoteOrderByWithAggregationInput[]
+    by: CourseNoteScalarFieldEnum[] | CourseNoteScalarFieldEnum
+    having?: CourseNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CourseNoteCountAggregateInputType | true
+    _min?: CourseNoteMinAggregateInputType
+    _max?: CourseNoteMaxAggregateInputType
+  }
+
+  export type CourseNoteGroupByOutputType = {
+    id: string
+    userId: string
+    courseId: string
+    lessonId: string | null
+    content: string
+    createdAt: Date
+    updatedAt: Date
+    _count: CourseNoteCountAggregateOutputType | null
+    _min: CourseNoteMinAggregateOutputType | null
+    _max: CourseNoteMaxAggregateOutputType | null
+  }
+
+  type GetCourseNoteGroupByPayload<T extends CourseNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CourseNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CourseNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CourseNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], CourseNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CourseNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    lesson?: boolean | CourseNote$lessonArgs<ExtArgs>
+  }, ExtArgs["result"]["courseNote"]>
+
+  export type CourseNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    lesson?: boolean | CourseNote$lessonArgs<ExtArgs>
+  }, ExtArgs["result"]["courseNote"]>
+
+  export type CourseNoteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    lesson?: boolean | CourseNote$lessonArgs<ExtArgs>
+  }, ExtArgs["result"]["courseNote"]>
+
+  export type CourseNoteSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CourseNoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "courseId" | "lessonId" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["courseNote"]>
+  export type CourseNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    lesson?: boolean | CourseNote$lessonArgs<ExtArgs>
+  }
+  export type CourseNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    lesson?: boolean | CourseNote$lessonArgs<ExtArgs>
+  }
+  export type CourseNoteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+    lesson?: boolean | CourseNote$lessonArgs<ExtArgs>
+  }
+
+  export type $CourseNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CourseNote"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+      lesson: Prisma.$LessonPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      courseId: string
+      lessonId: string | null
+      content: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["courseNote"]>
+    composites: {}
+  }
+
+  type CourseNoteGetPayload<S extends boolean | null | undefined | CourseNoteDefaultArgs> = $Result.GetResult<Prisma.$CourseNotePayload, S>
+
+  type CourseNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CourseNoteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CourseNoteCountAggregateInputType | true
+    }
+
+  export interface CourseNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CourseNote'], meta: { name: 'CourseNote' } }
+    /**
+     * Find zero or one CourseNote that matches the filter.
+     * @param {CourseNoteFindUniqueArgs} args - Arguments to find a CourseNote
+     * @example
+     * // Get one CourseNote
+     * const courseNote = await prisma.courseNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CourseNoteFindUniqueArgs>(args: SelectSubset<T, CourseNoteFindUniqueArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CourseNote that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CourseNoteFindUniqueOrThrowArgs} args - Arguments to find a CourseNote
+     * @example
+     * // Get one CourseNote
+     * const courseNote = await prisma.courseNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CourseNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, CourseNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CourseNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteFindFirstArgs} args - Arguments to find a CourseNote
+     * @example
+     * // Get one CourseNote
+     * const courseNote = await prisma.courseNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CourseNoteFindFirstArgs>(args?: SelectSubset<T, CourseNoteFindFirstArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CourseNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteFindFirstOrThrowArgs} args - Arguments to find a CourseNote
+     * @example
+     * // Get one CourseNote
+     * const courseNote = await prisma.courseNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CourseNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, CourseNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CourseNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CourseNotes
+     * const courseNotes = await prisma.courseNote.findMany()
+     * 
+     * // Get first 10 CourseNotes
+     * const courseNotes = await prisma.courseNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const courseNoteWithIdOnly = await prisma.courseNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CourseNoteFindManyArgs>(args?: SelectSubset<T, CourseNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CourseNote.
+     * @param {CourseNoteCreateArgs} args - Arguments to create a CourseNote.
+     * @example
+     * // Create one CourseNote
+     * const CourseNote = await prisma.courseNote.create({
+     *   data: {
+     *     // ... data to create a CourseNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends CourseNoteCreateArgs>(args: SelectSubset<T, CourseNoteCreateArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CourseNotes.
+     * @param {CourseNoteCreateManyArgs} args - Arguments to create many CourseNotes.
+     * @example
+     * // Create many CourseNotes
+     * const courseNote = await prisma.courseNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CourseNoteCreateManyArgs>(args?: SelectSubset<T, CourseNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CourseNotes and returns the data saved in the database.
+     * @param {CourseNoteCreateManyAndReturnArgs} args - Arguments to create many CourseNotes.
+     * @example
+     * // Create many CourseNotes
+     * const courseNote = await prisma.courseNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CourseNotes and only return the `id`
+     * const courseNoteWithIdOnly = await prisma.courseNote.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CourseNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, CourseNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CourseNote.
+     * @param {CourseNoteDeleteArgs} args - Arguments to delete one CourseNote.
+     * @example
+     * // Delete one CourseNote
+     * const CourseNote = await prisma.courseNote.delete({
+     *   where: {
+     *     // ... filter to delete one CourseNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CourseNoteDeleteArgs>(args: SelectSubset<T, CourseNoteDeleteArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CourseNote.
+     * @param {CourseNoteUpdateArgs} args - Arguments to update one CourseNote.
+     * @example
+     * // Update one CourseNote
+     * const courseNote = await prisma.courseNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CourseNoteUpdateArgs>(args: SelectSubset<T, CourseNoteUpdateArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CourseNotes.
+     * @param {CourseNoteDeleteManyArgs} args - Arguments to filter CourseNotes to delete.
+     * @example
+     * // Delete a few CourseNotes
+     * const { count } = await prisma.courseNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CourseNoteDeleteManyArgs>(args?: SelectSubset<T, CourseNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CourseNotes
+     * const courseNote = await prisma.courseNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CourseNoteUpdateManyArgs>(args: SelectSubset<T, CourseNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseNotes and returns the data updated in the database.
+     * @param {CourseNoteUpdateManyAndReturnArgs} args - Arguments to update many CourseNotes.
+     * @example
+     * // Update many CourseNotes
+     * const courseNote = await prisma.courseNote.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CourseNotes and only return the `id`
+     * const courseNoteWithIdOnly = await prisma.courseNote.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CourseNoteUpdateManyAndReturnArgs>(args: SelectSubset<T, CourseNoteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CourseNote.
+     * @param {CourseNoteUpsertArgs} args - Arguments to update or create a CourseNote.
+     * @example
+     * // Update or create a CourseNote
+     * const courseNote = await prisma.courseNote.upsert({
+     *   create: {
+     *     // ... data to create a CourseNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CourseNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CourseNoteUpsertArgs>(args: SelectSubset<T, CourseNoteUpsertArgs<ExtArgs>>): Prisma__CourseNoteClient<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CourseNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteCountArgs} args - Arguments to filter CourseNotes to count.
+     * @example
+     * // Count the number of CourseNotes
+     * const count = await prisma.courseNote.count({
+     *   where: {
+     *     // ... the filter for the CourseNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CourseNoteCountArgs>(
+      args?: Subset<T, CourseNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CourseNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CourseNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CourseNoteAggregateArgs>(args: Subset<T, CourseNoteAggregateArgs>): Prisma.PrismaPromise<GetCourseNoteAggregateType<T>>
+
+    /**
+     * Group by CourseNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CourseNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CourseNoteGroupByArgs['orderBy'] }
+        : { orderBy?: CourseNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CourseNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCourseNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CourseNote model
+   */
+  readonly fields: CourseNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CourseNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CourseNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lesson<T extends CourseNote$lessonArgs<ExtArgs> = {}>(args?: Subset<T, CourseNote$lessonArgs<ExtArgs>>): Prisma__LessonClient<$Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CourseNote model
+   */
+  interface CourseNoteFieldRefs {
+    readonly id: FieldRef<"CourseNote", 'String'>
+    readonly userId: FieldRef<"CourseNote", 'String'>
+    readonly courseId: FieldRef<"CourseNote", 'String'>
+    readonly lessonId: FieldRef<"CourseNote", 'String'>
+    readonly content: FieldRef<"CourseNote", 'String'>
+    readonly createdAt: FieldRef<"CourseNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"CourseNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CourseNote findUnique
+   */
+  export type CourseNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseNote to fetch.
+     */
+    where: CourseNoteWhereUniqueInput
+  }
+
+  /**
+   * CourseNote findUniqueOrThrow
+   */
+  export type CourseNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseNote to fetch.
+     */
+    where: CourseNoteWhereUniqueInput
+  }
+
+  /**
+   * CourseNote findFirst
+   */
+  export type CourseNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseNote to fetch.
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseNotes to fetch.
+     */
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseNotes.
+     */
+    cursor?: CourseNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseNotes.
+     */
+    distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CourseNote findFirstOrThrow
+   */
+  export type CourseNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseNote to fetch.
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseNotes to fetch.
+     */
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseNotes.
+     */
+    cursor?: CourseNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseNotes.
+     */
+    distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CourseNote findMany
+   */
+  export type CourseNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseNotes to fetch.
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseNotes to fetch.
+     */
+    orderBy?: CourseNoteOrderByWithRelationInput | CourseNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CourseNotes.
+     */
+    cursor?: CourseNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseNotes.
+     */
+    skip?: number
+    distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CourseNote create
+   */
+  export type CourseNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CourseNote.
+     */
+    data: XOR<CourseNoteCreateInput, CourseNoteUncheckedCreateInput>
+  }
+
+  /**
+   * CourseNote createMany
+   */
+  export type CourseNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CourseNotes.
+     */
+    data: CourseNoteCreateManyInput | CourseNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CourseNote createManyAndReturn
+   */
+  export type CourseNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * The data used to create many CourseNotes.
+     */
+    data: CourseNoteCreateManyInput | CourseNoteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseNote update
+   */
+  export type CourseNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CourseNote.
+     */
+    data: XOR<CourseNoteUpdateInput, CourseNoteUncheckedUpdateInput>
+    /**
+     * Choose, which CourseNote to update.
+     */
+    where: CourseNoteWhereUniqueInput
+  }
+
+  /**
+   * CourseNote updateMany
+   */
+  export type CourseNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CourseNotes.
+     */
+    data: XOR<CourseNoteUpdateManyMutationInput, CourseNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseNotes to update
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * Limit how many CourseNotes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CourseNote updateManyAndReturn
+   */
+  export type CourseNoteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * The data used to update CourseNotes.
+     */
+    data: XOR<CourseNoteUpdateManyMutationInput, CourseNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseNotes to update
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * Limit how many CourseNotes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseNote upsert
+   */
+  export type CourseNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CourseNote to update in case it exists.
+     */
+    where: CourseNoteWhereUniqueInput
+    /**
+     * In case the CourseNote found by the `where` argument doesn't exist, create a new CourseNote with this data.
+     */
+    create: XOR<CourseNoteCreateInput, CourseNoteUncheckedCreateInput>
+    /**
+     * In case the CourseNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CourseNoteUpdateInput, CourseNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * CourseNote delete
+   */
+  export type CourseNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+    /**
+     * Filter which CourseNote to delete.
+     */
+    where: CourseNoteWhereUniqueInput
+  }
+
+  /**
+   * CourseNote deleteMany
+   */
+  export type CourseNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseNotes to delete
+     */
+    where?: CourseNoteWhereInput
+    /**
+     * Limit how many CourseNotes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CourseNote.lesson
+   */
+  export type CourseNote$lessonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lesson
+     */
+    select?: LessonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Lesson
+     */
+    omit?: LessonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LessonInclude<ExtArgs> | null
+    where?: LessonWhereInput
+  }
+
+  /**
+   * CourseNote without action
+   */
+  export type CourseNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseNote
+     */
+    select?: CourseNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CourseNote
+     */
+    omit?: CourseNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseNoteInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -48029,6 +52021,7 @@ export namespace Prisma {
     visibility: 'visibility',
     nextSession: 'nextSession',
     finalExam: 'finalExam',
+    joinCodeHash: 'joinCodeHash',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -48096,6 +52089,22 @@ export namespace Prisma {
   export type CourseSessionScalarFieldEnum = (typeof CourseSessionScalarFieldEnum)[keyof typeof CourseSessionScalarFieldEnum]
 
 
+  export const SessionAnonymousQuestionScalarFieldEnum: {
+    id: 'id',
+    courseSessionId: 'courseSessionId',
+    courseId: 'courseId',
+    authorId: 'authorId',
+    content: 'content',
+    status: 'status',
+    answer: 'answer',
+    answeredAt: 'answeredAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SessionAnonymousQuestionScalarFieldEnum = (typeof SessionAnonymousQuestionScalarFieldEnum)[keyof typeof SessionAnonymousQuestionScalarFieldEnum]
+
+
   export const EnrollmentScalarFieldEnum: {
     id: 'id',
     courseId: 'courseId',
@@ -48105,10 +52114,24 @@ export namespace Prisma {
     status: 'status',
     progress: 'progress',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    learningReflectionEmailSentAt: 'learningReflectionEmailSentAt'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
+
+
+  export const LearningReflectionScalarFieldEnum: {
+    id: 'id',
+    enrollmentId: 'enrollmentId',
+    courseId: 'courseId',
+    userId: 'userId',
+    content: 'content',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LearningReflectionScalarFieldEnum = (typeof LearningReflectionScalarFieldEnum)[keyof typeof LearningReflectionScalarFieldEnum]
 
 
   export const SectionQuizSubmissionScalarFieldEnum: {
@@ -48430,6 +52453,19 @@ export namespace Prisma {
   export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof CouponScalarFieldEnum]
 
 
+  export const CourseNoteScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    lessonId: 'lessonId',
+    content: 'content',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CourseNoteScalarFieldEnum = (typeof CourseNoteScalarFieldEnum)[keyof typeof CourseNoteScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -48645,6 +52681,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SessionAnonymousQuestionStatus'
+   */
+  export type EnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionAnonymousQuestionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SessionAnonymousQuestionStatus[]'
+   */
+  export type ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionAnonymousQuestionStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'EnrollmentStatus'
    */
   export type EnumEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnrollmentStatus'>
@@ -48794,6 +52844,9 @@ export namespace Prisma {
     hostedGames?: QuizGameListRelationFilter
     gameParticipations?: QuizGameParticipantListRelationFilter
     orgMemberships?: OrgMemberListRelationFilter
+    courseNotes?: CourseNoteListRelationFilter
+    sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
+    learningReflections?: LearningReflectionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -48828,6 +52881,9 @@ export namespace Prisma {
     hostedGames?: QuizGameOrderByRelationAggregateInput
     gameParticipations?: QuizGameParticipantOrderByRelationAggregateInput
     orgMemberships?: OrgMemberOrderByRelationAggregateInput
+    courseNotes?: CourseNoteOrderByRelationAggregateInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
+    learningReflections?: LearningReflectionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -48865,6 +52921,9 @@ export namespace Prisma {
     hostedGames?: QuizGameListRelationFilter
     gameParticipations?: QuizGameParticipantListRelationFilter
     orgMemberships?: OrgMemberListRelationFilter
+    courseNotes?: CourseNoteListRelationFilter
+    sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
+    learningReflections?: LearningReflectionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -49386,6 +53445,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFilter<"Course"> | $Enums.CourseVisibility
     nextSession?: DateTimeNullableFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableFilter<"Course">
+    joinCodeHash?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49399,6 +53459,9 @@ export namespace Prisma {
     conversations?: ConversationListRelationFilter
     orgCourseAccess?: OrgCourseAccessListRelationFilter
     teamCourseAccess?: TeamCourseAccessListRelationFilter
+    notes?: CourseNoteListRelationFilter
+    sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
+    learningReflections?: LearningReflectionListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -49423,6 +53486,7 @@ export namespace Prisma {
     visibility?: SortOrder
     nextSession?: SortOrderInput | SortOrder
     finalExam?: SortOrderInput | SortOrder
+    joinCodeHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     instructor?: UserOrderByWithRelationInput
@@ -49436,6 +53500,9 @@ export namespace Prisma {
     conversations?: ConversationOrderByRelationAggregateInput
     orgCourseAccess?: OrgCourseAccessOrderByRelationAggregateInput
     teamCourseAccess?: TeamCourseAccessOrderByRelationAggregateInput
+    notes?: CourseNoteOrderByRelationAggregateInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
+    learningReflections?: LearningReflectionOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -49463,6 +53530,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFilter<"Course"> | $Enums.CourseVisibility
     nextSession?: DateTimeNullableFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableFilter<"Course">
+    joinCodeHash?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49476,6 +53544,9 @@ export namespace Prisma {
     conversations?: ConversationListRelationFilter
     orgCourseAccess?: OrgCourseAccessListRelationFilter
     teamCourseAccess?: TeamCourseAccessListRelationFilter
+    notes?: CourseNoteListRelationFilter
+    sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
+    learningReflections?: LearningReflectionListRelationFilter
   }, "id" | "slug">
 
   export type CourseOrderByWithAggregationInput = {
@@ -49500,6 +53571,7 @@ export namespace Prisma {
     visibility?: SortOrder
     nextSession?: SortOrderInput | SortOrder
     finalExam?: SortOrderInput | SortOrder
+    joinCodeHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CourseCountOrderByAggregateInput
@@ -49534,6 +53606,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityWithAggregatesFilter<"Course"> | $Enums.CourseVisibility
     nextSession?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableWithAggregatesFilter<"Course">
+    joinCodeHash?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
   }
@@ -49630,6 +53703,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
     progress?: LessonProgressListRelationFilter
+    notes?: CourseNoteListRelationFilter
   }
 
   export type LessonOrderByWithRelationInput = {
@@ -49648,6 +53722,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     section?: CourseSectionOrderByWithRelationInput
     progress?: LessonProgressOrderByRelationAggregateInput
+    notes?: CourseNoteOrderByRelationAggregateInput
   }
 
   export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -49669,6 +53744,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
     progress?: LessonProgressListRelationFilter
+    notes?: CourseNoteListRelationFilter
   }, "id">
 
   export type LessonOrderByWithAggregationInput = {
@@ -49793,6 +53869,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     enrollments?: EnrollmentListRelationFilter
+    anonymousQuestions?: SessionAnonymousQuestionListRelationFilter
   }
 
   export type CourseSessionOrderByWithRelationInput = {
@@ -49808,6 +53885,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     course?: CourseOrderByWithRelationInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
+    anonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
   }
 
   export type CourseSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -49826,6 +53904,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     enrollments?: EnrollmentListRelationFilter
+    anonymousQuestions?: SessionAnonymousQuestionListRelationFilter
   }, "id">
 
   export type CourseSessionOrderByWithAggregationInput = {
@@ -49862,6 +53941,92 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CourseSession"> | Date | string
   }
 
+  export type SessionAnonymousQuestionWhereInput = {
+    AND?: SessionAnonymousQuestionWhereInput | SessionAnonymousQuestionWhereInput[]
+    OR?: SessionAnonymousQuestionWhereInput[]
+    NOT?: SessionAnonymousQuestionWhereInput | SessionAnonymousQuestionWhereInput[]
+    id?: StringFilter<"SessionAnonymousQuestion"> | string
+    courseSessionId?: StringFilter<"SessionAnonymousQuestion"> | string
+    courseId?: StringFilter<"SessionAnonymousQuestion"> | string
+    authorId?: StringFilter<"SessionAnonymousQuestion"> | string
+    content?: StringFilter<"SessionAnonymousQuestion"> | string
+    status?: EnumSessionAnonymousQuestionStatusFilter<"SessionAnonymousQuestion"> | $Enums.SessionAnonymousQuestionStatus
+    answer?: StringNullableFilter<"SessionAnonymousQuestion"> | string | null
+    answeredAt?: DateTimeNullableFilter<"SessionAnonymousQuestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"SessionAnonymousQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"SessionAnonymousQuestion"> | Date | string
+    session?: XOR<CourseSessionScalarRelationFilter, CourseSessionWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SessionAnonymousQuestionOrderByWithRelationInput = {
+    id?: SortOrder
+    courseSessionId?: SortOrder
+    courseId?: SortOrder
+    authorId?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    answer?: SortOrderInput | SortOrder
+    answeredAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    session?: CourseSessionOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type SessionAnonymousQuestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SessionAnonymousQuestionWhereInput | SessionAnonymousQuestionWhereInput[]
+    OR?: SessionAnonymousQuestionWhereInput[]
+    NOT?: SessionAnonymousQuestionWhereInput | SessionAnonymousQuestionWhereInput[]
+    courseSessionId?: StringFilter<"SessionAnonymousQuestion"> | string
+    courseId?: StringFilter<"SessionAnonymousQuestion"> | string
+    authorId?: StringFilter<"SessionAnonymousQuestion"> | string
+    content?: StringFilter<"SessionAnonymousQuestion"> | string
+    status?: EnumSessionAnonymousQuestionStatusFilter<"SessionAnonymousQuestion"> | $Enums.SessionAnonymousQuestionStatus
+    answer?: StringNullableFilter<"SessionAnonymousQuestion"> | string | null
+    answeredAt?: DateTimeNullableFilter<"SessionAnonymousQuestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"SessionAnonymousQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"SessionAnonymousQuestion"> | Date | string
+    session?: XOR<CourseSessionScalarRelationFilter, CourseSessionWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SessionAnonymousQuestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    courseSessionId?: SortOrder
+    courseId?: SortOrder
+    authorId?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    answer?: SortOrderInput | SortOrder
+    answeredAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SessionAnonymousQuestionCountOrderByAggregateInput
+    _max?: SessionAnonymousQuestionMaxOrderByAggregateInput
+    _min?: SessionAnonymousQuestionMinOrderByAggregateInput
+  }
+
+  export type SessionAnonymousQuestionScalarWhereWithAggregatesInput = {
+    AND?: SessionAnonymousQuestionScalarWhereWithAggregatesInput | SessionAnonymousQuestionScalarWhereWithAggregatesInput[]
+    OR?: SessionAnonymousQuestionScalarWhereWithAggregatesInput[]
+    NOT?: SessionAnonymousQuestionScalarWhereWithAggregatesInput | SessionAnonymousQuestionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SessionAnonymousQuestion"> | string
+    courseSessionId?: StringWithAggregatesFilter<"SessionAnonymousQuestion"> | string
+    courseId?: StringWithAggregatesFilter<"SessionAnonymousQuestion"> | string
+    authorId?: StringWithAggregatesFilter<"SessionAnonymousQuestion"> | string
+    content?: StringWithAggregatesFilter<"SessionAnonymousQuestion"> | string
+    status?: EnumSessionAnonymousQuestionStatusWithAggregatesFilter<"SessionAnonymousQuestion"> | $Enums.SessionAnonymousQuestionStatus
+    answer?: StringNullableWithAggregatesFilter<"SessionAnonymousQuestion"> | string | null
+    answeredAt?: DateTimeNullableWithAggregatesFilter<"SessionAnonymousQuestion"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SessionAnonymousQuestion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SessionAnonymousQuestion"> | Date | string
+  }
+
   export type EnrollmentWhereInput = {
     AND?: EnrollmentWhereInput | EnrollmentWhereInput[]
     OR?: EnrollmentWhereInput[]
@@ -49875,6 +54040,7 @@ export namespace Prisma {
     progress?: IntFilter<"Enrollment"> | number
     createdAt?: DateTimeFilter<"Enrollment"> | Date | string
     updatedAt?: DateTimeFilter<"Enrollment"> | Date | string
+    learningReflectionEmailSentAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     student?: XOR<UserScalarRelationFilter, UserWhereInput>
     session?: XOR<CourseSessionNullableScalarRelationFilter, CourseSessionWhereInput> | null
@@ -49884,6 +54050,7 @@ export namespace Prisma {
     examSubmission?: XOR<ExamSubmissionNullableScalarRelationFilter, ExamSubmissionWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     sectionQuizSubmissions?: SectionQuizSubmissionListRelationFilter
+    learningReflection?: XOR<LearningReflectionNullableScalarRelationFilter, LearningReflectionWhereInput> | null
   }
 
   export type EnrollmentOrderByWithRelationInput = {
@@ -49896,6 +54063,7 @@ export namespace Prisma {
     progress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    learningReflectionEmailSentAt?: SortOrderInput | SortOrder
     course?: CourseOrderByWithRelationInput
     student?: UserOrderByWithRelationInput
     session?: CourseSessionOrderByWithRelationInput
@@ -49905,6 +54073,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionOrderByWithRelationInput
     transaction?: TransactionOrderByWithRelationInput
     sectionQuizSubmissions?: SectionQuizSubmissionOrderByRelationAggregateInput
+    learningReflection?: LearningReflectionOrderByWithRelationInput
   }
 
   export type EnrollmentWhereUniqueInput = Prisma.AtLeast<{
@@ -49921,6 +54090,7 @@ export namespace Prisma {
     progress?: IntFilter<"Enrollment"> | number
     createdAt?: DateTimeFilter<"Enrollment"> | Date | string
     updatedAt?: DateTimeFilter<"Enrollment"> | Date | string
+    learningReflectionEmailSentAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     student?: XOR<UserScalarRelationFilter, UserWhereInput>
     session?: XOR<CourseSessionNullableScalarRelationFilter, CourseSessionWhereInput> | null
@@ -49930,6 +54100,7 @@ export namespace Prisma {
     examSubmission?: XOR<ExamSubmissionNullableScalarRelationFilter, ExamSubmissionWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     sectionQuizSubmissions?: SectionQuizSubmissionListRelationFilter
+    learningReflection?: XOR<LearningReflectionNullableScalarRelationFilter, LearningReflectionWhereInput> | null
   }, "id" | "courseId_studentId">
 
   export type EnrollmentOrderByWithAggregationInput = {
@@ -49942,6 +54113,7 @@ export namespace Prisma {
     progress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    learningReflectionEmailSentAt?: SortOrderInput | SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
@@ -49962,6 +54134,78 @@ export namespace Prisma {
     progress?: IntWithAggregatesFilter<"Enrollment"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Enrollment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Enrollment"> | Date | string
+    learningReflectionEmailSentAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
+  }
+
+  export type LearningReflectionWhereInput = {
+    AND?: LearningReflectionWhereInput | LearningReflectionWhereInput[]
+    OR?: LearningReflectionWhereInput[]
+    NOT?: LearningReflectionWhereInput | LearningReflectionWhereInput[]
+    id?: StringFilter<"LearningReflection"> | string
+    enrollmentId?: StringFilter<"LearningReflection"> | string
+    courseId?: StringFilter<"LearningReflection"> | string
+    userId?: StringFilter<"LearningReflection"> | string
+    content?: StringFilter<"LearningReflection"> | string
+    createdAt?: DateTimeFilter<"LearningReflection"> | Date | string
+    updatedAt?: DateTimeFilter<"LearningReflection"> | Date | string
+    enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type LearningReflectionOrderByWithRelationInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    courseId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    enrollment?: EnrollmentOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type LearningReflectionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    enrollmentId?: string
+    AND?: LearningReflectionWhereInput | LearningReflectionWhereInput[]
+    OR?: LearningReflectionWhereInput[]
+    NOT?: LearningReflectionWhereInput | LearningReflectionWhereInput[]
+    courseId?: StringFilter<"LearningReflection"> | string
+    userId?: StringFilter<"LearningReflection"> | string
+    content?: StringFilter<"LearningReflection"> | string
+    createdAt?: DateTimeFilter<"LearningReflection"> | Date | string
+    updatedAt?: DateTimeFilter<"LearningReflection"> | Date | string
+    enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "enrollmentId">
+
+  export type LearningReflectionOrderByWithAggregationInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    courseId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LearningReflectionCountOrderByAggregateInput
+    _max?: LearningReflectionMaxOrderByAggregateInput
+    _min?: LearningReflectionMinOrderByAggregateInput
+  }
+
+  export type LearningReflectionScalarWhereWithAggregatesInput = {
+    AND?: LearningReflectionScalarWhereWithAggregatesInput | LearningReflectionScalarWhereWithAggregatesInput[]
+    OR?: LearningReflectionScalarWhereWithAggregatesInput[]
+    NOT?: LearningReflectionScalarWhereWithAggregatesInput | LearningReflectionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LearningReflection"> | string
+    enrollmentId?: StringWithAggregatesFilter<"LearningReflection"> | string
+    courseId?: StringWithAggregatesFilter<"LearningReflection"> | string
+    userId?: StringWithAggregatesFilter<"LearningReflection"> | string
+    content?: StringWithAggregatesFilter<"LearningReflection"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"LearningReflection"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LearningReflection"> | Date | string
   }
 
   export type SectionQuizSubmissionWhereInput = {
@@ -51677,6 +55921,77 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
   }
 
+  export type CourseNoteWhereInput = {
+    AND?: CourseNoteWhereInput | CourseNoteWhereInput[]
+    OR?: CourseNoteWhereInput[]
+    NOT?: CourseNoteWhereInput | CourseNoteWhereInput[]
+    id?: StringFilter<"CourseNote"> | string
+    userId?: StringFilter<"CourseNote"> | string
+    courseId?: StringFilter<"CourseNote"> | string
+    lessonId?: StringNullableFilter<"CourseNote"> | string | null
+    content?: StringFilter<"CourseNote"> | string
+    createdAt?: DateTimeFilter<"CourseNote"> | Date | string
+    updatedAt?: DateTimeFilter<"CourseNote"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    lesson?: XOR<LessonNullableScalarRelationFilter, LessonWhereInput> | null
+  }
+
+  export type CourseNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lessonId?: SortOrderInput | SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+    lesson?: LessonOrderByWithRelationInput
+  }
+
+  export type CourseNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CourseNoteWhereInput | CourseNoteWhereInput[]
+    OR?: CourseNoteWhereInput[]
+    NOT?: CourseNoteWhereInput | CourseNoteWhereInput[]
+    userId?: StringFilter<"CourseNote"> | string
+    courseId?: StringFilter<"CourseNote"> | string
+    lessonId?: StringNullableFilter<"CourseNote"> | string | null
+    content?: StringFilter<"CourseNote"> | string
+    createdAt?: DateTimeFilter<"CourseNote"> | Date | string
+    updatedAt?: DateTimeFilter<"CourseNote"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    lesson?: XOR<LessonNullableScalarRelationFilter, LessonWhereInput> | null
+  }, "id">
+
+  export type CourseNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lessonId?: SortOrderInput | SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CourseNoteCountOrderByAggregateInput
+    _max?: CourseNoteMaxOrderByAggregateInput
+    _min?: CourseNoteMinOrderByAggregateInput
+  }
+
+  export type CourseNoteScalarWhereWithAggregatesInput = {
+    AND?: CourseNoteScalarWhereWithAggregatesInput | CourseNoteScalarWhereWithAggregatesInput[]
+    OR?: CourseNoteScalarWhereWithAggregatesInput[]
+    NOT?: CourseNoteScalarWhereWithAggregatesInput | CourseNoteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CourseNote"> | string
+    userId?: StringWithAggregatesFilter<"CourseNote"> | string
+    courseId?: StringWithAggregatesFilter<"CourseNote"> | string
+    lessonId?: StringNullableWithAggregatesFilter<"CourseNote"> | string | null
+    content?: StringWithAggregatesFilter<"CourseNote"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CourseNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CourseNote"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -51709,6 +56024,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -51743,6 +56061,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -51777,6 +56098,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -51811,6 +56135,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -52391,6 +56718,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -52404,6 +56732,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -52428,6 +56759,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -52439,6 +56771,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -52461,6 +56796,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -52474,6 +56810,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -52498,6 +56837,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -52509,6 +56849,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -52533,6 +56876,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52557,6 +56901,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52583,6 +56928,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52679,6 +57025,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
+    notes?: CourseNoteCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateInput = {
@@ -52696,6 +57043,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUpdateInput = {
@@ -52713,6 +57061,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
+    notes?: CourseNoteUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateInput = {
@@ -52730,6 +57079,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonCreateManyInput = {
@@ -52852,6 +57202,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    anonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutSessionInput
   }
 
   export type CourseSessionUncheckedCreateInput = {
@@ -52866,6 +57217,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    anonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CourseSessionUpdateInput = {
@@ -52880,6 +57232,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    anonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutSessionNestedInput
   }
 
   export type CourseSessionUncheckedUpdateInput = {
@@ -52894,6 +57247,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    anonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type CourseSessionCreateManyInput = {
@@ -52934,12 +57288,101 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SessionAnonymousQuestionCreateInput = {
+    id?: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    session: CourseSessionCreateNestedOneWithoutAnonymousQuestionsInput
+    course: CourseCreateNestedOneWithoutSessionAnonymousQuestionsInput
+    author: UserCreateNestedOneWithoutSessionAnonymousQuestionsInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateInput = {
+    id?: string
+    courseSessionId: string
+    courseId: string
+    authorId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: CourseSessionUpdateOneRequiredWithoutAnonymousQuestionsNestedInput
+    course?: CourseUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput
+    author?: UserUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseSessionId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionCreateManyInput = {
+    id?: string
+    courseSessionId: string
+    courseId: string
+    authorId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseSessionId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EnrollmentCreateInput = {
     id?: string
     status?: $Enums.EnrollmentStatus
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -52949,6 +57392,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateInput = {
@@ -52961,11 +57405,13 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUpdateInput = {
@@ -52974,6 +57420,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -52983,6 +57430,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateInput = {
@@ -52995,11 +57443,13 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentCreateManyInput = {
@@ -53012,6 +57462,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -53020,6 +57471,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -53030,6 +57482,74 @@ export namespace Prisma {
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LearningReflectionCreateInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollment: EnrollmentCreateNestedOneWithoutLearningReflectionInput
+    course: CourseCreateNestedOneWithoutLearningReflectionsInput
+    user: UserCreateNestedOneWithoutLearningReflectionsInput
+  }
+
+  export type LearningReflectionUncheckedCreateInput = {
+    id?: string
+    enrollmentId: string
+    courseId: string
+    userId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollment?: EnrollmentUpdateOneRequiredWithoutLearningReflectionNestedInput
+    course?: CourseUpdateOneRequiredWithoutLearningReflectionsNestedInput
+    user?: UserUpdateOneRequiredWithoutLearningReflectionsNestedInput
+  }
+
+  export type LearningReflectionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LearningReflectionCreateManyInput = {
+    id?: string
+    enrollmentId: string
+    courseId: string
+    userId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LearningReflectionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -54791,6 +59311,73 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseNoteCreateInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCourseNotesInput
+    course: CourseCreateNestedOneWithoutNotesInput
+    lesson?: LessonCreateNestedOneWithoutNotesInput
+  }
+
+  export type CourseNoteUncheckedCreateInput = {
+    id?: string
+    userId: string
+    courseId: string
+    lessonId?: string | null
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CourseNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCourseNotesNestedInput
+    course?: CourseUpdateOneRequiredWithoutNotesNestedInput
+    lesson?: LessonUpdateOneWithoutNotesNestedInput
+  }
+
+  export type CourseNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lessonId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseNoteCreateManyInput = {
+    id?: string
+    userId: string
+    courseId: string
+    lessonId?: string | null
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CourseNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lessonId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -54932,6 +59519,24 @@ export namespace Prisma {
     none?: OrgMemberWhereInput
   }
 
+  export type CourseNoteListRelationFilter = {
+    every?: CourseNoteWhereInput
+    some?: CourseNoteWhereInput
+    none?: CourseNoteWhereInput
+  }
+
+  export type SessionAnonymousQuestionListRelationFilter = {
+    every?: SessionAnonymousQuestionWhereInput
+    some?: SessionAnonymousQuestionWhereInput
+    none?: SessionAnonymousQuestionWhereInput
+  }
+
+  export type LearningReflectionListRelationFilter = {
+    every?: LearningReflectionWhereInput
+    some?: LearningReflectionWhereInput
+    none?: LearningReflectionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -54986,6 +59591,18 @@ export namespace Prisma {
   }
 
   export type OrgMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CourseNoteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SessionAnonymousQuestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LearningReflectionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55567,6 +60184,7 @@ export namespace Prisma {
     visibility?: SortOrder
     nextSession?: SortOrder
     finalExam?: SortOrder
+    joinCodeHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -55597,6 +60215,7 @@ export namespace Prisma {
     status?: SortOrder
     visibility?: SortOrder
     nextSession?: SortOrder
+    joinCodeHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -55622,6 +60241,7 @@ export namespace Prisma {
     status?: SortOrder
     visibility?: SortOrder
     nextSession?: SortOrder
+    joinCodeHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -55935,6 +60555,67 @@ export namespace Prisma {
     maxStudents?: SortOrder
   }
 
+  export type EnumSessionAnonymousQuestionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionAnonymousQuestionStatus | EnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel> | $Enums.SessionAnonymousQuestionStatus
+  }
+
+  export type CourseSessionScalarRelationFilter = {
+    is?: CourseSessionWhereInput
+    isNot?: CourseSessionWhereInput
+  }
+
+  export type SessionAnonymousQuestionCountOrderByAggregateInput = {
+    id?: SortOrder
+    courseSessionId?: SortOrder
+    courseId?: SortOrder
+    authorId?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    answer?: SortOrder
+    answeredAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SessionAnonymousQuestionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    courseSessionId?: SortOrder
+    courseId?: SortOrder
+    authorId?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    answer?: SortOrder
+    answeredAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SessionAnonymousQuestionMinOrderByAggregateInput = {
+    id?: SortOrder
+    courseSessionId?: SortOrder
+    courseId?: SortOrder
+    authorId?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    answer?: SortOrder
+    answeredAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumSessionAnonymousQuestionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionAnonymousQuestionStatus | EnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionAnonymousQuestionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SessionAnonymousQuestionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel>
+  }
+
   export type EnumEnrollmentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EnrollmentStatus | EnumEnrollmentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EnrollmentStatus[] | ListEnumEnrollmentStatusFieldRefInput<$PrismaModel>
@@ -55967,6 +60648,11 @@ export namespace Prisma {
     isNot?: TransactionWhereInput | null
   }
 
+  export type LearningReflectionNullableScalarRelationFilter = {
+    is?: LearningReflectionWhereInput | null
+    isNot?: LearningReflectionWhereInput | null
+  }
+
   export type EnrollmentCourseIdStudentIdCompoundUniqueInput = {
     courseId: string
     studentId: string
@@ -55982,6 +60668,7 @@ export namespace Prisma {
     progress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    learningReflectionEmailSentAt?: SortOrder
   }
 
   export type EnrollmentAvgOrderByAggregateInput = {
@@ -55998,6 +60685,7 @@ export namespace Prisma {
     progress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    learningReflectionEmailSentAt?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -56010,6 +60698,7 @@ export namespace Prisma {
     progress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    learningReflectionEmailSentAt?: SortOrder
   }
 
   export type EnrollmentSumOrderByAggregateInput = {
@@ -56024,6 +60713,36 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEnrollmentStatusFilter<$PrismaModel>
     _max?: NestedEnumEnrollmentStatusFilter<$PrismaModel>
+  }
+
+  export type LearningReflectionCountOrderByAggregateInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    courseId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LearningReflectionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    courseId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LearningReflectionMinOrderByAggregateInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    courseId?: SortOrder
+    userId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type SectionQuizSubmissionEnrollmentIdSectionIdCompoundUniqueInput = {
@@ -57209,6 +61928,41 @@ export namespace Prisma {
     usedCount?: SortOrder
   }
 
+  export type LessonNullableScalarRelationFilter = {
+    is?: LessonWhereInput | null
+    isNot?: LessonWhereInput | null
+  }
+
+  export type CourseNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CourseNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CourseNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -57319,6 +62073,27 @@ export namespace Prisma {
     connect?: OrgMemberWhereUniqueInput | OrgMemberWhereUniqueInput[]
   }
 
+  export type CourseNoteCreateNestedManyWithoutUserInput = {
+    create?: XOR<CourseNoteCreateWithoutUserInput, CourseNoteUncheckedCreateWithoutUserInput> | CourseNoteCreateWithoutUserInput[] | CourseNoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutUserInput | CourseNoteCreateOrConnectWithoutUserInput[]
+    createMany?: CourseNoteCreateManyUserInputEnvelope
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+  }
+
+  export type SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutAuthorInput, SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput> | SessionAnonymousQuestionCreateWithoutAuthorInput[] | SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput | SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput[]
+    createMany?: SessionAnonymousQuestionCreateManyAuthorInputEnvelope
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+  }
+
+  export type LearningReflectionCreateNestedManyWithoutUserInput = {
+    create?: XOR<LearningReflectionCreateWithoutUserInput, LearningReflectionUncheckedCreateWithoutUserInput> | LearningReflectionCreateWithoutUserInput[] | LearningReflectionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutUserInput | LearningReflectionCreateOrConnectWithoutUserInput[]
+    createMany?: LearningReflectionCreateManyUserInputEnvelope
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -57427,6 +62202,27 @@ export namespace Prisma {
     connectOrCreate?: OrgMemberCreateOrConnectWithoutUserInput | OrgMemberCreateOrConnectWithoutUserInput[]
     createMany?: OrgMemberCreateManyUserInputEnvelope
     connect?: OrgMemberWhereUniqueInput | OrgMemberWhereUniqueInput[]
+  }
+
+  export type CourseNoteUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CourseNoteCreateWithoutUserInput, CourseNoteUncheckedCreateWithoutUserInput> | CourseNoteCreateWithoutUserInput[] | CourseNoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutUserInput | CourseNoteCreateOrConnectWithoutUserInput[]
+    createMany?: CourseNoteCreateManyUserInputEnvelope
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutAuthorInput, SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput> | SessionAnonymousQuestionCreateWithoutAuthorInput[] | SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput | SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput[]
+    createMany?: SessionAnonymousQuestionCreateManyAuthorInputEnvelope
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+  }
+
+  export type LearningReflectionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<LearningReflectionCreateWithoutUserInput, LearningReflectionUncheckedCreateWithoutUserInput> | LearningReflectionCreateWithoutUserInput[] | LearningReflectionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutUserInput | LearningReflectionCreateOrConnectWithoutUserInput[]
+    createMany?: LearningReflectionCreateManyUserInputEnvelope
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -57665,6 +62461,48 @@ export namespace Prisma {
     deleteMany?: OrgMemberScalarWhereInput | OrgMemberScalarWhereInput[]
   }
 
+  export type CourseNoteUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CourseNoteCreateWithoutUserInput, CourseNoteUncheckedCreateWithoutUserInput> | CourseNoteCreateWithoutUserInput[] | CourseNoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutUserInput | CourseNoteCreateOrConnectWithoutUserInput[]
+    upsert?: CourseNoteUpsertWithWhereUniqueWithoutUserInput | CourseNoteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CourseNoteCreateManyUserInputEnvelope
+    set?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    disconnect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    delete?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    update?: CourseNoteUpdateWithWhereUniqueWithoutUserInput | CourseNoteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CourseNoteUpdateManyWithWhereWithoutUserInput | CourseNoteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+  }
+
+  export type SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutAuthorInput, SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput> | SessionAnonymousQuestionCreateWithoutAuthorInput[] | SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput | SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput[]
+    upsert?: SessionAnonymousQuestionUpsertWithWhereUniqueWithoutAuthorInput | SessionAnonymousQuestionUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: SessionAnonymousQuestionCreateManyAuthorInputEnvelope
+    set?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    disconnect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    delete?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    update?: SessionAnonymousQuestionUpdateWithWhereUniqueWithoutAuthorInput | SessionAnonymousQuestionUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: SessionAnonymousQuestionUpdateManyWithWhereWithoutAuthorInput | SessionAnonymousQuestionUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+  }
+
+  export type LearningReflectionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LearningReflectionCreateWithoutUserInput, LearningReflectionUncheckedCreateWithoutUserInput> | LearningReflectionCreateWithoutUserInput[] | LearningReflectionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutUserInput | LearningReflectionCreateOrConnectWithoutUserInput[]
+    upsert?: LearningReflectionUpsertWithWhereUniqueWithoutUserInput | LearningReflectionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LearningReflectionCreateManyUserInputEnvelope
+    set?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    disconnect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    delete?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    update?: LearningReflectionUpdateWithWhereUniqueWithoutUserInput | LearningReflectionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LearningReflectionUpdateManyWithWhereWithoutUserInput | LearningReflectionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -57881,6 +62719,48 @@ export namespace Prisma {
     deleteMany?: OrgMemberScalarWhereInput | OrgMemberScalarWhereInput[]
   }
 
+  export type CourseNoteUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CourseNoteCreateWithoutUserInput, CourseNoteUncheckedCreateWithoutUserInput> | CourseNoteCreateWithoutUserInput[] | CourseNoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutUserInput | CourseNoteCreateOrConnectWithoutUserInput[]
+    upsert?: CourseNoteUpsertWithWhereUniqueWithoutUserInput | CourseNoteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CourseNoteCreateManyUserInputEnvelope
+    set?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    disconnect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    delete?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    update?: CourseNoteUpdateWithWhereUniqueWithoutUserInput | CourseNoteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CourseNoteUpdateManyWithWhereWithoutUserInput | CourseNoteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutAuthorInput, SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput> | SessionAnonymousQuestionCreateWithoutAuthorInput[] | SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput | SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput[]
+    upsert?: SessionAnonymousQuestionUpsertWithWhereUniqueWithoutAuthorInput | SessionAnonymousQuestionUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: SessionAnonymousQuestionCreateManyAuthorInputEnvelope
+    set?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    disconnect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    delete?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    update?: SessionAnonymousQuestionUpdateWithWhereUniqueWithoutAuthorInput | SessionAnonymousQuestionUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: SessionAnonymousQuestionUpdateManyWithWhereWithoutAuthorInput | SessionAnonymousQuestionUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+  }
+
+  export type LearningReflectionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LearningReflectionCreateWithoutUserInput, LearningReflectionUncheckedCreateWithoutUserInput> | LearningReflectionCreateWithoutUserInput[] | LearningReflectionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutUserInput | LearningReflectionCreateOrConnectWithoutUserInput[]
+    upsert?: LearningReflectionUpsertWithWhereUniqueWithoutUserInput | LearningReflectionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LearningReflectionCreateManyUserInputEnvelope
+    set?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    disconnect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    delete?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    update?: LearningReflectionUpdateWithWhereUniqueWithoutUserInput | LearningReflectionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LearningReflectionUpdateManyWithWhereWithoutUserInput | LearningReflectionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -58078,6 +62958,27 @@ export namespace Prisma {
     connect?: TeamCourseAccessWhereUniqueInput | TeamCourseAccessWhereUniqueInput[]
   }
 
+  export type CourseNoteCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CourseNoteCreateWithoutCourseInput, CourseNoteUncheckedCreateWithoutCourseInput> | CourseNoteCreateWithoutCourseInput[] | CourseNoteUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutCourseInput | CourseNoteCreateOrConnectWithoutCourseInput[]
+    createMany?: CourseNoteCreateManyCourseInputEnvelope
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+  }
+
+  export type SessionAnonymousQuestionCreateNestedManyWithoutCourseInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutCourseInput, SessionAnonymousQuestionUncheckedCreateWithoutCourseInput> | SessionAnonymousQuestionCreateWithoutCourseInput[] | SessionAnonymousQuestionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutCourseInput | SessionAnonymousQuestionCreateOrConnectWithoutCourseInput[]
+    createMany?: SessionAnonymousQuestionCreateManyCourseInputEnvelope
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+  }
+
+  export type LearningReflectionCreateNestedManyWithoutCourseInput = {
+    create?: XOR<LearningReflectionCreateWithoutCourseInput, LearningReflectionUncheckedCreateWithoutCourseInput> | LearningReflectionCreateWithoutCourseInput[] | LearningReflectionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutCourseInput | LearningReflectionCreateOrConnectWithoutCourseInput[]
+    createMany?: LearningReflectionCreateManyCourseInputEnvelope
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+  }
+
   export type CourseSectionUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -58139,6 +63040,27 @@ export namespace Prisma {
     connectOrCreate?: TeamCourseAccessCreateOrConnectWithoutCourseInput | TeamCourseAccessCreateOrConnectWithoutCourseInput[]
     createMany?: TeamCourseAccessCreateManyCourseInputEnvelope
     connect?: TeamCourseAccessWhereUniqueInput | TeamCourseAccessWhereUniqueInput[]
+  }
+
+  export type CourseNoteUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CourseNoteCreateWithoutCourseInput, CourseNoteUncheckedCreateWithoutCourseInput> | CourseNoteCreateWithoutCourseInput[] | CourseNoteUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutCourseInput | CourseNoteCreateOrConnectWithoutCourseInput[]
+    createMany?: CourseNoteCreateManyCourseInputEnvelope
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutCourseInput, SessionAnonymousQuestionUncheckedCreateWithoutCourseInput> | SessionAnonymousQuestionCreateWithoutCourseInput[] | SessionAnonymousQuestionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutCourseInput | SessionAnonymousQuestionCreateOrConnectWithoutCourseInput[]
+    createMany?: SessionAnonymousQuestionCreateManyCourseInputEnvelope
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+  }
+
+  export type LearningReflectionUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<LearningReflectionCreateWithoutCourseInput, LearningReflectionUncheckedCreateWithoutCourseInput> | LearningReflectionCreateWithoutCourseInput[] | LearningReflectionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutCourseInput | LearningReflectionCreateOrConnectWithoutCourseInput[]
+    createMany?: LearningReflectionCreateManyCourseInputEnvelope
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
   }
 
   export type EnumModalityFieldUpdateOperationsInput = {
@@ -58301,6 +63223,48 @@ export namespace Prisma {
     deleteMany?: TeamCourseAccessScalarWhereInput | TeamCourseAccessScalarWhereInput[]
   }
 
+  export type CourseNoteUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CourseNoteCreateWithoutCourseInput, CourseNoteUncheckedCreateWithoutCourseInput> | CourseNoteCreateWithoutCourseInput[] | CourseNoteUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutCourseInput | CourseNoteCreateOrConnectWithoutCourseInput[]
+    upsert?: CourseNoteUpsertWithWhereUniqueWithoutCourseInput | CourseNoteUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CourseNoteCreateManyCourseInputEnvelope
+    set?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    disconnect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    delete?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    update?: CourseNoteUpdateWithWhereUniqueWithoutCourseInput | CourseNoteUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CourseNoteUpdateManyWithWhereWithoutCourseInput | CourseNoteUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+  }
+
+  export type SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutCourseInput, SessionAnonymousQuestionUncheckedCreateWithoutCourseInput> | SessionAnonymousQuestionCreateWithoutCourseInput[] | SessionAnonymousQuestionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutCourseInput | SessionAnonymousQuestionCreateOrConnectWithoutCourseInput[]
+    upsert?: SessionAnonymousQuestionUpsertWithWhereUniqueWithoutCourseInput | SessionAnonymousQuestionUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: SessionAnonymousQuestionCreateManyCourseInputEnvelope
+    set?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    disconnect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    delete?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    update?: SessionAnonymousQuestionUpdateWithWhereUniqueWithoutCourseInput | SessionAnonymousQuestionUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: SessionAnonymousQuestionUpdateManyWithWhereWithoutCourseInput | SessionAnonymousQuestionUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+  }
+
+  export type LearningReflectionUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<LearningReflectionCreateWithoutCourseInput, LearningReflectionUncheckedCreateWithoutCourseInput> | LearningReflectionCreateWithoutCourseInput[] | LearningReflectionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutCourseInput | LearningReflectionCreateOrConnectWithoutCourseInput[]
+    upsert?: LearningReflectionUpsertWithWhereUniqueWithoutCourseInput | LearningReflectionUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: LearningReflectionCreateManyCourseInputEnvelope
+    set?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    disconnect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    delete?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    update?: LearningReflectionUpdateWithWhereUniqueWithoutCourseInput | LearningReflectionUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: LearningReflectionUpdateManyWithWhereWithoutCourseInput | LearningReflectionUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+  }
+
   export type CourseSectionUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -58427,6 +63391,48 @@ export namespace Prisma {
     deleteMany?: TeamCourseAccessScalarWhereInput | TeamCourseAccessScalarWhereInput[]
   }
 
+  export type CourseNoteUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CourseNoteCreateWithoutCourseInput, CourseNoteUncheckedCreateWithoutCourseInput> | CourseNoteCreateWithoutCourseInput[] | CourseNoteUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutCourseInput | CourseNoteCreateOrConnectWithoutCourseInput[]
+    upsert?: CourseNoteUpsertWithWhereUniqueWithoutCourseInput | CourseNoteUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CourseNoteCreateManyCourseInputEnvelope
+    set?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    disconnect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    delete?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    update?: CourseNoteUpdateWithWhereUniqueWithoutCourseInput | CourseNoteUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CourseNoteUpdateManyWithWhereWithoutCourseInput | CourseNoteUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutCourseInput, SessionAnonymousQuestionUncheckedCreateWithoutCourseInput> | SessionAnonymousQuestionCreateWithoutCourseInput[] | SessionAnonymousQuestionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutCourseInput | SessionAnonymousQuestionCreateOrConnectWithoutCourseInput[]
+    upsert?: SessionAnonymousQuestionUpsertWithWhereUniqueWithoutCourseInput | SessionAnonymousQuestionUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: SessionAnonymousQuestionCreateManyCourseInputEnvelope
+    set?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    disconnect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    delete?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    update?: SessionAnonymousQuestionUpdateWithWhereUniqueWithoutCourseInput | SessionAnonymousQuestionUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: SessionAnonymousQuestionUpdateManyWithWhereWithoutCourseInput | SessionAnonymousQuestionUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+  }
+
+  export type LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<LearningReflectionCreateWithoutCourseInput, LearningReflectionUncheckedCreateWithoutCourseInput> | LearningReflectionCreateWithoutCourseInput[] | LearningReflectionUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutCourseInput | LearningReflectionCreateOrConnectWithoutCourseInput[]
+    upsert?: LearningReflectionUpsertWithWhereUniqueWithoutCourseInput | LearningReflectionUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: LearningReflectionCreateManyCourseInputEnvelope
+    set?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    disconnect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    delete?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+    update?: LearningReflectionUpdateWithWhereUniqueWithoutCourseInput | LearningReflectionUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: LearningReflectionUpdateManyWithWhereWithoutCourseInput | LearningReflectionUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+  }
+
   export type CourseCreateNestedOneWithoutSectionsInput = {
     create?: XOR<CourseCreateWithoutSectionsInput, CourseUncheckedCreateWithoutSectionsInput>
     connectOrCreate?: CourseCreateOrConnectWithoutSectionsInput
@@ -58538,11 +63544,25 @@ export namespace Prisma {
     connect?: LessonProgressWhereUniqueInput | LessonProgressWhereUniqueInput[]
   }
 
+  export type CourseNoteCreateNestedManyWithoutLessonInput = {
+    create?: XOR<CourseNoteCreateWithoutLessonInput, CourseNoteUncheckedCreateWithoutLessonInput> | CourseNoteCreateWithoutLessonInput[] | CourseNoteUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutLessonInput | CourseNoteCreateOrConnectWithoutLessonInput[]
+    createMany?: CourseNoteCreateManyLessonInputEnvelope
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+  }
+
   export type LessonProgressUncheckedCreateNestedManyWithoutLessonInput = {
     create?: XOR<LessonProgressCreateWithoutLessonInput, LessonProgressUncheckedCreateWithoutLessonInput> | LessonProgressCreateWithoutLessonInput[] | LessonProgressUncheckedCreateWithoutLessonInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutLessonInput | LessonProgressCreateOrConnectWithoutLessonInput[]
     createMany?: LessonProgressCreateManyLessonInputEnvelope
     connect?: LessonProgressWhereUniqueInput | LessonProgressWhereUniqueInput[]
+  }
+
+  export type CourseNoteUncheckedCreateNestedManyWithoutLessonInput = {
+    create?: XOR<CourseNoteCreateWithoutLessonInput, CourseNoteUncheckedCreateWithoutLessonInput> | CourseNoteCreateWithoutLessonInput[] | CourseNoteUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutLessonInput | CourseNoteCreateOrConnectWithoutLessonInput[]
+    createMany?: CourseNoteCreateManyLessonInputEnvelope
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
   }
 
   export type EnumLessonTypeFieldUpdateOperationsInput = {
@@ -58571,6 +63591,20 @@ export namespace Prisma {
     deleteMany?: LessonProgressScalarWhereInput | LessonProgressScalarWhereInput[]
   }
 
+  export type CourseNoteUpdateManyWithoutLessonNestedInput = {
+    create?: XOR<CourseNoteCreateWithoutLessonInput, CourseNoteUncheckedCreateWithoutLessonInput> | CourseNoteCreateWithoutLessonInput[] | CourseNoteUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutLessonInput | CourseNoteCreateOrConnectWithoutLessonInput[]
+    upsert?: CourseNoteUpsertWithWhereUniqueWithoutLessonInput | CourseNoteUpsertWithWhereUniqueWithoutLessonInput[]
+    createMany?: CourseNoteCreateManyLessonInputEnvelope
+    set?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    disconnect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    delete?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    update?: CourseNoteUpdateWithWhereUniqueWithoutLessonInput | CourseNoteUpdateWithWhereUniqueWithoutLessonInput[]
+    updateMany?: CourseNoteUpdateManyWithWhereWithoutLessonInput | CourseNoteUpdateManyWithWhereWithoutLessonInput[]
+    deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+  }
+
   export type LessonProgressUncheckedUpdateManyWithoutLessonNestedInput = {
     create?: XOR<LessonProgressCreateWithoutLessonInput, LessonProgressUncheckedCreateWithoutLessonInput> | LessonProgressCreateWithoutLessonInput[] | LessonProgressUncheckedCreateWithoutLessonInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutLessonInput | LessonProgressCreateOrConnectWithoutLessonInput[]
@@ -58583,6 +63617,20 @@ export namespace Prisma {
     update?: LessonProgressUpdateWithWhereUniqueWithoutLessonInput | LessonProgressUpdateWithWhereUniqueWithoutLessonInput[]
     updateMany?: LessonProgressUpdateManyWithWhereWithoutLessonInput | LessonProgressUpdateManyWithWhereWithoutLessonInput[]
     deleteMany?: LessonProgressScalarWhereInput | LessonProgressScalarWhereInput[]
+  }
+
+  export type CourseNoteUncheckedUpdateManyWithoutLessonNestedInput = {
+    create?: XOR<CourseNoteCreateWithoutLessonInput, CourseNoteUncheckedCreateWithoutLessonInput> | CourseNoteCreateWithoutLessonInput[] | CourseNoteUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: CourseNoteCreateOrConnectWithoutLessonInput | CourseNoteCreateOrConnectWithoutLessonInput[]
+    upsert?: CourseNoteUpsertWithWhereUniqueWithoutLessonInput | CourseNoteUpsertWithWhereUniqueWithoutLessonInput[]
+    createMany?: CourseNoteCreateManyLessonInputEnvelope
+    set?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    disconnect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    delete?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+    update?: CourseNoteUpdateWithWhereUniqueWithoutLessonInput | CourseNoteUpdateWithWhereUniqueWithoutLessonInput[]
+    updateMany?: CourseNoteUpdateManyWithWhereWithoutLessonInput | CourseNoteUpdateManyWithWhereWithoutLessonInput[]
+    deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
   }
 
   export type EnrollmentCreateNestedOneWithoutLessonProgressInput = {
@@ -58626,11 +63674,25 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
+  export type SessionAnonymousQuestionCreateNestedManyWithoutSessionInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutSessionInput, SessionAnonymousQuestionUncheckedCreateWithoutSessionInput> | SessionAnonymousQuestionCreateWithoutSessionInput[] | SessionAnonymousQuestionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutSessionInput | SessionAnonymousQuestionCreateOrConnectWithoutSessionInput[]
+    createMany?: SessionAnonymousQuestionCreateManySessionInputEnvelope
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutSessionInput = {
     create?: XOR<EnrollmentCreateWithoutSessionInput, EnrollmentUncheckedCreateWithoutSessionInput> | EnrollmentCreateWithoutSessionInput[] | EnrollmentUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutSessionInput | EnrollmentCreateOrConnectWithoutSessionInput[]
     createMany?: EnrollmentCreateManySessionInputEnvelope
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutSessionInput, SessionAnonymousQuestionUncheckedCreateWithoutSessionInput> | SessionAnonymousQuestionCreateWithoutSessionInput[] | SessionAnonymousQuestionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutSessionInput | SessionAnonymousQuestionCreateOrConnectWithoutSessionInput[]
+    createMany?: SessionAnonymousQuestionCreateManySessionInputEnvelope
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
   }
 
   export type CourseUpdateOneRequiredWithoutCourseSessionsNestedInput = {
@@ -58655,6 +63717,20 @@ export namespace Prisma {
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
+  export type SessionAnonymousQuestionUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutSessionInput, SessionAnonymousQuestionUncheckedCreateWithoutSessionInput> | SessionAnonymousQuestionCreateWithoutSessionInput[] | SessionAnonymousQuestionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutSessionInput | SessionAnonymousQuestionCreateOrConnectWithoutSessionInput[]
+    upsert?: SessionAnonymousQuestionUpsertWithWhereUniqueWithoutSessionInput | SessionAnonymousQuestionUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: SessionAnonymousQuestionCreateManySessionInputEnvelope
+    set?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    disconnect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    delete?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    update?: SessionAnonymousQuestionUpdateWithWhereUniqueWithoutSessionInput | SessionAnonymousQuestionUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: SessionAnonymousQuestionUpdateManyWithWhereWithoutSessionInput | SessionAnonymousQuestionUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+  }
+
   export type EnrollmentUncheckedUpdateManyWithoutSessionNestedInput = {
     create?: XOR<EnrollmentCreateWithoutSessionInput, EnrollmentUncheckedCreateWithoutSessionInput> | EnrollmentCreateWithoutSessionInput[] | EnrollmentUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutSessionInput | EnrollmentCreateOrConnectWithoutSessionInput[]
@@ -58667,6 +63743,66 @@ export namespace Prisma {
     update?: EnrollmentUpdateWithWhereUniqueWithoutSessionInput | EnrollmentUpdateWithWhereUniqueWithoutSessionInput[]
     updateMany?: EnrollmentUpdateManyWithWhereWithoutSessionInput | EnrollmentUpdateManyWithWhereWithoutSessionInput[]
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<SessionAnonymousQuestionCreateWithoutSessionInput, SessionAnonymousQuestionUncheckedCreateWithoutSessionInput> | SessionAnonymousQuestionCreateWithoutSessionInput[] | SessionAnonymousQuestionUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SessionAnonymousQuestionCreateOrConnectWithoutSessionInput | SessionAnonymousQuestionCreateOrConnectWithoutSessionInput[]
+    upsert?: SessionAnonymousQuestionUpsertWithWhereUniqueWithoutSessionInput | SessionAnonymousQuestionUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: SessionAnonymousQuestionCreateManySessionInputEnvelope
+    set?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    disconnect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    delete?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
+    update?: SessionAnonymousQuestionUpdateWithWhereUniqueWithoutSessionInput | SessionAnonymousQuestionUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: SessionAnonymousQuestionUpdateManyWithWhereWithoutSessionInput | SessionAnonymousQuestionUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+  }
+
+  export type CourseSessionCreateNestedOneWithoutAnonymousQuestionsInput = {
+    create?: XOR<CourseSessionCreateWithoutAnonymousQuestionsInput, CourseSessionUncheckedCreateWithoutAnonymousQuestionsInput>
+    connectOrCreate?: CourseSessionCreateOrConnectWithoutAnonymousQuestionsInput
+    connect?: CourseSessionWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutSessionAnonymousQuestionsInput = {
+    create?: XOR<CourseCreateWithoutSessionAnonymousQuestionsInput, CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutSessionAnonymousQuestionsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSessionAnonymousQuestionsInput = {
+    create?: XOR<UserCreateWithoutSessionAnonymousQuestionsInput, UserUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSessionAnonymousQuestionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SessionAnonymousQuestionStatus
+  }
+
+  export type CourseSessionUpdateOneRequiredWithoutAnonymousQuestionsNestedInput = {
+    create?: XOR<CourseSessionCreateWithoutAnonymousQuestionsInput, CourseSessionUncheckedCreateWithoutAnonymousQuestionsInput>
+    connectOrCreate?: CourseSessionCreateOrConnectWithoutAnonymousQuestionsInput
+    upsert?: CourseSessionUpsertWithoutAnonymousQuestionsInput
+    connect?: CourseSessionWhereUniqueInput
+    update?: XOR<XOR<CourseSessionUpdateToOneWithWhereWithoutAnonymousQuestionsInput, CourseSessionUpdateWithoutAnonymousQuestionsInput>, CourseSessionUncheckedUpdateWithoutAnonymousQuestionsInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput = {
+    create?: XOR<CourseCreateWithoutSessionAnonymousQuestionsInput, CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutSessionAnonymousQuestionsInput
+    upsert?: CourseUpsertWithoutSessionAnonymousQuestionsInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutSessionAnonymousQuestionsInput, CourseUpdateWithoutSessionAnonymousQuestionsInput>, CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput = {
+    create?: XOR<UserCreateWithoutSessionAnonymousQuestionsInput, UserUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSessionAnonymousQuestionsInput
+    upsert?: UserUpsertWithoutSessionAnonymousQuestionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionAnonymousQuestionsInput, UserUpdateWithoutSessionAnonymousQuestionsInput>, UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput>
   }
 
   export type CourseCreateNestedOneWithoutEnrollmentsInput = {
@@ -58725,6 +63861,12 @@ export namespace Prisma {
     connect?: SectionQuizSubmissionWhereUniqueInput | SectionQuizSubmissionWhereUniqueInput[]
   }
 
+  export type LearningReflectionCreateNestedOneWithoutEnrollmentInput = {
+    create?: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutEnrollmentInput
+    connect?: LearningReflectionWhereUniqueInput
+  }
+
   export type LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput = {
     create?: XOR<LessonProgressCreateWithoutEnrollmentInput, LessonProgressUncheckedCreateWithoutEnrollmentInput> | LessonProgressCreateWithoutEnrollmentInput[] | LessonProgressUncheckedCreateWithoutEnrollmentInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutEnrollmentInput | LessonProgressCreateOrConnectWithoutEnrollmentInput[]
@@ -58755,6 +63897,12 @@ export namespace Prisma {
     connectOrCreate?: SectionQuizSubmissionCreateOrConnectWithoutEnrollmentInput | SectionQuizSubmissionCreateOrConnectWithoutEnrollmentInput[]
     createMany?: SectionQuizSubmissionCreateManyEnrollmentInputEnvelope
     connect?: SectionQuizSubmissionWhereUniqueInput | SectionQuizSubmissionWhereUniqueInput[]
+  }
+
+  export type LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput = {
+    create?: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutEnrollmentInput
+    connect?: LearningReflectionWhereUniqueInput
   }
 
   export type EnumEnrollmentStatusFieldUpdateOperationsInput = {
@@ -58855,6 +64003,16 @@ export namespace Prisma {
     deleteMany?: SectionQuizSubmissionScalarWhereInput | SectionQuizSubmissionScalarWhereInput[]
   }
 
+  export type LearningReflectionUpdateOneWithoutEnrollmentNestedInput = {
+    create?: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutEnrollmentInput
+    upsert?: LearningReflectionUpsertWithoutEnrollmentInput
+    disconnect?: LearningReflectionWhereInput | boolean
+    delete?: LearningReflectionWhereInput | boolean
+    connect?: LearningReflectionWhereUniqueInput
+    update?: XOR<XOR<LearningReflectionUpdateToOneWithWhereWithoutEnrollmentInput, LearningReflectionUpdateWithoutEnrollmentInput>, LearningReflectionUncheckedUpdateWithoutEnrollmentInput>
+  }
+
   export type LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput = {
     create?: XOR<LessonProgressCreateWithoutEnrollmentInput, LessonProgressUncheckedCreateWithoutEnrollmentInput> | LessonProgressCreateWithoutEnrollmentInput[] | LessonProgressUncheckedCreateWithoutEnrollmentInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutEnrollmentInput | LessonProgressCreateOrConnectWithoutEnrollmentInput[]
@@ -58911,6 +64069,58 @@ export namespace Prisma {
     update?: SectionQuizSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput | SectionQuizSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput[]
     updateMany?: SectionQuizSubmissionUpdateManyWithWhereWithoutEnrollmentInput | SectionQuizSubmissionUpdateManyWithWhereWithoutEnrollmentInput[]
     deleteMany?: SectionQuizSubmissionScalarWhereInput | SectionQuizSubmissionScalarWhereInput[]
+  }
+
+  export type LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput = {
+    create?: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
+    connectOrCreate?: LearningReflectionCreateOrConnectWithoutEnrollmentInput
+    upsert?: LearningReflectionUpsertWithoutEnrollmentInput
+    disconnect?: LearningReflectionWhereInput | boolean
+    delete?: LearningReflectionWhereInput | boolean
+    connect?: LearningReflectionWhereUniqueInput
+    update?: XOR<XOR<LearningReflectionUpdateToOneWithWhereWithoutEnrollmentInput, LearningReflectionUpdateWithoutEnrollmentInput>, LearningReflectionUncheckedUpdateWithoutEnrollmentInput>
+  }
+
+  export type EnrollmentCreateNestedOneWithoutLearningReflectionInput = {
+    create?: XOR<EnrollmentCreateWithoutLearningReflectionInput, EnrollmentUncheckedCreateWithoutLearningReflectionInput>
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutLearningReflectionInput
+    connect?: EnrollmentWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutLearningReflectionsInput = {
+    create?: XOR<CourseCreateWithoutLearningReflectionsInput, CourseUncheckedCreateWithoutLearningReflectionsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutLearningReflectionsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutLearningReflectionsInput = {
+    create?: XOR<UserCreateWithoutLearningReflectionsInput, UserUncheckedCreateWithoutLearningReflectionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLearningReflectionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnrollmentUpdateOneRequiredWithoutLearningReflectionNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutLearningReflectionInput, EnrollmentUncheckedCreateWithoutLearningReflectionInput>
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutLearningReflectionInput
+    upsert?: EnrollmentUpsertWithoutLearningReflectionInput
+    connect?: EnrollmentWhereUniqueInput
+    update?: XOR<XOR<EnrollmentUpdateToOneWithWhereWithoutLearningReflectionInput, EnrollmentUpdateWithoutLearningReflectionInput>, EnrollmentUncheckedUpdateWithoutLearningReflectionInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutLearningReflectionsNestedInput = {
+    create?: XOR<CourseCreateWithoutLearningReflectionsInput, CourseUncheckedCreateWithoutLearningReflectionsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutLearningReflectionsInput
+    upsert?: CourseUpsertWithoutLearningReflectionsInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutLearningReflectionsInput, CourseUpdateWithoutLearningReflectionsInput>, CourseUncheckedUpdateWithoutLearningReflectionsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutLearningReflectionsNestedInput = {
+    create?: XOR<UserCreateWithoutLearningReflectionsInput, UserUncheckedCreateWithoutLearningReflectionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLearningReflectionsInput
+    upsert?: UserUpsertWithoutLearningReflectionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLearningReflectionsInput, UserUpdateWithoutLearningReflectionsInput>, UserUncheckedUpdateWithoutLearningReflectionsInput>
   }
 
   export type EnrollmentCreateNestedOneWithoutSectionQuizSubmissionsInput = {
@@ -60113,6 +65323,50 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type UserCreateNestedOneWithoutCourseNotesInput = {
+    create?: XOR<UserCreateWithoutCourseNotesInput, UserUncheckedCreateWithoutCourseNotesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCourseNotesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutNotesInput = {
+    create?: XOR<CourseCreateWithoutNotesInput, CourseUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutNotesInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type LessonCreateNestedOneWithoutNotesInput = {
+    create?: XOR<LessonCreateWithoutNotesInput, LessonUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: LessonCreateOrConnectWithoutNotesInput
+    connect?: LessonWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutCourseNotesNestedInput = {
+    create?: XOR<UserCreateWithoutCourseNotesInput, UserUncheckedCreateWithoutCourseNotesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCourseNotesInput
+    upsert?: UserUpsertWithoutCourseNotesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCourseNotesInput, UserUpdateWithoutCourseNotesInput>, UserUncheckedUpdateWithoutCourseNotesInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutNotesNestedInput = {
+    create?: XOR<CourseCreateWithoutNotesInput, CourseUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutNotesInput
+    upsert?: CourseUpsertWithoutNotesInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutNotesInput, CourseUpdateWithoutNotesInput>, CourseUncheckedUpdateWithoutNotesInput>
+  }
+
+  export type LessonUpdateOneWithoutNotesNestedInput = {
+    create?: XOR<LessonCreateWithoutNotesInput, LessonUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: LessonCreateOrConnectWithoutNotesInput
+    upsert?: LessonUpsertWithoutNotesInput
+    disconnect?: LessonWhereInput | boolean
+    delete?: LessonWhereInput | boolean
+    connect?: LessonWhereUniqueInput
+    update?: XOR<XOR<LessonUpdateToOneWithWhereWithoutNotesInput, LessonUpdateWithoutNotesInput>, LessonUncheckedUpdateWithoutNotesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -60456,6 +65710,23 @@ export namespace Prisma {
     _max?: NestedEnumLessonTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionAnonymousQuestionStatus | EnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel> | $Enums.SessionAnonymousQuestionStatus
+  }
+
+  export type NestedEnumSessionAnonymousQuestionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionAnonymousQuestionStatus | EnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionAnonymousQuestionStatus[] | ListEnumSessionAnonymousQuestionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionAnonymousQuestionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SessionAnonymousQuestionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumEnrollmentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EnrollmentStatus | EnumEnrollmentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EnrollmentStatus[] | ListEnumEnrollmentStatusFieldRefInput<$PrismaModel>
@@ -60768,6 +66039,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
@@ -60780,6 +66052,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutInstructorInput = {
@@ -60803,6 +66078,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -60814,6 +66090,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutInstructorInput = {
@@ -60832,6 +66111,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
     organization?: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -60840,6 +66120,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutStudentInput = {
@@ -60851,11 +66132,13 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutStudentInput = {
@@ -61172,6 +66455,96 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseNoteCreateWithoutUserInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutNotesInput
+    lesson?: LessonCreateNestedOneWithoutNotesInput
+  }
+
+  export type CourseNoteUncheckedCreateWithoutUserInput = {
+    id?: string
+    courseId: string
+    lessonId?: string | null
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CourseNoteCreateOrConnectWithoutUserInput = {
+    where: CourseNoteWhereUniqueInput
+    create: XOR<CourseNoteCreateWithoutUserInput, CourseNoteUncheckedCreateWithoutUserInput>
+  }
+
+  export type CourseNoteCreateManyUserInputEnvelope = {
+    data: CourseNoteCreateManyUserInput | CourseNoteCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SessionAnonymousQuestionCreateWithoutAuthorInput = {
+    id?: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    session: CourseSessionCreateNestedOneWithoutAnonymousQuestionsInput
+    course: CourseCreateNestedOneWithoutSessionAnonymousQuestionsInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    courseSessionId: string
+    courseId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionCreateOrConnectWithoutAuthorInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    create: XOR<SessionAnonymousQuestionCreateWithoutAuthorInput, SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type SessionAnonymousQuestionCreateManyAuthorInputEnvelope = {
+    data: SessionAnonymousQuestionCreateManyAuthorInput | SessionAnonymousQuestionCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LearningReflectionCreateWithoutUserInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollment: EnrollmentCreateNestedOneWithoutLearningReflectionInput
+    course: CourseCreateNestedOneWithoutLearningReflectionsInput
+  }
+
+  export type LearningReflectionUncheckedCreateWithoutUserInput = {
+    id?: string
+    enrollmentId: string
+    courseId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionCreateOrConnectWithoutUserInput = {
+    where: LearningReflectionWhereUniqueInput
+    create: XOR<LearningReflectionCreateWithoutUserInput, LearningReflectionUncheckedCreateWithoutUserInput>
+  }
+
+  export type LearningReflectionCreateManyUserInputEnvelope = {
+    data: LearningReflectionCreateManyUserInput | LearningReflectionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -61354,6 +66727,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFilter<"Course"> | $Enums.CourseVisibility
     nextSession?: DateTimeNullableFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableFilter<"Course">
+    joinCodeHash?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
   }
@@ -61387,6 +66761,7 @@ export namespace Prisma {
     progress?: IntFilter<"Enrollment"> | number
     createdAt?: DateTimeFilter<"Enrollment"> | Date | string
     updatedAt?: DateTimeFilter<"Enrollment"> | Date | string
+    learningReflectionEmailSentAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
   }
 
   export type CertificateUpsertWithWhereUniqueWithoutUserInput = {
@@ -61672,6 +67047,96 @@ export namespace Prisma {
     joinedAt?: DateTimeFilter<"OrgMember"> | Date | string
   }
 
+  export type CourseNoteUpsertWithWhereUniqueWithoutUserInput = {
+    where: CourseNoteWhereUniqueInput
+    update: XOR<CourseNoteUpdateWithoutUserInput, CourseNoteUncheckedUpdateWithoutUserInput>
+    create: XOR<CourseNoteCreateWithoutUserInput, CourseNoteUncheckedCreateWithoutUserInput>
+  }
+
+  export type CourseNoteUpdateWithWhereUniqueWithoutUserInput = {
+    where: CourseNoteWhereUniqueInput
+    data: XOR<CourseNoteUpdateWithoutUserInput, CourseNoteUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CourseNoteUpdateManyWithWhereWithoutUserInput = {
+    where: CourseNoteScalarWhereInput
+    data: XOR<CourseNoteUpdateManyMutationInput, CourseNoteUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CourseNoteScalarWhereInput = {
+    AND?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+    OR?: CourseNoteScalarWhereInput[]
+    NOT?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+    id?: StringFilter<"CourseNote"> | string
+    userId?: StringFilter<"CourseNote"> | string
+    courseId?: StringFilter<"CourseNote"> | string
+    lessonId?: StringNullableFilter<"CourseNote"> | string | null
+    content?: StringFilter<"CourseNote"> | string
+    createdAt?: DateTimeFilter<"CourseNote"> | Date | string
+    updatedAt?: DateTimeFilter<"CourseNote"> | Date | string
+  }
+
+  export type SessionAnonymousQuestionUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    update: XOR<SessionAnonymousQuestionUpdateWithoutAuthorInput, SessionAnonymousQuestionUncheckedUpdateWithoutAuthorInput>
+    create: XOR<SessionAnonymousQuestionCreateWithoutAuthorInput, SessionAnonymousQuestionUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type SessionAnonymousQuestionUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    data: XOR<SessionAnonymousQuestionUpdateWithoutAuthorInput, SessionAnonymousQuestionUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type SessionAnonymousQuestionUpdateManyWithWhereWithoutAuthorInput = {
+    where: SessionAnonymousQuestionScalarWhereInput
+    data: XOR<SessionAnonymousQuestionUpdateManyMutationInput, SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type SessionAnonymousQuestionScalarWhereInput = {
+    AND?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+    OR?: SessionAnonymousQuestionScalarWhereInput[]
+    NOT?: SessionAnonymousQuestionScalarWhereInput | SessionAnonymousQuestionScalarWhereInput[]
+    id?: StringFilter<"SessionAnonymousQuestion"> | string
+    courseSessionId?: StringFilter<"SessionAnonymousQuestion"> | string
+    courseId?: StringFilter<"SessionAnonymousQuestion"> | string
+    authorId?: StringFilter<"SessionAnonymousQuestion"> | string
+    content?: StringFilter<"SessionAnonymousQuestion"> | string
+    status?: EnumSessionAnonymousQuestionStatusFilter<"SessionAnonymousQuestion"> | $Enums.SessionAnonymousQuestionStatus
+    answer?: StringNullableFilter<"SessionAnonymousQuestion"> | string | null
+    answeredAt?: DateTimeNullableFilter<"SessionAnonymousQuestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"SessionAnonymousQuestion"> | Date | string
+    updatedAt?: DateTimeFilter<"SessionAnonymousQuestion"> | Date | string
+  }
+
+  export type LearningReflectionUpsertWithWhereUniqueWithoutUserInput = {
+    where: LearningReflectionWhereUniqueInput
+    update: XOR<LearningReflectionUpdateWithoutUserInput, LearningReflectionUncheckedUpdateWithoutUserInput>
+    create: XOR<LearningReflectionCreateWithoutUserInput, LearningReflectionUncheckedCreateWithoutUserInput>
+  }
+
+  export type LearningReflectionUpdateWithWhereUniqueWithoutUserInput = {
+    where: LearningReflectionWhereUniqueInput
+    data: XOR<LearningReflectionUpdateWithoutUserInput, LearningReflectionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type LearningReflectionUpdateManyWithWhereWithoutUserInput = {
+    where: LearningReflectionScalarWhereInput
+    data: XOR<LearningReflectionUpdateManyMutationInput, LearningReflectionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type LearningReflectionScalarWhereInput = {
+    AND?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+    OR?: LearningReflectionScalarWhereInput[]
+    NOT?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+    id?: StringFilter<"LearningReflection"> | string
+    enrollmentId?: StringFilter<"LearningReflection"> | string
+    courseId?: StringFilter<"LearningReflection"> | string
+    userId?: StringFilter<"LearningReflection"> | string
+    content?: StringFilter<"LearningReflection"> | string
+    createdAt?: DateTimeFilter<"LearningReflection"> | Date | string
+    updatedAt?: DateTimeFilter<"LearningReflection"> | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -61703,6 +67168,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -61736,6 +67204,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -61785,6 +67256,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -61818,6 +67292,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -61851,6 +67328,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -61884,6 +67364,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -61933,6 +67416,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -61966,6 +67452,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorApplicationInput = {
@@ -61999,6 +67488,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorApplicationInput = {
@@ -62032,6 +67524,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorApplicationInput = {
@@ -62081,6 +67576,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorApplicationInput = {
@@ -62114,6 +67612,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorProfileInput = {
@@ -62147,6 +67648,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorProfileInput = {
@@ -62180,6 +67684,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorProfileInput = {
@@ -62229,6 +67736,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorProfileInput = {
@@ -62262,6 +67772,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutCategoryRefInput = {
@@ -62284,6 +67797,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -62296,6 +67810,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCategoryRefInput = {
@@ -62319,6 +67836,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -62330,6 +67848,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCategoryRefInput = {
@@ -62389,6 +67910,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorCoursesInput = {
@@ -62422,6 +67946,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorCoursesInput = {
@@ -62491,6 +68018,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    anonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutSessionInput
   }
 
   export type CourseSessionUncheckedCreateWithoutCourseInput = {
@@ -62504,6 +68032,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    anonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CourseSessionCreateOrConnectWithoutCourseInput = {
@@ -62522,6 +68051,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
     organization?: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -62530,6 +68060,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutCourseInput = {
@@ -62541,11 +68072,13 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutCourseInput = {
@@ -62730,6 +68263,96 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseNoteCreateWithoutCourseInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCourseNotesInput
+    lesson?: LessonCreateNestedOneWithoutNotesInput
+  }
+
+  export type CourseNoteUncheckedCreateWithoutCourseInput = {
+    id?: string
+    userId: string
+    lessonId?: string | null
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CourseNoteCreateOrConnectWithoutCourseInput = {
+    where: CourseNoteWhereUniqueInput
+    create: XOR<CourseNoteCreateWithoutCourseInput, CourseNoteUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CourseNoteCreateManyCourseInputEnvelope = {
+    data: CourseNoteCreateManyCourseInput | CourseNoteCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SessionAnonymousQuestionCreateWithoutCourseInput = {
+    id?: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    session: CourseSessionCreateNestedOneWithoutAnonymousQuestionsInput
+    author: UserCreateNestedOneWithoutSessionAnonymousQuestionsInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateWithoutCourseInput = {
+    id?: string
+    courseSessionId: string
+    authorId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionCreateOrConnectWithoutCourseInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    create: XOR<SessionAnonymousQuestionCreateWithoutCourseInput, SessionAnonymousQuestionUncheckedCreateWithoutCourseInput>
+  }
+
+  export type SessionAnonymousQuestionCreateManyCourseInputEnvelope = {
+    data: SessionAnonymousQuestionCreateManyCourseInput | SessionAnonymousQuestionCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LearningReflectionCreateWithoutCourseInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollment: EnrollmentCreateNestedOneWithoutLearningReflectionInput
+    user: UserCreateNestedOneWithoutLearningReflectionsInput
+  }
+
+  export type LearningReflectionUncheckedCreateWithoutCourseInput = {
+    id?: string
+    enrollmentId: string
+    userId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionCreateOrConnectWithoutCourseInput = {
+    where: LearningReflectionWhereUniqueInput
+    create: XOR<LearningReflectionCreateWithoutCourseInput, LearningReflectionUncheckedCreateWithoutCourseInput>
+  }
+
+  export type LearningReflectionCreateManyCourseInputEnvelope = {
+    data: LearningReflectionCreateManyCourseInput | LearningReflectionCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutInstructorCoursesInput = {
     update: XOR<UserUpdateWithoutInstructorCoursesInput, UserUncheckedUpdateWithoutInstructorCoursesInput>
     create: XOR<UserCreateWithoutInstructorCoursesInput, UserUncheckedCreateWithoutInstructorCoursesInput>
@@ -62772,6 +68395,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorCoursesInput = {
@@ -62805,6 +68431,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -63025,6 +68654,54 @@ export namespace Prisma {
     grantedAt?: DateTimeFilter<"TeamCourseAccess"> | Date | string
   }
 
+  export type CourseNoteUpsertWithWhereUniqueWithoutCourseInput = {
+    where: CourseNoteWhereUniqueInput
+    update: XOR<CourseNoteUpdateWithoutCourseInput, CourseNoteUncheckedUpdateWithoutCourseInput>
+    create: XOR<CourseNoteCreateWithoutCourseInput, CourseNoteUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CourseNoteUpdateWithWhereUniqueWithoutCourseInput = {
+    where: CourseNoteWhereUniqueInput
+    data: XOR<CourseNoteUpdateWithoutCourseInput, CourseNoteUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type CourseNoteUpdateManyWithWhereWithoutCourseInput = {
+    where: CourseNoteScalarWhereInput
+    data: XOR<CourseNoteUpdateManyMutationInput, CourseNoteUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type SessionAnonymousQuestionUpsertWithWhereUniqueWithoutCourseInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    update: XOR<SessionAnonymousQuestionUpdateWithoutCourseInput, SessionAnonymousQuestionUncheckedUpdateWithoutCourseInput>
+    create: XOR<SessionAnonymousQuestionCreateWithoutCourseInput, SessionAnonymousQuestionUncheckedCreateWithoutCourseInput>
+  }
+
+  export type SessionAnonymousQuestionUpdateWithWhereUniqueWithoutCourseInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    data: XOR<SessionAnonymousQuestionUpdateWithoutCourseInput, SessionAnonymousQuestionUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type SessionAnonymousQuestionUpdateManyWithWhereWithoutCourseInput = {
+    where: SessionAnonymousQuestionScalarWhereInput
+    data: XOR<SessionAnonymousQuestionUpdateManyMutationInput, SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type LearningReflectionUpsertWithWhereUniqueWithoutCourseInput = {
+    where: LearningReflectionWhereUniqueInput
+    update: XOR<LearningReflectionUpdateWithoutCourseInput, LearningReflectionUncheckedUpdateWithoutCourseInput>
+    create: XOR<LearningReflectionCreateWithoutCourseInput, LearningReflectionUncheckedCreateWithoutCourseInput>
+  }
+
+  export type LearningReflectionUpdateWithWhereUniqueWithoutCourseInput = {
+    where: LearningReflectionWhereUniqueInput
+    data: XOR<LearningReflectionUpdateWithoutCourseInput, LearningReflectionUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type LearningReflectionUpdateManyWithWhereWithoutCourseInput = {
+    where: LearningReflectionScalarWhereInput
+    data: XOR<LearningReflectionUpdateManyMutationInput, LearningReflectionUncheckedUpdateManyWithoutCourseInput>
+  }
+
   export type CourseCreateWithoutSectionsInput = {
     id?: string
     slug?: string | null
@@ -63045,6 +68722,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -63057,6 +68735,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSectionsInput = {
@@ -63081,6 +68762,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
@@ -63091,6 +68773,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSectionsInput = {
@@ -63112,6 +68797,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
+    notes?: CourseNoteCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutSectionInput = {
@@ -63128,6 +68814,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonCreateOrConnectWithoutSectionInput = {
@@ -63197,6 +68884,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -63209,6 +68897,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSectionsInput = {
@@ -63233,6 +68924,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
@@ -63243,6 +68935,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutSectionInput = {
@@ -63361,6 +69056,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseNoteCreateWithoutLessonInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCourseNotesInput
+    course: CourseCreateNestedOneWithoutNotesInput
+  }
+
+  export type CourseNoteUncheckedCreateWithoutLessonInput = {
+    id?: string
+    userId: string
+    courseId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CourseNoteCreateOrConnectWithoutLessonInput = {
+    where: CourseNoteWhereUniqueInput
+    create: XOR<CourseNoteCreateWithoutLessonInput, CourseNoteUncheckedCreateWithoutLessonInput>
+  }
+
+  export type CourseNoteCreateManyLessonInputEnvelope = {
+    data: CourseNoteCreateManyLessonInput | CourseNoteCreateManyLessonInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseSectionUpsertWithoutLessonsInput = {
     update: XOR<CourseSectionUpdateWithoutLessonsInput, CourseSectionUncheckedUpdateWithoutLessonsInput>
     create: XOR<CourseSectionCreateWithoutLessonsInput, CourseSectionUncheckedCreateWithoutLessonsInput>
@@ -63422,12 +69145,29 @@ export namespace Prisma {
     answers?: JsonNullableFilter<"LessonProgress">
   }
 
+  export type CourseNoteUpsertWithWhereUniqueWithoutLessonInput = {
+    where: CourseNoteWhereUniqueInput
+    update: XOR<CourseNoteUpdateWithoutLessonInput, CourseNoteUncheckedUpdateWithoutLessonInput>
+    create: XOR<CourseNoteCreateWithoutLessonInput, CourseNoteUncheckedCreateWithoutLessonInput>
+  }
+
+  export type CourseNoteUpdateWithWhereUniqueWithoutLessonInput = {
+    where: CourseNoteWhereUniqueInput
+    data: XOR<CourseNoteUpdateWithoutLessonInput, CourseNoteUncheckedUpdateWithoutLessonInput>
+  }
+
+  export type CourseNoteUpdateManyWithWhereWithoutLessonInput = {
+    where: CourseNoteScalarWhereInput
+    data: XOR<CourseNoteUpdateManyMutationInput, CourseNoteUncheckedUpdateManyWithoutLessonInput>
+  }
+
   export type EnrollmentCreateWithoutLessonProgressInput = {
     id?: string
     status?: $Enums.EnrollmentStatus
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -63436,6 +69176,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutLessonProgressInput = {
@@ -63448,10 +69189,12 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutLessonProgressInput = {
@@ -63473,6 +69216,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
+    notes?: CourseNoteCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutProgressInput = {
@@ -63489,6 +69233,7 @@ export namespace Prisma {
     resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonCreateOrConnectWithoutProgressInput = {
@@ -63513,6 +69258,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -63521,6 +69267,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutLessonProgressInput = {
@@ -63533,10 +69280,12 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -63564,6 +69313,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
+    notes?: CourseNoteUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutProgressInput = {
@@ -63580,6 +69330,7 @@ export namespace Prisma {
     resources?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type CourseCreateWithoutCourseSessionsInput = {
@@ -63602,6 +69353,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -63614,6 +69366,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCourseSessionsInput = {
@@ -63638,6 +69393,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -63648,6 +69404,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCourseSessionsInput = {
@@ -63661,6 +69420,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     organization?: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -63669,6 +69429,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutSessionInput = {
@@ -63680,11 +69441,13 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutSessionInput = {
@@ -63694,6 +69457,40 @@ export namespace Prisma {
 
   export type EnrollmentCreateManySessionInputEnvelope = {
     data: EnrollmentCreateManySessionInput | EnrollmentCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SessionAnonymousQuestionCreateWithoutSessionInput = {
+    id?: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutSessionAnonymousQuestionsInput
+    author: UserCreateNestedOneWithoutSessionAnonymousQuestionsInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedCreateWithoutSessionInput = {
+    id?: string
+    courseId: string
+    authorId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionCreateOrConnectWithoutSessionInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    create: XOR<SessionAnonymousQuestionCreateWithoutSessionInput, SessionAnonymousQuestionUncheckedCreateWithoutSessionInput>
+  }
+
+  export type SessionAnonymousQuestionCreateManySessionInputEnvelope = {
+    data: SessionAnonymousQuestionCreateManySessionInput | SessionAnonymousQuestionCreateManySessionInput[]
     skipDuplicates?: boolean
   }
 
@@ -63728,6 +69525,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -63740,6 +69538,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCourseSessionsInput = {
@@ -63764,6 +69565,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -63774,6 +69576,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutSessionInput = {
@@ -63790,6 +69595,422 @@ export namespace Prisma {
   export type EnrollmentUpdateManyWithWhereWithoutSessionInput = {
     where: EnrollmentScalarWhereInput
     data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type SessionAnonymousQuestionUpsertWithWhereUniqueWithoutSessionInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    update: XOR<SessionAnonymousQuestionUpdateWithoutSessionInput, SessionAnonymousQuestionUncheckedUpdateWithoutSessionInput>
+    create: XOR<SessionAnonymousQuestionCreateWithoutSessionInput, SessionAnonymousQuestionUncheckedCreateWithoutSessionInput>
+  }
+
+  export type SessionAnonymousQuestionUpdateWithWhereUniqueWithoutSessionInput = {
+    where: SessionAnonymousQuestionWhereUniqueInput
+    data: XOR<SessionAnonymousQuestionUpdateWithoutSessionInput, SessionAnonymousQuestionUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type SessionAnonymousQuestionUpdateManyWithWhereWithoutSessionInput = {
+    where: SessionAnonymousQuestionScalarWhereInput
+    data: XOR<SessionAnonymousQuestionUpdateManyMutationInput, SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type CourseSessionCreateWithoutAnonymousQuestionsInput = {
+    id?: string
+    city: string
+    location: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    maxStudents: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutCourseSessionsInput
+    enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+  }
+
+  export type CourseSessionUncheckedCreateWithoutAnonymousQuestionsInput = {
+    id?: string
+    courseId: string
+    city: string
+    location: string
+    date: Date | string
+    startTime: string
+    endTime: string
+    maxStudents: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type CourseSessionCreateOrConnectWithoutAnonymousQuestionsInput = {
+    where: CourseSessionWhereUniqueInput
+    create: XOR<CourseSessionCreateWithoutAnonymousQuestionsInput, CourseSessionUncheckedCreateWithoutAnonymousQuestionsInput>
+  }
+
+  export type CourseCreateWithoutSessionAnonymousQuestionsInput = {
+    id?: string
+    slug?: string | null
+    title: string
+    description: string
+    category: string
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutInstructorCoursesInput
+    categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
+    sections?: CourseSectionCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    transactions?: TransactionCreateNestedManyWithoutCourseInput
+    reviews?: ReviewCreateNestedManyWithoutCourseInput
+    conversations?: ConversationCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
+    id?: string
+    slug?: string | null
+    instructorId: string
+    title: string
+    description: string
+    category: string
+    categoryId?: string | null
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCourseInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutSessionAnonymousQuestionsInput, CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+  }
+
+  export type UserCreateWithoutSessionAnonymousQuestionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSessionAnonymousQuestionsInput, UserUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+  }
+
+  export type CourseSessionUpsertWithoutAnonymousQuestionsInput = {
+    update: XOR<CourseSessionUpdateWithoutAnonymousQuestionsInput, CourseSessionUncheckedUpdateWithoutAnonymousQuestionsInput>
+    create: XOR<CourseSessionCreateWithoutAnonymousQuestionsInput, CourseSessionUncheckedCreateWithoutAnonymousQuestionsInput>
+    where?: CourseSessionWhereInput
+  }
+
+  export type CourseSessionUpdateToOneWithWhereWithoutAnonymousQuestionsInput = {
+    where?: CourseSessionWhereInput
+    data: XOR<CourseSessionUpdateWithoutAnonymousQuestionsInput, CourseSessionUncheckedUpdateWithoutAnonymousQuestionsInput>
+  }
+
+  export type CourseSessionUpdateWithoutAnonymousQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    maxStudents?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+  }
+
+  export type CourseSessionUncheckedUpdateWithoutAnonymousQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    maxStudents?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type CourseUpsertWithoutSessionAnonymousQuestionsInput = {
+    update: XOR<CourseUpdateWithoutSessionAnonymousQuestionsInput, CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput>
+    create: XOR<CourseCreateWithoutSessionAnonymousQuestionsInput, CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutSessionAnonymousQuestionsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutSessionAnonymousQuestionsInput, CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput>
+  }
+
+  export type CourseUpdateWithoutSessionAnonymousQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
+    categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
+    sections?: CourseSectionUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type UserUpsertWithoutSessionAnonymousQuestionsInput = {
+    update: XOR<UserUpdateWithoutSessionAnonymousQuestionsInput, UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput>
+    create: XOR<UserCreateWithoutSessionAnonymousQuestionsInput, UserUncheckedCreateWithoutSessionAnonymousQuestionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSessionAnonymousQuestionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSessionAnonymousQuestionsInput, UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput>
+  }
+
+  export type UserUpdateWithoutSessionAnonymousQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutEnrollmentsInput = {
@@ -63812,6 +70033,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -63824,6 +70046,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -63848,6 +70073,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -63858,6 +70084,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -63896,6 +70125,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -63929,6 +70161,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -63947,6 +70182,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
+    anonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutSessionInput
   }
 
   export type CourseSessionUncheckedCreateWithoutEnrollmentsInput = {
@@ -63960,6 +70196,7 @@ export namespace Prisma {
     maxStudents: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    anonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type CourseSessionCreateOrConnectWithoutEnrollmentsInput = {
@@ -64141,6 +70378,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LearningReflectionCreateWithoutEnrollmentInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutLearningReflectionsInput
+    user: UserCreateNestedOneWithoutLearningReflectionsInput
+  }
+
+  export type LearningReflectionUncheckedCreateWithoutEnrollmentInput = {
+    id?: string
+    courseId: string
+    userId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionCreateOrConnectWithoutEnrollmentInput = {
+    where: LearningReflectionWhereUniqueInput
+    create: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
+  }
+
   export type CourseUpsertWithoutEnrollmentsInput = {
     update: XOR<CourseUpdateWithoutEnrollmentsInput, CourseUncheckedUpdateWithoutEnrollmentsInput>
     create: XOR<CourseCreateWithoutEnrollmentsInput, CourseUncheckedCreateWithoutEnrollmentsInput>
@@ -64172,6 +70432,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -64184,6 +70445,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -64208,6 +70472,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -64218,6 +70483,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutEnrollmentsInput = {
@@ -64262,6 +70530,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -64295,6 +70566,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseSessionUpsertWithoutEnrollmentsInput = {
@@ -64319,6 +70593,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
+    anonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutSessionNestedInput
   }
 
   export type CourseSessionUncheckedUpdateWithoutEnrollmentsInput = {
@@ -64332,6 +70607,7 @@ export namespace Prisma {
     maxStudents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    anonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -64512,12 +70788,42 @@ export namespace Prisma {
     data: XOR<SectionQuizSubmissionUpdateManyMutationInput, SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentInput>
   }
 
-  export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
+  export type LearningReflectionUpsertWithoutEnrollmentInput = {
+    update: XOR<LearningReflectionUpdateWithoutEnrollmentInput, LearningReflectionUncheckedUpdateWithoutEnrollmentInput>
+    create: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
+    where?: LearningReflectionWhereInput
+  }
+
+  export type LearningReflectionUpdateToOneWithWhereWithoutEnrollmentInput = {
+    where?: LearningReflectionWhereInput
+    data: XOR<LearningReflectionUpdateWithoutEnrollmentInput, LearningReflectionUncheckedUpdateWithoutEnrollmentInput>
+  }
+
+  export type LearningReflectionUpdateWithoutEnrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutLearningReflectionsNestedInput
+    user?: UserUpdateOneRequiredWithoutLearningReflectionsNestedInput
+  }
+
+  export type LearningReflectionUncheckedUpdateWithoutEnrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EnrollmentCreateWithoutLearningReflectionInput = {
     id?: string
     status?: $Enums.EnrollmentStatus
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -64526,6 +70832,423 @@ export namespace Prisma {
     certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
+    sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+  }
+
+  export type EnrollmentUncheckedCreateWithoutLearningReflectionInput = {
+    id?: string
+    courseId: string
+    studentId: string
+    sessionId?: string | null
+    organizationId?: string | null
+    status?: $Enums.EnrollmentStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
+    lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
+    certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
+    examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
+    transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
+    sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+  }
+
+  export type EnrollmentCreateOrConnectWithoutLearningReflectionInput = {
+    where: EnrollmentWhereUniqueInput
+    create: XOR<EnrollmentCreateWithoutLearningReflectionInput, EnrollmentUncheckedCreateWithoutLearningReflectionInput>
+  }
+
+  export type CourseCreateWithoutLearningReflectionsInput = {
+    id?: string
+    slug?: string | null
+    title: string
+    description: string
+    category: string
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutInstructorCoursesInput
+    categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
+    sections?: CourseSectionCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    transactions?: TransactionCreateNestedManyWithoutCourseInput
+    reviews?: ReviewCreateNestedManyWithoutCourseInput
+    conversations?: ConversationCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutLearningReflectionsInput = {
+    id?: string
+    slug?: string | null
+    instructorId: string
+    title: string
+    description: string
+    category: string
+    categoryId?: string | null
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCourseInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutLearningReflectionsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutLearningReflectionsInput, CourseUncheckedCreateWithoutLearningReflectionsInput>
+  }
+
+  export type UserCreateWithoutLearningReflectionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutLearningReflectionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutLearningReflectionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLearningReflectionsInput, UserUncheckedCreateWithoutLearningReflectionsInput>
+  }
+
+  export type EnrollmentUpsertWithoutLearningReflectionInput = {
+    update: XOR<EnrollmentUpdateWithoutLearningReflectionInput, EnrollmentUncheckedUpdateWithoutLearningReflectionInput>
+    create: XOR<EnrollmentCreateWithoutLearningReflectionInput, EnrollmentUncheckedCreateWithoutLearningReflectionInput>
+    where?: EnrollmentWhereInput
+  }
+
+  export type EnrollmentUpdateToOneWithWhereWithoutLearningReflectionInput = {
+    where?: EnrollmentWhereInput
+    data: XOR<EnrollmentUpdateWithoutLearningReflectionInput, EnrollmentUncheckedUpdateWithoutLearningReflectionInput>
+  }
+
+  export type EnrollmentUpdateWithoutLearningReflectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
+    student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+    session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
+    organization?: OrganizationUpdateOneWithoutEnrollmentsNestedInput
+    lessonProgress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
+    certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
+    examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
+    transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
+    sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateWithoutLearningReflectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
+    certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
+    examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
+    transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
+    sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+  }
+
+  export type CourseUpsertWithoutLearningReflectionsInput = {
+    update: XOR<CourseUpdateWithoutLearningReflectionsInput, CourseUncheckedUpdateWithoutLearningReflectionsInput>
+    create: XOR<CourseCreateWithoutLearningReflectionsInput, CourseUncheckedCreateWithoutLearningReflectionsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutLearningReflectionsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutLearningReflectionsInput, CourseUncheckedUpdateWithoutLearningReflectionsInput>
+  }
+
+  export type CourseUpdateWithoutLearningReflectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
+    categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
+    sections?: CourseSectionUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutLearningReflectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type UserUpsertWithoutLearningReflectionsInput = {
+    update: XOR<UserUpdateWithoutLearningReflectionsInput, UserUncheckedUpdateWithoutLearningReflectionsInput>
+    create: XOR<UserCreateWithoutLearningReflectionsInput, UserUncheckedCreateWithoutLearningReflectionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLearningReflectionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLearningReflectionsInput, UserUncheckedUpdateWithoutLearningReflectionsInput>
+  }
+
+  export type UserUpdateWithoutLearningReflectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLearningReflectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
+    id?: string
+    status?: $Enums.EnrollmentStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
+    course: CourseCreateNestedOneWithoutEnrollmentsInput
+    student: UserCreateNestedOneWithoutEnrollmentsInput
+    session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
+    organization?: OrganizationCreateNestedOneWithoutEnrollmentsInput
+    lessonProgress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
+    certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
+    examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
+    transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutSectionQuizSubmissionsInput = {
@@ -64538,10 +71261,12 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutSectionQuizSubmissionsInput = {
@@ -64593,6 +71318,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -64601,6 +71327,7 @@ export namespace Prisma {
     certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutSectionQuizSubmissionsInput = {
@@ -64613,10 +71340,12 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type CourseSectionUpsertWithoutSectionQuizSubmissionsInput = {
@@ -64658,6 +71387,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -64666,6 +71396,7 @@ export namespace Prisma {
     certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutExamSubmissionInput = {
@@ -64678,10 +71409,12 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutExamSubmissionInput = {
@@ -64706,6 +71439,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -64714,6 +71448,7 @@ export namespace Prisma {
     certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutExamSubmissionInput = {
@@ -64726,10 +71461,12 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentCreateWithoutCertificateInput = {
@@ -64738,6 +71475,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -64746,6 +71484,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutCertificateInput = {
@@ -64758,10 +71497,12 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutCertificateInput = {
@@ -64800,6 +71541,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -64833,6 +71577,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -64860,6 +71607,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -64872,6 +71620,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCertificatesInput = {
@@ -64896,6 +71647,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -64906,6 +71658,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCertificatesInput = {
@@ -64930,6 +71685,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -64938,6 +71694,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutCertificateInput = {
@@ -64950,10 +71707,12 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type UserUpsertWithoutCertificatesInput = {
@@ -64998,6 +71757,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -65031,6 +71793,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -65064,6 +71829,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -65076,6 +71842,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
@@ -65100,6 +71869,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -65110,6 +71880,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentCreateWithoutTransactionInput = {
@@ -65118,6 +71891,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -65126,6 +71900,7 @@ export namespace Prisma {
     certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutTransactionInput = {
@@ -65138,10 +71913,12 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutTransactionInput = {
@@ -65180,6 +71957,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -65213,6 +71993,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -65240,6 +72023,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -65252,6 +72036,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTransactionsInput = {
@@ -65276,6 +72063,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -65286,6 +72074,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTransactionsInput = {
@@ -65310,6 +72101,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -65318,6 +72110,7 @@ export namespace Prisma {
     certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutTransactionInput = {
@@ -65330,10 +72123,12 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type UserUpsertWithoutTransactionsInput = {
@@ -65378,6 +72173,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -65411,6 +72209,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutTransactionsInput = {
@@ -65444,6 +72245,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -65456,6 +72258,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTransactionsInput = {
@@ -65480,6 +72285,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -65490,6 +72296,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateWithoutReviewsInput = {
@@ -65512,6 +72321,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -65524,6 +72334,9 @@ export namespace Prisma {
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutReviewsInput = {
@@ -65548,6 +72361,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -65558,6 +72372,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutReviewsInput = {
@@ -65596,6 +72413,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -65629,6 +72449,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -65667,6 +72490,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -65679,6 +72503,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutReviewsInput = {
@@ -65703,6 +72530,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -65713,6 +72541,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutReviewsInput = {
@@ -65757,6 +72588,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -65790,6 +72624,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -65823,6 +72660,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -65856,6 +72696,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -65905,6 +72748,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -65938,6 +72784,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutConversationsInput = {
@@ -65960,6 +72809,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -65972,6 +72822,9 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutConversationsInput = {
@@ -65996,6 +72849,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -66006,6 +72860,9 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutConversationsInput = {
@@ -66044,6 +72901,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentConversationsInput = {
@@ -66077,6 +72937,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentConversationsInput = {
@@ -66115,6 +72978,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorConversationsInput = {
@@ -66148,6 +73014,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorConversationsInput = {
@@ -66212,6 +73081,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -66224,6 +73094,9 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutConversationsInput = {
@@ -66248,6 +73121,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -66258,6 +73132,9 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutStudentConversationsInput = {
@@ -66302,6 +73179,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentConversationsInput = {
@@ -66335,6 +73215,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructorConversationsInput = {
@@ -66379,6 +73262,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorConversationsInput = {
@@ -66412,6 +73298,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -66484,6 +73373,9 @@ export namespace Prisma {
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -66517,6 +73409,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -66595,6 +73490,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -66628,6 +73526,9 @@ export namespace Prisma {
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutHostedGamesInput = {
@@ -66661,6 +73562,9 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedGamesInput = {
@@ -66694,6 +73598,9 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedGamesInput = {
@@ -66833,6 +73740,9 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedGamesInput = {
@@ -66866,6 +73776,9 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizGameQuestionUpsertWithWhereUniqueWithoutGameInput = {
@@ -67126,6 +74039,9 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGameParticipationsInput = {
@@ -67159,6 +74075,9 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGameParticipationsInput = {
@@ -67277,6 +74196,9 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGameParticipationsInput = {
@@ -67310,6 +74232,9 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizGameAnswerUpsertWithWhereUniqueWithoutParticipantInput = {
@@ -67691,6 +74616,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     student: UserCreateNestedOneWithoutEnrollmentsInput
     session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
@@ -67699,6 +74625,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutOrganizationInput = {
@@ -67710,11 +74637,13 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
     lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutOrganizationInput = {
@@ -67974,6 +74903,9 @@ export namespace Prisma {
     sentMessages?: MessageCreateNestedManyWithoutSenderInput
     hostedGames?: QuizGameCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrgMembershipsInput = {
@@ -68007,6 +74939,9 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
     hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
     gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrgMembershipsInput = {
@@ -68123,6 +75058,9 @@ export namespace Prisma {
     sentMessages?: MessageUpdateManyWithoutSenderNestedInput
     hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrgMembershipsInput = {
@@ -68156,6 +75094,9 @@ export namespace Prisma {
     sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
     gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TeamMemberUpsertWithWhereUniqueWithoutMemberInput = {
@@ -68686,6 +75627,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -68698,6 +75640,9 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutCourseInput
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutOrgCourseAccessInput = {
@@ -68722,6 +75667,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -68732,6 +75678,9 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutOrgCourseAccessInput = {
@@ -68817,6 +75766,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -68829,6 +75779,9 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutCourseNestedInput
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutOrgCourseAccessInput = {
@@ -68853,6 +75806,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -68863,6 +75817,9 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type TeamCreateWithoutCourseAccessInput = {
@@ -68910,6 +75867,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -68922,6 +75880,9 @@ export namespace Prisma {
     reviews?: ReviewCreateNestedManyWithoutCourseInput
     conversations?: ConversationCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTeamCourseAccessInput = {
@@ -68946,6 +75907,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -68956,6 +75918,9 @@ export namespace Prisma {
     reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
     orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTeamCourseAccessInput = {
@@ -69025,6 +75990,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -69037,6 +76003,9 @@ export namespace Prisma {
     reviews?: ReviewUpdateManyWithoutCourseNestedInput
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTeamCourseAccessInput = {
@@ -69061,6 +76030,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -69071,6 +76041,9 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type OrganizationCreateWithoutMaterialsInput = {
@@ -69161,6 +76134,418 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
+  export type UserCreateWithoutCourseNotesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCourseNotesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCourseNotesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCourseNotesInput, UserUncheckedCreateWithoutCourseNotesInput>
+  }
+
+  export type CourseCreateWithoutNotesInput = {
+    id?: string
+    slug?: string | null
+    title: string
+    description: string
+    category: string
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutInstructorCoursesInput
+    categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
+    sections?: CourseSectionCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    transactions?: TransactionCreateNestedManyWithoutCourseInput
+    reviews?: ReviewCreateNestedManyWithoutCourseInput
+    conversations?: ConversationCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutNotesInput = {
+    id?: string
+    slug?: string | null
+    instructorId: string
+    title: string
+    description: string
+    category: string
+    categoryId?: string | null
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCourseInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutNotesInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutNotesInput, CourseUncheckedCreateWithoutNotesInput>
+  }
+
+  export type LessonCreateWithoutNotesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    type: $Enums.LessonType
+    duration?: string | null
+    order: number
+    videoUrl?: string | null
+    content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    section: CourseSectionCreateNestedOneWithoutLessonsInput
+    progress?: LessonProgressCreateNestedManyWithoutLessonInput
+  }
+
+  export type LessonUncheckedCreateWithoutNotesInput = {
+    id?: string
+    sectionId: string
+    title: string
+    description?: string | null
+    type: $Enums.LessonType
+    duration?: string | null
+    order: number
+    videoUrl?: string | null
+    content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  }
+
+  export type LessonCreateOrConnectWithoutNotesInput = {
+    where: LessonWhereUniqueInput
+    create: XOR<LessonCreateWithoutNotesInput, LessonUncheckedCreateWithoutNotesInput>
+  }
+
+  export type UserUpsertWithoutCourseNotesInput = {
+    update: XOR<UserUpdateWithoutCourseNotesInput, UserUncheckedUpdateWithoutCourseNotesInput>
+    create: XOR<UserCreateWithoutCourseNotesInput, UserUncheckedCreateWithoutCourseNotesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCourseNotesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCourseNotesInput, UserUncheckedUpdateWithoutCourseNotesInput>
+  }
+
+  export type UserUpdateWithoutCourseNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCourseNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CourseUpsertWithoutNotesInput = {
+    update: XOR<CourseUpdateWithoutNotesInput, CourseUncheckedUpdateWithoutNotesInput>
+    create: XOR<CourseCreateWithoutNotesInput, CourseUncheckedCreateWithoutNotesInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutNotesInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutNotesInput, CourseUncheckedUpdateWithoutNotesInput>
+  }
+
+  export type CourseUpdateWithoutNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
+    categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
+    sections?: CourseSectionUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type LessonUpsertWithoutNotesInput = {
+    update: XOR<LessonUpdateWithoutNotesInput, LessonUncheckedUpdateWithoutNotesInput>
+    create: XOR<LessonCreateWithoutNotesInput, LessonUncheckedCreateWithoutNotesInput>
+    where?: LessonWhereInput
+  }
+
+  export type LessonUpdateToOneWithWhereWithoutNotesInput = {
+    where?: LessonWhereInput
+    data: XOR<LessonUpdateWithoutNotesInput, LessonUncheckedUpdateWithoutNotesInput>
+  }
+
+  export type LessonUpdateWithoutNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
+    progress?: LessonProgressUpdateManyWithoutLessonNestedInput
+  }
+
+  export type LessonUncheckedUpdateWithoutNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  }
+
   export type AccountCreateManyUserInput = {
     id?: string
     accountId: string
@@ -69207,6 +76592,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -69220,6 +76606,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
   }
 
   export type CertificateCreateManyUserInput = {
@@ -69317,6 +76704,36 @@ export namespace Prisma {
     joinedAt?: Date | string
   }
 
+  export type CourseNoteCreateManyUserInput = {
+    id?: string
+    courseId: string
+    lessonId?: string | null
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionCreateManyAuthorInput = {
+    id?: string
+    courseSessionId: string
+    courseId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionCreateManyUserInput = {
+    id?: string
+    enrollmentId: string
+    courseId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AccountUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
@@ -69412,6 +76829,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
@@ -69424,6 +76842,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutInstructorInput = {
@@ -69447,6 +76868,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -69458,6 +76880,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutInstructorInput = {
@@ -69481,6 +76906,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69491,6 +76917,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
     organization?: OrganizationUpdateOneWithoutEnrollmentsNestedInput
@@ -69499,6 +76926,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutStudentInput = {
@@ -69510,11 +76938,13 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutStudentInput = {
@@ -69526,6 +76956,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CertificateUpdateWithoutUserInput = {
@@ -69827,6 +77258,96 @@ export namespace Prisma {
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseNoteUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutNotesNestedInput
+    lesson?: LessonUpdateOneWithoutNotesNestedInput
+  }
+
+  export type CourseNoteUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lessonId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseNoteUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lessonId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: CourseSessionUpdateOneRequiredWithoutAnonymousQuestionsNestedInput
+    course?: CourseUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseSessionId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseSessionId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LearningReflectionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollment?: EnrollmentUpdateOneRequiredWithoutLearningReflectionNestedInput
+    course?: CourseUpdateOneRequiredWithoutLearningReflectionsNestedInput
+  }
+
+  export type LearningReflectionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LearningReflectionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CourseCreateManyCategoryRefInput = {
     id?: string
     slug?: string | null
@@ -69848,6 +77369,7 @@ export namespace Prisma {
     visibility?: $Enums.CourseVisibility
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -69872,6 +77394,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -69884,6 +77407,9 @@ export namespace Prisma {
     conversations?: ConversationUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCategoryRefInput = {
@@ -69907,6 +77433,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -69918,6 +77445,9 @@ export namespace Prisma {
     conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
     orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutCategoryRefInput = {
@@ -69941,6 +77471,7 @@ export namespace Prisma {
     visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69975,6 +77506,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
   }
 
   export type CertificateCreateManyCourseInput = {
@@ -70032,6 +77564,36 @@ export namespace Prisma {
     grantedAt?: Date | string
   }
 
+  export type CourseNoteCreateManyCourseInput = {
+    id?: string
+    userId: string
+    lessonId?: string | null
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SessionAnonymousQuestionCreateManyCourseInput = {
+    id?: string
+    courseSessionId: string
+    authorId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LearningReflectionCreateManyCourseInput = {
+    id?: string
+    enrollmentId: string
+    userId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CourseSectionUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -70074,6 +77636,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    anonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutSessionNestedInput
   }
 
   export type CourseSessionUncheckedUpdateWithoutCourseInput = {
@@ -70087,6 +77650,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    anonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type CourseSessionUncheckedUpdateManyWithoutCourseInput = {
@@ -70107,6 +77671,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
     organization?: OrganizationUpdateOneWithoutEnrollmentsNestedInput
@@ -70115,6 +77680,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutCourseInput = {
@@ -70126,11 +77692,13 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutCourseInput = {
@@ -70142,6 +77710,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CertificateUpdateWithoutCourseInput = {
@@ -70311,6 +77880,96 @@ export namespace Prisma {
     grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseNoteUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCourseNotesNestedInput
+    lesson?: LessonUpdateOneWithoutNotesNestedInput
+  }
+
+  export type CourseNoteUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    lessonId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseNoteUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    lessonId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: CourseSessionUpdateOneRequiredWithoutAnonymousQuestionsNestedInput
+    author?: UserUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseSessionId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseSessionId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LearningReflectionUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollment?: EnrollmentUpdateOneRequiredWithoutLearningReflectionNestedInput
+    user?: UserUpdateOneRequiredWithoutLearningReflectionsNestedInput
+  }
+
+  export type LearningReflectionUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LearningReflectionUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LessonCreateManySectionInput = {
     id?: string
     title: string
@@ -70348,6 +78007,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
+    notes?: CourseNoteUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutSectionInput = {
@@ -70364,6 +78024,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateManyWithoutSectionInput = {
@@ -70413,6 +78074,15 @@ export namespace Prisma {
     answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
+  export type CourseNoteCreateManyLessonInput = {
+    id?: string
+    userId: string
+    courseId: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type LessonProgressUpdateWithoutLessonInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70437,6 +78107,33 @@ export namespace Prisma {
     answers?: NullableJsonNullValueInput | InputJsonValue
   }
 
+  export type CourseNoteUpdateWithoutLessonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCourseNotesNestedInput
+    course?: CourseUpdateOneRequiredWithoutNotesNestedInput
+  }
+
+  export type CourseNoteUncheckedUpdateWithoutLessonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseNoteUncheckedUpdateManyWithoutLessonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EnrollmentCreateManySessionInput = {
     id?: string
     courseId: string
@@ -70444,6 +78141,19 @@ export namespace Prisma {
     organizationId?: string | null
     status?: $Enums.EnrollmentStatus
     progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
+  }
+
+  export type SessionAnonymousQuestionCreateManySessionInput = {
+    id?: string
+    courseId: string
+    authorId: string
+    content: string
+    status?: $Enums.SessionAnonymousQuestionStatus
+    answer?: string | null
+    answeredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -70454,6 +78164,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     organization?: OrganizationUpdateOneWithoutEnrollmentsNestedInput
@@ -70462,6 +78173,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutSessionInput = {
@@ -70473,11 +78185,13 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutSessionInput = {
@@ -70487,6 +78201,43 @@ export namespace Prisma {
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SessionAnonymousQuestionUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput
+    author?: UserUpdateOneRequiredWithoutSessionAnonymousQuestionsNestedInput
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    status?: EnumSessionAnonymousQuestionStatusFieldUpdateOperationsInput | $Enums.SessionAnonymousQuestionStatus
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -70835,6 +78586,7 @@ export namespace Prisma {
     progress?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
   }
 
   export type OrgMemberUpdateWithoutOrganizationInput = {
@@ -70978,6 +78730,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
@@ -70986,6 +78739,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutOrganizationInput = {
@@ -70997,11 +78751,13 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -71013,6 +78769,7 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TeamMemberCreateManyMemberInput = {

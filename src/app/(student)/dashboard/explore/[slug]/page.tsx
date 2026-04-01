@@ -38,11 +38,16 @@ async function enrollCourseAction(_prev: EnrollState, formData: FormData): Promi
   "use server";
   const courseId = formData.get("courseId");
   const sessionId = formData.get("sessionId") as string | null;
+  const joinCode = formData.get("joinCode");
   if (!courseId || typeof courseId !== "string") {
     return { status: "error", message: "Curso inválido" };
   }
   try {
-    await enrollInCourse(courseId, sessionId || undefined);
+    await enrollInCourse(
+      courseId,
+      sessionId || undefined,
+      typeof joinCode === "string" ? joinCode : undefined
+    );
     return { status: "success" };
   } catch (error) {
     return {
@@ -133,6 +138,7 @@ export default async function ExploreCourseDetail({
               price={course.price}
               enrollAction={enrollCourseAction}
               returnUrl={`/dashboard/explore/${slug}`}
+              requiresJoinCode={course.requiresJoinCode}
               sessions={
                 course.modality === "presencial" && course.courseSessions?.length
                   ? course.courseSessions.map((s) => ({

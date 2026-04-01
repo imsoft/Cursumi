@@ -17,12 +17,14 @@ import {
   BarChart3,
   Gamepad2,
   FileDown,
+  PenLine,
 } from "lucide-react";
 
 const instructorNavItems = [
   { title: "Dashboard", href: "/instructor", icon: LayoutDashboard },
   { title: "Mis cursos", href: "/instructor/courses", icon: BookOpenCheck },
   { title: "Crear curso", href: "/instructor/courses/new", icon: PlusCircle },
+  { title: "Pizarrón virtual", href: "/instructor/whiteboard", icon: PenLine },
   { title: "Mis juegos", href: "/instructor/games", icon: Gamepad2 },
   { title: "Ingresos", href: "/instructor/earnings", icon: DollarSign },
   { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
@@ -42,6 +44,8 @@ const pathnameToTitle: Record<string, string> = {
 
 function getPageTitle(pathname: string | null): string {
   if (!pathname) return "Dashboard";
+  if (pathname.includes("/anonymous-questions")) return "Preguntas anónimas";
+  if (pathname.startsWith("/instructor/whiteboard")) return "Pizarrón virtual";
   const base = pathname.split("/").slice(0, 3).join("/");
   return pathnameToTitle[base] ?? instructorNavItems.find((n) => pathname.startsWith(n.href))?.title ?? "Dashboard";
 }

@@ -232,6 +232,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   visibility: 'visibility',
   nextSession: 'nextSession',
   finalExam: 'finalExam',
+  joinCodeHash: 'joinCodeHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -284,6 +285,19 @@ exports.Prisma.CourseSessionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SessionAnonymousQuestionScalarFieldEnum = {
+  id: 'id',
+  courseSessionId: 'courseSessionId',
+  courseId: 'courseId',
+  authorId: 'authorId',
+  content: 'content',
+  status: 'status',
+  answer: 'answer',
+  answeredAt: 'answeredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EnrollmentScalarFieldEnum = {
   id: 'id',
   courseId: 'courseId',
@@ -292,6 +306,17 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   organizationId: 'organizationId',
   status: 'status',
   progress: 'progress',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  learningReflectionEmailSentAt: 'learningReflectionEmailSentAt'
+};
+
+exports.Prisma.LearningReflectionScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  courseId: 'courseId',
+  userId: 'userId',
+  content: 'content',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -543,6 +568,16 @@ exports.Prisma.CouponScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CourseNoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  lessonId: 'lessonId',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -613,6 +648,12 @@ exports.LessonType = exports.$Enums.LessonType = {
   assignment: 'assignment'
 };
 
+exports.SessionAnonymousQuestionStatus = exports.$Enums.SessionAnonymousQuestionStatus = {
+  open: 'open',
+  answered: 'answered',
+  dismissed: 'dismissed'
+};
+
 exports.EnrollmentStatus = exports.$Enums.EnrollmentStatus = {
   active: 'active',
   completed: 'completed',
@@ -669,7 +710,9 @@ exports.Prisma.ModelName = {
   Lesson: 'Lesson',
   LessonProgress: 'LessonProgress',
   CourseSession: 'CourseSession',
+  SessionAnonymousQuestion: 'SessionAnonymousQuestion',
   Enrollment: 'Enrollment',
+  LearningReflection: 'LearningReflection',
   SectionQuizSubmission: 'SectionQuizSubmission',
   ExamSubmission: 'ExamSubmission',
   Certificate: 'Certificate',
@@ -693,7 +736,8 @@ exports.Prisma.ModelName = {
   OrgMaterial: 'OrgMaterial',
   Kpi: 'Kpi',
   SiteSetting: 'SiteSetting',
-  Coupon: 'Coupon'
+  Coupon: 'Coupon',
+  CourseNote: 'CourseNote'
 };
 
 /**

@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { sendLearningReflectionInviteIfNeeded } from "@/lib/learning-reflection-invite";
 
 async function requireSession() {
   const session = await auth.api.getSession({
@@ -111,6 +112,8 @@ export async function recalculateProgress(enrollmentId: string, courseId: string
         },
       });
     }
+
+    void sendLearningReflectionInviteIfNeeded(enrollmentId);
   }
 
   return progress;

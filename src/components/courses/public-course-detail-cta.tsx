@@ -20,6 +20,8 @@ interface PublicCourseDetailCTAProps {
   price: number;
   enrollAction: EnrollAction;
   returnUrl: string;
+  /** Presencial gratis con código de acceso */
+  requiresJoinCode?: boolean;
   /** Sesiones presenciales disponibles (solo para cursos presenciales) */
   sessions?: PickableSession[];
 }
@@ -30,6 +32,7 @@ export function PublicCourseDetailCTA({
   price,
   enrollAction,
   returnUrl,
+  requiresJoinCode,
   sessions,
 }: PublicCourseDetailCTAProps) {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
@@ -78,6 +81,7 @@ export function PublicCourseDetailCTA({
           courseId={courseId}
           sessionId={selectedSessionId ?? undefined}
           disabled={requiresSession && !selectedSessionId}
+          requiresJoinCode={requiresJoinCode}
         />
       ) : (
         <CheckoutButton

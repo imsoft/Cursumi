@@ -18,7 +18,7 @@ const PLATFORM_FEE_PERCENT = 15; // debe coincidir con src/lib/stripe.ts
 
 const createPricingSchema = (modality: "virtual" | "presencial") => {
   const baseSchema = {
-    price: z.coerce.number().positive("El precio debe ser mayor a 0"),
+    price: z.coerce.number().min(0, "El precio no puede ser negativo"),
     duration: z.string().min(1, "Ingresa la duración"),
   };
 
@@ -64,7 +64,11 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
   const watchedPrice = form.watch("price");
 
   const handleSubmit = form.handleSubmit((values) => {
-    onUpdate(values);
+    onUpdate({
+      ...values,
+      freeJoinCode: data.freeJoinCode,
+      clearFreeJoinCode: data.clearFreeJoinCode,
+    });
     onNext();
   });
 
@@ -128,6 +132,35 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                     (comisión plataforma {PLATFORM_FEE_PERCENT}%)
                   </span>
                 </span>
+              </div>
+            )}
+            {isPresencial && watchedPrice === 0 && (
+              <div className="mt-4 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+                <p className="text-sm font-medium text-foreground">Inscripción gratuita</p>
+                <p className="text-xs text-muted-foreground">
+                  Opcional: define un código para que solo quienes lo conozcan puedan inscribirse (por ejemplo lo compartes en clase).
+                </p>
+                <Input
+                  label="Código de inscripción"
+                  type="password"
+                  autoComplete="new-password"
+                  value={data.freeJoinCode ?? ""}
+                  onChange={(e) =>
+                    onUpdate({ freeJoinCode: e.target.value, clearFreeJoinCode: false })
+                  }
+                  placeholder={data.hasJoinCode ? "Nuevo código o vacío para no cambiar" : "Ej. TALLER2025"}
+                />
+                {data.hasJoinCode && (
+                  <label className="flex cursor-pointer items-start gap-2 text-sm text-foreground">
+                    <input
+                      type="checkbox"
+                      className="mt-1 rounded border-input"
+                      checked={!!data.clearFreeJoinCode}
+                      onChange={(e) => onUpdate({ clearFreeJoinCode: e.target.checked })}
+                    />
+                    <span>Quitar el código (cualquiera podrá inscribirse sin código)</span>
+                  </label>
+                )}
               </div>
             )}
           </div>

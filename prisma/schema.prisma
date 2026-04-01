@@ -46,6 +46,9 @@ model User {
   hostedGames           QuizGame[]
   gameParticipations    QuizGameParticipant[]
   orgMemberships        OrgMember[]
+  courseNotes           CourseNote[]
+  sessionAnonymousQuestions SessionAnonymousQuestion[]
+  learningReflections   LearningReflection[]
 }
 
 model Account {
@@ -252,6 +255,8 @@ model Course {
   visibility  CourseVisibility  @default(public)
   nextSession DateTime?
   finalExam   Json?        // CourseFinalExam serializado
+  /// Hash (scrypt) del código de inscripción para cursos presenciales gratuitos; null = abierto
+  joinCodeHash String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
@@ -266,6 +271,9 @@ model Course {
   conversations Conversation[]
   orgCourseAccess    OrgCourseAccess[]
   teamCourseAccess   TeamCourseAccess[]
+  notes              CourseNote[]
+  sessionAnonymousQuestions SessionAnonymousQuestion[]
+  learningReflections LearningReflection[]
 
   @@index([instructorId])
   @@index([status])
@@ -306,6 +314,7 @@ model Lesson {
 
   section  CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   progress LessonProgress[]
+  notes    CourseNote[]
 
   @@index([sectionId, order])
 }
@@ -344,9 +353,38 @@ model CourseSession {
 
   course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
   enrollments Enrollment[]
+  anonymousQuestions SessionAnonymousQuestion[]
 
   @@index([courseId])
   @@index([courseId, date])
+}
+
+enum SessionAnonymousQuestionStatus {
+  open
+  answered
+  dismissed
+}
+
+// Preguntas en vivo durante clase presencial (autor oculto para el instructor en la UI)
+model SessionAnonymousQuestion {
+  id              String   @id @default(cuid())
+  courseSessionId String
+  courseId        String
+  authorId        String
+  content         String   @db.Text
+  status          SessionAnonymousQuestionStatus @default(open)
+  answer          String?  @db.Text
+  answeredAt      DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  session CourseSession @relation(fields: [courseSessionId], references: [id], onDelete: Cascade)
+  course  Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  author  User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([courseSessionId, createdAt])
+  @@index([courseId])
+  @@index([authorId])
 }
 
 // ─────────────────────────────────────────
@@ -373,11 +411,31 @@ model Enrollment {
   examSubmission         ExamSubmission?
   transaction            Transaction?
   sectionQuizSubmissions SectionQuizSubmission[]
+  learningReflectionEmailSentAt DateTime?
+  learningReflection     LearningReflection?
 
   @@unique([courseId, studentId])
   @@index([studentId])
   @@index([sessionId])
   @@index([organizationId])
+}
+
+// Respuesta a "¿Qué aprendiste?" — visible en la ficha pública del curso
+model LearningReflection {
+  id           String   @id @default(cuid())
+  enrollmentId String   @unique
+  courseId     String
+  userId       String
+  content      String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  course     Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([userId])
 }
 
 // ─────────────────────────────────────────
@@ -815,4 +873,26 @@ model Coupon {
 
   @@index([code])
   @@index([active])
+}
+
+// ─────────────────────────────────────────
+// ANOTACIONES (Course Notes)
+// ─────────────────────────────────────────
+
+model CourseNote {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  lessonId  String?
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([lessonId])
 }

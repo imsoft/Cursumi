@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, Trophy } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { fireMiniConfetti } from "@/lib/minigame-confetti";
+import { MinigameLevelCelebration } from "./minigame-level-celebration";
 
 interface MemoryPair {
   term: string;
@@ -35,8 +35,8 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
       pairs.flatMap((pair, i) => [
         { id: `${i}-term`, pairIndex: i, content: pair.term },
         { id: `${i}-def`, pairIndex: i, content: pair.definition },
-      ])
-    )
+      ]),
+    ),
   );
 
   const [flipped, setFlipped] = useState<Set<string>>(new Set());
@@ -45,6 +45,10 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
   const [blocked, setBlocked] = useState(false);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
+  const [levelOpen, setLevelOpen] = useState(false);
+
+  const prevMatchedSize = useRef(0);
+  const finishSent = useRef(false);
 
   const totalCards = cards.length;
 
@@ -53,6 +57,22 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
       setWon(true);
     }
   }, [matched.size, totalCards]);
+
+  useEffect(() => {
+    const n = matched.size;
+    if (n > prevMatchedSize.current && n > 0 && n < totalCards) {
+      fireMiniConfetti();
+      setLevelOpen(true);
+    }
+    prevMatchedSize.current = n;
+  }, [matched.size, totalCards]);
+
+  useEffect(() => {
+    if (won && !finishSent.current) {
+      finishSent.current = true;
+      onComplete();
+    }
+  }, [won, onComplete]);
 
   const handleCardClick = useCallback(
     (card: Card) => {
@@ -70,13 +90,11 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
         return;
       }
 
-      // Second card
       const first = selected[0];
       setSelected([]);
       setMoves((m) => m + 1);
 
       if (first.pairIndex === card.pairIndex) {
-        // Match!
         setMatched((prev) => {
           const next = new Set(prev);
           next.add(first.id);
@@ -84,7 +102,6 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
           return next;
         });
       } else {
-        // No match — flip back after delay
         setBlocked(true);
         setTimeout(() => {
           setFlipped((prev) => {
@@ -97,36 +114,31 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
         }, 900);
       }
     },
-    [blocked, flipped, matched, selected]
+    [blocked, flipped, matched, selected],
   );
 
   const gridCols = cards.length <= 6 ? "grid-cols-3" : "grid-cols-4";
 
   if (won) {
     return (
-      <div className="flex flex-col items-center gap-6 rounded-xl border-2 border-green-500/40 bg-green-50/50 dark:bg-green-900/10 p-8 text-center">
-        <div className="flex flex-col items-center gap-3">
-          <Trophy className="h-12 w-12 text-yellow-500" />
-          <h3 className="text-2xl font-bold text-foreground">¡Completado!</h3>
-          <p className="text-muted-foreground">
-            Encontraste todos los pares en{" "}
-            <span className="font-semibold text-foreground">{moves}</span>{" "}
-            {moves === 1 ? "movimiento" : "movimientos"}.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 rounded-full bg-green-100 dark:bg-green-900/30 px-4 py-2 text-green-800 dark:text-green-400 text-sm font-medium">
-          <CheckCircle className="h-4 w-4" />
-          {pairs.length} pares encontrados
-        </div>
-        <Button onClick={onComplete} size="lg" className="min-w-[160px]">
-          Continuar
-        </Button>
+      <div className="flex flex-col items-center gap-3 py-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          ¡Listo! Encontraste {pairs.length} pares en {moves} {moves === 1 ? "movimiento" : "movimientos"}.
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
+      <MinigameLevelCelebration
+        open={levelOpen}
+        onOpenChange={setLevelOpen}
+        title="¡Par encontrado!"
+        description="Sigue así hasta completar todos los pares."
+        onContinue={() => {}}
+      />
+
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Encuentra los {pairs.length} pares correctos

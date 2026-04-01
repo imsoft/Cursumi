@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, XCircle, Trophy, RotateCcw } from "lucide-react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { CheckCircle, XCircle, Trophy } from "lucide-react";
+import { fireMiniConfetti } from "@/lib/minigame-confetti";
+import { MinigameLevelCelebration } from "./minigame-level-celebration";
 
 interface MatchPair {
   left: string;
@@ -30,11 +31,31 @@ export function MatchGame({ instruction, pairs, onComplete }: MatchGameProps) {
 
   const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
   const [selectedRight, setSelectedRight] = useState<number | null>(null);
-  const [matched, setMatched] = useState<Set<number>>(new Set()); // indices into pairs (left)
+  const [matched, setMatched] = useState<Set<number>>(new Set());
   const [matchedRight, setMatchedRight] = useState<Set<number>>(new Set());
   const [wrongPair, setWrongPair] = useState<{ left: number; right: number } | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [done, setDone] = useState(false);
+  const [levelOpen, setLevelOpen] = useState(false);
+
+  const prevMatchedCount = useRef(0);
+  const finishSent = useRef(false);
+
+  useEffect(() => {
+    if (done && !finishSent.current) {
+      finishSent.current = true;
+      onComplete();
+    }
+  }, [done, onComplete]);
+
+  useEffect(() => {
+    const n = matched.size;
+    if (n > prevMatchedCount.current && n > 0 && n < pairs.length) {
+      fireMiniConfetti();
+      setLevelOpen(true);
+    }
+    prevMatchedCount.current = n;
+  }, [matched.size, pairs.length]);
 
   const tryMatch = useCallback(
     (leftIdx: number, rightIdx: number) => {
@@ -97,30 +118,36 @@ export function MatchGame({ instruction, pairs, onComplete }: MatchGameProps) {
 
   if (done) {
     return (
-      <div className="flex flex-col items-center gap-4 py-8">
-        <Trophy className="h-12 w-12 text-yellow-500" />
-        <h3 className="text-xl font-bold text-foreground">¡Todas las conexiones correctas!</h3>
+      <div className="flex flex-col items-center gap-3 py-8 text-center">
+        <Trophy className="h-10 w-10 text-yellow-500" />
         <p className="text-sm text-muted-foreground">
-          Completado en {attempts} {attempts === 1 ? "intento" : "intentos"}
+          Completaste todas las conexiones en {attempts} {attempts === 1 ? "intento" : "intentos"}.
         </p>
-        <Button onClick={onComplete}>Continuar</Button>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
+      <MinigameLevelCelebration
+        open={levelOpen}
+        onOpenChange={setLevelOpen}
+        title="¡Conexión correcta!"
+        description="Sigue conectando hasta completar todas las parejas."
+        onContinue={() => {}}
+      />
+
       {instruction && (
         <p className="text-sm font-medium text-foreground">{instruction}</p>
       )}
       <p className="text-xs text-muted-foreground">
-        Selecciona un elemento de cada columna para conectarlos. {matched.size}/{pairs.length} conectados
+        Selecciona un elemento de cada columna para conectarlos. {matched.size}/{pairs.length}{" "}
+        conectados
       </p>
 
       <div className="grid grid-cols-2 gap-4">
-        {/* Left column */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Columna A</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Columna A</p>
           {leftItems.map((item, idx) => (
             <button
               key={idx}
@@ -138,9 +165,8 @@ export function MatchGame({ instruction, pairs, onComplete }: MatchGameProps) {
           ))}
         </div>
 
-        {/* Right column */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Columna B</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Columna B</p>
           {shuffledRight.map((item, idx) => (
             <button
               key={idx}
@@ -160,9 +186,7 @@ export function MatchGame({ instruction, pairs, onComplete }: MatchGameProps) {
       </div>
 
       {attempts > 0 && (
-        <p className="text-xs text-muted-foreground text-center">
-          Intentos: {attempts}
-        </p>
+        <p className="text-center text-xs text-muted-foreground">Intentos: {attempts}</p>
       )}
     </div>
   );

@@ -28,6 +28,16 @@ import { HangmanGame } from "./minigames/hangman-game";
 import { SortGame } from "./minigames/sort-game";
 import { MatchGame } from "./minigames/match-game";
 import { LessonSidebar } from "./lesson-sidebar";
+import { CourseNotesSheet } from "./course-notes-sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { fireGrandConfetti } from "@/lib/minigame-confetti";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
@@ -155,6 +165,7 @@ export function LessonViewerClient({
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
   const [marking, setMarking] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [minigameCelebrateOpen, setMinigameCelebrateOpen] = useState(false);
 
   // Scroll al inicio al entrar a una lección
   useEffect(() => {
@@ -429,8 +440,20 @@ export function LessonViewerClient({
       });
       setSectionMinigamePassed(true);
     } catch {
-      // silently fail, user can still continue
       setSectionMinigamePassed(true);
+    }
+    fireGrandConfetti();
+    setMinigameCelebrateOpen(true);
+  };
+
+  const handleNextAfterMinigameCelebration = () => {
+    setMinigameCelebrateOpen(false);
+    if (nextLesson) {
+      router.push(`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`);
+    } else if (hasFinalExam) {
+      router.push(`/dashboard/my-courses/${courseId}/exam`);
+    } else {
+      router.push(`/dashboard/my-courses/${courseId}`);
     }
   };
 
@@ -946,8 +969,31 @@ export function LessonViewerClient({
     );
   };
 
+  const nextMinigameCtaLabel = nextLesson
+    ? "Siguiente lección"
+    : hasFinalExam
+    ? "Ir al examen final"
+    : "Volver al curso";
+
   return (
     <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
+      <Dialog open={minigameCelebrateOpen} onOpenChange={setMinigameCelebrateOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>¡Felicitaciones!</DialogTitle>
+            <DialogDescription>
+              Completaste el minijuego de esta sección. Sigue con lo que viene a continuación.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:justify-center">
+            <Button className="min-w-[180px]" onClick={handleNextAfterMinigameCelebration}>
+              {nextMinigameCtaLabel}
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Mobile sidebar toggle */}
       <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-3 md:hidden">
         <button
@@ -989,7 +1035,10 @@ export function LessonViewerClient({
               <span className="capitalize">{lesson.type}</span>
               {lesson.duration && <span>· {lesson.duration}</span>}
             </div>
-            <h1 className="mt-1 text-2xl font-bold text-foreground">{lesson.title}</h1>
+            <div className="mt-1 flex items-start justify-between gap-4">
+              <h1 className="text-2xl font-bold text-foreground">{lesson.title}</h1>
+              <CourseNotesSheet courseId={courseId} lessonId={lesson.id} />
+            </div>
             {lesson.description && (
               <RichTextRenderer content={lesson.description} className="mt-2 text-sm text-muted-foreground" />
             )}

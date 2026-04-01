@@ -11,6 +11,7 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import { EnrollActionForm } from "@/components/student/enroll-action-form";
 import { CheckoutButton } from "@/components/student/checkout-button";
 import { ReviewSection } from "@/components/student/review-section";
+import { LearningReflectionsSection } from "@/components/courses/learning-reflections-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { formatPriceMXN } from "@/lib/utils";
@@ -70,11 +71,16 @@ async function enrollCourseAction(_prev: EnrollState, formData: FormData): Promi
   "use server";
   const courseId = formData.get("courseId");
   const sessionId = formData.get("sessionId") as string | null;
+  const joinCode = formData.get("joinCode");
   if (!courseId || typeof courseId !== "string") {
     return { status: "error", message: "Curso inválido" };
   }
   try {
-    await enrollInCourse(courseId, sessionId || undefined);
+    await enrollInCourse(
+      courseId,
+      sessionId || undefined,
+      typeof joinCode === "string" ? joinCode : undefined
+    );
     return { status: "success" };
   } catch (error) {
     return {
@@ -209,6 +215,7 @@ export default async function PublicCourseDetailPage({
               price={course.price}
               enrollAction={enrollCourseAction}
               returnUrl={returnUrl}
+              requiresJoinCode={course.requiresJoinCode}
               sessions={
                 course.modality === "presencial" && course.courseSessions?.length
                   ? course.courseSessions.map((s) => ({
@@ -228,6 +235,8 @@ export default async function PublicCourseDetailPage({
       </Card>
 
       <ReviewSection courseId={course.id} />
+
+      <LearningReflectionsSection courseId={course.id} />
     </div>
   );
 }

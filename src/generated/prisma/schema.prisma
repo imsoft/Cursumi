@@ -30,22 +30,25 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  accounts                Account[]
-  sessions                Session[]
-  instructorProfile       InstructorProfile?
-  instructorApplication   InstructorApplication?
-  instructorCourses       Course[]               @relation("InstructorCourses")
-  enrollments             Enrollment[]           @relation("StudentEnrollments")
-  certificates            Certificate[]
-  transactions            Transaction[]
-  reviews                 Review[]
-  notifications           Notification[]
-  studentConversations    Conversation[]         @relation("StudentConversations")
-  instructorConversations Conversation[]         @relation("InstructorConversations")
-  sentMessages            Message[]
-  hostedGames             QuizGame[]
-  gameParticipations      QuizGameParticipant[]
-  orgMemberships          OrgMember[]
+  accounts                  Account[]
+  sessions                  Session[]
+  instructorProfile         InstructorProfile?
+  instructorApplication     InstructorApplication?
+  instructorCourses         Course[]                   @relation("InstructorCourses")
+  enrollments               Enrollment[]               @relation("StudentEnrollments")
+  certificates              Certificate[]
+  transactions              Transaction[]
+  reviews                   Review[]
+  notifications             Notification[]
+  studentConversations      Conversation[]             @relation("StudentConversations")
+  instructorConversations   Conversation[]             @relation("InstructorConversations")
+  sentMessages              Message[]
+  hostedGames               QuizGame[]
+  gameParticipations        QuizGameParticipant[]
+  orgMemberships            OrgMember[]
+  courseNotes               CourseNote[]
+  sessionAnonymousQuestions SessionAnonymousQuestion[]
+  learningReflections       LearningReflection[]
 }
 
 model Account {
@@ -252,20 +255,25 @@ model Course {
   visibility   CourseVisibility @default(public)
   nextSession  DateTime?
   finalExam    Json? // CourseFinalExam serializado
+  /// Hash (scrypt) del código de inscripción para cursos presenciales gratuitos; null = abierto
+  joinCodeHash String?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
-  instructor       User               @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
-  categoryRef      Category?          @relation(fields: [categoryId], references: [id])
-  sections         CourseSection[]
-  courseSessions   CourseSession[]
-  enrollments      Enrollment[]
-  certificates     Certificate[]
-  transactions     Transaction[]
-  reviews          Review[]
-  conversations    Conversation[]
-  orgCourseAccess  OrgCourseAccess[]
-  teamCourseAccess TeamCourseAccess[]
+  instructor                User                       @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  categoryRef               Category?                  @relation(fields: [categoryId], references: [id])
+  sections                  CourseSection[]
+  courseSessions            CourseSession[]
+  enrollments               Enrollment[]
+  certificates              Certificate[]
+  transactions              Transaction[]
+  reviews                   Review[]
+  conversations             Conversation[]
+  orgCourseAccess           OrgCourseAccess[]
+  teamCourseAccess          TeamCourseAccess[]
+  notes                     CourseNote[]
+  sessionAnonymousQuestions SessionAnonymousQuestion[]
+  learningReflections       LearningReflection[]
 
   @@index([instructorId])
   @@index([status])
@@ -306,6 +314,7 @@ model Lesson {
 
   section  CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   progress LessonProgress[]
+  notes    CourseNote[]
 
   @@index([sectionId, order])
 }
@@ -342,11 +351,40 @@ model CourseSession {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  enrollments Enrollment[]
+  course             Course                     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollments        Enrollment[]
+  anonymousQuestions SessionAnonymousQuestion[]
 
   @@index([courseId])
   @@index([courseId, date])
+}
+
+enum SessionAnonymousQuestionStatus {
+  open
+  answered
+  dismissed
+}
+
+// Preguntas en vivo durante clase presencial (autor oculto para el instructor en la UI)
+model SessionAnonymousQuestion {
+  id              String                         @id @default(cuid())
+  courseSessionId String
+  courseId        String
+  authorId        String
+  content         String                         @db.Text
+  status          SessionAnonymousQuestionStatus @default(open)
+  answer          String?                        @db.Text
+  answeredAt      DateTime?
+  createdAt       DateTime                       @default(now())
+  updatedAt       DateTime                       @updatedAt
+
+  session CourseSession @relation(fields: [courseSessionId], references: [id], onDelete: Cascade)
+  course  Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  author  User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([courseSessionId, createdAt])
+  @@index([courseId])
+  @@index([authorId])
 }
 
 // ─────────────────────────────────────────
@@ -364,20 +402,40 @@ model Enrollment {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 
-  course                 Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  student                User                    @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
-  session                CourseSession?          @relation(fields: [sessionId], references: [id])
-  organization           Organization?           @relation(fields: [organizationId], references: [id])
-  lessonProgress         LessonProgress[]
-  certificate            Certificate?
-  examSubmission         ExamSubmission?
-  transaction            Transaction?
-  sectionQuizSubmissions SectionQuizSubmission[]
+  course                        Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student                       User                    @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
+  session                       CourseSession?          @relation(fields: [sessionId], references: [id])
+  organization                  Organization?           @relation(fields: [organizationId], references: [id])
+  lessonProgress                LessonProgress[]
+  certificate                   Certificate?
+  examSubmission                ExamSubmission?
+  transaction                   Transaction?
+  sectionQuizSubmissions        SectionQuizSubmission[]
+  learningReflectionEmailSentAt DateTime?
+  learningReflection            LearningReflection?
 
   @@unique([courseId, studentId])
   @@index([studentId])
   @@index([sessionId])
   @@index([organizationId])
+}
+
+// Respuesta a "¿Qué aprendiste?" — visible en la ficha pública del curso
+model LearningReflection {
+  id           String   @id @default(cuid())
+  enrollmentId String   @unique
+  courseId     String
+  userId       String
+  content      String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  course     Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([userId])
 }
 
 // ─────────────────────────────────────────
@@ -815,4 +873,26 @@ model Coupon {
 
   @@index([code])
   @@index([active])
+}
+
+// ─────────────────────────────────────────
+// ANOTACIONES (Course Notes)
+// ─────────────────────────────────────────
+
+model CourseNote {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  lessonId  String?
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([lessonId])
 }

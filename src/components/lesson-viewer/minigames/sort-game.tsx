@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Trophy, ChevronUp, ChevronDown } from "lucide-react";
 
@@ -16,7 +16,6 @@ function fisherYates(arr: string[]): string[] {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
-  // Make sure it's not already in order
   const sameAsOriginal = a.every((v, i) => v === arr[i]);
   if (sameAsOriginal && arr.length > 1) {
     [a[0], a[1]] = [a[1], a[0]];
@@ -29,12 +28,22 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
   const [checked, setChecked] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [won, setWon] = useState(false);
+  const finishSent = useRef(false);
 
   const correctOrder = items;
 
+  useEffect(() => {
+    if (won && !finishSent.current) {
+      finishSent.current = true;
+      onComplete();
+    }
+  }, [won, onComplete]);
+
   const moveUp = (index: number) => {
     if (index === 0) return;
-    if (checked) { setChecked(false); }
+    if (checked) {
+      setChecked(false);
+    }
     setOrder((prev) => {
       const next = [...prev];
       [next[index - 1], next[index]] = [next[index], next[index - 1]];
@@ -44,7 +53,9 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
 
   const moveDown = (index: number) => {
     if (index === order.length - 1) return;
-    if (checked) { setChecked(false); }
+    if (checked) {
+      setChecked(false);
+    }
     setOrder((prev) => {
       const next = [...prev];
       [next[index], next[index + 1]] = [next[index + 1], next[index]];
@@ -69,39 +80,18 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
 
   if (won) {
     return (
-      <div className="flex flex-col items-center gap-6 rounded-xl border-2 border-green-500/40 bg-green-50/50 dark:bg-green-900/10 p-8 text-center">
-        <Trophy className="h-12 w-12 text-yellow-500" />
-        <div>
-          <h3 className="text-2xl font-bold text-foreground">¡Correcto!</h3>
-          <p className="mt-1 text-muted-foreground">
-            Ordenaste todos los elementos correctamente
-            {attempts > 1 ? ` en ${attempts} intentos` : ""}.
-          </p>
-        </div>
-        <div className="space-y-2 text-left w-full max-w-sm">
-          {order.map((item, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-3 rounded-lg border border-green-500/40 bg-green-50 dark:bg-green-900/20 p-3"
-            >
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
-                {i + 1}
-              </span>
-              <span className="text-sm text-green-800 dark:text-green-400">{item}</span>
-              <CheckCircle className="ml-auto h-4 w-4 text-green-600 shrink-0" />
-            </div>
-          ))}
-        </div>
-        <Button onClick={onComplete} size="lg" className="min-w-[160px]">
-          Continuar
-        </Button>
+      <div className="flex flex-col items-center gap-3 py-6 text-center">
+        <Trophy className="h-10 w-10 text-yellow-500" />
+        <p className="text-sm text-muted-foreground">
+          Orden perfecto{attempts > 1 ? ` en ${attempts} intentos` : ""}.
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground italic">{instruction}</p>
+      <p className="text-sm italic text-muted-foreground">{instruction}</p>
 
       <div className="space-y-2">
         {order.map((item, i) => {
@@ -146,11 +136,11 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
               {isCorrect && <CheckCircle className="h-4 w-4 shrink-0 text-green-600" />}
               {isWrong && <XCircle className="h-4 w-4 shrink-0 text-red-500" />}
               {!checked && (
-                <div className="flex flex-col gap-0.5 shrink-0">
+                <div className="flex shrink-0 flex-col gap-0.5">
                   <button
                     onClick={() => moveUp(i)}
                     disabled={i === 0}
-                    className="rounded p-0.5 text-muted-foreground hover:bg-muted disabled:opacity-30 transition-colors"
+                    className="rounded p-0.5 text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30"
                     aria-label="Subir"
                   >
                     <ChevronUp className="h-4 w-4" />
@@ -158,7 +148,7 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
                   <button
                     onClick={() => moveDown(i)}
                     disabled={i === order.length - 1}
-                    className="rounded p-0.5 text-muted-foreground hover:bg-muted disabled:opacity-30 transition-colors"
+                    className="rounded p-0.5 text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30"
                     aria-label="Bajar"
                   >
                     <ChevronDown className="h-4 w-4" />
@@ -178,7 +168,7 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
 
       {checked && !won && (
         <div className="space-y-3">
-          <div className="rounded-lg bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-800 dark:text-red-400">
+          <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
             {correctCount === order.length ? (
               "¡Todo correcto!"
             ) : (
@@ -194,7 +184,7 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
               <Button variant="outline" onClick={handleRetry}>
                 Reintentar
               </Button>
-              <Button variant="ghost" onClick={onComplete} className="text-muted-foreground text-sm">
+              <Button variant="ghost" onClick={onComplete} className="text-sm text-muted-foreground">
                 Continuar de todas formas
               </Button>
             </div>

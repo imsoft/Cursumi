@@ -33,6 +33,7 @@ import type { StudentCourse, Recommendation } from "@/components/student/types";
 import type { CourseStudent, StudentCourseDetail } from "@/lib/course-service";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { verifyJoinCode, shouldUseFreePresencialJoinCode } from "@/lib/join-code";
 
 async function requireSession() {
   const session = await auth.api.getSession({
@@ -133,11 +134,30 @@ export async function getPublishedCourseDetail(courseId: string) {
   return getPublishedCourse(courseId);
 }
 
-export async function enrollInCourse(courseId: string, sessionId?: string) {
+export async function enrollInCourse(courseId: string, sessionId?: string, joinCode?: string) {
   const session = await requireSession();
   const course = await getPublishedCourse(courseId);
   if (!course) {
     throw new Error("Curso no encontrado o no publicado");
+  }
+
+  const enrollmentRules = await prisma.course.findFirst({
+    where: { id: courseId, status: "published" },
+    select: { joinCodeHash: true, modality: true, price: true },
+  });
+  if (
+    enrollmentRules &&
+    shouldUseFreePresencialJoinCode(enrollmentRules.modality, enrollmentRules.price) &&
+    enrollmentRules.joinCodeHash
+  ) {
+    const trimmed = joinCode?.trim() ?? "";
+    if (!trimmed) {
+      throw new Error("Este curso requiere un código de inscripción");
+    }
+    const ok = await verifyJoinCode(trimmed, enrollmentRules.joinCodeHash);
+    if (!ok) {
+      throw new Error("Código de inscripción incorrecto");
+    }
   }
 
   // Para cursos presenciales con sesiones, validar la sesión

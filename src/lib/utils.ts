@@ -44,3 +44,10 @@ export function formatPriceMXN(price: number, showDecimals: boolean = false): st
     maximumFractionDigits: showDecimals ? 2 : 0,
   }).format(price)
 }
+
+/** Primer nombre para saludos (ej. "María López" → "María"). */
+export function firstNameFromFullName(name: string | null | undefined): string {
+  const t = name?.trim();
+  if (!t) return "Usuario";
+  return t.split(/\s+/)[0] ?? "Usuario";
+}

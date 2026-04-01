@@ -204,6 +204,64 @@ export async function sendCertificateEmail({ to, name, courseTitle, certificateU
   }
 }
 
+interface SendLearningReflectionEmailParams {
+  to: string;
+  name: string;
+  courseTitle: string;
+  respondUrl: string;
+  coursePublicUrl: string;
+}
+
+/** Invitación a compartir "¿Qué aprendiste?" tras finalizar el curso o la sesión presencial */
+export async function sendLearningReflectionEmail({
+  to,
+  name,
+  courseTitle,
+  respondUrl,
+  coursePublicUrl,
+}: SendLearningReflectionEmailParams) {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("RESEND_API_KEY no está configurada");
+    throw new Error("Email no configurado");
+  }
+
+  const esc = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const safeName = esc((name || "Estudiante").slice(0, 120));
+  const safeTitle = esc(courseTitle.slice(0, 300));
+
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${safeName},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      Has terminado <strong>${safeTitle}</strong>. Nos encantaría saber qué te llevaste.
+    </p>
+    <p style="font-size:18px;font-weight:600;color:#4f46e5;margin-bottom:16px;">¿Qué aprendiste?</p>
+    <p style="font-size:15px;color:#4b5563;margin-bottom:24px;">
+      Tómate un minuto para escribirlo. Tu respuesta puede aparecer en la página pública del curso para ayudar a otras personas a decidirse (solo mostraremos tu nombre de pila).
+    </p>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${respondUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Contar qué aprendí
+      </a>
+    </div>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:8px;">También puedes ver la ficha del curso aquí:</p>
+    <p style="font-size:12px;word-break:break-all;background:#f9fafb;padding:10px;border-radius:4px;">
+      <a href="${coursePublicUrl}" style="color:#667eea;">${esc(coursePublicUrl)}</a>
+    </p>`;
+
+  const { error } = await resend.emails.send({
+    from: FROM(),
+    to: [to],
+    subject: `¿Qué aprendiste? — ${courseTitle.slice(0, 60)}`,
+    html: emailWrapper("¿Qué aprendiste?", body),
+  });
+
+  if (error) {
+    console.error("Error al enviar email ¿Qué aprendiste?:", error);
+    throw new Error(error.message);
+  }
+}
+
 interface SendProgressReminderEmailParams {
   to: string;
   name: string;
