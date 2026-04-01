@@ -28,7 +28,7 @@ export const ContactInfo = () => {
               Escríbenos
             </p>
             <Link
-              href="mailto:cursumi.com@gmail.com"
+              href="mailto:contacto@cursumi.com"
               className="mt-0.5 text-sm text-primary transition-colors hover:underline"
             >
               Enviar correo electrónico

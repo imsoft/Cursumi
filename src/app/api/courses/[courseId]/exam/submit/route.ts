@@ -49,12 +49,18 @@ export async function POST(
     // Si no hay preguntas auto-calificables, se otorga puntaje completo (100).
     let totalPoints = 0;
     let earnedPoints = 0;
+    const evaluations: Record<string, boolean> = {};
+
     for (const question of finalExam.questions) {
       if (question.correctAnswer === undefined) continue; // omitir no auto-calificables
       const pts = Math.max(1, question.points ?? 1); // tratar points=0 como 1
       totalPoints += pts;
       const userAnswer = body.answers[question.id];
-      if (userAnswer !== undefined && userAnswer === question.correctAnswer) {
+      const isCorrect = userAnswer !== undefined && userAnswer === question.correctAnswer;
+      
+      evaluations[question.id] = isCorrect;
+      
+      if (isCorrect) {
         earnedPoints += pts;
       }
     }
@@ -92,6 +98,7 @@ export async function POST(
     return NextResponse.json({
       score: submission.score,
       passed: submission.passed,
+      evaluations,
       certificate: certificate ? { id: certificate.id, number: certificate.number } : null,
     });
   } catch (error) {

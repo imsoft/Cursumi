@@ -114,10 +114,7 @@ export default async function ExploreCourseDetail({
                 <span>Inicio: {formatDateLongMX(course.startDate)}</span>
               </div>
             )}
-            <div className="flex items-center gap-2 text-sm text-foreground">
-              <Users className="h-4 w-4" />
-              <span>Inscritos: {course._count.enrollments}</span>
-            </div>
+
             {course.duration && (
               <div className="text-sm text-foreground">Duración: {course.duration}</div>
             )}
@@ -141,12 +138,11 @@ export default async function ExploreCourseDetail({
                   ? course.courseSessions.map((s) => ({
                       id: s.id,
                       city: s.city,
-                      location: s.location,
+                      location: "Sede confirmada al inscribirte",
                       date: s.date.toISOString(),
                       startTime: s.startTime,
                       endTime: s.endTime,
-                      maxStudents: s.maxStudents,
-                      enrolledCount: s._count.enrollments,
+                      isFull: s._count.enrollments >= s.maxStudents,
                     }))
                   : undefined
               }

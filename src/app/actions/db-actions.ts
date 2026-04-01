@@ -1,11 +1,24 @@
 "use server";
 
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+
+async function requireAdminSession() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session || (session.user as any).role !== "admin") {
+    throw new Error("No autorizado");
+  }
+  return session;
+}
 
 /**
  * Server Action de ejemplo: Obtener la versión de PostgreSQL
  */
 export async function getPostgresVersion() {
+  await requireAdminSession();
   try {
     const sql = getDb();
     const response = await sql`SELECT version()`;
@@ -23,6 +36,7 @@ export async function getPostgresVersion() {
  * Server Action de ejemplo: Crear una tabla de prueba
  */
 export async function createTestTable() {
+  await requireAdminSession();
   try {
     const sql = getDb();
     await sql`
@@ -46,6 +60,7 @@ export async function createTestTable() {
  * Server Action de ejemplo: Insertar un comentario
  */
 export async function insertComment(comment: string) {
+  await requireAdminSession();
   try {
     const sql = getDb();
     const result = await sql`
@@ -67,6 +82,7 @@ export async function insertComment(comment: string) {
  * Server Action de ejemplo: Obtener todos los comentarios
  */
 export async function getComments() {
+  await requireAdminSession();
   try {
     const sql = getDb();
     const result = await sql`

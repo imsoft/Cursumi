@@ -10,6 +10,7 @@ import { stripHtml } from "@/lib/utils";
 interface ExamResultsProps {
   exam: CourseFinalExam;
   userAnswers: Record<string, number>;
+  evaluations: Record<string, boolean>;
   score: number;
   passed: boolean;
   attemptsUsed: number;
@@ -20,6 +21,7 @@ interface ExamResultsProps {
 export const ExamResults = ({
   exam,
   userAnswers,
+  evaluations,
   score,
   passed,
   attemptsUsed,
@@ -28,9 +30,7 @@ export const ExamResults = ({
 }: ExamResultsProps) => {
   const canRetry = exam.attemptsAllowed ? attemptsUsed < exam.attemptsAllowed : true;
   const totalQuestions = exam.questions.length;
-  const correctAnswers = exam.questions.filter(
-    (q) => userAnswers[q.id] === q.correctAnswer
-  ).length;
+  const correctAnswers = Object.values(evaluations).filter(Boolean).length;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4">
@@ -117,7 +117,7 @@ export const ExamResults = ({
         <CardContent className="space-y-4">
           {exam.questions.map((question, index) => {
             const userAnswer = userAnswers[question.id];
-            const isCorrect = userAnswer === question.correctAnswer;
+            const isCorrect = evaluations[question.id] === true;
 
             return (
               <Card
@@ -150,23 +150,26 @@ export const ExamResults = ({
                     <div className="space-y-2 ml-9">
                       {question.options.map((option, optIndex) => {
                         const isUserAnswer = userAnswer === optIndex;
-                        const isCorrectAnswer = question.correctAnswer === optIndex;
+                        
+                        // We do not expose which one was the correct answer to prevent
+                        // students from simply writing down the correct answers and
+                        // retrying to get an instant 100%. We just highlight what they submitted.
 
                         return (
                           <div
                             key={optIndex}
                             className={`flex items-center gap-3 rounded-lg border p-3 ${
-                              isCorrectAnswer
+                              isUserAnswer && isCorrect
                                 ? "border-green-500 bg-green-100 dark:bg-green-950/30"
-                                : isUserAnswer
+                                : isUserAnswer && !isCorrect
                                 ? "border-red-500 bg-red-100 dark:bg-red-950/30"
                                 : "border-border bg-background"
                             }`}
                           >
                             <div className="shrink-0">
-                              {isCorrectAnswer ? (
+                              {isUserAnswer && isCorrect ? (
                                 <CheckCircle2 className="h-5 w-5 text-green-600" />
-                              ) : isUserAnswer ? (
+                              ) : isUserAnswer && !isCorrect ? (
                                 <XCircle className="h-5 w-5 text-red-600" />
                               ) : (
                                 <Circle className="h-5 w-5 text-muted-foreground" />
@@ -174,19 +177,19 @@ export const ExamResults = ({
                             </div>
                             <span
                               className={`text-sm ${
-                                isCorrectAnswer || isUserAnswer
+                                isUserAnswer
                                   ? "font-medium"
                                   : "text-muted-foreground"
                               }`}
                             >
                               {stripHtml(option)}
                             </span>
-                            {isCorrectAnswer && (
+                            {isUserAnswer && isCorrect && (
                               <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">
                                 Correcta
                               </span>
                             )}
-                            {isUserAnswer && !isCorrectAnswer && (
+                            {isUserAnswer && !isCorrect && (
                               <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border bg-background ml-auto border-red-500 text-red-600">
                                 Tu respuesta
                               </span>

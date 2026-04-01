@@ -3,9 +3,13 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { forgetPassword } from "@/lib/auth-client";
+import Script from "next/script";
+
+// Turnstile site key — puede ser undefined si no está configurado (dev mode sin CAPTCHA)
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +24,18 @@ type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 export const ForgotPasswordForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+
+  // Callback global que Turnstile llama cuando el usuario completa el desafío
+  const onTurnstileSuccess = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  // Exponer el callback globalmente para que el script de Turnstile pueda llamarlo
+  if (typeof window !== "undefined") {
+    (window as unknown as Record<string, unknown>)["__turnstileCallback"] = onTurnstileSuccess;
+  }
   
   const form = useForm<ForgotPasswordFormValues>({
     resolver: createZodResolver(forgotPasswordSchema),
@@ -31,14 +47,30 @@ export const ForgotPasswordForm = () => {
   const onSubmit = async (values: ForgotPasswordFormValues) => {
     try {
       setError(null);
+      // Si Turnstile está configurado y no hay token, bloquear el envío
+      if (TURNSTILE_SITE_KEY && !turnstileToken) {
+        setError("Por favor completa el desafío de seguridad antes de continuar.");
+        return;
+      }
       
       // Usar el cliente de Better Auth para solicitar reset de contraseña
       const result = await forgetPassword.email({
         email: values.email,
-      });
+        fetchOptions: {
+          body: {
+            "cf-turnstile-response": turnstileToken ?? "",
+          },
+        },
+      } as Parameters<typeof forgetPassword.email>[0]);
 
       if (result.error) {
         setError(result.error.message || "Error al enviar el correo de recuperación");
+        // Resetear el token de Turnstile para que el usuario pueda intentarlo de nuevo
+        setTurnstileToken(null);
+        if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>)["turnstile"]) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (window as any).turnstile?.reset();
+        }
         return;
       }
 
@@ -77,6 +109,14 @@ export const ForgotPasswordForm = () => {
   }
 
   return (
+    <>
+      {/* Cargar el script de Cloudflare Turnstile de forma lazy */}
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          strategy="lazyOnload"
+        />
+      )}
     <Card className="w-full max-w-md border border-border bg-card/90 shadow-2xl">
       <CardHeader className="flex flex-col gap-2 px-6 pt-6">
         <CardTitle className="text-3xl font-bold text-foreground">
@@ -100,6 +140,14 @@ export const ForgotPasswordForm = () => {
               </p>
             )}
           </div>
+          {TURNSTILE_SITE_KEY && (
+            <div
+              ref={turnstileRef}
+              className="cf-turnstile mt-4 flex justify-center"
+              data-sitekey={TURNSTILE_SITE_KEY}
+              data-callback="__turnstileCallback"
+            ></div>
+          )}
           {error && (
             <p className="text-xs text-destructive">{error}</p>
           )}
@@ -107,7 +155,7 @@ export const ForgotPasswordForm = () => {
             type="submit"
             size="lg"
             className="w-full"
-            disabled={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}
           >
             {form.formState.isSubmitting ? "Enviando..." : "Enviar enlace de recuperación"}
           </Button>
@@ -120,6 +168,7 @@ export const ForgotPasswordForm = () => {
         </form>
       </CardContent>
     </Card>
+    </>
   );
 };
 

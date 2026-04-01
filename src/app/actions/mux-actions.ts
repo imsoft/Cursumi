@@ -92,6 +92,7 @@ export async function createMuxUploadUrl(
  * Nota: el asset puede tardar en estar listo; idealmente se debería hacer polling.
  */
 export async function getMuxPlaybackId(uploadId: string) {
+  await requireSession();
   const { tokenId, tokenSecret } = requireMuxEnv();
   const authHeader = Buffer.from(`${tokenId}:${tokenSecret}`).toString("base64");
 

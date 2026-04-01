@@ -31,21 +31,10 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
 
   const handleSubmitExam = useCallback(() => {
     setIsSubmitting(true);
-    let totalPoints = 0;
-    let earnedPoints = 0;
-
-    exam.questions.forEach((question) => {
-      totalPoints += question.points || 0;
-      const userAnswer = answers[question.id];
-      if (userAnswer !== undefined && userAnswer === question.correctAnswer) {
-        earnedPoints += question.points || 0;
-      }
-    });
-
-    const percentage = totalPoints > 0 ? (earnedPoints / totalPoints) * 100 : 0;
-    const passed = percentage >= exam.passingScore;
-    onSubmit(answers, percentage, passed);
-  }, [answers, exam, onSubmit]);
+    // Client-side scoring is removed for security (correctAnswer is not exposed to the client)
+    // We pass 0 and false just to satisfy the callback signature. The server actually grades it.
+    onSubmit(answers, 0, false);
+  }, [answers, onSubmit]);
 
   const handleAutoSubmit = useCallback(() => {
     if (isSubmitting) return;

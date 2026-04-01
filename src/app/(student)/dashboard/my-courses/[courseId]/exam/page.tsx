@@ -3,6 +3,7 @@ import { getCachedSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { ExamPageClient } from "@/components/student/exam-page-client";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
+import { sanitizeExamForClient } from "@/lib/course-service";
 
 export default async function ExamPage({
   params,
@@ -26,17 +27,24 @@ export default async function ExamPage({
   const finalExam = enrollment.course.finalExam as CourseFinalExam | null;
   if (!finalExam) redirect(`/dashboard/my-courses/${courseId}`);
 
+  const safeExam = sanitizeExamForClient(finalExam);
+
   return (
     <ExamPageClient
       courseId={courseId}
       courseTitle={enrollment.course.title}
-      exam={finalExam}
+      exam={safeExam}
       existingSubmission={
         enrollment.examSubmission
           ? {
               score: enrollment.examSubmission.score,
               passed: enrollment.examSubmission.passed,
               answers: enrollment.examSubmission.answers as Record<string, number>,
+              evaluations: finalExam.questions.reduce<Record<string, boolean>>((acc, q) => {
+                const userAns = (enrollment.examSubmission!.answers as Record<string, number>)[q.id];
+                acc[q.id] = userAns !== undefined && userAns === q.correctAnswer;
+                return acc;
+              }, {}),
             }
           : null
       }

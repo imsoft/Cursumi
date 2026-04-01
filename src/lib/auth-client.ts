@@ -17,15 +17,19 @@ export const { signIn, signUp, signOut, useSession } = authClient;
 
 // Better Auth expone forgetPassword y resetPassword como métodos del cliente
 export const forgetPassword = {
-  email: async (params: { email: string }) => {
+  email: async (params: { email: string; fetchOptions?: any }) => {
     const baseURL = getAuthBaseURL();
-    const response = await fetch(`${baseURL}/api/auth/forget-password`, {
+    
+    // We intercept Turnstile from fetchOptions.body and embed it cleanly for our custom endpoint
+    const turnstileToken = params.fetchOptions?.body?.["cf-turnstile-response"] || "";
+
+    const response = await fetch(`${baseURL}/api/password-reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ email: params.email, turnstileToken }),
     });
     const data = await response.json();
-    return { data, error: data.error ? { message: data.error.message || "Error desconocido" } : null };
+    return { data, error: data.error ? { message: data.error || "Error desconocido" } : null };
   },
 };
 

@@ -17,6 +17,7 @@ interface ExamPageClientProps {
     score: number;
     passed: boolean;
     answers: Record<string, number>;
+    evaluations: Record<string, boolean>;
   } | null;
 }
 
@@ -30,6 +31,7 @@ export function ExamPageClient({
     score: number;
     passed: boolean;
     answers: Record<string, number>;
+    evaluations: Record<string, boolean>;
     certificate: { id: string; number: string } | null;
   } | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -48,6 +50,7 @@ export function ExamPageClient({
         <ExamResults
           exam={exam}
           userAnswers={existingSubmission.answers}
+          evaluations={existingSubmission.evaluations}
           score={existingSubmission.score}
           passed={existingSubmission.passed}
           attemptsUsed={1}
@@ -76,6 +79,7 @@ export function ExamPageClient({
         <ExamResults
           exam={exam}
           userAnswers={result.answers}
+          evaluations={result.evaluations}
           score={result.score}
           passed={result.passed}
           attemptsUsed={1}

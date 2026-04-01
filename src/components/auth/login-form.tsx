@@ -83,8 +83,10 @@ export const LoginForm = ({ returnUrl }: LoginFormProps) => {
       });
 
       if (result.error) {
-        const errorMessage = result.error.message || "Error al iniciar sesión";
-        setError(errorMessage);
+        // Mensaje genérico deliberado: nunca revelar si el email existe o no.
+        // El servidor ya normaliza los códigos de error (ver auth.ts hooks.after),
+        // pero esta es la segunda línea de defensa en el cliente.
+        setError("Correo o contraseña incorrectos.");
         return;
       }
 

@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json();
-    return NextResponse.json({ url: data.secure_url, publicId: data.public_id });
+    return NextResponse.json({ url: data.secure_url.replace(/\/v\d+\//, "/"), publicId: data.public_id });
   } catch (error) {
     return handleApiError(error);
   }

@@ -1,4 +1,4 @@
-import { redirect, unstable_rethrow } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
@@ -17,19 +17,19 @@ export default async function BusinessDashboardLayout({
   try {
     const session = await getSessionSafe();
     if (!session?.user?.id) {
-      redirect("/login");
+      notFound();
     }
 
     const result = await getOrgForUser(session.user.id);
     if (!result) {
-      redirect("/business");
+      notFound();
     }
 
     const { membership, org } = result;
 
     // Only owners and admins can access the business dashboard
     if (membership.orgRole === "member") {
-      redirect("/dashboard");
+      notFound();
     }
 
     const userName = session.user.name ?? "Admin";
@@ -54,6 +54,6 @@ export default async function BusinessDashboardLayout({
     );
   } catch (e) {
     unstable_rethrow(e);
-    redirect("/login");
+    notFound();
   }
 }

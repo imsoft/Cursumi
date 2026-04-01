@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getCachedSession } from "@/lib/session";
@@ -18,16 +18,16 @@ export default async function InstructorLayout({ children }: InstructorLayoutPro
   try {
     session = await getCachedSession();
   } catch {
-    redirect("/login");
+    notFound();
   }
 
   if (!session) {
-    redirect("/login");
+    notFound();
   }
 
   const role = await getUserRole(session.user.id);
   if (role !== "instructor" && role !== "admin") {
-    redirect("/dashboard");
+    notFound();
   }
 
   const userName = session.user.name || "Instructor";

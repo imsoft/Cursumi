@@ -20,6 +20,7 @@ async function requireSession() {
  * Si el progreso llega al 100%, marca el enrollment como completado y genera el certificado.
  */
 export async function recalculateProgress(enrollmentId: string, courseId: string) {
+  await requireSession();
   const [totalLessons, completedLessons, sections, passedGates, course, examSubmission, enrollment] =
     await Promise.all([
       prisma.lesson.count({ where: { section: { courseId } } }),

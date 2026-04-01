@@ -13,5 +13,5 @@ export const SOCIAL_LINK_DEFAULTS: SocialLink[] = [
   { key: "tiktok", label: "TikTok", url: "https://www.tiktok.com/@cursumi", visible: true },
   { key: "threads", label: "Threads", url: "https://www.threads.net/@cursumi", visible: true },
   { key: "twitch", label: "Twitch", url: "https://www.twitch.tv/cursumi", visible: true },
-  { key: "email", label: "Correo Electrónico", url: "mailto:cursumi.com@gmail.com", visible: true },
+  { key: "email", label: "Correo Electrónico", url: "mailto:contacto@cursumi.com", visible: true },
 ];

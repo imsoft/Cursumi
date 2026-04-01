@@ -1,4 +1,4 @@
-import { redirect, unstable_rethrow } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
@@ -17,17 +17,17 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   try {
     const session = await getSessionSafe();
     if (!session?.user?.id) {
-      redirect("/login");
+      notFound();
     }
 
     let role: string;
     try {
       role = await getUserRole(session.user.id);
     } catch {
-      redirect("/login");
+      notFound();
     }
     if (role !== "admin") {
-      redirect("/dashboard");
+      notFound();
     }
 
     const userName = session.user.name ?? "Admin";
@@ -47,6 +47,6 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     );
   } catch (e) {
     unstable_rethrow(e);
-    redirect("/login");
+    notFound();
   }
 }

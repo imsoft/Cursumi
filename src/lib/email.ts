@@ -330,7 +330,7 @@ export async function sendOrgInviteEmail({ to, orgName, inviterName, inviteLink 
 // CONTACTO
 // ─────────────────────────────────────────
 
-const CONTACT_EMAIL = "cursumi.com@gmail.com";
+const CONTACT_EMAIL = "contacto@cursumi.com";
 
 interface SendContactEmailParams {
   name: string;

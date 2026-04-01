@@ -9,7 +9,20 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ course
     if (!course) {
       return NextResponse.json({ error: "Curso no encontrado" }, { status: 404 });
     }
-    return NextResponse.json(course);
+    // SECURITY: Limit public payload to prevent leaking business intelligence 
+    // (like enrollments, exact session locations, or internal IDs).
+    const publicCourse = {
+      id: course.id,
+      title: course.title,
+      slug: course.slug,
+      description: course.description,
+      imageUrl: course.imageUrl,
+      modality: course.modality,
+      city: course.city,
+      price: course.price,
+    };
+
+    return NextResponse.json(publicCourse);
   } catch (error) {
     return handleApiError(error);
   }

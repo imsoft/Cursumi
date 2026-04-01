@@ -14,9 +14,27 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(self)" },
   // Evita que el browser exponga datos de la app a otras páginas en el mismo proceso
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  // Content Security Policy (Previene vulnerabilidades XSS severas limitando recursos)
+  {
+    key: "Content-Security-Policy",
+    value: `
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://js.stripe.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' blob: data: https://images.unsplash.com https://res.cloudinary.com https://image.mux.com;
+      media-src 'self' blob: data: https://stream.mux.com;
+      connect-src 'self' https://challenges.cloudflare.com https://api.stripe.com *.sentry.io;
+      frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com;
+      font-src 'self' data:;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+    `.replace(/\s{2,}/g, " ").trim()
+  },
 ];
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   async headers() {
     return [
       {

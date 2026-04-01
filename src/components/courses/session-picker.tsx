@@ -11,8 +11,7 @@ export interface PickableSession {
   date: string; // ISO
   startTime: string;
   endTime: string;
-  maxStudents: number;
-  enrolledCount: number;
+  isFull: boolean;
 }
 
 interface SessionPickerProps {
@@ -48,8 +47,7 @@ export function SessionPicker({ sessions, selectedSessionId, onSelect }: Session
     <div className="space-y-3">
       <p className="text-sm font-semibold text-foreground">Selecciona una sesión:</p>
       {futureSessions.map((session) => {
-        const isFull = session.enrolledCount >= session.maxStudents;
-        const spotsLeft = session.maxStudents - session.enrolledCount;
+        const isFull = session.isFull;
         const isSelected = selectedSessionId === session.id;
         const dateFormatted = new Date(session.date).toLocaleDateString("es-MX", {
           weekday: "long",
@@ -93,7 +91,7 @@ export function SessionPicker({ sessions, selectedSessionId, onSelect }: Session
                     {isFull ? (
                       <span className="text-destructive font-medium">Llena</span>
                     ) : (
-                      <span>{spotsLeft} {spotsLeft === 1 ? "lugar disponible" : "lugares disponibles"}</span>
+                      <span className="text-emerald-600 font-medium">Lugares disponibles</span>
                     )}
                   </span>
                 </div>

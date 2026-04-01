@@ -27,7 +27,7 @@ const organizationJsonLd = {
   contactPoint: [
     {
       "@type": "ContactPoint",
-      email: "cursumi.com@gmail.com",
+      email: "contacto@cursumi.com",
       contactType: "customer support",
       areaServed: "MX",
       availableLanguage: ["es", "en"],
@@ -57,7 +57,6 @@ export const metadata: Metadata = {
   description:
     "Cursumi conecta estudiantes e instructores en cursos virtuales y presenciales que generan resultados reales.",
   applicationName: "Cursumi",
-  generator: "Next.js",
   keywords: [
     "cursos",
     "educación",

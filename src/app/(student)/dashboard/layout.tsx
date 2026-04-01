@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getCachedSession } from "@/lib/session";
@@ -19,11 +19,11 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
   try {
     session = await getCachedSession();
   } catch {
-    redirect("/login");
+    notFound();
   }
 
   if (!session) {
-    redirect("/login");
+    notFound();
   }
 
   const [role, orgMembership] = await Promise.all([

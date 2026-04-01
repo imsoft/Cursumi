@@ -33,7 +33,7 @@ const adapter = new PrismaNeon({ connectionString });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const prisma = new PrismaClient({ adapter } as any);
 
-const EMAIL = "cursumi.com@gmail.com";
+const EMAIL = "contacto@cursumi.com";
 
 async function main() {
   const user = await prisma.user.updateMany({

@@ -614,7 +614,7 @@ export async function getPublishedCourseIdsForSitemap(): Promise<{ id: string; s
 }
 
 export async function getPublishedCourse(slugOrId: string) {
-  return prisma.course.findFirst({
+  const course = await prisma.course.findFirst({
     where: { status: "published", OR: [{ id: slugOrId }, { slug: slugOrId }] },
     include: {
       instructor: { select: { name: true } },
@@ -644,6 +644,14 @@ export async function getPublishedCourse(slugOrId: string) {
       },
     },
   });
+
+  if (course) {
+    // SECURITY: Delete finalExam to prevent leaking correct answers to the public API
+    // @ts-ignore
+    delete course.finalExam;
+  }
+
+  return course;
 }
 
 export async function listStudentCourses(studentId: string): Promise<StudentCourse[]> {
@@ -758,7 +766,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
 export type StudentCourseDetail = Prisma.PromiseReturnType<typeof getStudentCourseDetail>;
 
 export async function getStudentCourseDetail(courseId: string, studentId: string) {
-  return prisma.enrollment.findUnique({
+  const detail = await prisma.enrollment.findUnique({
     where: {
       courseId_studentId: {
         courseId,
@@ -797,6 +805,31 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
       },
     },
   });
+
+  if (detail?.course) {
+    // SECURITY: delete finalExam to prevent leakage on the regular student dashboard
+    // @ts-ignore
+    delete detail.course.finalExam;
+  }
+
+  return detail;
+}
+
+// ── Sanitize exams for client consumption ──
+import type { CourseFinalExam } from "@/components/instructor/course-types";
+
+/**
+ * Removes the 'correctAnswer' from all questions in the final exam
+ * so it can be securely sent to the client.
+ */
+export function sanitizeExamForClient(exam: CourseFinalExam): CourseFinalExam {
+  return {
+    ...exam,
+    questions: exam.questions.map((q) => {
+      const { correctAnswer, ...safeQuestion } = q;
+      return safeQuestion as any;
+    }),
+  };
 }
 
 export async function getLessonForStudent(lessonId: string, studentId: string) {

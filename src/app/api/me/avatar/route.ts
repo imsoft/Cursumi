@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       }
 
       const data = (await res.json()) as { secure_url: string };
-      imageUrl = data.secure_url;
+      imageUrl = data.secure_url.replace(/\/v\d+\//, "/");
     } else {
       const buf = Buffer.from(await file.arrayBuffer());
       const mime = file.type || "image/jpeg";
