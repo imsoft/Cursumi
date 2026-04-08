@@ -105,7 +105,9 @@ export function HangmanGame({ words, onComplete }: HangmanGameProps) {
     if (!transitioning || allDone) return;
     if (lastCelebrationWord.current === wordIndex) return;
     lastCelebrationWord.current = wordIndex;
-    fireMiniConfetti();
+    if (isWordWon) {
+      fireMiniConfetti();
+    }
     setLevelMode(isWordWon ? "won" : "lost");
     setLevelOpen(true);
   }, [transitioning, wordIndex, allDone, isWordWon, isWordLost]);

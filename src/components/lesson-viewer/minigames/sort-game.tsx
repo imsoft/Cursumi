@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Trophy, ChevronUp, ChevronDown } from "lucide-react";
+import { fireMiniConfetti } from "@/lib/minigame-confetti";
 
 interface SortGameProps {
   instruction: string;
@@ -68,6 +69,7 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
     setChecked(true);
     setAttempts((a) => a + 1);
     if (allCorrect) {
+      fireMiniConfetti();
       setWon(true);
     }
   };

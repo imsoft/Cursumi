@@ -432,6 +432,9 @@ export function LessonViewerClient({
   };
 
   const handleMinigameComplete = async () => {
+    // Feedback inmediato (no esperar al servidor; el canvas debe verse sobre el diálogo)
+    fireGrandConfetti();
+    setMinigameCelebrateOpen(true);
     try {
       await fetch(`/api/sections/${currentSectionId}/minigame/complete`, {
         method: "POST",
@@ -442,8 +445,6 @@ export function LessonViewerClient({
     } catch {
       setSectionMinigamePassed(true);
     }
-    fireGrandConfetti();
-    setMinigameCelebrateOpen(true);
   };
 
   const handleNextAfterMinigameCelebration = () => {
