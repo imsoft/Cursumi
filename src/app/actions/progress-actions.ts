@@ -71,21 +71,21 @@ export async function recalculateProgress(enrollmentId: string, courseId: string
     data: { progress },
   });
 
-  // Si el progreso llega al 100%, marcar como completado y generar certificado
-  if (progress === 100 && enrollment && enrollment.status !== "completed") {
-    await prisma.enrollment.update({
-      where: { id: enrollmentId },
-      data: { status: "completed" },
-    });
+  // Progreso al 100%: marcar completado y asegurar certificado (también si ya estaba "completed" pero faltaba fila)
+  if (progress === 100 && enrollment) {
+    if (enrollment.status !== "completed") {
+      await prisma.enrollment.update({
+        where: { id: enrollmentId },
+        data: { status: "completed" },
+      });
+    }
 
-    // Generar certificado si no existe
     const existingCert = await prisma.certificate.findUnique({
       where: { enrollmentId },
     });
 
     if (!existingCert) {
       const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-      // Si aprobó examen final → acreditación, si no tiene examen → participación
       const certType = examSubmission?.passed ? "accreditation" : "participation";
       const certificate = await prisma.certificate.create({
         data: {
@@ -97,7 +97,6 @@ export async function recalculateProgress(enrollmentId: string, courseId: string
         },
       });
 
-      // Notificar al estudiante
       await prisma.notification.create({
         data: {
           userId: enrollment.studentId,

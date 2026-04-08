@@ -7,7 +7,7 @@ import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
-import { ArrowLeft, Download, Share2, Award, Check } from "lucide-react";
+import { ArrowLeft, Download, Share2, Award, Check, Loader2 } from "lucide-react";
 import { CertificateView } from "@/components/certificates/certificate-view";
 
 interface CertificatePageProps {
@@ -19,6 +19,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new") === "1";
   const [certificate, setCertificate] = useState<Certificate | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -65,6 +66,8 @@ export default function CertificatePage({ params }: CertificatePageProps) {
 
   useEffect(() => {
     const load = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await fetch(`/api/me/certificates/${id}`, { cache: "no-store" });
         if (!res.ok) {
@@ -73,11 +76,12 @@ export default function CertificatePage({ params }: CertificatePageProps) {
         const data = (await res.json()) as Certificate;
         setCertificate(data);
         if (isNew) {
-          // Small delay so the page renders first
           setTimeout(() => fireConfetti(), 300);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "No pudimos cargar el certificado");
+      } finally {
+        setLoading(false);
       }
     };
     load();
@@ -116,6 +120,25 @@ export default function CertificatePage({ params }: CertificatePageProps) {
       setIsSharing(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <Link href="/dashboard/certificates">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Volver a certificados
+          </Button>
+        </Link>
+        <Card className="border border-border bg-card/90">
+          <CardContent className="flex flex-col items-center justify-center gap-4 py-16 px-4">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" aria-hidden />
+            <p className="text-sm text-muted-foreground">Cargando tu certificado…</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (error || !certificate) {
     return (

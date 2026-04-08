@@ -34,6 +34,7 @@ import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { ReviewSection } from "@/components/student/review-section";
 import { AnonymousQuestionsPanel } from "@/components/student/anonymous-questions-panel";
+import { recalculateProgress } from "@/app/actions/progress-actions";
 
 const lessonIcon = (type: LessonType) => {
   switch (type) {
@@ -97,14 +98,26 @@ export default async function MyCourseDetailPage({
   const canTakeExam = hasFinalExam && allLessonsCompleted && allGatesPassed;
   const examPassed = examSubmission?.passed ?? false;
 
-  // Fetch certificate if exam was submitted
   const session = await getCachedSession();
-  const certificate = session
+  let certificate = session
     ? await prisma.certificate.findFirst({
         where: { courseId, userId: session.user.id },
         select: { id: true, type: true },
       })
     : null;
+
+  // Reparar certificado faltante si el progreso ya es 100% (p. ej. estado previo inconsistente)
+  if (session && enrollmentDetail.progress === 100 && !certificate) {
+    try {
+      await recalculateProgress(enrollmentDetail.id, courseId);
+      certificate = await prisma.certificate.findFirst({
+        where: { courseId, userId: session.user.id },
+        select: { id: true, type: true },
+      });
+    } catch {
+      /* no bloquear la página */
+    }
+  }
 
   // Review eligibility: only requires enrollment
   const canReview = true;
