@@ -8,6 +8,21 @@ import { validateEmailDomain } from "./disposable-email";
 import { verifyTurnstile } from "./turnstile";
 import { checkRateLimitAsync } from "./rate-limit";
 
+/** IP real del cliente (Cloudflare / Vercel / proxy). */
+function getClientIpFromAuthRequest(headers: Headers | undefined): string {
+  if (!headers) return "unknown";
+  const cf = headers.get("cf-connecting-ip")?.trim();
+  if (cf) return cf;
+  const xff = headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  if (xff) return xff;
+  const real = headers.get("x-real-ip")?.trim();
+  if (real) return real;
+  return "unknown";
+}
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim();
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -46,12 +61,16 @@ export const auth = betterAuth({
     },
     sendOnSignUp: true,
   },
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
-  },
+  ...(googleClientId && googleClientSecret
+    ? {
+        socialProviders: {
+          google: {
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
+          },
+        },
+      }
+    : {}),
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 días por defecto
     updateAge: 60 * 60 * 24, // Actualizar cada 24 horas
@@ -67,7 +86,9 @@ export const auth = betterAuth({
     enabled: true,
     window: 60,   // ventana de 60 segundos
     max: 20,      // máx 20 requests por ventana (protección general)
-    storage: process.env.UPSTASH_REDIS_REST_URL ? "secondary-storage" : "memory",
+    // Solo "memory" o "database" sin definir `secondaryStorage` en Better Auth.
+    // "secondary-storage" sin adapter Redis rompe los endpoints /api/auth/* en producción.
+    storage: "memory",
     customRules: {
       "/sign-up/email": {
         window: 3600, // 1 hora
@@ -85,41 +106,42 @@ export const auth = betterAuth({
      *   4. Validación de dominio de email en sign-up.
      */
     before: createAuthMiddleware(async (ctx) => {
-      // Obtener IP del cliente (compatible con Vercel / Cloudflare proxy)
-      const ip =
-        ctx.request?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-        ctx.request?.headers?.get("x-real-ip") ||
-        "unknown";
+      const ip = getClientIpFromAuthRequest(ctx.request?.headers);
 
-      // ── 1. Global Rate Limiting: 50 requests por minuto ────────
-      const globalRateLimitResult = await checkRateLimitAsync({
-        key: `auth-global:${ip}`,
-        limit: 50,
-        windowSecs: 60,
-      });
-
-      if (globalRateLimitResult !== null) {
-        throw new APIError("TOO_MANY_REQUESTS", {
-          message: "Demasiadas solicitudes. Por favor, espera un momento.",
+      // ── 1. Global Rate Limiting: 50 req/min por IP ────────
+      // Si la IP es "unknown", no limitar por clave compartida (bloqueaba a todos los usuarios).
+      if (ip !== "unknown") {
+        const globalRateLimitResult = await checkRateLimitAsync({
+          key: `auth-global:${ip}`,
+          limit: 50,
+          windowSecs: 60,
         });
+
+        if (globalRateLimitResult !== null) {
+          throw new APIError("TOO_MANY_REQUESTS", {
+            message: "Demasiadas solicitudes. Por favor, espera un momento.",
+          });
+        }
       }
 
       const isSignup = ctx.path === "/sign-up/email";
       const isForgotPassword = ctx.path === "/forget-password";
 
       if (isSignup || isForgotPassword) {
-        // ── 2. Rate limiting granular por IP: máx 3 registros/recuperaciones por hora ────────
-        const actionType = isSignup ? "signup" : "forgot-password";
-        const rateLimitResult = await checkRateLimitAsync({
-          key: `auth-sensitive:${actionType}:${ip}`,
-          limit: 3,
-          windowSecs: 3600,
-        });
-
-        if (rateLimitResult !== null) {
-          throw new APIError("TOO_MANY_REQUESTS", {
-            message: "Demasiados intentos. Espera una hora e intenta de nuevo.",
+        // ── 2. Rate limiting granular por IP (omitir si IP desconocida; queda Turnstile + validación email)
+        if (ip !== "unknown") {
+          const actionType = isSignup ? "signup" : "forgot-password";
+          const rateLimitResult = await checkRateLimitAsync({
+            key: `auth-sensitive:${actionType}:${ip}`,
+            limit: 3,
+            windowSecs: 3600,
           });
+
+          if (rateLimitResult !== null) {
+            throw new APIError("TOO_MANY_REQUESTS", {
+              message: "Demasiados intentos. Espera una hora e intenta de nuevo.",
+            });
+          }
         }
 
         // ── 3. CAPTCHA: Cloudflare Turnstile ─────────────────────────────
@@ -162,10 +184,8 @@ export const auth = betterAuth({
       if (ctx.path === "/sign-in/email") {
         const returned = ctx.context.returned;
         // Si la respuesta es un error con código que revela existencia del email
-        if (
-          returned instanceof Response &&
-          (returned.status === 403 || returned.status === 200)
-        ) {
+        // Solo 403: un 200 exitoso no debe pasar por aquí (evita leer el body innecesariamente)
+        if (returned instanceof Response && returned.status === 403) {
           let body: Record<string, unknown> = {};
           try {
             body = await returned.clone().json();
@@ -218,22 +238,36 @@ export const auth = betterAuth({
       }
     }),
   },
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  baseURL: getAuthBaseURL(),
   basePath: "/api/auth",
   trustedOrigins: getTrustedOrigins(),
 });
 
+function getAuthBaseURL(): string {
+  const explicit =
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+    process.env.BETTER_AUTH_URL?.replace(/\/$/, "");
+  if (explicit) return explicit;
+  const vercel = process.env.VERCEL_URL?.replace(/\/$/, "");
+  if (vercel) return vercel.startsWith("http") ? vercel : `https://${vercel}`;
+  return "http://localhost:3000";
+}
+
 function getTrustedOrigins(): string[] {
-  const url = process.env.NEXT_PUBLIC_APP_URL;
-  if (!url) return ["http://localhost:3000"];
-  const base = url.replace(/\/$/, "");
-  const origins = [base];
+  const origins = new Set<string>();
+  const base = getAuthBaseURL();
+  origins.add(base);
   if (base.startsWith("https://www.")) {
-    origins.push(base.replace("https://www.", "https://"));
+    origins.add(base.replace("https://www.", "https://"));
   } else if (base.startsWith("https://")) {
-    origins.push(base.replace("https://", "https://www."));
+    origins.add(base.replace("https://", "https://www."));
   }
-  return origins;
+  const vercel = process.env.VERCEL_URL?.replace(/\/$/, "");
+  if (vercel) {
+    const v = vercel.startsWith("http") ? vercel : `https://${vercel}`;
+    origins.add(v);
+  }
+  return [...origins];
 }
 
 export type Session = typeof auth.$Infer.Session;

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Download,
   Eraser,
+  Maximize2,
+  Minimize2,
   Pencil,
   Redo2,
   RotateCcw,
@@ -40,14 +42,18 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
   const [color, setColor] = useState(COLORS[0]);
   const [lineWidth, setLineWidth] = useState(DEFAULT_LINE);
   const [ready, setReady] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const getCanvasSize = useCallback(() => {
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return null;
     const rect = wrap.getBoundingClientRect();
-    const w = Math.max(320, Math.floor(rect.width));
-    const h = Math.max(260, Math.min(520, Math.floor(rect.height)));
+    // Usar el rect real del contenedor (evita lienzo más ancho que el viewport)
+    const w = Math.max(280, Math.floor(rect.width));
+    const h = Math.max(200, Math.floor(rect.height));
     return { w, h };
   }, []);
 
@@ -94,6 +100,30 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     if (wrapRef.current) ro.observe(wrapRef.current);
     return () => ro.disconnect();
   }, [resizeAndInit]);
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const active = document.fullscreenElement === rootRef.current;
+      setIsFullscreen(active);
+      requestAnimationFrame(() => resizeAndInit());
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, [resizeAndInit]);
+
+  const toggleFullscreen = useCallback(async () => {
+    const el = rootRef.current;
+    if (!el) return;
+    try {
+      if (!document.fullscreenElement) {
+        await el.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch {
+      /* Safari / permisos */
+    }
+  }, []);
 
   const commitStroke = useCallback(() => {
     const snap = snapshot();
@@ -202,8 +232,16 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
   };
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-3 shadow-sm">
+    <div
+      ref={rootRef}
+      className={cn(
+        "flex min-w-0 max-w-full flex-col gap-4",
+        isFullscreen &&
+          "box-border flex h-[100dvh] max-h-[100dvh] w-full max-w-none flex-col overflow-hidden bg-background p-3 md:p-4",
+        className,
+      )}
+    >
+      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2 overflow-x-auto rounded-xl border border-border bg-card p-3 shadow-sm [-webkit-overflow-scrolling:touch]">
         <div className="flex flex-wrap items-center gap-1 border-r border-border pr-3">
           <Button
             type="button"
@@ -258,7 +296,16 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
           <span className="w-6 tabular-nums">{lineWidth}</span>
         </label>
 
-        <div className="ml-auto flex flex-wrap items-center gap-1">
+        <div className="ml-auto flex shrink-0 flex-wrap items-center gap-1">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+          >
+            {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          </Button>
           <Button type="button" variant="outline" size="sm" onClick={undo} title="Deshacer">
             <RotateCcw className="h-4 w-4" />
           </Button>
@@ -277,11 +324,14 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
 
       <div
         ref={wrapRef}
-        className="relative h-[min(56vh,520px)] min-h-[260px] w-full shrink-0 overflow-hidden rounded-xl border border-border bg-muted/30"
+        className={cn(
+          "relative w-full min-w-0 max-w-full shrink-0 overflow-hidden rounded-xl border border-border bg-muted/30",
+          isFullscreen ? "min-h-0 flex-1" : "h-[min(56vh,520px)] min-h-[260px]",
+        )}
       >
         <canvas
           ref={canvasRef}
-          className="touch-none block cursor-crosshair bg-white"
+          className="touch-none block max-w-full cursor-crosshair bg-white"
           onMouseDown={start}
           onMouseMove={draw}
           onMouseUp={end}

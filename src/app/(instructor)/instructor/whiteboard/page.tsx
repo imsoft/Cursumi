@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function InstructorWhiteboardPage() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 max-w-full flex-col gap-4 overflow-x-hidden">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Pizarrón virtual</h1>
         <p className="mt-1 text-sm text-muted-foreground">

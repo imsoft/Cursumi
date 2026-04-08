@@ -34,12 +34,13 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 interface RegisterFormProps {
   returnUrl?: string;
+  googleAuthEnabled?: boolean;
 }
 
 // Turnstile site key — puede ser undefined si no está configurado (dev mode sin CAPTCHA)
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
+export const RegisterForm = ({ returnUrl, googleAuthEnabled = false }: RegisterFormProps) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -221,37 +222,36 @@ export const RegisterForm = ({ returnUrl }: RegisterFormProps) => {
               Iniciar sesión
             </Link>
           </div>
-          <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            <span className="flex-1 h-px bg-border" />
-            o regístrate con
-            <span className="flex-1 h-px bg-border" />
-          </div>
-          <div className="mt-3 flex flex-col gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="w-full flex items-center justify-center gap-2"
-              onClick={async () => {
-                try {
-                  await signIn.social({
-                    provider: "google",
-                  });
-                } catch (error) {
-                  console.error("Error al registrarse con Google:", error);
-                  setError("Error al registrarse con Google. Por favor, intenta de nuevo.");
-                }
-              }}
-            >
-              <Image
-                src="/logos/google.svg"
-                alt="Google"
-                width={20}
-                height={20}
-              />
-              Continuar con Google
-            </Button>
-          </div>
+          {googleAuthEnabled && (
+            <>
+              <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                <span className="flex-1 h-px bg-border" />
+                o regístrate con
+                <span className="flex-1 h-px bg-border" />
+              </div>
+              <div className="mt-3 flex flex-col gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="flex w-full items-center justify-center gap-2"
+                  onClick={async () => {
+                    try {
+                      await signIn.social({
+                        provider: "google",
+                      });
+                    } catch (error) {
+                      console.error("Error al registrarse con Google:", error);
+                      setError("Error al registrarse con Google. Por favor, intenta de nuevo.");
+                    }
+                  }}
+                >
+                  <Image src="/logos/google.svg" alt="Google" width={20} height={20} />
+                  Continuar con Google
+                </Button>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </>
