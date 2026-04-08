@@ -6,7 +6,7 @@ import { CheckCircle, XCircle, Trophy, ChevronUp, ChevronDown } from "lucide-rea
 import { fireMiniConfetti } from "@/lib/minigame-confetti";
 
 interface SortGameProps {
-  instruction: string;
+  instruction?: string;
   items: string[]; // correct order
   onComplete: () => void;
 }
@@ -93,7 +93,9 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm italic text-muted-foreground">{instruction}</p>
+      {instruction?.trim() ? (
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{instruction.trim()}</p>
+      ) : null}
 
       <div className="space-y-2">
         {order.map((item, i) => {

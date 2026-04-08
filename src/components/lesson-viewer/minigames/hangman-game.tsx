@@ -11,6 +11,8 @@ interface HangmanWord {
 }
 
 interface HangmanGameProps {
+  /** Texto opcional del instructor (orientación antes de jugar). */
+  instruction?: string;
   words: HangmanWord[];
   onComplete: () => void;
 }
@@ -52,7 +54,7 @@ function GallowsSVG({ wrongGuesses }: { wrongGuesses: number }) {
   );
 }
 
-export function HangmanGame({ words, onComplete }: HangmanGameProps) {
+export function HangmanGame({ instruction, words, onComplete }: HangmanGameProps) {
   const [wordIndex, setWordIndex] = useState(0);
   const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
   const [wordStatus, setWordStatus] = useState<("won" | "lost" | null)[]>(() => words.map(() => null));
@@ -137,6 +139,9 @@ export function HangmanGame({ words, onComplete }: HangmanGameProps) {
 
   return (
     <div className="space-y-6">
+      {instruction?.trim() ? (
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{instruction.trim()}</p>
+      ) : null}
       <MinigameLevelCelebration
         open={levelOpen}
         onOpenChange={setLevelOpen}

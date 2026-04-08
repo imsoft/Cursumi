@@ -133,6 +133,10 @@ enum LessonType {
   text
   quiz
   assignment
+  /// Test de cierre (misma estructura que el antiguo test al final de sección); contenido JSON = SectionQuiz
+  section_quiz
+  /// Minijuego de cierre; contenido JSON = SectionMinigame
+  section_minigame
 }
 
 enum EnrollmentStatus {

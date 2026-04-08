@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useCallback, useRef, useEffect } from "react";
+import { useState, useTransition, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ import {
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
   CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon, Loader2,
   ArrowUp, ArrowDown, Check,
+  Gamepad2,
+  ClipboardCheck,
 } from "lucide-react";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { ModalityBadge } from "@/components/ui/modality-badge";
@@ -22,14 +24,12 @@ import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
   addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions, reorderSections,
 } from "@/app/actions/course-actions";
-import { SectionActivityEditor } from "@/components/instructor/section-activity-editor";
 import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
 import type { CourseSessionData } from "@/components/instructor/course-types";
 import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
-import type { SectionQuiz, SectionMinigame } from "@/components/instructor/course-types";
 import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
-type LessonType = "video" | "text" | "quiz" | "assignment";
+type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
 interface Lesson {
   id: string;
@@ -71,6 +71,8 @@ const LESSON_TYPE_OPTIONS: { value: LessonType; label: string; icon: React.React
   { value: "text", label: "Texto", icon: <FileText className="h-4 w-4" /> },
   { value: "quiz", label: "Quiz", icon: <FileQuestion className="h-4 w-4" /> },
   { value: "assignment", label: "Tarea", icon: <BookOpen className="h-4 w-4" /> },
+  { value: "section_quiz", label: "Test de cierre", icon: <ClipboardCheck className="h-4 w-4" /> },
+  { value: "section_minigame", label: "Minijuego de cierre", icon: <Gamepad2 className="h-4 w-4" /> },
 ];
 
 function lessonIcon(type: LessonType) {
@@ -79,11 +81,20 @@ function lessonIcon(type: LessonType) {
     case "text": return <FileText className="h-4 w-4 text-muted-foreground" />;
     case "quiz": return <FileQuestion className="h-4 w-4 text-muted-foreground" />;
     case "assignment": return <BookOpen className="h-4 w-4 text-muted-foreground" />;
+    case "section_quiz": return <ClipboardCheck className="h-4 w-4 text-muted-foreground" />;
+    case "section_minigame": return <Gamepad2 className="h-4 w-4 text-muted-foreground" />;
   }
 }
 
 function lessonTypeLabel(type: LessonType) {
-  return { video: "Video", text: "Texto", quiz: "Quiz", assignment: "Tarea" }[type];
+  return {
+    video: "Video",
+    text: "Texto",
+    quiz: "Quiz",
+    assignment: "Tarea",
+    section_quiz: "Test de cierre",
+    section_minigame: "Minijuego de cierre",
+  }[type];
 }
 
 export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
@@ -118,46 +129,6 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
   const [editSectionTitle, setEditSectionTitle] = useState("");
-
-  /** Evita guardar y refrescar en cada tecla (rompía inputs de minijuegos / test de sección). */
-  const SECTION_ACTIVITY_DEBOUNCE_MS = 600;
-  const sectionActivityTimeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
-    new Map(),
-  );
-
-  useEffect(() => {
-    const timers = sectionActivityTimeoutsRef.current;
-    return () => {
-      for (const t of timers.values()) clearTimeout(t);
-      timers.clear();
-    };
-  }, []);
-
-  const scheduleSectionActivitySave = useCallback(
-    (
-      sectionId: string,
-      data: { quiz: SectionQuiz | null; minigame: SectionMinigame | null },
-    ) => {
-      setActionError(null);
-      const prev = sectionActivityTimeoutsRef.current.get(sectionId);
-      if (prev) clearTimeout(prev);
-      const t = setTimeout(() => {
-        sectionActivityTimeoutsRef.current.delete(sectionId);
-        startTransition(async () => {
-          try {
-            await editSection(course.id, sectionId, data);
-            router.refresh();
-          } catch (err) {
-            setActionError(
-              err instanceof Error ? err.message : "Error al guardar actividad",
-            );
-          }
-        });
-      }, SECTION_ACTIVITY_DEBOUNCE_MS);
-      sectionActivityTimeoutsRef.current.set(sectionId, t);
-    },
-    [course.id, router],
-  );
 
   const handleCoverSuccess = useCallback(
     (url: string) => {
@@ -783,31 +754,6 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                           Agregar lección
                         </Button>
                       )}
-
-                      {/* Actividad de sección (test o minijuego) */}
-                      <Separator className="my-3" />
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-foreground">Actividad al final de la sección</h4>
-                        <p className="text-xs text-muted-foreground">
-                          Elige un test o un minijuego que los estudiantes deben completar para avanzar.
-                        </p>
-                        <SectionActivityEditor
-                          quiz={section.quiz as Parameters<typeof SectionActivityEditor>[0]["quiz"]}
-                          minigame={section.minigame as Parameters<typeof SectionActivityEditor>[0]["minigame"]}
-                          onQuizChange={(quiz) => {
-                            scheduleSectionActivitySave(section.id, {
-                              quiz: (quiz ?? null) as SectionQuiz | null,
-                              minigame: null,
-                            });
-                          }}
-                          onMinigameChange={(minigame) => {
-                            scheduleSectionActivitySave(section.id, {
-                              minigame: (minigame ?? null) as SectionMinigame | null,
-                              quiz: null,
-                            });
-                          }}
-                        />
-                      </div>
                     </CardContent>
                   )}
                 </Card>

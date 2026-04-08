@@ -7,11 +7,8 @@ import type {
   CourseSessionData,
   SectionActivity,
 } from "@/components/instructor/course-types";
-import {
-  countSectionGateActivities,
-  ensureActivityIds,
-  normalizeSectionActivities,
-} from "@/lib/section-activities";
+import { ensureActivityIds, normalizeSectionActivities } from "@/lib/section-activities";
+import { gateActivityFromLesson, listSectionGateUnitsForUi } from "@/lib/gate-lesson-content";
 import { hashJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import type { Course } from "@/components/courses/types";
@@ -975,7 +972,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
         activities: true,
         lessons: {
           orderBy: { order: "asc" },
-          select: { id: true, title: true, type: true, duration: true, order: true },
+          select: { id: true, title: true, type: true, duration: true, order: true, content: true },
         },
       },
     }),
@@ -996,11 +993,11 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
 
   const passedSectionIds = new Set<string>();
   for (const sec of courseSections) {
-    const acts = normalizeSectionActivities(sec);
-    if (acts.length === 0) continue;
-    const allPassed = acts.every((act) =>
+    const units = listSectionGateUnitsForUi(sec);
+    if (units.length === 0) continue;
+    const allPassed = units.every((u) =>
       enrollment.sectionQuizSubmissions.some(
-        (s) => s.sectionId === sec.id && s.activityId === act.id && s.passed,
+        (s) => s.sectionId === u.sectionId && s.activityId === u.activityId && s.passed,
       ),
     );
     if (allPassed) passedSectionIds.add(sec.id);
@@ -1017,9 +1014,16 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   const sectionLessons = (currentSection?.lessons ?? []).slice().sort((a, b) => a.order - b.order);
   const isLastLessonInSection = sectionLessons[sectionLessons.length - 1]?.id === lessonId;
 
-  const currentSectionGateActivities: SectionActivity[] = currentSection
-    ? normalizeSectionActivities(currentSection)
-    : [];
+  let currentSectionGateActivities: SectionActivity[] = [];
+  if (lesson.type === "section_quiz" || lesson.type === "section_minigame") {
+    const g = gateActivityFromLesson(lesson);
+    if (g) currentSectionGateActivities = [g];
+  } else if (isLastLessonInSection && currentSection) {
+    const legacy = normalizeSectionActivities(currentSection);
+    if (legacy.length > 0) {
+      currentSectionGateActivities = legacy;
+    }
+  }
 
   const sectionGateCompletion: Record<string, boolean> = {};
   for (const act of currentSectionGateActivities) {
@@ -1044,16 +1048,16 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   const savedQuizAnswers = currentLessonProgress?.answers ?? null;
 
   const sidebarSections = courseSections.map((s) => {
-    const acts = normalizeSectionActivities(s);
-    const gatesPassed = acts.filter((a) =>
+    const units = listSectionGateUnitsForUi(s);
+    const gatesPassed = units.filter((u) =>
       enrollment.sectionQuizSubmissions.some(
-        (ss) => ss.sectionId === s.id && ss.activityId === a.id && ss.passed,
+        (ss) => ss.sectionId === u.sectionId && ss.activityId === u.activityId && ss.passed,
       ),
     ).length;
     return {
       id: s.id,
       title: s.title,
-      gateTotal: acts.length,
+      gateTotal: units.length,
       gatesPassed,
       lessons: s.lessons.map((l) => ({
         id: l.id,
@@ -1229,7 +1233,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
             activities: true,
             lessons: {
               orderBy: { order: "asc" },
-              select: { id: true, title: true, type: true },
+              select: { id: true, title: true, type: true, content: true },
             },
           },
         },
@@ -1259,7 +1263,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
   const sections = (course?.sections ?? []).map((s) => ({
     id: s.id,
     title: s.title,
-    hasQuiz: countSectionGateActivities(s) > 0,
+    hasQuiz: listSectionGateUnitsForUi(s).length > 0,
     lessons: s.lessons.map((l) => ({ id: l.id, title: l.title, type: l.type })),
   }));
 

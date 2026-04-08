@@ -295,11 +295,15 @@ function SectionQuizEditor({
 // ─── Minigame editors ────────────────────────────────────────────────────────
 
 function MemoryMinigameEditor({
+  instruction,
   pairs,
-  onChange,
+  onInstructionChange,
+  onPairsChange,
 }: {
+  instruction: string;
   pairs: MemoryPair[];
-  onChange: (pairs: MemoryPair[]) => void;
+  onInstructionChange: (v: string) => void;
+  onPairsChange: (pairs: MemoryPair[]) => void;
 }) {
   const [term, setTerm] = useState("");
   const [definition, setDefinition] = useState("");
@@ -307,21 +311,34 @@ function MemoryMinigameEditor({
   const addPair = () => {
     if (!term.trim() || !definition.trim()) return;
     if (pairs.length >= 8) return;
-    onChange([...pairs, { term: term.trim(), definition: definition.trim() }]);
+    onPairsChange([...pairs, { term: term.trim(), definition: definition.trim() }]);
     setTerm("");
     setDefinition("");
   };
 
-  const removePair = (i: number) => onChange(pairs.filter((_, idx) => idx !== i));
+  const removePair = (i: number) => onPairsChange(pairs.filter((_, idx) => idx !== i));
 
   const updatePair = (index: number, field: "term" | "definition", value: string) => {
-    onChange(
+    onPairsChange(
       pairs.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
     );
   };
 
   return (
     <div className="space-y-3">
+      <div className="space-y-1">
+        <Label className="text-sm font-medium">Instrucción para el alumno</Label>
+        <Textarea
+          placeholder="Ej: Empareja cada concepto con su definición."
+          value={instruction ?? ""}
+          onChange={(e) => onInstructionChange(e.target.value)}
+          rows={3}
+          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
+        />
+        <p className="text-xs text-muted-foreground">
+          Opcional. Se muestra arriba del juego para orientar al estudiante.
+        </p>
+      </div>
       <p className="text-xs text-muted-foreground">Mínimo 4 pares, máximo 8</p>
       {pairs.map((p, i) => (
         <div
@@ -367,11 +384,15 @@ function MemoryMinigameEditor({
 }
 
 function HangmanMinigameEditor({
+  instruction,
   words,
-  onChange,
+  onInstructionChange,
+  onWordsChange,
 }: {
+  instruction: string;
   words: HangmanWord[];
-  onChange: (words: HangmanWord[]) => void;
+  onInstructionChange: (v: string) => void;
+  onWordsChange: (words: HangmanWord[]) => void;
 }) {
   const [word, setWord] = useState("");
   const [hint, setHint] = useState("");
@@ -380,15 +401,15 @@ function HangmanMinigameEditor({
     const clean = word.toUpperCase().trim();
     if (!clean || !hint.trim()) return;
     if (words.length >= 5) return;
-    onChange([...words, { word: clean, hint: hint.trim() }]);
+    onWordsChange([...words, { word: clean, hint: hint.trim() }]);
     setWord("");
     setHint("");
   };
 
-  const removeWord = (i: number) => onChange(words.filter((_, idx) => idx !== i));
+  const removeWord = (i: number) => onWordsChange(words.filter((_, idx) => idx !== i));
 
   const updateWord = (index: number, field: "word" | "hint", value: string) => {
-    onChange(
+    onWordsChange(
       words.map((w, i) => {
         if (i !== index) return w;
         if (field === "word") {
@@ -401,6 +422,19 @@ function HangmanMinigameEditor({
 
   return (
     <div className="space-y-3">
+      <div className="space-y-1">
+        <Label className="text-sm font-medium">Instrucción para el alumno</Label>
+        <Textarea
+          placeholder="Ej: Adivina cada palabra usando la pista. Letras de la A a la Z, sin tildes."
+          value={instruction ?? ""}
+          onChange={(e) => onInstructionChange(e.target.value)}
+          rows={3}
+          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
+        />
+        <p className="text-xs text-muted-foreground">
+          Opcional. Se muestra arriba del juego.
+        </p>
+      </div>
       <p className="text-xs text-muted-foreground">3–5 palabras, sin tildes ni caracteres especiales</p>
       {words.map((w, i) => (
         <div
@@ -497,10 +531,10 @@ function SortMinigameEditor({
         <Label className="text-sm font-medium">Instrucción para el alumno</Label>
         <Textarea
           placeholder="Ej: Ordena los pasos del proceso"
-          value={instruction}
+          value={instruction ?? ""}
           onChange={(e) => onInstructionChange(e.target.value)}
           rows={3}
-          className="min-h-[80px] resize-y"
+          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
         />
       </div>
       <p className="text-xs text-muted-foreground">
@@ -595,10 +629,10 @@ function MatchMinigameEditor({
         <Label className="text-sm font-medium">Instrucción para el alumno</Label>
         <Textarea
           placeholder="Ej: Conecta cada concepto con su definición"
-          value={instruction}
+          value={instruction ?? ""}
           onChange={(e) => onInstructionChange(e.target.value)}
           rows={3}
-          className="min-h-[80px] resize-y"
+          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
         />
       </div>
       <p className="text-xs text-muted-foreground">
@@ -662,17 +696,144 @@ const ACTIVITY_OPTIONS: { type: ActivityType; label: string; icon: React.ReactNo
   { type: "match", label: "Conectar", icon: <Gamepad2 className="h-4 w-4" />, description: "Conectar columnas" },
 ];
 
+const MINIGAME_ONLY_OPTIONS = ACTIVITY_OPTIONS.filter((o) =>
+  ["memory", "hangman", "sort", "match"].includes(o.type),
+);
+
+export type SectionActivityEditorMode = "section" | "lessonQuiz" | "lessonMinigame";
+
 export function SectionActivityEditor({
+  mode = "section",
   quiz,
   minigame,
   onQuizChange,
   onMinigameChange,
 }: {
+  mode?: SectionActivityEditorMode;
   quiz: SectionQuiz | undefined;
   minigame: SectionMinigame | undefined;
   onQuizChange: (quiz: SectionQuiz | undefined) => void;
   onMinigameChange: (minigame: SectionMinigame | undefined) => void;
 }) {
+  if (mode === "lessonQuiz") {
+    return (
+      <div className="space-y-3">
+        <p className="text-sm text-muted-foreground">
+          Este tipo de lección es un test de cierre: el alumno debe alcanzar la calificación mínima para marcar la
+          lección como completada.
+        </p>
+        <SectionQuizEditor quiz={quiz} onChange={onQuizChange} />
+      </div>
+    );
+  }
+
+  if (mode === "lessonMinigame") {
+    const currentType: ActivityType = minigame
+      ? (minigame.type as ActivityType)
+      : "memory";
+
+    const handleMiniTypeChange = (type: ActivityType) => {
+      if (type === "memory") {
+        onMinigameChange({ type: "memory", instruction: "", pairs: [] });
+      } else if (type === "hangman") {
+        onMinigameChange({ type: "hangman", instruction: "", words: [] });
+      } else if (type === "sort") {
+        onMinigameChange({ type: "sort", instruction: "", items: [] });
+      } else if (type === "match") {
+        onMinigameChange({ type: "match", instruction: "", pairs: [] });
+      }
+    };
+
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Elige el tipo de minijuego. El alumno debe completarlo para avanzar.
+        </p>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+          {MINIGAME_ONLY_OPTIONS.map((opt) => (
+            <button
+              key={opt.type}
+              type="button"
+              onClick={() => handleMiniTypeChange(opt.type)}
+              className={`
+              flex flex-col items-center gap-1.5 rounded-xl border-2 p-3 text-center transition-all
+              ${
+                currentType === opt.type
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:bg-muted/50"
+              }
+            `}
+            >
+              {opt.icon}
+              <span className="text-xs font-semibold">{opt.label}</span>
+              <span className="text-[10px] leading-tight opacity-70">{opt.description}</span>
+            </button>
+          ))}
+        </div>
+
+        {minigame?.type === "memory" && (
+          <MemoryMinigameEditor
+            instruction={minigame.instruction ?? ""}
+            pairs={minigame.pairs}
+            onInstructionChange={(instruction) =>
+              onMinigameChange({ type: "memory", instruction, pairs: minigame.pairs })
+            }
+            onPairsChange={(pairs) =>
+              onMinigameChange({
+                type: "memory",
+                instruction: minigame.instruction ?? "",
+                pairs,
+              })
+            }
+          />
+        )}
+
+        {minigame?.type === "hangman" && (
+          <HangmanMinigameEditor
+            instruction={minigame.instruction ?? ""}
+            words={minigame.words}
+            onInstructionChange={(instruction) =>
+              onMinigameChange({ type: "hangman", instruction, words: minigame.words })
+            }
+            onWordsChange={(words) =>
+              onMinigameChange({
+                type: "hangman",
+                instruction: minigame.instruction ?? "",
+                words,
+              })
+            }
+          />
+        )}
+
+        {minigame?.type === "sort" && (
+          <SortMinigameEditor
+            instruction={minigame.instruction ?? ""}
+            items={minigame.items}
+            onInstructionChange={(instruction) =>
+              onMinigameChange({ type: "sort", instruction, items: minigame.items })
+            }
+            onItemsChange={(items) =>
+              onMinigameChange({ type: "sort", instruction: minigame.instruction ?? "", items })
+            }
+          />
+        )}
+
+        {minigame?.type === "match" && (
+          <MatchMinigameEditor
+            instruction={minigame.instruction ?? ""}
+            pairs={minigame.pairs}
+            onInstructionChange={(instruction) =>
+              onMinigameChange({ type: "match", instruction, pairs: minigame.pairs })
+            }
+            onPairsChange={(pairs) =>
+              onMinigameChange({ type: "match", instruction: minigame.instruction ?? "", pairs })
+            }
+          />
+        )}
+      </div>
+    );
+  }
+
   const currentType: ActivityType = minigame
     ? (minigame.type as ActivityType)
     : quiz
@@ -688,10 +849,10 @@ export function SectionActivityEditor({
       if (!quiz) onQuizChange({ passingScore: 70, questions: [] });
     } else if (type === "memory") {
       onQuizChange(undefined);
-      onMinigameChange({ type: "memory", pairs: [] });
+      onMinigameChange({ type: "memory", instruction: "", pairs: [] });
     } else if (type === "hangman") {
       onQuizChange(undefined);
-      onMinigameChange({ type: "hangman", words: [] });
+      onMinigameChange({ type: "hangman", instruction: "", words: [] });
     } else if (type === "sort") {
       onQuizChange(undefined);
       onMinigameChange({ type: "sort", instruction: "", items: [] });
@@ -731,40 +892,60 @@ export function SectionActivityEditor({
 
       {currentType === "memory" && minigame?.type === "memory" && (
         <MemoryMinigameEditor
+          instruction={minigame.instruction ?? ""}
           pairs={minigame.pairs}
-          onChange={(pairs) => onMinigameChange({ type: "memory", pairs })}
+          onInstructionChange={(instruction) =>
+            onMinigameChange({ type: "memory", instruction, pairs: minigame.pairs })
+          }
+          onPairsChange={(pairs) =>
+            onMinigameChange({
+              type: "memory",
+              instruction: minigame.instruction ?? "",
+              pairs,
+            })
+          }
         />
       )}
 
       {currentType === "hangman" && minigame?.type === "hangman" && (
         <HangmanMinigameEditor
+          instruction={minigame.instruction ?? ""}
           words={minigame.words}
-          onChange={(words) => onMinigameChange({ type: "hangman", words })}
+          onInstructionChange={(instruction) =>
+            onMinigameChange({ type: "hangman", instruction, words: minigame.words })
+          }
+          onWordsChange={(words) =>
+            onMinigameChange({
+              type: "hangman",
+              instruction: minigame.instruction ?? "",
+              words,
+            })
+          }
         />
       )}
 
       {currentType === "sort" && minigame?.type === "sort" && (
         <SortMinigameEditor
-          instruction={minigame.instruction}
+          instruction={minigame.instruction ?? ""}
           items={minigame.items}
           onInstructionChange={(instruction) =>
             onMinigameChange({ type: "sort", instruction, items: minigame.items })
           }
           onItemsChange={(items) =>
-            onMinigameChange({ type: "sort", instruction: minigame.instruction, items })
+            onMinigameChange({ type: "sort", instruction: minigame.instruction ?? "", items })
           }
         />
       )}
 
       {currentType === "match" && minigame?.type === "match" && (
         <MatchMinigameEditor
-          instruction={minigame.instruction}
+          instruction={minigame.instruction ?? ""}
           pairs={minigame.pairs}
           onInstructionChange={(instruction) =>
             onMinigameChange({ type: "match", instruction, pairs: minigame.pairs })
           }
           onPairsChange={(pairs) =>
-            onMinigameChange({ type: "match", instruction: minigame.instruction, pairs })
+            onMinigameChange({ type: "match", instruction: minigame.instruction ?? "", pairs })
           }
         />
       )}

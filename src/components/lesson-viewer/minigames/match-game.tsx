@@ -11,7 +11,7 @@ interface MatchPair {
 }
 
 interface MatchGameProps {
-  instruction: string;
+  instruction?: string;
   pairs: MatchPair[];
   onComplete: () => void;
 }

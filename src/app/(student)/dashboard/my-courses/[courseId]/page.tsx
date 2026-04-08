@@ -23,6 +23,7 @@ import {
   Award,
   Lock,
   Video,
+  Gamepad2,
 } from "lucide-react";
 import type { LessonType } from "@/generated/prisma";
 import { EnrolledWelcomeBanner } from "@/components/student/enrolled-welcome-banner";
@@ -35,7 +36,7 @@ import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { ReviewSection } from "@/components/student/review-section";
 import { AnonymousQuestionsPanel } from "@/components/student/anonymous-questions-panel";
 import { recalculateProgress } from "@/app/actions/progress-actions";
-import { normalizeSectionActivities } from "@/lib/section-activities";
+import { listSectionGateUnitsForUi } from "@/lib/gate-lesson-content";
 import type { StudentCourseDetail } from "@/lib/course-service";
 
 const lessonIcon = (type: LessonType) => {
@@ -44,6 +45,8 @@ const lessonIcon = (type: LessonType) => {
     case "text": return <FileText className="h-4 w-4 text-primary" />;
     case "quiz": return <HelpCircle className="h-4 w-4 text-primary" />;
     case "assignment": return <ClipboardList className="h-4 w-4 text-primary" />;
+    case "section_quiz": return <HelpCircle className="h-4 w-4 text-primary" />;
+    case "section_minigame": return <Gamepad2 className="h-4 w-4 text-primary" />;
   }
 };
 
@@ -84,11 +87,11 @@ export default async function MyCourseDetailPage({
   const allLessonsCompleted = allLessons.length > 0 && allLessons.every((l) => completedIds.has(l.id));
 
   const allGatesPassed = course.sections.every((s) => {
-    const acts = normalizeSectionActivities(s);
-    if (acts.length === 0) return true;
-    return acts.every((act) =>
+    const units = listSectionGateUnitsForUi(s);
+    if (units.length === 0) return true;
+    return units.every((u) =>
       sectionSubs.some(
-        (sub) => sub.sectionId === s.id && sub.activityId === act.id && sub.passed,
+        (sub) => sub.sectionId === u.sectionId && sub.activityId === u.activityId && sub.passed,
       ),
     );
   });

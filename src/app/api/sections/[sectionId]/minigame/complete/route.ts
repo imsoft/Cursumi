@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCachedSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { recalculateProgress } from "@/app/actions/progress-actions";
+import { upsertLessonProgressForGateActivity } from "@/lib/gate-lesson-progress";
 
 export async function POST(
   req: Request,
@@ -43,6 +44,12 @@ export async function POST(
     },
   });
   if (existing?.passed) {
+    await upsertLessonProgressForGateActivity({
+      enrollmentId: enrollment.id,
+      courseId,
+      sectionId,
+      activityId,
+    });
     return NextResponse.json({ passed: true });
   }
 
@@ -64,6 +71,12 @@ export async function POST(
     },
   });
 
+  await upsertLessonProgressForGateActivity({
+    enrollmentId: enrollment.id,
+    courseId,
+    sectionId,
+    activityId,
+  });
   await recalculateProgress(enrollment.id, courseId);
 
   return NextResponse.json({ passed: true });

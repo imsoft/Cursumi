@@ -653,7 +653,9 @@ exports.LessonType = exports.$Enums.LessonType = {
   video: 'video',
   text: 'text',
   quiz: 'quiz',
-  assignment: 'assignment'
+  assignment: 'assignment',
+  section_quiz: 'section_quiz',
+  section_minigame: 'section_minigame'
 };
 
 exports.SessionAnonymousQuestionStatus = exports.$Enums.SessionAnonymousQuestionStatus = {

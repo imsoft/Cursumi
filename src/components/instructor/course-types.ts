@@ -67,11 +67,15 @@ export type HangmanWord = { word: string; hint: string };
 
 export type MemoryMinigame = {
   type: "memory";
+  /** Instrucción opcional para el alumno (p. ej. cómo jugar o el objetivo). */
+  instruction?: string;
   pairs: MemoryPair[]; // 4–8 pairs
 };
 
 export type HangmanMinigame = {
   type: "hangman";
+  /** Instrucción opcional para el alumno. */
+  instruction?: string;
   words: HangmanWord[]; // 3–5 words
 };
 
@@ -130,7 +134,7 @@ export type CourseLesson = {
   id: string;
   title: string;
   description?: string;
-  type: "video" | "text" | "quiz" | "assignment";
+  type: "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
   duration?: string;
   order: number;
   content?: string;

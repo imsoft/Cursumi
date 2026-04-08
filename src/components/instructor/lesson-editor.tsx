@@ -1,13 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon } from "lucide-react";
-import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
+import type {
+  CourseLesson,
+  QuizQuestion,
+  EvaluationCriterion,
+  CourseFile,
+  CourseResource,
+  SectionQuiz,
+  SectionMinigame,
+} from "./course-types";
+import { SectionActivityEditor } from "./section-activity-editor";
+import {
+  parseSectionQuizFromLessonContent,
+  parseSectionMinigameFromLessonContent,
+  stringifySectionQuizPayload,
+  stringifySectionMinigamePayload,
+} from "@/lib/gate-lesson-content";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { stripHtml } from "@/lib/utils";
 import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
@@ -22,8 +37,10 @@ interface LessonEditorProps {
 const lessonTypeOptions = [
   { value: "video", label: "Video" },
   { value: "text", label: "Texto" },
-  { value: "quiz", label: "Quiz" },
+  { value: "quiz", label: "Quiz (lección)" },
   { value: "assignment", label: "Tarea" },
+  { value: "section_quiz", label: "Test de cierre" },
+  { value: "section_minigame", label: "Minijuego de cierre" },
 ];
 
 export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) => {
@@ -53,6 +70,45 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const [quizPassingRequired, setQuizPassingRequired] = useState(lesson.quizPassingRequired ?? false);
   const [quizPassingScore, setQuizPassingScore] = useState(lesson.quizPassingScore ?? 70);
 
+  const [gateQuiz, setGateQuiz] = useState<SectionQuiz>(() => {
+    if (lesson.type === "section_quiz") {
+      return parseSectionQuizFromLessonContent(lesson.content) ?? { passingScore: 70, questions: [] };
+    }
+    return { passingScore: 70, questions: [] };
+  });
+  const [gateMinigame, setGateMinigame] = useState<SectionMinigame | null>(() => {
+    if (lesson.type === "section_minigame") {
+      return (
+        parseSectionMinigameFromLessonContent(lesson.content) ?? {
+          type: "memory",
+          instruction: "",
+          pairs: [],
+        }
+      );
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (lesson.type === "section_quiz") {
+      setGateQuiz(parseSectionQuizFromLessonContent(lesson.content) ?? { passingScore: 70, questions: [] });
+    } else {
+      setGateQuiz({ passingScore: 70, questions: [] });
+    }
+    if (lesson.type === "section_minigame") {
+      setGateMinigame(
+        parseSectionMinigameFromLessonContent(lesson.content) ?? {
+          type: "memory",
+          instruction: "",
+          pairs: [],
+        },
+      );
+    } else {
+      setGateMinigame(null);
+    }
+    // Solo al cambiar de lección (evita pisar el borrador al guardar)
+  }, [lesson.id]);
+
   // Estados para crear pregunta
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
   const [newQuestionType, setNewQuestionType] = useState<"multiple-choice" | "true-false" | "checkbox">("multiple-choice");
@@ -62,15 +118,22 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
 
   const handleSave = () => {
+    let savedContent = content;
+    if (type === "section_quiz") {
+      savedContent = stringifySectionQuizPayload(gateQuiz);
+    } else if (type === "section_minigame" && gateMinigame) {
+      savedContent = stringifySectionMinigamePayload(gateMinigame);
+    }
+
     onSave({
       title,
       description,
       type,
       duration,
-      content,
-      videoUrl,
-      files,
-      resources,
+      content: savedContent,
+      videoUrl: type === "section_quiz" || type === "section_minigame" ? "" : videoUrl,
+      files: type === "section_quiz" || type === "section_minigame" ? [] : files,
+      resources: type === "section_quiz" || type === "section_minigame" ? [] : resources,
       quizQuestions: type === "quiz" ? quizQuestions : undefined,
       evaluationCriteria: type === "assignment" ? evaluationCriteria : undefined,
       quizTimeLimit: type === "quiz" ? quizTimeLimit : undefined,
@@ -339,7 +402,24 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                 label="Tipo de lección *"
                 options={lessonTypeOptions}
                 value={type}
-                onChange={(e) => setType(e.target.value as CourseLesson["type"])}
+                onChange={(e) => {
+                  const v = e.target.value as CourseLesson["type"];
+                  setType(v);
+                  if (v === "section_quiz") {
+                    setGateQuiz(
+                      parseSectionQuizFromLessonContent(content) ?? { passingScore: 70, questions: [] },
+                    );
+                  }
+                  if (v === "section_minigame") {
+                    setGateMinigame(
+                      parseSectionMinigameFromLessonContent(content) ?? {
+                        type: "memory",
+                        instruction: "",
+                        pairs: [],
+                      },
+                    );
+                  }
+                }}
               />
             </div>
           </div>
@@ -354,6 +434,26 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
               className="mt-1"
             />
           </div>
+
+          {type === "section_quiz" && (
+            <SectionActivityEditor
+              mode="lessonQuiz"
+              quiz={gateQuiz}
+              minigame={undefined}
+              onQuizChange={(q) => setGateQuiz(q ?? { passingScore: 70, questions: [] })}
+              onMinigameChange={() => {}}
+            />
+          )}
+
+          {type === "section_minigame" && gateMinigame && (
+            <SectionActivityEditor
+              mode="lessonMinigame"
+              quiz={undefined}
+              minigame={gateMinigame}
+              onQuizChange={() => {}}
+              onMinigameChange={(m) => setGateMinigame(m ?? null)}
+            />
+          )}
 
           {/* Contenido específico según el tipo de lección */}
           {type === "video" && (

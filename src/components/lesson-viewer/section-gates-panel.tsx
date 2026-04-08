@@ -400,10 +400,18 @@ export function SectionGatesPanel({
               ) : (
                 <>
                   {mg.type === "memory" && (
-                    <MemoryGame pairs={mg.pairs} onComplete={() => completeMinigame(act.id)} />
+                    <MemoryGame
+                      instruction={mg.instruction}
+                      pairs={mg.pairs}
+                      onComplete={() => completeMinigame(act.id)}
+                    />
                   )}
                   {mg.type === "hangman" && (
-                    <HangmanGame words={mg.words} onComplete={() => completeMinigame(act.id)} />
+                    <HangmanGame
+                      instruction={mg.instruction}
+                      words={mg.words}
+                      onComplete={() => completeMinigame(act.id)}
+                    />
                   )}
                   {mg.type === "sort" && (
                     <SortGame

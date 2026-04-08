@@ -257,7 +257,9 @@ export const LessonType: {
   video: 'video',
   text: 'text',
   quiz: 'quiz',
-  assignment: 'assignment'
+  assignment: 'assignment',
+  section_quiz: 'section_quiz',
+  section_minigame: 'section_minigame'
 };
 
 export type LessonType = (typeof LessonType)[keyof typeof LessonType]

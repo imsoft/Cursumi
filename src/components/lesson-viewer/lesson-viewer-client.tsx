@@ -19,6 +19,8 @@ import {
   Menu,
   X,
   Lock,
+  Gamepad2,
+  ClipboardCheck,
 } from "lucide-react";
 // Note: PlayCircle, FileText, HelpCircle, ClipboardList used in lessonTypeIcon below
 import type { SectionActivity } from "@/components/instructor/course-types";
@@ -28,7 +30,7 @@ import { SectionGatesPanel } from "./section-gates-panel";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
-type LessonType = "video" | "text" | "quiz" | "assignment";
+type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
 interface LessonAttachment {
   id: string;
@@ -49,7 +51,7 @@ interface LessonData {
   id: string;
   title: string;
   description?: string | null;
-  type: LessonType;
+  type: LessonType | string;
   content: string | null;
   videoUrl: string | null;
   duration: string | null;
@@ -60,7 +62,7 @@ interface LessonData {
 interface SidebarLesson {
   id: string;
   title: string;
-  type: LessonType;
+  type: LessonType | string;
   duration: string | null;
   completed: boolean;
 }
@@ -90,11 +92,13 @@ interface LessonViewerClientProps {
   savedQuizAnswers?: Record<string, number | number[]> | null;
 }
 
-const lessonTypeIcon: Record<LessonType, React.ReactNode> = {
+const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
   video: <PlayCircle className="h-4 w-4 shrink-0" />,
   text: <FileText className="h-4 w-4 shrink-0" />,
   quiz: <HelpCircle className="h-4 w-4 shrink-0" />,
   assignment: <ClipboardList className="h-4 w-4 shrink-0" />,
+  section_quiz: <ClipboardCheck className="h-4 w-4 shrink-0" />,
+  section_minigame: <Gamepad2 className="h-4 w-4 shrink-0" />,
 };
 
 function getMuxPlaybackId(url: string): string | null {
@@ -223,6 +227,7 @@ export function LessonViewerClient({
   const quizAttemptsExhausted = quizConfig.maxAttempts > 0 && quizAttemptCount >= quizConfig.maxAttempts;
 
   const isCompleted = completedIds.has(lesson.id);
+  const isGateLesson = lesson.type === "section_quiz" || lesson.type === "section_minigame";
 
   const sectionGatesAllPassed = useMemo(() => {
     if (currentSectionGateActivities.length === 0) return true;
@@ -241,10 +246,13 @@ export function LessonViewerClient({
   const nextIsInDifferentSection =
     nextLesson !== null && nextLessonSectionId !== null && nextLessonSectionId !== currentSectionId;
   const sectionGatesRequired =
-    isLastLessonInSection && currentSectionGateActivities.length > 0;
+    currentSectionGateActivities.length > 0 && (isGateLesson || isLastLessonInSection);
   const sectionGatePending = sectionGatesRequired && !sectionGatesAllPassed;
   const blockNextNavigation =
-    (nextIsInDifferentSection || (nextLesson === null && hasFinalExam)) && sectionGatePending;
+    sectionGatePending &&
+    (isGateLesson ||
+      nextIsInDifferentSection ||
+      (nextLesson === null && hasFinalExam));
 
   const markComplete = useCallback(async (extra?: { score?: number; answers?: Record<string, number | number[]> }) => {
     if (isCompleted || marking) return;
@@ -611,6 +619,14 @@ export function LessonViewerClient({
       );
     }
 
+    if (lesson.type === "section_quiz" || lesson.type === "section_minigame") {
+      return (
+        <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-sm text-muted-foreground">
+          Completa el test o minijuego de cierre en el panel inferior para continuar.
+        </div>
+      );
+    }
+
     if (lesson.type === "assignment") {
       return (
         <div className="space-y-4 rounded-lg border border-border bg-card p-6">
@@ -706,8 +722,14 @@ export function LessonViewerClient({
           {/* Lesson title */}
           <div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              {lessonTypeIcon[lesson.type]}
-              <span className="capitalize">{lesson.type}</span>
+              {lessonTypeIcon[lesson.type] ?? <FileText className="h-4 w-4 shrink-0" />}
+              <span className="capitalize">
+                {lesson.type === "section_quiz"
+                  ? "test de cierre"
+                  : lesson.type === "section_minigame"
+                    ? "minijuego de cierre"
+                    : lesson.type}
+              </span>
               {lesson.duration && <span>· {lesson.duration}</span>}
             </div>
             <div className="mt-1 flex items-start justify-between gap-4">
@@ -744,7 +766,7 @@ export function LessonViewerClient({
             </div>
           )}
 
-          {sectionGatesRequired && isCompleted && (
+          {sectionGatesRequired && (isGateLesson || isCompleted) && (
             <SectionGatesPanel
               activities={currentSectionGateActivities}
               initialCompletion={gateCompletion}

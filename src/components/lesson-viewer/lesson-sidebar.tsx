@@ -13,14 +13,16 @@ import {
   ClipboardList,
   Lock,
   ListChecks,
+  Gamepad2,
+  ClipboardCheck,
 } from "lucide-react";
 
-type LessonType = "video" | "text" | "quiz" | "assignment";
+type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
 interface SidebarLesson {
   id: string;
   title: string;
-  type: LessonType;
+  type: LessonType | string;
   duration: string | null;
   completed: boolean;
 }
@@ -43,11 +45,13 @@ interface LessonSidebarProps {
   onLessonClick: () => void;
 }
 
-const lessonTypeIcon: Record<LessonType, React.ReactNode> = {
+const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
   video: <PlayCircle className="h-4 w-4 shrink-0" />,
   text: <FileText className="h-4 w-4 shrink-0" />,
   quiz: <HelpCircle className="h-4 w-4 shrink-0" />,
   assignment: <ClipboardList className="h-4 w-4 shrink-0" />,
+  section_quiz: <ClipboardCheck className="h-4 w-4 shrink-0" />,
+  section_minigame: <Gamepad2 className="h-4 w-4 shrink-0" />,
 };
 
 export const LessonSidebar = memo(function LessonSidebar({
@@ -142,7 +146,9 @@ export const LessonSidebar = memo(function LessonSidebar({
                       <Circle className="h-4 w-4 shrink-0 text-muted-foreground" />
                     )}
                     <span className="flex-1 truncate">{l.title}</span>
-                    {lessonTypeIcon[l.type]}
+                    {lessonTypeIcon[l.type] ?? (
+                      <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    )}
                   </Link>
                 );
               })}

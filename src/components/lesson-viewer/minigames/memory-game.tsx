@@ -16,6 +16,8 @@ interface Card {
 }
 
 interface MemoryGameProps {
+  /** Texto opcional del instructor (orientación antes de jugar). */
+  instruction?: string;
   pairs: MemoryPair[];
   onComplete: () => void;
 }
@@ -29,7 +31,7 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
+export function MemoryGame({ instruction, pairs, onComplete }: MemoryGameProps) {
   const [cards] = useState<Card[]>(() =>
     shuffle(
       pairs.flatMap((pair, i) => [
@@ -131,6 +133,9 @@ export function MemoryGame({ pairs, onComplete }: MemoryGameProps) {
 
   return (
     <div className="space-y-4">
+      {instruction?.trim() ? (
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{instruction.trim()}</p>
+      ) : null}
       <MinigameLevelCelebration
         open={levelOpen}
         onOpenChange={setLevelOpen}

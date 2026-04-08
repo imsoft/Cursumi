@@ -20,6 +20,8 @@ import {
   Video,
   BookOpen,
   FileQuestion,
+  Gamepad2,
+  ClipboardCheck,
 } from "lucide-react";
 import type {
   CourseSection,
@@ -28,7 +30,6 @@ import type {
 import { LessonEditor } from "./lesson-editor";
 import { LessonStatusBadge } from "./lesson-status-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
-import { SectionActivityEditor } from "./section-activity-editor";
 
 interface CourseSectionsManagerProps {
   sections: CourseSection[];
@@ -128,6 +129,10 @@ export const CourseSectionsManager = ({
         return FileQuestion;
       case "assignment":
         return BookOpen;
+      case "section_quiz":
+        return ClipboardCheck;
+      case "section_minigame":
+        return Gamepad2;
       default:
         return FileText;
     }
@@ -143,12 +148,21 @@ export const CourseSectionsManager = ({
         return "Quiz";
       case "assignment":
         return "Tarea";
+      case "section_quiz":
+        return "Test de cierre";
+      case "section_minigame":
+        return "Minijuego de cierre";
       default:
         return "Lección";
     }
   };
 
   const totalLessons = sections.reduce((acc, s) => acc + s.lessons.length, 0);
+  const gateClosingLessons = sections.reduce(
+    (acc, s) =>
+      acc + s.lessons.filter((l) => l.type === "section_quiz" || l.type === "section_minigame").length,
+    0,
+  );
 
   return (
     <div className="space-y-6">
@@ -361,22 +375,6 @@ export const CourseSectionsManager = ({
                             </div>
                           )}
                         </div>
-
-                        <Separator />
-
-                        {/* Actividad de sección (test o minijuego) */}
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-foreground">Actividad al final de la sección</h4>
-                          <p className="text-xs text-muted-foreground">
-                            Elige un test o un minijuego que los estudiantes deben completar para avanzar.
-                          </p>
-                          <SectionActivityEditor
-                            quiz={section.quiz}
-                            minigame={section.minigame}
-                            onQuizChange={(quiz) => updateSection(section.id, { quiz, minigame: undefined })}
-                            onMinigameChange={(minigame) => updateSection(section.id, { minigame, quiz: undefined })}
-                          />
-                        </div>
                       </CardContent>
                     </CollapsibleContent>
                   </Collapsible>
@@ -397,16 +395,11 @@ export const CourseSectionsManager = ({
               </p>
               <p className="text-sm text-muted-foreground">
                 {totalLessons} {totalLessons === 1 ? "lección" : "lecciones"} en total
-                {sections.filter((s) => s.quiz && s.quiz.questions.length > 0).length > 0 && (
+                {gateClosingLessons > 0 && (
                   <span>
-                    {" "}·{" "}
-                    {sections.filter((s) => s.quiz && s.quiz.questions.length > 0).length} con test
-                  </span>
-                )}
-                {sections.filter((s) => s.minigame).length > 0 && (
-                  <span>
-                    {" "}·{" "}
-                    {sections.filter((s) => s.minigame).length} con minijuego
+                    {" "}
+                    · {gateClosingLessons}{" "}
+                    {gateClosingLessons === 1 ? "lección de cierre" : "lecciones de cierre"} (test o minijuego)
                   </span>
                 )}
               </p>
