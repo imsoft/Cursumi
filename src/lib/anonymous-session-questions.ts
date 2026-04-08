@@ -24,7 +24,8 @@ export async function assertStudentEnrolledInSession(
   const enrollment = await prisma.enrollment.findUnique({
     where: { courseId_studentId: { courseId, studentId: userId } },
   });
-  if (!enrollment || enrollment.status !== "active") {
+  // `completed` sigue siendo una inscripción válida (p. ej. curso al 100%).
+  if (!enrollment || enrollment.status === "cancelled") {
     throw new ApiError(403, "Debes estar inscrito en este curso");
   }
   if (enrollment.sessionId !== sessionId) {
