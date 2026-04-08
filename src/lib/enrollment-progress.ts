@@ -65,17 +65,30 @@ export async function recalculateEnrollmentProgress(
     (course.finalExam as { questions?: unknown[] }).questions?.length
   );
 
-  const totalUnits = totalLessons + totalGateUnits + (hasFinalExam ? 1 : 0);
-  const completedUnits =
-    completedLessons + completedGateUnits + (examSubmission ? 1 : 0);
+  /** Contenido obligatorio del curso: todas las lecciones + actividades de cierre en la sección (legacy). */
+  const contentTotalUnits = totalLessons + totalGateUnits;
+  const contentCompletedUnits = completedLessons + completedGateUnits;
 
-  // Completado real: unidades enteras (evita quedar en 99% por redondeo cuando ya cumplieron todo).
-  const fullyComplete = totalUnits > 0 && completedUnits >= totalUnits;
-  const progress = fullyComplete
+  /**
+   * Certificado y "curso completado": solo contenido (lecciones + cierres de sección).
+   * El examen final no bloquea el certificado ni la calificación mostrada como 100%;
+   * la nota del examen solo afecta el tipo (acreditación vs participación) si lo presentó.
+   */
+  const contentFullyComplete =
+    contentTotalUnits > 0 && contentCompletedUnits >= contentTotalUnits;
+
+  /** Barra de progreso: opcionalmente incluye 1 unidad por examen enviado (informativo). */
+  const totalUnitsWithExam = contentTotalUnits + (hasFinalExam ? 1 : 0);
+  const completedUnitsWithExam =
+    contentCompletedUnits + (examSubmission ? 1 : 0);
+
+  const progress = contentFullyComplete
     ? 100
-    : totalUnits > 0
-      ? Math.round((completedUnits / totalUnits) * 100)
+    : totalUnitsWithExam > 0
+      ? Math.round((completedUnitsWithExam / totalUnitsWithExam) * 100)
       : 0;
+
+  const fullyComplete = contentFullyComplete;
 
   await prisma.enrollment.update({
     where: { id: enrollmentId },
@@ -96,7 +109,9 @@ export async function recalculateEnrollmentProgress(
 
     if (!existingCert) {
       const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-      const certType = examSubmission?.passed ? "accreditation" : "participation";
+      // Acreditación solo si presentó examen y aprobó; si no hay examen o no lo presentó / no aprobó → participación.
+      const certType =
+        hasFinalExam && examSubmission?.passed ? "accreditation" : "participation";
       const certificate = await prisma.certificate.create({
         data: {
           enrollmentId,
@@ -133,16 +148,16 @@ export async function recalculateEnrollmentProgress(
 }
 
 /**
- * Reintenta recalcular y crear certificados faltantes (progreso ≥99 o estado completed sin fila en Certificate).
- * Útil tras correcciones de fórmula o fallos previos al guardar.
+ * Reintenta recalcular inscripciones sin certificado (p. ej. tras cambiar la fórmula de completado).
  */
 export async function repairCertificatesForStudent(studentId: string): Promise<void> {
   const pending = await prisma.enrollment.findMany({
     where: {
       studentId,
       certificate: null,
-      OR: [{ progress: { gte: 99 } }, { status: "completed" }],
     },
+    orderBy: { updatedAt: "desc" },
+    take: 100,
     select: { id: true, courseId: true },
   });
   for (const e of pending) {
