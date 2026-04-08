@@ -12,8 +12,8 @@ export async function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
   const pathname = request.nextUrl.pathname;
 
-  // Rutas que requieren autenticación
-  const protectedRoutes = ["/dashboard", "/instructor", "/admin"];
+  // Rutas que requieren autenticación (cookie presente; el layout valida la sesión real)
+  const protectedRoutes = ["/dashboard", "/instructor", "/admin", "/business"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );

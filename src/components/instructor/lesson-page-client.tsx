@@ -73,7 +73,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
 
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<boolean> => {
     setSaving(true);
     setSaveError(null);
     try {
@@ -87,16 +87,18 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
+      return true;
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : "Error al guardar lección");
+      return false;
     } finally {
       setSaving(false);
     }
   };
 
   const handleSaveAndBack = async () => {
-    await handleSave();
-    if (!saveError) {
+    const ok = await handleSave();
+    if (ok) {
       router.push(`/instructor/courses/${courseId}/edit`);
     }
   };
@@ -133,12 +135,21 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
     setUploadingFile(true);
     setFileUploadError(null);
     try {
+      const maxBytes = 10 * 1024 * 1024;
+      if (file.size > maxBytes) {
+        throw new Error(`El archivo supera ${maxBytes / (1024 * 1024)} MB`);
+      }
       const form = new FormData();
       form.append("file", file);
       const res = await fetch("/api/upload/attachment", { method: "POST", body: form });
-      if (!res.ok) throw new Error("Error al subir archivo");
-      const { url } = await res.json();
-      setFiles((prev) => [...prev, { id: crypto.randomUUID(), name: file.name, type: fileType, url, size: file.size }]);
+      const data = (await res.json().catch(() => ({}))) as { error?: string; url?: string };
+      if (!res.ok) throw new Error(data.error || "Error al subir archivo");
+      if (!data.url) throw new Error("Respuesta inválida del servidor");
+      const url = data.url;
+      setFiles((prev) => [
+        ...prev,
+        { id: crypto.randomUUID(), name: file.name, type: fileType, url, size: file.size },
+      ]);
     } catch (err) {
       setFileUploadError(err instanceof Error ? err.message : "Error al subir");
     } finally {
@@ -232,7 +243,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 max-w-full space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <Button variant="ghost" size="sm" asChild>
@@ -687,6 +698,9 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
               <Upload className="h-4 w-4" />
               {uploadingFile ? "Subiendo..." : "Subir archivo"}
             </label>
+            <p className="text-xs text-muted-foreground">
+              PDF, Office, imágenes, ZIP… (máx. 10 MB por archivo)
+            </p>
             {fileUploadError && <p className="text-xs text-destructive">{fileUploadError}</p>}
           </div>
 

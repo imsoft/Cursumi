@@ -52,8 +52,18 @@ export default function MaterialsPage() {
         method: "POST",
         body: formData,
       });
-      const uploadData = await uploadRes.json();
-      if (!uploadRes.ok) return;
+      const uploadData = (await uploadRes.json().catch(() => ({}))) as {
+        error?: string;
+        url?: string;
+      };
+      if (!uploadRes.ok) {
+        alert(uploadData.error || "No se pudo subir el archivo");
+        return;
+      }
+      if (!uploadData.url) {
+        alert("Respuesta inválida del servidor");
+        return;
+      }
 
       // Save material metadata
       const res = await fetch("/api/business/materials", {

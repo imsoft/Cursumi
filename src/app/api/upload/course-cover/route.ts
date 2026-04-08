@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHash } from "crypto";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -32,20 +31,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const timestamp = Math.round(Date.now() / 1000);
     const folder = "cursumi/course-covers";
-    const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
-    const signature = createHash("sha1").update(paramsToSign + apiSecret).digest("hex");
 
     const uploadForm = new FormData();
     uploadForm.append("file", file);
-    uploadForm.append("api_key", apiKey);
-    uploadForm.append("timestamp", timestamp.toString());
-    uploadForm.append("signature", signature);
     uploadForm.append("folder", folder);
+
+    const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString("base64");
 
     const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
       method: "POST",
+      headers: { Authorization: `Basic ${auth}` },
       body: uploadForm,
     });
 

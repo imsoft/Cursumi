@@ -48,8 +48,10 @@ export function DashboardHeader({
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur px-4 md:px-6">
       <SidebarTrigger />
       {(title || description) && (
-        <div className="flex-1">
-          {title && <span className="text-lg font-semibold">{title}</span>}
+        <div className="min-w-0 flex-1">
+          {title && (
+            <span className="block truncate text-lg font-semibold">{title}</span>
+          )}
           {description && (
             <p className="text-sm text-muted-foreground">{description}</p>
           )}

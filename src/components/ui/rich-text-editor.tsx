@@ -40,6 +40,7 @@ import {
   ListOrdered,
   Pilcrow,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // ── Toolbar ──────────────────────────────────────────────────────────────────
 
@@ -252,14 +253,14 @@ export function RichTextEditor({
   };
 
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={cn("min-w-0 max-w-full space-y-2", className)}>
       <LexicalComposer initialConfig={initialConfig}>
         <ToolbarPlugin />
-        <div className="relative rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+        <div className="relative min-w-0 max-w-full overflow-hidden rounded-lg border border-input bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
           <RichTextPlugin
             contentEditable={
               <ContentEditable
-                className="px-4 py-3 text-sm text-foreground outline-none"
+                className="max-w-full min-w-0 wrap-anywhere px-4 py-3 text-sm text-foreground outline-none"
                 style={{ minHeight }}
               />
             }

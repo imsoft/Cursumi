@@ -15,9 +15,14 @@ export default function NotFound() {
       <p className="mt-2 text-center text-muted-foreground">
         La página que buscas no existe o ha sido movida.
       </p>
-      <Button asChild className="mt-6">
-        <Link href="/">Volver al inicio</Link>
-      </Button>
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <Button asChild variant="outline">
+          <Link href="/login">Iniciar sesión</Link>
+        </Button>
+        <Button asChild>
+          <Link href="/">Volver al inicio</Link>
+        </Button>
+      </div>
     </div>
   );
 }

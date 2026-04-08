@@ -1,7 +1,7 @@
-import { notFound, unstable_rethrow } from "next/navigation";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { getSessionSafe } from "@/lib/session";
+import { getCachedSession } from "@/lib/session";
 import { getOrgForUser } from "@/lib/org-service";
 import { getUserBasicInfo } from "@/lib/user-service";
 import { BusinessShell } from "@/components/layouts/business-shell";
@@ -15,48 +15,43 @@ export default async function BusinessDashboardLayout({
 }: {
   children: ReactNode;
 }) {
-  try {
-    const session = await getSessionSafe();
-    if (!session?.user?.id) {
-      notFound();
-    }
-
-    const [result, { image: userImage }] = await Promise.all([
-      getOrgForUser(session.user.id),
-      getUserBasicInfo(session.user.id),
-    ]);
-    if (!result) {
-      notFound();
-    }
-
-    const { membership, org } = result;
-
-    // Only owners and admins can access the business dashboard
-    if (membership.orgRole === "member") {
-      notFound();
-    }
-
-    const userName = session.user.name ?? "Admin";
-    const userInitials =
-      session.user.name
-        ?.split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2) || "BI";
-
-    return (
-      <BusinessShell
-        userName={userName}
-        userInitials={userInitials}
-        userImage={userImage}
-        orgName={org.name}
-      >
-        {children}
-      </BusinessShell>
-    );
-  } catch (e) {
-    unstable_rethrow(e);
-    notFound();
+  const session = await getCachedSession();
+  if (!session?.user?.id) {
+    redirect("/login");
   }
+
+  const [result, { image: userImage }] = await Promise.all([
+    getOrgForUser(session.user.id),
+    getUserBasicInfo(session.user.id),
+  ]);
+  if (!result) {
+    redirect("/dashboard");
+  }
+
+  const { membership, org } = result;
+
+  // Only owners and admins can access the business dashboard
+  if (membership.orgRole === "member") {
+    redirect("/dashboard");
+  }
+
+  const userName = session.user.name ?? "Admin";
+  const userInitials =
+    session.user.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "BI";
+
+  return (
+    <BusinessShell
+      userName={userName}
+      userInitials={userInitials}
+      userImage={userImage}
+      orgName={org.name}
+    >
+      {children}
+    </BusinessShell>
+  );
 }
