@@ -622,7 +622,7 @@ export function LessonViewerClient({
     if (lesson.type === "section_quiz" || lesson.type === "section_minigame") {
       return (
         <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-sm text-muted-foreground">
-          Completa el test o minijuego de cierre en el panel inferior para continuar.
+          Completa el test o minijuego en el panel inferior para continuar.
         </div>
       );
     }
@@ -725,9 +725,9 @@ export function LessonViewerClient({
               {lessonTypeIcon[lesson.type] ?? <FileText className="h-4 w-4 shrink-0" />}
               <span className="capitalize">
                 {lesson.type === "section_quiz"
-                  ? "test de cierre"
+                  ? "test"
                   : lesson.type === "section_minigame"
-                    ? "minijuego de cierre"
+                    ? "minijuego"
                     : lesson.type}
               </span>
               {lesson.duration && <span>· {lesson.duration}</span>}

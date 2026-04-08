@@ -39,8 +39,8 @@ const lessonTypeOptions = [
   { value: "text", label: "Texto" },
   { value: "quiz", label: "Quiz (lección)" },
   { value: "assignment", label: "Tarea" },
-  { value: "section_quiz", label: "Test de cierre" },
-  { value: "section_minigame", label: "Minijuego de cierre" },
+  { value: "section_quiz", label: "Test" },
+  { value: "section_minigame", label: "Minijuego" },
 ];
 
 export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) => {

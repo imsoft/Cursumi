@@ -106,13 +106,17 @@ export const Hero = ({ stats }: HeroProps) => {
               <div className="h-8 w-px bg-border" />
             </>
           )}
-          <div>
-            <div className="flex items-center justify-center gap-1 text-2xl font-bold text-foreground">
-              4.8
-              <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+          {stats.averageRating != null && (
+            <div>
+              <div className="flex items-center justify-center gap-1 text-2xl font-bold text-foreground">
+                {stats.averageRating % 1 === 0
+                  ? stats.averageRating
+                  : stats.averageRating.toFixed(1)}
+                <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+              </div>
+              <div>Valoración media</div>
             </div>
-            <div>Valoración media</div>
-          </div>
+          )}
         </motion.div>
       )}
     </motion.section>

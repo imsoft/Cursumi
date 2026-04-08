@@ -719,7 +719,7 @@ export function SectionActivityEditor({
     return (
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">
-          Este tipo de lección es un test de cierre: el alumno debe alcanzar la calificación mínima para marcar la
+          Este tipo de lección es un test: el alumno debe alcanzar la calificación mínima para marcar la
           lección como completada.
         </p>
         <SectionQuizEditor quiz={quiz} onChange={onQuizChange} />

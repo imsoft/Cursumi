@@ -149,9 +149,9 @@ export const CourseSectionsManager = ({
       case "assignment":
         return "Tarea";
       case "section_quiz":
-        return "Test de cierre";
+        return "Test";
       case "section_minigame":
-        return "Minijuego de cierre";
+        return "Minijuego";
       default:
         return "Lección";
     }

@@ -4,23 +4,31 @@ export type PublicStats = {
   studentsCount: number;
   citiesCount: number;
   instructorsCount: number;
+  /** Promedio de reseñas aprobadas (1–5); null si no hay reseñas publicadas */
+  averageRating: number | null;
 };
 
 export async function getPublicStats(): Promise<PublicStats> {
-  const [enrollmentsDistinct, courses, instructors] = await Promise.all([
+  const [enrollmentsDistinct, courses, instructors, reviewAgg] = await Promise.all([
     prisma.enrollment.findMany({ select: { studentId: true }, distinct: ["studentId"] }),
     prisma.course.findMany({
       where: { status: "published", city: { not: null } },
       select: { city: true },
     }),
     prisma.user.count({ where: { role: "instructor" } }),
+    prisma.review.aggregate({
+      where: { approved: true },
+      _avg: { rating: true },
+    }),
   ]);
 
   const uniqueCities = new Set(courses.map((c) => c.city).filter(Boolean));
+  const avg = reviewAgg._avg.rating;
   return {
     studentsCount: enrollmentsDistinct.length,
     citiesCount: uniqueCities.size,
     instructorsCount: instructors,
+    averageRating: avg != null ? Math.round(avg * 10) / 10 : null,
   };
 }
 
