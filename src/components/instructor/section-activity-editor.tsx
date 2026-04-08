@@ -10,7 +10,6 @@ import { Switch } from "@/components/ui/switch";
 import {
   Plus, Trash2, ClipboardCheck, CheckCircle2, Circle, Gamepad2, ChevronUp, ChevronDown,
 } from "lucide-react";
-import { stripHtml } from "@/lib/utils";
 import type {
   SectionQuiz,
   SectionQuizQuestion,
@@ -76,6 +75,12 @@ function SectionQuizEditor({
     syncUp(hasQuiz, updated, passingScore);
   };
 
+  const replaceQuestion = (index: number, q: SectionQuizQuestion) => {
+    const updated = questions.map((prev, i) => (i === index ? q : prev));
+    setQuestions(updated);
+    syncUp(hasQuiz, updated, passingScore);
+  };
+
   const handleScoreChange = (score: number) => {
     setPassingScore(score);
     syncUp(hasQuiz, questions, score);
@@ -117,47 +122,109 @@ function SectionQuizEditor({
           </div>
 
           {questions.length > 0 && (
-            <div className="space-y-2">
-              {questions.map((q, i) => (
-                <Card key={i} className="border border-border bg-muted/10">
-                  <CardContent className="p-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 space-y-1">
-                        <p className="text-sm font-medium">
-                          {i + 1}. {stripHtml(q.question)}
-                        </p>
-                        <div className="space-y-1">
-                          {q.options.map((opt, j) => (
-                            <div
-                              key={j}
-                              className={`flex items-center gap-2 rounded px-2 py-1 text-xs ${
-                                q.correct === j
-                                  ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                                  : "text-muted-foreground"
-                              }`}
-                            >
-                              {q.correct === j ? (
-                                <CheckCircle2 className="h-3 w-3 shrink-0 text-green-600" />
-                              ) : (
-                                <Circle className="h-3 w-3 shrink-0" />
-                              )}
-                              {stripHtml(opt)}
-                            </div>
-                          ))}
-                        </div>
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-foreground">Preguntas del test</p>
+              {questions.map((q, qi) => {
+                const validOpts = q.options.filter((o) => o.trim());
+                const invalid = validOpts.length < 2 || q.correct < 0 || q.correct >= q.options.length;
+                return (
+                  <Card key={qi} className="border border-border bg-muted/10">
+                    <CardContent className="space-y-3 p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <Label className="text-sm font-medium">Pregunta {qi + 1}</Label>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteQuestion(qi)}
+                          className="shrink-0 -mt-1"
+                          type="button"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteQuestion(i)}
-                        className="shrink-0"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      <Textarea
+                        placeholder="Enunciado de la pregunta..."
+                        value={q.question}
+                        rows={3}
+                        className="min-h-[72px] resize-y text-sm"
+                        onChange={(e) =>
+                          replaceQuestion(qi, { ...q, question: e.target.value })
+                        }
+                      />
+                      <div className="space-y-2">
+                        <Label className="text-xs text-muted-foreground">
+                          Opciones (elige la correcta)
+                        </Label>
+                        {q.options.map((opt, oi) => (
+                          <div key={oi} className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => replaceQuestion(qi, { ...q, correct: oi })}
+                              className="shrink-0"
+                              title="Marcar como correcta"
+                            >
+                              {q.correct === oi ? (
+                                <CheckCircle2 className="h-5 w-5 text-primary" />
+                              ) : (
+                                <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                              )}
+                            </button>
+                            <Input
+                              value={opt}
+                              placeholder={`Opción ${oi + 1}`}
+                              className="text-sm"
+                              onChange={(e) => {
+                                const next = [...q.options];
+                                next[oi] = e.target.value;
+                                replaceQuestion(qi, { ...q, options: next });
+                              }}
+                            />
+                            {q.options.length > 2 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="shrink-0 px-2"
+                                onClick={() => {
+                                  const next = q.options.filter((_, j) => j !== oi);
+                                  let correct = q.correct;
+                                  if (correct === oi) correct = 0;
+                                  else if (correct > oi) correct -= 1;
+                                  replaceQuestion(qi, { ...q, options: next, correct });
+                                }}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                        {q.options.length < 8 && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="w-fit"
+                            onClick={() =>
+                              replaceQuestion(qi, {
+                                ...q,
+                                options: [...q.options, ""],
+                              })
+                            }
+                          >
+                            <Plus className="mr-1 h-3.5 w-3.5" />
+                            Añadir opción
+                          </Button>
+                        )}
+                      </div>
+                      {invalid && (
+                        <p className="text-xs text-amber-600 dark:text-amber-400">
+                          Necesitas al menos 2 opciones con texto y una respuesta correcta válida.
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
 
