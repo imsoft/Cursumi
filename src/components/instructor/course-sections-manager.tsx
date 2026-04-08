@@ -201,8 +201,8 @@ export const CourseSectionsManager = ({
               return (
                 <Card key={section.id} className="border border-border bg-card/90">
                   <Collapsible open={isExpanded} onOpenChange={() => toggleSection(section.id)}>
-                    <CardHeader className="pb-3">
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <CardHeader className="px-6 py-3">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex-1 space-y-2 min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
                             <GripVertical className="h-4 w-4 text-muted-foreground" />

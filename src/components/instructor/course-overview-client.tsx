@@ -623,10 +623,10 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
               return (
                 <Card key={section.id}>
                   {/* Section header */}
-                  <CardHeader className="pb-0 pt-4">
+                  <CardHeader className="px-6 py-3">
                     <div className="flex items-center gap-2">
                       {/* Move up/down */}
-                      <div className="flex flex-col">
+                      <div className="flex shrink-0 flex-col justify-center">
                         <button
                           type="button"
                           disabled={si === 0 || isPending}
