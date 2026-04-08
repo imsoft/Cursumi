@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
 import { AdminShell } from "@/components/layouts/admin-shell";
-import { getUserRole } from "@/lib/user-service";
+import { getUserBasicInfo } from "@/lib/user-service";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -21,8 +21,11 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     }
 
     let role: string;
+    let userImage: string | null;
     try {
-      role = await getUserRole(session.user.id);
+      const info = await getUserBasicInfo(session.user.id);
+      role = info.role;
+      userImage = info.image;
     } catch {
       notFound();
     }
@@ -38,7 +41,6 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         .join("")
         .toUpperCase()
         .slice(0, 2) || "AD";
-    const userImage = (session.user as { image?: string | null }).image ?? null;
 
     return (
       <AdminShell userName={userName} userInitials={userInitials} userImage={userImage}>

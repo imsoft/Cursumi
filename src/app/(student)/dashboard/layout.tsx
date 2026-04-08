@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getCachedSession } from "@/lib/session";
-import { getUserRole } from "@/lib/user-service";
+import { getUserBasicInfo } from "@/lib/user-service";
 import { StudentShell } from "@/components/layouts/student-shell";
 import { prisma } from "@/lib/prisma";
 
@@ -26,8 +26,8 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
     notFound();
   }
 
-  const [role, orgMembership] = await Promise.all([
-    getUserRole(session.user.id),
+  const [{ role, image: userImage }, orgMembership] = await Promise.all([
+    getUserBasicInfo(session.user.id),
     prisma.orgMember.findFirst({
       where: { userId: session.user.id },
       select: { id: true },
@@ -44,7 +44,6 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
       .join("")
       .toUpperCase()
       .slice(0, 2) || "U";
-  const userImage = (session.user as { image?: string | null }).image ?? null;
 
   return (
     <StudentShell userName={userName} userInitials={userInitials} userImage={userImage} hasOrg={!!orgMembership}>

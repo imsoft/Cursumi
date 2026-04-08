@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
 import { getOrgForUser } from "@/lib/org-service";
+import { getUserBasicInfo } from "@/lib/user-service";
 import { BusinessShell } from "@/components/layouts/business-shell";
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export default async function BusinessDashboardLayout({
       notFound();
     }
 
-    const result = await getOrgForUser(session.user.id);
+    const [result, { image: userImage }] = await Promise.all([
+      getOrgForUser(session.user.id),
+      getUserBasicInfo(session.user.id),
+    ]);
     if (!result) {
       notFound();
     }
@@ -40,7 +44,6 @@ export default async function BusinessDashboardLayout({
         .join("")
         .toUpperCase()
         .slice(0, 2) || "BI";
-    const userImage = (session.user as { image?: string | null }).image ?? null;
 
     return (
       <BusinessShell
