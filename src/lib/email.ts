@@ -6,14 +6,22 @@ const FROM = () => process.env.RESEND_FROM_EMAIL || "Cursumi <onboarding@resend.
 const LOGO_URL = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com"}/logos/cursumi.svg`;
 const SITE_URL = () => process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com";
 
+/**
+ * Colores marca en HTML (coinciden con el logo `cursumi.svg` y el tema --primary).
+ * Evitar el antiguo índigo #667eea / #764ba2, que no es el violeta de la plataforma.
+ */
+const EMAIL_BRAND_GRADIENT =
+  "linear-gradient(135deg,#4300d0 0%,#6d28d9 50%,#a400e3 100%)";
+const EMAIL_BRAND_ACCENT = "#6d28d9";
+
 function emailWrapper(title: string, body: string): string {
   return `<!DOCTYPE html>
 <html>
   <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title}</title></head>
   <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:0 auto;padding:20px;background-color:#f5f5f5;">
-    <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:30px;text-align:center;border-radius:10px 10px 0 0;">
-      <a href="${SITE_URL()}" style="text-decoration:none;">
-        <img src="${LOGO_URL()}" alt="Cursumi" width="140" height="40" style="display:inline-block;margin-bottom:16px;" />
+    <div style="background:${EMAIL_BRAND_GRADIENT};padding:30px;text-align:center;border-radius:10px 10px 0 0;">
+      <a href="${SITE_URL()}" style="text-decoration:none;display:inline-block;line-height:0;">
+        <img src="${LOGO_URL()}" alt="Cursumi" width="64" height="64" style="display:block;margin:0 auto 16px;width:64px;height:64px;object-fit:contain;border:0;" />
       </a>
       <h1 style="color:white;margin:0;font-size:24px;font-weight:700;">${title}</h1>
     </div>
@@ -21,7 +29,7 @@ function emailWrapper(title: string, body: string): string {
       ${body}
       <hr style="border:none;border-top:1px solid #e5e7eb;margin:30px 0;">
       <div style="text-align:center;">
-        <a href="${SITE_URL()}" style="color:#667eea;text-decoration:none;font-size:13px;font-weight:600;">cursumi.com</a>
+        <a href="${SITE_URL()}" style="color:${EMAIL_BRAND_ACCENT};text-decoration:none;font-size:13px;font-weight:600;">cursumi.com</a>
         <p style="font-size:12px;color:#9ca3af;margin:8px 0 0;">© ${new Date().getFullYear()} Cursumi. Todos los derechos reservados.</p>
       </div>
     </div>
@@ -57,7 +65,7 @@ export async function sendPasswordResetEmail({
       Recibimos una solicitud para restablecer la contraseña de tu cuenta en Cursumi. Si fuiste tú, haz clic en el siguiente botón:
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${resetLink}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${resetLink}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Restablecer contraseña
       </a>
     </div>
@@ -104,7 +112,7 @@ export async function sendVerificationEmail({
       Gracias por registrarte en Cursumi. Para completar tu registro, verifica tu correo electrónico:
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${verificationLink}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${verificationLink}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Verificar correo electrónico
       </a>
     </div>
@@ -155,7 +163,7 @@ export async function sendEnrollmentEmail({ to, name, courseTitle, courseUrl }: 
       Tu inscripcion a <strong>${courseTitle}</strong> ha sido confirmada. Ya puedes comenzar a aprender!
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${courseUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${courseUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Ir al curso
       </a>
     </div>
@@ -187,7 +195,7 @@ export async function sendCertificateEmail({ to, name, courseTitle, certificateU
       Felicidades! Has completado <strong>${courseTitle}</strong> y tu certificado esta listo.
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${certificateUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${certificateUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Ver mi certificado
       </a>
     </div>
@@ -235,18 +243,18 @@ export async function sendLearningReflectionEmail({
     <p style="font-size:16px;margin-bottom:20px;">
       Has terminado <strong>${safeTitle}</strong>. Nos encantaría saber qué te llevaste.
     </p>
-    <p style="font-size:18px;font-weight:600;color:#4f46e5;margin-bottom:16px;">¿Qué aprendiste?</p>
+    <p style="font-size:18px;font-weight:600;color:${EMAIL_BRAND_ACCENT};margin-bottom:16px;">¿Qué aprendiste?</p>
     <p style="font-size:15px;color:#4b5563;margin-bottom:24px;">
       Tómate un minuto para escribirlo. Tu respuesta puede aparecer en la página pública del curso para ayudar a otras personas a decidirse (solo mostraremos tu nombre de pila).
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${respondUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${respondUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Contar qué aprendí
       </a>
     </div>
     <p style="font-size:13px;color:#6b7280;margin-bottom:8px;">También puedes ver la ficha del curso aquí:</p>
     <p style="font-size:12px;word-break:break-all;background:#f9fafb;padding:10px;border-radius:4px;">
-      <a href="${coursePublicUrl}" style="color:#667eea;">${esc(coursePublicUrl)}</a>
+      <a href="${coursePublicUrl}" style="color:${EMAIL_BRAND_ACCENT};">${esc(coursePublicUrl)}</a>
     </p>`;
 
   const { error } = await resend.emails.send({
@@ -278,7 +286,7 @@ export async function sendProgressReminderEmail({ to, name, courseTitle, progres
       Hace 7 dias que no entras a <strong>${courseTitle}</strong>. Ya llevas el ${progress}% completado, no te rindas!
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${courseUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${courseUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Continuar aprendiendo
       </a>
     </div>
@@ -324,7 +332,7 @@ export async function sendProfileReminderEmail({ to, name, percent, missingField
       ${fieldsList}
     </ul>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${profileUrl}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${profileUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Completar mi perfil
       </a>
     </div>
@@ -365,7 +373,7 @@ export async function sendOrgInviteEmail({ to, orgName, inviterName, inviteLink 
       La invitación expira en 7 días.
     </p>
     <div style="text-align:center;margin:30px 0;">
-      <a href="${inviteLink}" style="display:inline-block;background:#667eea;color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+      <a href="${inviteLink}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Aceptar invitación
       </a>
     </div>
@@ -407,7 +415,7 @@ export async function sendContactEmail({ name, email, subject, reason, message }
   const body = `
     <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
       <tr><td style="padding:8px 12px;font-weight:600;color:#374151;width:100px;">Nombre</td><td style="padding:8px 12px;">${name}</td></tr>
-      <tr style="background:#f9fafb;"><td style="padding:8px 12px;font-weight:600;color:#374151;">Correo</td><td style="padding:8px 12px;"><a href="mailto:${email}" style="color:#667eea;">${email}</a></td></tr>
+      <tr style="background:#f9fafb;"><td style="padding:8px 12px;font-weight:600;color:#374151;">Correo</td><td style="padding:8px 12px;"><a href="mailto:${email}" style="color:${EMAIL_BRAND_ACCENT};">${email}</a></td></tr>
       <tr><td style="padding:8px 12px;font-weight:600;color:#374151;">Motivo</td><td style="padding:8px 12px;">${reason}</td></tr>
       <tr style="background:#f9fafb;"><td style="padding:8px 12px;font-weight:600;color:#374151;">Asunto</td><td style="padding:8px 12px;">${subject}</td></tr>
     </table>
