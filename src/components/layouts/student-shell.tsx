@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   SidebarProvider,
   SidebarInset,
@@ -81,13 +82,18 @@ export function StudentShell({
 }: StudentShellProps) {
   const pathname = usePathname();
   const pageTitle = pageTitleProp ?? getPageTitle(pathname, userName);
+  /** Vista detalle de certificado: al imprimir / guardar PDF se ocultan sidebar y header (globals.css). */
+  const isCertificatePrintPage =
+    pathname != null && /^\/dashboard\/certificates\/[^/]+$/.test(pathname);
 
   const navItems = hasOrg
     ? [...studentNavItems.slice(0, 3), { title: "Materiales", href: "/dashboard/org-materials", icon: FileText }, ...studentNavItems.slice(3)]
     : studentNavItems;
 
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      className={cn(isCertificatePrintPage && "print-certificate-layout")}
+    >
       <AppSidebar navItems={navItems} title="Cursumi" />
       <SidebarInset>
         <DashboardHeader
@@ -95,7 +101,12 @@ export function StudentShell({
           profileHref="/dashboard/account?tab=profile"
           user={{ name: userName, initials: userInitials, imageUrl: userImage }}
         />
-        <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
+        <div
+          className={cn(
+            "flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8",
+            isCertificatePrintPage && "print:p-0 print:gap-0",
+          )}
+        >
           <div className="flex w-full flex-1 flex-col gap-6">
             {children}
           </div>

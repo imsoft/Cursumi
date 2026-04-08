@@ -134,15 +134,15 @@
 .rich-text-content strong, .rich-text-content b { @apply font-bold; }
 .rich-text-content br { @apply block; }
 
-/* Print: solo mostrar el certificado en una sola página horizontal */
+/* Print: certificado (misma línea visual que en pantalla; landscape) */
 @media print {
   @page {
-    margin: 8mm 10mm;
+    margin: 10mm 12mm;
     size: landscape;
   }
 
-  /* Resetear todo el documento */
-  html, body {
+  html,
+  body {
     margin: 0 !important;
     padding: 0 !important;
     height: auto !important;
@@ -150,12 +150,15 @@
     background: white !important;
   }
 
+  .print\:hidden {
+    display: none !important;
+  }
+
   /*
-   * Esconder todo el contenido excepto el certificado.
-   * El certificado usa position:fixed, así que solo necesitamos
-   * que el body no genere altura extra (páginas vacías).
+   * Rutas que no son el detalle del certificado: ocultar el layout completo
+   * y dejar solo el bloque fijo del certificado (compat. otras páginas).
    */
-  body > * {
+  body:not(:has(.print-certificate-layout)) > * {
     height: 0 !important;
     overflow: hidden !important;
     margin: 0 !important;
@@ -163,11 +166,28 @@
     border: none !important;
   }
 
-  .print\:hidden {
+  /* Detalle certificado: no colapsar el root; el shell oculta sidebar/header abajo */
+  body:has(.print-certificate-layout) > * {
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-certificate-layout [data-slot="sidebar"],
+  .print-certificate-layout [data-slot="sidebar-gap"] {
+    display: none !important;
+  }
+  .print-certificate-layout [data-slot="sidebar-inset"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .print-certificate-layout [data-slot="sidebar-inset"] > header {
     display: none !important;
   }
 
-  /* Forzar tema claro en el certificado para impresión */
+  /* Tema claro en el certificado (coincide con :root claro) */
   [data-certificate],
   [data-certificate] * {
     --foreground: oklch(0.141 0.005 285.823);
@@ -181,22 +201,24 @@
     color: oklch(0.141 0.005 285.823);
   }
 
-  /* Certificado: forzar que ocupe exactamente una página */
+  /*
+   * Estilo común impresión ≈ pantalla (degradado, borde, sombra).
+   * Posición: en /dashboard/certificates/:id va en flujo; en admin preview u otras rutas sigue fixed sobre layout colapsado.
+   */
   [data-certificate] {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
-    margin: 0 !important;
     padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    background: white !important;
+    border: 2px solid oklch(0.541 0.281 293.009 / 0.22) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: 0 25px 50px -12px oklch(0.35 0.12 293 / 0.14) !important;
+    background: linear-gradient(
+      to bottom right,
+      oklch(1 0 0),
+      oklch(0.97 0.028 293)
+    ) !important;
     overflow: visible !important;
     page-break-inside: avoid;
     page-break-after: avoid;
@@ -204,60 +226,99 @@
     print-color-adjust: exact;
   }
 
-  /* Relleno interior compacto para caber en una hoja */
-  [data-certificate] > div {
-    padding: 0.6cm 1cm !important;
+  .print-certificate-layout [data-certificate] {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin: 0 auto !important;
   }
 
-  /* Reducir espaciado vertical entre secciones */
+  body:not(:has(.print-certificate-layout)) [data-certificate] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+  }
+
+  [data-certificate] > div {
+    padding: 0.85cm 1.15cm !important;
+  }
+
   [data-certificate] .space-y-8 > * + *,
   [data-certificate] .space-y-10 > * + *,
   [data-certificate] .md\:space-y-10 > * + * {
-    margin-top: 0.55rem !important;
+    margin-top: 0.75rem !important;
   }
   [data-certificate] .space-y-4 > * + * {
-    margin-top: 0.3rem !important;
+    margin-top: 0.45rem !important;
   }
 
-  /* Instructor + fecha: siempre dos columnas */
   [data-certificate] [data-certificate-meta] {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 0.75rem !important;
-    padding-top: 0.35rem !important;
+    gap: 1rem !important;
+    padding-top: 0.5rem !important;
   }
 
   [data-certificate] .flex {
     display: flex !important;
   }
 
-  /* Tipografía compacta */
-  [data-certificate] h1 { font-size: 1.2rem !important; line-height: 1.2 !important; margin-bottom: 0.15rem !important; }
-  [data-certificate] h2 { font-size: 1.5rem !important; line-height: 1.15 !important; }
-  [data-certificate] h3 { font-size: 1.1rem !important; line-height: 1.2 !important; }
-  [data-certificate] p { font-size: 0.8rem !important; }
-  [data-certificate] .text-lg { font-size: 0.85rem !important; }
-  [data-certificate] .text-xs { font-size: 0.65rem !important; }
-  [data-certificate] .text-sm { font-size: 0.7rem !important; }
+  /* Tipografía más cercana a pantalla (antes se reducía demasiado) */
+  [data-certificate] h1 {
+    font-size: 1.65rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.25rem !important;
+  }
+  [data-certificate] h2 {
+    font-size: 2.1rem !important;
+    line-height: 1.15 !important;
+  }
+  [data-certificate] h3 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+  }
+  [data-certificate] p {
+    font-size: 0.88rem !important;
+  }
+  [data-certificate] .text-lg {
+    font-size: 1rem !important;
+  }
+  [data-certificate] .text-xs {
+    font-size: 0.72rem !important;
+  }
+  [data-certificate] .text-sm {
+    font-size: 0.8rem !important;
+  }
 
-  /* Secciones con bordes: menos padding */
-  [data-certificate] .py-6 { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
-  [data-certificate] .pt-6 { padding-top: 0.35rem !important; }
-  [data-certificate] .mt-6 { margin-top: 0.35rem !important; }
+  [data-certificate] .py-6 {
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+  }
+  [data-certificate] .pt-6 {
+    padding-top: 0.5rem !important;
+  }
+  [data-certificate] .mt-6 {
+    margin-top: 0.5rem !important;
+  }
 
-  /* Logo más pequeño */
-  [data-certificate] img.h-12 { height: 2rem !important; }
+  [data-certificate] img.h-12 {
+    height: 2.85rem !important;
+  }
 
-  /* Firmas: respetar tamaño inline, reducir proporcionalmente para print */
   [data-certificate] [data-signature] {
     max-height: inherit !important;
   }
 
-  /* Badges compactos */
-  [data-certificate] .rounded-md { padding: 0.1rem 0.5rem !important; font-size: 0.65rem !important; }
+  [data-certificate] .rounded-md {
+    padding: 0.2rem 0.55rem !important;
+    font-size: 0.72rem !important;
+  }
 
-  /* Forzar colores en impresión */
-  [data-certificate] * {
+  [data-certificate] *,
+  [data-certificate] {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
