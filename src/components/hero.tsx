@@ -88,7 +88,7 @@ export const Hero = ({ stats }: HeroProps) => {
             <>
               <div>
                 <div className="text-2xl font-bold text-foreground">
-                  {stats.studentsCount.toLocaleString()}+
+                  {stats.studentsCount.toLocaleString()}
                 </div>
                 <div>Estudiantes</div>
               </div>
@@ -99,7 +99,7 @@ export const Hero = ({ stats }: HeroProps) => {
             <>
               <div>
                 <div className="text-2xl font-bold text-foreground">
-                  {stats.instructorsCount}+
+                  {stats.instructorsCount.toLocaleString()}
                 </div>
                 <div>Instructores</div>
               </div>
