@@ -130,6 +130,55 @@ export async function getStudentsProgressForCourse(courseId: string) {
   return getCourseStudentsProgress(courseId);
 }
 
+export type InstructorCourseReviewRow = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  approved: boolean;
+  createdAt: Date;
+  user: { name: string | null };
+};
+
+/** Reseñas del curso (incluye pendientes de moderación) para el instructor titular. */
+export async function getInstructorCourseReviews(courseId: string): Promise<{
+  reviews: InstructorCourseReviewRow[];
+  averageApproved: number;
+  countApproved: number;
+  countPending: number;
+}> {
+  const session = await requireSession();
+  const course = await getCourseDetail(courseId);
+  if (!course || course.instructorId !== session.user.id) {
+    throw new Error("No autorizado");
+  }
+
+  const reviews = await prisma.review.findMany({
+    where: { courseId },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      approved: true,
+      createdAt: true,
+      user: { select: { name: true } },
+    },
+  });
+
+  const approved = reviews.filter((r) => r.approved);
+  const avg =
+    approved.length > 0
+      ? approved.reduce((acc, r) => acc + r.rating, 0) / approved.length
+      : 0;
+
+  return {
+    reviews,
+    averageApproved: Math.round(avg * 10) / 10,
+    countApproved: approved.length,
+    countPending: reviews.length - approved.length,
+  };
+}
+
 export async function getPublishedCourseDetail(courseId: string) {
   return getPublishedCourse(courseId);
 }
