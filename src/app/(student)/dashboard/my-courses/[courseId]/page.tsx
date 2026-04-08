@@ -35,7 +35,7 @@ import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { ReviewSection } from "@/components/student/review-section";
 import { AnonymousQuestionsPanel } from "@/components/student/anonymous-questions-panel";
-import { recalculateProgress } from "@/app/actions/progress-actions";
+import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 import { listSectionGateUnitsForUi } from "@/lib/gate-lesson-content";
 import type { StudentCourseDetail } from "@/lib/course-service";
 
@@ -110,7 +110,7 @@ export default async function MyCourseDetailPage({
   // Reparar certificado faltante si el progreso ya es 100% (p. ej. estado previo inconsistente)
   if (session && enrollmentDetail.progress === 100 && !certificate) {
     try {
-      await recalculateProgress(enrollmentDetail.id, courseId);
+      await recalculateEnrollmentProgress(enrollmentDetail.id, courseId);
       certificate = await prisma.certificate.findFirst({
         where: { courseId, userId: session.user.id },
         select: { id: true, type: true },

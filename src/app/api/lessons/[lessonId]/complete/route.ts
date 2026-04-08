@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
-import { recalculateProgress } from "@/app/actions/progress-actions";
+import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 
 export async function POST(req: NextRequest, context: { params: Promise<{ lessonId: string }> }) {
   try {
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ lesson
     });
 
     // Recalcular progreso (marca completado y genera certificado si llega a 100%)
-    const progress = await recalculateProgress(enrollment.id, courseId);
+    const progress = await recalculateEnrollmentProgress(enrollment.id, courseId);
 
     const totalLessons = await prisma.lesson.count({
       where: { section: { courseId } },

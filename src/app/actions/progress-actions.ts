@@ -3,8 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { sendLearningReflectionInviteIfNeeded } from "@/lib/learning-reflection-invite";
-import { normalizeSectionActivities } from "@/lib/section-activities";
+import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 
 async function requireSession() {
   const session = await auth.api.getSession({
@@ -18,113 +17,19 @@ async function requireSession() {
 
 /**
  * Recalcula el progreso del enrollment contando lecciones, gates de sección y examen final.
- * Puede llamarse desde cualquier endpoint que afecte el progreso.
- * Si el progreso llega al 100%, marca el enrollment como completado y genera el certificado.
+ * Solo para el estudiante dueño del enrollment (p. ej. desde el cliente).
+ * Las rutas API deben usar `recalculateEnrollmentProgress` en lib tras validar sesión.
  */
 export async function recalculateProgress(enrollmentId: string, courseId: string) {
-  await requireSession();
-  const [totalLessons, completedLessons, sections, gateSubmissions, course, examSubmission, enrollment] =
-    await Promise.all([
-      prisma.lesson.count({ where: { section: { courseId } } }),
-      prisma.lessonProgress.count({ where: { enrollmentId } }),
-      prisma.courseSection.findMany({
-        where: { courseId },
-        select: { id: true, quiz: true, minigame: true, activities: true },
-      }),
-      prisma.sectionQuizSubmission.findMany({
-        where: { enrollmentId, passed: true },
-        select: { sectionId: true, activityId: true },
-      }),
-      prisma.course.findUnique({
-        where: { id: courseId },
-        select: { finalExam: true, title: true },
-      }),
-      prisma.examSubmission.findUnique({
-        where: { enrollmentId },
-        select: { passed: true },
-      }),
-      prisma.enrollment.findUnique({
-        where: { id: enrollmentId },
-        select: { studentId: true, status: true },
-      }),
-    ]);
-
-  const passedGateKeys = new Set(gateSubmissions.map((s) => `${s.sectionId}\t${s.activityId}`));
-
-  let totalGateUnits = 0;
-  let completedGateUnits = 0;
-  for (const sec of sections) {
-    const acts = normalizeSectionActivities(sec);
-    for (const act of acts) {
-      totalGateUnits++;
-      if (passedGateKeys.has(`${sec.id}\t${act.id}`)) {
-        completedGateUnits++;
-      }
-    }
-  }
-
-  const hasFinalExam = !!(
-    course?.finalExam &&
-    (course.finalExam as { questions?: unknown[] }).questions?.length
-  );
-
-  const totalUnits = totalLessons + totalGateUnits + (hasFinalExam ? 1 : 0);
-  // El examen cuenta como completado si fue enviado (aprobado o no).
-  const completedUnits =
-    completedLessons + completedGateUnits + (examSubmission ? 1 : 0);
-
-  const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
-
-  await prisma.enrollment.update({
-    where: { id: enrollmentId },
-    data: { progress },
+  const session = await requireSession();
+  const enrollment = await prisma.enrollment.findFirst({
+    where: { id: enrollmentId, courseId, studentId: session.user.id },
+    select: { id: true },
   });
-
-  // Progreso al 100%: marcar completado y asegurar certificado (también si ya estaba "completed" pero faltaba fila)
-  if (progress === 100 && enrollment) {
-    if (enrollment.status !== "completed") {
-      await prisma.enrollment.update({
-        where: { id: enrollmentId },
-        data: { status: "completed" },
-      });
-    }
-
-    const existingCert = await prisma.certificate.findUnique({
-      where: { enrollmentId },
-    });
-
-    if (!existingCert) {
-      const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-      const certType = examSubmission?.passed ? "accreditation" : "participation";
-      const certificate = await prisma.certificate.create({
-        data: {
-          enrollmentId,
-          userId: enrollment.studentId,
-          courseId,
-          number: certNumber,
-          type: certType,
-        },
-      });
-
-      await prisma.notification.create({
-        data: {
-          userId: enrollment.studentId,
-          type: "certificate",
-          title: certType === "accreditation"
-            ? "Certificado de acreditación"
-            : "Reconocimiento de participación",
-          body: certType === "accreditation"
-            ? `Has completado el curso "${course?.title || ""}". Tu certificado de acreditación ya está disponible.`
-            : `Has completado el curso "${course?.title || ""}". Tu reconocimiento de participación ya está disponible.`,
-          link: `/dashboard/certificates/${certificate.id}`,
-        },
-      });
-    }
-
-    void sendLearningReflectionInviteIfNeeded(enrollmentId);
+  if (!enrollment) {
+    throw new Error("No autorizado");
   }
-
-  return progress;
+  return recalculateEnrollmentProgress(enrollmentId, courseId);
 }
 
 /**
@@ -161,10 +66,15 @@ export async function completeLesson(courseId: string, lessonId: string) {
     },
   });
 
-  const progress = await recalculateProgress(enrollment.id, courseId);
+  const progress = await recalculateEnrollmentProgress(enrollment.id, courseId);
 
   const totalLessons = await prisma.lesson.count({ where: { section: { courseId } } });
-  const completedLessons = await prisma.lessonProgress.count({ where: { enrollmentId: enrollment.id } });
+  const completedLessons = await prisma.lessonProgress.count({
+    where: {
+      enrollmentId: enrollment.id,
+      lesson: { section: { courseId } },
+    },
+  });
 
   return { progress, completedLessons, totalLessons };
 }

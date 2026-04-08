@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-/** Si `activityId` es una lección `section_quiz` / `section_minigame`, marca progreso de lección (sin duplicar unidades en `recalculateProgress`). */
+/** Si `activityId` es una lección `section_quiz` / `section_minigame`, marca progreso de lección (las unidades de cierre legacy siguen en `normalizeSectionActivities`). */
 export async function upsertLessonProgressForGateActivity(args: {
   enrollmentId: string;
   courseId: string;

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCachedSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
-import { recalculateProgress } from "@/app/actions/progress-actions";
+import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 import { upsertLessonProgressForGateActivity } from "@/lib/gate-lesson-progress";
 
 export async function POST(
@@ -57,6 +57,7 @@ export async function POST(
       sectionId,
       activityId,
     });
+    await recalculateEnrollmentProgress(enrollment.id, courseId);
     return NextResponse.json({ passed: true, score: existing.score });
   }
 
@@ -79,7 +80,7 @@ export async function POST(
       sectionId,
       activityId,
     });
-    await recalculateProgress(enrollment.id, courseId);
+    await recalculateEnrollmentProgress(enrollment.id, courseId);
   }
 
   return NextResponse.json({ passed: submission.passed, score: submission.score });

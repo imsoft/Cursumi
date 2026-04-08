@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
 import { sendCertificateEmail } from "@/lib/email";
-import { recalculateProgress } from "@/app/actions/progress-actions";
+import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 
 const bodySchema = z.object({
   answers: z.record(z.string(), z.number()),
@@ -78,7 +78,7 @@ export async function POST(
     });
 
     // Recalcular progreso (genera certificado + notificación + marca completado si llega a 100%)
-    await recalculateProgress(enrollment.id, courseId);
+    await recalculateEnrollmentProgress(enrollment.id, courseId);
 
     // Email de certificado
     const certificate = await prisma.certificate.findUnique({
