@@ -11,7 +11,10 @@ export async function POST(
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { sectionId } = await params;
-  const { courseId } = await req.json();
+  const body = await req.json();
+  const { courseId } = body as { courseId: unknown; activityId?: unknown };
+  const activityId =
+    typeof body.activityId === "string" && body.activityId.length > 0 ? body.activityId : "default";
 
   if (typeof courseId !== "string") {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
@@ -31,16 +34,34 @@ export async function POST(
 
   // Minigames are always marked as passed (no score requirement)
   const existing = await prisma.sectionQuizSubmission.findUnique({
-    where: { enrollmentId_sectionId: { enrollmentId: enrollment.id, sectionId } },
+    where: {
+      enrollmentId_sectionId_activityId: {
+        enrollmentId: enrollment.id,
+        sectionId,
+        activityId,
+      },
+    },
   });
   if (existing?.passed) {
     return NextResponse.json({ passed: true });
   }
 
   await prisma.sectionQuizSubmission.upsert({
-    where: { enrollmentId_sectionId: { enrollmentId: enrollment.id, sectionId } },
+    where: {
+      enrollmentId_sectionId_activityId: {
+        enrollmentId: enrollment.id,
+        sectionId,
+        activityId,
+      },
+    },
     update: { score: 100, passed: true },
-    create: { enrollmentId: enrollment.id, sectionId, score: 100, passed: true },
+    create: {
+      enrollmentId: enrollment.id,
+      sectionId,
+      activityId,
+      score: 100,
+      passed: true,
+    },
   });
 
   await recalculateProgress(enrollment.id, courseId);

@@ -19,25 +19,12 @@ import {
   Menu,
   X,
   Lock,
-  ClipboardCheck,
-  Gamepad2,
 } from "lucide-react";
 // Note: PlayCircle, FileText, HelpCircle, ClipboardList used in lessonTypeIcon below
-import { MemoryGame } from "./minigames/memory-game";
-import { HangmanGame } from "./minigames/hangman-game";
-import { SortGame } from "./minigames/sort-game";
-import { MatchGame } from "./minigames/match-game";
+import type { SectionActivity } from "@/components/instructor/course-types";
 import { LessonSidebar } from "./lesson-sidebar";
 import { CourseNotesSheet } from "./course-notes-sheet";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { fireGrandConfetti } from "@/lib/minigame-confetti";
+import { SectionGatesPanel } from "./section-gates-panel";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
@@ -81,29 +68,10 @@ interface SidebarLesson {
 interface SidebarSection {
   id: string;
   title: string;
-  hasQuiz: boolean;
-  quizPassed: boolean;
-  hasMinigame: boolean;
-  minigamePassed: boolean;
+  gateTotal: number;
+  gatesPassed: number;
   lessons: SidebarLesson[];
 }
-
-interface SectionQuizQuestion {
-  question: string;
-  options: string[];
-  correct: number;
-}
-
-interface SectionQuiz {
-  passingScore: number;
-  questions: SectionQuizQuestion[];
-}
-
-type SectionMinigameData =
-  | { type: "memory"; pairs: { term: string; definition: string }[] }
-  | { type: "hangman"; words: { word: string; hint: string }[] }
-  | { type: "sort"; instruction: string; items: string[] }
-  | { type: "match"; instruction: string; pairs: { left: string; right: string }[] };
 
 interface LessonViewerClientProps {
   lesson: LessonData;
@@ -112,10 +80,8 @@ interface LessonViewerClientProps {
   completedIds: string[];
   prevLesson: { id: string; title: string } | null;
   nextLesson: { id: string; title: string } | null;
-  sectionQuiz: SectionQuiz | null;
-  sectionQuizPassed: boolean;
-  sectionMinigame: SectionMinigameData | null;
-  sectionMinigamePassed: boolean;
+  currentSectionGateActivities: SectionActivity[];
+  sectionGateCompletion: Record<string, boolean>;
   isLastLessonInSection: boolean;
   nextLessonSectionId: string | null;
   currentSectionId: string;
@@ -150,10 +116,8 @@ export function LessonViewerClient({
   completedIds: initialCompleted,
   prevLesson,
   nextLesson,
-  sectionQuiz,
-  sectionQuizPassed: initialSectionQuizPassed,
-  sectionMinigame,
-  sectionMinigamePassed: initialSectionMinigamePassed,
+  currentSectionGateActivities,
+  sectionGateCompletion: initialSectionGateCompletion,
   isLastLessonInSection,
   nextLessonSectionId,
   currentSectionId,
@@ -165,7 +129,13 @@ export function LessonViewerClient({
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
   const [marking, setMarking] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [minigameCelebrateOpen, setMinigameCelebrateOpen] = useState(false);
+  const [gateCompletion, setGateCompletion] = useState<Record<string, boolean>>(
+    () => initialSectionGateCompletion,
+  );
+
+  useEffect(() => {
+    setGateCompletion(initialSectionGateCompletion);
+  }, [lesson.id, initialSectionGateCompletion]);
 
   // Scroll al inicio al entrar a una lección
   useEffect(() => {
@@ -214,15 +184,6 @@ export function LessonViewerClient({
     return { timeLimit: 0, maxAttempts: 0, passingRequired: false, passingScore: 70 };
   }, [lesson.type, lesson.content]);
 
-  // Estado del test de sección
-  const [sectionQuizPassed, setSectionQuizPassed] = useState(initialSectionQuizPassed);
-  const [sectionMinigamePassed, setSectionMinigamePassed] = useState(initialSectionMinigamePassed);
-  const [showSectionQuiz, setShowSectionQuiz] = useState(false);
-  const [sectionQuizAnswers, setSectionQuizAnswers] = useState<Record<number, number>>({});
-  const [sectionQuizSubmitted, setSectionQuizSubmitted] = useState(false);
-  const [sectionQuizScore, setSectionQuizScore] = useState(0);
-  const [sectionQuizSubmitting, setSectionQuizSubmitting] = useState(false);
-
   // Quiz timer
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => {
@@ -263,18 +224,25 @@ export function LessonViewerClient({
 
   const isCompleted = completedIds.has(lesson.id);
 
+  const sectionGatesAllPassed = useMemo(() => {
+    if (currentSectionGateActivities.length === 0) return true;
+    return currentSectionGateActivities.every((a) => gateCompletion[a.id]);
+  }, [currentSectionGateActivities, gateCompletion]);
+
+  const sectionsForSidebar = useMemo(() => {
+    return sections.map((s) => {
+      if (s.id !== currentSectionId) return s;
+      const passed = currentSectionGateActivities.filter((a) => gateCompletion[a.id]).length;
+      return { ...s, gatesPassed: passed };
+    });
+  }, [sections, currentSectionId, currentSectionGateActivities, gateCompletion]);
+
   // ¿El siguiente lesson es en otra sección?
   const nextIsInDifferentSection =
     nextLesson !== null && nextLessonSectionId !== null && nextLessonSectionId !== currentSectionId;
-  // Mostrar quiz/minijuego en la última lección de la sección (aunque sea la última del curso)
-  const sectionQuizRequired =
-    isLastLessonInSection && sectionQuiz !== null && sectionQuiz.questions.length > 0;
-  const sectionMinigameRequired =
-    isLastLessonInSection && sectionMinigame !== null;
-  // Bloquear navegación si falta quiz/minijuego de la sección actual
-  // (aplica tanto si hay siguiente sección como si es la última y hay examen final)
-  const sectionGatePending =
-    (sectionQuizRequired && !sectionQuizPassed) || (sectionMinigameRequired && !sectionMinigamePassed);
+  const sectionGatesRequired =
+    isLastLessonInSection && currentSectionGateActivities.length > 0;
+  const sectionGatePending = sectionGatesRequired && !sectionGatesAllPassed;
   const blockNextNavigation =
     (nextIsInDifferentSection || (nextLesson === null && hasFinalExam)) && sectionGatePending;
 
@@ -392,70 +360,6 @@ export function LessonViewerClient({
   const handleAssignmentSubmit = async () => {
     setAssignmentSaved(true);
     await markComplete();
-  };
-
-  // Lógica del test de sección
-  const computedSectionQuizScore = () => {
-    if (!sectionQuiz) return 0;
-    const correct = sectionQuiz.questions.reduce(
-      (acc, q, i) => acc + (sectionQuizAnswers[i] === q.correct ? 1 : 0),
-      0
-    );
-    return Math.round((correct / sectionQuiz.questions.length) * 100);
-  };
-
-  const handleSectionQuizSubmit = async () => {
-    if (!sectionQuiz) return;
-    setSectionQuizSubmitting(true);
-    const score = computedSectionQuizScore();
-    const passingScore = sectionQuiz.passingScore ?? 70;
-    const passed = score >= passingScore;
-    setSectionQuizScore(score);
-    setSectionQuizSubmitted(true);
-
-    try {
-      await fetch(`/api/sections/${currentSectionId}/quiz/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId, score, passed }),
-      });
-      if (passed) setSectionQuizPassed(true);
-    } finally {
-      setSectionQuizSubmitting(false);
-    }
-  };
-
-  const resetSectionQuiz = () => {
-    setSectionQuizAnswers({});
-    setSectionQuizSubmitted(false);
-    setSectionQuizScore(0);
-  };
-
-  const handleMinigameComplete = async () => {
-    // Feedback inmediato (no esperar al servidor; el canvas debe verse sobre el diálogo)
-    fireGrandConfetti();
-    setMinigameCelebrateOpen(true);
-    try {
-      await fetch(`/api/sections/${currentSectionId}/minigame/complete`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId }),
-      });
-      setSectionMinigamePassed(true);
-    } catch {
-      setSectionMinigamePassed(true);
-    }
-  };
-
-  const handleNextAfterMinigameCelebration = () => {
-    setMinigameCelebrateOpen(false);
-    if (nextLesson) {
-      router.push(`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`);
-    } else if (hasFinalExam) {
-      router.push(`/dashboard/my-courses/${courseId}/exam`);
-    } else {
-      router.push(`/dashboard/my-courses/${courseId}`);
-    }
   };
 
   const handleNext = () => {
@@ -746,219 +650,13 @@ export function LessonViewerClient({
     return null;
   };
 
-  const renderSectionQuiz = () => {
-    if (!sectionQuiz || sectionQuiz.questions.length === 0) return null;
-
-    const passingScore = sectionQuiz.passingScore ?? 70;
-
-    return (
-      <div className="space-y-6 rounded-xl border-2 border-primary/30 bg-primary/5 p-6">
-        <div className="flex items-center gap-3">
-          <ClipboardCheck className="h-6 w-6 text-primary shrink-0" />
-          <div>
-            <h2 className="text-xl font-bold text-foreground">Test de sección</h2>
-            <p className="text-sm text-muted-foreground">
-              Debes aprobar este test ({passingScore}% mínimo) para continuar con la siguiente sección.
-            </p>
-          </div>
-        </div>
-
-        {sectionQuizPassed && (
-          <div className="flex items-center gap-2 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-            <CheckCircle className="h-5 w-5 shrink-0" />
-            <p className="text-sm font-medium">Ya aprobaste este test. Puedes continuar.</p>
-          </div>
-        )}
-
-        {!sectionQuizPassed && !showSectionQuiz && (
-          <Button onClick={() => setShowSectionQuiz(true)}>
-            <ClipboardCheck className="mr-2 h-4 w-4" />
-            Realizar test de sección
-          </Button>
-        )}
-
-        {!sectionQuizPassed && showSectionQuiz && (
-          <div className="space-y-6">
-            {sectionQuiz.questions.map((q, i) => (
-              <div key={i} className="space-y-3">
-                <p className="font-medium text-foreground">
-                  {i + 1}. {stripHtml(q.question)}
-                </p>
-                <div className="space-y-2">
-                  {q.options.map((opt, j) => {
-                    const isSelected = sectionQuizAnswers[i] === j;
-                    const isCorrect = sectionQuizSubmitted && j === q.correct;
-                    const isWrong = sectionQuizSubmitted && isSelected && j !== q.correct;
-                    return (
-                      <button
-                        key={j}
-                        onClick={() =>
-                          !sectionQuizSubmitted &&
-                          setSectionQuizAnswers((prev) => ({ ...prev, [i]: j }))
-                        }
-                        disabled={sectionQuizSubmitted}
-                        className={`w-full rounded-md border px-4 py-2 text-left text-sm transition-colors ${
-                          isCorrect
-                            ? "border-green-500 bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                            : isWrong
-                            ? "border-red-500 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                            : isSelected
-                            ? "border-primary bg-primary/10 text-foreground"
-                            : "border-border bg-background text-foreground hover:bg-muted"
-                        }`}
-                      >
-                        {stripHtml(opt)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-
-            {!sectionQuizSubmitted && (
-              <Button
-                onClick={handleSectionQuizSubmit}
-                disabled={
-                  Object.keys(sectionQuizAnswers).length < sectionQuiz.questions.length ||
-                  sectionQuizSubmitting
-                }
-              >
-                {sectionQuizSubmitting ? "Enviando..." : "Enviar respuestas"}
-              </Button>
-            )}
-
-            {sectionQuizSubmitted && (
-              <div
-                className={`rounded-lg p-4 text-sm font-medium ${
-                  sectionQuizPassed
-                    ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                    : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                }`}
-              >
-                {sectionQuizPassed ? (
-                  <div className="flex flex-col gap-3">
-                    <span>
-                      Aprobado: {sectionQuizScore}%. Puedes continuar con la siguiente sección.
-                    </span>
-                    {nextLesson ? (
-                      <Button size="sm" onClick={handleNext} className="w-fit">
-                        Siguiente lección
-                        <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    ) : hasFinalExam ? (
-                      <Button size="sm" onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)} className="w-fit">
-                        Presentar examen final
-                        <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    ) : null}
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <p>
-                      No aprobado: {sectionQuizScore}%. Necesitas al menos {passingScore}%.
-                    </p>
-                    <button
-                      onClick={resetSectionQuiz}
-                      className="underline underline-offset-2 hover:no-underline"
-                    >
-                      Intentar de nuevo
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const renderSectionMinigame = () => {
-    if (!sectionMinigame) return null;
-    const minigameLabel =
-      sectionMinigame.type === "memory"
-        ? "Memoria"
-        : sectionMinigame.type === "hangman"
-        ? "Ahorcado"
-        : sectionMinigame.type === "match"
-        ? "Conectar columnas"
-        : "Ordenar";
-
-    return (
-      <div className="space-y-6 rounded-xl border-2 border-purple-400/40 bg-purple-50/50 dark:bg-purple-900/10 p-6">
-        <div className="flex items-center gap-3">
-          <Gamepad2 className="h-6 w-6 text-purple-600 dark:text-purple-400 shrink-0" />
-          <div>
-            <h2 className="text-xl font-bold text-foreground">
-              Minijuego: {minigameLabel}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Completa el minijuego para continuar con la siguiente sección.
-            </p>
-          </div>
-        </div>
-
-        {sectionMinigamePassed ? (
-          <div className="flex flex-col gap-3 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 shrink-0" />
-              <p className="text-sm font-medium">¡Minijuego completado! Puedes continuar.</p>
-            </div>
-            {nextLesson ? (
-              <Button size="sm" onClick={handleNext} className="w-fit">
-                Siguiente lección
-                <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
-            ) : hasFinalExam ? (
-              <Button size="sm" onClick={() => router.push(`/dashboard/my-courses/${courseId}/exam`)} className="w-fit">
-                Presentar examen final
-                <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
-            ) : (
-              <Button size="sm" variant="outline" onClick={() => router.push(`/dashboard/my-courses/${courseId}`)} className="w-fit">
-                Volver al curso
-              </Button>
-            )}
-          </div>
-        ) : (
-          <>
-            {sectionMinigame.type === "memory" && (
-              <MemoryGame pairs={sectionMinigame.pairs} onComplete={handleMinigameComplete} />
-            )}
-            {sectionMinigame.type === "hangman" && (
-              <HangmanGame words={sectionMinigame.words} onComplete={handleMinigameComplete} />
-            )}
-            {sectionMinigame.type === "sort" && (
-              <SortGame
-                instruction={sectionMinigame.instruction}
-                items={sectionMinigame.items}
-                onComplete={handleMinigameComplete}
-              />
-            )}
-            {sectionMinigame.type === "match" && (
-              <MatchGame
-                instruction={sectionMinigame.instruction}
-                pairs={sectionMinigame.pairs}
-                onComplete={handleMinigameComplete}
-              />
-            )}
-          </>
-        )}
-      </div>
-    );
-  };
-
   const nextButton = (size: "sm" | "default" = "sm") => {
     if (!nextLesson) return null;
     if (blockNextNavigation) {
-      const label =
-        sectionMinigameRequired && !sectionMinigamePassed
-          ? "Completa el minijuego"
-          : "Aprueba el test de sección";
       return (
         <Button size={size} disabled className="opacity-60">
           <Lock className="mr-1 h-3 w-3" />
-          {label}
+          Completa las actividades de esta sección
         </Button>
       );
     }
@@ -970,31 +668,8 @@ export function LessonViewerClient({
     );
   };
 
-  const nextMinigameCtaLabel = nextLesson
-    ? "Siguiente lección"
-    : hasFinalExam
-    ? "Ir al examen final"
-    : "Volver al curso";
-
   return (
     <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
-      <Dialog open={minigameCelebrateOpen} onOpenChange={setMinigameCelebrateOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>¡Felicitaciones!</DialogTitle>
-            <DialogDescription>
-              Completaste el minijuego de esta sección. Sigue con lo que viene a continuación.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:justify-center">
-            <Button className="min-w-[180px]" onClick={handleNextAfterMinigameCelebration}>
-              {nextMinigameCtaLabel}
-              <ChevronRight className="ml-1 h-4 w-4" />
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       {/* Mobile sidebar toggle */}
       <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-3 md:hidden">
         <button
@@ -1016,12 +691,11 @@ export function LessonViewerClient({
       >
         <LessonSidebar
           courseId={courseId}
-          sections={sections}
+          sections={sectionsForSidebar}
           completedIds={completedIds}
           currentLessonId={lesson.id}
           currentSectionId={currentSectionId}
-          sectionQuizPassed={sectionQuizPassed}
-          sectionMinigamePassed={sectionMinigamePassed}
+          sectionGatesAllPassed={sectionGatesAllPassed}
           onLessonClick={() => setSidebarOpen(false)}
         />
       </aside>
@@ -1070,11 +744,19 @@ export function LessonViewerClient({
             </div>
           )}
 
-          {/* Test de sección — aparece después de completar la última lección de la sección */}
-          {sectionQuizRequired && isCompleted && renderSectionQuiz()}
-
-          {/* Minijuego de sección */}
-          {sectionMinigameRequired && isCompleted && renderSectionMinigame()}
+          {sectionGatesRequired && isCompleted && (
+            <SectionGatesPanel
+              activities={currentSectionGateActivities}
+              initialCompletion={gateCompletion}
+              courseId={courseId}
+              currentSectionId={currentSectionId}
+              nextLesson={nextLesson}
+              hasFinalExam={hasFinalExam}
+              onCompletionChange={(activityId, passed) =>
+                setGateCompletion((prev) => ({ ...prev, [activityId]: passed }))
+              }
+            />
+          )}
 
           {/* Adjuntos y recursos */}
           {((lesson.attachments && lesson.attachments.length > 0) || (lesson.resources && lesson.resources.length > 0)) && (

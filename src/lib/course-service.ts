@@ -1,7 +1,17 @@
 import { prisma } from "./prisma";
 import { Prisma } from "@/generated/prisma";
 import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
-import type { CourseFormData, CourseSection, CourseSessionData } from "@/components/instructor/course-types";
+import type {
+  CourseFormData,
+  CourseSection,
+  CourseSessionData,
+  SectionActivity,
+} from "@/components/instructor/course-types";
+import {
+  countSectionGateActivities,
+  ensureActivityIds,
+  normalizeSectionActivities,
+} from "@/lib/section-activities";
 import { hashJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import type { Course } from "@/components/courses/types";
@@ -11,6 +21,25 @@ import type { StudentCourse, Recommendation } from "@/components/student/types";
  * Recalcula el progreso de TODOS los enrollments de un curso.
  * Se usa cuando el instructor modifica la estructura del curso (agrega/elimina lecciones, secciones, etc.)
  */
+function sectionJsonForPrisma(section: CourseSection): {
+  quiz: Prisma.InputJsonValue | typeof Prisma.JsonNull;
+  minigame: Prisma.InputJsonValue | typeof Prisma.JsonNull;
+  activities: Prisma.InputJsonValue | typeof Prisma.JsonNull;
+} {
+  if (section.activities && section.activities.length > 0) {
+    return {
+      activities: ensureActivityIds(section.activities) as unknown as Prisma.InputJsonValue,
+      quiz: Prisma.JsonNull,
+      minigame: Prisma.JsonNull,
+    };
+  }
+  return {
+    activities: Prisma.JsonNull,
+    quiz: section.quiz ? (section.quiz as Prisma.InputJsonValue) : Prisma.JsonNull,
+    minigame: section.minigame ? (section.minigame as Prisma.InputJsonValue) : Prisma.JsonNull,
+  };
+}
+
 async function recalculateAllEnrollments(courseId: string) {
   const enrollments = await prisma.enrollment.findMany({
     where: { courseId },
@@ -22,7 +51,7 @@ async function recalculateAllEnrollments(courseId: string) {
     prisma.lesson.count({ where: { section: { courseId } } }),
     prisma.courseSection.findMany({
       where: { courseId },
-      select: { id: true, quiz: true, minigame: true },
+      select: { id: true, quiz: true, minigame: true, activities: true },
     }),
     prisma.course.findUnique({
       where: { id: courseId },
@@ -30,24 +59,24 @@ async function recalculateAllEnrollments(courseId: string) {
     }),
   ]);
 
-  const gatedSections = sections.filter(
-    (s) =>
-      (s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length) ||
-      (s.minigame && (s.minigame as { type?: string }).type),
-  ).length;
+  let totalGateUnits = 0;
+  for (const sec of sections) {
+    totalGateUnits += normalizeSectionActivities(sec).length;
+  }
 
   const hasFinalExam = !!(
     course?.finalExam &&
     (course.finalExam as { questions?: unknown[] }).questions?.length
   );
 
-  const totalUnits = totalLessons + gatedSections + (hasFinalExam ? 1 : 0);
+  const totalUnits = totalLessons + totalGateUnits + (hasFinalExam ? 1 : 0);
 
   for (const enrollment of enrollments) {
-    const [completedLessons, passedGates, examSubmission] = await Promise.all([
+    const [completedLessons, gateSubmissions, examSubmission] = await Promise.all([
       prisma.lessonProgress.count({ where: { enrollmentId: enrollment.id } }),
-      prisma.sectionQuizSubmission.count({
+      prisma.sectionQuizSubmission.findMany({
         where: { enrollmentId: enrollment.id, passed: true },
+        select: { sectionId: true, activityId: true },
       }),
       prisma.examSubmission.findUnique({
         where: { enrollmentId: enrollment.id },
@@ -55,8 +84,18 @@ async function recalculateAllEnrollments(courseId: string) {
       }),
     ]);
 
+    const passedGateKeys = new Set(gateSubmissions.map((s) => `${s.sectionId}\t${s.activityId}`));
+    let completedGateUnits = 0;
+    for (const sec of sections) {
+      for (const act of normalizeSectionActivities(sec)) {
+        if (passedGateKeys.has(`${sec.id}\t${act.id}`)) {
+          completedGateUnits++;
+        }
+      }
+    }
+
     const completedUnits =
-      completedLessons + passedGates + (examSubmission?.passed ? 1 : 0);
+      completedLessons + completedGateUnits + (examSubmission ? 1 : 0);
     const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
 
     await prisma.enrollment.update({
@@ -208,8 +247,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
               title: section.title,
               description: section.description,
               order: section.order ?? index + 1,
-              quiz: section.quiz ? (section.quiz as object) : undefined,
-              minigame: section.minigame ? (section.minigame as object) : undefined,
+              ...sectionJsonForPrisma(section),
               lessons: {
                 create: section.lessons?.map((lesson, lessonIndex) => ({
                   title: lesson.title,
@@ -309,8 +347,7 @@ export async function updateCourse(
           title: sectionPayload.title,
           description: sectionPayload.description ?? null,
           order: sectionPayload.order,
-          quiz: section.quiz ? (section.quiz as object) : Prisma.JsonNull,
-          minigame: section.minigame ? (section.minigame as object) : Prisma.JsonNull,
+          ...sectionJsonForPrisma(section),
         },
       });
 
@@ -358,8 +395,7 @@ export async function updateCourse(
           title: sectionPayload.title,
           description: sectionPayload.description ?? null,
           order: sectionPayload.order,
-          quiz: section.quiz ? (section.quiz as object) : undefined,
-          minigame: section.minigame ? (section.minigame as object) : undefined,
+          ...sectionJsonForPrisma(section),
           lessons: {
             create: sectionPayload.lessons.map((lesson, lessonIndex) => ({
               title: lesson.title,
@@ -424,7 +460,13 @@ export async function deleteSection(sectionId: string) {
 
 export async function updateSectionData(
   sectionId: string,
-  data: { title?: string; description?: string; quiz?: object | null; minigame?: object | null }
+  data: {
+    title?: string;
+    description?: string;
+    quiz?: object | null;
+    minigame?: object | null;
+    activities?: object | null;
+  }
 ) {
   await prisma.courseSection.update({
     where: { id: sectionId },
@@ -433,6 +475,7 @@ export async function updateSectionData(
       ...(data.description !== undefined && { description: data.description }),
       ...(data.quiz !== undefined && { quiz: data.quiz ?? Prisma.JsonNull }),
       ...(data.minigame !== undefined && { minigame: data.minigame ?? Prisma.JsonNull }),
+      ...(data.activities !== undefined && { activities: data.activities ?? Prisma.JsonNull }),
     },
   });
 }
@@ -838,7 +881,7 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
       },
       lessonProgress: { select: { lessonId: true } },
       examSubmission: { select: { passed: true, score: true } },
-      sectionQuizSubmissions: { select: { sectionId: true, passed: true } },
+      sectionQuizSubmissions: { select: { sectionId: true, activityId: true, passed: true } },
       session: {
         select: {
           id: true,
@@ -897,7 +940,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     where: { courseId_studentId: { courseId, studentId } },
     include: {
       lessonProgress: { select: { lessonId: true, score: true, answers: true } },
-      sectionQuizSubmissions: { select: { sectionId: true, passed: true } },
+      sectionQuizSubmissions: { select: { sectionId: true, activityId: true, passed: true } },
     },
   });
   if (!enrollment) return null;
@@ -914,6 +957,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
             order: true,
             quiz: true,
             minigame: true,
+            activities: true,
             courseId: true,
           },
         },
@@ -928,6 +972,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
         order: true,
         quiz: true,
         minigame: true,
+        activities: true,
         lessons: {
           orderBy: { order: "asc" },
           select: { id: true, title: true, type: true, duration: true, order: true },
@@ -948,9 +993,18 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   );
 
   const completedIds = new Set(enrollment.lessonProgress.map((lp) => lp.lessonId));
-  const passedSectionIds = new Set(
-    enrollment.sectionQuizSubmissions.filter((s) => s.passed).map((s) => s.sectionId)
-  );
+
+  const passedSectionIds = new Set<string>();
+  for (const sec of courseSections) {
+    const acts = normalizeSectionActivities(sec);
+    if (acts.length === 0) continue;
+    const allPassed = acts.every((act) =>
+      enrollment.sectionQuizSubmissions.some(
+        (s) => s.sectionId === sec.id && s.activityId === act.id && s.passed,
+      ),
+    );
+    if (allPassed) passedSectionIds.add(sec.id);
+  }
 
   // Flatten all lessons in order to find prev/next
   const allLessons = courseSections.flatMap((s) => s.lessons);
@@ -963,28 +1017,21 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   const sectionLessons = (currentSection?.lessons ?? []).slice().sort((a, b) => a.order - b.order);
   const isLastLessonInSection = sectionLessons[sectionLessons.length - 1]?.id === lessonId;
 
-  // Section quiz — validar estructura antes de exponer al cliente
-  const rawQuiz = lesson.section.quiz as Record<string, unknown> | null;
-  const sectionQuiz =
-    rawQuiz &&
-    typeof rawQuiz.passingScore === "number" &&
-    Array.isArray(rawQuiz.questions) &&
-    rawQuiz.questions.length > 0
-      ? (rawQuiz as { passingScore: number; questions: { question: string; options: string[]; correct: number }[] })
-      : null;
-  const sectionQuizPassed = passedSectionIds.has(lesson.sectionId);
+  const currentSectionGateActivities: SectionActivity[] = currentSection
+    ? normalizeSectionActivities(currentSection)
+    : [];
 
-  // Section minigame — validar que tenga type reconocido
-  const rawMinigame = lesson.section.minigame as Record<string, unknown> | null;
-  const sectionMinigame =
-    rawMinigame && ["memory", "hangman", "sort", "match"].includes(rawMinigame.type as string)
-      ? (rawMinigame as
-          | { type: "memory"; pairs: { term: string; definition: string }[] }
-          | { type: "hangman"; words: { word: string; hint: string }[] }
-          | { type: "sort"; instruction: string; items: string[] }
-          | { type: "match"; instruction: string; pairs: { left: string; right: string }[] })
-      : null;
-  const sectionMinigamePassed = passedSectionIds.has(lesson.sectionId);
+  const sectionGateCompletion: Record<string, boolean> = {};
+  for (const act of currentSectionGateActivities) {
+    sectionGateCompletion[act.id] = enrollment.sectionQuizSubmissions.some(
+      (s) =>
+        s.sectionId === lesson.sectionId && s.activityId === act.id && s.passed,
+    );
+  }
+
+  const sectionGatesAllPassed =
+    currentSectionGateActivities.length === 0 ||
+    currentSectionGateActivities.every((a) => sectionGateCompletion[a.id]);
 
   // Next lesson's section ID (to detect cross-section navigation)
   const nextLessonSectionId = nextLesson
@@ -996,6 +1043,28 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
   const savedQuizScore = currentLessonProgress?.score ?? null;
   const savedQuizAnswers = currentLessonProgress?.answers ?? null;
 
+  const sidebarSections = courseSections.map((s) => {
+    const acts = normalizeSectionActivities(s);
+    const gatesPassed = acts.filter((a) =>
+      enrollment.sectionQuizSubmissions.some(
+        (ss) => ss.sectionId === s.id && ss.activityId === a.id && ss.passed,
+      ),
+    ).length;
+    return {
+      id: s.id,
+      title: s.title,
+      gateTotal: acts.length,
+      gatesPassed,
+      lessons: s.lessons.map((l) => ({
+        id: l.id,
+        title: l.title,
+        type: l.type,
+        duration: l.duration ?? null,
+        order: l.order,
+      })),
+    };
+  });
+
   return {
     lesson,
     enrollment,
@@ -1003,11 +1072,10 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     prevLesson,
     nextLesson,
     courseId,
-    sections: courseSections,
-    sectionQuiz,
-    sectionQuizPassed,
-    sectionMinigame,
-    sectionMinigamePassed,
+    sidebarSections,
+    currentSectionGateActivities,
+    sectionGateCompletion,
+    sectionGatesAllPassed,
     isLastLessonInSection,
     passedSectionIds,
     nextLessonSectionId,
@@ -1128,7 +1196,7 @@ export type StudentProgressDetail = {
   sessionLabel?: string;
   completedLessonIds: string[];
   lessonScores: Record<string, number>; // lessonId → score
-  sectionQuizzes: { sectionId: string; score: number; passed: boolean }[];
+  sectionQuizzes: { sectionId: string; activityId: string; score: number; passed: boolean }[];
   examSubmission: { score: number; passed: boolean; submittedAt: string } | null;
   certificateType: string | null;
 };
@@ -1157,6 +1225,8 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
             id: true,
             title: true,
             quiz: true,
+            minigame: true,
+            activities: true,
             lessons: {
               orderBy: { order: "asc" },
               select: { id: true, title: true, type: true },
@@ -1171,7 +1241,9 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
         student: { select: { id: true, name: true, email: true } },
         session: { select: { city: true, state: true, date: true } },
         lessonProgress: { select: { lessonId: true, score: true } },
-        sectionQuizSubmissions: { select: { sectionId: true, score: true, passed: true } },
+        sectionQuizSubmissions: {
+          select: { sectionId: true, activityId: true, score: true, passed: true },
+        },
         examSubmission: { select: { score: true, passed: true, submittedAt: true } },
         certificate: { select: { type: true } },
       },
@@ -1187,7 +1259,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
   const sections = (course?.sections ?? []).map((s) => ({
     id: s.id,
     title: s.title,
-    hasQuiz: !!(s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length),
+    hasQuiz: countSectionGateActivities(s) > 0,
     lessons: s.lessons.map((l) => ({ id: l.id, title: l.title, type: l.type })),
   }));
 
@@ -1207,6 +1279,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
       e.lessonProgress.filter((lp) => lp.score != null).map((lp) => [lp.lessonId, lp.score!])
     ),
     sectionQuizzes: e.sectionQuizSubmissions.map((sq) => ({
+      activityId: sq.activityId,
       sectionId: sq.sectionId,
       score: sq.score,
       passed: sq.passed,

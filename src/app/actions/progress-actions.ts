@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendLearningReflectionInviteIfNeeded } from "@/lib/learning-reflection-invite";
+import { normalizeSectionActivities } from "@/lib/section-activities";
 
 async function requireSession() {
   const session = await auth.api.getSession({
@@ -22,16 +23,17 @@ async function requireSession() {
  */
 export async function recalculateProgress(enrollmentId: string, courseId: string) {
   await requireSession();
-  const [totalLessons, completedLessons, sections, passedGates, course, examSubmission, enrollment] =
+  const [totalLessons, completedLessons, sections, gateSubmissions, course, examSubmission, enrollment] =
     await Promise.all([
       prisma.lesson.count({ where: { section: { courseId } } }),
       prisma.lessonProgress.count({ where: { enrollmentId } }),
       prisma.courseSection.findMany({
         where: { courseId },
-        select: { id: true, quiz: true, minigame: true },
+        select: { id: true, quiz: true, minigame: true, activities: true },
       }),
-      prisma.sectionQuizSubmission.count({
+      prisma.sectionQuizSubmission.findMany({
         where: { enrollmentId, passed: true },
+        select: { sectionId: true, activityId: true },
       }),
       prisma.course.findUnique({
         where: { id: courseId },
@@ -47,22 +49,29 @@ export async function recalculateProgress(enrollmentId: string, courseId: string
       }),
     ]);
 
-  const gatedSections = sections.filter(
-    (s) =>
-      (s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length) ||
-      (s.minigame && (s.minigame as { type?: string }).type),
-  ).length;
+  const passedGateKeys = new Set(gateSubmissions.map((s) => `${s.sectionId}\t${s.activityId}`));
+
+  let totalGateUnits = 0;
+  let completedGateUnits = 0;
+  for (const sec of sections) {
+    const acts = normalizeSectionActivities(sec);
+    for (const act of acts) {
+      totalGateUnits++;
+      if (passedGateKeys.has(`${sec.id}\t${act.id}`)) {
+        completedGateUnits++;
+      }
+    }
+  }
 
   const hasFinalExam = !!(
     course?.finalExam &&
     (course.finalExam as { questions?: unknown[] }).questions?.length
   );
 
-  const totalUnits = totalLessons + gatedSections + (hasFinalExam ? 1 : 0);
+  const totalUnits = totalLessons + totalGateUnits + (hasFinalExam ? 1 : 0);
   // El examen cuenta como completado si fue enviado (aprobado o no).
-  // El tipo de certificado se decide por si aprobó.
   const completedUnits =
-    completedLessons + passedGates + (examSubmission ? 1 : 0);
+    completedLessons + completedGateUnits + (examSubmission ? 1 : 0);
 
   const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
 

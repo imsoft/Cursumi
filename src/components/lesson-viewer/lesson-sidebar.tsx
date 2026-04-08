@@ -12,8 +12,7 @@ import {
   HelpCircle,
   ClipboardList,
   Lock,
-  ClipboardCheck,
-  Gamepad2,
+  ListChecks,
 } from "lucide-react";
 
 type LessonType = "video" | "text" | "quiz" | "assignment";
@@ -29,10 +28,8 @@ interface SidebarLesson {
 interface SidebarSection {
   id: string;
   title: string;
-  hasQuiz: boolean;
-  quizPassed: boolean;
-  hasMinigame: boolean;
-  minigamePassed: boolean;
+  gateTotal: number;
+  gatesPassed: number;
   lessons: SidebarLesson[];
 }
 
@@ -42,8 +39,7 @@ interface LessonSidebarProps {
   completedIds: Set<string>;
   currentLessonId: string;
   currentSectionId: string;
-  sectionQuizPassed: boolean;
-  sectionMinigamePassed: boolean;
+  sectionGatesAllPassed: boolean;
   onLessonClick: () => void;
 }
 
@@ -60,8 +56,7 @@ export const LessonSidebar = memo(function LessonSidebar({
   completedIds,
   currentLessonId,
   currentSectionId,
-  sectionQuizPassed,
-  sectionMinigamePassed,
+  sectionGatesAllPassed,
   onLessonClick,
 }: LessonSidebarProps) {
   const totalLessons = sections.reduce((acc, s) => acc + s.lessons.length, 0);
@@ -71,17 +66,18 @@ export const LessonSidebar = memo(function LessonSidebar({
   );
   const progress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
-  // Calcular secciones bloqueadas
   const lockedSectionIds = new Set<string>();
   let gateFailed = false;
   for (const s of sections) {
     if (gateFailed) lockedSectionIds.add(s.id);
     if (!gateFailed) {
-      const sectionPassed =
-        s.id === currentSectionId
-          ? s.hasQuiz ? sectionQuizPassed : s.hasMinigame ? sectionMinigamePassed : true
-          : s.hasQuiz ? s.quizPassed : s.hasMinigame ? s.minigamePassed : true;
-      if ((s.hasQuiz || s.hasMinigame) && !sectionPassed) gateFailed = true;
+      const needsGates = s.gateTotal > 0;
+      const sectionPassed = needsGates
+        ? s.id === currentSectionId
+          ? sectionGatesAllPassed
+          : s.gatesPassed >= s.gateTotal
+        : true;
+      if (needsGates && !sectionPassed) gateFailed = true;
     }
   }
 
@@ -151,9 +147,15 @@ export const LessonSidebar = memo(function LessonSidebar({
                 );
               })}
 
-              {section.hasQuiz && (() => {
-                const passed = section.id === currentSectionId ? sectionQuizPassed : section.quizPassed;
-                const isActive = section.id === currentSectionId && !passed && section.lessons.every((l) => completedIds.has(l.id));
+              {section.gateTotal > 0 && (() => {
+                const passed =
+                  section.id === currentSectionId
+                    ? sectionGatesAllPassed
+                    : section.gatesPassed >= section.gateTotal;
+                const isActive =
+                  section.id === currentSectionId &&
+                  !passed &&
+                  section.lessons.every((l) => completedIds.has(l.id));
                 return (
                   <div
                     className={`flex items-center gap-2 px-4 py-2 text-sm ${
@@ -167,33 +169,11 @@ export const LessonSidebar = memo(function LessonSidebar({
                     {passed ? (
                       <CheckCircle className="h-4 w-4 shrink-0" />
                     ) : (
-                      <ClipboardCheck className="h-4 w-4 shrink-0" />
+                      <ListChecks className="h-4 w-4 shrink-0" />
                     )}
-                    <span className="flex-1 truncate text-xs font-medium">Test de sección</span>
-                    {!passed && <Lock className="h-3 w-3 shrink-0" />}
-                  </div>
-                );
-              })()}
-
-              {section.hasMinigame && (() => {
-                const passed = section.id === currentSectionId ? sectionMinigamePassed : section.minigamePassed;
-                const isActive = section.id === currentSectionId && !passed && section.lessons.every((l) => completedIds.has(l.id));
-                return (
-                  <div
-                    className={`flex items-center gap-2 px-4 py-2 text-sm ${
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : passed
-                        ? "text-green-600 dark:text-green-400"
-                        : "text-purple-600 dark:text-purple-400"
-                    }`}
-                  >
-                    {passed ? (
-                      <CheckCircle className="h-4 w-4 shrink-0" />
-                    ) : (
-                      <Gamepad2 className="h-4 w-4 shrink-0" />
-                    )}
-                    <span className="flex-1 truncate text-xs font-medium">Minijuego</span>
+                    <span className="flex-1 truncate text-xs font-medium">
+                      Actividades de cierre ({section.gatesPassed}/{section.gateTotal})
+                    </span>
                     {!passed && <Lock className="h-3 w-3 shrink-0" />}
                   </div>
                 );

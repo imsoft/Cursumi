@@ -35,6 +35,8 @@ import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { ReviewSection } from "@/components/student/review-section";
 import { AnonymousQuestionsPanel } from "@/components/student/anonymous-questions-panel";
 import { recalculateProgress } from "@/app/actions/progress-actions";
+import { normalizeSectionActivities } from "@/lib/section-activities";
+import type { StudentCourseDetail } from "@/lib/course-service";
 
 const lessonIcon = (type: LessonType) => {
   switch (type) {
@@ -54,7 +56,7 @@ export default async function MyCourseDetailPage({
 }) {
   const { courseId } = await params;
   const { enrolled } = await searchParams;
-  const enrollmentDetail = await getMyCourseDetail(courseId);
+  const enrollmentDetail = (await getMyCourseDetail(courseId)) as StudentCourseDetail | null;
   if (!enrollmentDetail) {
     redirect("/dashboard/my-courses");
   }
@@ -66,16 +68,10 @@ export default async function MyCourseDetailPage({
     examSubmission,
     sectionQuizSubmissions,
     session: enrolledSession,
-  } = enrollmentDetail as typeof enrollmentDetail & {
-    lessonProgress?: { lessonId: string }[];
-    examSubmission?: { passed: boolean; score: number } | null;
-    sectionQuizSubmissions?: { sectionId: string; passed: boolean }[];
-  };
+  } = enrollmentDetail;
 
   const completedIds = new Set((lessonProgress ?? []).map((lp: { lessonId: string }) => lp.lessonId));
-  const passedSectionIds = new Set(
-    (sectionQuizSubmissions ?? []).filter((s) => s.passed).map((s) => s.sectionId),
-  );
+  const sectionSubs = sectionQuizSubmissions ?? [];
 
   // Find first uncompleted lesson for "Continue" button
   const allLessons = course.sections.flatMap((s) => s.lessons);
@@ -87,12 +83,14 @@ export default async function MyCourseDetailPage({
   const hasFinalExam = !!(finalExam?.questions?.length);
   const allLessonsCompleted = allLessons.length > 0 && allLessons.every((l) => completedIds.has(l.id));
 
-  // Check all section gates are passed
   const allGatesPassed = course.sections.every((s) => {
-    const hasQuiz = !!(s.quiz && (s.quiz as { questions?: unknown[] }).questions?.length);
-    const hasMinigame = !!(s.minigame && (s.minigame as { type?: string }).type);
-    if (!hasQuiz && !hasMinigame) return true;
-    return passedSectionIds.has(s.id);
+    const acts = normalizeSectionActivities(s);
+    if (acts.length === 0) return true;
+    return acts.every((act) =>
+      sectionSubs.some(
+        (sub) => sub.sectionId === s.id && sub.activityId === act.id && sub.passed,
+      ),
+    );
   });
 
   const canTakeExam = hasFinalExam && allLessonsCompleted && allGatesPassed;

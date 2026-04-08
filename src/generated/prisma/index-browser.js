@@ -247,7 +247,8 @@ exports.Prisma.CourseSectionScalarFieldEnum = {
   description: 'description',
   order: 'order',
   quiz: 'quiz',
-  minigame: 'minigame'
+  minigame: 'minigame',
+  activities: 'activities'
 };
 
 exports.Prisma.LessonScalarFieldEnum = {
@@ -330,6 +331,7 @@ exports.Prisma.SectionQuizSubmissionScalarFieldEnum = {
   id: 'id',
   enrollmentId: 'enrollmentId',
   sectionId: 'sectionId',
+  activityId: 'activityId',
   score: 'score',
   passed: 'passed',
   submittedAt: 'submittedAt'

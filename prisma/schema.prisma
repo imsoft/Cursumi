@@ -292,8 +292,9 @@ model CourseSection {
   title       String
   description String?
   order       Int
-  quiz        Json?   // SectionQuiz: { passingScore: number, questions: Array<{ question, options, correct }> }
-  minigame    Json?   // SectionMinigame: { type: "memory"|"hangman"|"sort", ... }
+  quiz        Json?   // legacy: un solo test (se migra a activities al guardar desde el editor)
+  minigame    Json?   // legacy: un solo minijuego
+  activities  Json?   // SectionActivity[]: varios tests y minijuegos con id estable por actividad
 
   course                 Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons                Lesson[]
@@ -454,6 +455,7 @@ model SectionQuizSubmission {
   id           String   @id @default(cuid())
   enrollmentId String
   sectionId    String
+  activityId   String   @default("default") // id de la actividad en CourseSection.activities (o "default" legacy)
   score        Int      // 0-100
   passed       Boolean
   submittedAt  DateTime @default(now())
@@ -461,7 +463,7 @@ model SectionQuizSubmission {
   enrollment Enrollment    @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
   section    CourseSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
-  @@unique([enrollmentId, sectionId])
+  @@unique([enrollmentId, sectionId, activityId])
   @@index([sectionId])
 }
 

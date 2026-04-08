@@ -11,7 +11,15 @@ export async function POST(
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { sectionId } = await params;
-  const { courseId, score, passed } = await req.json();
+  const body = await req.json();
+  const { courseId, score, passed } = body as {
+    courseId: unknown;
+    score: unknown;
+    passed: unknown;
+    activityId?: unknown;
+  };
+  const activityId =
+    typeof body.activityId === "string" && body.activityId.length > 0 ? body.activityId : "default";
 
   if (typeof courseId !== "string" || typeof score !== "number" || typeof passed !== "boolean") {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
@@ -32,18 +40,29 @@ export async function POST(
   });
   if (!section) return NextResponse.json({ error: "Sección no encontrada en este curso" }, { status: 404 });
 
-  // Si ya aprobó, no sobreescribir el estado de aprobado
   const existing = await prisma.sectionQuizSubmission.findUnique({
-    where: { enrollmentId_sectionId: { enrollmentId: enrollment.id, sectionId } },
+    where: {
+      enrollmentId_sectionId_activityId: {
+        enrollmentId: enrollment.id,
+        sectionId,
+        activityId,
+      },
+    },
   });
   if (existing?.passed) {
     return NextResponse.json({ passed: true, score: existing.score });
   }
 
   const submission = await prisma.sectionQuizSubmission.upsert({
-    where: { enrollmentId_sectionId: { enrollmentId: enrollment.id, sectionId } },
+    where: {
+      enrollmentId_sectionId_activityId: {
+        enrollmentId: enrollment.id,
+        sectionId,
+        activityId,
+      },
+    },
     update: { score, passed },
-    create: { enrollmentId: enrollment.id, sectionId, score, passed },
+    create: { enrollmentId: enrollment.id, sectionId, activityId, score, passed },
   });
 
   if (submission.passed) {

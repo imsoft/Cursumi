@@ -90,13 +90,22 @@ export type MatchMinigame = {
 
 export type SectionMinigame = MemoryMinigame | HangmanMinigame | SortMinigame | MatchMinigame;
 
+/** Actividades de cierre de sección (varios tests y minijuegos). Si está vacío, se usan quiz/minigame legacy. */
+export type SectionActivity =
+  | { id: string; kind: "quiz"; passingScore: number; questions: SectionQuizQuestion[] }
+  | { id: string; kind: "minigame"; minigame: SectionMinigame };
+
 export type CourseSection = {
   id: string;
   title: string;
   description?: string;
   order: number;
   lessons: CourseLesson[];
+  /** Lista ordenada de actividades (preferido). */
+  activities?: SectionActivity[];
+  /** Legacy: un solo test */
   quiz?: SectionQuiz;
+  /** Legacy: un solo minijuego */
   minigame?: SectionMinigame;
 };
 

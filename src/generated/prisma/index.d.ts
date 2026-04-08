@@ -15560,6 +15560,7 @@ export namespace Prisma {
     order: number
     quiz: number
     minigame: number
+    activities: number
     _all: number
   }
 
@@ -15596,6 +15597,7 @@ export namespace Prisma {
     order?: true
     quiz?: true
     minigame?: true
+    activities?: true
     _all?: true
   }
 
@@ -15693,6 +15695,7 @@ export namespace Prisma {
     order: number
     quiz: JsonValue | null
     minigame: JsonValue | null
+    activities: JsonValue | null
     _count: CourseSectionCountAggregateOutputType | null
     _avg: CourseSectionAvgAggregateOutputType | null
     _sum: CourseSectionSumAggregateOutputType | null
@@ -15722,6 +15725,7 @@ export namespace Prisma {
     order?: boolean
     quiz?: boolean
     minigame?: boolean
+    activities?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     lessons?: boolean | CourseSection$lessonsArgs<ExtArgs>
     sectionQuizSubmissions?: boolean | CourseSection$sectionQuizSubmissionsArgs<ExtArgs>
@@ -15736,6 +15740,7 @@ export namespace Prisma {
     order?: boolean
     quiz?: boolean
     minigame?: boolean
+    activities?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["courseSection"]>
 
@@ -15747,6 +15752,7 @@ export namespace Prisma {
     order?: boolean
     quiz?: boolean
     minigame?: boolean
+    activities?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["courseSection"]>
 
@@ -15758,9 +15764,10 @@ export namespace Prisma {
     order?: boolean
     quiz?: boolean
     minigame?: boolean
+    activities?: boolean
   }
 
-  export type CourseSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "title" | "description" | "order" | "quiz" | "minigame", ExtArgs["result"]["courseSection"]>
+  export type CourseSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "title" | "description" | "order" | "quiz" | "minigame" | "activities", ExtArgs["result"]["courseSection"]>
   export type CourseSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     lessons?: boolean | CourseSection$lessonsArgs<ExtArgs>
@@ -15789,6 +15796,7 @@ export namespace Prisma {
       order: number
       quiz: Prisma.JsonValue | null
       minigame: Prisma.JsonValue | null
+      activities: Prisma.JsonValue | null
     }, ExtArgs["result"]["courseSection"]>
     composites: {}
   }
@@ -16222,6 +16230,7 @@ export namespace Prisma {
     readonly order: FieldRef<"CourseSection", 'Int'>
     readonly quiz: FieldRef<"CourseSection", 'Json'>
     readonly minigame: FieldRef<"CourseSection", 'Json'>
+    readonly activities: FieldRef<"CourseSection", 'Json'>
   }
     
 
@@ -23915,6 +23924,7 @@ export namespace Prisma {
     id: string | null
     enrollmentId: string | null
     sectionId: string | null
+    activityId: string | null
     score: number | null
     passed: boolean | null
     submittedAt: Date | null
@@ -23924,6 +23934,7 @@ export namespace Prisma {
     id: string | null
     enrollmentId: string | null
     sectionId: string | null
+    activityId: string | null
     score: number | null
     passed: boolean | null
     submittedAt: Date | null
@@ -23933,6 +23944,7 @@ export namespace Prisma {
     id: number
     enrollmentId: number
     sectionId: number
+    activityId: number
     score: number
     passed: number
     submittedAt: number
@@ -23952,6 +23964,7 @@ export namespace Prisma {
     id?: true
     enrollmentId?: true
     sectionId?: true
+    activityId?: true
     score?: true
     passed?: true
     submittedAt?: true
@@ -23961,6 +23974,7 @@ export namespace Prisma {
     id?: true
     enrollmentId?: true
     sectionId?: true
+    activityId?: true
     score?: true
     passed?: true
     submittedAt?: true
@@ -23970,6 +23984,7 @@ export namespace Prisma {
     id?: true
     enrollmentId?: true
     sectionId?: true
+    activityId?: true
     score?: true
     passed?: true
     submittedAt?: true
@@ -24066,6 +24081,7 @@ export namespace Prisma {
     id: string
     enrollmentId: string
     sectionId: string
+    activityId: string
     score: number
     passed: boolean
     submittedAt: Date
@@ -24094,6 +24110,7 @@ export namespace Prisma {
     id?: boolean
     enrollmentId?: boolean
     sectionId?: boolean
+    activityId?: boolean
     score?: boolean
     passed?: boolean
     submittedAt?: boolean
@@ -24105,6 +24122,7 @@ export namespace Prisma {
     id?: boolean
     enrollmentId?: boolean
     sectionId?: boolean
+    activityId?: boolean
     score?: boolean
     passed?: boolean
     submittedAt?: boolean
@@ -24116,6 +24134,7 @@ export namespace Prisma {
     id?: boolean
     enrollmentId?: boolean
     sectionId?: boolean
+    activityId?: boolean
     score?: boolean
     passed?: boolean
     submittedAt?: boolean
@@ -24127,12 +24146,13 @@ export namespace Prisma {
     id?: boolean
     enrollmentId?: boolean
     sectionId?: boolean
+    activityId?: boolean
     score?: boolean
     passed?: boolean
     submittedAt?: boolean
   }
 
-  export type SectionQuizSubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "sectionId" | "score" | "passed" | "submittedAt", ExtArgs["result"]["sectionQuizSubmission"]>
+  export type SectionQuizSubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "sectionId" | "activityId" | "score" | "passed" | "submittedAt", ExtArgs["result"]["sectionQuizSubmission"]>
   export type SectionQuizSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -24156,6 +24176,7 @@ export namespace Prisma {
       id: string
       enrollmentId: string
       sectionId: string
+      activityId: string
       score: number
       passed: boolean
       submittedAt: Date
@@ -24587,6 +24608,7 @@ export namespace Prisma {
     readonly id: FieldRef<"SectionQuizSubmission", 'String'>
     readonly enrollmentId: FieldRef<"SectionQuizSubmission", 'String'>
     readonly sectionId: FieldRef<"SectionQuizSubmission", 'String'>
+    readonly activityId: FieldRef<"SectionQuizSubmission", 'String'>
     readonly score: FieldRef<"SectionQuizSubmission", 'Int'>
     readonly passed: FieldRef<"SectionQuizSubmission", 'Boolean'>
     readonly submittedAt: FieldRef<"SectionQuizSubmission", 'DateTime'>
@@ -52111,7 +52133,8 @@ export namespace Prisma {
     description: 'description',
     order: 'order',
     quiz: 'quiz',
-    minigame: 'minigame'
+    minigame: 'minigame',
+    activities: 'activities'
   };
 
   export type CourseSectionScalarFieldEnum = (typeof CourseSectionScalarFieldEnum)[keyof typeof CourseSectionScalarFieldEnum]
@@ -52215,6 +52238,7 @@ export namespace Prisma {
     id: 'id',
     enrollmentId: 'enrollmentId',
     sectionId: 'sectionId',
+    activityId: 'activityId',
     score: 'score',
     passed: 'passed',
     submittedAt: 'submittedAt'
@@ -53714,6 +53738,7 @@ export namespace Prisma {
     order?: IntFilter<"CourseSection"> | number
     quiz?: JsonNullableFilter<"CourseSection">
     minigame?: JsonNullableFilter<"CourseSection">
+    activities?: JsonNullableFilter<"CourseSection">
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     lessons?: LessonListRelationFilter
     sectionQuizSubmissions?: SectionQuizSubmissionListRelationFilter
@@ -53727,6 +53752,7 @@ export namespace Prisma {
     order?: SortOrder
     quiz?: SortOrderInput | SortOrder
     minigame?: SortOrderInput | SortOrder
+    activities?: SortOrderInput | SortOrder
     course?: CourseOrderByWithRelationInput
     lessons?: LessonOrderByRelationAggregateInput
     sectionQuizSubmissions?: SectionQuizSubmissionOrderByRelationAggregateInput
@@ -53743,6 +53769,7 @@ export namespace Prisma {
     order?: IntFilter<"CourseSection"> | number
     quiz?: JsonNullableFilter<"CourseSection">
     minigame?: JsonNullableFilter<"CourseSection">
+    activities?: JsonNullableFilter<"CourseSection">
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     lessons?: LessonListRelationFilter
     sectionQuizSubmissions?: SectionQuizSubmissionListRelationFilter
@@ -53756,6 +53783,7 @@ export namespace Prisma {
     order?: SortOrder
     quiz?: SortOrderInput | SortOrder
     minigame?: SortOrderInput | SortOrder
+    activities?: SortOrderInput | SortOrder
     _count?: CourseSectionCountOrderByAggregateInput
     _avg?: CourseSectionAvgOrderByAggregateInput
     _max?: CourseSectionMaxOrderByAggregateInput
@@ -53774,6 +53802,7 @@ export namespace Prisma {
     order?: IntWithAggregatesFilter<"CourseSection"> | number
     quiz?: JsonNullableWithAggregatesFilter<"CourseSection">
     minigame?: JsonNullableWithAggregatesFilter<"CourseSection">
+    activities?: JsonNullableWithAggregatesFilter<"CourseSection">
   }
 
   export type LessonWhereInput = {
@@ -54317,6 +54346,7 @@ export namespace Prisma {
     id?: StringFilter<"SectionQuizSubmission"> | string
     enrollmentId?: StringFilter<"SectionQuizSubmission"> | string
     sectionId?: StringFilter<"SectionQuizSubmission"> | string
+    activityId?: StringFilter<"SectionQuizSubmission"> | string
     score?: IntFilter<"SectionQuizSubmission"> | number
     passed?: BoolFilter<"SectionQuizSubmission"> | boolean
     submittedAt?: DateTimeFilter<"SectionQuizSubmission"> | Date | string
@@ -54328,6 +54358,7 @@ export namespace Prisma {
     id?: SortOrder
     enrollmentId?: SortOrder
     sectionId?: SortOrder
+    activityId?: SortOrder
     score?: SortOrder
     passed?: SortOrder
     submittedAt?: SortOrder
@@ -54337,23 +54368,25 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    enrollmentId_sectionId?: SectionQuizSubmissionEnrollmentIdSectionIdCompoundUniqueInput
+    enrollmentId_sectionId_activityId?: SectionQuizSubmissionEnrollmentIdSectionIdActivityIdCompoundUniqueInput
     AND?: SectionQuizSubmissionWhereInput | SectionQuizSubmissionWhereInput[]
     OR?: SectionQuizSubmissionWhereInput[]
     NOT?: SectionQuizSubmissionWhereInput | SectionQuizSubmissionWhereInput[]
     enrollmentId?: StringFilter<"SectionQuizSubmission"> | string
     sectionId?: StringFilter<"SectionQuizSubmission"> | string
+    activityId?: StringFilter<"SectionQuizSubmission"> | string
     score?: IntFilter<"SectionQuizSubmission"> | number
     passed?: BoolFilter<"SectionQuizSubmission"> | boolean
     submittedAt?: DateTimeFilter<"SectionQuizSubmission"> | Date | string
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
-  }, "id" | "enrollmentId_sectionId">
+  }, "id" | "enrollmentId_sectionId_activityId">
 
   export type SectionQuizSubmissionOrderByWithAggregationInput = {
     id?: SortOrder
     enrollmentId?: SortOrder
     sectionId?: SortOrder
+    activityId?: SortOrder
     score?: SortOrder
     passed?: SortOrder
     submittedAt?: SortOrder
@@ -54371,6 +54404,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"SectionQuizSubmission"> | string
     enrollmentId?: StringWithAggregatesFilter<"SectionQuizSubmission"> | string
     sectionId?: StringWithAggregatesFilter<"SectionQuizSubmission"> | string
+    activityId?: StringWithAggregatesFilter<"SectionQuizSubmission"> | string
     score?: IntWithAggregatesFilter<"SectionQuizSubmission"> | number
     passed?: BoolWithAggregatesFilter<"SectionQuizSubmission"> | boolean
     submittedAt?: DateTimeWithAggregatesFilter<"SectionQuizSubmission"> | Date | string
@@ -57063,6 +57097,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     course: CourseCreateNestedOneWithoutSectionsInput
     lessons?: LessonCreateNestedManyWithoutSectionInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutSectionInput
@@ -57076,6 +57111,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUncheckedCreateNestedManyWithoutSectionInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutSectionInput
   }
@@ -57087,6 +57123,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     course?: CourseUpdateOneRequiredWithoutSectionsNestedInput
     lessons?: LessonUpdateManyWithoutSectionNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutSectionNestedInput
@@ -57100,6 +57137,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUncheckedUpdateManyWithoutSectionNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutSectionNestedInput
   }
@@ -57112,6 +57150,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CourseSectionUpdateManyMutationInput = {
@@ -57121,6 +57160,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CourseSectionUncheckedUpdateManyInput = {
@@ -57131,6 +57171,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LessonCreateInput = {
@@ -57693,6 +57734,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionCreateInput = {
     id?: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -57704,6 +57746,7 @@ export namespace Prisma {
     id?: string
     enrollmentId: string
     sectionId: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -57711,6 +57754,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57722,6 +57766,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
     sectionId?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57731,6 +57776,7 @@ export namespace Prisma {
     id?: string
     enrollmentId: string
     sectionId: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -57738,6 +57784,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57747,6 +57794,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
     sectionId?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60496,6 +60544,7 @@ export namespace Prisma {
     order?: SortOrder
     quiz?: SortOrder
     minigame?: SortOrder
+    activities?: SortOrder
   }
 
   export type CourseSectionAvgOrderByAggregateInput = {
@@ -60897,15 +60946,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type SectionQuizSubmissionEnrollmentIdSectionIdCompoundUniqueInput = {
+  export type SectionQuizSubmissionEnrollmentIdSectionIdActivityIdCompoundUniqueInput = {
     enrollmentId: string
     sectionId: string
+    activityId: string
   }
 
   export type SectionQuizSubmissionCountOrderByAggregateInput = {
     id?: SortOrder
     enrollmentId?: SortOrder
     sectionId?: SortOrder
+    activityId?: SortOrder
     score?: SortOrder
     passed?: SortOrder
     submittedAt?: SortOrder
@@ -60919,6 +60970,7 @@ export namespace Prisma {
     id?: SortOrder
     enrollmentId?: SortOrder
     sectionId?: SortOrder
+    activityId?: SortOrder
     score?: SortOrder
     passed?: SortOrder
     submittedAt?: SortOrder
@@ -60928,6 +60980,7 @@ export namespace Prisma {
     id?: SortOrder
     enrollmentId?: SortOrder
     sectionId?: SortOrder
+    activityId?: SortOrder
     score?: SortOrder
     passed?: SortOrder
     submittedAt?: SortOrder
@@ -68161,6 +68214,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonCreateNestedManyWithoutSectionInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutSectionInput
   }
@@ -68172,6 +68226,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUncheckedCreateNestedManyWithoutSectionInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutSectionInput
   }
@@ -68673,6 +68728,7 @@ export namespace Prisma {
     order?: IntFilter<"CourseSection"> | number
     quiz?: JsonNullableFilter<"CourseSection">
     minigame?: JsonNullableFilter<"CourseSection">
+    activities?: JsonNullableFilter<"CourseSection">
   }
 
   export type CourseSessionUpsertWithWhereUniqueWithoutCourseInput = {
@@ -69018,6 +69074,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionCreateWithoutSectionInput = {
     id?: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -69027,6 +69084,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionUncheckedCreateWithoutSectionInput = {
     id?: string
     enrollmentId: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -69189,6 +69247,7 @@ export namespace Prisma {
     id?: StringFilter<"SectionQuizSubmission"> | string
     enrollmentId?: StringFilter<"SectionQuizSubmission"> | string
     sectionId?: StringFilter<"SectionQuizSubmission"> | string
+    activityId?: StringFilter<"SectionQuizSubmission"> | string
     score?: IntFilter<"SectionQuizSubmission"> | number
     passed?: BoolFilter<"SectionQuizSubmission"> | boolean
     submittedAt?: DateTimeFilter<"SectionQuizSubmission"> | Date | string
@@ -69201,6 +69260,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     course: CourseCreateNestedOneWithoutSectionsInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutSectionInput
   }
@@ -69213,6 +69273,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutSectionInput
   }
 
@@ -69293,6 +69354,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     course?: CourseUpdateOneRequiredWithoutSectionsNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutSectionNestedInput
   }
@@ -69305,6 +69367,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutSectionNestedInput
   }
 
@@ -70573,6 +70636,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionCreateWithoutEnrollmentInput = {
     id?: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -70582,6 +70646,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionUncheckedCreateWithoutEnrollmentInput = {
     id?: string
     sectionId: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -71516,6 +71581,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     course: CourseCreateNestedOneWithoutSectionsInput
     lessons?: LessonCreateNestedManyWithoutSectionInput
   }
@@ -71528,6 +71594,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUncheckedCreateNestedManyWithoutSectionInput
   }
 
@@ -71601,6 +71668,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     course?: CourseUpdateOneRequiredWithoutSectionsNestedInput
     lessons?: LessonUpdateManyWithoutSectionNestedInput
   }
@@ -71613,6 +71681,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUncheckedUpdateManyWithoutSectionNestedInput
   }
 
@@ -77798,6 +77867,7 @@ export namespace Prisma {
     order: number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CourseSessionCreateManyCourseInput = {
@@ -77918,6 +77988,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUpdateManyWithoutSectionNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutSectionNestedInput
   }
@@ -77929,6 +78000,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
     lessons?: LessonUncheckedUpdateManyWithoutSectionNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutSectionNestedInput
   }
@@ -77940,6 +78012,7 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     quiz?: NullableJsonNullValueInput | InputJsonValue
     minigame?: NullableJsonNullValueInput | InputJsonValue
+    activities?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CourseSessionUpdateWithoutCourseInput = {
@@ -78311,6 +78384,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionCreateManySectionInput = {
     id?: string
     enrollmentId: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -78367,6 +78441,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionUpdateWithoutSectionInput = {
     id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78376,6 +78451,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionUncheckedUpdateWithoutSectionInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78384,6 +78460,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionUncheckedUpdateManyWithoutSectionInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78576,6 +78653,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionCreateManyEnrollmentInput = {
     id?: string
     sectionId: string
+    activityId?: string
     score: number
     passed: boolean
     submittedAt?: Date | string
@@ -78607,6 +78685,7 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionUpdateWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78616,6 +78695,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionUncheckedUpdateWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionId?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78624,6 +78704,7 @@ export namespace Prisma {
   export type SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     sectionId?: StringFieldUpdateOperationsInput | string
+    activityId?: StringFieldUpdateOperationsInput | string
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
