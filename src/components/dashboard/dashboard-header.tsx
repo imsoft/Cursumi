@@ -41,7 +41,7 @@ export function DashboardHeader({
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/login");
+    router.push("/");
     router.refresh();
   };
 

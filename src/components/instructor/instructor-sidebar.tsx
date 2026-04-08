@@ -22,7 +22,7 @@ export const InstructorSidebar = ({ open, onClose }: SidebarProps) => {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/login");
+    router.push("/");
     router.refresh();
   };
 
