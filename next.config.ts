@@ -23,7 +23,7 @@ const securityHeaders = [
       style-src 'self' 'unsafe-inline';
       img-src 'self' blob: data: https://images.unsplash.com https://res.cloudinary.com https://image.mux.com;
       media-src 'self' blob: data: https://stream.mux.com;
-      connect-src 'self' https://challenges.cloudflare.com https://api.stripe.com *.sentry.io;
+      connect-src 'self' https://challenges.cloudflare.com https://api.stripe.com https://api.cloudinary.com *.sentry.io;
       frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com;
       font-src 'self' data:;
       object-src 'none';

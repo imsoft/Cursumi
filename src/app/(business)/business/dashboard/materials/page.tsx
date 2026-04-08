@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload, FileText, Trash2, Download, Loader2 } from "lucide-react";
+import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
 
 interface Material {
   id: string;
@@ -43,35 +44,25 @@ export default function MaterialsPage() {
     const file = fileRef.current?.files?.[0];
     if (!file || !name.trim()) return;
 
+    const maxBytes = 10 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      alert(`El archivo supera ${maxBytes / (1024 * 1024)} MB`);
+      return;
+    }
+
     setUploading(true);
     try {
-      // Upload to Cloudinary via existing attachment endpoint
-      const formData = new FormData();
-      formData.append("file", file);
-      const uploadRes = await fetch("/api/upload/attachment?folder=materials", {
-        method: "POST",
-        body: formData,
-      });
-      const uploadData = (await uploadRes.json().catch(() => ({}))) as {
-        error?: string;
-        url?: string;
-      };
-      if (!uploadRes.ok) {
-        alert(uploadData.error || "No se pudo subir el archivo");
-        return;
-      }
-      if (!uploadData.url) {
-        alert("Respuesta inválida del servidor");
-        return;
-      }
+      const { url: fileUrl } = await uploadAttachmentDirect(
+        file,
+        "cursumi/materials",
+      );
 
-      // Save material metadata
       const res = await fetch("/api/business/materials", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
-          fileUrl: uploadData.url,
+          fileUrl,
           fileType: file.type.split("/")[1] || file.name.split(".").pop() || "pdf",
           fileSize: file.size,
         }),
@@ -82,7 +73,11 @@ export default function MaterialsPage() {
         setName("");
         setShowForm(false);
         if (fileRef.current) fileRef.current.value = "";
+      } else {
+        alert(typeof data.error === "string" ? data.error : "No se pudo guardar el material");
       }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "No se pudo subir el archivo");
     } finally {
       setUploading(false);
     }

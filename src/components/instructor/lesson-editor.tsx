@@ -10,6 +10,7 @@ import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Cir
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { stripHtml } from "@/lib/utils";
+import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
 import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
 
 interface LessonEditorProps {
@@ -92,13 +93,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
       if (file.size > maxBytes) {
         throw new Error(`El archivo supera ${maxBytes / (1024 * 1024)} MB`);
       }
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/upload/attachment", { method: "POST", body: form });
-      const data = (await res.json().catch(() => ({}))) as { error?: string; url?: string };
-      if (!res.ok) throw new Error(data.error || "Error al subir archivo");
-      if (!data.url) throw new Error("Respuesta inválida del servidor");
-      const url = data.url;
+      const { url } = await uploadAttachmentDirect(file, "cursumi/attachments");
 
       setFiles((prev) => [...prev, {
         id: crypto.randomUUID(),

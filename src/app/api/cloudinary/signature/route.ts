@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
-import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
+import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { authorizeCloudinaryUploader } from "@/lib/authorize-cloudinary-uploader";
 
 /**
  * Genera una firma para subida client-side a Cloudinary.
@@ -29,7 +30,7 @@ function requireEnv(name: string) {
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
-    await requireRole(session.user.id, ["instructor", "admin"]);
+    await authorizeCloudinaryUploader(session.user.id);
 
     const cloudName = requireEnv("CLOUDINARY_CLOUD_NAME");
     const apiKey = requireEnv("CLOUDINARY_API_KEY");

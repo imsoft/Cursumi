@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
+import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { authorizeCloudinaryUploader } from "@/lib/authorize-cloudinary-uploader";
 
 const ALLOWED_FOLDERS: Record<string, string> = {
   attachments: "cursumi/attachments",
@@ -12,7 +13,7 @@ const MAX_BYTES = 10 * 1024 * 1024;
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
-    await requireRole(session.user.id, ["instructor", "admin"]);
+    await authorizeCloudinaryUploader(session.user.id);
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
