@@ -3,6 +3,7 @@
 import { useState, useEffect, useId } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
+import { ProfilePhotoImg } from "@/components/ui/profile-photo-img";
 import { Camera } from "lucide-react";
 import { compressImageToJpegFile } from "@/lib/browser-image";
 
@@ -83,8 +84,11 @@ export function UserAvatarUpload({
     >
       <Avatar className="h-full w-full min-h-0 min-w-0 rounded-full text-2xl shadow-none ring-0 ring-offset-0 focus-within:ring-0">
         {avatar ? (
-          // eslint-disable-next-line @next/next/no-img-element -- URL externa o data URL
-          <img src={avatar} alt="" className="h-full w-full rounded-full object-cover" />
+          <ProfilePhotoImg
+            src={avatar}
+            alt=""
+            className="h-full w-full rounded-full object-cover"
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center rounded-full bg-primary text-primary-foreground">
             {initials}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar } from "@/components/ui/avatar";
+import { ProfilePhotoImg } from "@/components/ui/profile-photo-img";
 import { signOut } from "@/lib/auth-client";
 import {
   DropdownMenu,
@@ -67,8 +68,7 @@ export function DashboardHeader({
             <DropdownMenuTrigger className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground outline-none transition-colors hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
               <Avatar className="h-10 w-10 overflow-hidden rounded-full text-sm font-semibold">
                 {user.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- URL OAuth o Cloudinary
-                  <img
+                  <ProfilePhotoImg
                     src={user.imageUrl}
                     alt=""
                     className="h-full w-full object-cover"

@@ -27,6 +27,7 @@ import {
 import type { LessonType } from "@/generated/prisma";
 import { EnrolledWelcomeBanner } from "@/components/student/enrolled-welcome-banner";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
+import { ProfilePhotoImg } from "@/components/ui/profile-photo-img";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
@@ -150,8 +151,7 @@ export default async function MyCourseDetailPage({
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               {course.instructor?.image ? (
-                // eslint-disable-next-line @next/next/no-img-element -- URL de proveedor OAuth / variada
-                <img
+                <ProfilePhotoImg
                   src={course.instructor.image}
                   alt=""
                   width={44}

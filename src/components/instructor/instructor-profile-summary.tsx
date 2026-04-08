@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/ui/avatar";
+import { ProfilePhotoImg } from "@/components/ui/profile-photo-img";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { UserAvatarUpload } from "@/components/profile/user-avatar-upload";
@@ -58,8 +59,11 @@ export const InstructorProfileSummary = ({
           ) : (
             <Avatar className="h-16 w-16 shrink-0 text-foreground">
               {avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={avatarUrl} alt="" className="h-full w-full rounded-full object-cover" />
+                <ProfilePhotoImg
+                  src={avatarUrl}
+                  alt=""
+                  className="h-full w-full rounded-full object-cover"
+                />
               ) : (
                 initials
               )}
