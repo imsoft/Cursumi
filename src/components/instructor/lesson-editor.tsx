@@ -410,7 +410,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
                       />
                       <label
                         htmlFor="video-upload"
-                        className="flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-primary/40 bg-gradient-to-br from-primary/5 to-primary/10 p-12 transition-all hover:border-primary/60 hover:bg-primary/15"
+                        className="flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-primary/40 bg-linear-to-br from-primary/5 to-primary/10 p-12 transition-all hover:border-primary/60 hover:bg-primary/15"
                       >
                         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 shadow-lg">
                           <Video className="h-10 w-10 text-primary" />
