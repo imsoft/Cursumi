@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { DEFAULT_PLATFORM_FEE_PERCENT } from "@/lib/platform-fee";
 
 // Lazy singleton — only instantiates at runtime, not at build time
 let _stripe: Stripe | null = null;
@@ -21,10 +22,16 @@ export const stripe = new Proxy({} as Stripe, {
   },
 });
 
-export const PLATFORM_FEE_PERCENT = 15; // 15% de comisión de la plataforma
+/** @deprecated Usar `getPlatformFeePercent()`; se mantiene el default para referencia */
+export const PLATFORM_FEE_PERCENT = DEFAULT_PLATFORM_FEE_PERCENT;
 
-export function calculateSplit(amountCents: number) {
-  const platformFee = Math.round(amountCents * (PLATFORM_FEE_PERCENT / 100));
+/**
+ * Reparto plataforma / instructor sobre el monto cobrado (centavos).
+ * `platformFeePercent` entre 0 y 100 (configurable en admin).
+ */
+export function calculateSplit(amountCents: number, platformFeePercent: number) {
+  const pct = Math.min(100, Math.max(0, Math.round(platformFeePercent)));
+  const platformFee = Math.round(amountCents * (pct / 100));
   const instructorAmount = amountCents - platformFee;
   return { platformFee, instructorAmount };
 }

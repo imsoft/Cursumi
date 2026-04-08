@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { stripe, calculateSplit } from "@/lib/stripe";
+import { getPlatformFeePercent } from "@/lib/platform-fee";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { checkRateLimitAsync } from "@/lib/rate-limit";
 
@@ -84,7 +85,8 @@ export async function POST(req: NextRequest) {
       : originalPrice;
 
     const amountCents = discountedPrice;
-    const { platformFee, instructorAmount } = calculateSplit(amountCents);
+    const platformFeePercent = await getPlatformFeePercent();
+    const { platformFee, instructorAmount } = calculateSplit(amountCents, platformFeePercent);
 
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

@@ -9,10 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Save, Bell, Globe, Share2, Loader2, CheckCircle2 } from "lucide-react";
+import { Save, Bell, Globe, Share2, Loader2, CheckCircle2, Percent } from "lucide-react";
 import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links-config";
 import { SocialIcon } from "@/components/social-icon";
 import { SignatureUpload } from "@/components/profile/signature-upload";
+import { formatPriceMXN } from "@/lib/utils";
 
 export default function AdminSettingsPage() {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
@@ -20,6 +21,22 @@ export default function AdminSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
+  const [platformFeePercent, setPlatformFeePercent] = useState(15);
+  const [loadingFee, setLoadingFee] = useState(true);
+  const [savingFee, setSavingFee] = useState(false);
+  const [savedFee, setSavedFee] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/platform-fee")
+      .then((r) => r.json())
+      .then((d: { platformFeePercent?: number }) => {
+        if (typeof d.platformFeePercent === "number") {
+          setPlatformFeePercent(d.platformFeePercent);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingFee(false));
+  }, []);
 
   useEffect(() => {
     fetch("/api/me/signature")
@@ -53,6 +70,24 @@ export default function AdminSettingsPage() {
       prev.map((link) => (link.key === key ? { ...link, url } : link))
     );
     setSaved(false);
+  };
+
+  const handleSavePlatformFee = async () => {
+    setSavingFee(true);
+    setSavedFee(false);
+    try {
+      const res = await fetch("/api/admin/platform-fee", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ platformFeePercent }),
+      });
+      if (res.ok) {
+        setSavedFee(true);
+        setTimeout(() => setSavedFee(false), 3000);
+      }
+    } finally {
+      setSavingFee(false);
+    }
   };
 
   const handleSave = async () => {
@@ -111,6 +146,78 @@ export default function AdminSettingsPage() {
               <Save className="mr-2 h-4 w-4" />
               Guardar cambios
             </Button>
+          </CardContent>
+        </Card>
+
+        {/* Comisión plataforma (pagos) */}
+        <Card className="border border-border bg-card/90 lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Percent className="h-5 w-5" />
+              Comisión de la plataforma
+            </CardTitle>
+            <CardDescription>
+              Porcentaje que retiene Cursumi sobre cada pago de curso (0% = todo va al instructor; 100% = todo a la
+              plataforma). Aplica a nuevos checkouts en Stripe.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {loadingFee ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Cargando…
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-4">
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={platformFeePercent}
+                    onChange={(e) => setPlatformFeePercent(Number(e.target.value))}
+                    className="h-2 w-full max-w-md cursor-pointer accent-primary"
+                    aria-label="Porcentaje de comisión"
+                  />
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      min={0}
+                      max={100}
+                      value={platformFeePercent}
+                      onChange={(e) => {
+                        const v = Number(e.target.value);
+                        if (Number.isNaN(v)) return;
+                        setPlatformFeePercent(Math.min(100, Math.max(0, Math.round(v))));
+                      }}
+                      className="w-20 text-center"
+                    />
+                    <span className="text-sm font-medium text-foreground">%</span>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Ejemplo con venta de {formatPriceMXN(1000)}: la plataforma recibe{" "}
+                  <strong>
+                    {formatPriceMXN(Math.round(1000 * (platformFeePercent / 100)))}
+                  </strong>{" "}
+                  y el instructor{" "}
+                  <strong>
+                    {formatPriceMXN(Math.round(1000 * ((100 - platformFeePercent) / 100)))}
+                  </strong>{" "}
+                  (antes de comisiones de Stripe).
+                </p>
+                <Button onClick={handleSavePlatformFee} disabled={savingFee}>
+                  {savingFee ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : savedFee ? (
+                    <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
+                  ) : (
+                    <Save className="mr-2 h-4 w-4" />
+                  )}
+                  {savingFee ? "Guardando…" : savedFee ? "Guardado" : "Guardar comisión"}
+                </Button>
+              </>
+            )}
           </CardContent>
         </Card>
 

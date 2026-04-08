@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
@@ -14,8 +15,6 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { CourseSessionsManager } from "./course-sessions-manager";
-
-const PLATFORM_FEE_PERCENT = 15; // debe coincidir con src/lib/stripe.ts
 
 const createPricingSchema = (modality: "virtual" | "presencial" | "live") => {
   const baseSchema = {
@@ -46,6 +45,19 @@ interface CoursePricingProps {
 }
 
 export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePricingProps) => {
+  const [platformFeePercent, setPlatformFeePercent] = useState(15);
+
+  useEffect(() => {
+    fetch("/api/platform-fee")
+      .then((r) => r.json())
+      .then((j: { platformFeePercent?: number }) => {
+        if (typeof j.platformFeePercent === "number") {
+          setPlatformFeePercent(j.platformFeePercent);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const modality = data.modality || "virtual";
   const pricingSchema = createPricingSchema(modality);
   const isPresencial = modality === "presencial";
@@ -129,11 +141,11 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 <span>
                   Recibirás{" "}
                   <strong>
-                    {formatPriceMXN(Math.round(watchedPrice * (1 - PLATFORM_FEE_PERCENT / 100)))}
+                    {formatPriceMXN(Math.round(watchedPrice * (1 - platformFeePercent / 100)))}
                   </strong>{" "}
                   por cada venta
                   <span className="text-xs text-muted-foreground ml-1">
-                    (comisión plataforma {PLATFORM_FEE_PERCENT}%)
+                    (comisión plataforma {platformFeePercent}%)
                   </span>
                 </span>
               </div>
