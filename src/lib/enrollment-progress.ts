@@ -69,14 +69,20 @@ export async function recalculateEnrollmentProgress(
   const completedUnits =
     completedLessons + completedGateUnits + (examSubmission ? 1 : 0);
 
-  const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
+  // Completado real: unidades enteras (evita quedar en 99% por redondeo cuando ya cumplieron todo).
+  const fullyComplete = totalUnits > 0 && completedUnits >= totalUnits;
+  const progress = fullyComplete
+    ? 100
+    : totalUnits > 0
+      ? Math.round((completedUnits / totalUnits) * 100)
+      : 0;
 
   await prisma.enrollment.update({
     where: { id: enrollmentId },
     data: { progress },
   });
 
-  if (progress === 100) {
+  if (fullyComplete) {
     if (enrollment.status !== "completed") {
       await prisma.enrollment.update({
         where: { id: enrollmentId },
@@ -101,23 +107,45 @@ export async function recalculateEnrollmentProgress(
         },
       });
 
-      await prisma.notification.create({
-        data: {
-          userId: enrollment.studentId,
-          type: "certificate",
-          title: certType === "accreditation"
-            ? "Certificado de acreditación"
-            : "Reconocimiento de participación",
-          body: certType === "accreditation"
-            ? `Has completado el curso "${course?.title || ""}". Tu certificado de acreditación ya está disponible.`
-            : `Has completado el curso "${course?.title || ""}". Tu reconocimiento de participación ya está disponible.`,
-          link: `/dashboard/certificates/${certificate.id}`,
-        },
-      });
+      try {
+        await prisma.notification.create({
+          data: {
+            userId: enrollment.studentId,
+            type: "certificate",
+            title: certType === "accreditation"
+              ? "Certificado de acreditación"
+              : "Reconocimiento de participación",
+            body: certType === "accreditation"
+              ? `Has completado el curso "${course?.title || ""}". Tu certificado de acreditación ya está disponible.`
+              : `Has completado el curso "${course?.title || ""}". Tu reconocimiento de participación ya está disponible.`,
+            link: `/dashboard/certificates/${certificate.id}`,
+          },
+        });
+      } catch {
+        /* el certificado ya existe; la notificación no debe bloquear */
+      }
     }
 
     void sendLearningReflectionInviteIfNeeded(enrollmentId);
   }
 
   return progress;
+}
+
+/**
+ * Reintenta recalcular y crear certificados faltantes (progreso ≥99 o estado completed sin fila en Certificate).
+ * Útil tras correcciones de fórmula o fallos previos al guardar.
+ */
+export async function repairCertificatesForStudent(studentId: string): Promise<void> {
+  const pending = await prisma.enrollment.findMany({
+    where: {
+      studentId,
+      certificate: null,
+      OR: [{ progress: { gte: 99 } }, { status: "completed" }],
+    },
+    select: { id: true, courseId: true },
+  });
+  for (const e of pending) {
+    await recalculateEnrollmentProgress(e.id, e.courseId);
+  }
 }

@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { repairCertificatesForStudent } from "@/lib/enrollment-progress";
 
 export async function GET() {
   try {
     const session = await requireSession();
+
+    await repairCertificatesForStudent(session.user.id);
 
     const dbCerts = await prisma.certificate.findMany({
       where: { userId: session.user.id },

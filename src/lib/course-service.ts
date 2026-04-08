@@ -9,6 +9,7 @@ import type {
 } from "@/components/instructor/course-types";
 import { ensureActivityIds, normalizeSectionActivities } from "@/lib/section-activities";
 import { gateActivityFromLesson, listSectionGateUnitsForUi } from "@/lib/gate-lesson-content";
+import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 import { hashJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import type { Course } from "@/components/courses/types";
@@ -44,61 +45,8 @@ async function recalculateAllEnrollments(courseId: string) {
   });
   if (enrollments.length === 0) return;
 
-  const [totalLessons, sections, course] = await Promise.all([
-    prisma.lesson.count({ where: { section: { courseId } } }),
-    prisma.courseSection.findMany({
-      where: { courseId },
-      select: { id: true, quiz: true, minigame: true, activities: true },
-    }),
-    prisma.course.findUnique({
-      where: { id: courseId },
-      select: { finalExam: true },
-    }),
-  ]);
-
-  let totalGateUnits = 0;
-  for (const sec of sections) {
-    totalGateUnits += normalizeSectionActivities(sec).length;
-  }
-
-  const hasFinalExam = !!(
-    course?.finalExam &&
-    (course.finalExam as { questions?: unknown[] }).questions?.length
-  );
-
-  const totalUnits = totalLessons + totalGateUnits + (hasFinalExam ? 1 : 0);
-
   for (const enrollment of enrollments) {
-    const [completedLessons, gateSubmissions, examSubmission] = await Promise.all([
-      prisma.lessonProgress.count({ where: { enrollmentId: enrollment.id } }),
-      prisma.sectionQuizSubmission.findMany({
-        where: { enrollmentId: enrollment.id, passed: true },
-        select: { sectionId: true, activityId: true },
-      }),
-      prisma.examSubmission.findUnique({
-        where: { enrollmentId: enrollment.id },
-        select: { passed: true },
-      }),
-    ]);
-
-    const passedGateKeys = new Set(gateSubmissions.map((s) => `${s.sectionId}\t${s.activityId}`));
-    let completedGateUnits = 0;
-    for (const sec of sections) {
-      for (const act of normalizeSectionActivities(sec)) {
-        if (passedGateKeys.has(`${sec.id}\t${act.id}`)) {
-          completedGateUnits++;
-        }
-      }
-    }
-
-    const completedUnits =
-      completedLessons + completedGateUnits + (examSubmission ? 1 : 0);
-    const progress = totalUnits > 0 ? Math.round((completedUnits / totalUnits) * 100) : 0;
-
-    await prisma.enrollment.update({
-      where: { id: enrollment.id },
-      data: { progress },
-    });
+    await recalculateEnrollmentProgress(enrollment.id, courseId);
   }
 }
 
