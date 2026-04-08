@@ -23,7 +23,7 @@ Plataforma de cursos virtuales, presenciales y en vivo: estudiantes exploran e i
    | **Base de datos** | `DATABASE_URL` — Neon; usa conexión **directa** para migraciones (`prisma migrate`). |
    | **Auth (obligatorio)** | `BETTER_AUTH_SECRET` (mín. 32 caracteres; p. ej. `openssl rand -base64 32`), `NEXT_PUBLIC_APP_URL` (URL pública **sin** barra final, p. ej. `http://localhost:3000` o `https://www.cursumi.com`). Opcional: `BETTER_AUTH_URL` si difiere de `NEXT_PUBLIC_APP_URL` en el servidor. |
    | **OAuth Google (opcional)** | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`. Si faltan, el login por email sigue funcionando y el botón de Google no se muestra. En Google Cloud Console, redirect URI: `https://TU-DOMINIO/api/auth/callback/google`. |
-   | **Email** | Resend: `RESEND_API_KEY`, `RESEND_FROM_EMAIL` (verificación de correo y recuperación de contraseña). |
+   | **Email** | Resend: `RESEND_API_KEY`, `RESEND_FROM_EMAIL` (verificación de correo y recuperación de contraseña). Opcional: `CONTACT_INBOX_EMAIL` — bandeja del formulario `/contact` (por defecto `contacto@cursumi.com`; el destino debe estar permitido en tu cuenta Resend). |
    | **Seguridad registro / forgot password** | Cloudflare Turnstile: `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Si no configuras el secret, el servidor omite la verificación CAPTCHA en desarrollo. |
    | **Rate limiting (opcional)** | Upstash Redis: `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` — complementa límites en hooks de auth. |
    | **Video** | Mux: `MUX_TOKEN_ID`, `MUX_TOKEN_SECRET` |

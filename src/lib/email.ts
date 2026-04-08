@@ -388,7 +388,11 @@ export async function sendOrgInviteEmail({ to, orgName, inviterName, inviteLink 
 // CONTACTO
 // ─────────────────────────────────────────
 
-const CONTACT_EMAIL = "contacto@cursumi.com";
+/** Destino de los mensajes del formulario `/contact` (Resend). `CONTACT_INBOX_EMAIL` en .env; por defecto contacto@cursumi.com. */
+function getContactInboxEmail(): string {
+  const v = process.env.CONTACT_INBOX_EMAIL?.trim();
+  return v && v.length > 0 ? v : "contacto@cursumi.com";
+}
 
 interface SendContactEmailParams {
   name: string;
@@ -413,7 +417,7 @@ export async function sendContactEmail({ name, email, subject, reason, message }
     <p style="font-size:12px;color:#9ca3af;margin-top:20px;">Puedes responder directamente a este correo para contestar al usuario.</p>`;
   await resend.emails.send({
     from: FROM(),
-    to: [CONTACT_EMAIL],
+    to: [getContactInboxEmail()],
     replyTo: email,
     subject: `[Contacto - ${reason}] ${subject}`,
     html: emailWrapper("Nuevo mensaje de contacto", body),
