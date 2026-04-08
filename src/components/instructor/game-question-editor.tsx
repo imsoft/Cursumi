@@ -105,32 +105,47 @@ export function GameQuestionEditor({
         />
 
         {q.type === "truefalse" ? (
-          <div className="grid grid-cols-2 gap-3">
-            {q.options.map((opt, optIndex) => (
-              <button
-                key={optIndex}
-                type="button"
-                onClick={() => onChange({ correct: optIndex })}
-                className={`rounded-xl border-2 p-4 text-center font-semibold transition-colors ${
-                  q.correct === optIndex
-                    ? optIndex === 0
-                      ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400"
-                      : "border-red-500 bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400"
-                    : "border-border bg-muted/30 text-muted-foreground hover:border-primary/50"
-                }`}
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Edita el texto de cada opción y elige cuál es la respuesta correcta en la sala.
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {[0, 1].map((optIndex) => (
+                <div key={optIndex} className="flex items-center gap-2">
+                  <span className="w-5 shrink-0 text-sm font-semibold">
+                    {OPTION_LABELS[optIndex]}
+                  </span>
+                  <Input
+                    placeholder={optIndex === 0 ? "Verdadero" : "Falso"}
+                    value={q.options[optIndex] ?? ""}
+                    onChange={(e) => onChangeOption(optIndex, e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium">Respuesta correcta:</span>
+              <select
+                value={q.correct}
+                onChange={(e) => onChange({ correct: Number(e.target.value) })}
+                className="rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
-                {opt}
-                {q.correct === optIndex && (
-                  <span className="ml-2 text-xs font-normal">(correcta)</span>
-                )}
-              </button>
-            ))}
+                <option value={0}>
+                  {OPTION_LABELS[0]}
+                  {q.options[0]?.trim() ? ` — ${q.options[0]}` : ""}
+                </option>
+                <option value={1}>
+                  {OPTION_LABELS[1]}
+                  {q.options[1]?.trim() ? ` — ${q.options[1]}` : ""}
+                </option>
+              </select>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {q.options.map((opt, optIndex) => (
               <div key={optIndex} className="flex items-center gap-2">
-                <span className="font-semibold text-sm w-5 shrink-0">
+                <span className="w-5 shrink-0 text-sm font-semibold">
                   {OPTION_LABELS[optIndex]}
                 </span>
                 <Input
@@ -143,7 +158,7 @@ export function GameQuestionEditor({
           </div>
         )}
 
-        <div className="flex flex-wrap gap-4 items-center">
+        <div className="flex flex-wrap items-center gap-4">
           {q.type === "multiple" && (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Respuesta correcta:</span>
@@ -153,7 +168,9 @@ export function GameQuestionEditor({
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 {OPTION_LABELS.map((label, i) => (
-                  <option key={i} value={i}>{label}</option>
+                  <option key={i} value={i}>
+                    {label}
+                  </option>
                 ))}
               </select>
             </div>

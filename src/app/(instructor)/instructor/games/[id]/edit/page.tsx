@@ -107,7 +107,7 @@ export default function EditGamePage({ params }: { params: Promise<{ id: string 
         setError(`La pregunta ${i + 1} no tiene texto`);
         return;
       }
-      if (q.type === "multiple" && q.options.some((o) => !o.trim())) {
+      if (q.options.some((o) => !o.trim())) {
         setError(`La pregunta ${i + 1} tiene opciones vacías`);
         return;
       }
