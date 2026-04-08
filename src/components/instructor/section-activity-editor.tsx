@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -373,10 +374,12 @@ function SortMinigameEditor({
     <div className="space-y-3">
       <div className="space-y-1">
         <Label className="text-sm font-medium">Instrucción para el alumno</Label>
-        <Input
+        <Textarea
           placeholder="Ej: Ordena los pasos del proceso"
           value={instruction}
           onChange={(e) => onInstructionChange(e.target.value)}
+          rows={3}
+          className="min-h-[80px] resize-y"
         />
       </div>
       <p className="text-xs text-muted-foreground">
@@ -387,10 +390,20 @@ function SortMinigameEditor({
           <span className="w-6 shrink-0 text-center text-xs font-bold text-muted-foreground">{i + 1}</span>
           <span className="flex-1 truncate">{item}</span>
           <div className="flex flex-col gap-0.5">
-            <button onClick={() => moveUp(i)} disabled={i === 0} className="rounded p-0.5 text-muted-foreground hover:bg-muted disabled:opacity-30">
+            <button
+              type="button"
+              onClick={() => moveUp(i)}
+              disabled={i === 0}
+              className="rounded p-0.5 text-muted-foreground hover:bg-muted disabled:opacity-30"
+            >
               <ChevronUp className="h-3.5 w-3.5" />
             </button>
-            <button onClick={() => moveDown(i)} disabled={i === items.length - 1} className="rounded p-0.5 text-muted-foreground hover:bg-muted disabled:opacity-30">
+            <button
+              type="button"
+              onClick={() => moveDown(i)}
+              disabled={i === items.length - 1}
+              className="rounded p-0.5 text-muted-foreground hover:bg-muted disabled:opacity-30"
+            >
               <ChevronDown className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -449,10 +462,12 @@ function MatchMinigameEditor({
     <div className="space-y-3">
       <div className="space-y-1">
         <Label className="text-sm font-medium">Instrucción para el alumno</Label>
-        <Input
+        <Textarea
           placeholder="Ej: Conecta cada concepto con su definición"
           value={instruction}
           onChange={(e) => onInstructionChange(e.target.value)}
+          rows={3}
+          className="min-h-[80px] resize-y"
         />
       </div>
       <p className="text-xs text-muted-foreground">
