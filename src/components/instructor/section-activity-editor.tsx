@@ -247,16 +247,35 @@ function MemoryMinigameEditor({
 
   const removePair = (i: number) => onChange(pairs.filter((_, idx) => idx !== i));
 
+  const updatePair = (index: number, field: "term" | "definition", value: string) => {
+    onChange(
+      pairs.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
+    );
+  };
+
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">Mínimo 4 pares, máximo 8</p>
       {pairs.map((p, i) => (
-        <div key={i} className="flex items-center gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 text-sm">
-          <span className="flex-1 truncate">
-            <span className="font-medium">{p.term}</span>
-            <span className="text-muted-foreground"> · {p.definition}</span>
-          </span>
-          <Button variant="ghost" size="sm" onClick={() => removePair(i)}>
+        <div
+          key={i}
+          className="flex flex-col gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 sm:flex-row sm:items-center"
+        >
+          <div className="grid flex-1 gap-2 sm:grid-cols-2">
+            <Input
+              value={p.term}
+              placeholder="Término"
+              onChange={(e) => updatePair(i, "term", e.target.value)}
+              className="text-sm"
+            />
+            <Input
+              value={p.definition}
+              placeholder="Definición"
+              onChange={(e) => updatePair(i, "definition", e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => removePair(i)} className="shrink-0 self-end sm:self-center">
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -301,16 +320,47 @@ function HangmanMinigameEditor({
 
   const removeWord = (i: number) => onChange(words.filter((_, idx) => idx !== i));
 
+  const updateWord = (index: number, field: "word" | "hint", value: string) => {
+    onChange(
+      words.map((w, i) => {
+        if (i !== index) return w;
+        if (field === "word") {
+          return { ...w, word: value.toUpperCase() };
+        }
+        return { ...w, hint: value };
+      }),
+    );
+  };
+
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">3–5 palabras, sin tildes ni caracteres especiales</p>
       {words.map((w, i) => (
-        <div key={i} className="flex items-center gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 text-sm">
-          <span className="flex-1 truncate">
-            <span className="font-mono font-medium">{w.word}</span>
-            <span className="text-muted-foreground"> (pista: {w.hint})</span>
-          </span>
-          <Button variant="ghost" size="sm" onClick={() => removeWord(i)}>
+        <div
+          key={i}
+          className="flex flex-col gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 sm:flex-row sm:items-end"
+        >
+          <div className="grid flex-1 gap-2 sm:grid-cols-2">
+            <div className="space-y-1">
+              <Label className="text-xs text-muted-foreground">Palabra</Label>
+              <Input
+                value={w.word}
+                placeholder="PALABRA"
+                className="font-mono text-sm"
+                onChange={(e) => updateWord(i, "word", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs text-muted-foreground">Pista</Label>
+              <Input
+                value={w.hint}
+                placeholder="Pista para el alumno"
+                className="text-sm"
+                onChange={(e) => updateWord(i, "hint", e.target.value)}
+              />
+            </div>
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => removeWord(i)} className="shrink-0 self-end">
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -356,6 +406,10 @@ function SortMinigameEditor({
 
   const removeItem = (i: number) => onItemsChange(items.filter((_, idx) => idx !== i));
 
+  const updateItem = (index: number, value: string) => {
+    onItemsChange(items.map((it, i) => (i === index ? value : it)));
+  };
+
   const moveUp = (i: number) => {
     if (i === 0) return;
     const next = [...items];
@@ -388,7 +442,11 @@ function SortMinigameEditor({
       {items.map((item, i) => (
         <div key={i} className="flex items-center gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 text-sm">
           <span className="w-6 shrink-0 text-center text-xs font-bold text-muted-foreground">{i + 1}</span>
-          <span className="flex-1 truncate">{item}</span>
+          <Input
+            value={item}
+            className="flex-1 text-sm"
+            onChange={(e) => updateItem(i, e.target.value)}
+          />
           <div className="flex flex-col gap-0.5">
             <button
               type="button"
@@ -458,6 +516,12 @@ function MatchMinigameEditor({
 
   const removePair = (i: number) => onPairsChange(pairs.filter((_, idx) => idx !== i));
 
+  const updatePair = (index: number, field: "left" | "right", value: string) => {
+    onPairsChange(
+      pairs.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
+    );
+  };
+
   return (
     <div className="space-y-3">
       <div className="space-y-1">
@@ -474,13 +538,25 @@ function MatchMinigameEditor({
         Define los pares correctos (4–8 pares). Se mostrarán desordenados al alumno.
       </p>
       {pairs.map((p, i) => (
-        <div key={i} className="flex items-center gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 text-sm">
-          <span className="flex-1 truncate">
-            <span className="font-medium">{p.left}</span>
-            <span className="text-muted-foreground"> → </span>
-            <span className="font-medium">{p.right}</span>
-          </span>
-          <Button variant="ghost" size="sm" onClick={() => removePair(i)}>
+        <div
+          key={i}
+          className="flex flex-col gap-2 rounded-lg border border-border bg-muted/10 px-3 py-2 sm:flex-row sm:items-center"
+        >
+          <div className="grid flex-1 gap-2 sm:grid-cols-2">
+            <Input
+              value={p.left}
+              placeholder="Columna A"
+              className="text-sm"
+              onChange={(e) => updatePair(i, "left", e.target.value)}
+            />
+            <Input
+              value={p.right}
+              placeholder="Columna B"
+              className="text-sm"
+              onChange={(e) => updatePair(i, "right", e.target.value)}
+            />
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => removePair(i)} className="shrink-0 self-end sm:self-center">
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
