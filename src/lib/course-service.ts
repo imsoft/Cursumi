@@ -24,9 +24,10 @@ function sectionJsonForPrisma(section: CourseSection): {
   minigame: Prisma.InputJsonValue | typeof Prisma.JsonNull;
   activities: Prisma.InputJsonValue | typeof Prisma.JsonNull;
 } {
-  if (section.activities && section.activities.length > 0) {
+  const merged = normalizeSectionActivities(section);
+  if (merged.length > 0) {
     return {
-      activities: ensureActivityIds(section.activities) as unknown as Prisma.InputJsonValue,
+      activities: ensureActivityIds(merged) as unknown as Prisma.InputJsonValue,
       quiz: Prisma.JsonNull,
       minigame: Prisma.JsonNull,
     };

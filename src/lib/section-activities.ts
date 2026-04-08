@@ -12,23 +12,31 @@ function isActivityArray(raw: unknown): raw is SectionActivity[] {
   return Array.isArray(raw) && raw.length > 0 && typeof (raw[0] as { kind?: string }).kind === "string";
 }
 
-/** Normaliza datos de BD (activities + legacy quiz/minigame) a lista ordenada de actividades. */
+/**
+ * Normaliza datos de BD (activities + legacy quiz/minigame) a lista ordenada de actividades.
+ *
+ * Si hay un array `activities` no vacío, se parte de ahí y **se añaden** quiz/minigame legacy
+ * solo cuando ese tipo aún no está en el array (evita perder datos al migrar de columnas legacy).
+ */
 export function normalizeSectionActivities(section: {
   activities?: unknown;
   quiz?: unknown;
   minigame?: unknown;
 }): SectionActivity[] {
   const raw = section.activities;
+  let base: SectionActivity[] = [];
   if (isActivityArray(raw)) {
-    return raw
+    base = raw
       .map((a) => normalizeOneActivity(a))
       .filter((a): a is SectionActivity => a !== null);
   }
 
-  const out: SectionActivity[] = [];
+  const hasQuiz = base.some((a) => a.kind === "quiz");
+  const hasMinigame = base.some((a) => a.kind === "minigame");
+
   const q = section.quiz as SectionQuiz | undefined;
-  if (q && Array.isArray(q.questions) && q.questions.length > 0 && typeof q.passingScore === "number") {
-    out.push({
+  if (!hasQuiz && q && Array.isArray(q.questions) && q.questions.length > 0 && typeof q.passingScore === "number") {
+    base.push({
       id: LEGACY_QUIZ_ID,
       kind: "quiz",
       passingScore: q.passingScore,
@@ -36,10 +44,11 @@ export function normalizeSectionActivities(section: {
     });
   }
   const m = section.minigame as SectionMinigame | undefined;
-  if (m && typeof (m as { type?: string }).type === "string") {
-    out.push({ id: LEGACY_MINI_ID, kind: "minigame", minigame: m });
+  if (!hasMinigame && m && typeof (m as { type?: string }).type === "string") {
+    base.push({ id: LEGACY_MINI_ID, kind: "minigame", minigame: m });
   }
-  return out;
+
+  return base;
 }
 
 function normalizeOneActivity(a: unknown): SectionActivity | null {

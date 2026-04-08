@@ -60,6 +60,8 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
       title: s.title,
       description: s.description,
       order: s.order,
+      /** Actividades de cierre (JSON); debe viajar al cliente para no perder datos al guardar el curso completo */
+      activities: toPlainJson(s.activities),
       quiz: toPlainJson(s.quiz),
       minigame: toPlainJson(s.minigame),
       lessons: s.lessons.map((l) => ({
