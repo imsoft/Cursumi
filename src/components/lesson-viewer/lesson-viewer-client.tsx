@@ -628,16 +628,61 @@ export function LessonViewerClient({
     }
 
     if (lesson.type === "assignment") {
+      let assignmentInstructions = lesson.content || "";
+      let assignmentCriteria: { id: string; criterion: string; points?: number }[] = [];
+      if (lesson.content?.trim().startsWith("{")) {
+        try {
+          const parsed = JSON.parse(lesson.content);
+          assignmentInstructions = parsed.instructions || "";
+          assignmentCriteria = parsed.criteria || [];
+        } catch {
+          // JSON malformed (e.g. literal newlines) — extract via string search
+          const instrKey = '"instructions":"';
+          const keyIdx = lesson.content.indexOf(instrKey);
+          const critBoundary = lesson.content.lastIndexOf('","criteria":');
+          if (keyIdx !== -1 && critBoundary > keyIdx) {
+            assignmentInstructions = lesson.content
+              .slice(keyIdx + instrKey.length, critBoundary)
+              .replace(/\\n/g, "\n")
+              .replace(/\\r/g, "")
+              .replace(/\\"/g, '"')
+              .replace(/\\\\/g, "\\");
+            try {
+              const criteriaStr = lesson.content.slice(critBoundary + '","criteria":'.length, -1);
+              assignmentCriteria = JSON.parse(criteriaStr) || [];
+            } catch { /* skip criteria if also malformed */ }
+          } else {
+            // Not the expected JSON format — show nothing rather than raw JSON
+            assignmentInstructions = "";
+          }
+        }
+      }
       return (
         <div className="space-y-4 rounded-lg border border-border bg-card p-6">
           <h2 className="text-xl font-semibold">Tarea</h2>
-          {lesson.content && (
+          {assignmentInstructions && (
             <div className="prose prose-neutral dark:prose-invert max-w-none text-sm">
-              {lesson.content.includes("<") ? (
-                <RichTextRenderer content={lesson.content} />
+              {assignmentInstructions.includes("<") ? (
+                <RichTextRenderer content={assignmentInstructions} />
               ) : (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{assignmentInstructions}</ReactMarkdown>
               )}
+            </div>
+          )}
+          {assignmentCriteria.length > 0 && (
+            <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-2">
+              <h3 className="text-sm font-semibold text-foreground">Criterios de evaluación</h3>
+              <ul className="space-y-1">
+                {assignmentCriteria.map((c) => (
+                  <li key={c.id} className="flex items-start gap-2 text-sm text-foreground">
+                    <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <span>{c.criterion}</span>
+                    {c.points != null && (
+                      <span className="ml-auto shrink-0 text-xs text-muted-foreground">{c.points} pts</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
           <div className="space-y-2">

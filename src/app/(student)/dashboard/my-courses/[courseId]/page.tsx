@@ -107,10 +107,14 @@ export default async function MyCourseDetailPage({
       })
     : null;
 
-  // Reparar certificado faltante si el progreso ya es 100% (p. ej. estado previo inconsistente)
-  if (session && enrollmentDetail.progress === 100 && !certificate) {
+  // Recalcular progreso si el enrollment dice 100% pero hay lecciones sin completar
+  // (puede pasar cuando el instructor agrega lecciones nuevas después de que el alumno completó el curso)
+  const enrollmentProgressStale = progress === 100 && !allLessonsCompleted;
+  let displayProgress = progress;
+
+  if (session && (enrollmentProgressStale || (progress === 100 && !certificate))) {
     try {
-      await recalculateEnrollmentProgress(enrollmentDetail.id, courseId);
+      displayProgress = await recalculateEnrollmentProgress(enrollmentDetail.id, courseId);
       certificate = await prisma.certificate.findFirst({
         where: { courseId, userId: session.user.id },
         select: { id: true, type: true },
@@ -192,9 +196,9 @@ export default async function MyCourseDetailPage({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium text-foreground">Progreso</span>
-              <span className="font-semibold text-foreground">{progress}%</span>
+              <span className="font-semibold text-foreground">{displayProgress}%</span>
             </div>
-            <Progress value={progress} className="h-2.5 rounded-full" />
+            <Progress value={displayProgress} className="h-2.5 rounded-full" />
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {course.duration && (
@@ -438,7 +442,7 @@ export default async function MyCourseDetailPage({
             <div className="flex justify-end">
               <Button asChild>
                 <Link href={`/dashboard/my-courses/${courseId}/lessons/${nextLesson.id}`}>
-                  {progress === 0 ? "Comenzar curso" : "Continuar curso"}
+                  {displayProgress === 0 ? "Comenzar curso" : "Continuar curso"}
                 </Link>
               </Button>
             </div>

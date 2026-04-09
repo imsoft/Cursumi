@@ -14,11 +14,16 @@ import {
   Plus, Trash2, CheckCircle2, Circle, Upload,
   FileText, Image as ImageIcon, File, Link as LinkIcon, X, Pencil, Check,
 } from "lucide-react";
-import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource } from "./course-types";
+import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource, SectionMinigame } from "./course-types";
+import { SectionActivityEditor } from "./section-activity-editor";
 import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
 import { saveLessonContent } from "@/app/actions/course-actions";
 import { stripHtml } from "@/lib/utils";
 import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
+import {
+  parseSectionMinigameFromLessonContent,
+  stringifySectionMinigamePayload,
+} from "@/lib/gate-lesson-content";
 
 interface LessonPageClientProps {
   courseId: string;
@@ -30,6 +35,7 @@ const lessonTypeOptions = [
   { value: "text", label: "Texto" },
   { value: "quiz", label: "Quiz" },
   { value: "assignment", label: "Tarea" },
+  { value: "section_minigame", label: "Minijuego" },
 ];
 
 export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
@@ -59,6 +65,13 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [quizAttempts, setQuizAttempts] = useState<number | undefined>(lesson.quizAttempts);
   const [quizPassingRequired, setQuizPassingRequired] = useState(lesson.quizPassingRequired ?? false);
   const [quizPassingScore, setQuizPassingScore] = useState(lesson.quizPassingScore ?? 70);
+  // Minigame
+  const [gateMinigame, setGateMinigame] = useState<SectionMinigame | null>(() => {
+    if (lesson.type === "section_minigame") {
+      return parseSectionMinigameFromLessonContent(lesson.content) ?? { type: "memory", instruction: "", pairs: [] };
+    }
+    return null;
+  });
   // New question form
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
   const [newQuestionType, setNewQuestionType] = useState<"multiple-choice" | "true-false" | "checkbox">("multiple-choice");
@@ -78,9 +91,17 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
     setSaving(true);
     setSaveError(null);
     try {
+      const savedContent = type === "section_minigame" && gateMinigame
+        ? stringifySectionMinigamePayload(gateMinigame)
+        : content;
       await saveLessonContent(courseId, lesson.id, {
-        title, description, type, duration, content, videoUrl,
-        files, resources, quizQuestions, evaluationCriteria,
+        title, description, type, duration,
+        content: savedContent,
+        videoUrl: type === "section_minigame" ? "" : videoUrl,
+        files: type === "section_minigame" ? [] : files,
+        resources: type === "section_minigame" ? [] : resources,
+        quizQuestions: type === "quiz" ? quizQuestions : undefined,
+        evaluationCriteria: type === "assignment" ? evaluationCriteria : undefined,
         quizTimeLimit: type === "quiz" ? quizTimeLimit : undefined,
         quizAttempts: type === "quiz" ? quizAttempts : undefined,
         quizPassingRequired: type === "quiz" ? quizPassingRequired : undefined,
@@ -290,7 +311,13 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
               label="Tipo de lección *"
               options={lessonTypeOptions}
               value={type}
-              onChange={(e) => setType(e.target.value as CourseLesson["type"])}
+              onChange={(e) => {
+                const v = e.target.value as CourseLesson["type"];
+                setType(v);
+                if (v === "section_minigame" && !gateMinigame) {
+                  setGateMinigame({ type: "memory", instruction: "", pairs: [] });
+                }
+              }}
             />
           </div>
 
@@ -649,6 +676,17 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                 </div>
               </div>
             </div>
+          )}
+
+          {/* ── Minijuego ── */}
+          {type === "section_minigame" && gateMinigame && (
+            <SectionActivityEditor
+              mode="lessonMinigame"
+              minigame={gateMinigame}
+              onMinigameChange={(m) => setGateMinigame(m ?? { type: "memory", instruction: "", pairs: [] })}
+              quiz={undefined}
+              onQuizChange={() => {}}
+            />
           )}
         </CardContent>
       </Card>
