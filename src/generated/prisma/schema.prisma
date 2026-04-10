@@ -51,6 +51,7 @@ model User {
   courseNotes               CourseNote[]
   sessionAnonymousQuestions SessionAnonymousQuestion[]
   learningReflections       LearningReflection[]
+  wishlistItems             WishlistItem[]
 }
 
 model Account {
@@ -133,9 +134,9 @@ enum LessonType {
   text
   quiz
   assignment
-  /// Test de cierre (misma estructura que el antiguo test al final de sección); contenido JSON = SectionQuiz
+  /// Test (misma estructura que el antiguo test al final de sección); contenido JSON = SectionQuiz
   section_quiz
-  /// Minijuego de cierre; contenido JSON = SectionMinigame
+  /// Minijuego; contenido JSON = SectionMinigame
   section_minigame
 }
 
@@ -283,6 +284,7 @@ model Course {
   notes                     CourseNote[]
   sessionAnonymousQuestions SessionAnonymousQuestion[]
   learningReflections       LearningReflection[]
+  wishlistItems             WishlistItem[]
 
   @@index([instructorId])
   @@index([status])
@@ -319,6 +321,7 @@ model Lesson {
   content     String?    @db.Text
   attachments Json? // CourseFile[] — PDFs y archivos descargables
   resources   Json? // CourseResource[] — enlaces externos
+  isFree      Boolean    @default(false) // Preview gratuita — visible sin enrolamiento
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -909,4 +912,20 @@ model CourseNote {
   @@index([userId])
   @@index([courseId])
   @@index([lessonId])
+}
+
+// WISHLIST
+// ─────────────────────────────────────────
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
 }

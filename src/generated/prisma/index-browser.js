@@ -263,6 +263,7 @@ exports.Prisma.LessonScalarFieldEnum = {
   content: 'content',
   attachments: 'attachments',
   resources: 'resources',
+  isFree: 'isFree',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -585,6 +586,13 @@ exports.Prisma.CourseNoteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WishlistItemScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -747,7 +755,8 @@ exports.Prisma.ModelName = {
   Kpi: 'Kpi',
   SiteSetting: 'SiteSetting',
   Coupon: 'Coupon',
-  CourseNote: 'CourseNote'
+  CourseNote: 'CourseNote',
+  WishlistItem: 'WishlistItem'
 };
 
 /**

@@ -21,11 +21,13 @@ import {
   Gamepad2,
   FileText,
   BookOpen,
+  Heart,
 } from "lucide-react";
 
 const studentNavItems = [
   { title: "Inicio", href: "/dashboard", icon: LayoutDashboard },
   { title: "Mis cursos", href: "/dashboard/my-courses", icon: BookOpenCheck },
+  { title: "Guardados", href: "/dashboard/wishlist", icon: Heart },
   { title: "Mis notas", href: "/dashboard/notes", icon: BookOpen },
   { title: "Certificados", href: "/dashboard/certificates", icon: Award },
   { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
@@ -36,6 +38,7 @@ const studentNavItems = [
 
 const pathnameToTitle: Record<string, string> = {
   "/dashboard/my-courses": "Mis cursos",
+  "/dashboard/wishlist": "Guardados",
   "/dashboard/notes": "Mis notas",
   "/dashboard/certificates": "Certificados",
   "/dashboard/explore": "Explorar cursos",

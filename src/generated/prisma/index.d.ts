@@ -213,6 +213,11 @@ export type Coupon = $Result.DefaultSelection<Prisma.$CouponPayload>
  * 
  */
 export type CourseNote = $Result.DefaultSelection<Prisma.$CourseNotePayload>
+/**
+ * Model WishlistItem
+ * 
+ */
+export type WishlistItem = $Result.DefaultSelection<Prisma.$WishlistItemPayload>
 
 /**
  * Enums
@@ -933,6 +938,16 @@ export class PrismaClient<
     * ```
     */
   get courseNote(): Prisma.CourseNoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.wishlistItem`: Exposes CRUD operations for the **WishlistItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WishlistItems
+    * const wishlistItems = await prisma.wishlistItem.findMany()
+    * ```
+    */
+  get wishlistItem(): Prisma.WishlistItemDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1406,7 +1421,8 @@ export namespace Prisma {
     Kpi: 'Kpi',
     SiteSetting: 'SiteSetting',
     Coupon: 'Coupon',
-    CourseNote: 'CourseNote'
+    CourseNote: 'CourseNote',
+    WishlistItem: 'WishlistItem'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1422,7 +1438,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4386,6 +4402,80 @@ export namespace Prisma {
           }
         }
       }
+      WishlistItem: {
+        payload: Prisma.$WishlistItemPayload<ExtArgs>
+        fields: Prisma.WishlistItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WishlistItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WishlistItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>
+          }
+          findFirst: {
+            args: Prisma.WishlistItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WishlistItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>
+          }
+          findMany: {
+            args: Prisma.WishlistItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>[]
+          }
+          create: {
+            args: Prisma.WishlistItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>
+          }
+          createMany: {
+            args: Prisma.WishlistItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WishlistItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>[]
+          }
+          delete: {
+            args: Prisma.WishlistItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>
+          }
+          update: {
+            args: Prisma.WishlistItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.WishlistItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WishlistItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WishlistItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.WishlistItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WishlistItemPayload>
+          }
+          aggregate: {
+            args: Prisma.WishlistItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWishlistItem>
+          }
+          groupBy: {
+            args: Prisma.WishlistItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WishlistItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WishlistItemCountArgs<ExtArgs>
+            result: $Utils.Optional<WishlistItemCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4534,6 +4624,7 @@ export namespace Prisma {
     siteSetting?: SiteSettingOmit
     coupon?: CouponOmit
     courseNote?: CourseNoteOmit
+    wishlistItem?: WishlistItemOmit
   }
 
   /* Types for Logging */
@@ -4631,6 +4722,7 @@ export namespace Prisma {
     courseNotes: number
     sessionAnonymousQuestions: number
     learningReflections: number
+    wishlistItems: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4651,6 +4743,7 @@ export namespace Prisma {
     courseNotes?: boolean | UserCountOutputTypeCountCourseNotesArgs
     sessionAnonymousQuestions?: boolean | UserCountOutputTypeCountSessionAnonymousQuestionsArgs
     learningReflections?: boolean | UserCountOutputTypeCountLearningReflectionsArgs
+    wishlistItems?: boolean | UserCountOutputTypeCountWishlistItemsArgs
   }
 
   // Custom InputTypes
@@ -4783,6 +4876,13 @@ export namespace Prisma {
     where?: LearningReflectionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountWishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WishlistItemWhereInput
+  }
+
 
   /**
    * Count Type CategoryCountOutputType
@@ -4832,6 +4932,7 @@ export namespace Prisma {
     notes: number
     sessionAnonymousQuestions: number
     learningReflections: number
+    wishlistItems: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4847,6 +4948,7 @@ export namespace Prisma {
     notes?: boolean | CourseCountOutputTypeCountNotesArgs
     sessionAnonymousQuestions?: boolean | CourseCountOutputTypeCountSessionAnonymousQuestionsArgs
     learningReflections?: boolean | CourseCountOutputTypeCountLearningReflectionsArgs
+    wishlistItems?: boolean | CourseCountOutputTypeCountWishlistItemsArgs
   }
 
   // Custom InputTypes
@@ -4942,6 +5044,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountLearningReflectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LearningReflectionWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountWishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WishlistItemWhereInput
   }
 
 
@@ -5669,6 +5778,7 @@ export namespace Prisma {
     courseNotes?: boolean | User$courseNotesArgs<ExtArgs>
     sessionAnonymousQuestions?: boolean | User$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
+    wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5750,6 +5860,7 @@ export namespace Prisma {
     courseNotes?: boolean | User$courseNotesArgs<ExtArgs>
     sessionAnonymousQuestions?: boolean | User$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
+    wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5777,6 +5888,7 @@ export namespace Prisma {
       courseNotes: Prisma.$CourseNotePayload<ExtArgs>[]
       sessionAnonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
       learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
+      wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6211,6 +6323,7 @@ export namespace Prisma {
     courseNotes<T extends User$courseNotesArgs<ExtArgs> = {}>(args?: Subset<T, User$courseNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessionAnonymousQuestions<T extends User$sessionAnonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionAnonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     learningReflections<T extends User$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    wishlistItems<T extends User$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7087,6 +7200,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * User.wishlistItems
+   */
+  export type User$wishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    where?: WishlistItemWhereInput
+    orderBy?: WishlistItemOrderByWithRelationInput | WishlistItemOrderByWithRelationInput[]
+    cursor?: WishlistItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
   }
 
   /**
@@ -14170,6 +14307,7 @@ export namespace Prisma {
     notes?: boolean | Course$notesArgs<ExtArgs>
     sessionAnonymousQuestions?: boolean | Course$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
+    wishlistItems?: boolean | Course$wishlistItemsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -14277,6 +14415,7 @@ export namespace Prisma {
     notes?: boolean | Course$notesArgs<ExtArgs>
     sessionAnonymousQuestions?: boolean | Course$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
+    wishlistItems?: boolean | Course$wishlistItemsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14305,6 +14444,7 @@ export namespace Prisma {
       notes: Prisma.$CourseNotePayload<ExtArgs>[]
       sessionAnonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
       learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
+      wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14743,6 +14883,7 @@ export namespace Prisma {
     notes<T extends Course$notesArgs<ExtArgs> = {}>(args?: Subset<T, Course$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessionAnonymousQuestions<T extends Course$sessionAnonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$sessionAnonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     learningReflections<T extends Course$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    wishlistItems<T extends Course$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, Course$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15497,6 +15638,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LearningReflectionScalarFieldEnum | LearningReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * Course.wishlistItems
+   */
+  export type Course$wishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    where?: WishlistItemWhereInput
+    orderBy?: WishlistItemOrderByWithRelationInput | WishlistItemOrderByWithRelationInput[]
+    cursor?: WishlistItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
   }
 
   /**
@@ -16725,6 +16890,7 @@ export namespace Prisma {
     order: number | null
     videoUrl: string | null
     content: string | null
+    isFree: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16739,6 +16905,7 @@ export namespace Prisma {
     order: number | null
     videoUrl: string | null
     content: string | null
+    isFree: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16755,6 +16922,7 @@ export namespace Prisma {
     content: number
     attachments: number
     resources: number
+    isFree: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -16779,6 +16947,7 @@ export namespace Prisma {
     order?: true
     videoUrl?: true
     content?: true
+    isFree?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16793,6 +16962,7 @@ export namespace Prisma {
     order?: true
     videoUrl?: true
     content?: true
+    isFree?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16809,6 +16979,7 @@ export namespace Prisma {
     content?: true
     attachments?: true
     resources?: true
+    isFree?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -16912,6 +17083,7 @@ export namespace Prisma {
     content: string | null
     attachments: JsonValue | null
     resources: JsonValue | null
+    isFree: boolean
     createdAt: Date
     updatedAt: Date
     _count: LessonCountAggregateOutputType | null
@@ -16947,6 +17119,7 @@ export namespace Prisma {
     content?: boolean
     attachments?: boolean
     resources?: boolean
+    isFree?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -16967,6 +17140,7 @@ export namespace Prisma {
     content?: boolean
     attachments?: boolean
     resources?: boolean
+    isFree?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -16984,6 +17158,7 @@ export namespace Prisma {
     content?: boolean
     attachments?: boolean
     resources?: boolean
+    isFree?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
@@ -17001,11 +17176,12 @@ export namespace Prisma {
     content?: boolean
     attachments?: boolean
     resources?: boolean
+    isFree?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "type" | "duration" | "order" | "videoUrl" | "content" | "attachments" | "resources" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
+  export type LessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sectionId" | "title" | "description" | "type" | "duration" | "order" | "videoUrl" | "content" | "attachments" | "resources" | "isFree" | "createdAt" | "updatedAt", ExtArgs["result"]["lesson"]>
   export type LessonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
     progress?: boolean | Lesson$progressArgs<ExtArgs>
@@ -17038,6 +17214,7 @@ export namespace Prisma {
       content: string | null
       attachments: Prisma.JsonValue | null
       resources: Prisma.JsonValue | null
+      isFree: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["lesson"]>
@@ -17477,6 +17654,7 @@ export namespace Prisma {
     readonly content: FieldRef<"Lesson", 'String'>
     readonly attachments: FieldRef<"Lesson", 'Json'>
     readonly resources: FieldRef<"Lesson", 'Json'>
+    readonly isFree: FieldRef<"Lesson", 'Boolean'>
     readonly createdAt: FieldRef<"Lesson", 'DateTime'>
     readonly updatedAt: FieldRef<"Lesson", 'DateTime'>
   }
@@ -51971,6 +52149,1059 @@ export namespace Prisma {
 
 
   /**
+   * Model WishlistItem
+   */
+
+  export type AggregateWishlistItem = {
+    _count: WishlistItemCountAggregateOutputType | null
+    _min: WishlistItemMinAggregateOutputType | null
+    _max: WishlistItemMaxAggregateOutputType | null
+  }
+
+  export type WishlistItemMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    createdAt: Date | null
+  }
+
+  export type WishlistItemMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    createdAt: Date | null
+  }
+
+  export type WishlistItemCountAggregateOutputType = {
+    id: number
+    userId: number
+    courseId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type WishlistItemMinAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    createdAt?: true
+  }
+
+  export type WishlistItemMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    createdAt?: true
+  }
+
+  export type WishlistItemCountAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type WishlistItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WishlistItem to aggregate.
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WishlistItems to fetch.
+     */
+    orderBy?: WishlistItemOrderByWithRelationInput | WishlistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WishlistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WishlistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WishlistItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WishlistItems
+    **/
+    _count?: true | WishlistItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WishlistItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WishlistItemMaxAggregateInputType
+  }
+
+  export type GetWishlistItemAggregateType<T extends WishlistItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateWishlistItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWishlistItem[P]>
+      : GetScalarType<T[P], AggregateWishlistItem[P]>
+  }
+
+
+
+
+  export type WishlistItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WishlistItemWhereInput
+    orderBy?: WishlistItemOrderByWithAggregationInput | WishlistItemOrderByWithAggregationInput[]
+    by: WishlistItemScalarFieldEnum[] | WishlistItemScalarFieldEnum
+    having?: WishlistItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WishlistItemCountAggregateInputType | true
+    _min?: WishlistItemMinAggregateInputType
+    _max?: WishlistItemMaxAggregateInputType
+  }
+
+  export type WishlistItemGroupByOutputType = {
+    id: string
+    userId: string
+    courseId: string
+    createdAt: Date
+    _count: WishlistItemCountAggregateOutputType | null
+    _min: WishlistItemMinAggregateOutputType | null
+    _max: WishlistItemMaxAggregateOutputType | null
+  }
+
+  type GetWishlistItemGroupByPayload<T extends WishlistItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WishlistItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WishlistItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WishlistItemGroupByOutputType[P]>
+            : GetScalarType<T[P], WishlistItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WishlistItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["wishlistItem"]>
+
+  export type WishlistItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["wishlistItem"]>
+
+  export type WishlistItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["wishlistItem"]>
+
+  export type WishlistItemSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    createdAt?: boolean
+  }
+
+  export type WishlistItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "courseId" | "createdAt", ExtArgs["result"]["wishlistItem"]>
+  export type WishlistItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type WishlistItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type WishlistItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+
+  export type $WishlistItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WishlistItem"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      courseId: string
+      createdAt: Date
+    }, ExtArgs["result"]["wishlistItem"]>
+    composites: {}
+  }
+
+  type WishlistItemGetPayload<S extends boolean | null | undefined | WishlistItemDefaultArgs> = $Result.GetResult<Prisma.$WishlistItemPayload, S>
+
+  type WishlistItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WishlistItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WishlistItemCountAggregateInputType | true
+    }
+
+  export interface WishlistItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WishlistItem'], meta: { name: 'WishlistItem' } }
+    /**
+     * Find zero or one WishlistItem that matches the filter.
+     * @param {WishlistItemFindUniqueArgs} args - Arguments to find a WishlistItem
+     * @example
+     * // Get one WishlistItem
+     * const wishlistItem = await prisma.wishlistItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WishlistItemFindUniqueArgs>(args: SelectSubset<T, WishlistItemFindUniqueArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WishlistItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WishlistItemFindUniqueOrThrowArgs} args - Arguments to find a WishlistItem
+     * @example
+     * // Get one WishlistItem
+     * const wishlistItem = await prisma.wishlistItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WishlistItemFindUniqueOrThrowArgs>(args: SelectSubset<T, WishlistItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WishlistItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemFindFirstArgs} args - Arguments to find a WishlistItem
+     * @example
+     * // Get one WishlistItem
+     * const wishlistItem = await prisma.wishlistItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WishlistItemFindFirstArgs>(args?: SelectSubset<T, WishlistItemFindFirstArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WishlistItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemFindFirstOrThrowArgs} args - Arguments to find a WishlistItem
+     * @example
+     * // Get one WishlistItem
+     * const wishlistItem = await prisma.wishlistItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WishlistItemFindFirstOrThrowArgs>(args?: SelectSubset<T, WishlistItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WishlistItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WishlistItems
+     * const wishlistItems = await prisma.wishlistItem.findMany()
+     * 
+     * // Get first 10 WishlistItems
+     * const wishlistItems = await prisma.wishlistItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const wishlistItemWithIdOnly = await prisma.wishlistItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WishlistItemFindManyArgs>(args?: SelectSubset<T, WishlistItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WishlistItem.
+     * @param {WishlistItemCreateArgs} args - Arguments to create a WishlistItem.
+     * @example
+     * // Create one WishlistItem
+     * const WishlistItem = await prisma.wishlistItem.create({
+     *   data: {
+     *     // ... data to create a WishlistItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends WishlistItemCreateArgs>(args: SelectSubset<T, WishlistItemCreateArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WishlistItems.
+     * @param {WishlistItemCreateManyArgs} args - Arguments to create many WishlistItems.
+     * @example
+     * // Create many WishlistItems
+     * const wishlistItem = await prisma.wishlistItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WishlistItemCreateManyArgs>(args?: SelectSubset<T, WishlistItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WishlistItems and returns the data saved in the database.
+     * @param {WishlistItemCreateManyAndReturnArgs} args - Arguments to create many WishlistItems.
+     * @example
+     * // Create many WishlistItems
+     * const wishlistItem = await prisma.wishlistItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WishlistItems and only return the `id`
+     * const wishlistItemWithIdOnly = await prisma.wishlistItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WishlistItemCreateManyAndReturnArgs>(args?: SelectSubset<T, WishlistItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WishlistItem.
+     * @param {WishlistItemDeleteArgs} args - Arguments to delete one WishlistItem.
+     * @example
+     * // Delete one WishlistItem
+     * const WishlistItem = await prisma.wishlistItem.delete({
+     *   where: {
+     *     // ... filter to delete one WishlistItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WishlistItemDeleteArgs>(args: SelectSubset<T, WishlistItemDeleteArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WishlistItem.
+     * @param {WishlistItemUpdateArgs} args - Arguments to update one WishlistItem.
+     * @example
+     * // Update one WishlistItem
+     * const wishlistItem = await prisma.wishlistItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WishlistItemUpdateArgs>(args: SelectSubset<T, WishlistItemUpdateArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WishlistItems.
+     * @param {WishlistItemDeleteManyArgs} args - Arguments to filter WishlistItems to delete.
+     * @example
+     * // Delete a few WishlistItems
+     * const { count } = await prisma.wishlistItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WishlistItemDeleteManyArgs>(args?: SelectSubset<T, WishlistItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WishlistItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WishlistItems
+     * const wishlistItem = await prisma.wishlistItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WishlistItemUpdateManyArgs>(args: SelectSubset<T, WishlistItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WishlistItems and returns the data updated in the database.
+     * @param {WishlistItemUpdateManyAndReturnArgs} args - Arguments to update many WishlistItems.
+     * @example
+     * // Update many WishlistItems
+     * const wishlistItem = await prisma.wishlistItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WishlistItems and only return the `id`
+     * const wishlistItemWithIdOnly = await prisma.wishlistItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WishlistItemUpdateManyAndReturnArgs>(args: SelectSubset<T, WishlistItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WishlistItem.
+     * @param {WishlistItemUpsertArgs} args - Arguments to update or create a WishlistItem.
+     * @example
+     * // Update or create a WishlistItem
+     * const wishlistItem = await prisma.wishlistItem.upsert({
+     *   create: {
+     *     // ... data to create a WishlistItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WishlistItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WishlistItemUpsertArgs>(args: SelectSubset<T, WishlistItemUpsertArgs<ExtArgs>>): Prisma__WishlistItemClient<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WishlistItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemCountArgs} args - Arguments to filter WishlistItems to count.
+     * @example
+     * // Count the number of WishlistItems
+     * const count = await prisma.wishlistItem.count({
+     *   where: {
+     *     // ... the filter for the WishlistItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends WishlistItemCountArgs>(
+      args?: Subset<T, WishlistItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WishlistItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WishlistItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WishlistItemAggregateArgs>(args: Subset<T, WishlistItemAggregateArgs>): Prisma.PrismaPromise<GetWishlistItemAggregateType<T>>
+
+    /**
+     * Group by WishlistItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WishlistItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WishlistItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WishlistItemGroupByArgs['orderBy'] }
+        : { orderBy?: WishlistItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WishlistItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWishlistItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WishlistItem model
+   */
+  readonly fields: WishlistItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WishlistItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WishlistItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WishlistItem model
+   */
+  interface WishlistItemFieldRefs {
+    readonly id: FieldRef<"WishlistItem", 'String'>
+    readonly userId: FieldRef<"WishlistItem", 'String'>
+    readonly courseId: FieldRef<"WishlistItem", 'String'>
+    readonly createdAt: FieldRef<"WishlistItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WishlistItem findUnique
+   */
+  export type WishlistItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WishlistItem to fetch.
+     */
+    where: WishlistItemWhereUniqueInput
+  }
+
+  /**
+   * WishlistItem findUniqueOrThrow
+   */
+  export type WishlistItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WishlistItem to fetch.
+     */
+    where: WishlistItemWhereUniqueInput
+  }
+
+  /**
+   * WishlistItem findFirst
+   */
+  export type WishlistItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WishlistItem to fetch.
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WishlistItems to fetch.
+     */
+    orderBy?: WishlistItemOrderByWithRelationInput | WishlistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WishlistItems.
+     */
+    cursor?: WishlistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WishlistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WishlistItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WishlistItems.
+     */
+    distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * WishlistItem findFirstOrThrow
+   */
+  export type WishlistItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WishlistItem to fetch.
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WishlistItems to fetch.
+     */
+    orderBy?: WishlistItemOrderByWithRelationInput | WishlistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WishlistItems.
+     */
+    cursor?: WishlistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WishlistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WishlistItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WishlistItems.
+     */
+    distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * WishlistItem findMany
+   */
+  export type WishlistItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which WishlistItems to fetch.
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WishlistItems to fetch.
+     */
+    orderBy?: WishlistItemOrderByWithRelationInput | WishlistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WishlistItems.
+     */
+    cursor?: WishlistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WishlistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WishlistItems.
+     */
+    skip?: number
+    distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * WishlistItem create
+   */
+  export type WishlistItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WishlistItem.
+     */
+    data: XOR<WishlistItemCreateInput, WishlistItemUncheckedCreateInput>
+  }
+
+  /**
+   * WishlistItem createMany
+   */
+  export type WishlistItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WishlistItems.
+     */
+    data: WishlistItemCreateManyInput | WishlistItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WishlistItem createManyAndReturn
+   */
+  export type WishlistItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many WishlistItems.
+     */
+    data: WishlistItemCreateManyInput | WishlistItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WishlistItem update
+   */
+  export type WishlistItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WishlistItem.
+     */
+    data: XOR<WishlistItemUpdateInput, WishlistItemUncheckedUpdateInput>
+    /**
+     * Choose, which WishlistItem to update.
+     */
+    where: WishlistItemWhereUniqueInput
+  }
+
+  /**
+   * WishlistItem updateMany
+   */
+  export type WishlistItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WishlistItems.
+     */
+    data: XOR<WishlistItemUpdateManyMutationInput, WishlistItemUncheckedUpdateManyInput>
+    /**
+     * Filter which WishlistItems to update
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * Limit how many WishlistItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WishlistItem updateManyAndReturn
+   */
+  export type WishlistItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * The data used to update WishlistItems.
+     */
+    data: XOR<WishlistItemUpdateManyMutationInput, WishlistItemUncheckedUpdateManyInput>
+    /**
+     * Filter which WishlistItems to update
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * Limit how many WishlistItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WishlistItem upsert
+   */
+  export type WishlistItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WishlistItem to update in case it exists.
+     */
+    where: WishlistItemWhereUniqueInput
+    /**
+     * In case the WishlistItem found by the `where` argument doesn't exist, create a new WishlistItem with this data.
+     */
+    create: XOR<WishlistItemCreateInput, WishlistItemUncheckedCreateInput>
+    /**
+     * In case the WishlistItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WishlistItemUpdateInput, WishlistItemUncheckedUpdateInput>
+  }
+
+  /**
+   * WishlistItem delete
+   */
+  export type WishlistItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+    /**
+     * Filter which WishlistItem to delete.
+     */
+    where: WishlistItemWhereUniqueInput
+  }
+
+  /**
+   * WishlistItem deleteMany
+   */
+  export type WishlistItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WishlistItems to delete
+     */
+    where?: WishlistItemWhereInput
+    /**
+     * Limit how many WishlistItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WishlistItem without action
+   */
+  export type WishlistItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WishlistItem
+     */
+    select?: WishlistItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WishlistItem
+     */
+    omit?: WishlistItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WishlistItemInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -52154,6 +53385,7 @@ export namespace Prisma {
     content: 'content',
     attachments: 'attachments',
     resources: 'resources',
+    isFree: 'isFree',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -52569,6 +53801,16 @@ export namespace Prisma {
   export type CourseNoteScalarFieldEnum = (typeof CourseNoteScalarFieldEnum)[keyof typeof CourseNoteScalarFieldEnum]
 
 
+  export const WishlistItemScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    createdAt: 'createdAt'
+  };
+
+  export type WishlistItemScalarFieldEnum = (typeof WishlistItemScalarFieldEnum)[keyof typeof WishlistItemScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -52951,6 +54193,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteListRelationFilter
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
+    wishlistItems?: WishlistItemListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -52989,6 +54232,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteOrderByRelationAggregateInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
     learningReflections?: LearningReflectionOrderByRelationAggregateInput
+    wishlistItems?: WishlistItemOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -53030,6 +54274,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteListRelationFilter
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
+    wishlistItems?: WishlistItemListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -53576,6 +54821,7 @@ export namespace Prisma {
     notes?: CourseNoteListRelationFilter
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
+    wishlistItems?: WishlistItemListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -53618,6 +54864,7 @@ export namespace Prisma {
     notes?: CourseNoteOrderByRelationAggregateInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
     learningReflections?: LearningReflectionOrderByRelationAggregateInput
+    wishlistItems?: WishlistItemOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -53663,6 +54910,7 @@ export namespace Prisma {
     notes?: CourseNoteListRelationFilter
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
+    wishlistItems?: WishlistItemListRelationFilter
   }, "id" | "slug">
 
   export type CourseOrderByWithAggregationInput = {
@@ -53822,6 +55070,7 @@ export namespace Prisma {
     content?: StringNullableFilter<"Lesson"> | string | null
     attachments?: JsonNullableFilter<"Lesson">
     resources?: JsonNullableFilter<"Lesson">
+    isFree?: BoolFilter<"Lesson"> | boolean
     createdAt?: DateTimeFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
@@ -53841,6 +55090,7 @@ export namespace Prisma {
     content?: SortOrderInput | SortOrder
     attachments?: SortOrderInput | SortOrder
     resources?: SortOrderInput | SortOrder
+    isFree?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     section?: CourseSectionOrderByWithRelationInput
@@ -53863,6 +55113,7 @@ export namespace Prisma {
     content?: StringNullableFilter<"Lesson"> | string | null
     attachments?: JsonNullableFilter<"Lesson">
     resources?: JsonNullableFilter<"Lesson">
+    isFree?: BoolFilter<"Lesson"> | boolean
     createdAt?: DateTimeFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
@@ -53882,6 +55133,7 @@ export namespace Prisma {
     content?: SortOrderInput | SortOrder
     attachments?: SortOrderInput | SortOrder
     resources?: SortOrderInput | SortOrder
+    isFree?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: LessonCountOrderByAggregateInput
@@ -53906,6 +55158,7 @@ export namespace Prisma {
     content?: StringNullableWithAggregatesFilter<"Lesson"> | string | null
     attachments?: JsonNullableWithAggregatesFilter<"Lesson">
     resources?: JsonNullableWithAggregatesFilter<"Lesson">
+    isFree?: BoolWithAggregatesFilter<"Lesson"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   }
@@ -56130,6 +57383,60 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CourseNote"> | Date | string
   }
 
+  export type WishlistItemWhereInput = {
+    AND?: WishlistItemWhereInput | WishlistItemWhereInput[]
+    OR?: WishlistItemWhereInput[]
+    NOT?: WishlistItemWhereInput | WishlistItemWhereInput[]
+    id?: StringFilter<"WishlistItem"> | string
+    userId?: StringFilter<"WishlistItem"> | string
+    courseId?: StringFilter<"WishlistItem"> | string
+    createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+  }
+
+  export type WishlistItemOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+  }
+
+  export type WishlistItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_courseId?: WishlistItemUserIdCourseIdCompoundUniqueInput
+    AND?: WishlistItemWhereInput | WishlistItemWhereInput[]
+    OR?: WishlistItemWhereInput[]
+    NOT?: WishlistItemWhereInput | WishlistItemWhereInput[]
+    userId?: StringFilter<"WishlistItem"> | string
+    courseId?: StringFilter<"WishlistItem"> | string
+    createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+  }, "id" | "userId_courseId">
+
+  export type WishlistItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    createdAt?: SortOrder
+    _count?: WishlistItemCountOrderByAggregateInput
+    _max?: WishlistItemMaxOrderByAggregateInput
+    _min?: WishlistItemMinOrderByAggregateInput
+  }
+
+  export type WishlistItemScalarWhereWithAggregatesInput = {
+    AND?: WishlistItemScalarWhereWithAggregatesInput | WishlistItemScalarWhereWithAggregatesInput[]
+    OR?: WishlistItemScalarWhereWithAggregatesInput[]
+    NOT?: WishlistItemScalarWhereWithAggregatesInput | WishlistItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WishlistItem"> | string
+    userId?: StringWithAggregatesFilter<"WishlistItem"> | string
+    courseId?: StringWithAggregatesFilter<"WishlistItem"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"WishlistItem"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -56166,6 +57473,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -56204,6 +57512,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -56242,6 +57551,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -56280,6 +57590,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -56888,6 +58199,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -56928,6 +58240,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -56968,6 +58281,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -57008,6 +58322,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -57187,6 +58502,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
@@ -57206,6 +58522,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -57223,6 +58540,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
@@ -57242,6 +58560,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
@@ -57260,6 +58579,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -57275,6 +58595,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -57291,6 +58612,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59565,6 +60887,53 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WishlistItemCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutWishlistItemsInput
+    course: CourseCreateNestedOneWithoutWishlistItemsInput
+  }
+
+  export type WishlistItemUncheckedCreateInput = {
+    id?: string
+    userId: string
+    courseId: string
+    createdAt?: Date | string
+  }
+
+  export type WishlistItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWishlistItemsNestedInput
+    course?: CourseUpdateOneRequiredWithoutWishlistItemsNestedInput
+  }
+
+  export type WishlistItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WishlistItemCreateManyInput = {
+    id?: string
+    userId: string
+    courseId: string
+    createdAt?: Date | string
+  }
+
+  export type WishlistItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WishlistItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -59724,6 +61093,12 @@ export namespace Prisma {
     none?: LearningReflectionWhereInput
   }
 
+  export type WishlistItemListRelationFilter = {
+    every?: WishlistItemWhereInput
+    some?: WishlistItemWhereInput
+    none?: WishlistItemWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -59790,6 +61165,10 @@ export namespace Prisma {
   }
 
   export type LearningReflectionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WishlistItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -60607,6 +61986,7 @@ export namespace Prisma {
     content?: SortOrder
     attachments?: SortOrder
     resources?: SortOrder
+    isFree?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60625,6 +62005,7 @@ export namespace Prisma {
     order?: SortOrder
     videoUrl?: SortOrder
     content?: SortOrder
+    isFree?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60639,6 +62020,7 @@ export namespace Prisma {
     order?: SortOrder
     videoUrl?: SortOrder
     content?: SortOrder
+    isFree?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -62170,6 +63552,32 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type WishlistItemUserIdCourseIdCompoundUniqueInput = {
+    userId: string
+    courseId: string
+  }
+
+  export type WishlistItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WishlistItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WishlistItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -62301,6 +63709,13 @@ export namespace Prisma {
     connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
   }
 
+  export type WishlistItemCreateNestedManyWithoutUserInput = {
+    create?: XOR<WishlistItemCreateWithoutUserInput, WishlistItemUncheckedCreateWithoutUserInput> | WishlistItemCreateWithoutUserInput[] | WishlistItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutUserInput | WishlistItemCreateOrConnectWithoutUserInput[]
+    createMany?: WishlistItemCreateManyUserInputEnvelope
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -62430,6 +63845,13 @@ export namespace Prisma {
     connectOrCreate?: LearningReflectionCreateOrConnectWithoutUserInput | LearningReflectionCreateOrConnectWithoutUserInput[]
     createMany?: LearningReflectionCreateManyUserInputEnvelope
     connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+  }
+
+  export type WishlistItemUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<WishlistItemCreateWithoutUserInput, WishlistItemUncheckedCreateWithoutUserInput> | WishlistItemCreateWithoutUserInput[] | WishlistItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutUserInput | WishlistItemCreateOrConnectWithoutUserInput[]
+    createMany?: WishlistItemCreateManyUserInputEnvelope
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -62710,6 +64132,20 @@ export namespace Prisma {
     deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
   }
 
+  export type WishlistItemUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WishlistItemCreateWithoutUserInput, WishlistItemUncheckedCreateWithoutUserInput> | WishlistItemCreateWithoutUserInput[] | WishlistItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutUserInput | WishlistItemCreateOrConnectWithoutUserInput[]
+    upsert?: WishlistItemUpsertWithWhereUniqueWithoutUserInput | WishlistItemUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WishlistItemCreateManyUserInputEnvelope
+    set?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    disconnect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    delete?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    update?: WishlistItemUpdateWithWhereUniqueWithoutUserInput | WishlistItemUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WishlistItemUpdateManyWithWhereWithoutUserInput | WishlistItemUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -62968,6 +64404,20 @@ export namespace Prisma {
     deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
   }
 
+  export type WishlistItemUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WishlistItemCreateWithoutUserInput, WishlistItemUncheckedCreateWithoutUserInput> | WishlistItemCreateWithoutUserInput[] | WishlistItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutUserInput | WishlistItemCreateOrConnectWithoutUserInput[]
+    upsert?: WishlistItemUpsertWithWhereUniqueWithoutUserInput | WishlistItemUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WishlistItemCreateManyUserInputEnvelope
+    set?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    disconnect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    delete?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    update?: WishlistItemUpdateWithWhereUniqueWithoutUserInput | WishlistItemUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WishlistItemUpdateManyWithWhereWithoutUserInput | WishlistItemUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -63186,6 +64636,13 @@ export namespace Prisma {
     connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
   }
 
+  export type WishlistItemCreateNestedManyWithoutCourseInput = {
+    create?: XOR<WishlistItemCreateWithoutCourseInput, WishlistItemUncheckedCreateWithoutCourseInput> | WishlistItemCreateWithoutCourseInput[] | WishlistItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutCourseInput | WishlistItemCreateOrConnectWithoutCourseInput[]
+    createMany?: WishlistItemCreateManyCourseInputEnvelope
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+  }
+
   export type CourseSectionUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -63268,6 +64725,13 @@ export namespace Prisma {
     connectOrCreate?: LearningReflectionCreateOrConnectWithoutCourseInput | LearningReflectionCreateOrConnectWithoutCourseInput[]
     createMany?: LearningReflectionCreateManyCourseInputEnvelope
     connect?: LearningReflectionWhereUniqueInput | LearningReflectionWhereUniqueInput[]
+  }
+
+  export type WishlistItemUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<WishlistItemCreateWithoutCourseInput, WishlistItemUncheckedCreateWithoutCourseInput> | WishlistItemCreateWithoutCourseInput[] | WishlistItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutCourseInput | WishlistItemCreateOrConnectWithoutCourseInput[]
+    createMany?: WishlistItemCreateManyCourseInputEnvelope
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
   }
 
   export type EnumModalityFieldUpdateOperationsInput = {
@@ -63472,6 +64936,20 @@ export namespace Prisma {
     deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
   }
 
+  export type WishlistItemUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<WishlistItemCreateWithoutCourseInput, WishlistItemUncheckedCreateWithoutCourseInput> | WishlistItemCreateWithoutCourseInput[] | WishlistItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutCourseInput | WishlistItemCreateOrConnectWithoutCourseInput[]
+    upsert?: WishlistItemUpsertWithWhereUniqueWithoutCourseInput | WishlistItemUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: WishlistItemCreateManyCourseInputEnvelope
+    set?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    disconnect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    delete?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    update?: WishlistItemUpdateWithWhereUniqueWithoutCourseInput | WishlistItemUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: WishlistItemUpdateManyWithWhereWithoutCourseInput | WishlistItemUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+  }
+
   export type CourseSectionUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -63638,6 +65116,20 @@ export namespace Prisma {
     update?: LearningReflectionUpdateWithWhereUniqueWithoutCourseInput | LearningReflectionUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: LearningReflectionUpdateManyWithWhereWithoutCourseInput | LearningReflectionUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: LearningReflectionScalarWhereInput | LearningReflectionScalarWhereInput[]
+  }
+
+  export type WishlistItemUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<WishlistItemCreateWithoutCourseInput, WishlistItemUncheckedCreateWithoutCourseInput> | WishlistItemCreateWithoutCourseInput[] | WishlistItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: WishlistItemCreateOrConnectWithoutCourseInput | WishlistItemCreateOrConnectWithoutCourseInput[]
+    upsert?: WishlistItemUpsertWithWhereUniqueWithoutCourseInput | WishlistItemUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: WishlistItemCreateManyCourseInputEnvelope
+    set?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    disconnect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    delete?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+    update?: WishlistItemUpdateWithWhereUniqueWithoutCourseInput | WishlistItemUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: WishlistItemUpdateManyWithWhereWithoutCourseInput | WishlistItemUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
   }
 
   export type CourseCreateNestedOneWithoutSectionsInput = {
@@ -65574,6 +67066,34 @@ export namespace Prisma {
     update?: XOR<XOR<LessonUpdateToOneWithWhereWithoutNotesInput, LessonUpdateWithoutNotesInput>, LessonUncheckedUpdateWithoutNotesInput>
   }
 
+  export type UserCreateNestedOneWithoutWishlistItemsInput = {
+    create?: XOR<UserCreateWithoutWishlistItemsInput, UserUncheckedCreateWithoutWishlistItemsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWishlistItemsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutWishlistItemsInput = {
+    create?: XOR<CourseCreateWithoutWishlistItemsInput, CourseUncheckedCreateWithoutWishlistItemsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutWishlistItemsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutWishlistItemsNestedInput = {
+    create?: XOR<UserCreateWithoutWishlistItemsInput, UserUncheckedCreateWithoutWishlistItemsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWishlistItemsInput
+    upsert?: UserUpsertWithoutWishlistItemsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWishlistItemsInput, UserUpdateWithoutWishlistItemsInput>, UserUncheckedUpdateWithoutWishlistItemsInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutWishlistItemsNestedInput = {
+    create?: XOR<CourseCreateWithoutWishlistItemsInput, CourseUncheckedCreateWithoutWishlistItemsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutWishlistItemsInput
+    upsert?: CourseUpsertWithoutWishlistItemsInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutWishlistItemsInput, CourseUpdateWithoutWishlistItemsInput>, CourseUncheckedUpdateWithoutWishlistItemsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -66265,6 +67785,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutInstructorInput = {
@@ -66304,6 +67825,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutInstructorInput = {
@@ -66753,6 +68275,28 @@ export namespace Prisma {
 
   export type LearningReflectionCreateManyUserInputEnvelope = {
     data: LearningReflectionCreateManyUserInput | LearningReflectionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WishlistItemCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    course: CourseCreateNestedOneWithoutWishlistItemsInput
+  }
+
+  export type WishlistItemUncheckedCreateWithoutUserInput = {
+    id?: string
+    courseId: string
+    createdAt?: Date | string
+  }
+
+  export type WishlistItemCreateOrConnectWithoutUserInput = {
+    where: WishlistItemWhereUniqueInput
+    create: XOR<WishlistItemCreateWithoutUserInput, WishlistItemUncheckedCreateWithoutUserInput>
+  }
+
+  export type WishlistItemCreateManyUserInputEnvelope = {
+    data: WishlistItemCreateManyUserInput | WishlistItemCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -67351,6 +68895,32 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"LearningReflection"> | Date | string
   }
 
+  export type WishlistItemUpsertWithWhereUniqueWithoutUserInput = {
+    where: WishlistItemWhereUniqueInput
+    update: XOR<WishlistItemUpdateWithoutUserInput, WishlistItemUncheckedUpdateWithoutUserInput>
+    create: XOR<WishlistItemCreateWithoutUserInput, WishlistItemUncheckedCreateWithoutUserInput>
+  }
+
+  export type WishlistItemUpdateWithWhereUniqueWithoutUserInput = {
+    where: WishlistItemWhereUniqueInput
+    data: XOR<WishlistItemUpdateWithoutUserInput, WishlistItemUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WishlistItemUpdateManyWithWhereWithoutUserInput = {
+    where: WishlistItemScalarWhereInput
+    data: XOR<WishlistItemUpdateManyMutationInput, WishlistItemUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type WishlistItemScalarWhereInput = {
+    AND?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+    OR?: WishlistItemScalarWhereInput[]
+    NOT?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+    id?: StringFilter<"WishlistItem"> | string
+    userId?: StringFilter<"WishlistItem"> | string
+    courseId?: StringFilter<"WishlistItem"> | string
+    createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -67386,6 +68956,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -67423,6 +68994,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -67476,6 +69048,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -67513,6 +69086,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -67550,6 +69124,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -67587,6 +69162,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -67640,6 +69216,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -67677,6 +69254,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorApplicationInput = {
@@ -67714,6 +69292,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorApplicationInput = {
@@ -67751,6 +69330,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorApplicationInput = {
@@ -67804,6 +69384,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorApplicationInput = {
@@ -67841,6 +69422,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorProfileInput = {
@@ -67878,6 +69460,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorProfileInput = {
@@ -67915,6 +69498,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorProfileInput = {
@@ -67968,6 +69552,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorProfileInput = {
@@ -68005,6 +69590,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutCategoryRefInput = {
@@ -68044,6 +69630,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCategoryRefInput = {
@@ -68083,6 +69670,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCategoryRefInput = {
@@ -68146,6 +69734,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorCoursesInput = {
@@ -68183,6 +69772,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorCoursesInput = {
@@ -68593,6 +70183,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WishlistItemCreateWithoutCourseInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutWishlistItemsInput
+  }
+
+  export type WishlistItemUncheckedCreateWithoutCourseInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type WishlistItemCreateOrConnectWithoutCourseInput = {
+    where: WishlistItemWhereUniqueInput
+    create: XOR<WishlistItemCreateWithoutCourseInput, WishlistItemUncheckedCreateWithoutCourseInput>
+  }
+
+  export type WishlistItemCreateManyCourseInputEnvelope = {
+    data: WishlistItemCreateManyCourseInput | WishlistItemCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutInstructorCoursesInput = {
     update: XOR<UserUpdateWithoutInstructorCoursesInput, UserUncheckedUpdateWithoutInstructorCoursesInput>
     create: XOR<UserCreateWithoutInstructorCoursesInput, UserUncheckedCreateWithoutInstructorCoursesInput>
@@ -68639,6 +70251,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorCoursesInput = {
@@ -68676,6 +70289,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -68947,6 +70561,22 @@ export namespace Prisma {
     data: XOR<LearningReflectionUpdateManyMutationInput, LearningReflectionUncheckedUpdateManyWithoutCourseInput>
   }
 
+  export type WishlistItemUpsertWithWhereUniqueWithoutCourseInput = {
+    where: WishlistItemWhereUniqueInput
+    update: XOR<WishlistItemUpdateWithoutCourseInput, WishlistItemUncheckedUpdateWithoutCourseInput>
+    create: XOR<WishlistItemCreateWithoutCourseInput, WishlistItemUncheckedCreateWithoutCourseInput>
+  }
+
+  export type WishlistItemUpdateWithWhereUniqueWithoutCourseInput = {
+    where: WishlistItemWhereUniqueInput
+    data: XOR<WishlistItemUpdateWithoutCourseInput, WishlistItemUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type WishlistItemUpdateManyWithWhereWithoutCourseInput = {
+    where: WishlistItemScalarWhereInput
+    data: XOR<WishlistItemUpdateManyMutationInput, WishlistItemUncheckedUpdateManyWithoutCourseInput>
+  }
+
   export type CourseCreateWithoutSectionsInput = {
     id?: string
     slug?: string | null
@@ -68984,6 +70614,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSectionsInput = {
@@ -69023,6 +70654,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSectionsInput = {
@@ -69041,6 +70673,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
@@ -69058,6 +70691,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -69150,6 +70784,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSectionsInput = {
@@ -69189,6 +70824,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutSectionInput = {
@@ -69222,6 +70858,7 @@ export namespace Prisma {
     content?: StringNullableFilter<"Lesson"> | string | null
     attachments?: JsonNullableFilter<"Lesson">
     resources?: JsonNullableFilter<"Lesson">
+    isFree?: BoolFilter<"Lesson"> | boolean
     createdAt?: DateTimeFilter<"Lesson"> | Date | string
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
   }
@@ -69469,6 +71106,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
@@ -69487,6 +71125,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
@@ -69566,6 +71205,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
@@ -69584,6 +71224,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
@@ -69626,6 +71267,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCourseSessionsInput = {
@@ -69665,6 +71307,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCourseSessionsInput = {
@@ -69800,6 +71443,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCourseSessionsInput = {
@@ -69839,6 +71483,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutSessionInput = {
@@ -69947,6 +71592,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -69986,6 +71632,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -70028,6 +71675,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -70065,6 +71713,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -70163,6 +71812,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -70202,6 +71852,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutSessionAnonymousQuestionsInput = {
@@ -70250,6 +71901,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -70287,6 +71939,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutEnrollmentsInput = {
@@ -70326,6 +71979,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -70365,6 +72019,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -70407,6 +72062,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -70444,6 +72100,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -70735,6 +72392,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -70774,6 +72432,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutEnrollmentsInput = {
@@ -70822,6 +72481,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -70859,6 +72519,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseSessionUpsertWithoutEnrollmentsInput = {
@@ -71189,6 +72850,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutLearningReflectionsInput = {
@@ -71228,6 +72890,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutLearningReflectionsInput = {
@@ -71270,6 +72933,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLearningReflectionsInput = {
@@ -71307,6 +72971,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLearningReflectionsInput = {
@@ -71409,6 +73074,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -71448,6 +73114,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutLearningReflectionsInput = {
@@ -71496,6 +73163,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -71533,6 +73201,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
@@ -71851,6 +73520,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -71888,6 +73558,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -71932,6 +73603,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCertificatesInput = {
@@ -71971,6 +73643,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCertificatesInput = {
@@ -72071,6 +73744,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -72108,6 +73782,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -72158,6 +73833,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
@@ -72197,6 +73873,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentCreateWithoutTransactionInput = {
@@ -72275,6 +73952,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -72312,6 +73990,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -72356,6 +74035,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTransactionsInput = {
@@ -72395,6 +74075,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTransactionsInput = {
@@ -72495,6 +74176,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -72532,6 +74214,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutTransactionsInput = {
@@ -72582,6 +74265,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTransactionsInput = {
@@ -72621,6 +74305,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateWithoutReviewsInput = {
@@ -72660,6 +74345,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutReviewsInput = {
@@ -72699,6 +74385,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutReviewsInput = {
@@ -72741,6 +74428,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -72778,6 +74466,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -72833,6 +74522,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutReviewsInput = {
@@ -72872,6 +74562,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutReviewsInput = {
@@ -72920,6 +74611,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -72957,6 +74649,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -72994,6 +74687,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -73031,6 +74725,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -73084,6 +74779,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -73121,6 +74817,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutConversationsInput = {
@@ -73160,6 +74857,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutConversationsInput = {
@@ -73199,6 +74897,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutConversationsInput = {
@@ -73241,6 +74940,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentConversationsInput = {
@@ -73278,6 +74978,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentConversationsInput = {
@@ -73320,6 +75021,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorConversationsInput = {
@@ -73357,6 +75059,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorConversationsInput = {
@@ -73438,6 +75141,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutConversationsInput = {
@@ -73477,6 +75181,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutStudentConversationsInput = {
@@ -73525,6 +75230,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentConversationsInput = {
@@ -73562,6 +75268,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructorConversationsInput = {
@@ -73610,6 +75317,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorConversationsInput = {
@@ -73647,6 +75355,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -73723,6 +75432,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -73760,6 +75470,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -73842,6 +75553,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -73879,6 +75591,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutHostedGamesInput = {
@@ -73916,6 +75629,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedGamesInput = {
@@ -73953,6 +75667,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedGamesInput = {
@@ -74096,6 +75811,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedGamesInput = {
@@ -74133,6 +75849,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizGameQuestionUpsertWithWhereUniqueWithoutGameInput = {
@@ -74397,6 +76114,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGameParticipationsInput = {
@@ -74434,6 +76152,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGameParticipationsInput = {
@@ -74556,6 +76275,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGameParticipationsInput = {
@@ -74593,6 +76313,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizGameAnswerUpsertWithWhereUniqueWithoutParticipantInput = {
@@ -75265,6 +76986,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrgMembershipsInput = {
@@ -75302,6 +77024,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrgMembershipsInput = {
@@ -75422,6 +77145,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrgMembershipsInput = {
@@ -75459,6 +77183,7 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TeamMemberUpsertWithWhereUniqueWithoutMemberInput = {
@@ -76006,6 +77731,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutOrgCourseAccessInput = {
@@ -76045,6 +77771,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutOrgCourseAccessInput = {
@@ -76147,6 +77874,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutOrgCourseAccessInput = {
@@ -76186,6 +77914,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type TeamCreateWithoutCourseAccessInput = {
@@ -76250,6 +77979,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTeamCourseAccessInput = {
@@ -76289,6 +78019,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTeamCourseAccessInput = {
@@ -76375,6 +78106,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTeamCourseAccessInput = {
@@ -76414,6 +78146,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type OrganizationCreateWithoutMaterialsInput = {
@@ -76539,6 +78272,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourseNotesInput = {
@@ -76576,6 +78310,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourseNotesInput = {
@@ -76620,6 +78355,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutNotesInput = {
@@ -76659,6 +78395,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutNotesInput = {
@@ -76677,6 +78414,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
@@ -76695,6 +78433,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -76751,6 +78490,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourseNotesInput = {
@@ -76788,6 +78528,7 @@ export namespace Prisma {
     orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutNotesInput = {
@@ -76838,6 +78579,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutNotesInput = {
@@ -76877,6 +78619,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithoutNotesInput = {
@@ -76901,6 +78644,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
@@ -76919,9 +78663,354 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  }
+
+  export type UserCreateWithoutWishlistItemsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutWishlistItemsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutWishlistItemsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWishlistItemsInput, UserUncheckedCreateWithoutWishlistItemsInput>
+  }
+
+  export type CourseCreateWithoutWishlistItemsInput = {
+    id?: string
+    slug?: string | null
+    title: string
+    description: string
+    category: string
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    state?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutInstructorCoursesInput
+    categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
+    sections?: CourseSectionCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    transactions?: TransactionCreateNestedManyWithoutCourseInput
+    reviews?: ReviewCreateNestedManyWithoutCourseInput
+    conversations?: ConversationCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutWishlistItemsInput = {
+    id?: string
+    slug?: string | null
+    instructorId: string
+    title: string
+    description: string
+    category: string
+    categoryId?: string | null
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    state?: string | null
+    location?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCourseInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutWishlistItemsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutWishlistItemsInput, CourseUncheckedCreateWithoutWishlistItemsInput>
+  }
+
+  export type UserUpsertWithoutWishlistItemsInput = {
+    update: XOR<UserUpdateWithoutWishlistItemsInput, UserUncheckedUpdateWithoutWishlistItemsInput>
+    create: XOR<UserCreateWithoutWishlistItemsInput, UserUncheckedCreateWithoutWishlistItemsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWishlistItemsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWishlistItemsInput, UserUncheckedUpdateWithoutWishlistItemsInput>
+  }
+
+  export type UserUpdateWithoutWishlistItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWishlistItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CourseUpsertWithoutWishlistItemsInput = {
+    update: XOR<CourseUpdateWithoutWishlistItemsInput, CourseUncheckedUpdateWithoutWishlistItemsInput>
+    create: XOR<CourseCreateWithoutWishlistItemsInput, CourseUncheckedCreateWithoutWishlistItemsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutWishlistItemsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutWishlistItemsInput, CourseUncheckedUpdateWithoutWishlistItemsInput>
+  }
+
+  export type CourseUpdateWithoutWishlistItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
+    categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
+    sections?: CourseSectionUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutWishlistItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -77113,6 +79202,12 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type WishlistItemCreateManyUserInput = {
+    id?: string
+    courseId: string
+    createdAt?: Date | string
+  }
+
   export type AccountUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
@@ -77225,6 +79320,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutInstructorInput = {
@@ -77264,6 +79360,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutInstructorInput = {
@@ -77730,6 +79827,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WishlistItemUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutWishlistItemsNestedInput
+  }
+
+  export type WishlistItemUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WishlistItemUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CourseCreateManyCategoryRefInput = {
     id?: string
     slug?: string | null
@@ -77794,6 +79909,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCategoryRefInput = {
@@ -77833,6 +79949,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutCategoryRefInput = {
@@ -77981,6 +80098,12 @@ export namespace Prisma {
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type WishlistItemCreateManyCourseInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
   }
 
   export type CourseSectionUpdateWithoutCourseInput = {
@@ -78368,6 +80491,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WishlistItemUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWishlistItemsNestedInput
+  }
+
+  export type WishlistItemUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WishlistItemUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LessonCreateManySectionInput = {
     id?: string
     title: string
@@ -78379,6 +80520,7 @@ export namespace Prisma {
     content?: string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -78403,6 +80545,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
@@ -78420,6 +80563,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
@@ -78437,6 +80581,7 @@ export namespace Prisma {
     content?: NullableStringFieldUpdateOperationsInput | string | null
     attachments?: NullableJsonNullValueInput | InputJsonValue
     resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

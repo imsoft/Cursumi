@@ -455,6 +455,7 @@ export async function updateLessonById(
     content?: string | null;
     attachments?: object[] | null;
     resources?: object[] | null;
+    isFree?: boolean;
   }
 ) {
   await prisma.lesson.update({
@@ -468,6 +469,7 @@ export async function updateLessonById(
       ...(data.content !== undefined && { content: data.content }),
       ...(data.attachments !== undefined && { attachments: data.attachments ?? Prisma.JsonNull }),
       ...(data.resources !== undefined && { resources: data.resources ?? Prisma.JsonNull }),
+      ...(data.isFree !== undefined && { isFree: data.isFree }),
     },
   });
 }
@@ -654,8 +656,15 @@ export async function getPublishedCourse(slugOrId: string) {
         take: 10,
       },
       sections: {
+        orderBy: { order: "asc" as const },
         select: {
-          lessons: { select: { duration: true } },
+          id: true,
+          title: true,
+          order: true,
+          lessons: {
+            orderBy: { order: "asc" as const },
+            select: { id: true, title: true, type: true, duration: true, order: true, isFree: true },
+          },
         },
       },
       courseSessions: {
@@ -710,12 +719,22 @@ export async function listStudentCourses(studentId: string): Promise<StudentCour
           status: true,
         },
       },
+      // Última lección con actividad para "Continúa donde lo dejaste"
+      lessonProgress: {
+        orderBy: { completedAt: "desc" },
+        take: 1,
+        select: {
+          lessonId: true,
+          lesson: { select: { title: true } },
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
 
   return enrollments.map((enrollment) => {
     const { course } = enrollment;
+    const lastProgress = enrollment.lessonProgress[0];
     return {
       id: course.id,
       title: course.title,
@@ -729,6 +748,8 @@ export async function listStudentCourses(studentId: string): Promise<StudentCour
       imageUrl:
         course.imageUrl ||
         "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=450&fit=crop",
+      lastLessonId: lastProgress?.lessonId,
+      lastLessonTitle: lastProgress?.lesson?.title,
     };
   });
 }
@@ -872,16 +893,16 @@ export function sanitizeExamForClient(exam: CourseFinalExam): CourseFinalExam {
 }
 
 export async function getLessonForStudent(lessonId: string, studentId: string) {
-  // Primero verificar que la lección existe y obtener el courseId con una query ligera
+  // Primero verificar que la lección existe y obtener el courseId + isFree con una query ligera
   const lessonMeta = await prisma.lesson.findUnique({
     where: { id: lessonId },
-    select: { section: { select: { courseId: true } } },
+    select: { isFree: true, section: { select: { courseId: true } } },
   });
   if (!lessonMeta) return null;
 
   const courseId = lessonMeta.section.courseId;
 
-  // Verificar enrollment ANTES de cargar todo el curso (evita query pesada para usuarios no inscritos)
+  // Verificar enrollment — excepto para lecciones gratuitas (preview pública)
   const enrollment = await prisma.enrollment.findUnique({
     where: { courseId_studentId: { courseId, studentId } },
     include: {
@@ -889,7 +910,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
       sectionQuizSubmissions: { select: { sectionId: true, activityId: true, passed: true } },
     },
   });
-  if (!enrollment) return null;
+  if (!enrollment && !lessonMeta.isFree) return null;
 
   // Carga en paralelo: datos de la lección + índice ligero del curso (sidebar) + finalExam check
   const [lesson, courseSections, courseData] = await Promise.all([
@@ -938,16 +959,16 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     (courseData.finalExam as { questions?: unknown[] }).questions?.length
   );
 
-  const completedIds = new Set(enrollment.lessonProgress.map((lp) => lp.lessonId));
+  const completedIds = new Set(enrollment?.lessonProgress.map((lp) => lp.lessonId) ?? []);
 
   const passedSectionIds = new Set<string>();
   for (const sec of courseSections) {
     const units = listSectionGateUnitsForUi(sec);
     if (units.length === 0) continue;
     const allPassed = units.every((u) =>
-      enrollment.sectionQuizSubmissions.some(
+      enrollment?.sectionQuizSubmissions.some(
         (s) => s.sectionId === u.sectionId && s.activityId === u.activityId && s.passed,
-      ),
+      ) ?? false,
     );
     if (allPassed) passedSectionIds.add(sec.id);
   }
@@ -976,10 +997,10 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
 
   const sectionGateCompletion: Record<string, boolean> = {};
   for (const act of currentSectionGateActivities) {
-    sectionGateCompletion[act.id] = enrollment.sectionQuizSubmissions.some(
+    sectionGateCompletion[act.id] = enrollment?.sectionQuizSubmissions.some(
       (s) =>
         s.sectionId === lesson.sectionId && s.activityId === act.id && s.passed,
-    );
+    ) ?? false;
   }
 
   const sectionGatesAllPassed =
@@ -992,16 +1013,16 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     : null;
 
   // Quiz submission for the current lesson (if it's a quiz type)
-  const currentLessonProgress = enrollment.lessonProgress.find((lp) => lp.lessonId === lessonId);
+  const currentLessonProgress = enrollment?.lessonProgress.find((lp) => lp.lessonId === lessonId);
   const savedQuizScore = currentLessonProgress?.score ?? null;
   const savedQuizAnswers = currentLessonProgress?.answers ?? null;
 
   const sidebarSections = courseSections.map((s) => {
     const units = listSectionGateUnitsForUi(s);
     const gatesPassed = units.filter((u) =>
-      enrollment.sectionQuizSubmissions.some(
+      enrollment?.sectionQuizSubmissions.some(
         (ss) => ss.sectionId === u.sectionId && ss.activityId === u.activityId && ss.passed,
-      ),
+      ) ?? false,
     ).length;
     return {
       id: s.id,

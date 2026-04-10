@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build & TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      # Variables mínimas para que Next.js pueda hacer el build sin conexión real a BD
+      DATABASE_URL: "postgresql://fake:fake@localhost:5432/fake"
+      BETTER_AUTH_SECRET: "ci-secret-placeholder-32-chars-min"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ""
+      TURNSTILE_SECRET_KEY: ""
+      STRIPE_SECRET_KEY: "sk_test_placeholder"
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
+      STRIPE_WEBHOOK_SECRET: "whsec_placeholder"
+      RESEND_API_KEY: "re_placeholder"
+      NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: "placeholder"
+      CLOUDINARY_API_KEY: "placeholder"
+      CLOUDINARY_API_SECRET: "placeholder"
+      MUX_TOKEN_ID: "placeholder"
+      MUX_TOKEN_SECRET: "placeholder"
+      UPSTASH_REDIS_REST_URL: ""
+      UPSTASH_REDIS_REST_TOKEN: ""
+      SENTRY_AUTH_TOKEN: ""
+      NEXT_PUBLIC_SENTRY_DSN: ""
+      CRON_SECRET: "placeholder"
+      CONTACT_INBOX_EMAIL: "test@example.com"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript check
+        run: pnpm exec tsc --noEmit
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint

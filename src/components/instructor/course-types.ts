@@ -148,6 +148,8 @@ export type CourseLesson = {
   quizAttempts?: number; // intentos permitidos
   quizPassingRequired?: boolean; // ¿requiere aprobar para continuar?
   quizPassingScore?: number; // porcentaje mínimo (0-100)
+  /** Si true, la lección es visible públicamente sin enrolamiento (preview gratuita) */
+  isFree?: boolean;
 };
 
 export type CourseFile = {

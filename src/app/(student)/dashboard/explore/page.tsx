@@ -52,6 +52,7 @@ export default async function ExploreCoursesPage({
       currentPage={page}
       categories={categories}
       enrolledCourseIds={Array.from(enrolledCourseIds)}
+      isLoggedIn={!!session}
       initialFilters={{
         q: filters.q ?? "",
         category: filters.category ?? "all",

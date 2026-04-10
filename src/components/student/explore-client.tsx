@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { BookOpen, Search } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
+import { WishlistButton } from "@/components/courses/wishlist-button";
 
 const SEARCH_DEBOUNCE_MS = 350;
 import type { Course } from "@/components/courses/types";
@@ -29,6 +30,7 @@ interface ExploreClientProps {
   currentPage: number;
   categories: Category[];
   enrolledCourseIds: string[];
+  isLoggedIn?: boolean;
   initialFilters: {
     q: string;
     category: string;
@@ -66,6 +68,7 @@ export function ExploreClient({
   currentPage,
   categories,
   enrolledCourseIds,
+  isLoggedIn = false,
   initialFilters,
 }: ExploreClientProps) {
   const router = useRouter();
@@ -199,7 +202,13 @@ export function ExploreClient({
               ? `/dashboard/my-courses/${course.id}`
               : `/dashboard/explore/${course.slug || course.id}`;
             return (
-              <Link key={course.id} href={href} className="block h-full">
+              <div key={course.id} className="relative h-full">
+                {!isEnrolled && (
+                  <div className="absolute top-2 right-2 z-10">
+                    <WishlistButton courseId={course.id} isLoggedIn={isLoggedIn} size="sm" />
+                  </div>
+                )}
+                <Link href={href} className="block h-full">
                 <Card className="group flex h-full flex-col border border-border bg-card/90 transition-all hover:shadow-lg hover:border-primary/20 cursor-pointer">
                   {course.imageUrl && (
                     <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
@@ -246,7 +255,8 @@ export function ExploreClient({
                     </Button>
                   </CardContent>
                 </Card>
-              </Link>
+                </Link>
+              </div>
             );
           })}
         </div>

@@ -422,6 +422,7 @@ export async function saveLessonContent(courseId: string, lessonId: string, data
     content,
     attachments: (data.files?.length ? data.files : null) as object[] | null,
     resources: (data.resources?.length ? data.resources : null) as object[] | null,
+    isFree: data.isFree ?? false,
   });
   revalidatePath(`/instructor/courses/${courseId}/edit`);
 }

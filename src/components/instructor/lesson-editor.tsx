@@ -64,6 +64,8 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
   const [videoError, setVideoError] = useState<string | null>(null);
   const [, setUploadId] = useState<string | null>(null);
   
+  const [isFree, setIsFree] = useState(lesson.isFree ?? false);
+
   // Quiz config
   const [quizTimeLimit, setQuizTimeLimit] = useState<number | undefined>(lesson.quizTimeLimit);
   const [quizAttempts, setQuizAttempts] = useState<number | undefined>(lesson.quizAttempts);
@@ -140,6 +142,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
       quizAttempts: type === "quiz" ? quizAttempts : undefined,
       quizPassingRequired: type === "quiz" ? quizPassingRequired : undefined,
       quizPassingScore: type === "quiz" && quizPassingRequired ? quizPassingScore : undefined,
+      isFree,
     });
   };
 
@@ -389,6 +392,22 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
         </div>
 
         <div className="space-y-4">
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
+            <input
+              id="lesson-is-free"
+              type="checkbox"
+              checked={isFree}
+              onChange={(e) => setIsFree(e.target.checked)}
+              className="h-4 w-4 rounded border-border accent-primary"
+            />
+            <label htmlFor="lesson-is-free" className="flex flex-col cursor-pointer">
+              <span className="text-sm font-medium">Lección de acceso libre (preview gratuita)</span>
+              <span className="text-xs text-muted-foreground">
+                Los visitantes podrán ver esta lección sin estar inscritos al curso
+              </span>
+            </label>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <Input

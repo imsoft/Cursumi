@@ -9,6 +9,7 @@ import { SOCIAL_LINK_DEFAULTS, type SocialLink } from "@/lib/social-links-config
 const footerNav = [
   { label: "Cursos", href: "/courses" },
   { label: "Cómo funciona", href: "/how-it-works" },
+  { label: "Precios", href: "/pricing" },
   { label: "Para instructores", href: "/instructors" },
   { label: "Contacto", href: "/contact" },
 ];

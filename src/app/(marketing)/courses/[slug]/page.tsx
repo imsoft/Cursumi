@@ -14,6 +14,7 @@ import { ReviewSection } from "@/components/student/review-section";
 import { LearningReflectionsSection } from "@/components/courses/learning-reflections-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
+import { WishlistButton } from "@/components/courses/wishlist-button";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDuration } from "@/lib/course-completion";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
@@ -40,25 +41,46 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const baseUrl = getBaseUrl();
   const canonicalUrl = `${baseUrl}/courses/${course.slug || slug}`;
   const image = course.imageUrl || ogFallback;
+  const ogImageUrl = `${baseUrl}/api/og/course/${course.id}`;
+
+  const modalityLabel =
+    course.modality === "virtual" ? "online" :
+    course.modality === "presencial" ? "presencial" : "en vivo";
+
   return {
     title: `${course.title} | Cursumi`,
     description: course.description,
+    keywords: [
+      course.title,
+      course.category,
+      `curso de ${course.category}`,
+      `curso ${modalityLabel}`,
+      course.instructor?.name ? `${course.instructor.name}` : null,
+      "Cursumi",
+      "cursos online",
+      "formación",
+      "aprendizaje",
+    ].filter(Boolean) as string[],
+    authors: course.instructor?.name ? [{ name: course.instructor.name }] : undefined,
     alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: course.title,
+      title: `${course.title} — Cursumi`,
       description: course.description || "Curso en Cursumi",
       url: canonicalUrl,
+      siteName: "Cursumi",
+      locale: "es_MX",
       images: [
-        image,
-        { url: `/api/og/course/${course.id}` },
+        { url: ogImageUrl, width: 1200, height: 630, alt: course.title },
+        { url: image, width: 1200, height: 630, alt: course.title },
       ],
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: course.title,
+      site: "@cursumi",
+      title: `${course.title} — Cursumi`,
       description: course.description || "Curso en Cursumi",
-      images: [image],
+      images: [ogImageUrl],
     },
   };
 }
@@ -116,13 +138,25 @@ export default async function PublicCourseDetailPage({
   const totalDurationFormatted = totalDurationMinutes > 0 ? formatDuration(totalDurationMinutes) : null;
 
   const baseUrl = getBaseUrl();
+
+  const reviews = course.reviews ?? [];
+  const avgRating =
+    reviews.length > 0
+      ? reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
+      : null;
+
   const courseSchema = {
     "@context": "https://schema.org",
     "@type": "Course",
     name: course.title,
     description: course.description,
+    url: `${baseUrl}/courses/${courseSlug}`,
     provider: { "@type": "Organization", name: "Cursumi", sameAs: baseUrl },
+    ...(course.instructor?.name && {
+      author: { "@type": "Person", name: course.instructor.name },
+    }),
     educationalLevel: course.level,
+    inLanguage: "es-MX",
     timeRequired: course.duration,
     courseMode: course.modality,
     courseCode: course.id,
@@ -132,7 +166,17 @@ export default async function PublicCourseDetailPage({
       price: course.price,
       priceCurrency: "MXN",
       availability: "https://schema.org/InStock",
+      url: `${baseUrl}/courses/${courseSlug}`,
     },
+    ...(avgRating !== null && reviews.length >= 3 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: Math.round(avgRating * 10) / 10,
+        reviewCount: reviews.length,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
   };
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -167,10 +211,13 @@ export default async function PublicCourseDetailPage({
       <Card className="overflow-hidden border border-border bg-card/90">
         <CourseCoverImage imageUrl={course.imageUrl} title={course.title} />
         <CardHeader>
-          <div className="flex flex-wrap items-center gap-2">
-            <ModalityBadge modality={course.modality} size="md" />
-            <Badge variant="outline">{course.category}</Badge>
-            {course.level && <Badge variant="outline">{course.level}</Badge>}
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <ModalityBadge modality={course.modality} size="md" />
+              <Badge variant="outline">{course.category}</Badge>
+              {course.level && <Badge variant="outline">{course.level}</Badge>}
+            </div>
+            <WishlistButton courseId={course.id} isLoggedIn={isLoggedIn} />
           </div>
           <CardTitle className="text-3xl">{course.title}</CardTitle>
           <RichTextRenderer content={course.description} className="text-sm leading-relaxed text-muted-foreground" />
@@ -240,6 +287,64 @@ export default async function PublicCourseDetailPage({
           </div>
         </CardContent>
       </Card>
+
+      {/* Temario / curriculum */}
+      {course.sections && course.sections.length > 0 && (
+        <Card className="border border-border bg-card/90">
+          <CardHeader>
+            <CardTitle className="text-xl">Contenido del curso</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {course.sections.reduce((acc, s) => acc + s.lessons.length, 0)} lecciones
+              {totalDurationFormatted ? ` · ${totalDurationFormatted}` : ""}
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-3 pt-0">
+            {course.sections.map((section) => (
+              <div key={section.id} className="rounded-lg border border-border overflow-hidden">
+                <div className="bg-muted/40 px-4 py-2.5">
+                  <p className="text-sm font-semibold">{section.title}</p>
+                </div>
+                <ul className="divide-y divide-border">
+                  {section.lessons.map((lesson) => (
+                    <li key={lesson.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {lesson.type === "video" ? (
+                          <Video className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        ) : lesson.type === "quiz" ? (
+                          <Users className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        ) : (
+                          <Monitor className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        )}
+                        <span className="text-sm truncate">{lesson.title}</span>
+                        {lesson.isFree && (
+                          <span className="shrink-0 rounded-full bg-green-600/10 px-2 py-0.5 text-[10px] font-semibold text-green-700 dark:text-green-400">
+                            Gratis
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        {lesson.duration && (
+                          <span className="text-xs text-muted-foreground">{lesson.duration}</span>
+                        )}
+                        {lesson.isFree && (
+                          <Link
+                            href={isLoggedIn
+                              ? `/dashboard/my-courses/${course.id}/lessons/${lesson.id}`
+                              : `/login?redirect=/dashboard/my-courses/${course.id}/lessons/${lesson.id}`}
+                            className="text-xs font-medium text-primary hover:underline"
+                          >
+                            Ver lección
+                          </Link>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       <ReviewSection courseId={course.id} />
 

@@ -13,6 +13,9 @@ export type StudentCourse = {
   totalSessions?: number;
   completedSessions?: number;
   imageUrl?: string;
+  /** Última lección con actividad — para el botón "Continúa donde lo dejaste" */
+  lastLessonId?: string;
+  lastLessonTitle?: string;
 };
 
 export type UpcomingClass = {

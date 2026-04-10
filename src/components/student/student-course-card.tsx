@@ -118,15 +118,34 @@ export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
         </div>
 
         <div className="flex gap-2 pt-2">
-          <Link href={`/dashboard/my-courses/${course.id}`} className="flex-1">
-            <Button
-              variant={course.status === "completed" ? "outline" : "default"}
-              size="sm"
-              className="w-full px-4 py-2"
-            >
-              {course.status === "completed" ? "Ver curso" : "Continuar curso"}
-            </Button>
-          </Link>
+          {course.status !== "completed" && course.lastLessonId ? (
+            <>
+              <Link
+                href={`/dashboard/my-courses/${course.id}/lessons/${course.lastLessonId}`}
+                className="flex-1"
+              >
+                <Button size="sm" className="w-full gap-1.5 px-4 py-2">
+                  <PlayCircle className="h-3.5 w-3.5" />
+                  Continuar
+                </Button>
+              </Link>
+              <Link href={`/dashboard/my-courses/${course.id}`}>
+                <Button variant="outline" size="sm" className="px-3 py-2">
+                  Ver todo
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <Link href={`/dashboard/my-courses/${course.id}`} className="flex-1">
+              <Button
+                variant={course.status === "completed" ? "outline" : "default"}
+                size="sm"
+                className="w-full px-4 py-2"
+              >
+                {course.status === "completed" ? "Ver curso" : "Continuar curso"}
+              </Button>
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>
