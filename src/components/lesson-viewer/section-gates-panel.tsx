@@ -94,7 +94,7 @@ export function SectionGatesPanel({
         const res = await fetch(`/api/sections/${currentSectionId}/quiz/submit`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ courseId, score, passed, activityId: act.id }),
+          body: JSON.stringify({ courseId, activityId: act.id, answers: ui.answers }),
         });
         if (res.ok && passed) {
           setCompletion((c) => {

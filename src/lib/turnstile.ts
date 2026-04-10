@@ -29,12 +29,15 @@ export async function verifyTurnstile(
   ip?: string
 ): Promise<{ success: boolean; error?: string }> {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
+  const isProd = process.env.NODE_ENV === "production";
 
-  // Si no hay clave configurada (ej. dev sin Turnstile), dejar pasar con log
+  // Sin clave configurada: en producción bloquear, en dev omitir
   if (!secretKey) {
-    console.warn(
-      "[Turnstile] TURNSTILE_SECRET_KEY no configurada — omitiendo verificación CAPTCHA"
-    );
+    if (isProd) {
+      console.error("[Turnstile] TURNSTILE_SECRET_KEY no configurada en producción — bloqueando.");
+      return { success: false, error: "Verificación de seguridad no disponible. Contacta al soporte." };
+    }
+    console.warn("[Turnstile] TURNSTILE_SECRET_KEY no configurada — omitiendo verificación (dev)");
     return { success: true };
   }
 
@@ -58,7 +61,9 @@ export async function verifyTurnstile(
 
     if (!response.ok) {
       console.error("[Turnstile] Error HTTP al verificar:", response.status);
-      // En caso de error del servicio de Cloudflare, dejar pasar (disponibilidad > seguridad)
+      if (isProd) {
+        return { success: false, error: "Error al verificar el CAPTCHA. Intenta de nuevo." };
+      }
       return { success: true };
     }
 
@@ -75,8 +80,10 @@ export async function verifyTurnstile(
 
     return { success: true };
   } catch (err) {
-    // Timeout o error de red — dejar pasar para no bloquear usuarios legítimos
     console.error("[Turnstile] Error al conectar con Cloudflare:", err);
+    if (isProd) {
+      return { success: false, error: "No se pudo verificar el CAPTCHA. Intenta de nuevo." };
+    }
     return { success: true };
   }
 }

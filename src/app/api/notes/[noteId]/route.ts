@@ -6,6 +6,24 @@ interface NoteParams {
   params: Promise<{ noteId: string }>;
 }
 
+async function resolveNoteForUser(noteId: string, userId: string) {
+  const note = await prisma.courseNote.findUnique({
+    where: { id: noteId },
+    select: { id: true, userId: true, courseId: true, lessonId: true, content: true },
+  });
+
+  if (!note || note.userId !== userId) return { note: null, error: "Nota no encontrada o permiso denegado." };
+
+  // Verify the user is still enrolled in the course this note belongs to
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { courseId_studentId: { courseId: note.courseId, studentId: userId } },
+    select: { id: true },
+  });
+  if (!enrollment) return { note: null, error: "No tienes acceso a este curso." };
+
+  return { note, error: null };
+}
+
 export async function PATCH(req: NextRequest, { params }: NoteParams) {
   try {
     const session = await requireSession();
@@ -15,12 +33,9 @@ export async function PATCH(req: NextRequest, { params }: NoteParams) {
     const body = await req.json();
     const { content } = body;
 
-    const note = await prisma.courseNote.findUnique({
-      where: { id: noteId }
-    });
-
-    if (!note || note.userId !== userId) {
-      return NextResponse.json({ error: "Nota no encontrada o permiso denegado." }, { status: 403 });
+    const { note, error } = await resolveNoteForUser(noteId, userId);
+    if (!note) {
+      return NextResponse.json({ error }, { status: 403 });
     }
 
     const updatedNote = await prisma.courseNote.update({
@@ -40,12 +55,9 @@ export async function DELETE(req: NextRequest, { params }: NoteParams) {
     const userId = session.user.id;
     const { noteId } = await params;
 
-    const note = await prisma.courseNote.findUnique({
-      where: { id: noteId }
-    });
-
-    if (!note || note.userId !== userId) {
-      return NextResponse.json({ error: "Nota no encontrada o permiso denegado." }, { status: 403 });
+    const { note, error } = await resolveNoteForUser(noteId, userId);
+    if (!note) {
+      return NextResponse.json({ error }, { status: 403 });
     }
 
     await prisma.courseNote.delete({

@@ -34,14 +34,40 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Failed to fetch file" }, { status: 502 });
   }
 
+  const rawContentType = upstream.headers.get("content-type") || "application/octet-stream";
+  // Normalize: strip params like "; charset=utf-8"
+  const mimeType = rawContentType.split(";")[0].trim().toLowerCase();
+
+  // Whitelist of allowed MIME types for downloadable course materials
+  const ALLOWED_MIME_TYPES = new Set([
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/zip",
+    "text/plain",
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/svg+xml",
+  ]);
+
+  if (!ALLOWED_MIME_TYPES.has(mimeType)) {
+    return NextResponse.json({ error: "Tipo de archivo no permitido" }, { status: 415 });
+  }
+
   const filename = name || url.split("/").pop() || "download";
-  const contentType = upstream.headers.get("content-type") || "application/octet-stream";
 
   return new NextResponse(upstream.body, {
     headers: {
-      "Content-Type": contentType,
+      "Content-Type": mimeType,
       "Content-Disposition": `attachment; filename="${filename.replace(/"/g, "'")}"`,
       "Cache-Control": "private, max-age=3600",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 }

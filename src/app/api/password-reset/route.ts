@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 import { headers } from "next/headers";
 
 export async function POST(req: Request) {
@@ -13,15 +14,22 @@ export async function POST(req: Request) {
 
     // 1. Validate CAPTCHA
     const reqHeaders = await headers();
-    const ip = reqHeaders.get("x-forwarded-for") || "127.0.0.1";
+    const ip = reqHeaders.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+
+    // 2. Rate limiting: máx 5 resets por IP cada hora, máx 3 por email cada hora
+    const ipLimit = await checkRateLimitAsync({ key: `pwd-reset:ip:${ip}`, limit: 5, windowSecs: 3600 });
+    if (ipLimit) return ipLimit;
+    const emailLimit = await checkRateLimitAsync({ key: `pwd-reset:email:${email.toLowerCase()}`, limit: 3, windowSecs: 3600 });
+    if (emailLimit) return emailLimit;
     
+    // 3. Validate CAPTCHA
     if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
       if (!turnstileToken) {
         return NextResponse.json({ error: "CAPTCHA requerido" }, { status: 400 });
       }
       const captchaResult = await verifyTurnstile(turnstileToken, ip);
       if (!captchaResult.success) {
-        return NextResponse.json({ error: "Captcha inválido" }, { status: 400 });
+        return NextResponse.json({ error: captchaResult.error ?? "Captcha inválido" }, { status: 400 });
       }
     }
 

@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const securityHeaders = [
   // Impide que la app sea embebida en iframes de otros orígenes (clickjacking)
   { key: "X-Frame-Options", value: "DENY" },
@@ -8,13 +10,17 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   // Controla qué información se envía en el header Referer
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  // Fuerza HTTPS por 1 año e incluye subdominios
-  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+  // Fuerza HTTPS por 1 año — solo en producción (localhost no soporta HTTPS)
+  ...(isProd
+    ? [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" }]
+    : []),
   // Restringe acceso a APIs del navegador desde iframes
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(self)" },
   // Evita que el browser exponga datos de la app a otras páginas en el mismo proceso
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   // Content Security Policy (Previene vulnerabilidades XSS severas limitando recursos)
+  // Nota: unsafe-inline y unsafe-eval son requeridos por Next.js App Router y librerías de terceros.
+  // Para eliminarlos completamente se necesitaría implementar nonces server-side en layout.tsx.
   {
     key: "Content-Security-Policy",
     value: `
