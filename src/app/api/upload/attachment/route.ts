@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { authorizeCloudinaryUploader } from "@/lib/authorize-cloudinary-uploader";
+import { prisma } from "@/lib/prisma";
 
-const ALLOWED_FOLDERS: Record<string, string> = {
-  attachments: "cursumi/attachments",
-  materials: "cursumi/materials",
-};
-
-/** Límite alineado con portadas de curso; Vercel Hobby corta el body ~4.5 MB antes del handler. */
 const MAX_BYTES = 10 * 1024 * 1024;
+
+async function resolveFolder(userId: string, courseId?: string): Promise<string> {
+  if (!courseId) return "cursumi/attachments";
+
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, instructorId: userId },
+    select: { id: true },
+  });
+  return course ? `cursumi/courses/${courseId}/attachments` : "cursumi/attachments";
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,8 +45,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const folderKey = req.nextUrl.searchParams.get("folder") || "attachments";
-    const folder = ALLOWED_FOLDERS[folderKey] || "cursumi/attachments";
+    const courseId = req.nextUrl.searchParams.get("courseId") ?? undefined;
+    const folder = await resolveFolder(session.user.id, courseId);
 
     const uploadForm = new FormData();
     uploadForm.append("file", file);
@@ -56,9 +61,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
-      const err = (await res.json().catch(() => ({}))) as {
-        error?: { message?: string };
-      };
+      const err = (await res.json().catch(() => ({}))) as { error?: { message?: string } };
       console.error("[upload/attachment] Cloudinary:", res.status, err);
       return NextResponse.json(
         { error: err.error?.message ?? "Error al subir el archivo a almacenamiento" },

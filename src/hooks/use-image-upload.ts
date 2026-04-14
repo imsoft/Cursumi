@@ -5,6 +5,8 @@ import { useCallback, useState } from "react";
 interface UseImageUploadOptions {
   endpoint?: string;
   maxSizeMB?: number;
+  /** ID del curso — cuando se proporciona se envía junto al archivo para organizar en Cloudinary */
+  courseId?: string;
   onSuccess?: (url: string) => void;
   onError?: (message: string) => void;
 }
@@ -12,6 +14,7 @@ interface UseImageUploadOptions {
 export function useImageUpload({
   endpoint = "/api/upload/course-cover",
   maxSizeMB = 10,
+  courseId,
   onSuccess,
   onError,
 }: UseImageUploadOptions = {}) {
@@ -32,6 +35,8 @@ export function useImageUpload({
       try {
         const formData = new FormData();
         formData.append("file", file);
+        if (courseId) formData.append("courseId", courseId);
+
         const res = await fetch(endpoint, { method: "POST", body: formData });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Error al subir la imagen");
@@ -42,7 +47,7 @@ export function useImageUpload({
         setUploading(false);
       }
     },
-    [endpoint, maxSizeMB, onSuccess, onError],
+    [endpoint, maxSizeMB, courseId, onSuccess, onError],
   );
 
   return { upload, uploading };

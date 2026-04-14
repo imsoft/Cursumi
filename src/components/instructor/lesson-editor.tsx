@@ -32,6 +32,7 @@ interface LessonEditorProps {
   lesson: CourseLesson;
   onSave: (updates: Partial<CourseLesson>) => void;
   onCancel: () => void;
+  courseId?: string;
 }
 
 const lessonTypeOptions = [
@@ -43,7 +44,7 @@ const lessonTypeOptions = [
   { value: "section_minigame", label: "Minijuego" },
 ];
 
-export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) => {
+export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEditorProps) => {
   const [title, setTitle] = useState(lesson.title);
   const [description, setDescription] = useState(lesson.description || "");
   const [type, setType] = useState<CourseLesson["type"]>(lesson.type);
@@ -159,7 +160,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel }: LessonEditorProps) =>
       if (file.size > maxBytes) {
         throw new Error(`El archivo supera ${maxBytes / (1024 * 1024)} MB`);
       }
-      const { url } = await uploadAttachmentDirect(file, "cursumi/attachments");
+      const { url } = await uploadAttachmentDirect(file, "attachments", { courseId });
 
       setFiles((prev) => [...prev, {
         id: crypto.randomUUID(),

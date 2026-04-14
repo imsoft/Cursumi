@@ -6,6 +6,8 @@ import { getOrgForUser } from "@/lib/org-service";
 import { getUserBasicInfo } from "@/lib/user-service";
 import { BusinessShell } from "@/components/layouts/business-shell";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };

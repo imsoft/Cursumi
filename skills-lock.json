@@ -55,6 +55,11 @@
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "computedHash": "3462ec83f862abb2d532953df33a4dbf87f4616849da5d4b5cc7c13601aaf997"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "cf8e5916d474886bd67b09691247f43f331523008b7d366064bc607ab42d6302"
     }
   }
 }

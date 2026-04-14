@@ -161,7 +161,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
       if (file.size > maxBytes) {
         throw new Error(`El archivo supera ${maxBytes / (1024 * 1024)} MB`);
       }
-      const { url } = await uploadAttachmentDirect(file, "cursumi/attachments");
+      const { url } = await uploadAttachmentDirect(file, "attachments", { courseId });
       setFiles((prev) => [
         ...prev,
         { id: crypto.randomUUID(), name: file.name, type: fileType, url, size: file.size },

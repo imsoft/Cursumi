@@ -45,9 +45,6 @@ const websiteJsonLd = {
   publisher: { "@type": "Organization", name: "Cursumi", url: siteUrl },
 };
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export const metadata: Metadata = {
   manifest: "/manifest.json",
   metadataBase: new URL(siteUrl),

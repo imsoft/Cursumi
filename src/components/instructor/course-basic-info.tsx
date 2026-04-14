@@ -122,6 +122,7 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
   );
 
   const { upload, uploading } = useImageUpload({
+    courseId: data.id,
     onSuccess: handleUploadSuccess,
     onError: setUploadError,
   });

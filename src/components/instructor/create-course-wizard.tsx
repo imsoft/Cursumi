@@ -284,6 +284,7 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
             <TabsContent value="sections" className="mt-0">
               <CourseSectionsManager
                 sections={courseData.sections || []}
+                courseId={courseData.id}
                 onUpdate={(sections) => updateCourseData({ sections })}
                 onNext={handleNext}
                 onPrevious={handlePrevious}

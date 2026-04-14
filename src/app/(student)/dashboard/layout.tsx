@@ -6,6 +6,8 @@ import { getUserBasicInfo } from "@/lib/user-service";
 import { StudentShell } from "@/components/layouts/student-shell";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };

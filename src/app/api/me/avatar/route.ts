@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     if (cloudName && apiKey && apiSecret) {
       const timestamp = Math.round(Date.now() / 1000);
-      const folder = "cursumi/avatars";
+      const folder = `cursumi/users/${session.user.id}/avatar`;
       const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
       const signature = createHash("sha1").update(paramsToSign + apiSecret).digest("hex");
 

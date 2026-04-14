@@ -54,7 +54,7 @@ export default function MaterialsPage() {
     try {
       const { url: fileUrl } = await uploadAttachmentDirect(
         file,
-        "cursumi/materials",
+        "materials",
       );
 
       const res = await fetch("/api/business/materials", {

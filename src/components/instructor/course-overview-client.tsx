@@ -139,6 +139,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
   );
 
   const { upload: uploadCover, uploading: uploadingCover } = useImageUpload({
+    courseId: course.id,
     onSuccess: handleCoverSuccess,
     onError: setCoverUploadError,
   });

@@ -5,6 +5,8 @@ import { getCachedSession } from "@/lib/session";
 import { AdminShell } from "@/components/layouts/admin-shell";
 import { getUserBasicInfo } from "@/lib/user-service";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };

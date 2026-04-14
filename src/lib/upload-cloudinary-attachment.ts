@@ -2,17 +2,28 @@
  * Sube un archivo (PDF, Office, etc.) directamente a Cloudinary como `raw`,
  * usando firma del servidor. Evita el límite de body de Vercel al no pasar
  * el binario por /api/upload/attachment.
+ *
+ * La carpeta en Cloudinary se resuelve server-side:
+ *  - Con courseId → cursumi/courses/{courseId}/attachments
+ *  - Con orgId implícito (materials) → cursumi/orgs/{orgId}/materials
+ *  - Sin contexto → cursumi/attachments o cursumi/materials (fallback)
  */
-export type CloudinaryAttachmentFolder = "cursumi/attachments" | "cursumi/materials";
+export type CloudinaryAttachmentFolder = "attachments" | "materials";
+
+export interface UploadAttachmentOptions {
+  /** ID del curso — cuando se proporciona, los archivos se guardan en cursumi/courses/{courseId}/attachments */
+  courseId?: string;
+}
 
 export async function uploadAttachmentDirect(
   file: File,
   folder: CloudinaryAttachmentFolder,
+  opts: UploadAttachmentOptions = {},
 ): Promise<{ url: string }> {
   const sigRes = await fetch("/api/cloudinary/signature", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ folder }),
+    body: JSON.stringify({ folder, courseId: opts.courseId }),
   });
   const sigData = (await sigRes.json().catch(() => ({}))) as {
     error?: string;
@@ -26,13 +37,7 @@ export async function uploadAttachmentDirect(
     throw new Error(sigData.error || "No se pudo autorizar la subida");
   }
   const { timestamp, signature, cloudName, apiKey, folder: signedFolder } = sigData;
-  if (
-    timestamp == null ||
-    !signature ||
-    !cloudName ||
-    !apiKey ||
-    !signedFolder
-  ) {
+  if (timestamp == null || !signature || !cloudName || !apiKey || !signedFolder) {
     throw new Error("Respuesta de firma incompleta");
   }
 
@@ -52,14 +57,10 @@ export async function uploadAttachmentDirect(
     secure_url?: string;
   };
   if (!uploadRes.ok) {
-    throw new Error(
-      data.error?.message || "Error al subir el archivo a almacenamiento",
-    );
+    throw new Error(data.error?.message || "Error al subir el archivo a almacenamiento");
   }
   if (!data.secure_url) {
     throw new Error("Respuesta sin URL del archivo");
   }
-  return {
-    url: data.secure_url.replace(/\/v\d+\//, "/v1/"),
-  };
+  return { url: data.secure_url.replace(/\/v\d+\//, "/v1/") };
 }

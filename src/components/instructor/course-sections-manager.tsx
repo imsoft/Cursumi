@@ -36,6 +36,7 @@ interface CourseSectionsManagerProps {
   onUpdate: (sections: CourseSection[]) => void;
   onNext: () => void;
   onPrevious: () => void;
+  courseId?: string;
 }
 
 export const CourseSectionsManager = ({
@@ -43,6 +44,7 @@ export const CourseSectionsManager = ({
   onUpdate,
   onNext,
   onPrevious,
+  courseId,
 }: CourseSectionsManagerProps) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [newSectionTitle, setNewSectionTitle] = useState("");
@@ -312,6 +314,7 @@ export const CourseSectionsManager = ({
                                       <LessonEditor
                                         key={lesson.id}
                                         lesson={lesson}
+                                        courseId={courseId}
                                         onSave={(updates) => {
                                           updateLesson(section.id, lesson.id, updates);
                                           setEditingLesson(null);

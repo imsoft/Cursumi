@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
+import { prisma } from "@/lib/prisma";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+
+async function resolveFolder(userId: string, courseId?: string): Promise<string> {
+  if (!courseId) return "cursumi/course-covers";
+
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, instructorId: userId },
+    select: { id: true },
+  });
+  if (!course) return "cursumi/course-covers"; // silently fallback — auth already checked role
+  return `cursumi/courses/${courseId}/cover`;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,6 +22,8 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    const courseId = formData.get("courseId") as string | null;
+
     if (!file || file.size === 0) {
       return NextResponse.json({ error: "Selecciona una imagen" }, { status: 400 });
     }
@@ -31,7 +45,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const folder = "cursumi/course-covers";
+    const folder = await resolveFolder(session.user.id, courseId ?? undefined);
 
     const uploadForm = new FormData();
     uploadForm.append("file", file);
