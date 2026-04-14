@@ -3,7 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prisma } from "./prisma";
-import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
+import { sendVerificationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "./email";
 import { validateEmailDomain } from "./disposable-email";
 import { verifyTurnstile } from "./turnstile";
 import { checkRateLimitAsync } from "./rate-limit";
@@ -208,31 +208,43 @@ export const auth = betterAuth({
         }
       }
 
-      // ── Sign-up: normalizar USER_ALREADY_EXISTS a respuesta genérica ──────────
+      // ── Sign-up: onboarding email + normalizar USER_ALREADY_EXISTS ────────────
       if (ctx.path === "/sign-up/email") {
         const returned = ctx.context.returned;
-        if (returned instanceof Response && returned.status >= 400) {
-          let body: Record<string, unknown> = {};
-          try {
-            body = await returned.clone().json();
-          } catch {
-            return;
-          }
-          const code = body?.code as string | undefined;
-          // Normalizar cualquier error que revele existencia del email
-          if (
-            code === "USER_ALREADY_EXISTS" ||
-            code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
-          ) {
-            // Devolver 200 genérico: el atacante no puede distinguir si el email existía
-            return {
-              response: Response.json(
-                {
-                  message: "Si el correo es válido, recibirás un enlace de verificación en breve.",
-                },
-                { status: 200 }
-              ),
-            };
+        if (returned instanceof Response) {
+          if (returned.status === 200) {
+            // Registro exitoso — enviar email de bienvenida en background
+            const reqBody = ctx.body as Record<string, unknown> | undefined;
+            const email = reqBody?.["email"] as string | undefined;
+            const name = reqBody?.["name"] as string | undefined;
+            if (email) {
+              sendWelcomeEmail({ to: email, name: name || "Estudiante" }).catch(
+                (err) => console.error("Welcome email error:", err)
+              );
+            }
+          } else if (returned.status >= 400) {
+            let body: Record<string, unknown> = {};
+            try {
+              body = await returned.clone().json();
+            } catch {
+              return;
+            }
+            const code = body?.code as string | undefined;
+            // Normalizar cualquier error que revele existencia del email
+            if (
+              code === "USER_ALREADY_EXISTS" ||
+              code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
+            ) {
+              // Devolver 200 genérico: el atacante no puede distinguir si el email existía
+              return {
+                response: Response.json(
+                  {
+                    message: "Si el correo es válido, recibirás un enlace de verificación en breve.",
+                  },
+                  { status: 200 }
+                ),
+              };
+            }
           }
         }
       }

@@ -145,6 +145,76 @@ export async function sendVerificationEmail({
 
 
 // ─────────────────────────────────────────
+// ONBOARDING
+// ─────────────────────────────────────────
+
+interface SendWelcomeEmailParams {
+  to: string;
+  name: string;
+}
+
+export async function sendWelcomeEmail({ to, name }: SendWelcomeEmailParams) {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const site = SITE_URL();
+  const safeName = name?.slice(0, 120) || "Estudiante";
+
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${safeName},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      Tu cuenta en Cursumi está lista. Ya puedes explorar el catálogo y comenzar tu primer curso.
+    </p>
+
+    <div style="background:#f9fafb;border-radius:8px;padding:24px;margin-bottom:28px;">
+      <p style="font-size:14px;font-weight:600;color:#374151;margin:0 0 16px;">Próximos pasos:</p>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="padding:8px 12px 8px 0;vertical-align:top;font-size:22px;width:36px;">📚</td>
+          <td style="padding:8px 0;vertical-align:top;">
+            <strong style="font-size:14px;color:#111827;">Explora el catálogo</strong>
+            <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">Cursos virtuales, presenciales y en vivo.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px 8px 0;vertical-align:top;font-size:22px;width:36px;">🎓</td>
+          <td style="padding:8px 0;vertical-align:top;">
+            <strong style="font-size:14px;color:#111827;">Completa tu perfil</strong>
+            <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">Agrega foto y bio para conectar con instructores.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px 8px 0;vertical-align:top;font-size:22px;width:36px;">🏆</td>
+          <td style="padding:8px 0;vertical-align:top;">
+            <strong style="font-size:14px;color:#111827;">Obtén tu certificado</strong>
+            <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">Al finalizar cada curso recibirás un certificado descargable.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${site}/courses" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 32px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Ver cursos disponibles
+      </a>
+    </div>
+    <p style="font-size:13px;color:#9ca3af;text-align:center;">
+      ¿Tienes preguntas? Escríbenos desde <a href="${site}/contact" style="color:${EMAIL_BRAND_ACCENT};">cursumi.com/contact</a>
+    </p>`;
+
+  try {
+    await resend.emails.send({
+      from: FROM(),
+      to: [to],
+      subject: "¡Bienvenido a Cursumi! Aquí empieza tu aprendizaje",
+      html: emailWrapper("¡Bienvenido a Cursumi!", body),
+    });
+  } catch (err) {
+    // El onboarding no debe bloquear el registro
+    console.error("Error al enviar email de bienvenida:", err);
+  }
+}
+
+// ─────────────────────────────────────────
 // EMAILS TRANSACCIONALES
 // ─────────────────────────────────────────
 

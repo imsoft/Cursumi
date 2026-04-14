@@ -18,13 +18,12 @@ function makeLesson(overrides: Partial<CourseLesson> = {}): CourseLesson {
     description: "Descripción",
     duration: "10m",
     videoUrl: "https://stream.mux.com/abc",
-    content: null,
+    content: undefined,
     order: 1,
     quizQuestions: [],
     files: [],
     resources: [],
     evaluationCriteria: [],
-    isPublished: false,
     ...overrides,
   };
 }
@@ -33,12 +32,12 @@ function makeSection(lessons: CourseLesson[] = [], overrides: Partial<CourseSect
   return {
     id: "section-1",
     title: "Sección 1",
-    description: null,
+    description: undefined,
     order: 1,
     lessons,
-    quiz: null,
-    minigame: null,
-    activities: null,
+    quiz: undefined,
+    minigame: undefined,
+    activities: undefined,
     ...overrides,
   };
 }
@@ -140,7 +139,7 @@ describe("getLessonCompletion — quiz", () => {
   });
 
   it("quiz con preguntas: canPublish=true", () => {
-    const q = [{ question: "¿?", options: ["a", "b"], correct: 0, explanation: "" }];
+    const q = [{ id: "q1", type: "multiple-choice" as const, question: "¿?", options: ["a", "b"], correctAnswer: 0 }];
     const result = getLessonCompletion(makeLesson({ type: "quiz", quizQuestions: q, description: "desc", files: [] }));
     expect(result.canPublish).toBe(true);
   });

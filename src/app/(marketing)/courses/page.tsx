@@ -2,6 +2,9 @@ import { listPublicCourses } from "@/app/actions/course-actions";
 import { CoursesPageClient } from "@/components/courses/courses-page-client";
 import type { Metadata } from "next";
 
+// Regenerar cada 5 minutos — los instructores publican cursos con poca frecuencia
+export const revalidate = 300;
+
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {

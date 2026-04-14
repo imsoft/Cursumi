@@ -1,6 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+// Regenerar cada 5 minutos — el detalle del curso (reviews, precio) puede cambiar
+export const revalidate = 300;
 import { getPublishedCourseDetail, enrollInCourse } from "@/app/actions/course-actions";
 import { getSessionSafe } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

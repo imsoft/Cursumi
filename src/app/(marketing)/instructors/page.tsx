@@ -1,3 +1,6 @@
+// Contenido mayormente estático — regenerar cada hora
+export const revalidate = 3600;
+
 import { InstructorsHero } from "@/components/instructors/instructors-hero";
 import { InstructorsBenefits } from "@/components/instructors/benefits-section";
 import { InstructorsCourseTypes } from "@/components/instructors/course-types-section";

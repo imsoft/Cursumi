@@ -66,6 +66,84 @@ jobs:
       - name: Build
         run: pnpm build
 
+  e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build
+
+    env:
+      DATABASE_URL: "postgresql://fake:fake@localhost:5432/fake"
+      BETTER_AUTH_SECRET: "ci-secret-placeholder-32-chars-min"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ""
+      TURNSTILE_SECRET_KEY: ""
+      STRIPE_SECRET_KEY: "sk_test_placeholder"
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
+      STRIPE_WEBHOOK_SECRET: "whsec_placeholder"
+      RESEND_API_KEY: "re_placeholder"
+      NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: "placeholder"
+      CLOUDINARY_API_KEY: "placeholder"
+      CLOUDINARY_API_SECRET: "placeholder"
+      MUX_TOKEN_ID: "placeholder"
+      MUX_TOKEN_SECRET: "placeholder"
+      UPSTASH_REDIS_REST_URL: ""
+      UPSTASH_REDIS_REST_TOKEN: ""
+      SENTRY_AUTH_TOKEN: ""
+      NEXT_PUBLIC_SENTRY_DSN: ""
+      CRON_SECRET: "placeholder"
+      CONTACT_INBOX_EMAIL: "test@example.com"
+      PORT: 3000
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Build
+        run: pnpm build
+
+      - name: Start server & run E2E tests
+        run: |
+          pnpm start &
+          SERVER_PID=$!
+          # Esperar a que el servidor esté listo (hasta 60 s)
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000 > /dev/null 2>&1; then
+              echo "Servidor listo en el intento $i"
+              break
+            fi
+            sleep 2
+          done
+          pnpm exec playwright test --reporter=list
+          EXIT_CODE=$?
+          kill $SERVER_PID || true
+          exit $EXIT_CODE
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   lint:
     name: Lint
     runs-on: ubuntu-latest

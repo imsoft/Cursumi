@@ -1,3 +1,6 @@
+// Página completamente estática — regenerar solo una vez al día
+export const revalidate = 86400;
+
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Check, X, ArrowRight, BookOpen, Users, Award, Zap } from "lucide-react";
