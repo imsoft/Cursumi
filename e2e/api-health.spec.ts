@@ -70,9 +70,9 @@ test.describe("API: endpoints de upload protegidos", () => {
 });
 
 test.describe("API: endpoints de pago protegidos", () => {
-  test("POST /api/checkout sin sesión → 401", async ({ request }) => {
-    const res = await request.post("/api/checkout", {
-      data: { courseId: "fake-id" },
+  test("POST /api/payments/checkout sin sesión → 401", async ({ request }) => {
+    const res = await request.post("/api/payments/checkout", {
+      json: { courseId: "fake-id" },
     });
     expect([401, 403]).toContain(res.status());
   });

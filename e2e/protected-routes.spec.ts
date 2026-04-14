@@ -44,9 +44,11 @@ test.describe("Páginas públicas no requieren sesión", () => {
   for (const route of PUBLIC_ROUTES) {
     test(`${route} es accesible sin sesión`, async ({ page }) => {
       const response = await page.goto(route);
-      // No redirige a login
-      await expect(page).not.toHaveURL(/login/);
-      // Y no es un 500
+      if (route === "/login") {
+        await expect(page).toHaveURL(/login/);
+      } else {
+        await expect(page).not.toHaveURL(/login/);
+      }
       expect(response?.status()).not.toBe(500);
     });
   }

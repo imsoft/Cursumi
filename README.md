@@ -31,6 +31,7 @@ Plataforma de cursos virtuales, presenciales y en vivo: estudiantes exploran e i
    | **Pagos** | Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (+ Stripe Connect según tu entorno). |
    | **Observabilidad (opcional)** | Sentry: `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN` (source maps en CI). |
    | **Cron** | `CRON_SECRET` — protege rutas bajo `/api/cron/*` (p. ej. recordatorios). |
+   | **Notificaciones push (opcional)** | Web Push (VAPID): `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`; opcional `VAPID_CONTACT_EMAIL`. Sin ellas, el resto de la app funciona; solo se omiten suscripciones push en el cliente. |
 
 2. **Dependencias:** `pnpm install` (ejecuta `prisma generate` en `postinstall`; cliente en `src/generated/prisma`).
 
@@ -55,8 +56,16 @@ Plataforma de cursos virtuales, presenciales y en vivo: estudiantes exploran e i
 | `pnpm db:migrate` | Crea o aplica migraciones (`prisma migrate dev`) |
 | `pnpm db:studio` | Prisma Studio |
 | `pnpm db:seed` | Ejecuta `prisma/seed.ts` |
+| `pnpm test` | Vitest (una ejecución) |
+| `pnpm test:watch` | Vitest en modo watch |
+| `pnpm test:ui` | Vitest con interfaz gráfica |
+| `pnpm test:e2e` | Pruebas E2E con Playwright (`e2e/`) |
+| `pnpm test:e2e:ui` | Playwright en modo UI |
 
-Pruebas E2E: hay `playwright.config.ts`; ejecuta Playwright según tu entorno (`pnpm exec playwright test` si añades script).
+### Pruebas
+
+- **Vitest:** útil para lógica y componentes aislados; ver tabla de scripts arriba.
+- **Playwright:** `baseURL` por defecto `http://localhost:3000` (sobrescribe con `PLAYWRIGHT_BASE_URL`). En local, levanta antes la app con `pnpm dev` o `pnpm start`. Con la variable de entorno `CI` definida, `playwright.config.ts` puede arrancar el servidor de producción (`pnpm start`) automáticamente.
 
 ---
 
@@ -67,6 +76,7 @@ Pruebas E2E: hay `playwright.config.ts`; ejecuta Playwright según tu entorno (`
 - **Video:** Mux — subida y reproducción; rutas `/api/mux/*`.
 - **Medios (Cloudinary):** imágenes (portadas, avatares) y archivos **raw** (material de lección, materiales B2B). Firma en `POST /api/cloudinary/signature`; subida al cliente a `https://api.cloudinary.com/...` (debe estar permitido en CSP `connect-src`, ver `next.config.ts`). Respaldo: `POST /api/upload/attachment` y `/api/upload/course-cover` en servidor.
 - **Pagos:** Stripe (checkout) y Stripe Connect (liquidación a instructores). Webhook: `/api/payments/webhook`.
+- **Notificaciones push (opcional):** Web Push con VAPID (`src/lib/web-push.ts`); variables en la tabla de entorno del setup.
 - **Protección de rutas (Next.js 16):** `src/proxy.ts` actúa como capa tipo middleware (no dupliques con `middleware.ts`). Rutas protegidas por cookie de sesión; la sesión real se valida en layouts y APIs.
 
 ---

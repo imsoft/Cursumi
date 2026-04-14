@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { loginPasswordInput } from "./helpers";
 
 test.describe("Catálogo de cursos (público)", () => {
   test("Página de cursos muestra listado", async ({ page }) => {
     await page.goto("/courses");
     await expect(page).toHaveURL(/courses/);
-    // Debe tener algún contenido de cursos o mensaje de vacío
-    const body = page.locator("main, body");
-    await expect(body).toBeVisible();
+    // Layout puede anidar más de un <main>; el contenedor principal es #main-content
+    await expect(page.locator("#main-content")).toBeVisible();
   });
 
   test("Explorar cursos requiere login", async ({ page }) => {
@@ -36,10 +36,11 @@ test.describe("Búsqueda de cursos", () => {
     }
 
     // Login
+    const main = page.locator("main");
     await page.goto("/login");
-    await page.getByLabel("Correo electrónico").fill(email);
-    await page.getByLabel("Contraseña").fill(password);
-    await page.getByRole("button", { name: "Iniciar sesión" }).click();
+    await main.getByLabel("Correo electrónico").fill(email);
+    await loginPasswordInput(main).fill(password);
+    await main.getByRole("button", { name: "Iniciar sesión" }).click();
     await expect(page).toHaveURL(/dashboard/, { timeout: 8000 });
 
     // Navegar a explorar

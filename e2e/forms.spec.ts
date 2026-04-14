@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { loginPasswordInput, mockTurnstileTokenIfNeeded } from "./helpers";
 
 test.describe("Formulario de registro", () => {
   test.beforeEach(async ({ page }) => {
@@ -6,14 +7,20 @@ test.describe("Formulario de registro", () => {
   });
 
   test("muestra errores al enviar vacío", async ({ page }) => {
-    await page.getByRole("button", { name: "Crear cuenta" }).click();
-    await expect(page.getByText("El nombre es obligatorio")).toBeVisible();
+    const main = page.locator("main");
+    await mockTurnstileTokenIfNeeded(page);
+    await expect(main.getByRole("button", { name: "Crear cuenta" })).toBeEnabled({ timeout: 8000 });
+    await main.getByRole("button", { name: "Crear cuenta" }).click();
+    await expect(main.getByText("El nombre es obligatorio")).toBeVisible();
   });
 
   test("muestra error por email inválido", async ({ page }) => {
-    await page.getByLabel("Nombre").fill("Test User");
-    await page.getByLabel("Correo electrónico").fill("no-es-email");
-    await page.getByRole("button", { name: "Crear cuenta" }).click();
+    const main = page.locator("main");
+    await mockTurnstileTokenIfNeeded(page);
+    await expect(main.getByRole("button", { name: "Crear cuenta" })).toBeEnabled({ timeout: 8000 });
+    await main.getByLabel(/Nombre completo/i).fill("Test User");
+    await main.getByLabel("Correo electrónico").fill("no-es-email");
+    await main.getByRole("button", { name: "Crear cuenta" }).click();
     // El campo de email debe mostrar un error de validación
     await expect(page.locator("input[type='email']:invalid, [data-invalid], [aria-invalid='true']").or(
       page.getByText(/correo|email|válido/i)
@@ -23,7 +30,7 @@ test.describe("Formulario de registro", () => {
   });
 
   test("tiene enlace a login", async ({ page }) => {
-    const loginLink = page.getByRole("link", { name: /iniciar sesión|login/i });
+    const loginLink = page.locator("main").getByRole("link", { name: /iniciar sesión|login/i }).first();
     await expect(loginLink).toBeVisible();
     await loginLink.click();
     await expect(page).toHaveURL(/login/);
@@ -36,15 +43,16 @@ test.describe("Formulario de login", () => {
   });
 
   test("muestra error con credenciales incorrectas", async ({ page }) => {
-    await page.getByLabel("Correo electrónico").fill("noexiste@cursumi.com");
-    await page.getByLabel("Contraseña").fill("wrong-password-123");
-    await page.getByRole("button", { name: "Iniciar sesión" }).click();
+    const main = page.locator("main");
+    await main.getByLabel("Correo electrónico").fill("noexiste@cursumi.com");
+    await loginPasswordInput(main).fill("wrong-password-123");
+    await main.getByRole("button", { name: "Iniciar sesión" }).click();
     // No redirige — permanece en /login
     await expect(page).toHaveURL(/login/, { timeout: 6000 });
   });
 
   test("tiene enlace a registro", async ({ page }) => {
-    const signupLink = page.getByRole("link", { name: /crear cuenta|registr/i });
+    const signupLink = page.locator("main").getByRole("link", { name: /crear cuenta|registr/i }).first();
     await expect(signupLink).toBeVisible();
     await signupLink.click();
     await expect(page).toHaveURL(/signup/);
