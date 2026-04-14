@@ -218,6 +218,16 @@ export type CourseNote = $Result.DefaultSelection<Prisma.$CourseNotePayload>
  * 
  */
 export type WishlistItem = $Result.DefaultSelection<Prisma.$WishlistItemPayload>
+/**
+ * Model Referral
+ * 
+ */
+export type Referral = $Result.DefaultSelection<Prisma.$ReferralPayload>
+/**
+ * Model PushSubscription
+ * 
+ */
+export type PushSubscription = $Result.DefaultSelection<Prisma.$PushSubscriptionPayload>
 
 /**
  * Enums
@@ -296,6 +306,15 @@ export const TransactionStatus: {
 };
 
 export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
+export const ReferralStatus: {
+  pending: 'pending',
+  earned: 'earned',
+  paid: 'paid'
+};
+
+export type ReferralStatus = (typeof ReferralStatus)[keyof typeof ReferralStatus]
 
 
 export const OrgRole: {
@@ -393,6 +412,10 @@ export const ApplicationStatus: typeof $Enums.ApplicationStatus
 export type TransactionStatus = $Enums.TransactionStatus
 
 export const TransactionStatus: typeof $Enums.TransactionStatus
+
+export type ReferralStatus = $Enums.ReferralStatus
+
+export const ReferralStatus: typeof $Enums.ReferralStatus
 
 export type OrgRole = $Enums.OrgRole
 
@@ -948,6 +971,26 @@ export class PrismaClient<
     * ```
     */
   get wishlistItem(): Prisma.WishlistItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.referral`: Exposes CRUD operations for the **Referral** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Referrals
+    * const referrals = await prisma.referral.findMany()
+    * ```
+    */
+  get referral(): Prisma.ReferralDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pushSubscription`: Exposes CRUD operations for the **PushSubscription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PushSubscriptions
+    * const pushSubscriptions = await prisma.pushSubscription.findMany()
+    * ```
+    */
+  get pushSubscription(): Prisma.PushSubscriptionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1422,7 +1465,9 @@ export namespace Prisma {
     SiteSetting: 'SiteSetting',
     Coupon: 'Coupon',
     CourseNote: 'CourseNote',
-    WishlistItem: 'WishlistItem'
+    WishlistItem: 'WishlistItem',
+    Referral: 'Referral',
+    PushSubscription: 'PushSubscription'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1438,7 +1483,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4476,6 +4521,154 @@ export namespace Prisma {
           }
         }
       }
+      Referral: {
+        payload: Prisma.$ReferralPayload<ExtArgs>
+        fields: Prisma.ReferralFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReferralFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReferralFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>
+          }
+          findFirst: {
+            args: Prisma.ReferralFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReferralFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>
+          }
+          findMany: {
+            args: Prisma.ReferralFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>[]
+          }
+          create: {
+            args: Prisma.ReferralCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>
+          }
+          createMany: {
+            args: Prisma.ReferralCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReferralCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>[]
+          }
+          delete: {
+            args: Prisma.ReferralDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>
+          }
+          update: {
+            args: Prisma.ReferralUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReferralDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReferralUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReferralUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReferralUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralPayload>
+          }
+          aggregate: {
+            args: Prisma.ReferralAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReferral>
+          }
+          groupBy: {
+            args: Prisma.ReferralGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReferralGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReferralCountArgs<ExtArgs>
+            result: $Utils.Optional<ReferralCountAggregateOutputType> | number
+          }
+        }
+      }
+      PushSubscription: {
+        payload: Prisma.$PushSubscriptionPayload<ExtArgs>
+        fields: Prisma.PushSubscriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PushSubscriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PushSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.PushSubscriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PushSubscriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          findMany: {
+            args: Prisma.PushSubscriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+          }
+          create: {
+            args: Prisma.PushSubscriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          createMany: {
+            args: Prisma.PushSubscriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PushSubscriptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+          }
+          delete: {
+            args: Prisma.PushSubscriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          update: {
+            args: Prisma.PushSubscriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PushSubscriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PushSubscriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PushSubscriptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.PushSubscriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.PushSubscriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePushSubscription>
+          }
+          groupBy: {
+            args: Prisma.PushSubscriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PushSubscriptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PushSubscriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<PushSubscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4625,6 +4818,8 @@ export namespace Prisma {
     coupon?: CouponOmit
     courseNote?: CourseNoteOmit
     wishlistItem?: WishlistItemOmit
+    referral?: ReferralOmit
+    pushSubscription?: PushSubscriptionOmit
   }
 
   /* Types for Logging */
@@ -4723,6 +4918,9 @@ export namespace Prisma {
     sessionAnonymousQuestions: number
     learningReflections: number
     wishlistItems: number
+    pushSubscriptions: number
+    referrals: number
+    referralCommissions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4744,6 +4942,9 @@ export namespace Prisma {
     sessionAnonymousQuestions?: boolean | UserCountOutputTypeCountSessionAnonymousQuestionsArgs
     learningReflections?: boolean | UserCountOutputTypeCountLearningReflectionsArgs
     wishlistItems?: boolean | UserCountOutputTypeCountWishlistItemsArgs
+    pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
+    referrals?: boolean | UserCountOutputTypeCountReferralsArgs
+    referralCommissions?: boolean | UserCountOutputTypeCountReferralCommissionsArgs
   }
 
   // Custom InputTypes
@@ -4881,6 +5082,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WishlistItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPushSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PushSubscriptionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReferralsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReferralCommissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralWhereInput
   }
 
 
@@ -5534,6 +5756,8 @@ export namespace Prisma {
     role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
+    referralCode: string | null
+    referredById: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -5553,6 +5777,8 @@ export namespace Prisma {
     role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
+    referralCode: string | null
+    referredById: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -5572,6 +5798,8 @@ export namespace Prisma {
     role: number
     createdAt: number
     updatedAt: number
+    referralCode: number
+    referredById: number
     _all: number
   }
 
@@ -5593,6 +5821,8 @@ export namespace Prisma {
     role?: true
     createdAt?: true
     updatedAt?: true
+    referralCode?: true
+    referredById?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -5612,6 +5842,8 @@ export namespace Prisma {
     role?: true
     createdAt?: true
     updatedAt?: true
+    referralCode?: true
+    referredById?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -5631,6 +5863,8 @@ export namespace Prisma {
     role?: true
     createdAt?: true
     updatedAt?: true
+    referralCode?: true
+    referredById?: true
     _all?: true
   }
 
@@ -5723,6 +5957,8 @@ export namespace Prisma {
     role: $Enums.Role
     createdAt: Date
     updatedAt: Date
+    referralCode: string | null
+    referredById: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -5759,6 +5995,8 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    referralCode?: boolean
+    referredById?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     instructorProfile?: boolean | User$instructorProfileArgs<ExtArgs>
@@ -5779,6 +6017,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: boolean | User$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
+    pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
+    referredBy?: boolean | User$referredByArgs<ExtArgs>
+    referrals?: boolean | User$referralsArgs<ExtArgs>
+    referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
+    referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5799,6 +6042,9 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    referralCode?: boolean
+    referredById?: boolean
+    referredBy?: boolean | User$referredByArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5818,6 +6064,9 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    referralCode?: boolean
+    referredById?: boolean
+    referredBy?: boolean | User$referredByArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -5837,9 +6086,11 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    referralCode?: boolean
+    referredById?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phone" | "city" | "state" | "bio" | "website" | "linkedinUrl" | "instagramUrl" | "signatureUrl" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phone" | "city" | "state" | "bio" | "website" | "linkedinUrl" | "instagramUrl" | "signatureUrl" | "role" | "createdAt" | "updatedAt" | "referralCode" | "referredById", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -5861,10 +6112,19 @@ export namespace Prisma {
     sessionAnonymousQuestions?: boolean | User$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
+    pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
+    referredBy?: boolean | User$referredByArgs<ExtArgs>
+    referrals?: boolean | User$referralsArgs<ExtArgs>
+    referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
+    referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referredBy?: boolean | User$referredByArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referredBy?: boolean | User$referredByArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -5889,6 +6149,17 @@ export namespace Prisma {
       sessionAnonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
       learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
       wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
+      pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
+      referredBy: Prisma.$UserPayload<ExtArgs> | null
+      referrals: Prisma.$UserPayload<ExtArgs>[]
+      /**
+       * Comisiones que este usuario ha generado como referidor
+       */
+      referralCommissions: Prisma.$ReferralPayload<ExtArgs>[]
+      /**
+       * Entrada de referido de este usuario (solo existe si fue referido por alguien)
+       */
+      referralEntry: Prisma.$ReferralPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5910,6 +6181,14 @@ export namespace Prisma {
       role: $Enums.Role
       createdAt: Date
       updatedAt: Date
+      /**
+       * Código único para compartir — generado al crear la cuenta
+       */
+      referralCode: string | null
+      /**
+       * Usuario que refirió a este usuario (null si llegó sin referido)
+       */
+      referredById: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -6324,6 +6603,11 @@ export namespace Prisma {
     sessionAnonymousQuestions<T extends User$sessionAnonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionAnonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     learningReflections<T extends User$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wishlistItems<T extends User$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pushSubscriptions<T extends User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    referredBy<T extends User$referredByArgs<ExtArgs> = {}>(args?: Subset<T, User$referredByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    referrals<T extends User$referralsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    referralCommissions<T extends User$referralCommissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralCommissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    referralEntry<T extends User$referralEntryArgs<ExtArgs> = {}>(args?: Subset<T, User$referralEntryArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6369,6 +6653,8 @@ export namespace Prisma {
     readonly role: FieldRef<"User", 'Role'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly referralCode: FieldRef<"User", 'String'>
+    readonly referredById: FieldRef<"User", 'String'>
   }
     
 
@@ -6618,6 +6904,10 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6688,6 +6978,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7224,6 +7518,116 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.pushSubscriptions
+   */
+  export type User$pushSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    where?: PushSubscriptionWhereInput
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    cursor?: PushSubscriptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * User.referredBy
+   */
+  export type User$referredByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * User.referrals
+   */
+  export type User$referralsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * User.referralCommissions
+   */
+  export type User$referralCommissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    where?: ReferralWhereInput
+    orderBy?: ReferralOrderByWithRelationInput | ReferralOrderByWithRelationInput[]
+    cursor?: ReferralWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReferralScalarFieldEnum | ReferralScalarFieldEnum[]
+  }
+
+  /**
+   * User.referralEntry
+   */
+  export type User$referralEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    where?: ReferralWhereInput
   }
 
   /**
@@ -27688,6 +28092,7 @@ export namespace Prisma {
     enrollment?: boolean | Transaction$enrollmentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    referral?: boolean | Transaction$referralArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -27752,6 +28157,7 @@ export namespace Prisma {
     enrollment?: boolean | Transaction$enrollmentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    referral?: boolean | Transaction$referralArgs<ExtArgs>
   }
   export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | Transaction$enrollmentArgs<ExtArgs>
@@ -27770,6 +28176,7 @@ export namespace Prisma {
       enrollment: Prisma.$EnrollmentPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs>
       course: Prisma.$CoursePayload<ExtArgs>
+      referral: Prisma.$ReferralPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -28183,6 +28590,7 @@ export namespace Prisma {
     enrollment<T extends Transaction$enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$enrollmentArgs<ExtArgs>>): Prisma__EnrollmentClient<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    referral<T extends Transaction$referralArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$referralArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28638,6 +29046,25 @@ export namespace Prisma {
      */
     include?: EnrollmentInclude<ExtArgs> | null
     where?: EnrollmentWhereInput
+  }
+
+  /**
+   * Transaction.referral
+   */
+  export type Transaction$referralArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    where?: ReferralWhereInput
   }
 
   /**
@@ -53202,6 +53629,2241 @@ export namespace Prisma {
 
 
   /**
+   * Model Referral
+   */
+
+  export type AggregateReferral = {
+    _count: ReferralCountAggregateOutputType | null
+    _avg: ReferralAvgAggregateOutputType | null
+    _sum: ReferralSumAggregateOutputType | null
+    _min: ReferralMinAggregateOutputType | null
+    _max: ReferralMaxAggregateOutputType | null
+  }
+
+  export type ReferralAvgAggregateOutputType = {
+    commissionAmount: number | null
+  }
+
+  export type ReferralSumAggregateOutputType = {
+    commissionAmount: number | null
+  }
+
+  export type ReferralMinAggregateOutputType = {
+    id: string | null
+    referrerId: string | null
+    referredUserId: string | null
+    transactionId: string | null
+    commissionAmount: number | null
+    status: $Enums.ReferralStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReferralMaxAggregateOutputType = {
+    id: string | null
+    referrerId: string | null
+    referredUserId: string | null
+    transactionId: string | null
+    commissionAmount: number | null
+    status: $Enums.ReferralStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReferralCountAggregateOutputType = {
+    id: number
+    referrerId: number
+    referredUserId: number
+    transactionId: number
+    commissionAmount: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReferralAvgAggregateInputType = {
+    commissionAmount?: true
+  }
+
+  export type ReferralSumAggregateInputType = {
+    commissionAmount?: true
+  }
+
+  export type ReferralMinAggregateInputType = {
+    id?: true
+    referrerId?: true
+    referredUserId?: true
+    transactionId?: true
+    commissionAmount?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReferralMaxAggregateInputType = {
+    id?: true
+    referrerId?: true
+    referredUserId?: true
+    transactionId?: true
+    commissionAmount?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReferralCountAggregateInputType = {
+    id?: true
+    referrerId?: true
+    referredUserId?: true
+    transactionId?: true
+    commissionAmount?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReferralAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Referral to aggregate.
+     */
+    where?: ReferralWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Referrals to fetch.
+     */
+    orderBy?: ReferralOrderByWithRelationInput | ReferralOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReferralWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Referrals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Referrals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Referrals
+    **/
+    _count?: true | ReferralCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReferralAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReferralSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReferralMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReferralMaxAggregateInputType
+  }
+
+  export type GetReferralAggregateType<T extends ReferralAggregateArgs> = {
+        [P in keyof T & keyof AggregateReferral]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReferral[P]>
+      : GetScalarType<T[P], AggregateReferral[P]>
+  }
+
+
+
+
+  export type ReferralGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralWhereInput
+    orderBy?: ReferralOrderByWithAggregationInput | ReferralOrderByWithAggregationInput[]
+    by: ReferralScalarFieldEnum[] | ReferralScalarFieldEnum
+    having?: ReferralScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReferralCountAggregateInputType | true
+    _avg?: ReferralAvgAggregateInputType
+    _sum?: ReferralSumAggregateInputType
+    _min?: ReferralMinAggregateInputType
+    _max?: ReferralMaxAggregateInputType
+  }
+
+  export type ReferralGroupByOutputType = {
+    id: string
+    referrerId: string
+    referredUserId: string
+    transactionId: string | null
+    commissionAmount: number | null
+    status: $Enums.ReferralStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: ReferralCountAggregateOutputType | null
+    _avg: ReferralAvgAggregateOutputType | null
+    _sum: ReferralSumAggregateOutputType | null
+    _min: ReferralMinAggregateOutputType | null
+    _max: ReferralMaxAggregateOutputType | null
+  }
+
+  type GetReferralGroupByPayload<T extends ReferralGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReferralGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReferralGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReferralGroupByOutputType[P]>
+            : GetScalarType<T[P], ReferralGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReferralSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    transactionId?: boolean
+    commissionAmount?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    transaction?: boolean | Referral$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["referral"]>
+
+  export type ReferralSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    transactionId?: boolean
+    commissionAmount?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    transaction?: boolean | Referral$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["referral"]>
+
+  export type ReferralSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    transactionId?: boolean
+    commissionAmount?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    transaction?: boolean | Referral$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["referral"]>
+
+  export type ReferralSelectScalar = {
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    transactionId?: boolean
+    commissionAmount?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReferralOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "referrerId" | "referredUserId" | "transactionId" | "commissionAmount" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["referral"]>
+  export type ReferralInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    transaction?: boolean | Referral$transactionArgs<ExtArgs>
+  }
+  export type ReferralIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    transaction?: boolean | Referral$transactionArgs<ExtArgs>
+  }
+  export type ReferralIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    transaction?: boolean | Referral$transactionArgs<ExtArgs>
+  }
+
+  export type $ReferralPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Referral"
+    objects: {
+      referrer: Prisma.$UserPayload<ExtArgs>
+      referredUser: Prisma.$UserPayload<ExtArgs>
+      transaction: Prisma.$TransactionPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      /**
+       * El usuario que compartió su link (referidor)
+       */
+      referrerId: string
+      /**
+       * El usuario nuevo que se registró con el link
+       */
+      referredUserId: string
+      /**
+       * Transacción que activó la comisión (primera compra del referido)
+       */
+      transactionId: string | null
+      /**
+       * Comisión en centavos MXN (10 % del monto neto de la transacción)
+       */
+      commissionAmount: number | null
+      status: $Enums.ReferralStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["referral"]>
+    composites: {}
+  }
+
+  type ReferralGetPayload<S extends boolean | null | undefined | ReferralDefaultArgs> = $Result.GetResult<Prisma.$ReferralPayload, S>
+
+  type ReferralCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReferralFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReferralCountAggregateInputType | true
+    }
+
+  export interface ReferralDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Referral'], meta: { name: 'Referral' } }
+    /**
+     * Find zero or one Referral that matches the filter.
+     * @param {ReferralFindUniqueArgs} args - Arguments to find a Referral
+     * @example
+     * // Get one Referral
+     * const referral = await prisma.referral.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReferralFindUniqueArgs>(args: SelectSubset<T, ReferralFindUniqueArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Referral that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReferralFindUniqueOrThrowArgs} args - Arguments to find a Referral
+     * @example
+     * // Get one Referral
+     * const referral = await prisma.referral.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReferralFindUniqueOrThrowArgs>(args: SelectSubset<T, ReferralFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Referral that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralFindFirstArgs} args - Arguments to find a Referral
+     * @example
+     * // Get one Referral
+     * const referral = await prisma.referral.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReferralFindFirstArgs>(args?: SelectSubset<T, ReferralFindFirstArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Referral that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralFindFirstOrThrowArgs} args - Arguments to find a Referral
+     * @example
+     * // Get one Referral
+     * const referral = await prisma.referral.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReferralFindFirstOrThrowArgs>(args?: SelectSubset<T, ReferralFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Referrals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Referrals
+     * const referrals = await prisma.referral.findMany()
+     * 
+     * // Get first 10 Referrals
+     * const referrals = await prisma.referral.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const referralWithIdOnly = await prisma.referral.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReferralFindManyArgs>(args?: SelectSubset<T, ReferralFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Referral.
+     * @param {ReferralCreateArgs} args - Arguments to create a Referral.
+     * @example
+     * // Create one Referral
+     * const Referral = await prisma.referral.create({
+     *   data: {
+     *     // ... data to create a Referral
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReferralCreateArgs>(args: SelectSubset<T, ReferralCreateArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Referrals.
+     * @param {ReferralCreateManyArgs} args - Arguments to create many Referrals.
+     * @example
+     * // Create many Referrals
+     * const referral = await prisma.referral.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReferralCreateManyArgs>(args?: SelectSubset<T, ReferralCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Referrals and returns the data saved in the database.
+     * @param {ReferralCreateManyAndReturnArgs} args - Arguments to create many Referrals.
+     * @example
+     * // Create many Referrals
+     * const referral = await prisma.referral.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Referrals and only return the `id`
+     * const referralWithIdOnly = await prisma.referral.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReferralCreateManyAndReturnArgs>(args?: SelectSubset<T, ReferralCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Referral.
+     * @param {ReferralDeleteArgs} args - Arguments to delete one Referral.
+     * @example
+     * // Delete one Referral
+     * const Referral = await prisma.referral.delete({
+     *   where: {
+     *     // ... filter to delete one Referral
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReferralDeleteArgs>(args: SelectSubset<T, ReferralDeleteArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Referral.
+     * @param {ReferralUpdateArgs} args - Arguments to update one Referral.
+     * @example
+     * // Update one Referral
+     * const referral = await prisma.referral.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReferralUpdateArgs>(args: SelectSubset<T, ReferralUpdateArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Referrals.
+     * @param {ReferralDeleteManyArgs} args - Arguments to filter Referrals to delete.
+     * @example
+     * // Delete a few Referrals
+     * const { count } = await prisma.referral.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReferralDeleteManyArgs>(args?: SelectSubset<T, ReferralDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Referrals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Referrals
+     * const referral = await prisma.referral.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReferralUpdateManyArgs>(args: SelectSubset<T, ReferralUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Referrals and returns the data updated in the database.
+     * @param {ReferralUpdateManyAndReturnArgs} args - Arguments to update many Referrals.
+     * @example
+     * // Update many Referrals
+     * const referral = await prisma.referral.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Referrals and only return the `id`
+     * const referralWithIdOnly = await prisma.referral.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReferralUpdateManyAndReturnArgs>(args: SelectSubset<T, ReferralUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Referral.
+     * @param {ReferralUpsertArgs} args - Arguments to update or create a Referral.
+     * @example
+     * // Update or create a Referral
+     * const referral = await prisma.referral.upsert({
+     *   create: {
+     *     // ... data to create a Referral
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Referral we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReferralUpsertArgs>(args: SelectSubset<T, ReferralUpsertArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Referrals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralCountArgs} args - Arguments to filter Referrals to count.
+     * @example
+     * // Count the number of Referrals
+     * const count = await prisma.referral.count({
+     *   where: {
+     *     // ... the filter for the Referrals we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReferralCountArgs>(
+      args?: Subset<T, ReferralCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReferralCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Referral.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReferralAggregateArgs>(args: Subset<T, ReferralAggregateArgs>): Prisma.PrismaPromise<GetReferralAggregateType<T>>
+
+    /**
+     * Group by Referral.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReferralGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReferralGroupByArgs['orderBy'] }
+        : { orderBy?: ReferralGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReferralGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReferralGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Referral model
+   */
+  readonly fields: ReferralFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Referral.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReferralClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    referrer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    referredUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transaction<T extends Referral$transactionArgs<ExtArgs> = {}>(args?: Subset<T, Referral$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Referral model
+   */
+  interface ReferralFieldRefs {
+    readonly id: FieldRef<"Referral", 'String'>
+    readonly referrerId: FieldRef<"Referral", 'String'>
+    readonly referredUserId: FieldRef<"Referral", 'String'>
+    readonly transactionId: FieldRef<"Referral", 'String'>
+    readonly commissionAmount: FieldRef<"Referral", 'Int'>
+    readonly status: FieldRef<"Referral", 'ReferralStatus'>
+    readonly createdAt: FieldRef<"Referral", 'DateTime'>
+    readonly updatedAt: FieldRef<"Referral", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Referral findUnique
+   */
+  export type ReferralFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * Filter, which Referral to fetch.
+     */
+    where: ReferralWhereUniqueInput
+  }
+
+  /**
+   * Referral findUniqueOrThrow
+   */
+  export type ReferralFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * Filter, which Referral to fetch.
+     */
+    where: ReferralWhereUniqueInput
+  }
+
+  /**
+   * Referral findFirst
+   */
+  export type ReferralFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * Filter, which Referral to fetch.
+     */
+    where?: ReferralWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Referrals to fetch.
+     */
+    orderBy?: ReferralOrderByWithRelationInput | ReferralOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Referrals.
+     */
+    cursor?: ReferralWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Referrals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Referrals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Referrals.
+     */
+    distinct?: ReferralScalarFieldEnum | ReferralScalarFieldEnum[]
+  }
+
+  /**
+   * Referral findFirstOrThrow
+   */
+  export type ReferralFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * Filter, which Referral to fetch.
+     */
+    where?: ReferralWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Referrals to fetch.
+     */
+    orderBy?: ReferralOrderByWithRelationInput | ReferralOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Referrals.
+     */
+    cursor?: ReferralWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Referrals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Referrals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Referrals.
+     */
+    distinct?: ReferralScalarFieldEnum | ReferralScalarFieldEnum[]
+  }
+
+  /**
+   * Referral findMany
+   */
+  export type ReferralFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * Filter, which Referrals to fetch.
+     */
+    where?: ReferralWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Referrals to fetch.
+     */
+    orderBy?: ReferralOrderByWithRelationInput | ReferralOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Referrals.
+     */
+    cursor?: ReferralWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Referrals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Referrals.
+     */
+    skip?: number
+    distinct?: ReferralScalarFieldEnum | ReferralScalarFieldEnum[]
+  }
+
+  /**
+   * Referral create
+   */
+  export type ReferralCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Referral.
+     */
+    data: XOR<ReferralCreateInput, ReferralUncheckedCreateInput>
+  }
+
+  /**
+   * Referral createMany
+   */
+  export type ReferralCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Referrals.
+     */
+    data: ReferralCreateManyInput | ReferralCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Referral createManyAndReturn
+   */
+  export type ReferralCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * The data used to create many Referrals.
+     */
+    data: ReferralCreateManyInput | ReferralCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Referral update
+   */
+  export type ReferralUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Referral.
+     */
+    data: XOR<ReferralUpdateInput, ReferralUncheckedUpdateInput>
+    /**
+     * Choose, which Referral to update.
+     */
+    where: ReferralWhereUniqueInput
+  }
+
+  /**
+   * Referral updateMany
+   */
+  export type ReferralUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Referrals.
+     */
+    data: XOR<ReferralUpdateManyMutationInput, ReferralUncheckedUpdateManyInput>
+    /**
+     * Filter which Referrals to update
+     */
+    where?: ReferralWhereInput
+    /**
+     * Limit how many Referrals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Referral updateManyAndReturn
+   */
+  export type ReferralUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * The data used to update Referrals.
+     */
+    data: XOR<ReferralUpdateManyMutationInput, ReferralUncheckedUpdateManyInput>
+    /**
+     * Filter which Referrals to update
+     */
+    where?: ReferralWhereInput
+    /**
+     * Limit how many Referrals to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Referral upsert
+   */
+  export type ReferralUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Referral to update in case it exists.
+     */
+    where: ReferralWhereUniqueInput
+    /**
+     * In case the Referral found by the `where` argument doesn't exist, create a new Referral with this data.
+     */
+    create: XOR<ReferralCreateInput, ReferralUncheckedCreateInput>
+    /**
+     * In case the Referral was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReferralUpdateInput, ReferralUncheckedUpdateInput>
+  }
+
+  /**
+   * Referral delete
+   */
+  export type ReferralDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+    /**
+     * Filter which Referral to delete.
+     */
+    where: ReferralWhereUniqueInput
+  }
+
+  /**
+   * Referral deleteMany
+   */
+  export type ReferralDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Referrals to delete
+     */
+    where?: ReferralWhereInput
+    /**
+     * Limit how many Referrals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Referral.transaction
+   */
+  export type Referral$transactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+  }
+
+  /**
+   * Referral without action
+   */
+  export type ReferralDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Referral
+     */
+    select?: ReferralSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Referral
+     */
+    omit?: ReferralOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PushSubscription
+   */
+
+  export type AggregatePushSubscription = {
+    _count: PushSubscriptionCountAggregateOutputType | null
+    _min: PushSubscriptionMinAggregateOutputType | null
+    _max: PushSubscriptionMaxAggregateOutputType | null
+  }
+
+  export type PushSubscriptionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    endpoint: string | null
+    createdAt: Date | null
+  }
+
+  export type PushSubscriptionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    endpoint: string | null
+    createdAt: Date | null
+  }
+
+  export type PushSubscriptionCountAggregateOutputType = {
+    id: number
+    userId: number
+    endpoint: number
+    keys: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PushSubscriptionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    endpoint?: true
+    createdAt?: true
+  }
+
+  export type PushSubscriptionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    endpoint?: true
+    createdAt?: true
+  }
+
+  export type PushSubscriptionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    endpoint?: true
+    keys?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PushSubscriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PushSubscription to aggregate.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PushSubscriptions
+    **/
+    _count?: true | PushSubscriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PushSubscriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PushSubscriptionMaxAggregateInputType
+  }
+
+  export type GetPushSubscriptionAggregateType<T extends PushSubscriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePushSubscription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePushSubscription[P]>
+      : GetScalarType<T[P], AggregatePushSubscription[P]>
+  }
+
+
+
+
+  export type PushSubscriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PushSubscriptionWhereInput
+    orderBy?: PushSubscriptionOrderByWithAggregationInput | PushSubscriptionOrderByWithAggregationInput[]
+    by: PushSubscriptionScalarFieldEnum[] | PushSubscriptionScalarFieldEnum
+    having?: PushSubscriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PushSubscriptionCountAggregateInputType | true
+    _min?: PushSubscriptionMinAggregateInputType
+    _max?: PushSubscriptionMaxAggregateInputType
+  }
+
+  export type PushSubscriptionGroupByOutputType = {
+    id: string
+    userId: string
+    endpoint: string
+    keys: JsonValue
+    createdAt: Date
+    _count: PushSubscriptionCountAggregateOutputType | null
+    _min: PushSubscriptionMinAggregateOutputType | null
+    _max: PushSubscriptionMaxAggregateOutputType | null
+  }
+
+  type GetPushSubscriptionGroupByPayload<T extends PushSubscriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PushSubscriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PushSubscriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PushSubscriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], PushSubscriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PushSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    endpoint?: boolean
+    keys?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pushSubscription"]>
+
+  export type PushSubscriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    endpoint?: boolean
+    keys?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pushSubscription"]>
+
+  export type PushSubscriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    endpoint?: boolean
+    keys?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pushSubscription"]>
+
+  export type PushSubscriptionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    endpoint?: boolean
+    keys?: boolean
+    createdAt?: boolean
+  }
+
+  export type PushSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "endpoint" | "keys" | "createdAt", ExtArgs["result"]["pushSubscription"]>
+  export type PushSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PushSubscriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PushSubscriptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PushSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PushSubscription"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      endpoint: string
+      /**
+       * { p256dh: string; auth: string }
+       */
+      keys: Prisma.JsonValue
+      createdAt: Date
+    }, ExtArgs["result"]["pushSubscription"]>
+    composites: {}
+  }
+
+  type PushSubscriptionGetPayload<S extends boolean | null | undefined | PushSubscriptionDefaultArgs> = $Result.GetResult<Prisma.$PushSubscriptionPayload, S>
+
+  type PushSubscriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PushSubscriptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PushSubscriptionCountAggregateInputType | true
+    }
+
+  export interface PushSubscriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PushSubscription'], meta: { name: 'PushSubscription' } }
+    /**
+     * Find zero or one PushSubscription that matches the filter.
+     * @param {PushSubscriptionFindUniqueArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PushSubscriptionFindUniqueArgs>(args: SelectSubset<T, PushSubscriptionFindUniqueArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PushSubscription that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PushSubscriptionFindUniqueOrThrowArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PushSubscriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, PushSubscriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PushSubscription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionFindFirstArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PushSubscriptionFindFirstArgs>(args?: SelectSubset<T, PushSubscriptionFindFirstArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PushSubscription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionFindFirstOrThrowArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PushSubscriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, PushSubscriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PushSubscriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PushSubscriptions
+     * const pushSubscriptions = await prisma.pushSubscription.findMany()
+     * 
+     * // Get first 10 PushSubscriptions
+     * const pushSubscriptions = await prisma.pushSubscription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pushSubscriptionWithIdOnly = await prisma.pushSubscription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PushSubscriptionFindManyArgs>(args?: SelectSubset<T, PushSubscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PushSubscription.
+     * @param {PushSubscriptionCreateArgs} args - Arguments to create a PushSubscription.
+     * @example
+     * // Create one PushSubscription
+     * const PushSubscription = await prisma.pushSubscription.create({
+     *   data: {
+     *     // ... data to create a PushSubscription
+     *   }
+     * })
+     * 
+     */
+    create<T extends PushSubscriptionCreateArgs>(args: SelectSubset<T, PushSubscriptionCreateArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PushSubscriptions.
+     * @param {PushSubscriptionCreateManyArgs} args - Arguments to create many PushSubscriptions.
+     * @example
+     * // Create many PushSubscriptions
+     * const pushSubscription = await prisma.pushSubscription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PushSubscriptionCreateManyArgs>(args?: SelectSubset<T, PushSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PushSubscriptions and returns the data saved in the database.
+     * @param {PushSubscriptionCreateManyAndReturnArgs} args - Arguments to create many PushSubscriptions.
+     * @example
+     * // Create many PushSubscriptions
+     * const pushSubscription = await prisma.pushSubscription.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PushSubscriptions and only return the `id`
+     * const pushSubscriptionWithIdOnly = await prisma.pushSubscription.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PushSubscriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, PushSubscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PushSubscription.
+     * @param {PushSubscriptionDeleteArgs} args - Arguments to delete one PushSubscription.
+     * @example
+     * // Delete one PushSubscription
+     * const PushSubscription = await prisma.pushSubscription.delete({
+     *   where: {
+     *     // ... filter to delete one PushSubscription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PushSubscriptionDeleteArgs>(args: SelectSubset<T, PushSubscriptionDeleteArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PushSubscription.
+     * @param {PushSubscriptionUpdateArgs} args - Arguments to update one PushSubscription.
+     * @example
+     * // Update one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PushSubscriptionUpdateArgs>(args: SelectSubset<T, PushSubscriptionUpdateArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PushSubscriptions.
+     * @param {PushSubscriptionDeleteManyArgs} args - Arguments to filter PushSubscriptions to delete.
+     * @example
+     * // Delete a few PushSubscriptions
+     * const { count } = await prisma.pushSubscription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PushSubscriptionDeleteManyArgs>(args?: SelectSubset<T, PushSubscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PushSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PushSubscriptions
+     * const pushSubscription = await prisma.pushSubscription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PushSubscriptionUpdateManyArgs>(args: SelectSubset<T, PushSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PushSubscriptions and returns the data updated in the database.
+     * @param {PushSubscriptionUpdateManyAndReturnArgs} args - Arguments to update many PushSubscriptions.
+     * @example
+     * // Update many PushSubscriptions
+     * const pushSubscription = await prisma.pushSubscription.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PushSubscriptions and only return the `id`
+     * const pushSubscriptionWithIdOnly = await prisma.pushSubscription.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PushSubscriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, PushSubscriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PushSubscription.
+     * @param {PushSubscriptionUpsertArgs} args - Arguments to update or create a PushSubscription.
+     * @example
+     * // Update or create a PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.upsert({
+     *   create: {
+     *     // ... data to create a PushSubscription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PushSubscription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PushSubscriptionUpsertArgs>(args: SelectSubset<T, PushSubscriptionUpsertArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PushSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionCountArgs} args - Arguments to filter PushSubscriptions to count.
+     * @example
+     * // Count the number of PushSubscriptions
+     * const count = await prisma.pushSubscription.count({
+     *   where: {
+     *     // ... the filter for the PushSubscriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PushSubscriptionCountArgs>(
+      args?: Subset<T, PushSubscriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PushSubscriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PushSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PushSubscriptionAggregateArgs>(args: Subset<T, PushSubscriptionAggregateArgs>): Prisma.PrismaPromise<GetPushSubscriptionAggregateType<T>>
+
+    /**
+     * Group by PushSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PushSubscriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PushSubscriptionGroupByArgs['orderBy'] }
+        : { orderBy?: PushSubscriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PushSubscriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPushSubscriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PushSubscription model
+   */
+  readonly fields: PushSubscriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PushSubscription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PushSubscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PushSubscription model
+   */
+  interface PushSubscriptionFieldRefs {
+    readonly id: FieldRef<"PushSubscription", 'String'>
+    readonly userId: FieldRef<"PushSubscription", 'String'>
+    readonly endpoint: FieldRef<"PushSubscription", 'String'>
+    readonly keys: FieldRef<"PushSubscription", 'Json'>
+    readonly createdAt: FieldRef<"PushSubscription", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PushSubscription findUnique
+   */
+  export type PushSubscriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription findUniqueOrThrow
+   */
+  export type PushSubscriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription findFirst
+   */
+  export type PushSubscriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PushSubscriptions.
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PushSubscriptions.
+     */
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PushSubscription findFirstOrThrow
+   */
+  export type PushSubscriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PushSubscriptions.
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PushSubscriptions.
+     */
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PushSubscription findMany
+   */
+  export type PushSubscriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscriptions to fetch.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PushSubscriptions.
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PushSubscription create
+   */
+  export type PushSubscriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PushSubscription.
+     */
+    data: XOR<PushSubscriptionCreateInput, PushSubscriptionUncheckedCreateInput>
+  }
+
+  /**
+   * PushSubscription createMany
+   */
+  export type PushSubscriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PushSubscriptions.
+     */
+    data: PushSubscriptionCreateManyInput | PushSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PushSubscription createManyAndReturn
+   */
+  export type PushSubscriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many PushSubscriptions.
+     */
+    data: PushSubscriptionCreateManyInput | PushSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PushSubscription update
+   */
+  export type PushSubscriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PushSubscription.
+     */
+    data: XOR<PushSubscriptionUpdateInput, PushSubscriptionUncheckedUpdateInput>
+    /**
+     * Choose, which PushSubscription to update.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription updateMany
+   */
+  export type PushSubscriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PushSubscriptions.
+     */
+    data: XOR<PushSubscriptionUpdateManyMutationInput, PushSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which PushSubscriptions to update
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * Limit how many PushSubscriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PushSubscription updateManyAndReturn
+   */
+  export type PushSubscriptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to update PushSubscriptions.
+     */
+    data: XOR<PushSubscriptionUpdateManyMutationInput, PushSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which PushSubscriptions to update
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * Limit how many PushSubscriptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PushSubscription upsert
+   */
+  export type PushSubscriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PushSubscription to update in case it exists.
+     */
+    where: PushSubscriptionWhereUniqueInput
+    /**
+     * In case the PushSubscription found by the `where` argument doesn't exist, create a new PushSubscription with this data.
+     */
+    create: XOR<PushSubscriptionCreateInput, PushSubscriptionUncheckedCreateInput>
+    /**
+     * In case the PushSubscription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PushSubscriptionUpdateInput, PushSubscriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * PushSubscription delete
+   */
+  export type PushSubscriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter which PushSubscription to delete.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription deleteMany
+   */
+  export type PushSubscriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PushSubscriptions to delete
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * Limit how many PushSubscriptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PushSubscription without action
+   */
+  export type PushSubscriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PushSubscription
+     */
+    omit?: PushSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -53231,7 +55893,9 @@ export namespace Prisma {
     signatureUrl: 'signatureUrl',
     role: 'role',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    referralCode: 'referralCode',
+    referredById: 'referredById'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -53811,6 +56475,31 @@ export namespace Prisma {
   export type WishlistItemScalarFieldEnum = (typeof WishlistItemScalarFieldEnum)[keyof typeof WishlistItemScalarFieldEnum]
 
 
+  export const ReferralScalarFieldEnum: {
+    id: 'id',
+    referrerId: 'referrerId',
+    referredUserId: 'referredUserId',
+    transactionId: 'transactionId',
+    commissionAmount: 'commissionAmount',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReferralScalarFieldEnum = (typeof ReferralScalarFieldEnum)[keyof typeof ReferralScalarFieldEnum]
+
+
+  export const PushSubscriptionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    endpoint: 'endpoint',
+    keys: 'keys',
+    createdAt: 'createdAt'
+  };
+
+  export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -54149,6 +56838,20 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
+
+
+  /**
+   * Reference to a field of type 'ReferralStatus'
+   */
+  export type EnumReferralStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferralStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReferralStatus[]'
+   */
+  export type ListEnumReferralStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferralStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -54174,6 +56877,8 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    referralCode?: StringNullableFilter<"User"> | string | null
+    referredById?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     instructorProfile?: XOR<InstructorProfileNullableScalarRelationFilter, InstructorProfileWhereInput> | null
@@ -54194,6 +56899,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
+    pushSubscriptions?: PushSubscriptionListRelationFilter
+    referredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    referrals?: UserListRelationFilter
+    referralCommissions?: ReferralListRelationFilter
+    referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -54213,6 +56923,8 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    referralCode?: SortOrderInput | SortOrder
+    referredById?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     instructorProfile?: InstructorProfileOrderByWithRelationInput
@@ -54233,11 +56945,17 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
     learningReflections?: LearningReflectionOrderByRelationAggregateInput
     wishlistItems?: WishlistItemOrderByRelationAggregateInput
+    pushSubscriptions?: PushSubscriptionOrderByRelationAggregateInput
+    referredBy?: UserOrderByWithRelationInput
+    referrals?: UserOrderByRelationAggregateInput
+    referralCommissions?: ReferralOrderByRelationAggregateInput
+    referralEntry?: ReferralOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    referralCode?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -54255,6 +56973,7 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    referredById?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     instructorProfile?: XOR<InstructorProfileNullableScalarRelationFilter, InstructorProfileWhereInput> | null
@@ -54275,7 +56994,12 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
-  }, "id" | "email">
+    pushSubscriptions?: PushSubscriptionListRelationFilter
+    referredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    referrals?: UserListRelationFilter
+    referralCommissions?: ReferralListRelationFilter
+    referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
+  }, "id" | "email" | "referralCode">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -54294,6 +57018,8 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    referralCode?: SortOrderInput | SortOrder
+    referredById?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -54319,6 +57045,8 @@ export namespace Prisma {
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    referralCode?: StringNullableWithAggregatesFilter<"User"> | string | null
+    referredById?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type AccountWhereInput = {
@@ -55819,6 +58547,7 @@ export namespace Prisma {
     enrollment?: XOR<EnrollmentNullableScalarRelationFilter, EnrollmentWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    referral?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
   }
 
   export type TransactionOrderByWithRelationInput = {
@@ -55839,6 +58568,7 @@ export namespace Prisma {
     enrollment?: EnrollmentOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
+    referral?: ReferralOrderByWithRelationInput
   }
 
   export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -55862,6 +58592,7 @@ export namespace Prisma {
     enrollment?: XOR<EnrollmentNullableScalarRelationFilter, EnrollmentWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+    referral?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
   }, "id" | "enrollmentId" | "stripeSessionId">
 
   export type TransactionOrderByWithAggregationInput = {
@@ -57437,6 +60168,139 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"WishlistItem"> | Date | string
   }
 
+  export type ReferralWhereInput = {
+    AND?: ReferralWhereInput | ReferralWhereInput[]
+    OR?: ReferralWhereInput[]
+    NOT?: ReferralWhereInput | ReferralWhereInput[]
+    id?: StringFilter<"Referral"> | string
+    referrerId?: StringFilter<"Referral"> | string
+    referredUserId?: StringFilter<"Referral"> | string
+    transactionId?: StringNullableFilter<"Referral"> | string | null
+    commissionAmount?: IntNullableFilter<"Referral"> | number | null
+    status?: EnumReferralStatusFilter<"Referral"> | $Enums.ReferralStatus
+    createdAt?: DateTimeFilter<"Referral"> | Date | string
+    updatedAt?: DateTimeFilter<"Referral"> | Date | string
+    referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+    referredUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+  }
+
+  export type ReferralOrderByWithRelationInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    commissionAmount?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    referrer?: UserOrderByWithRelationInput
+    referredUser?: UserOrderByWithRelationInput
+    transaction?: TransactionOrderByWithRelationInput
+  }
+
+  export type ReferralWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    referredUserId?: string
+    transactionId?: string
+    AND?: ReferralWhereInput | ReferralWhereInput[]
+    OR?: ReferralWhereInput[]
+    NOT?: ReferralWhereInput | ReferralWhereInput[]
+    referrerId?: StringFilter<"Referral"> | string
+    commissionAmount?: IntNullableFilter<"Referral"> | number | null
+    status?: EnumReferralStatusFilter<"Referral"> | $Enums.ReferralStatus
+    createdAt?: DateTimeFilter<"Referral"> | Date | string
+    updatedAt?: DateTimeFilter<"Referral"> | Date | string
+    referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+    referredUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+  }, "id" | "referredUserId" | "transactionId">
+
+  export type ReferralOrderByWithAggregationInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    commissionAmount?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReferralCountOrderByAggregateInput
+    _avg?: ReferralAvgOrderByAggregateInput
+    _max?: ReferralMaxOrderByAggregateInput
+    _min?: ReferralMinOrderByAggregateInput
+    _sum?: ReferralSumOrderByAggregateInput
+  }
+
+  export type ReferralScalarWhereWithAggregatesInput = {
+    AND?: ReferralScalarWhereWithAggregatesInput | ReferralScalarWhereWithAggregatesInput[]
+    OR?: ReferralScalarWhereWithAggregatesInput[]
+    NOT?: ReferralScalarWhereWithAggregatesInput | ReferralScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Referral"> | string
+    referrerId?: StringWithAggregatesFilter<"Referral"> | string
+    referredUserId?: StringWithAggregatesFilter<"Referral"> | string
+    transactionId?: StringNullableWithAggregatesFilter<"Referral"> | string | null
+    commissionAmount?: IntNullableWithAggregatesFilter<"Referral"> | number | null
+    status?: EnumReferralStatusWithAggregatesFilter<"Referral"> | $Enums.ReferralStatus
+    createdAt?: DateTimeWithAggregatesFilter<"Referral"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Referral"> | Date | string
+  }
+
+  export type PushSubscriptionWhereInput = {
+    AND?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    OR?: PushSubscriptionWhereInput[]
+    NOT?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    id?: StringFilter<"PushSubscription"> | string
+    userId?: StringFilter<"PushSubscription"> | string
+    endpoint?: StringFilter<"PushSubscription"> | string
+    keys?: JsonFilter<"PushSubscription">
+    createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PushSubscriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    keys?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PushSubscriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    endpoint?: string
+    AND?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    OR?: PushSubscriptionWhereInput[]
+    NOT?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    userId?: StringFilter<"PushSubscription"> | string
+    keys?: JsonFilter<"PushSubscription">
+    createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "endpoint">
+
+  export type PushSubscriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    keys?: SortOrder
+    createdAt?: SortOrder
+    _count?: PushSubscriptionCountOrderByAggregateInput
+    _max?: PushSubscriptionMaxOrderByAggregateInput
+    _min?: PushSubscriptionMinOrderByAggregateInput
+  }
+
+  export type PushSubscriptionScalarWhereWithAggregatesInput = {
+    AND?: PushSubscriptionScalarWhereWithAggregatesInput | PushSubscriptionScalarWhereWithAggregatesInput[]
+    OR?: PushSubscriptionScalarWhereWithAggregatesInput[]
+    NOT?: PushSubscriptionScalarWhereWithAggregatesInput | PushSubscriptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PushSubscription"> | string
+    userId?: StringWithAggregatesFilter<"PushSubscription"> | string
+    endpoint?: StringWithAggregatesFilter<"PushSubscription"> | string
+    keys?: JsonWithAggregatesFilter<"PushSubscription">
+    createdAt?: DateTimeWithAggregatesFilter<"PushSubscription"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -57454,6 +60318,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -57474,6 +60339,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -57493,6 +60363,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -57513,6 +60385,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUpdateInput = {
@@ -57532,6 +60408,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -57552,6 +60429,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -57571,6 +60453,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -57591,6 +60475,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -57610,6 +60498,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -57629,6 +60519,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -57648,6 +60539,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountCreateInput = {
@@ -59268,6 +62161,7 @@ export namespace Prisma {
     enrollment?: EnrollmentCreateNestedOneWithoutTransactionInput
     user: UserCreateNestedOneWithoutTransactionsInput
     course: CourseCreateNestedOneWithoutTransactionsInput
+    referral?: ReferralCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateInput = {
@@ -59285,6 +62179,7 @@ export namespace Prisma {
     couponCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    referral?: ReferralUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUpdateInput = {
@@ -59302,6 +62197,7 @@ export namespace Prisma {
     enrollment?: EnrollmentUpdateOneWithoutTransactionNestedInput
     user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     course?: CourseUpdateOneRequiredWithoutTransactionsNestedInput
+    referral?: ReferralUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateInput = {
@@ -59319,6 +62215,7 @@ export namespace Prisma {
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionCreateManyInput = {
@@ -60934,6 +63831,135 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReferralCreateInput = {
+    id?: string
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralCommissionsInput
+    referredUser: UserCreateNestedOneWithoutReferralEntryInput
+    transaction?: TransactionCreateNestedOneWithoutReferralInput
+  }
+
+  export type ReferralUncheckedCreateInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    transactionId?: string | null
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralCommissionsNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralEntryNestedInput
+    transaction?: TransactionUpdateOneWithoutReferralNestedInput
+  }
+
+  export type ReferralUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralCreateManyInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    transactionId?: string | null
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionCreateInput = {
+    id?: string
+    endpoint: string
+    keys: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutPushSubscriptionsInput
+  }
+
+  export type PushSubscriptionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    endpoint: string
+    keys: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPushSubscriptionsNestedInput
+  }
+
+  export type PushSubscriptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionCreateManyInput = {
+    id?: string
+    userId: string
+    endpoint: string
+    keys: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -61099,6 +64125,34 @@ export namespace Prisma {
     none?: WishlistItemWhereInput
   }
 
+  export type PushSubscriptionListRelationFilter = {
+    every?: PushSubscriptionWhereInput
+    some?: PushSubscriptionWhereInput
+    none?: PushSubscriptionWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type ReferralListRelationFilter = {
+    every?: ReferralWhereInput
+    some?: ReferralWhereInput
+    none?: ReferralWhereInput
+  }
+
+  export type ReferralNullableScalarRelationFilter = {
+    is?: ReferralWhereInput | null
+    isNot?: ReferralWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -61172,6 +64226,18 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PushSubscriptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReferralOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -61189,6 +64255,8 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    referralCode?: SortOrder
+    referredById?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -61208,6 +64276,8 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    referralCode?: SortOrder
+    referredById?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -61227,6 +64297,8 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    referralCode?: SortOrder
+    referredById?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -63578,6 +66650,86 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type EnumReferralStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusFilter<$PrismaModel> | $Enums.ReferralStatus
+  }
+
+  export type ReferralCountOrderByAggregateInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    transactionId?: SortOrder
+    commissionAmount?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralAvgOrderByAggregateInput = {
+    commissionAmount?: SortOrder
+  }
+
+  export type ReferralMaxOrderByAggregateInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    transactionId?: SortOrder
+    commissionAmount?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralMinOrderByAggregateInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    transactionId?: SortOrder
+    commissionAmount?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralSumOrderByAggregateInput = {
+    commissionAmount?: SortOrder
+  }
+
+  export type EnumReferralStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReferralStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReferralStatusFilter<$PrismaModel>
+    _max?: NestedEnumReferralStatusFilter<$PrismaModel>
+  }
+
+  export type PushSubscriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    keys?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PushSubscriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PushSubscriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -63716,6 +66868,39 @@ export namespace Prisma {
     connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
   }
 
+  export type PushSubscriptionCreateNestedManyWithoutUserInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutReferralsInput = {
+    create?: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedManyWithoutReferredByInput = {
+    create?: XOR<UserCreateWithoutReferredByInput, UserUncheckedCreateWithoutReferredByInput> | UserCreateWithoutReferredByInput[] | UserUncheckedCreateWithoutReferredByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutReferredByInput | UserCreateOrConnectWithoutReferredByInput[]
+    createMany?: UserCreateManyReferredByInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ReferralCreateNestedManyWithoutReferrerInput = {
+    create?: XOR<ReferralCreateWithoutReferrerInput, ReferralUncheckedCreateWithoutReferrerInput> | ReferralCreateWithoutReferrerInput[] | ReferralUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferrerInput | ReferralCreateOrConnectWithoutReferrerInput[]
+    createMany?: ReferralCreateManyReferrerInputEnvelope
+    connect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+  }
+
+  export type ReferralCreateNestedOneWithoutReferredUserInput = {
+    create?: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferredUserInput
+    connect?: ReferralWhereUniqueInput
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -63852,6 +67037,33 @@ export namespace Prisma {
     connectOrCreate?: WishlistItemCreateOrConnectWithoutUserInput | WishlistItemCreateOrConnectWithoutUserInput[]
     createMany?: WishlistItemCreateManyUserInputEnvelope
     connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+  }
+
+  export type PushSubscriptionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutReferredByInput = {
+    create?: XOR<UserCreateWithoutReferredByInput, UserUncheckedCreateWithoutReferredByInput> | UserCreateWithoutReferredByInput[] | UserUncheckedCreateWithoutReferredByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutReferredByInput | UserCreateOrConnectWithoutReferredByInput[]
+    createMany?: UserCreateManyReferredByInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ReferralUncheckedCreateNestedManyWithoutReferrerInput = {
+    create?: XOR<ReferralCreateWithoutReferrerInput, ReferralUncheckedCreateWithoutReferrerInput> | ReferralCreateWithoutReferrerInput[] | ReferralUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferrerInput | ReferralCreateOrConnectWithoutReferrerInput[]
+    createMany?: ReferralCreateManyReferrerInputEnvelope
+    connect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+  }
+
+  export type ReferralUncheckedCreateNestedOneWithoutReferredUserInput = {
+    create?: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferredUserInput
+    connect?: ReferralWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -64146,6 +67358,68 @@ export namespace Prisma {
     deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
   }
 
+  export type PushSubscriptionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    upsert?: PushSubscriptionUpsertWithWhereUniqueWithoutUserInput | PushSubscriptionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    set?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    disconnect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    delete?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    update?: PushSubscriptionUpdateWithWhereUniqueWithoutUserInput | PushSubscriptionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PushSubscriptionUpdateManyWithWhereWithoutUserInput | PushSubscriptionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+  }
+
+  export type UserUpdateOneWithoutReferralsNestedInput = {
+    create?: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralsInput
+    upsert?: UserUpsertWithoutReferralsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralsInput, UserUpdateWithoutReferralsInput>, UserUncheckedUpdateWithoutReferralsInput>
+  }
+
+  export type UserUpdateManyWithoutReferredByNestedInput = {
+    create?: XOR<UserCreateWithoutReferredByInput, UserUncheckedCreateWithoutReferredByInput> | UserCreateWithoutReferredByInput[] | UserUncheckedCreateWithoutReferredByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutReferredByInput | UserCreateOrConnectWithoutReferredByInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutReferredByInput | UserUpsertWithWhereUniqueWithoutReferredByInput[]
+    createMany?: UserCreateManyReferredByInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutReferredByInput | UserUpdateWithWhereUniqueWithoutReferredByInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutReferredByInput | UserUpdateManyWithWhereWithoutReferredByInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ReferralUpdateManyWithoutReferrerNestedInput = {
+    create?: XOR<ReferralCreateWithoutReferrerInput, ReferralUncheckedCreateWithoutReferrerInput> | ReferralCreateWithoutReferrerInput[] | ReferralUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferrerInput | ReferralCreateOrConnectWithoutReferrerInput[]
+    upsert?: ReferralUpsertWithWhereUniqueWithoutReferrerInput | ReferralUpsertWithWhereUniqueWithoutReferrerInput[]
+    createMany?: ReferralCreateManyReferrerInputEnvelope
+    set?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    disconnect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    delete?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    connect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    update?: ReferralUpdateWithWhereUniqueWithoutReferrerInput | ReferralUpdateWithWhereUniqueWithoutReferrerInput[]
+    updateMany?: ReferralUpdateManyWithWhereWithoutReferrerInput | ReferralUpdateManyWithWhereWithoutReferrerInput[]
+    deleteMany?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
+  }
+
+  export type ReferralUpdateOneWithoutReferredUserNestedInput = {
+    create?: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferredUserInput
+    upsert?: ReferralUpsertWithoutReferredUserInput
+    disconnect?: ReferralWhereInput | boolean
+    delete?: ReferralWhereInput | boolean
+    connect?: ReferralWhereUniqueInput
+    update?: XOR<XOR<ReferralUpdateToOneWithWhereWithoutReferredUserInput, ReferralUpdateWithoutReferredUserInput>, ReferralUncheckedUpdateWithoutReferredUserInput>
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -64416,6 +67690,58 @@ export namespace Prisma {
     update?: WishlistItemUpdateWithWhereUniqueWithoutUserInput | WishlistItemUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: WishlistItemUpdateManyWithWhereWithoutUserInput | WishlistItemUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+  }
+
+  export type PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    upsert?: PushSubscriptionUpsertWithWhereUniqueWithoutUserInput | PushSubscriptionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    set?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    disconnect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    delete?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    update?: PushSubscriptionUpdateWithWhereUniqueWithoutUserInput | PushSubscriptionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PushSubscriptionUpdateManyWithWhereWithoutUserInput | PushSubscriptionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutReferredByNestedInput = {
+    create?: XOR<UserCreateWithoutReferredByInput, UserUncheckedCreateWithoutReferredByInput> | UserCreateWithoutReferredByInput[] | UserUncheckedCreateWithoutReferredByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutReferredByInput | UserCreateOrConnectWithoutReferredByInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutReferredByInput | UserUpsertWithWhereUniqueWithoutReferredByInput[]
+    createMany?: UserCreateManyReferredByInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutReferredByInput | UserUpdateWithWhereUniqueWithoutReferredByInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutReferredByInput | UserUpdateManyWithWhereWithoutReferredByInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ReferralUncheckedUpdateManyWithoutReferrerNestedInput = {
+    create?: XOR<ReferralCreateWithoutReferrerInput, ReferralUncheckedCreateWithoutReferrerInput> | ReferralCreateWithoutReferrerInput[] | ReferralUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferrerInput | ReferralCreateOrConnectWithoutReferrerInput[]
+    upsert?: ReferralUpsertWithWhereUniqueWithoutReferrerInput | ReferralUpsertWithWhereUniqueWithoutReferrerInput[]
+    createMany?: ReferralCreateManyReferrerInputEnvelope
+    set?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    disconnect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    delete?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    connect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+    update?: ReferralUpdateWithWhereUniqueWithoutReferrerInput | ReferralUpdateWithWhereUniqueWithoutReferrerInput[]
+    updateMany?: ReferralUpdateManyWithWhereWithoutReferrerInput | ReferralUpdateManyWithWhereWithoutReferrerInput[]
+    deleteMany?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
+  }
+
+  export type ReferralUncheckedUpdateOneWithoutReferredUserNestedInput = {
+    create?: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutReferredUserInput
+    upsert?: ReferralUpsertWithoutReferredUserInput
+    disconnect?: ReferralWhereInput | boolean
+    delete?: ReferralWhereInput | boolean
+    connect?: ReferralWhereUniqueInput
+    update?: XOR<XOR<ReferralUpdateToOneWithWhereWithoutReferredUserInput, ReferralUpdateWithoutReferredUserInput>, ReferralUncheckedUpdateWithoutReferredUserInput>
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -65928,6 +69254,18 @@ export namespace Prisma {
     connect?: CourseWhereUniqueInput
   }
 
+  export type ReferralCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<ReferralCreateWithoutTransactionInput, ReferralUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutTransactionInput
+    connect?: ReferralWhereUniqueInput
+  }
+
+  export type ReferralUncheckedCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<ReferralCreateWithoutTransactionInput, ReferralUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutTransactionInput
+    connect?: ReferralWhereUniqueInput
+  }
+
   export type EnumTransactionStatusFieldUpdateOperationsInput = {
     set?: $Enums.TransactionStatus
   }
@@ -65956,6 +69294,26 @@ export namespace Prisma {
     upsert?: CourseUpsertWithoutTransactionsInput
     connect?: CourseWhereUniqueInput
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutTransactionsInput, CourseUpdateWithoutTransactionsInput>, CourseUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type ReferralUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<ReferralCreateWithoutTransactionInput, ReferralUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutTransactionInput
+    upsert?: ReferralUpsertWithoutTransactionInput
+    disconnect?: ReferralWhereInput | boolean
+    delete?: ReferralWhereInput | boolean
+    connect?: ReferralWhereUniqueInput
+    update?: XOR<XOR<ReferralUpdateToOneWithWhereWithoutTransactionInput, ReferralUpdateWithoutTransactionInput>, ReferralUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type ReferralUncheckedUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<ReferralCreateWithoutTransactionInput, ReferralUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: ReferralCreateOrConnectWithoutTransactionInput
+    upsert?: ReferralUpsertWithoutTransactionInput
+    disconnect?: ReferralWhereInput | boolean
+    delete?: ReferralWhereInput | boolean
+    connect?: ReferralWhereUniqueInput
+    update?: XOR<XOR<ReferralUpdateToOneWithWhereWithoutTransactionInput, ReferralUpdateWithoutTransactionInput>, ReferralUncheckedUpdateWithoutTransactionInput>
   }
 
   export type CourseCreateNestedOneWithoutReviewsInput = {
@@ -67094,6 +70452,68 @@ export namespace Prisma {
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutWishlistItemsInput, CourseUpdateWithoutWishlistItemsInput>, CourseUncheckedUpdateWithoutWishlistItemsInput>
   }
 
+  export type UserCreateNestedOneWithoutReferralCommissionsInput = {
+    create?: XOR<UserCreateWithoutReferralCommissionsInput, UserUncheckedCreateWithoutReferralCommissionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralCommissionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReferralEntryInput = {
+    create?: XOR<UserCreateWithoutReferralEntryInput, UserUncheckedCreateWithoutReferralEntryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralEntryInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TransactionCreateNestedOneWithoutReferralInput = {
+    create?: XOR<TransactionCreateWithoutReferralInput, TransactionUncheckedCreateWithoutReferralInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutReferralInput
+    connect?: TransactionWhereUniqueInput
+  }
+
+  export type EnumReferralStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReferralStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutReferralCommissionsNestedInput = {
+    create?: XOR<UserCreateWithoutReferralCommissionsInput, UserUncheckedCreateWithoutReferralCommissionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralCommissionsInput
+    upsert?: UserUpsertWithoutReferralCommissionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralCommissionsInput, UserUpdateWithoutReferralCommissionsInput>, UserUncheckedUpdateWithoutReferralCommissionsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReferralEntryNestedInput = {
+    create?: XOR<UserCreateWithoutReferralEntryInput, UserUncheckedCreateWithoutReferralEntryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralEntryInput
+    upsert?: UserUpsertWithoutReferralEntryInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralEntryInput, UserUpdateWithoutReferralEntryInput>, UserUncheckedUpdateWithoutReferralEntryInput>
+  }
+
+  export type TransactionUpdateOneWithoutReferralNestedInput = {
+    create?: XOR<TransactionCreateWithoutReferralInput, TransactionUncheckedCreateWithoutReferralInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutReferralInput
+    upsert?: TransactionUpsertWithoutReferralInput
+    disconnect?: TransactionWhereInput | boolean
+    delete?: TransactionWhereInput | boolean
+    connect?: TransactionWhereUniqueInput
+    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutReferralInput, TransactionUpdateWithoutReferralInput>, TransactionUncheckedUpdateWithoutReferralInput>
+  }
+
+  export type UserCreateNestedOneWithoutPushSubscriptionsInput = {
+    create?: XOR<UserCreateWithoutPushSubscriptionsInput, UserUncheckedCreateWithoutPushSubscriptionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPushSubscriptionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPushSubscriptionsNestedInput = {
+    create?: XOR<UserCreateWithoutPushSubscriptionsInput, UserUncheckedCreateWithoutPushSubscriptionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPushSubscriptionsInput
+    upsert?: UserUpsertWithoutPushSubscriptionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, UserUpdateWithoutPushSubscriptionsInput>, UserUncheckedUpdateWithoutPushSubscriptionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -67612,6 +71032,23 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedEnumReferralStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusFilter<$PrismaModel> | $Enums.ReferralStatus
+  }
+
+  export type NestedEnumReferralStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReferralStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReferralStatusFilter<$PrismaModel>
+    _max?: NestedEnumReferralStatusFilter<$PrismaModel>
+  }
+
   export type AccountCreateWithoutUserInput = {
     id?: string
     accountId: string
@@ -67926,6 +71363,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     enrollment?: EnrollmentCreateNestedOneWithoutTransactionInput
     course: CourseCreateNestedOneWithoutTransactionsInput
+    referral?: ReferralCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutUserInput = {
@@ -67942,6 +71380,7 @@ export namespace Prisma {
     couponCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    referral?: ReferralUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutUserInput = {
@@ -68298,6 +71737,276 @@ export namespace Prisma {
   export type WishlistItemCreateManyUserInputEnvelope = {
     data: WishlistItemCreateManyUserInput | WishlistItemCreateManyUserInput[]
     skipDuplicates?: boolean
+  }
+
+  export type PushSubscriptionCreateWithoutUserInput = {
+    id?: string
+    endpoint: string
+    keys: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionUncheckedCreateWithoutUserInput = {
+    id?: string
+    endpoint: string
+    keys: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionCreateOrConnectWithoutUserInput = {
+    where: PushSubscriptionWhereUniqueInput
+    create: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PushSubscriptionCreateManyUserInputEnvelope = {
+    data: PushSubscriptionCreateManyUserInput | PushSubscriptionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutReferralsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
+  }
+
+  export type UserCreateWithoutReferredByInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReferredByInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReferredByInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferredByInput, UserUncheckedCreateWithoutReferredByInput>
+  }
+
+  export type UserCreateManyReferredByInputEnvelope = {
+    data: UserCreateManyReferredByInput | UserCreateManyReferredByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReferralCreateWithoutReferrerInput = {
+    id?: string
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredUser: UserCreateNestedOneWithoutReferralEntryInput
+    transaction?: TransactionCreateNestedOneWithoutReferralInput
+  }
+
+  export type ReferralUncheckedCreateWithoutReferrerInput = {
+    id?: string
+    referredUserId: string
+    transactionId?: string | null
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralCreateOrConnectWithoutReferrerInput = {
+    where: ReferralWhereUniqueInput
+    create: XOR<ReferralCreateWithoutReferrerInput, ReferralUncheckedCreateWithoutReferrerInput>
+  }
+
+  export type ReferralCreateManyReferrerInputEnvelope = {
+    data: ReferralCreateManyReferrerInput | ReferralCreateManyReferrerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReferralCreateWithoutReferredUserInput = {
+    id?: string
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralCommissionsInput
+    transaction?: TransactionCreateNestedOneWithoutReferralInput
+  }
+
+  export type ReferralUncheckedCreateWithoutReferredUserInput = {
+    id?: string
+    referrerId: string
+    transactionId?: string | null
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralCreateOrConnectWithoutReferredUserInput = {
+    where: ReferralWhereUniqueInput
+    create: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -68921,6 +72630,233 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
   }
 
+  export type PushSubscriptionUpsertWithWhereUniqueWithoutUserInput = {
+    where: PushSubscriptionWhereUniqueInput
+    update: XOR<PushSubscriptionUpdateWithoutUserInput, PushSubscriptionUncheckedUpdateWithoutUserInput>
+    create: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PushSubscriptionUpdateWithWhereUniqueWithoutUserInput = {
+    where: PushSubscriptionWhereUniqueInput
+    data: XOR<PushSubscriptionUpdateWithoutUserInput, PushSubscriptionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PushSubscriptionUpdateManyWithWhereWithoutUserInput = {
+    where: PushSubscriptionScalarWhereInput
+    data: XOR<PushSubscriptionUpdateManyMutationInput, PushSubscriptionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PushSubscriptionScalarWhereInput = {
+    AND?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+    OR?: PushSubscriptionScalarWhereInput[]
+    NOT?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+    id?: StringFilter<"PushSubscription"> | string
+    userId?: StringFilter<"PushSubscription"> | string
+    endpoint?: StringFilter<"PushSubscription"> | string
+    keys?: JsonFilter<"PushSubscription">
+    createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
+  }
+
+  export type UserUpsertWithoutReferralsInput = {
+    update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
+    create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
+  }
+
+  export type UserUpdateWithoutReferralsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutReferredByInput, UserUncheckedUpdateWithoutReferredByInput>
+    create: XOR<UserCreateWithoutReferredByInput, UserUncheckedCreateWithoutReferredByInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutReferredByInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutReferredByInput, UserUncheckedUpdateWithoutReferredByInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutReferredByInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutReferredByInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    name?: StringNullableFilter<"User"> | string | null
+    email?: StringFilter<"User"> | string
+    emailVerified?: BoolFilter<"User"> | boolean
+    image?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    city?: StringNullableFilter<"User"> | string | null
+    state?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
+    website?: StringNullableFilter<"User"> | string | null
+    linkedinUrl?: StringNullableFilter<"User"> | string | null
+    instagramUrl?: StringNullableFilter<"User"> | string | null
+    signatureUrl?: StringNullableFilter<"User"> | string | null
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    referralCode?: StringNullableFilter<"User"> | string | null
+    referredById?: StringNullableFilter<"User"> | string | null
+  }
+
+  export type ReferralUpsertWithWhereUniqueWithoutReferrerInput = {
+    where: ReferralWhereUniqueInput
+    update: XOR<ReferralUpdateWithoutReferrerInput, ReferralUncheckedUpdateWithoutReferrerInput>
+    create: XOR<ReferralCreateWithoutReferrerInput, ReferralUncheckedCreateWithoutReferrerInput>
+  }
+
+  export type ReferralUpdateWithWhereUniqueWithoutReferrerInput = {
+    where: ReferralWhereUniqueInput
+    data: XOR<ReferralUpdateWithoutReferrerInput, ReferralUncheckedUpdateWithoutReferrerInput>
+  }
+
+  export type ReferralUpdateManyWithWhereWithoutReferrerInput = {
+    where: ReferralScalarWhereInput
+    data: XOR<ReferralUpdateManyMutationInput, ReferralUncheckedUpdateManyWithoutReferrerInput>
+  }
+
+  export type ReferralScalarWhereInput = {
+    AND?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
+    OR?: ReferralScalarWhereInput[]
+    NOT?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
+    id?: StringFilter<"Referral"> | string
+    referrerId?: StringFilter<"Referral"> | string
+    referredUserId?: StringFilter<"Referral"> | string
+    transactionId?: StringNullableFilter<"Referral"> | string | null
+    commissionAmount?: IntNullableFilter<"Referral"> | number | null
+    status?: EnumReferralStatusFilter<"Referral"> | $Enums.ReferralStatus
+    createdAt?: DateTimeFilter<"Referral"> | Date | string
+    updatedAt?: DateTimeFilter<"Referral"> | Date | string
+  }
+
+  export type ReferralUpsertWithoutReferredUserInput = {
+    update: XOR<ReferralUpdateWithoutReferredUserInput, ReferralUncheckedUpdateWithoutReferredUserInput>
+    create: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
+    where?: ReferralWhereInput
+  }
+
+  export type ReferralUpdateToOneWithWhereWithoutReferredUserInput = {
+    where?: ReferralWhereInput
+    data: XOR<ReferralUpdateWithoutReferredUserInput, ReferralUncheckedUpdateWithoutReferredUserInput>
+  }
+
+  export type ReferralUpdateWithoutReferredUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralCommissionsNestedInput
+    transaction?: TransactionUpdateOneWithoutReferralNestedInput
+  }
+
+  export type ReferralUncheckedUpdateWithoutReferredUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -68938,6 +72874,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
@@ -68957,6 +72894,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -68976,6 +72918,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
@@ -68995,6 +72939,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -69030,6 +72978,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
@@ -69049,6 +72998,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -69068,6 +73022,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
@@ -69087,6 +73043,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -69106,6 +73066,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
@@ -69125,6 +73086,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -69144,6 +73110,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
@@ -69163,6 +73131,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -69198,6 +73170,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
@@ -69217,6 +73190,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -69236,6 +73214,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
@@ -69255,6 +73235,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserCreateWithoutInstructorApplicationInput = {
@@ -69274,6 +73258,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -69293,6 +73278,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorApplicationInput = {
@@ -69312,6 +73302,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -69331,6 +73323,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorApplicationInput = {
@@ -69366,6 +73362,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -69385,6 +73382,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorApplicationInput = {
@@ -69404,6 +73406,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -69423,6 +73427,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserCreateWithoutInstructorProfileInput = {
@@ -69442,6 +73450,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
@@ -69461,6 +73470,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorProfileInput = {
@@ -69480,6 +73494,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
@@ -69499,6 +73515,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorProfileInput = {
@@ -69534,6 +73554,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
@@ -69553,6 +73574,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorProfileInput = {
@@ -69572,6 +73598,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
@@ -69591,6 +73619,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseCreateWithoutCategoryRefInput = {
@@ -69716,6 +73748,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -69735,6 +73768,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorCoursesInput = {
@@ -69754,6 +73792,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -69773,6 +73813,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorCoursesInput = {
@@ -69963,6 +74007,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     enrollment?: EnrollmentCreateNestedOneWithoutTransactionInput
     user: UserCreateNestedOneWithoutTransactionsInput
+    referral?: ReferralCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCourseInput = {
@@ -69979,6 +74024,7 @@ export namespace Prisma {
     couponCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    referral?: ReferralUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutCourseInput = {
@@ -70233,6 +74279,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -70252,6 +74299,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorCoursesInput = {
@@ -70271,6 +74323,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -70290,6 +74344,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -71657,6 +75715,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -71676,6 +75735,11 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -71695,6 +75759,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -71714,6 +75780,10 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -71883,6 +75953,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -71902,6 +75973,11 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -71921,6 +75997,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -71940,6 +76018,10 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseCreateWithoutEnrollmentsInput = {
@@ -72044,6 +76126,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -72063,6 +76146,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -72082,6 +76170,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -72101,6 +76191,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -72270,6 +76364,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTransactionsInput
     course: CourseCreateNestedOneWithoutTransactionsInput
+    referral?: ReferralCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutEnrollmentInput = {
@@ -72286,6 +76381,7 @@ export namespace Prisma {
     couponCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    referral?: ReferralUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutEnrollmentInput = {
@@ -72463,6 +76559,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -72482,6 +76579,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -72501,6 +76603,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -72520,6 +76624,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseSessionUpsertWithoutEnrollmentsInput = {
@@ -72709,6 +76817,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     course?: CourseUpdateOneRequiredWithoutTransactionsNestedInput
+    referral?: ReferralUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutEnrollmentInput = {
@@ -72725,6 +76834,7 @@ export namespace Prisma {
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type SectionQuizSubmissionUpsertWithWhereUniqueWithoutEnrollmentInput = {
@@ -72915,6 +77025,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -72934,6 +77045,11 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutLearningReflectionsInput = {
@@ -72953,6 +77069,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -72972,6 +77090,10 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutLearningReflectionsInput = {
@@ -73145,6 +77267,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -73164,6 +77287,11 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -73183,6 +77311,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -73202,6 +77332,10 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
@@ -73502,6 +77636,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -73521,6 +77656,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -73540,6 +77680,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -73559,6 +77701,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -73726,6 +77872,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -73745,6 +77892,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -73764,6 +77916,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -73783,6 +77937,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -73934,6 +78092,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -73953,6 +78112,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -73972,6 +78136,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -73991,6 +78157,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -74083,6 +78253,31 @@ export namespace Prisma {
     create: XOR<CourseCreateWithoutTransactionsInput, CourseUncheckedCreateWithoutTransactionsInput>
   }
 
+  export type ReferralCreateWithoutTransactionInput = {
+    id?: string
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralCommissionsInput
+    referredUser: UserCreateNestedOneWithoutReferralEntryInput
+  }
+
+  export type ReferralUncheckedCreateWithoutTransactionInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralCreateOrConnectWithoutTransactionInput = {
+    where: ReferralWhereUniqueInput
+    create: XOR<ReferralCreateWithoutTransactionInput, ReferralUncheckedCreateWithoutTransactionInput>
+  }
+
   export type EnrollmentUpsertWithoutTransactionInput = {
     update: XOR<EnrollmentUpdateWithoutTransactionInput, EnrollmentUncheckedUpdateWithoutTransactionInput>
     create: XOR<EnrollmentCreateWithoutTransactionInput, EnrollmentUncheckedCreateWithoutTransactionInput>
@@ -74158,6 +78353,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -74177,6 +78373,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -74196,6 +78397,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -74215,6 +78418,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseUpsertWithoutTransactionsInput = {
@@ -74306,6 +78513,37 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type ReferralUpsertWithoutTransactionInput = {
+    update: XOR<ReferralUpdateWithoutTransactionInput, ReferralUncheckedUpdateWithoutTransactionInput>
+    create: XOR<ReferralCreateWithoutTransactionInput, ReferralUncheckedCreateWithoutTransactionInput>
+    where?: ReferralWhereInput
+  }
+
+  export type ReferralUpdateToOneWithWhereWithoutTransactionInput = {
+    where?: ReferralWhereInput
+    data: XOR<ReferralUpdateWithoutTransactionInput, ReferralUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type ReferralUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralCommissionsNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralEntryNestedInput
+  }
+
+  export type ReferralUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CourseCreateWithoutReviewsInput = {
@@ -74410,6 +78648,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -74429,6 +78668,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -74448,6 +78692,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -74467,6 +78713,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -74593,6 +78843,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -74612,6 +78863,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -74631,6 +78887,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -74650,6 +78908,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -74669,6 +78931,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -74688,6 +78951,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -74707,6 +78975,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -74726,6 +78996,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -74761,6 +79035,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -74780,6 +79055,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -74799,6 +79079,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -74818,6 +79100,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseCreateWithoutConversationsInput = {
@@ -74922,6 +79208,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -74941,6 +79228,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentConversationsInput = {
@@ -74960,6 +79252,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -74979,6 +79273,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentConversationsInput = {
@@ -75003,6 +79301,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -75022,6 +79321,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorConversationsInput = {
@@ -75041,6 +79345,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -75060,6 +79366,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorConversationsInput = {
@@ -75212,6 +79522,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -75231,6 +79542,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentConversationsInput = {
@@ -75250,6 +79566,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -75269,6 +79587,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUpsertWithoutInstructorConversationsInput = {
@@ -75299,6 +79621,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -75318,6 +79641,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorConversationsInput = {
@@ -75337,6 +79665,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -75356,6 +79686,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -75414,6 +79748,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -75433,6 +79768,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -75452,6 +79792,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -75471,6 +79813,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -75535,6 +79881,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -75554,6 +79901,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -75573,6 +79925,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -75592,6 +79946,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserCreateWithoutHostedGamesInput = {
@@ -75611,6 +79969,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -75630,6 +79989,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedGamesInput = {
@@ -75649,6 +80013,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -75668,6 +80034,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedGamesInput = {
@@ -75793,6 +80163,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -75812,6 +80183,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedGamesInput = {
@@ -75831,6 +80207,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -75850,6 +80228,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type QuizGameQuestionUpsertWithWhereUniqueWithoutGameInput = {
@@ -76096,6 +80478,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -76115,6 +80498,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutGameParticipationsInput = {
@@ -76134,6 +80522,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -76153,6 +80543,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutGameParticipationsInput = {
@@ -76257,6 +80651,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -76276,6 +80671,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGameParticipationsInput = {
@@ -76295,6 +80695,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -76314,6 +80716,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type QuizGameAnswerUpsertWithWhereUniqueWithoutParticipantInput = {
@@ -76968,6 +81374,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -76987,6 +81394,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutOrgMembershipsInput = {
@@ -77006,6 +81418,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -77025,6 +81439,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutOrgMembershipsInput = {
@@ -77127,6 +81545,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -77146,6 +81565,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrgMembershipsInput = {
@@ -77165,6 +81589,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -77184,6 +81610,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type TeamMemberUpsertWithWhereUniqueWithoutMemberInput = {
@@ -78254,6 +82684,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -78273,6 +82704,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutCourseNotesInput = {
@@ -78292,6 +82728,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -78311,6 +82749,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutCourseNotesInput = {
@@ -78472,6 +82914,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -78491,6 +82934,11 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourseNotesInput = {
@@ -78510,6 +82958,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -78529,6 +82979,10 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseUpsertWithoutNotesInput = {
@@ -78686,6 +83140,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -78705,6 +83160,11 @@ export namespace Prisma {
     courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistItemsInput = {
@@ -78724,6 +83184,8 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -78743,6 +83205,10 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistItemsInput = {
@@ -78863,6 +83329,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -78882,6 +83349,11 @@ export namespace Prisma {
     courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistItemsInput = {
@@ -78901,6 +83373,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -78920,6 +83394,10 @@ export namespace Prisma {
     courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type CourseUpsertWithoutWishlistItemsInput = {
@@ -79011,6 +83489,666 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type UserCreateWithoutReferralCommissionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralCommissionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralCommissionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralCommissionsInput, UserUncheckedCreateWithoutReferralCommissionsInput>
+  }
+
+  export type UserCreateWithoutReferralEntryInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralEntryInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralEntryInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralEntryInput, UserUncheckedCreateWithoutReferralEntryInput>
+  }
+
+  export type TransactionCreateWithoutReferralInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status?: $Enums.TransactionStatus
+    stripePaymentId?: string | null
+    stripeSessionId?: string | null
+    platformFee?: number | null
+    instructorAmount?: number | null
+    couponCode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollment?: EnrollmentCreateNestedOneWithoutTransactionInput
+    user: UserCreateNestedOneWithoutTransactionsInput
+    course: CourseCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type TransactionUncheckedCreateWithoutReferralInput = {
+    id?: string
+    enrollmentId?: string | null
+    userId: string
+    courseId: string
+    amount: number
+    currency?: string
+    status?: $Enums.TransactionStatus
+    stripePaymentId?: string | null
+    stripeSessionId?: string | null
+    platformFee?: number | null
+    instructorAmount?: number | null
+    couponCode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutReferralInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutReferralInput, TransactionUncheckedCreateWithoutReferralInput>
+  }
+
+  export type UserUpsertWithoutReferralCommissionsInput = {
+    update: XOR<UserUpdateWithoutReferralCommissionsInput, UserUncheckedUpdateWithoutReferralCommissionsInput>
+    create: XOR<UserCreateWithoutReferralCommissionsInput, UserUncheckedCreateWithoutReferralCommissionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralCommissionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralCommissionsInput, UserUncheckedUpdateWithoutReferralCommissionsInput>
+  }
+
+  export type UserUpdateWithoutReferralCommissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralCommissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUpsertWithoutReferralEntryInput = {
+    update: XOR<UserUpdateWithoutReferralEntryInput, UserUncheckedUpdateWithoutReferralEntryInput>
+    create: XOR<UserCreateWithoutReferralEntryInput, UserUncheckedCreateWithoutReferralEntryInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralEntryInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralEntryInput, UserUncheckedUpdateWithoutReferralEntryInput>
+  }
+
+  export type UserUpdateWithoutReferralEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+  }
+
+  export type TransactionUpsertWithoutReferralInput = {
+    update: XOR<TransactionUpdateWithoutReferralInput, TransactionUncheckedUpdateWithoutReferralInput>
+    create: XOR<TransactionCreateWithoutReferralInput, TransactionUncheckedCreateWithoutReferralInput>
+    where?: TransactionWhereInput
+  }
+
+  export type TransactionUpdateToOneWithWhereWithoutReferralInput = {
+    where?: TransactionWhereInput
+    data: XOR<TransactionUpdateWithoutReferralInput, TransactionUncheckedUpdateWithoutReferralInput>
+  }
+
+  export type TransactionUpdateWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    stripePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    platformFee?: NullableIntFieldUpdateOperationsInput | number | null
+    instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollment?: EnrollmentUpdateOneWithoutTransactionNestedInput
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
+    course?: CourseUpdateOneRequiredWithoutTransactionsNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    stripePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    platformFee?: NullableIntFieldUpdateOperationsInput | number | null
+    instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutPushSubscriptionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPushSubscriptionsInput, UserUncheckedCreateWithoutPushSubscriptionsInput>
+  }
+
+  export type UserUpsertWithoutPushSubscriptionsInput = {
+    update: XOR<UserUpdateWithoutPushSubscriptionsInput, UserUncheckedUpdateWithoutPushSubscriptionsInput>
+    create: XOR<UserCreateWithoutPushSubscriptionsInput, UserUncheckedCreateWithoutPushSubscriptionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPushSubscriptionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPushSubscriptionsInput, UserUncheckedUpdateWithoutPushSubscriptionsInput>
+  }
+
+  export type UserUpdateWithoutPushSubscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -79206,6 +84344,43 @@ export namespace Prisma {
     id?: string
     courseId: string
     createdAt?: Date | string
+  }
+
+  export type PushSubscriptionCreateManyUserInput = {
+    id?: string
+    endpoint: string
+    keys: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type UserCreateManyReferredByInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+  }
+
+  export type ReferralCreateManyReferrerInput = {
+    id?: string
+    referredUserId: string
+    transactionId?: string | null
+    commissionAmount?: number | null
+    status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -79479,6 +84654,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneWithoutTransactionNestedInput
     course?: CourseUpdateOneRequiredWithoutTransactionsNestedInput
+    referral?: ReferralUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutUserInput = {
@@ -79495,6 +84671,7 @@ export namespace Prisma {
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutUserInput = {
@@ -79843,6 +85020,165 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    keys?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpdateWithoutReferredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutReferredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReferralUpdateWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredUser?: UserUpdateOneRequiredWithoutReferralEntryNestedInput
+    transaction?: TransactionUpdateOneWithoutReferralNestedInput
+  }
+
+  export type ReferralUncheckedUpdateWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralUncheckedUpdateManyWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CourseCreateManyCategoryRefInput = {
@@ -80275,6 +85611,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneWithoutTransactionNestedInput
     user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
+    referral?: ReferralUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCourseInput = {
@@ -80291,6 +85628,7 @@ export namespace Prisma {
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCourseInput = {

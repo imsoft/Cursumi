@@ -3,6 +3,8 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { sendEnrollmentEmail } from "@/lib/email";
+import { createNotification } from "@/lib/notification-helpers";
+import { processReferralCommission } from "@/lib/referral";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -71,16 +73,17 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Notify student
-      await prisma.notification.create({
-        data: {
-          userId,
-          type: "enrollment",
-          title: "Inscripción confirmada",
-          body: "Tu pago fue procesado exitosamente. ¡Ya puedes acceder al curso!",
-          link: `/dashboard/my-courses/${courseId}`,
-        },
+      // Notify student + push
+      await createNotification({
+        userId,
+        type: "enrollment",
+        title: "Inscripción confirmada",
+        body: "Tu pago fue procesado exitosamente. ¡Ya puedes acceder al curso!",
+        link: `/dashboard/my-courses/${courseId}`,
       });
+
+      // Procesar comisión de referido si aplica
+      processReferralCommission(transaction.id).catch(() => {});
 
       // Notify instructor + send enrollment email to student
       const course = await prisma.course.findUnique({
@@ -88,14 +91,12 @@ export async function POST(req: NextRequest) {
         select: { instructorId: true, title: true },
       });
       if (course) {
-        await prisma.notification.create({
-          data: {
-            userId: course.instructorId,
-            type: "enrollment",
-            title: "Nueva inscripción",
-            body: `Un nuevo estudiante se inscribió en "${course.title}".`,
-            link: `/instructor/courses/${courseId}`,
-          },
+        await createNotification({
+          userId: course.instructorId,
+          type: "enrollment",
+          title: "Nueva inscripción",
+          body: `Un nuevo estudiante se inscribió en "${course.title}".`,
+          link: `/instructor/courses/${courseId}`,
         });
 
         // Email de bienvenida al curso

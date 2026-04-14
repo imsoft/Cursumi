@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { createNotification } from "@/lib/notification-helpers";
 
 const sendSchema = z.object({ body: z.string().min(1).max(2000) });
 
@@ -68,14 +69,12 @@ export async function POST(
         ? conversation.instructorId
         : conversation.studentId;
 
-    await prisma.notification.create({
-      data: {
-        userId: recipientId,
-        type: "message",
-        title: "Nuevo mensaje",
-        body: body.slice(0, 80),
-        link: `/dashboard/my-courses`,
-      },
+    await createNotification({
+      userId: recipientId,
+      type: "message",
+      title: "Nuevo mensaje",
+      body: body.slice(0, 80),
+      link: `/dashboard/my-courses`,
     });
 
     return NextResponse.json(message, { status: 201 });

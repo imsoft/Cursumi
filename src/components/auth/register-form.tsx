@@ -35,12 +35,13 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 interface RegisterFormProps {
   returnUrl?: string;
   googleAuthEnabled?: boolean;
+  referralCode?: string;
 }
 
 // Turnstile site key — puede ser undefined si no está configurado (dev mode sin CAPTCHA)
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-export const RegisterForm = ({ returnUrl, googleAuthEnabled = false }: RegisterFormProps) => {
+export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCode }: RegisterFormProps) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -85,6 +86,7 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false }: RegisterF
         fetchOptions: {
           body: {
             "cf-turnstile-response": turnstileToken ?? "",
+            ...(referralCode ? { "referral-code": referralCode } : {}),
           },
         },
       } as Parameters<typeof signUp.email>[0]);

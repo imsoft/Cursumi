@@ -52,6 +52,18 @@ model User {
   sessionAnonymousQuestions SessionAnonymousQuestion[]
   learningReflections   LearningReflection[]
   wishlistItems         WishlistItem[]
+  pushSubscriptions     PushSubscription[]
+
+  /// Código único para compartir — generado al crear la cuenta
+  referralCode  String?  @unique
+  /// Usuario que refirió a este usuario (null si llegó sin referido)
+  referredById  String?
+  referredBy    User?    @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals     User[]   @relation("UserReferrals")
+  /// Comisiones que este usuario ha generado como referidor
+  referralCommissions Referral[]
+  /// Entrada de referido de este usuario (solo existe si fue referido por alguien)
+  referralEntry       Referral?  @relation("ReferredUser")
 }
 
 model Account {
@@ -157,6 +169,12 @@ enum TransactionStatus {
   completed
   failed
   refunded
+}
+
+enum ReferralStatus {
+  pending   // registrado pero sin compra aún
+  earned    // primera compra completada — comisión acumulada
+  paid      // comisión pagada al referidor
 }
 
 // ── CURSUMI BUSINESS ──
@@ -535,9 +553,10 @@ model Transaction {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 
-  enrollment Enrollment? @relation(fields: [enrollmentId], references: [id])
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollment  Enrollment? @relation(fields: [enrollmentId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  referral    Referral?
 
   @@index([userId])
   @@index([courseId])
@@ -927,5 +946,48 @@ model WishlistItem {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([userId])
+}
+
+// ─────────────────────────────────────────
+// REFERIDOS
+// ─────────────────────────────────────────
+
+model Referral {
+  id              String         @id @default(cuid())
+  /// El usuario que compartió su link (referidor)
+  referrerId      String
+  /// El usuario nuevo que se registró con el link
+  referredUserId  String         @unique
+  /// Transacción que activó la comisión (primera compra del referido)
+  transactionId   String?  @unique
+  /// Comisión en centavos MXN (10 % del monto neto de la transacción)
+  commissionAmount Int?
+  status          ReferralStatus @default(pending)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  referrer     User         @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUser User         @relation("ReferredUser", fields: [referredUserId], references: [id], onDelete: Cascade)
+  transaction  Transaction? @relation(fields: [transactionId], references: [id])
+
+  @@index([referrerId])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────
+// WEB PUSH
+// ─────────────────────────────────────────
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  /// { p256dh: string; auth: string }
+  keys      Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }

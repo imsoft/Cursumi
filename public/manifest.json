@@ -2,10 +2,11 @@
   "name": "Cursumi",
   "short_name": "Cursumi",
   "description": "Plataforma de cursos online en español",
-  "start_url": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0f0f0f",
-  "theme_color": "#667eea",
+  "theme_color": "#6d28d9",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -23,5 +24,22 @@
   ],
   "categories": ["education"],
   "lang": "es",
-  "screenshots": []
+  "dir": "ltr",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Mis cursos",
+      "short_name": "Cursos",
+      "description": "Ver tus cursos inscritos",
+      "url": "/dashboard/my-courses",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Explorar catálogo",
+      "short_name": "Catálogo",
+      "description": "Descubrir nuevos cursos",
+      "url": "/courses",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }

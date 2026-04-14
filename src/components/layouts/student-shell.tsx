@@ -22,6 +22,7 @@ import {
   FileText,
   BookOpen,
   Heart,
+  Gift,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -32,6 +33,7 @@ const studentNavItems = [
   { title: "Certificados", href: "/dashboard/certificates", icon: Award },
   { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
   { title: "Juegos", href: "/dashboard/games", icon: Gamepad2 },
+  { title: "Referidos", href: "/dashboard/referral", icon: Gift },
   { title: "Cuenta", href: "/dashboard/account", icon: UserCircle },
   { title: "Ser instructor", href: "/dashboard/become-instructor", icon: GraduationCap },
 ];

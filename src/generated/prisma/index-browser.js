@@ -136,7 +136,9 @@ exports.Prisma.UserScalarFieldEnum = {
   signatureUrl: 'signatureUrl',
   role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  referralCode: 'referralCode',
+  referredById: 'referredById'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -593,6 +595,25 @@ exports.Prisma.WishlistItemScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ReferralScalarFieldEnum = {
+  id: 'id',
+  referrerId: 'referrerId',
+  referredUserId: 'referredUserId',
+  transactionId: 'transactionId',
+  commissionAmount: 'commissionAmount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  keys: 'keys',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -715,6 +736,12 @@ exports.OrgSubscriptionStatus = exports.$Enums.OrgSubscriptionStatus = {
   trialing: 'trialing'
 };
 
+exports.ReferralStatus = exports.$Enums.ReferralStatus = {
+  pending: 'pending',
+  earned: 'earned',
+  paid: 'paid'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
@@ -756,7 +783,9 @@ exports.Prisma.ModelName = {
   SiteSetting: 'SiteSetting',
   Coupon: 'Coupon',
   CourseNote: 'CourseNote',
-  WishlistItem: 'WishlistItem'
+  WishlistItem: 'WishlistItem',
+  Referral: 'Referral',
+  PushSubscription: 'PushSubscription'
 };
 
 /**

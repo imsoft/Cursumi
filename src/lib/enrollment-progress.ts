@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { sendLearningReflectionInviteIfNeeded } from "@/lib/learning-reflection-invite";
 import { normalizeSectionActivities } from "@/lib/section-activities";
+import { createNotification } from "@/lib/notification-helpers";
 
 /**
  * Recalcula progreso del enrollment y crea certificado si llega al 100%.
@@ -123,18 +124,16 @@ export async function recalculateEnrollmentProgress(
       });
 
       try {
-        await prisma.notification.create({
-          data: {
-            userId: enrollment.studentId,
-            type: "certificate",
-            title: certType === "accreditation"
-              ? "Certificado de acreditación"
-              : "Reconocimiento de participación",
-            body: certType === "accreditation"
-              ? `Has completado el curso "${course?.title || ""}". Tu certificado de acreditación ya está disponible.`
-              : `Has completado el curso "${course?.title || ""}". Tu reconocimiento de participación ya está disponible.`,
-            link: `/dashboard/certificates/${certificate.id}`,
-          },
+        await createNotification({
+          userId: enrollment.studentId,
+          type: "certificate",
+          title: certType === "accreditation"
+            ? "Certificado de acreditación"
+            : "Reconocimiento de participación",
+          body: certType === "accreditation"
+            ? `Has completado el curso "${course?.title || ""}". Tu certificado de acreditación ya está disponible.`
+            : `Has completado el curso "${course?.title || ""}". Tu reconocimiento de participación ya está disponible.`,
+          link: `/dashboard/certificates/${certificate.id}`,
         });
       } catch {
         /* el certificado ya existe; la notificación no debe bloquear */

@@ -4,6 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prisma } from "./prisma";
 import { sendVerificationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "./email";
+import { applyReferral, ensureReferralCode } from "./referral";
 import { validateEmailDomain } from "./disposable-email";
 import { verifyTurnstile } from "./turnstile";
 import { checkRateLimitAsync } from "./rate-limit";
@@ -208,19 +209,32 @@ export const auth = betterAuth({
         }
       }
 
-      // ── Sign-up: onboarding email + normalizar USER_ALREADY_EXISTS ────────────
+      // ── Sign-up: onboarding + referral + normalizar USER_ALREADY_EXISTS ──────
       if (ctx.path === "/sign-up/email") {
         const returned = ctx.context.returned;
         if (returned instanceof Response) {
           if (returned.status === 200) {
-            // Registro exitoso — enviar email de bienvenida en background
+            // Registro exitoso — disparar side-effects en background
             const reqBody = ctx.body as Record<string, unknown> | undefined;
             const email = reqBody?.["email"] as string | undefined;
             const name = reqBody?.["name"] as string | undefined;
+            const referralCode = reqBody?.["referral-code"] as string | undefined;
+
             if (email) {
               sendWelcomeEmail({ to: email, name: name || "Estudiante" }).catch(
                 (err) => console.error("Welcome email error:", err)
               );
+
+              // Generar código de referido para el nuevo usuario + aplicar referido
+              const responseClone = returned.clone();
+              responseClone.json().then((body: { user?: { id?: string } }) => {
+                const userId = body?.user?.id;
+                if (!userId) return;
+                ensureReferralCode(userId).catch(() => {});
+                if (referralCode) {
+                  applyReferral(userId, referralCode).catch(() => {});
+                }
+              }).catch(() => {});
             }
           } else if (returned.status >= 400) {
             let body: Record<string, unknown> = {};

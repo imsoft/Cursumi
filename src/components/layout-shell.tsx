@@ -22,7 +22,9 @@ export const LayoutShell = ({ children }: LayoutShellProps) => {
     <>
       <PWARegister />
       {!hideGlobalShell && <Navbar />}
-      {children}
+      <main id="main-content" tabIndex={-1}>
+        {children}
+      </main>
       {!hideGlobalShell && <Footer />}
     </>
   );

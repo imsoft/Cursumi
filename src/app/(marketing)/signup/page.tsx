@@ -14,11 +14,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type Props = { searchParams: Promise<{ returnUrl?: string }> };
+type Props = { searchParams: Promise<{ returnUrl?: string; ref?: string }> };
 
 export default async function RegisterPage({ searchParams }: Props) {
   const session = await getSessionSafe();
-  const { returnUrl } = await searchParams;
+  const { returnUrl, ref } = await searchParams;
   if (session) {
     const target = safeRedirectTarget(returnUrl, "/dashboard");
     redirect(target);
@@ -27,7 +27,11 @@ export default async function RegisterPage({ searchParams }: Props) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center px-4 py-8 sm:py-12 lg:py-16">
-        <RegisterForm returnUrl={returnUrl} googleAuthEnabled={isGoogleAuthConfigured()} />
+        <RegisterForm
+          returnUrl={returnUrl}
+          googleAuthEnabled={isGoogleAuthConfigured()}
+          referralCode={ref}
+        />
       </main>
     </div>
   );
