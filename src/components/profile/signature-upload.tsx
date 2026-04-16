@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useId } from "react";
+import { useState, useId, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PenLine, Upload, Trash2 } from "lucide-react";
@@ -15,6 +15,11 @@ export function SignatureUpload({ signatureUrl, onUploaded }: SignatureUploadPro
   const [signature, setSignature] = useState<string | null>(signatureUrl);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // El perfil padre carga async: sin esto el estado local queda en null tras recargar aunque la API devuelva la URL.
+  useEffect(() => {
+    setSignature(signatureUrl);
+  }, [signatureUrl]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -13,13 +13,16 @@ import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
 import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
+/** Misma cota que PATCH /api/instructor/profile (bio) */
+export const INSTRUCTOR_BIO_MAX_CHARS = 2000;
+
 const instructorProfileSchema = z.object({
   fullName: z.string().min(2, "El nombre es obligatorio"),
   email: z.string().email("Correo electrónico inválido"),
   state: z.string().optional(),
   city: z.string().optional(),
   headline: z.string().optional(),
-  bio: z.string().optional(),
+  bio: z.string().max(INSTRUCTOR_BIO_MAX_CHARS, `Máximo ${INSTRUCTOR_BIO_MAX_CHARS} caracteres`).optional(),
   specialties: z.string().optional(),
   teachingYears: z.preprocess(
     (val) => (val === "" || val === undefined || val === null || Number.isNaN(Number(val)) ? undefined : Number(val)),
@@ -98,10 +101,11 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
     try {
       setError(null);
       setStatusMessage(null);
+      const { email: _email, ...payload } = values;
       const res = await fetch("/api/instructor/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -134,7 +138,13 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
               )}
             </div>
             <div>
-              <Input label="Correo electrónico *" type="email" {...form.register("email")} />
+              <Input
+                label="Correo electrónico *"
+                type="email"
+                disabled
+                autoComplete="email"
+                {...form.register("email")}
+              />
               {form.formState.errors.email && (
                 <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
               )}
@@ -154,7 +164,12 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
             cityLabel="Ciudad o municipio"
           />
           <div>
-            <label className="text-sm font-medium text-foreground">Biografía</label>
+            <div className="flex items-baseline justify-between gap-2">
+              <label className="text-sm font-medium text-foreground">Biografía</label>
+              <span className="text-xs tabular-nums text-muted-foreground" aria-live="polite">
+                {(form.watch("bio") ?? "").length}/{INSTRUCTOR_BIO_MAX_CHARS}
+              </span>
+            </div>
             <RichTextEditor
               value={form.watch("bio") ?? ""}
               onChange={(html) => form.setValue("bio", html, { shouldValidate: true })}
