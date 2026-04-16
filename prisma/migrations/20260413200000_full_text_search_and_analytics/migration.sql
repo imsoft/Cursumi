@@ -10,11 +10,11 @@
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- Índice GIN trigrama: acelera ILIKE y búsqueda por similitud en título
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "Course_title_trgm_idx"
+CREATE INDEX IF NOT EXISTS "Course_title_trgm_idx"
   ON "Course" USING gin(title gin_trgm_ops);
 
 -- Índice GIN tsvector: búsqueda semántica en español (stemming + stopwords)
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "Course_fts_idx"
+CREATE INDEX IF NOT EXISTS "Course_fts_idx"
   ON "Course" USING gin(
     to_tsvector('spanish',
       coalesce(title, '') || ' ' || coalesce(description, '')
@@ -28,9 +28,9 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS "Course_fts_idx"
 --   - Joins entre LessonProgress y Lesson para el funnel de abandono
 
 -- Índice en completedAt para poder ordenar y agrupar por fecha
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "LessonProgress_completedAt_idx"
+CREATE INDEX IF NOT EXISTS "LessonProgress_completedAt_idx"
   ON "LessonProgress"("completedAt");
 
 -- Índice compuesto lessonId + enrollmentId para joins rápidos en analytics
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "LessonProgress_lessonId_enrollmentId_idx"
+CREATE INDEX IF NOT EXISTS "LessonProgress_lessonId_enrollmentId_idx"
   ON "LessonProgress"("lessonId", "enrollmentId");
