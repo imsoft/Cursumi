@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { getCachedSession } from "@/lib/session";
+import { getSessionSafe } from "@/lib/session";
 import { getOrgForUser } from "@/lib/org-service";
 import { getUserBasicInfo } from "@/lib/user-service";
 import { BusinessShell } from "@/components/layouts/business-shell";
@@ -17,7 +17,7 @@ export default async function BusinessDashboardLayout({
 }: {
   children: ReactNode;
 }) {
-  const session = await getCachedSession();
+  const session = await getSessionSafe();
   if (!session?.user?.id) {
     redirect("/login");
   }

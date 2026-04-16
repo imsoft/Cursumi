@@ -59,16 +59,22 @@ export async function checkRateLimitAsync(config: RateLimitConfig): Promise<Next
   const { limit, windowSecs, key } = config;
 
   if (redis) {
-    // Redis sliding window con INCR + EXPIRE
-    const count = await redis.incr(key);
-    if (count === 1) {
-      await redis.expire(key, windowSecs);
+    try {
+      // Redis sliding window con INCR + EXPIRE
+      const count = await redis.incr(key);
+      if (count === 1) {
+        await redis.expire(key, windowSecs);
+      }
+      if (count > limit) {
+        const ttl = await redis.ttl(key);
+        return rateLimitResponse(ttl, limit, Date.now() + ttl * 1000);
+      }
+      return null;
+    } catch {
+      // Si Redis no está disponible, continuar sin limitar (mejor disponibilidad que seguridad aquí)
+      console.warn("[rate-limit] Redis unavailable, skipping rate limit check for key:", key);
+      return null;
     }
-    if (count > limit) {
-      const ttl = await redis.ttl(key);
-      return rateLimitResponse(ttl, limit, Date.now() + ttl * 1000);
-    }
-    return null;
   }
 
   // Fallback en memoria

@@ -1,5 +1,5 @@
-import { redirect, unstable_rethrow } from "next/navigation";
-import { getCachedSession } from "@/lib/session";
+import { redirect } from "next/navigation";
+import { getSessionSafe } from "@/lib/session";
 import { getUserRole } from "@/lib/user-service";
 import { getPublicStats, getPublicTestimonials, getFeaturedCourses } from "@/lib/public-stats";
 import { CourseTypes } from "@/components/course-types";
@@ -34,13 +34,7 @@ export const metadata = {
 };
 
 export default async function Home() {
-  let session;
-  try {
-    session = await getCachedSession();
-  } catch (e) {
-    unstable_rethrow(e);
-    throw e;
-  }
+  const session = await getSessionSafe();
   if (session) {
     const role = await getUserRole(session.user.id);
     if (role === "admin") redirect("/admin");

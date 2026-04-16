@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { getCachedSession } from "@/lib/session";
+import { getSessionSafe } from "@/lib/session";
 import { getUserBasicInfo } from "@/lib/user-service";
 import { StudentShell } from "@/components/layouts/student-shell";
 import { prisma } from "@/lib/prisma";
@@ -17,7 +17,7 @@ interface StudentLayoutProps {
 }
 
 export default async function StudentLayout({ children }: StudentLayoutProps) {
-  const session = await getCachedSession();
+  const session = await getSessionSafe();
   if (!session) {
     redirect("/login");
   }
