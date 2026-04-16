@@ -5,7 +5,8 @@ import Link from "next/link";
 import { BookOpen, Search, Clock, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
 
 export type NoteExpanded = {
   id: string;
@@ -129,22 +130,21 @@ export function NotesClient({ initialNotes }: { initialNotes: NoteExpanded[] }) 
       </div>
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:flex-wrap sm:items-end">
-        <Select
+        <Combobox
           id="filter-instructor"
           label="Instructor"
           className="min-w-[min(100%,220px)] flex-1"
           options={instructorSelectOptions}
           value={selectedInstructor}
-          onChange={(e) => setSelectedInstructor(e.target.value)}
+          onValueChange={setSelectedInstructor}
         />
-        <Select
+        <Combobox
           id="filter-course"
           label="Curso"
           className="min-w-[min(100%,220px)] flex-1"
           options={courseSelectOptions}
           value={selectedCourse}
-          onChange={(e) => {
-            const v = e.target.value;
+          onValueChange={(v) => {
             setSelectedCourse(v);
             if (v) {
               const row = initialNotes.find((n) => n.course.id === v);
@@ -155,15 +155,17 @@ export function NotesClient({ initialNotes }: { initialNotes: NoteExpanded[] }) 
       </div>
 
       {filteredNotes.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border p-12 text-center">
-          <BookOpen className="mb-4 h-10 w-10 text-muted-foreground opacity-50" />
-          <h3 className="text-lg font-medium">No se encontraron notas</h3>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            {initialNotes.length > 0
-              ? "No hay notas que coincidan con la búsqueda o los filtros."
-              : "Aún no has tomado ninguna nota. Entra a un curso y empieza a escribir."}
-          </p>
-        </div>
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyMedia variant="icon"><BookOpen /></EmptyMedia>
+            <EmptyTitle>No se encontraron notas</EmptyTitle>
+            <EmptyDescription>
+              {initialNotes.length > 0
+                ? "No hay notas que coincidan con la búsqueda o los filtros."
+                : "Aún no has tomado ninguna nota. Entra a un curso y empieza a escribir."}
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredNotes.map((note) => (

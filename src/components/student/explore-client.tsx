@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { PageHeader } from "@/components/shared/page-header";
 import { formatPriceMXN, stripHtml } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -139,31 +139,31 @@ export function ExploreClient({
             />
           </div>
           <div className="grid w-full gap-4 md:w-auto md:grid-cols-4">
-            <Select
+            <Combobox
               label="Categoría"
               options={categoryOptions}
               value={initialFilters.category}
-              onChange={(e) => updateFilter("category", e.target.value)}
+              onValueChange={(v) => updateFilter("category", v)}
             />
-            <Select
+            <Combobox
               label="Modalidad"
               options={modalityOptions}
               value={initialFilters.modality}
-              onChange={(e) => updateFilter("modality", e.target.value)}
+              onValueChange={(v) => updateFilter("modality", v)}
             />
-            <Select
+            <Combobox
               label="Nivel"
               options={levelOptions}
               value={initialFilters.level}
-              onChange={(e) => updateFilter("level", e.target.value)}
+              onValueChange={(v) => updateFilter("level", v)}
             />
-            <Select
+            <Combobox
               label="Ordenar por"
               options={sortOptions}
               value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value);
-                updateFilter("sortBy", e.target.value);
+              onValueChange={(v) => {
+                setSortBy(v);
+                updateFilter("sortBy", v);
               }}
             />
           </div>

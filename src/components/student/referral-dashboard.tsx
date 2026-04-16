@@ -90,11 +90,9 @@ export function ReferralDashboard() {
 
   if (!data) {
     return (
-      <Card>
-        <CardContent className="p-8 text-center text-muted-foreground">
-          No se pudo cargar el programa de referidos.
-        </CardContent>
-      </Card>
+      <p className="py-8 text-center text-sm text-muted-foreground">
+        No se pudo cargar el programa de referidos.
+      </p>
     );
   }
 

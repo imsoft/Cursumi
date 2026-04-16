@@ -114,7 +114,7 @@ export function CourseChatClient({
       {/* Messages */}
       <div className="flex-1 overflow-y-auto space-y-3 p-4">
         {messages.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground py-8">
+          <p className="py-8 text-center text-sm text-muted-foreground">
             No hay mensajes aún. ¡Inicia la conversación!
           </p>
         )}

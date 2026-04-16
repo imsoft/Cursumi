@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CourseCard, type CourseCardProps } from "@/components/course-card";
 import { stripHtml } from "@/lib/utils";
 import type { FeaturedCourseItem } from "@/lib/public-stats";
+import { EmptyState } from "@/components/shared/empty-state";
 
 const DEFAULT_COURSE_IMAGE =
   "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=80";
@@ -54,23 +55,12 @@ export const FeaturedCourses = ({ courses }: FeaturedCoursesProps) => {
 
         {/* Grid or empty state */}
         {courses.length === 0 ? (
-          <div className="flex flex-col items-center gap-5 rounded-3xl border border-dashed border-border bg-card/60 py-20 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/8">
-              <BookOpen className="h-8 w-8 text-primary/40" />
-            </div>
-            <div>
-              <p className="font-semibold text-foreground">
-                Los cursos están llegando pronto
-              </p>
-              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                Explora la plataforma y sé el primero en inscribirte cuando
-                estén disponibles.
-              </p>
-            </div>
-            <Link href="/courses">
-              <Button size="sm">Explorar cursos</Button>
-            </Link>
-          </div>
+          <EmptyState
+            icon={BookOpen}
+            title="Los cursos están llegando pronto"
+            description="Explora la plataforma y sé el primero en inscribirte cuando estén disponibles."
+            action={{ label: "Explorar cursos", href: "/courses" }}
+          />
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {courses.map((course) => (

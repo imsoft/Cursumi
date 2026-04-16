@@ -7,7 +7,7 @@ import { createZodResolver } from "@/lib/form-resolver";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2 } from "lucide-react";
 
@@ -118,10 +118,11 @@ export const ContactForm = () => {
         label="Asunto"
         {...form.register("subject")}
       />
-      <Select
+      <Combobox
         label="Motivo"
         options={reasonOptions}
-        {...form.register("reason")}
+        value={form.watch("reason")}
+        onValueChange={(v) => form.setValue("reason", v as ContactFormValues["reason"], { shouldValidate: true })}
       />
       <Textarea
         label="Mensaje"

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 
 const statusOptions = [
@@ -56,17 +56,17 @@ export const MyCoursesFilters = ({
           />
         </div>
         <div className="grid w-full gap-4 md:w-auto md:grid-cols-2">
-          <Select
+          <Combobox
             label="Estado"
             options={statusOptions}
             value={statusFilter}
-            onChange={(event) => onStatusChange(event.target.value)}
+            onValueChange={onStatusChange}
           />
-          <Select
+          <Combobox
             label="Modalidad"
             options={modalityOptions}
             value={modalityFilter}
-            onChange={(event) => onModalityChange(event.target.value)}
+            onValueChange={onModalityChange}
           />
         </div>
         <div className="flex items-end">
@@ -84,4 +84,3 @@ export const MyCoursesFilters = ({
     </div>
   );
 };
-

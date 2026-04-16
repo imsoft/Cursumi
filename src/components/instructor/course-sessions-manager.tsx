@@ -4,10 +4,12 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { DatePickerField } from "@/components/ui/date-picker";
 import { Plus, MapPin, Calendar, Clock, Users, Trash2, Video, Link2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CourseSessionData } from "./course-types";
 import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
 
 /**
  * Input nativo para date/time que NO es controlado por React en cada keystroke.
@@ -118,18 +120,19 @@ export function CourseSessionsManager({
   return (
     <div className="space-y-3">
       {sessions.length === 0 && !adding && (
-        <div className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center">
-          {isLive ? (
-            <Video className="mx-auto h-8 w-8 text-muted-foreground/50" />
-          ) : (
-            <MapPin className="mx-auto h-8 w-8 text-muted-foreground/50" />
-          )}
-          <p className="mt-2 text-sm text-muted-foreground">
-            {isLive
-              ? "Agrega sesiones con fecha, hora y enlace de videollamada (Meet, Zoom, etc.)."
-              : "Agrega al menos una sesión con lugar, fecha y horario."}
-          </p>
-        </div>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              {isLive ? <Video /> : <MapPin />}
+            </EmptyMedia>
+            <EmptyTitle>Sin sesiones</EmptyTitle>
+            <EmptyDescription>
+              {isLive
+                ? "Agrega sesiones con fecha, hora y enlace de videollamada (Meet, Zoom, etc.)."
+                : "Agrega al menos una sesión con lugar, fecha y horario."}
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       )}
 
       {sessions.map((session, i) => {
@@ -207,14 +210,13 @@ export function CourseSessionsManager({
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                  <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground mb-1">
                     <Calendar className="h-3 w-3" /> Fecha
                   </label>
-                  <NativeDateTimeInput
-                    type="date"
-                    className="mt-1"
+                  <DatePickerField
                     value={session.date ? session.date.substring(0, 10) : ""}
                     onChange={(v) => handleUpdate(i, { date: v })}
+                    placeholder="Selecciona fecha"
                   />
                 </div>
                 <div>
@@ -319,12 +321,11 @@ export function CourseSessionsManager({
             )}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div>
-                <label className="text-xs font-medium text-muted-foreground">Fecha *</label>
-                <NativeDateTimeInput
-                  type="date"
-                  className="mt-1"
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Fecha *</label>
+                <DatePickerField
                   value={draft.date}
                   onChange={(v) => setDraft((d) => ({ ...d, date: v }))}
+                  placeholder="Selecciona fecha"
                 />
               </div>
               <div>

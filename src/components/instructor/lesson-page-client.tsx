@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -307,14 +307,14 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <Select
+            <Combobox
               label="Tipo de lección *"
               options={lessonTypeOptions}
               value={type}
-              onChange={(e) => {
-                const v = e.target.value as CourseLesson["type"];
-                setType(v);
-                if (v === "section_minigame" && !gateMinigame) {
+              onValueChange={(v) => {
+                const lessonType = v as CourseLesson["type"];
+                setType(lessonType);
+                if (lessonType === "section_minigame" && !gateMinigame) {
                   setGateMinigame({ type: "memory", instruction: "", pairs: [] });
                 }
               }}
@@ -524,14 +524,14 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="mb-2 block text-sm font-medium text-foreground">Tipo de pregunta</label>
-                      <Select
+                      <Combobox
                         value={newQuestionType}
-                        onChange={(e) => {
-                          const val = e.target.value as typeof newQuestionType;
-                          setNewQuestionType(val);
+                        onValueChange={(val) => {
+                          const v = val as typeof newQuestionType;
+                          setNewQuestionType(v);
                           setNewQuestionCorrectAnswer(null);
                           setNewQuestionCorrectAnswers(new Set());
-                          if (val === "true-false") setNewQuestionOptions(["Verdadero", "Falso"]);
+                          if (v === "true-false") setNewQuestionOptions(["Verdadero", "Falso"]);
                           else setNewQuestionOptions(["", ""]);
                         }}
                         options={[

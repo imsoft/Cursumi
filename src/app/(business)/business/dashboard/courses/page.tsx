@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Plus, Search, BookOpenCheck, Trash2, Users, BarChart3 } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 interface OrgCourse {
   id: string;
@@ -177,11 +178,11 @@ export default function BusinessCoursesPage() {
       {/* Active courses */}
       <h3 className="text-lg font-bold">Cursos activos ({orgCourses.length})</h3>
       {orgCourses.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            No tienes cursos aún. Agrega cursos del catálogo para empezar.
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={BookOpenCheck}
+          title="No tienes cursos aún"
+          description="Agrega cursos del catálogo para empezar"
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {orgCourses.map((course) => (

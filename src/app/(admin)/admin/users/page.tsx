@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -237,17 +237,17 @@ export default function AdminUsersPage() {
               />
             </div>
             <div className="grid w-full grid-cols-2 gap-4 sm:w-auto">
-              <Select
+              <Combobox
                 label="Rol"
                 options={roleOptions}
                 value={roleFilter}
-                onChange={(event) => setRoleFilter(event.target.value)}
+                onValueChange={setRoleFilter}
               />
-              <Select
+              <Combobox
                 label="Estado"
                 options={statusOptions}
                 value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
+                onValueChange={setStatusFilter}
               />
             </div>
             <div>

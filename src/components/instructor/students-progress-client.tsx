@@ -248,13 +248,11 @@ export function StudentsProgressClient({ courseId, courseTitle, data }: Students
         </CardHeader>
         <CardContent>
           {filtered.length === 0 ? (
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">
-                {data.students.length === 0
-                  ? "Aún no hay alumnos inscritos en este curso."
-                  : "No se encontraron alumnos con ese criterio."}
-              </p>
-            </div>
+            <p className="py-8 text-center text-muted-foreground">
+              {data.students.length === 0
+                ? "Aún no hay alumnos inscritos en este curso."
+                : "No se encontraron alumnos con ese criterio."}
+            </p>
           ) : (
             <div className="space-y-3">
               {filtered.map((student) => (

@@ -279,11 +279,9 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
             </div>
 
             {questions.length === 0 && (
-              <Card className="border-dashed">
-                <CardContent className="p-8 text-center text-muted-foreground">
-                  Agrega al menos una pregunta para el examen.
-                </CardContent>
-              </Card>
+              <p className="rounded-lg border border-dashed border-border py-6 text-center text-sm text-muted-foreground">
+                Agrega al menos una pregunta para el examen.
+              </p>
             )}
 
             {questions.map((q, qi) => (

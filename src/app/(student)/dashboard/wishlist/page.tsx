@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { WishlistButton } from "@/components/courses/wishlist-button";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
+import { EmptyState } from "@/components/shared/empty-state";
 
 export const metadata: Metadata = {
   title: "Mis guardados | Cursumi",
@@ -50,20 +51,12 @@ export default async function WishlistPage() {
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-xl border border-border bg-card/60 px-6 py-12 text-center">
-          <Heart className="mx-auto h-10 w-10 text-muted-foreground/40 mb-3" />
-          <p className="font-semibold text-foreground">No tienes cursos guardados</p>
-          <p className="text-sm text-muted-foreground mt-1 mb-5">
-            Guarda cursos que te interesen para verlos después
-          </p>
-          <Link
-            href="/courses"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            Explorar cursos
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+        <EmptyState
+          icon={Heart}
+          title="No tienes cursos guardados"
+          description="Guarda cursos que te interesen para verlos después"
+          action={{ label: "Explorar cursos", href: "/courses" }}
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {items.map(({ course }) => (

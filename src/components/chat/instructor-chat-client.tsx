@@ -118,8 +118,8 @@ export function InstructorChatClient({
           </div>
           <div className="flex-1 overflow-y-auto">
             {conversations.length === 0 ? (
-              <div className="p-4 text-center">
-                <MessageSquare className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+              <div className="flex flex-col items-center gap-2 p-4 text-center">
+                <MessageSquare className="h-8 w-8 text-muted-foreground/50" />
                 <p className="text-xs text-muted-foreground">Aún no hay conversaciones</p>
               </div>
             ) : (

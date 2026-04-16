@@ -8,7 +8,7 @@ import { createZodResolver } from "@/lib/form-resolver";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import { ArrowRight, Upload, Loader2 } from "lucide-react";
 import { useRef, useMemo, useEffect, useState, useCallback } from "react";
@@ -177,11 +177,11 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
 
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Select
+              <Combobox
                 label="Categoría *"
                 options={categoryOptions}
                 value={form.watch("category")}
-                onChange={(e) => form.setValue("category", e.target.value)}
+                onValueChange={(v) => form.setValue("category", v, { shouldValidate: true })}
               />
               {form.formState.errors.category && (
                 <p className="mt-1 text-xs text-destructive">
@@ -191,11 +191,11 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
             </div>
 
             <div>
-              <Select
+              <Combobox
                 label="Nivel *"
                 options={levelOptions}
                 value={form.watch("level")}
-                onChange={(e) => form.setValue("level", e.target.value)}
+                onValueChange={(v) => form.setValue("level", v, { shouldValidate: true })}
               />
               {form.formState.errors.level && (
                 <p className="mt-1 text-xs text-destructive">

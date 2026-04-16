@@ -582,11 +582,9 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
 
         {/* Sections list */}
         {course.sections.length === 0 ? (
-          <Card className="border-dashed">
-            <CardContent className="p-8 text-center text-muted-foreground">
-              Agrega tu primera sección para empezar a estructurar el curso.
-            </CardContent>
-          </Card>
+          <p className="rounded-lg border border-dashed border-border py-8 text-center text-sm text-muted-foreground">
+            Agrega tu primera sección para empezar a estructurar el curso.
+          </p>
         ) : (
           <div className="space-y-3">
             {course.sections.map((section, si) => {

@@ -28,6 +28,7 @@ import type {
   CourseLesson,
 } from "./course-types";
 import { LessonEditor } from "./lesson-editor";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
 import { LessonStatusBadge } from "./lesson-status-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 
@@ -201,14 +202,13 @@ export const CourseSectionsManager = ({
 
         {/* Sections List */}
         {sections.length === 0 ? (
-          <Card className="border border-dashed border-border bg-muted/20">
-            <CardContent className="flex flex-col items-center justify-center p-12 text-center">
-              <p className="text-muted-foreground">No hay secciones aún</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Agrega tu primera sección para comenzar a estructurar tu curso
-              </p>
-            </CardContent>
-          </Card>
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon"><BookOpen /></EmptyMedia>
+              <EmptyTitle>No hay secciones aún</EmptyTitle>
+              <EmptyDescription>Agrega tu primera sección para comenzar a estructurar tu curso</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           <div className="space-y-4">
             {sections.map((section, sectionIndex) => {
@@ -294,11 +294,11 @@ export const CourseSectionsManager = ({
                           </div>
 
                           {section.lessons.length === 0 ? (
-                            <div className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center">
-                              <p className="text-sm text-muted-foreground">
-                                No hay lecciones en esta sección
-                              </p>
-                            </div>
+                            <Empty className="py-6">
+                              <EmptyHeader>
+                                <EmptyTitle className="text-sm font-normal text-muted-foreground">No hay lecciones en esta sección</EmptyTitle>
+                              </EmptyHeader>
+                            </Empty>
                           ) : (
                             <div className="space-y-2">
                               {section.lessons

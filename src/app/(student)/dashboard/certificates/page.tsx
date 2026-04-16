@@ -5,7 +5,7 @@ import { CertificatesHeader } from "@/components/student/certificates-header";
 import { CertificateCard } from "@/components/student/certificate-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { Certificate } from "@/components/student/types";
 import { Award } from "lucide-react";
@@ -95,17 +95,17 @@ export default function CertificatesPage() {
             />
           </div>
           <div className="grid w-full gap-4 md:w-auto md:grid-cols-2">
-            <Select
+            <Combobox
               label="Categoría"
               options={categoryOptions}
               value={categoryFilter}
-              onChange={(event) => setCategoryFilter(event.target.value)}
+              onValueChange={setCategoryFilter}
             />
-            <Select
+            <Combobox
               label="Modalidad"
               options={modalityOptions}
               value={modalityFilter}
-              onChange={(event) => setModalityFilter(event.target.value)}
+              onValueChange={setModalityFilter}
             />
           </div>
           <div className="flex items-end">

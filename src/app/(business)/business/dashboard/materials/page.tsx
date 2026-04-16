@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload, FileText, Trash2, Download, Loader2 } from "lucide-react";
 import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
+import { EmptyState } from "@/components/shared/empty-state";
 
 interface Material {
   id: string;
@@ -141,11 +142,11 @@ export default function MaterialsPage() {
       )}
 
       {materials.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            No hay materiales aún. Sube PDFs o documentos para tu equipo.
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={FileText}
+          title="No hay materiales aún"
+          description="Sube PDFs o documentos para compartir con tu equipo"
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {materials.map((m) => (

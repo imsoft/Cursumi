@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Trash2, PlusCircle, ToggleLeft, ToggleRight } from "lucide-react";
+import { DatePickerField } from "@/components/ui/date-picker";
 
 interface Coupon {
   id: string;
@@ -113,7 +114,14 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
                 <Input label="Máximo de usos (vacío = ilimitado)" type="number" min={1} {...form.register("maxUses")} />
               </div>
               <div>
-                <Input label="Fecha de expiración (opcional)" type="datetime-local" {...form.register("expiresAt")} />
+                <label className="mb-1.5 block text-sm font-medium text-foreground">
+                  Fecha de expiración (opcional)
+                </label>
+                <DatePickerField
+                  value={form.watch("expiresAt") || ""}
+                  onChange={(v) => form.setValue("expiresAt", v, { shouldValidate: true })}
+                  placeholder="Sin expiración"
+                />
               </div>
               <div className="flex items-end gap-2">
                 <Button type="submit" disabled={form.formState.isSubmitting}>
@@ -170,7 +178,7 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
           </Card>
         ))}
         {coupons.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground py-8">No hay cupones. Crea el primero.</p>
+          <p className="py-8 text-center text-sm text-muted-foreground">No hay cupones. Crea el primero.</p>
         )}
       </div>
     </div>

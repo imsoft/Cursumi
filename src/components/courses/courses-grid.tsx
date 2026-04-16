@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { SearchX } from "lucide-react";
 import { Course } from "./types";
 import { CourseCard } from "./course-card";
+import { EmptyState } from "@/components/shared/empty-state";
 
 interface CoursesGridProps {
   courses: Course[];
@@ -17,26 +18,16 @@ export const CoursesGrid = ({
   if (!courses.length) {
     return (
       <section className="mx-auto max-w-6xl px-4 py-8">
-        <div className="flex flex-col items-center gap-5 rounded-3xl border border-dashed border-border bg-card/60 py-20 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
-            <SearchX className="h-8 w-8 text-muted-foreground/50" />
-          </div>
-          <div>
-            <p className="text-lg font-bold text-foreground">
-              Sin resultados para esa búsqueda
-            </p>
-            <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-              {hasFiltersApplied
-                ? "Intenta con otros filtros o limpia la búsqueda para ver todos los cursos disponibles."
-                : "Todavía no hay cursos publicados. Vuelve pronto."}
-            </p>
-          </div>
-          {hasFiltersApplied && (
-            <Button variant="outline" size="sm" onClick={onClearFilters}>
-              Ver todos los cursos
-            </Button>
-          )}
-        </div>
+        <EmptyState
+          icon={SearchX}
+          title="Sin resultados para esa búsqueda"
+          description={
+            hasFiltersApplied
+              ? "Intenta con otros filtros o limpia la búsqueda para ver todos los cursos disponibles."
+              : "Todavía no hay cursos publicados. Vuelve pronto."
+          }
+          action={hasFiltersApplied ? { label: "Ver todos los cursos", variant: "outline", onClick: onClearFilters } : undefined}
+        />
       </section>
     );
   }

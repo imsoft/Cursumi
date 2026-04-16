@@ -1,16 +1,16 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectOption } from "@/components/ui/select";
+import { Combobox, ComboboxOption } from "@/components/ui/combobox";
 
-const modalityOptions: SelectOption[] = [
+const modalityOptions: ComboboxOption[] = [
   { value: "all", label: "Todas las modalidades" },
   { value: "virtual", label: "Virtual" },
   { value: "live", label: "En vivo" },
   { value: "presencial", label: "Presencial" },
 ];
 
-const categoryOptions: SelectOption[] = [
+const categoryOptions: ComboboxOption[] = [
   { value: "all", label: "Todas las categorías" },
   { value: "programacion", label: "Programación" },
   { value: "marketing", label: "Marketing" },
@@ -18,7 +18,7 @@ const categoryOptions: SelectOption[] = [
   { value: "negocios", label: "Negocios" },
 ];
 
-const cityOptions: SelectOption[] = [
+const cityOptions: ComboboxOption[] = [
   { value: "all", label: "Todas las ciudades" },
   { value: "CDMX", label: "CDMX" },
   { value: "Guadalajara", label: "Guadalajara" },
@@ -26,7 +26,7 @@ const cityOptions: SelectOption[] = [
   { value: "Online", label: "Online" },
 ];
 
-const orderOptions: SelectOption[] = [
+const orderOptions: ComboboxOption[] = [
   { value: "recientes", label: "Más recientes" },
   { value: "populares", label: "Más populares" },
   { value: "calificados", label: "Mejor calificados" },
@@ -90,29 +90,29 @@ export const FiltersBar = ({
 
         {/* Filter selects */}
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Select
+          <Combobox
             label="Modalidad"
             options={modalityOptions}
             value={modality}
-            onChange={(event) => onModalityChange(event.target.value)}
+            onValueChange={onModalityChange}
           />
-          <Select
+          <Combobox
             label="Categoría"
             options={categoryOptions}
             value={category}
-            onChange={(event) => onCategoryChange(event.target.value)}
+            onValueChange={onCategoryChange}
           />
-          <Select
+          <Combobox
             label="Ciudad"
             options={cityOptions}
             value={city}
-            onChange={(event) => onCityChange(event.target.value)}
+            onValueChange={onCityChange}
           />
-          <Select
+          <Combobox
             label="Ordenar por"
             options={orderOptions}
             value={order}
-            onChange={(event) => onOrderChange(event.target.value)}
+            onValueChange={onOrderChange}
           />
         </div>
 

@@ -11,8 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
+import { DatePickerField } from "@/components/ui/date-picker";
 
 const createCourseSchema = z
   .object({
@@ -174,10 +175,11 @@ export const CreateCourseForm = () => {
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <Select
+                  <Combobox
                     label="Categoría *"
                     options={categoryOptions}
-                    {...form.register("category")}
+                    value={form.watch("category")}
+                    onValueChange={(v) => form.setValue("category", v, { shouldValidate: true })}
                   />
                   {form.formState.errors.category && (
                     <p className="mt-1 text-xs text-destructive">
@@ -186,7 +188,12 @@ export const CreateCourseForm = () => {
                   )}
                 </div>
                 <div>
-                  <Select label="Nivel *" options={levelOptions} {...form.register("level")} />
+                  <Combobox
+                    label="Nivel *"
+                    options={levelOptions}
+                    value={form.watch("level")}
+                    onValueChange={(v) => form.setValue("level", v as "beginner" | "intermediate" | "advanced", { shouldValidate: true })}
+                  />
                   {form.formState.errors.level && (
                     <p className="mt-1 text-xs text-destructive">
                       {form.formState.errors.level.message}
@@ -203,10 +210,11 @@ export const CreateCourseForm = () => {
             <h2 className="text-lg font-semibold text-foreground">Modalidad y ubicación</h2>
             <div className="space-y-4">
               <div>
-                <Select
+                <Combobox
                   label="Modalidad *"
                   options={modalityOptions}
-                  {...form.register("modality")}
+                  value={form.watch("modality")}
+                  onValueChange={(v) => form.setValue("modality", v as "virtual" | "presencial", { shouldValidate: true })}
                 />
                 {form.formState.errors.modality && (
                   <p className="mt-1 text-xs text-destructive">
@@ -254,10 +262,11 @@ export const CreateCourseForm = () => {
             <h2 className="text-lg font-semibold text-foreground">Fechas / duración</h2>
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <Select
+                <Combobox
                   label="Tipo de curso *"
                   options={courseTypeOptions}
-                  {...form.register("courseType")}
+                  value={form.watch("courseType")}
+                  onValueChange={(v) => form.setValue("courseType", v as "self_paced" | "cohort", { shouldValidate: true })}
                 />
                 {form.formState.errors.courseType && (
                   <p className="mt-1 text-xs text-destructive">
@@ -266,7 +275,14 @@ export const CreateCourseForm = () => {
                 )}
               </div>
               <div>
-                <Input label="Fecha de inicio *" type="date" {...form.register("startDate")} />
+                <label className="mb-1.5 block text-sm font-medium text-foreground">
+                  Fecha de inicio *
+                </label>
+                <DatePickerField
+                  value={form.watch("startDate")}
+                  onChange={(v) => form.setValue("startDate", v, { shouldValidate: true })}
+                  placeholder="Selecciona la fecha de inicio"
+                />
                 {form.formState.errors.startDate && (
                   <p className="mt-1 text-xs text-destructive">
                     {form.formState.errors.startDate.message}

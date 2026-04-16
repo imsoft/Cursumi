@@ -1,6 +1,8 @@
 import { useMemo } from "react";
+import { BookOpen } from "lucide-react";
 import { CourseListItem } from "@/components/instructor/course-list-item";
 import { InstructorCourse } from "@/components/instructor/types";
+import { EmptyState } from "@/components/shared/empty-state";
 
 export type CourseFilterTab = "all" | "published" | "draft";
 
@@ -21,9 +23,11 @@ export const CourseList = ({ courses, activeTab = "all" }: CourseListProps) => {
 
   if (filteredCourses.length === 0) {
     return (
-      <div className="py-8 text-center text-muted-foreground">
-        <p>No hay cursos en esta categoría.</p>
-      </div>
+      <EmptyState
+        icon={BookOpen}
+        title="No hay cursos en esta categoría"
+        description="Prueba seleccionando otro filtro o crea un nuevo curso"
+      />
     );
   }
 

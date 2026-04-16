@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon } from "lucide-react";
@@ -418,19 +418,19 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
               />
             </div>
             <div>
-              <Select
+              <Combobox
                 label="Tipo de lección *"
                 options={lessonTypeOptions}
                 value={type}
-                onChange={(e) => {
-                  const v = e.target.value as CourseLesson["type"];
-                  setType(v);
-                  if (v === "section_quiz") {
+                onValueChange={(v) => {
+                  const lessonType = v as CourseLesson["type"];
+                  setType(lessonType);
+                  if (lessonType === "section_quiz") {
                     setGateQuiz(
                       parseSectionQuizFromLessonContent(content) ?? { passingScore: 70, questions: [] },
                     );
                   }
-                  if (v === "section_minigame") {
+                  if (lessonType === "section_minigame") {
                     setGateMinigame(
                       parseSectionMinigameFromLessonContent(content) ?? {
                         type: "memory",
@@ -784,14 +784,14 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                       <label className="mb-2 block text-sm font-medium text-foreground">
                         Tipo de pregunta
                       </label>
-                      <Select
+                      <Combobox
                         value={newQuestionType}
-                        onChange={(e) => {
-                          const val = e.target.value as typeof newQuestionType;
-                          setNewQuestionType(val);
+                        onValueChange={(val) => {
+                          const v = val as typeof newQuestionType;
+                          setNewQuestionType(v);
                           setNewQuestionCorrectAnswer(null);
                           setNewQuestionCorrectAnswers(new Set());
-                          if (val === "true-false") {
+                          if (v === "true-false") {
                             setNewQuestionOptions(["Verdadero", "Falso"]);
                           } else {
                             setNewQuestionOptions(["", ""]);

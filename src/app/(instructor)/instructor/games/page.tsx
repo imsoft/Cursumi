@@ -6,7 +6,8 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Check, Users, HelpCircle, Play, Pencil, Trash2 } from "lucide-react";
+import { Copy, Check, Users, HelpCircle, Play, Pencil, Trash2, Gamepad2 } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 type GameStatus = "waiting" | "active" | "finished";
 
@@ -80,16 +81,12 @@ export default function InstructorGamesPage() {
       />
 
       {games.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-4 py-16">
-            <p className="text-muted-foreground text-center">
-              No tienes juegos aún. ¡Crea tu primer juego!
-            </p>
-            <Button asChild>
-              <Link href="/instructor/games/new">Crear juego</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={Gamepad2}
+          title="No tienes juegos aún"
+          description="Crea juegos de preguntas interactivos para tus estudiantes"
+          action={{ label: "Crear juego", href: "/instructor/games/new" }}
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {games.map((game) => (

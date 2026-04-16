@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Users, BookOpenCheck, Trash2 } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 interface Team {
   id: string;
@@ -96,11 +97,11 @@ export default function TeamsPage() {
       )}
 
       {teams.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-4 py-16">
-            <p className="text-muted-foreground">No tienes equipos aún.</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={Users}
+          title="No tienes equipos aún"
+          description="Crea tu primer equipo para organizar a tus colaboradores"
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {teams.map((team) => (

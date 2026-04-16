@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { formatPriceMXN } from "@/lib/utils";
 import { PageHeader } from "@/components/shared/page-header";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -129,17 +129,17 @@ export default function AdminCoursesPage() {
               />
             </div>
             <div className="grid w-full gap-4 md:w-auto md:grid-cols-2">
-              <Select
+              <Combobox
                 label="Estado"
                 options={statusOptions}
                 value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
+                onValueChange={setStatusFilter}
               />
-              <Select
+              <Combobox
                 label="Modalidad"
                 options={modalityOptions}
                 value={modalityFilter}
-                onChange={(event) => setModalityFilter(event.target.value)}
+                onValueChange={setModalityFilter}
               />
             </div>
             <div>
