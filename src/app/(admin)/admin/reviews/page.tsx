@@ -4,21 +4,14 @@ import { ReviewModerationClient } from "@/components/admin/review-moderation-cli
 export const metadata = { title: "Moderación de Reseñas | Admin" };
 
 export default async function AdminReviewsPage() {
-
-  const raw = await prisma.review.findMany({
-    where: { approved: false },
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      rating: true,
-      comment: true,
-      approved: true,
-      createdAt: true,
-      user: { select: { name: true, email: true } },
-      course: { select: { id: true, title: true } },
+  const courses = await prisma.course.findMany({
+    where: {
+      status: "published",
+      reviews: { some: {} },
     },
+    select: { id: true, title: true },
+    orderBy: { title: "asc" },
   });
 
-  const reviews = raw.map((r) => ({ ...r, createdAt: r.createdAt.toISOString() }));
-  return <ReviewModerationClient initialReviews={reviews} />;
+  return <ReviewModerationClient courses={courses} />;
 }

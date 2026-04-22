@@ -11,9 +11,13 @@ export async function GET(req: NextRequest) {
     const { searchParams } = req.nextUrl;
     const approvedParam = searchParams.get("approved");
     const approved = approvedParam === "true" ? true : approvedParam === "false" ? false : undefined;
+    const courseId = searchParams.get("courseId") || undefined;
 
     const reviews = await prisma.review.findMany({
-      where: { ...(approved !== undefined && { approved }) },
+      where: {
+        ...(approved !== undefined && { approved }),
+        ...(courseId && { courseId }),
+      },
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
