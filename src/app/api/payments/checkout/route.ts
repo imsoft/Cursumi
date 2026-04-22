@@ -25,6 +25,17 @@ export async function POST(req: NextRequest) {
     if (limited) return limited;
     const { courseId, couponCode, sessionId } = bodySchema.parse(await req.json());
 
+    // Validar que el sessionId pertenece al curso antes de continuar
+    if (sessionId) {
+      const validSession = await prisma.courseSession.findFirst({
+        where: { id: sessionId, courseId },
+        select: { id: true },
+      });
+      if (!validSession) {
+        return NextResponse.json({ error: "Sesión de curso no válida" }, { status: 400 });
+      }
+    }
+
     const course = await prisma.course.findUnique({
       where: { id: courseId, status: "published" },
       select: { id: true, title: true, price: true, imageUrl: true },

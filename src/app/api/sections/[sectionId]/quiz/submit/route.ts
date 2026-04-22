@@ -65,17 +65,13 @@ export async function POST(
     score = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
     passed = score >= (activity.passingScore ?? 70);
   } else {
-    // Minigame: el score lo controla el cliente (no hay respuestas verificables)
+    // Minigame: el score viene del cliente pero el servidor decide si aprobó
     const clientScore = body.score;
-    const clientPassed = body.passed;
-    if (typeof clientScore !== "number" || typeof clientPassed !== "boolean") {
+    if (typeof clientScore !== "number" || !Number.isFinite(clientScore)) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
-    if (clientScore < 0 || clientScore > 100) {
-      return NextResponse.json({ error: "Score debe estar entre 0 y 100" }, { status: 400 });
-    }
-    score = clientScore;
-    passed = clientPassed;
+    score = Math.min(100, Math.max(0, Math.round(clientScore)));
+    passed = score >= 70; // minigame no tiene passingScore, usar umbral por defecto
   }
 
   const existing = await prisma.sectionQuizSubmission.findUnique({

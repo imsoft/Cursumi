@@ -561,6 +561,7 @@ model Transaction {
   @@index([userId])
   @@index([courseId])
   @@index([status])
+  @@index([userId, courseId, status]) // acelera findFirst en checkout (pending transactions)
 }
 
 // ─────────────────────────────────────────

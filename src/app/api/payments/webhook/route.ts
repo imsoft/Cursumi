@@ -65,12 +65,17 @@ export async function POST(req: NextRequest) {
         data: { enrollmentId: enrollment.id },
       });
 
-      // Incrementar cupón SOLO al confirmar el pago (evita doble-spend)
+      // Incrementar cupón SOLO al confirmar el pago.
+      // Operación atómica: solo incrementa si aún está bajo el límite,
+      // evitando race conditions con múltiples webhooks simultáneos.
       if (transaction.couponCode) {
-        await prisma.coupon.update({
-          where: { code: transaction.couponCode },
-          data: { usedCount: { increment: 1 } },
-        });
+        await prisma.$executeRaw`
+          UPDATE "Coupon"
+          SET "usedCount" = "usedCount" + 1
+          WHERE code = ${transaction.couponCode}
+            AND active = true
+            AND ("maxUses" IS NULL OR "usedCount" < "maxUses")
+        `;
       }
 
       // Notify student + push

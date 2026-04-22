@@ -2,13 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 
 const bodySchema = z.object({ code: z.string().min(1) });
 
 // POST /api/coupons/validate — valida un cupón y retorna el % de descuento
 export async function POST(req: NextRequest) {
   try {
-    await requireSession();
+    const session = await requireSession();
+
+    // 20 intentos por hora por usuario — previene fuerza bruta de códigos
+    const limited = await checkRateLimitAsync({
+      key: `coupon-validate:${session.user.id}`,
+      limit: 20,
+      windowSecs: 3600,
+    });
+    if (limited) return limited;
     const { code } = bodySchema.parse(await req.json());
 
     const coupon = await prisma.coupon.findUnique({
