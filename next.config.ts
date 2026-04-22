@@ -25,11 +25,12 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://js.stripe.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://challenges.cloudflare.com https://js.stripe.com;
       style-src 'self' 'unsafe-inline';
       img-src 'self' blob: data: https://images.unsplash.com https://res.cloudinary.com https://image.mux.com https://*.googleusercontent.com;
       media-src 'self' blob: data: https://stream.mux.com;
-      connect-src 'self' https://challenges.cloudflare.com https://api.stripe.com https://api.cloudinary.com *.sentry.io;
+      worker-src 'self' blob:;
+      connect-src 'self' blob: https://challenges.cloudflare.com https://api.stripe.com https://api.cloudinary.com *.sentry.io;
       frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com;
       font-src 'self' data:;
       object-src 'none';
