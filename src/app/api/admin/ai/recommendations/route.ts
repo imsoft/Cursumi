@@ -61,6 +61,13 @@ export async function POST(req: Request) {
     return NextResponse.json(json);
   } catch (error) {
     console.error("[recommendations]", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    if (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")) {
+      return NextResponse.json(
+        { error: "Cuota de Gemini agotada (429). Habilita billing en Google Cloud Console o espera al reset diario." },
+        { status: 429 }
+      );
+    }
     return handleApiError(error);
   }
 }

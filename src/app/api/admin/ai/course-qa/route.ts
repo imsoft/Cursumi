@@ -69,7 +69,13 @@ ${courseContext}`;
           }
         } catch (err) {
           console.error("[course-qa stream]", err);
-          controller.enqueue(encoder.encode("Error al generar respuesta. Verifica la configuración de la API."));
+          const msg = err instanceof Error ? err.message : String(err);
+          const friendly = msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")
+            ? "⚠️ Cuota de Gemini agotada (429). Habilita billing en Google Cloud Console o espera al reset diario."
+            : msg.includes("API key") || msg.includes("API_KEY")
+            ? "⚠️ API key inválida. Verifica GOOGLE_GENAI_API_KEY en las variables de entorno."
+            : `⚠️ Error de Gemini: ${msg.slice(0, 200)}`;
+          controller.enqueue(encoder.encode(friendly));
         } finally {
           controller.close();
         }
