@@ -25,6 +25,7 @@ import {
   FileDown,
   Award,
   PenLine,
+  Sparkles,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -42,6 +43,7 @@ const adminNavItems = [
   { title: "Simulador", href: "/admin/simulator", icon: Calculator },
   { title: "Plantillas", href: "/admin/templates", icon: FileDown },
   { title: "Constancia", href: "/admin/certificate-preview", icon: Award },
+  { title: "AI Lab", href: "/admin/ai-lab", icon: Sparkles },
   { title: "Configuración", href: "/admin/settings", icon: Settings },
 ];
 

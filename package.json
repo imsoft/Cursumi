@@ -20,6 +20,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@google/genai": "^1.50.1",
     "@hookform/resolvers": "^5.2.2",
     "@lexical/html": "^0.42.0",
     "@lexical/list": "^0.42.0",
