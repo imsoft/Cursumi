@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CertificateView } from "@/components/certificates/certificate-view";
-import { PartyPopper, Download } from "lucide-react";
+import { PartyPopper, Download, Loader2 } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
+import { downloadCertificateAsPdf } from "@/lib/download-certificate";
 
 const DEFAULTS: Certificate = {
   id: "preview",
@@ -30,6 +31,7 @@ const DEFAULTS: Certificate = {
 
 export default function CertificatePreviewPage() {
   const [cert, setCert] = useState<Certificate>(DEFAULTS);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     const prevTitle = document.title;
@@ -180,10 +182,23 @@ export default function CertificatePreviewPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => window.print()}
+              disabled={downloading}
+              onClick={async () => {
+                setDownloading(true);
+                try {
+                  await downloadCertificateAsPdf({
+                    studentName: cert.studentName,
+                    certificateNumber: cert.certificateNumber,
+                  });
+                } finally {
+                  setDownloading(false);
+                }
+              }}
             >
-              <Download className="mr-2 h-4 w-4" />
-              Probar descarga PDF
+              {downloading
+                ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                : <Download className="mr-2 h-4 w-4" />}
+              {downloading ? "Generando PDF…" : "Probar descarga PDF"}
             </Button>
           </div>
         </CardContent>

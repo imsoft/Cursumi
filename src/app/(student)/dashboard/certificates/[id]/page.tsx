@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
 import { ArrowLeft, Download, Share2, Award, Check, Loader2 } from "lucide-react";
 import { CertificateView } from "@/components/certificates/certificate-view";
+import { downloadCertificateAsPdf } from "@/lib/download-certificate";
 
 interface CertificatePageProps {
   params: Promise<{ id: string }>;
@@ -87,10 +88,17 @@ export default function CertificatePage({ params }: CertificatePageProps) {
     load();
   }, [id, isNew, fireConfetti]);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
+    if (!certificate) return;
     setIsDownloading(true);
-    window.print();
-    setTimeout(() => setIsDownloading(false), 1000);
+    try {
+      await downloadCertificateAsPdf({
+        studentName: certificate.studentName,
+        certificateNumber: certificate.certificateNumber,
+      });
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const handleShare = async () => {
