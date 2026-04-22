@@ -115,7 +115,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
 
           {/* Firmas: instructor + administrador */}
           <div className="pt-6 print:pt-3">
-            <div className="flex items-end justify-between gap-4 print:gap-6">
+            <div className="flex items-start justify-between gap-4 print:gap-6">
               <div className="text-center flex-1 min-w-0">
                 {certificate.instructorSignatureUrl ? (
                   <div className="flex items-end justify-center mb-1" style={{ height: sigH }}>
@@ -152,6 +152,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
                   <div className="mb-1" style={{ height: sigH }}></div>
                 )}
                 <div className="border-t border-foreground/30 pt-1">
+                  <p className="text-xs text-muted-foreground">&nbsp;</p>
                   <p className="text-xs text-muted-foreground">Diseñador del taller</p>
                 </div>
               </div>
