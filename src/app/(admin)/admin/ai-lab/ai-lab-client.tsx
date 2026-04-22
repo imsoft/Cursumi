@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Combobox } from "@/components/ui/combobox";
-import { Loader2, SendHorizonal, Sparkles, BookOpen, Route } from "lucide-react";
+import { Loader2, SendHorizonal, Sparkles, BookOpen, Route, ExternalLink } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Course = { id: string; title: string; status: string };
 type User = { id: string; name: string; email: string; role: string };
-type Message = { role: "user" | "assistant"; content: string };
+type Message = { role: "user" | "assistant"; content: string; thinking?: boolean };
 
 type RecommendationStep = {
   step: number;
@@ -35,6 +35,57 @@ const priorityColor: Record<string, string> = {
   baja: "bg-gray-100 text-gray-700",
 };
 
+// ─── Thinking animation ───────────────────────────────────────────────────────
+
+function ThinkingDots() {
+  return (
+    <span className="inline-flex items-center gap-1 text-muted-foreground text-sm">
+      <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+      <span>Gemini está pensando</span>
+      <span className="inline-flex gap-0.5 ml-0.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:0ms]" />
+        <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:150ms]" />
+        <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:300ms]" />
+      </span>
+    </span>
+  );
+}
+
+function GeneratingState() {
+  const steps = [
+    "Analizando perfil del alumno…",
+    "Revisando catálogo de cursos…",
+    "Construyendo ruta de aprendizaje…",
+    "Finalizando recomendaciones…",
+  ];
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setStep((s) => (s + 1) % steps.length), 1800);
+    return () => clearInterval(id);
+  }, [steps.length]);
+
+  return (
+    <div className="rounded-xl border border-dashed bg-card/50 p-12 flex flex-col items-center gap-4">
+      <div className="relative">
+        <Sparkles className="w-10 h-10 text-purple-400 animate-pulse" />
+        <div className="absolute inset-0 rounded-full bg-purple-400/20 animate-ping" />
+      </div>
+      <p className="text-sm text-muted-foreground transition-all duration-500">{steps[step]}</p>
+      <div className="flex gap-1">
+        {steps.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 rounded-full transition-all duration-300 ${
+              i === step ? "w-6 bg-purple-400" : "w-1.5 bg-muted"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function AiLabClient() {
@@ -55,15 +106,27 @@ export function AiLabClient() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-5 h-5 text-purple-500" />
-          <h1 className="text-2xl font-semibold">AI Lab</h1>
-          <Badge variant="outline" className="text-xs">Beta · Solo admin</Badge>
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Sparkles className="w-5 h-5 text-purple-500" />
+            <h1 className="text-2xl font-semibold">AI Lab</h1>
+            <Badge variant="outline" className="text-xs">Beta · Solo admin</Badge>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Herramientas de inteligencia artificial con Gemini 2.0 Flash para explorar funcionalidades antes de lanzarlas a alumnos.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Herramientas de inteligencia artificial con Gemini 2.0 Flash para explorar funcionalidades antes de lanzarlas a alumnos.
-        </p>
+        <a
+          href="https://aistudio.google.com/u/3/usage?timeRange=last-28-days&project=gen-lang-client-0631151683&pli=1"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground border rounded-lg px-3 py-2 transition-colors hover:bg-muted/50 shrink-0"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          Ver uso en Google AI Studio
+        </a>
       </div>
 
       <Tabs defaultValue="qa" className="flex flex-col gap-4">
@@ -111,12 +174,16 @@ function CourseQA({ courses, loading }: { courses: Course[]; loading: boolean })
 
     const question = input.trim();
     setInput("");
-    const history = messages.slice(-10);
-    setMessages((prev) => [...prev, { role: "user", content: question }]);
+    const history = messages.slice(-10).map((m) => ({ role: m.role, content: m.content }));
+
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: question },
+      { role: "assistant", content: "", thinking: true },
+    ]);
     setStreaming(true);
 
     let assistantContent = "";
-    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     try {
       const res = await fetch("/api/admin/ai/course-qa", {
@@ -136,7 +203,7 @@ function CourseQA({ courses, loading }: { courses: Course[]; loading: boolean })
         assistantContent += decoder.decode(value, { stream: true });
         setMessages((prev) => {
           const updated = [...prev];
-          updated[updated.length - 1] = { role: "assistant", content: assistantContent };
+          updated[updated.length - 1] = { role: "assistant", content: assistantContent, thinking: false };
           return updated;
         });
       }
@@ -145,7 +212,8 @@ function CourseQA({ courses, loading }: { courses: Course[]; loading: boolean })
         const updated = [...prev];
         updated[updated.length - 1] = {
           role: "assistant",
-          content: "Error al obtener respuesta. Intenta de nuevo.",
+          content: "Error al obtener respuesta. Verifica la configuración de la API.",
+          thinking: false,
         };
         return updated;
       });
@@ -164,7 +232,7 @@ function CourseQA({ courses, loading }: { courses: Course[]; loading: boolean })
   return (
     <div
       className="rounded-xl border bg-card flex flex-col"
-      style={{ height: "calc(100vh - 280px)", minHeight: 480 }}
+      style={{ height: "calc(100vh - 300px)", minHeight: 480 }}
     >
       {/* Header */}
       <div className="p-4 border-b flex items-center gap-3">
@@ -188,13 +256,14 @@ function CourseQA({ courses, loading }: { courses: Course[]; loading: boolean })
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4">
         {!courseId && (
-          <div className="h-full flex items-center justify-center text-muted-foreground text-sm">
-            Selecciona un curso para empezar a hacer preguntas sobre su contenido
+          <div className="h-full flex flex-col items-center justify-center gap-2 text-muted-foreground text-sm">
+            <Sparkles className="w-8 h-8 text-purple-300" />
+            <p>Selecciona un curso para empezar a hacer preguntas sobre su contenido</p>
           </div>
         )}
         {courseId && messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center gap-2 text-muted-foreground text-sm">
-            <Sparkles className="w-8 h-8 text-purple-400" />
+            <Sparkles className="w-8 h-8 text-purple-400 animate-pulse" />
             <p>Gemini conoce el contenido completo del curso.</p>
             <p>Haz cualquier pregunta sobre el material.</p>
           </div>
@@ -209,14 +278,7 @@ function CourseQA({ courses, loading }: { courses: Course[]; loading: boolean })
                     : "bg-muted text-foreground"
                 }`}
               >
-                {msg.content ||
-                  (streaming && i === messages.length - 1 ? (
-                    <span className="flex items-center gap-1.5 text-muted-foreground">
-                      <Loader2 className="w-3 h-3 animate-spin" /> Pensando...
-                    </span>
-                  ) : (
-                    ""
-                  ))}
+                {msg.thinking ? <ThinkingDots /> : msg.content}
               </div>
             </div>
           ))}
@@ -279,7 +341,7 @@ function LearningRecommendations({ users, loading }: { users: User[]; loading: b
       setResult(data);
     } catch {
       setResult({
-        error: "Error al generar recomendaciones",
+        error: "Error al generar recomendaciones. Verifica la configuración de la API.",
         summary: "",
         learningPath: [],
         skills: [],
@@ -320,7 +382,9 @@ function LearningRecommendations({ users, loading }: { users: User[]; loading: b
         </div>
       )}
 
-      {result && !result.error && (
+      {generating && <GeneratingState />}
+
+      {result && !result.error && !generating && (
         <div className="flex flex-col gap-4">
           {/* Summary */}
           <div className="rounded-xl border bg-card p-5">

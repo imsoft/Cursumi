@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
-import { gemini, GEMINI_MODEL } from "@/lib/gemini";
+import { getGemini, GEMINI_MODEL } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
@@ -56,7 +56,8 @@ ${courseContext}`;
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          const result = await gemini.models.generateContentStream({
+          const ai = getGemini();
+          const result = await ai.models.generateContentStream({
             model: GEMINI_MODEL,
             config: { systemInstruction },
             contents,
@@ -66,6 +67,9 @@ ${courseContext}`;
               controller.enqueue(encoder.encode(chunk.text));
             }
           }
+        } catch (err) {
+          console.error("[course-qa stream]", err);
+          controller.enqueue(encoder.encode("Error al generar respuesta. Verifica la configuración de la API."));
         } finally {
           controller.close();
         }

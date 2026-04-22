@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
-import { gemini, GEMINI_MODEL } from "@/lib/gemini";
+import { getGemini, GEMINI_MODEL } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
@@ -43,7 +43,8 @@ export async function POST(req: Request) {
 
     const prompt = buildRecommendationPrompt(student, notEnrolled);
 
-    const result = await gemini.models.generateContent({
+    const ai = getGemini();
+    const result = await ai.models.generateContent({
       model: GEMINI_MODEL,
       config: {
         systemInstruction:
@@ -59,6 +60,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(json);
   } catch (error) {
+    console.error("[recommendations]", error);
     return handleApiError(error);
   }
 }
@@ -84,7 +86,7 @@ function buildRecommendationPrompt(
     .join("\n") || "Ninguno";
 
   const catalog = availableCourses
-    .map((c) => `- ID:${c.id} | ${c.title} (${c.category}, nivel: ${c.level || "N/A"}) — ${c.description.slice(0, 100)}`)
+    .map((c) => `- ID:${c.id} | ${c.title} (${c.category}, nivel: ${c.level || "N/A"}) — ${(c.description ?? "").slice(0, 100)}`)
     .join("\n") || "Sin cursos disponibles";
 
   return `Alumno: ${student.name || "Sin nombre"}
