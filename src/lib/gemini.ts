@@ -11,4 +11,4 @@ export function getGemini(): GoogleGenAI {
   return _client;
 }
 
-export const GEMINI_MODEL = "gemini-2.0-flash";
+export const GEMINI_MODEL = "gemini-2.5-flash";
