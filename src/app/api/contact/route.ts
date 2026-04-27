@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { sendContactEmail } from "@/lib/email";
+import { checkRateLimitAsync, getClientIp } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -11,6 +12,10 @@ const schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = await checkRateLimitAsync({ key: `contact:${ip}`, limit: 5, windowSecs: 3600 });
+  if (rl) return rl;
+
   try {
     const body = schema.parse(await req.json());
     await sendContactEmail(body);
