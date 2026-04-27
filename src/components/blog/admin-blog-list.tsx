@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Pencil, Trash2, Plus, Eye, EyeOff } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye, EyeOff, FileText } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 import { PageHeader } from "@/components/shared/page-header";
 
 interface BlogPost {
@@ -94,15 +95,12 @@ export function AdminBlogList() {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       {!loading && posts.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            No hay artículos todavía.{" "}
-            <Link href="/admin/blog/new" className="text-primary underline">
-              Crea el primero
-            </Link>
-            .
-          </CardContent>
-        </Card>
+        <EmptyState
+          title="Sin artículos"
+          description="Aún no has publicado ningún artículo."
+          icon={FileText}
+          action={{ label: "Crear artículo", href: "/admin/blog/new" }}
+        />
       )}
 
       <div className="space-y-3">

@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import {
   Mail, Calendar, Search, ChevronDown, ChevronUp,
   CheckCircle2, Circle, BookOpen, FileQuestion, Trophy,
-  Video, FileText, Gamepad2, Award,
+  Video, FileText, Gamepad2, Award, Users,
 } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 import type { CourseProgressOverview, StudentProgressDetail } from "@/lib/course-service";
 import { UnenrollButton } from "@/components/instructor/unenroll-button";
 
@@ -248,11 +249,13 @@ export function StudentsProgressClient({ courseId, courseTitle, data }: Students
         </CardHeader>
         <CardContent>
           {filtered.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">
-              {data.students.length === 0
+            <EmptyState
+              title={data.students.length === 0 ? "Sin alumnos inscritos" : "Sin resultados"}
+              description={data.students.length === 0
                 ? "Aún no hay alumnos inscritos en este curso."
                 : "No se encontraron alumnos con ese criterio."}
-            </p>
+              icon={Users}
+            />
           ) : (
             <div className="space-y-3">
               {filtered.map((student) => (

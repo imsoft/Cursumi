@@ -3,7 +3,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarDays, User } from "lucide-react";
+import { CalendarDays, Newspaper, User } from "lucide-react";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
 export const revalidate = 300;
 
@@ -49,7 +50,15 @@ export default async function BlogPage() {
       </div>
 
       {posts.length === 0 && (
-        <p className="text-center text-muted-foreground">Próximamente el primer artículo.</p>
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Newspaper />
+            </EmptyMedia>
+            <EmptyTitle>Próximamente</EmptyTitle>
+            <EmptyDescription>Pronto publicaremos el primer artículo. ¡Vuelve más tarde!</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       )}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

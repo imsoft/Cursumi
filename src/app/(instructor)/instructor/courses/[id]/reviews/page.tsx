@@ -3,7 +3,8 @@ import { getCourseDetailForUser, getInstructorCourseReviews } from "@/app/action
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, Star, MessageSquare } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 import { formatDateLongMX } from "@/lib/date-format";
 
 function Stars({ value }: { value: number }) {
@@ -109,7 +110,11 @@ export default async function InstructorCourseReviewsPage({
         </CardHeader>
         <CardContent className="space-y-4">
           {reviews.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aún no hay reseñas en este curso.</p>
+            <EmptyState
+              title="Sin reseñas"
+              description="Aún no hay reseñas en este curso."
+              icon={MessageSquare}
+            />
           ) : (
             <ul className="divide-y divide-border">
               {reviews.map((r) => (

@@ -9,7 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, PlusCircle, ToggleLeft, ToggleRight } from "lucide-react";
+import { Trash2, PlusCircle, ToggleLeft, ToggleRight, TicketPercent } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 import { DatePickerField } from "@/components/ui/date-picker";
 
 interface Coupon {
@@ -178,7 +179,12 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
           </Card>
         ))}
         {coupons.length === 0 && (
-          <p className="py-8 text-center text-sm text-muted-foreground">No hay cupones. Crea el primero.</p>
+          <EmptyState
+            title="Sin cupones"
+            description="Aún no has creado ningún cupón."
+            icon={TicketPercent}
+            action={{ label: "Crear cupón", onClick: () => setShowForm(true) }}
+          />
         )}
       </div>
     </div>
