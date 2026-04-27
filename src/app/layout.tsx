@@ -7,8 +7,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-const ogImage =
-  "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80";
+const ogImage = `${siteUrl}/api/og`;
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -96,6 +95,13 @@ export const metadata: Metadata = {
     description:
       "Cursos virtuales y presenciales con instructores expertos. Aprende, practica y consigue resultados reales.",
     images: [ogImage],
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
   },
   robots: {
     index: true,

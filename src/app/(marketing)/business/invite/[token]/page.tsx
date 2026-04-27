@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSessionSafe } from "@/lib/session";
 import { AcceptInviteClient } from "@/components/business/accept-invite-client";
+
+export const metadata: Metadata = {
+  title: "Invitación de organización | Cursumi",
+  robots: { index: false, follow: false },
+};
 
 interface Props {
   params: Promise<{ token: string }>;
