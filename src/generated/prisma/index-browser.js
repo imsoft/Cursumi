@@ -614,6 +614,21 @@ exports.Prisma.PushSubscriptionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BlogPostScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  excerpt: 'excerpt',
+  content: 'content',
+  coverImageUrl: 'coverImageUrl',
+  published: 'published',
+  publishedAt: 'publishedAt',
+  tags: 'tags',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -785,7 +800,8 @@ exports.Prisma.ModelName = {
   CourseNote: 'CourseNote',
   WishlistItem: 'WishlistItem',
   Referral: 'Referral',
-  PushSubscription: 'PushSubscription'
+  PushSubscription: 'PushSubscription',
+  BlogPost: 'BlogPost'
 };
 
 /**

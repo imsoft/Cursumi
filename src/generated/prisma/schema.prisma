@@ -64,6 +64,7 @@ model User {
   referralCommissions Referral[]
   /// Entrada de referido de este usuario (solo existe si fue referido por alguien)
   referralEntry       Referral?  @relation("ReferredUser")
+  blogPosts           BlogPost[] @relation("BlogAuthor")
 }
 
 model Account {
@@ -561,6 +562,7 @@ model Transaction {
   @@index([userId])
   @@index([courseId])
   @@index([status])
+  @@index([userId, courseId, status]) // acelera findFirst en checkout (pending transactions)
 }
 
 // ─────────────────────────────────────────
@@ -990,4 +992,28 @@ model PushSubscription {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+// ─────────────────────────────────────────
+// BLOG
+// ─────────────────────────────────────────
+
+model BlogPost {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  excerpt       String?
+  content       String    @db.Text
+  coverImageUrl String?
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+  tags          String[]  @default([])
+  authorId      String
+  author        User      @relation("BlogAuthor", fields: [authorId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([published])
+  @@index([slug])
+  @@index([authorId])
 }

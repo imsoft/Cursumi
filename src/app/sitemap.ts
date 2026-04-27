@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedCourseIdsForSitemap } from "@/lib/course-service";
+import { prisma } from "@/lib/prisma";
 
 const siteUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/$/, "");
 
@@ -20,6 +21,7 @@ const staticRoutes: StaticRoute[] = [
   { url: `${siteUrl}/terminos`,      changeFrequency: "yearly",  priority: 0.3 },
   { url: `${siteUrl}/pricing`,       changeFrequency: "monthly", priority: 0.7 },
   { url: `${siteUrl}/business`,      changeFrequency: "monthly", priority: 0.7 },
+  { url: `${siteUrl}/blog`,          changeFrequency: "weekly",  priority: 0.8 },
   { url: `${siteUrl}/login`,         changeFrequency: "monthly", priority: 0.5 },
   { url: `${siteUrl}/signup`,        changeFrequency: "monthly", priority: 0.5 },
 ];
@@ -47,5 +49,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Si la BD no está disponible (build time), solo devolver rutas estáticas
   }
 
-  return [...staticEntries, ...courseEntries];
+  let blogEntries: MetadataRoute.Sitemap = [];
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { published: true },
+      select: { slug: true, updatedAt: true },
+    });
+    blogEntries = posts.map((post) => ({
+      url: `${siteUrl}/blog/${post.slug}`,
+      lastModified: post.updatedAt,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
+  } catch {
+    // BD no disponible en build time
+  }
+
+  return [...staticEntries, ...courseEntries, ...blogEntries];
 }

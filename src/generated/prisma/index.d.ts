@@ -228,6 +228,11 @@ export type Referral = $Result.DefaultSelection<Prisma.$ReferralPayload>
  * 
  */
 export type PushSubscription = $Result.DefaultSelection<Prisma.$PushSubscriptionPayload>
+/**
+ * Model BlogPost
+ * 
+ */
+export type BlogPost = $Result.DefaultSelection<Prisma.$BlogPostPayload>
 
 /**
  * Enums
@@ -991,6 +996,16 @@ export class PrismaClient<
     * ```
     */
   get pushSubscription(): Prisma.PushSubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.blogPost`: Exposes CRUD operations for the **BlogPost** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BlogPosts
+    * const blogPosts = await prisma.blogPost.findMany()
+    * ```
+    */
+  get blogPost(): Prisma.BlogPostDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1467,7 +1482,8 @@ export namespace Prisma {
     CourseNote: 'CourseNote',
     WishlistItem: 'WishlistItem',
     Referral: 'Referral',
-    PushSubscription: 'PushSubscription'
+    PushSubscription: 'PushSubscription',
+    BlogPost: 'BlogPost'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1483,7 +1499,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4669,6 +4685,80 @@ export namespace Prisma {
           }
         }
       }
+      BlogPost: {
+        payload: Prisma.$BlogPostPayload<ExtArgs>
+        fields: Prisma.BlogPostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BlogPostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BlogPostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          findFirst: {
+            args: Prisma.BlogPostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BlogPostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          findMany: {
+            args: Prisma.BlogPostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>[]
+          }
+          create: {
+            args: Prisma.BlogPostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          createMany: {
+            args: Prisma.BlogPostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BlogPostCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>[]
+          }
+          delete: {
+            args: Prisma.BlogPostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          update: {
+            args: Prisma.BlogPostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          deleteMany: {
+            args: Prisma.BlogPostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BlogPostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BlogPostUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>[]
+          }
+          upsert: {
+            args: Prisma.BlogPostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BlogPostPayload>
+          }
+          aggregate: {
+            args: Prisma.BlogPostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBlogPost>
+          }
+          groupBy: {
+            args: Prisma.BlogPostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BlogPostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BlogPostCountArgs<ExtArgs>
+            result: $Utils.Optional<BlogPostCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4820,6 +4910,7 @@ export namespace Prisma {
     wishlistItem?: WishlistItemOmit
     referral?: ReferralOmit
     pushSubscription?: PushSubscriptionOmit
+    blogPost?: BlogPostOmit
   }
 
   /* Types for Logging */
@@ -4921,6 +5012,7 @@ export namespace Prisma {
     pushSubscriptions: number
     referrals: number
     referralCommissions: number
+    blogPosts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4945,6 +5037,7 @@ export namespace Prisma {
     pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
     referrals?: boolean | UserCountOutputTypeCountReferralsArgs
     referralCommissions?: boolean | UserCountOutputTypeCountReferralCommissionsArgs
+    blogPosts?: boolean | UserCountOutputTypeCountBlogPostsArgs
   }
 
   // Custom InputTypes
@@ -5103,6 +5196,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountReferralCommissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReferralWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBlogPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BlogPostWhereInput
   }
 
 
@@ -6022,6 +6122,7 @@ export namespace Prisma {
     referrals?: boolean | User$referralsArgs<ExtArgs>
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
     referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
+    blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6117,6 +6218,7 @@ export namespace Prisma {
     referrals?: boolean | User$referralsArgs<ExtArgs>
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
     referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
+    blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6160,6 +6262,7 @@ export namespace Prisma {
        * Entrada de referido de este usuario (solo existe si fue referido por alguien)
        */
       referralEntry: Prisma.$ReferralPayload<ExtArgs> | null
+      blogPosts: Prisma.$BlogPostPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6608,6 +6711,7 @@ export namespace Prisma {
     referrals<T extends User$referralsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     referralCommissions<T extends User$referralCommissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralCommissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     referralEntry<T extends User$referralEntryArgs<ExtArgs> = {}>(args?: Subset<T, User$referralEntryArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    blogPosts<T extends User$blogPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7628,6 +7732,30 @@ export namespace Prisma {
      */
     include?: ReferralInclude<ExtArgs> | null
     where?: ReferralWhereInput
+  }
+
+  /**
+   * User.blogPosts
+   */
+  export type User$blogPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    where?: BlogPostWhereInput
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    cursor?: BlogPostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
   }
 
   /**
@@ -55864,6 +55992,1151 @@ export namespace Prisma {
 
 
   /**
+   * Model BlogPost
+   */
+
+  export type AggregateBlogPost = {
+    _count: BlogPostCountAggregateOutputType | null
+    _min: BlogPostMinAggregateOutputType | null
+    _max: BlogPostMaxAggregateOutputType | null
+  }
+
+  export type BlogPostMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    slug: string | null
+    excerpt: string | null
+    content: string | null
+    coverImageUrl: string | null
+    published: boolean | null
+    publishedAt: Date | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BlogPostMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    slug: string | null
+    excerpt: string | null
+    content: string | null
+    coverImageUrl: string | null
+    published: boolean | null
+    publishedAt: Date | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BlogPostCountAggregateOutputType = {
+    id: number
+    title: number
+    slug: number
+    excerpt: number
+    content: number
+    coverImageUrl: number
+    published: number
+    publishedAt: number
+    tags: number
+    authorId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BlogPostMinAggregateInputType = {
+    id?: true
+    title?: true
+    slug?: true
+    excerpt?: true
+    content?: true
+    coverImageUrl?: true
+    published?: true
+    publishedAt?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BlogPostMaxAggregateInputType = {
+    id?: true
+    title?: true
+    slug?: true
+    excerpt?: true
+    content?: true
+    coverImageUrl?: true
+    published?: true
+    publishedAt?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BlogPostCountAggregateInputType = {
+    id?: true
+    title?: true
+    slug?: true
+    excerpt?: true
+    content?: true
+    coverImageUrl?: true
+    published?: true
+    publishedAt?: true
+    tags?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BlogPostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BlogPost to aggregate.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BlogPosts
+    **/
+    _count?: true | BlogPostCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BlogPostMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BlogPostMaxAggregateInputType
+  }
+
+  export type GetBlogPostAggregateType<T extends BlogPostAggregateArgs> = {
+        [P in keyof T & keyof AggregateBlogPost]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBlogPost[P]>
+      : GetScalarType<T[P], AggregateBlogPost[P]>
+  }
+
+
+
+
+  export type BlogPostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BlogPostWhereInput
+    orderBy?: BlogPostOrderByWithAggregationInput | BlogPostOrderByWithAggregationInput[]
+    by: BlogPostScalarFieldEnum[] | BlogPostScalarFieldEnum
+    having?: BlogPostScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BlogPostCountAggregateInputType | true
+    _min?: BlogPostMinAggregateInputType
+    _max?: BlogPostMaxAggregateInputType
+  }
+
+  export type BlogPostGroupByOutputType = {
+    id: string
+    title: string
+    slug: string
+    excerpt: string | null
+    content: string
+    coverImageUrl: string | null
+    published: boolean
+    publishedAt: Date | null
+    tags: string[]
+    authorId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: BlogPostCountAggregateOutputType | null
+    _min: BlogPostMinAggregateOutputType | null
+    _max: BlogPostMaxAggregateOutputType | null
+  }
+
+  type GetBlogPostGroupByPayload<T extends BlogPostGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BlogPostGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BlogPostGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BlogPostGroupByOutputType[P]>
+            : GetScalarType<T[P], BlogPostGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BlogPostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    excerpt?: boolean
+    content?: boolean
+    coverImageUrl?: boolean
+    published?: boolean
+    publishedAt?: boolean
+    tags?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["blogPost"]>
+
+  export type BlogPostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    excerpt?: boolean
+    content?: boolean
+    coverImageUrl?: boolean
+    published?: boolean
+    publishedAt?: boolean
+    tags?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["blogPost"]>
+
+  export type BlogPostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    excerpt?: boolean
+    content?: boolean
+    coverImageUrl?: boolean
+    published?: boolean
+    publishedAt?: boolean
+    tags?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["blogPost"]>
+
+  export type BlogPostSelectScalar = {
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    excerpt?: boolean
+    content?: boolean
+    coverImageUrl?: boolean
+    published?: boolean
+    publishedAt?: boolean
+    tags?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BlogPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "coverImageUrl" | "published" | "publishedAt" | "tags" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["blogPost"]>
+  export type BlogPostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BlogPostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BlogPostIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BlogPostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BlogPost"
+    objects: {
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      slug: string
+      excerpt: string | null
+      content: string
+      coverImageUrl: string | null
+      published: boolean
+      publishedAt: Date | null
+      tags: string[]
+      authorId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["blogPost"]>
+    composites: {}
+  }
+
+  type BlogPostGetPayload<S extends boolean | null | undefined | BlogPostDefaultArgs> = $Result.GetResult<Prisma.$BlogPostPayload, S>
+
+  type BlogPostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BlogPostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BlogPostCountAggregateInputType | true
+    }
+
+  export interface BlogPostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BlogPost'], meta: { name: 'BlogPost' } }
+    /**
+     * Find zero or one BlogPost that matches the filter.
+     * @param {BlogPostFindUniqueArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BlogPostFindUniqueArgs>(args: SelectSubset<T, BlogPostFindUniqueArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BlogPost that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BlogPostFindUniqueOrThrowArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BlogPostFindUniqueOrThrowArgs>(args: SelectSubset<T, BlogPostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BlogPost that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostFindFirstArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BlogPostFindFirstArgs>(args?: SelectSubset<T, BlogPostFindFirstArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BlogPost that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostFindFirstOrThrowArgs} args - Arguments to find a BlogPost
+     * @example
+     * // Get one BlogPost
+     * const blogPost = await prisma.blogPost.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BlogPostFindFirstOrThrowArgs>(args?: SelectSubset<T, BlogPostFindFirstOrThrowArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BlogPosts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BlogPosts
+     * const blogPosts = await prisma.blogPost.findMany()
+     * 
+     * // Get first 10 BlogPosts
+     * const blogPosts = await prisma.blogPost.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const blogPostWithIdOnly = await prisma.blogPost.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BlogPostFindManyArgs>(args?: SelectSubset<T, BlogPostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BlogPost.
+     * @param {BlogPostCreateArgs} args - Arguments to create a BlogPost.
+     * @example
+     * // Create one BlogPost
+     * const BlogPost = await prisma.blogPost.create({
+     *   data: {
+     *     // ... data to create a BlogPost
+     *   }
+     * })
+     * 
+     */
+    create<T extends BlogPostCreateArgs>(args: SelectSubset<T, BlogPostCreateArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BlogPosts.
+     * @param {BlogPostCreateManyArgs} args - Arguments to create many BlogPosts.
+     * @example
+     * // Create many BlogPosts
+     * const blogPost = await prisma.blogPost.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BlogPostCreateManyArgs>(args?: SelectSubset<T, BlogPostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BlogPosts and returns the data saved in the database.
+     * @param {BlogPostCreateManyAndReturnArgs} args - Arguments to create many BlogPosts.
+     * @example
+     * // Create many BlogPosts
+     * const blogPost = await prisma.blogPost.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BlogPosts and only return the `id`
+     * const blogPostWithIdOnly = await prisma.blogPost.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BlogPostCreateManyAndReturnArgs>(args?: SelectSubset<T, BlogPostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BlogPost.
+     * @param {BlogPostDeleteArgs} args - Arguments to delete one BlogPost.
+     * @example
+     * // Delete one BlogPost
+     * const BlogPost = await prisma.blogPost.delete({
+     *   where: {
+     *     // ... filter to delete one BlogPost
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BlogPostDeleteArgs>(args: SelectSubset<T, BlogPostDeleteArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BlogPost.
+     * @param {BlogPostUpdateArgs} args - Arguments to update one BlogPost.
+     * @example
+     * // Update one BlogPost
+     * const blogPost = await prisma.blogPost.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BlogPostUpdateArgs>(args: SelectSubset<T, BlogPostUpdateArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BlogPosts.
+     * @param {BlogPostDeleteManyArgs} args - Arguments to filter BlogPosts to delete.
+     * @example
+     * // Delete a few BlogPosts
+     * const { count } = await prisma.blogPost.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BlogPostDeleteManyArgs>(args?: SelectSubset<T, BlogPostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BlogPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BlogPosts
+     * const blogPost = await prisma.blogPost.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BlogPostUpdateManyArgs>(args: SelectSubset<T, BlogPostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BlogPosts and returns the data updated in the database.
+     * @param {BlogPostUpdateManyAndReturnArgs} args - Arguments to update many BlogPosts.
+     * @example
+     * // Update many BlogPosts
+     * const blogPost = await prisma.blogPost.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BlogPosts and only return the `id`
+     * const blogPostWithIdOnly = await prisma.blogPost.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BlogPostUpdateManyAndReturnArgs>(args: SelectSubset<T, BlogPostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BlogPost.
+     * @param {BlogPostUpsertArgs} args - Arguments to update or create a BlogPost.
+     * @example
+     * // Update or create a BlogPost
+     * const blogPost = await prisma.blogPost.upsert({
+     *   create: {
+     *     // ... data to create a BlogPost
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BlogPost we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BlogPostUpsertArgs>(args: SelectSubset<T, BlogPostUpsertArgs<ExtArgs>>): Prisma__BlogPostClient<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BlogPosts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostCountArgs} args - Arguments to filter BlogPosts to count.
+     * @example
+     * // Count the number of BlogPosts
+     * const count = await prisma.blogPost.count({
+     *   where: {
+     *     // ... the filter for the BlogPosts we want to count
+     *   }
+     * })
+    **/
+    count<T extends BlogPostCountArgs>(
+      args?: Subset<T, BlogPostCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BlogPostCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BlogPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BlogPostAggregateArgs>(args: Subset<T, BlogPostAggregateArgs>): Prisma.PrismaPromise<GetBlogPostAggregateType<T>>
+
+    /**
+     * Group by BlogPost.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BlogPostGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BlogPostGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BlogPostGroupByArgs['orderBy'] }
+        : { orderBy?: BlogPostGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BlogPostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBlogPostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BlogPost model
+   */
+  readonly fields: BlogPostFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BlogPost.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BlogPostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BlogPost model
+   */
+  interface BlogPostFieldRefs {
+    readonly id: FieldRef<"BlogPost", 'String'>
+    readonly title: FieldRef<"BlogPost", 'String'>
+    readonly slug: FieldRef<"BlogPost", 'String'>
+    readonly excerpt: FieldRef<"BlogPost", 'String'>
+    readonly content: FieldRef<"BlogPost", 'String'>
+    readonly coverImageUrl: FieldRef<"BlogPost", 'String'>
+    readonly published: FieldRef<"BlogPost", 'Boolean'>
+    readonly publishedAt: FieldRef<"BlogPost", 'DateTime'>
+    readonly tags: FieldRef<"BlogPost", 'String[]'>
+    readonly authorId: FieldRef<"BlogPost", 'String'>
+    readonly createdAt: FieldRef<"BlogPost", 'DateTime'>
+    readonly updatedAt: FieldRef<"BlogPost", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BlogPost findUnique
+   */
+  export type BlogPostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost findUniqueOrThrow
+   */
+  export type BlogPostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost findFirst
+   */
+  export type BlogPostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BlogPosts.
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlogPosts.
+     */
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * BlogPost findFirstOrThrow
+   */
+  export type BlogPostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPost to fetch.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BlogPosts.
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BlogPosts.
+     */
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * BlogPost findMany
+   */
+  export type BlogPostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter, which BlogPosts to fetch.
+     */
+    where?: BlogPostWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BlogPosts to fetch.
+     */
+    orderBy?: BlogPostOrderByWithRelationInput | BlogPostOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BlogPosts.
+     */
+    cursor?: BlogPostWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BlogPosts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BlogPosts.
+     */
+    skip?: number
+    distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * BlogPost create
+   */
+  export type BlogPostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BlogPost.
+     */
+    data: XOR<BlogPostCreateInput, BlogPostUncheckedCreateInput>
+  }
+
+  /**
+   * BlogPost createMany
+   */
+  export type BlogPostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BlogPosts.
+     */
+    data: BlogPostCreateManyInput | BlogPostCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BlogPost createManyAndReturn
+   */
+  export type BlogPostCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * The data used to create many BlogPosts.
+     */
+    data: BlogPostCreateManyInput | BlogPostCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BlogPost update
+   */
+  export type BlogPostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BlogPost.
+     */
+    data: XOR<BlogPostUpdateInput, BlogPostUncheckedUpdateInput>
+    /**
+     * Choose, which BlogPost to update.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost updateMany
+   */
+  export type BlogPostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BlogPosts.
+     */
+    data: XOR<BlogPostUpdateManyMutationInput, BlogPostUncheckedUpdateManyInput>
+    /**
+     * Filter which BlogPosts to update
+     */
+    where?: BlogPostWhereInput
+    /**
+     * Limit how many BlogPosts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BlogPost updateManyAndReturn
+   */
+  export type BlogPostUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * The data used to update BlogPosts.
+     */
+    data: XOR<BlogPostUpdateManyMutationInput, BlogPostUncheckedUpdateManyInput>
+    /**
+     * Filter which BlogPosts to update
+     */
+    where?: BlogPostWhereInput
+    /**
+     * Limit how many BlogPosts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BlogPost upsert
+   */
+  export type BlogPostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BlogPost to update in case it exists.
+     */
+    where: BlogPostWhereUniqueInput
+    /**
+     * In case the BlogPost found by the `where` argument doesn't exist, create a new BlogPost with this data.
+     */
+    create: XOR<BlogPostCreateInput, BlogPostUncheckedCreateInput>
+    /**
+     * In case the BlogPost was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BlogPostUpdateInput, BlogPostUncheckedUpdateInput>
+  }
+
+  /**
+   * BlogPost delete
+   */
+  export type BlogPostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+    /**
+     * Filter which BlogPost to delete.
+     */
+    where: BlogPostWhereUniqueInput
+  }
+
+  /**
+   * BlogPost deleteMany
+   */
+  export type BlogPostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BlogPosts to delete
+     */
+    where?: BlogPostWhereInput
+    /**
+     * Limit how many BlogPosts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BlogPost without action
+   */
+  export type BlogPostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BlogPost
+     */
+    select?: BlogPostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BlogPost
+     */
+    omit?: BlogPostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BlogPostInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -56500,6 +57773,24 @@ export namespace Prisma {
   export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
 
 
+  export const BlogPostScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    slug: 'slug',
+    excerpt: 'excerpt',
+    content: 'content',
+    coverImageUrl: 'coverImageUrl',
+    published: 'published',
+    publishedAt: 'publishedAt',
+    tags: 'tags',
+    authorId: 'authorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BlogPostScalarFieldEnum = (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -56904,6 +58195,7 @@ export namespace Prisma {
     referrals?: UserListRelationFilter
     referralCommissions?: ReferralListRelationFilter
     referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
+    blogPosts?: BlogPostListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -56950,6 +58242,7 @@ export namespace Prisma {
     referrals?: UserOrderByRelationAggregateInput
     referralCommissions?: ReferralOrderByRelationAggregateInput
     referralEntry?: ReferralOrderByWithRelationInput
+    blogPosts?: BlogPostOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -56999,6 +58292,7 @@ export namespace Prisma {
     referrals?: UserListRelationFilter
     referralCommissions?: ReferralListRelationFilter
     referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
+    blogPosts?: BlogPostListRelationFilter
   }, "id" | "email" | "referralCode">
 
   export type UserOrderByWithAggregationInput = {
@@ -60301,6 +61595,96 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"PushSubscription"> | Date | string
   }
 
+  export type BlogPostWhereInput = {
+    AND?: BlogPostWhereInput | BlogPostWhereInput[]
+    OR?: BlogPostWhereInput[]
+    NOT?: BlogPostWhereInput | BlogPostWhereInput[]
+    id?: StringFilter<"BlogPost"> | string
+    title?: StringFilter<"BlogPost"> | string
+    slug?: StringFilter<"BlogPost"> | string
+    excerpt?: StringNullableFilter<"BlogPost"> | string | null
+    content?: StringFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableFilter<"BlogPost"> | string | null
+    published?: BoolFilter<"BlogPost"> | boolean
+    publishedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    tags?: StringNullableListFilter<"BlogPost">
+    authorId?: StringFilter<"BlogPost"> | string
+    createdAt?: DateTimeFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type BlogPostOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrderInput | SortOrder
+    content?: SortOrder
+    coverImageUrl?: SortOrderInput | SortOrder
+    published?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    tags?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type BlogPostWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: BlogPostWhereInput | BlogPostWhereInput[]
+    OR?: BlogPostWhereInput[]
+    NOT?: BlogPostWhereInput | BlogPostWhereInput[]
+    title?: StringFilter<"BlogPost"> | string
+    excerpt?: StringNullableFilter<"BlogPost"> | string | null
+    content?: StringFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableFilter<"BlogPost"> | string | null
+    published?: BoolFilter<"BlogPost"> | boolean
+    publishedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    tags?: StringNullableListFilter<"BlogPost">
+    authorId?: StringFilter<"BlogPost"> | string
+    createdAt?: DateTimeFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "slug">
+
+  export type BlogPostOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrderInput | SortOrder
+    content?: SortOrder
+    coverImageUrl?: SortOrderInput | SortOrder
+    published?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    tags?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BlogPostCountOrderByAggregateInput
+    _max?: BlogPostMaxOrderByAggregateInput
+    _min?: BlogPostMinOrderByAggregateInput
+  }
+
+  export type BlogPostScalarWhereWithAggregatesInput = {
+    AND?: BlogPostScalarWhereWithAggregatesInput | BlogPostScalarWhereWithAggregatesInput[]
+    OR?: BlogPostScalarWhereWithAggregatesInput[]
+    NOT?: BlogPostScalarWhereWithAggregatesInput | BlogPostScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BlogPost"> | string
+    title?: StringWithAggregatesFilter<"BlogPost"> | string
+    slug?: StringWithAggregatesFilter<"BlogPost"> | string
+    excerpt?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    content?: StringWithAggregatesFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableWithAggregatesFilter<"BlogPost"> | string | null
+    published?: BoolWithAggregatesFilter<"BlogPost"> | boolean
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"BlogPost"> | Date | string | null
+    tags?: StringNullableListFilter<"BlogPost">
+    authorId?: StringWithAggregatesFilter<"BlogPost"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BlogPost"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -60344,6 +61728,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -60389,6 +61774,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUpdateInput = {
@@ -60434,6 +61820,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -60479,6 +61866,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -63960,6 +65348,110 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BlogPostCreateInput = {
+    id?: string
+    title: string
+    slug: string
+    excerpt?: string | null
+    content: string
+    coverImageUrl?: string | null
+    published?: boolean
+    publishedAt?: Date | string | null
+    tags?: BlogPostCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutBlogPostsInput
+  }
+
+  export type BlogPostUncheckedCreateInput = {
+    id?: string
+    title: string
+    slug: string
+    excerpt?: string | null
+    content: string
+    coverImageUrl?: string | null
+    published?: boolean
+    publishedAt?: Date | string | null
+    tags?: BlogPostCreatetagsInput | string[]
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutBlogPostsNestedInput
+  }
+
+  export type BlogPostUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostCreateManyInput = {
+    id?: string
+    title: string
+    slug: string
+    excerpt?: string | null
+    content: string
+    coverImageUrl?: string | null
+    published?: boolean
+    publishedAt?: Date | string | null
+    tags?: BlogPostCreatetagsInput | string[]
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -64153,6 +65645,12 @@ export namespace Prisma {
     isNot?: ReferralWhereInput | null
   }
 
+  export type BlogPostListRelationFilter = {
+    every?: BlogPostWhereInput
+    some?: BlogPostWhereInput
+    none?: BlogPostWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -64235,6 +65733,10 @@ export namespace Prisma {
   }
 
   export type ReferralOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BlogPostOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -66730,6 +68232,57 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type BlogPostCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    content?: SortOrder
+    coverImageUrl?: SortOrder
+    published?: SortOrder
+    publishedAt?: SortOrder
+    tags?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BlogPostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    content?: SortOrder
+    coverImageUrl?: SortOrder
+    published?: SortOrder
+    publishedAt?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BlogPostMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    excerpt?: SortOrder
+    content?: SortOrder
+    coverImageUrl?: SortOrder
+    published?: SortOrder
+    publishedAt?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -66901,6 +68454,13 @@ export namespace Prisma {
     connect?: ReferralWhereUniqueInput
   }
 
+  export type BlogPostCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -67064,6 +68624,13 @@ export namespace Prisma {
     create?: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
     connectOrCreate?: ReferralCreateOrConnectWithoutReferredUserInput
     connect?: ReferralWhereUniqueInput
+  }
+
+  export type BlogPostUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -67420,6 +68987,20 @@ export namespace Prisma {
     update?: XOR<XOR<ReferralUpdateToOneWithWhereWithoutReferredUserInput, ReferralUpdateWithoutReferredUserInput>, ReferralUncheckedUpdateWithoutReferredUserInput>
   }
 
+  export type BlogPostUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    upsert?: BlogPostUpsertWithWhereUniqueWithoutAuthorInput | BlogPostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    set?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    disconnect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    delete?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    update?: BlogPostUpdateWithWhereUniqueWithoutAuthorInput | BlogPostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: BlogPostUpdateManyWithWhereWithoutAuthorInput | BlogPostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -67742,6 +69323,20 @@ export namespace Prisma {
     delete?: ReferralWhereInput | boolean
     connect?: ReferralWhereUniqueInput
     update?: XOR<XOR<ReferralUpdateToOneWithWhereWithoutReferredUserInput, ReferralUpdateWithoutReferredUserInput>, ReferralUncheckedUpdateWithoutReferredUserInput>
+  }
+
+  export type BlogPostUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput> | BlogPostCreateWithoutAuthorInput[] | BlogPostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
+    upsert?: BlogPostUpsertWithWhereUniqueWithoutAuthorInput | BlogPostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: BlogPostCreateManyAuthorInputEnvelope
+    set?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    disconnect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    delete?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+    update?: BlogPostUpdateWithWhereUniqueWithoutAuthorInput | BlogPostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: BlogPostUpdateManyWithWhereWithoutAuthorInput | BlogPostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -70514,6 +72109,29 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, UserUpdateWithoutPushSubscriptionsInput>, UserUncheckedUpdateWithoutPushSubscriptionsInput>
   }
 
+  export type BlogPostCreatetagsInput = {
+    set: string[]
+  }
+
+  export type UserCreateNestedOneWithoutBlogPostsInput = {
+    create?: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBlogPostsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BlogPostUpdatetagsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type UserUpdateOneRequiredWithoutBlogPostsNestedInput = {
+    create?: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBlogPostsInput
+    upsert?: UserUpsertWithoutBlogPostsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBlogPostsInput, UserUpdateWithoutBlogPostsInput>, UserUncheckedUpdateWithoutBlogPostsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -71805,6 +73423,7 @@ export namespace Prisma {
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -71849,6 +73468,7 @@ export namespace Prisma {
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -71898,6 +73518,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReferredByInput = {
@@ -71942,6 +73563,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReferredByInput = {
@@ -72007,6 +73629,44 @@ export namespace Prisma {
   export type ReferralCreateOrConnectWithoutReferredUserInput = {
     where: ReferralWhereUniqueInput
     create: XOR<ReferralCreateWithoutReferredUserInput, ReferralUncheckedCreateWithoutReferredUserInput>
+  }
+
+  export type BlogPostCreateWithoutAuthorInput = {
+    id?: string
+    title: string
+    slug: string
+    excerpt?: string | null
+    content: string
+    coverImageUrl?: string | null
+    published?: boolean
+    publishedAt?: Date | string | null
+    tags?: BlogPostCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    title: string
+    slug: string
+    excerpt?: string | null
+    content: string
+    coverImageUrl?: string | null
+    published?: boolean
+    publishedAt?: Date | string | null
+    tags?: BlogPostCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostCreateOrConnectWithoutAuthorInput = {
+    where: BlogPostWhereUniqueInput
+    create: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type BlogPostCreateManyAuthorInputEnvelope = {
+    data: BlogPostCreateManyAuthorInput | BlogPostCreateManyAuthorInput[]
+    skipDuplicates?: boolean
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -72710,6 +74370,7 @@ export namespace Prisma {
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -72754,6 +74415,7 @@ export namespace Prisma {
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
@@ -72857,6 +74519,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BlogPostUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: BlogPostWhereUniqueInput
+    update: XOR<BlogPostUpdateWithoutAuthorInput, BlogPostUncheckedUpdateWithoutAuthorInput>
+    create: XOR<BlogPostCreateWithoutAuthorInput, BlogPostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type BlogPostUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: BlogPostWhereUniqueInput
+    data: XOR<BlogPostUpdateWithoutAuthorInput, BlogPostUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type BlogPostUpdateManyWithWhereWithoutAuthorInput = {
+    where: BlogPostScalarWhereInput
+    data: XOR<BlogPostUpdateManyMutationInput, BlogPostUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type BlogPostScalarWhereInput = {
+    AND?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
+    OR?: BlogPostScalarWhereInput[]
+    NOT?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
+    id?: StringFilter<"BlogPost"> | string
+    title?: StringFilter<"BlogPost"> | string
+    slug?: StringFilter<"BlogPost"> | string
+    excerpt?: StringNullableFilter<"BlogPost"> | string | null
+    content?: StringFilter<"BlogPost"> | string
+    coverImageUrl?: StringNullableFilter<"BlogPost"> | string | null
+    published?: BoolFilter<"BlogPost"> | boolean
+    publishedAt?: DateTimeNullableFilter<"BlogPost"> | Date | string | null
+    tags?: StringNullableListFilter<"BlogPost">
+    authorId?: StringFilter<"BlogPost"> | string
+    createdAt?: DateTimeFilter<"BlogPost"> | Date | string
+    updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -72899,6 +74595,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -72943,6 +74640,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -73003,6 +74701,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -73047,6 +74746,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -73091,6 +74791,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -73135,6 +74836,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -73195,6 +74897,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -73239,6 +74942,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutInstructorApplicationInput = {
@@ -73283,6 +74987,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutInstructorApplicationInput = {
@@ -73327,6 +75032,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutInstructorApplicationInput = {
@@ -73387,6 +75093,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorApplicationInput = {
@@ -73431,6 +75138,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutInstructorProfileInput = {
@@ -73475,6 +75183,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutInstructorProfileInput = {
@@ -73519,6 +75228,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutInstructorProfileInput = {
@@ -73579,6 +75289,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorProfileInput = {
@@ -73623,6 +75334,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseCreateWithoutCategoryRefInput = {
@@ -73773,6 +75485,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutInstructorCoursesInput = {
@@ -73817,6 +75530,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutInstructorCoursesInput = {
@@ -74304,6 +76018,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorCoursesInput = {
@@ -74348,6 +76063,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -75740,6 +77456,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -75784,6 +77501,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -75978,6 +77696,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -76022,6 +77741,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseCreateWithoutEnrollmentsInput = {
@@ -76151,6 +77871,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -76195,6 +77916,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -76584,6 +78306,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -76628,6 +78351,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseSessionUpsertWithoutEnrollmentsInput = {
@@ -77050,6 +78774,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutLearningReflectionsInput = {
@@ -77094,6 +78819,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutLearningReflectionsInput = {
@@ -77292,6 +79018,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -77336,6 +79063,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
@@ -77661,6 +79389,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -77705,6 +79434,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -77897,6 +79627,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -77941,6 +79672,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -78117,6 +79849,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -78161,6 +79894,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -78378,6 +80112,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -78422,6 +80157,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseUpsertWithoutTransactionsInput = {
@@ -78673,6 +80409,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -78717,6 +80454,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -78868,6 +80606,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -78912,6 +80651,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -78956,6 +80696,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -79000,6 +80741,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -79060,6 +80802,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -79104,6 +80847,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseCreateWithoutConversationsInput = {
@@ -79233,6 +80977,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutStudentConversationsInput = {
@@ -79277,6 +81022,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutStudentConversationsInput = {
@@ -79326,6 +81072,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutInstructorConversationsInput = {
@@ -79370,6 +81117,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutInstructorConversationsInput = {
@@ -79547,6 +81295,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentConversationsInput = {
@@ -79591,6 +81340,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutInstructorConversationsInput = {
@@ -79646,6 +81396,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorConversationsInput = {
@@ -79690,6 +81441,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -79773,6 +81525,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -79817,6 +81570,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -79906,6 +81660,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -79950,6 +81705,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutHostedGamesInput = {
@@ -79994,6 +81750,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutHostedGamesInput = {
@@ -80038,6 +81795,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutHostedGamesInput = {
@@ -80188,6 +81946,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedGamesInput = {
@@ -80232,6 +81991,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type QuizGameQuestionUpsertWithWhereUniqueWithoutGameInput = {
@@ -80503,6 +82263,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutGameParticipationsInput = {
@@ -80547,6 +82308,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutGameParticipationsInput = {
@@ -80676,6 +82438,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGameParticipationsInput = {
@@ -80720,6 +82483,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type QuizGameAnswerUpsertWithWhereUniqueWithoutParticipantInput = {
@@ -81399,6 +83163,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutOrgMembershipsInput = {
@@ -81443,6 +83208,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutOrgMembershipsInput = {
@@ -81570,6 +83336,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrgMembershipsInput = {
@@ -81614,6 +83381,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TeamMemberUpsertWithWhereUniqueWithoutMemberInput = {
@@ -82709,6 +84477,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCourseNotesInput = {
@@ -82753,6 +84522,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCourseNotesInput = {
@@ -82939,6 +84709,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourseNotesInput = {
@@ -82983,6 +84754,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseUpsertWithoutNotesInput = {
@@ -83165,6 +84937,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutWishlistItemsInput = {
@@ -83209,6 +84982,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutWishlistItemsInput = {
@@ -83354,6 +85128,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistItemsInput = {
@@ -83398,6 +85173,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type CourseUpsertWithoutWishlistItemsInput = {
@@ -83533,6 +85309,7 @@ export namespace Prisma {
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReferralCommissionsInput = {
@@ -83577,6 +85354,7 @@ export namespace Prisma {
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReferralCommissionsInput = {
@@ -83626,6 +85404,7 @@ export namespace Prisma {
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutReferralEntryInput = {
@@ -83670,6 +85449,7 @@ export namespace Prisma {
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutReferralEntryInput = {
@@ -83769,6 +85549,7 @@ export namespace Prisma {
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralCommissionsInput = {
@@ -83813,6 +85594,7 @@ export namespace Prisma {
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutReferralEntryInput = {
@@ -83868,6 +85650,7 @@ export namespace Prisma {
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralEntryInput = {
@@ -83912,6 +85695,7 @@ export namespace Prisma {
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TransactionUpsertWithoutReferralInput = {
@@ -84001,6 +85785,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
@@ -84045,6 +85830,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
@@ -84105,6 +85891,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
@@ -84146,6 +85933,203 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserCreateWithoutBlogPostsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBlogPostsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBlogPostsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+  }
+
+  export type UserUpsertWithoutBlogPostsInput = {
+    update: XOR<UserUpdateWithoutBlogPostsInput, UserUncheckedUpdateWithoutBlogPostsInput>
+    create: XOR<UserCreateWithoutBlogPostsInput, UserUncheckedCreateWithoutBlogPostsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBlogPostsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBlogPostsInput, UserUncheckedUpdateWithoutBlogPostsInput>
+  }
+
+  export type UserUpdateWithoutBlogPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBlogPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -84379,6 +86363,20 @@ export namespace Prisma {
     transactionId?: string | null
     commissionAmount?: number | null
     status?: $Enums.ReferralStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BlogPostCreateManyAuthorInput = {
+    id?: string
+    title: string
+    slug: string
+    excerpt?: string | null
+    content: string
+    coverImageUrl?: string | null
+    published?: boolean
+    publishedAt?: Date | string | null
+    tags?: BlogPostCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -85085,6 +87083,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredByInput = {
@@ -85129,6 +87128,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferredByInput = {
@@ -85177,6 +87177,48 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionAmount?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BlogPostUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    coverImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: BlogPostUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
