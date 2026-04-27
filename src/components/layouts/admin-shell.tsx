@@ -26,11 +26,13 @@ import {
   Award,
   PenLine,
   Sparkles,
+  Newspaper,
 } from "lucide-react";
 
 const adminNavItems = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Pizarrón virtual", href: "/admin/whiteboard", icon: PenLine },
+  { title: "Blog", href: "/admin/blog", icon: Newspaper },
   { title: "Usuarios", href: "/admin/users", icon: Users },
   { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
   { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },

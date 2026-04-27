@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { label: "Cursos", href: "/courses" },
+  { label: "Blog", href: "/blog" },
   { label: "Cómo funciona", href: "/how-it-works" },
   { label: "Precios", href: "/pricing" },
   { label: "Para instructores", href: "/instructors" },
