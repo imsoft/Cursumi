@@ -78,7 +78,7 @@ export function InstructorShell({
           user={{ name: userName, initials: userInitials, imageUrl: userImage }}
         />
         <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
-          <div className="flex min-w-0 w-full flex-1 flex-col gap-6">
+          <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-6">
             {children}
           </div>
         </div>

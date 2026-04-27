@@ -256,7 +256,7 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     <div
       ref={rootRef}
       className={cn(
-        "flex min-w-0 max-w-full flex-col gap-4",
+        "flex min-h-0 min-w-0 max-w-full flex-1 flex-col gap-4",
         isFullscreen &&
           "box-border flex h-[100dvh] max-h-[100dvh] w-full max-w-none flex-col overflow-hidden bg-background p-3 md:p-4",
         className,
@@ -346,8 +346,8 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
       <div
         ref={wrapRef}
         className={cn(
-          "relative w-full min-w-0 max-w-full shrink-0 overflow-hidden rounded-xl border border-border bg-muted/30",
-          isFullscreen ? "min-h-0 flex-1" : "h-[min(56vh,520px)] min-h-[260px]",
+          "relative w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-border bg-muted/30",
+          isFullscreen ? "min-h-0 flex-1" : "min-h-[260px] flex-1",
         )}
       >
         <canvas
