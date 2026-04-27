@@ -45,6 +45,7 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
+  const hasInitialized = useRef(false);
 
   const getCanvasSize = useCallback(() => {
     const wrap = wrapRef.current;
@@ -75,6 +76,18 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     const canvas = canvasRef.current;
     const size = getCanvasSize();
     if (!canvas || !size) return;
+
+    // Preserve existing content before changing canvas dimensions
+    // (assigning canvas.width/height always clears the bitmap)
+    let savedContent: HTMLCanvasElement | null = null;
+    if (hasInitialized.current && canvas.width > 0 && canvas.height > 0) {
+      const tmp = document.createElement("canvas");
+      tmp.width = canvas.width;
+      tmp.height = canvas.height;
+      tmp.getContext("2d")?.drawImage(canvas, 0, 0);
+      savedContent = tmp;
+    }
+
     const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
     canvas.width = Math.floor(size.w * dpr);
     canvas.height = Math.floor(size.h * dpr);
@@ -87,10 +100,18 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     ctx.lineJoin = "round";
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, size.w, size.h);
+
+    if (savedContent) {
+      // Scale old content to new dimensions
+      ctx.drawImage(savedContent, 0, 0, savedContent.width, savedContent.height, 0, 0, size.w, size.h);
+    }
+
     ctxRef.current = ctx;
-    const initial = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    undoRef.current = [initial];
+    // Reset undo/redo: old ImageData has wrong dimensions after resize
+    const snap = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    undoRef.current = [snap];
     redoRef.current = [];
+    hasInitialized.current = true;
     setReady(true);
   }, [getCanvasSize]);
 
