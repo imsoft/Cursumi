@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+import { ImagePlus, Loader2, Trash2, X } from "lucide-react";
+import { useImageUpload } from "@/hooks/use-image-upload";
 
 const schema = z.object({
   title: z.string().min(3, "Mínimo 3 caracteres").max(200),
@@ -24,7 +25,7 @@ const schema = z.object({
     .regex(/^[a-z0-9-]+$/, "Solo minúsculas, números y guiones"),
   excerpt: z.string().max(500, "Máximo 500 caracteres").optional(),
   content: z.string().min(1, "El contenido es obligatorio"),
-  coverImageUrl: z.string().url("URL inválida").optional().or(z.literal("")),
+  coverImageUrl: z.string().optional().or(z.literal("")),
   tags: z.array(z.string()).default([]),
   published: z.boolean().default(false),
 });
@@ -53,6 +54,17 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
   const [tagInput, setTagInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { upload, uploading } = useImageUpload({
+    endpoint: "/api/upload/blog-cover",
+    onSuccess: (url) => {
+      form.setValue("coverImageUrl", url, { shouldDirty: true });
+      setUploadError(null);
+    },
+    onError: (msg) => setUploadError(msg),
+  });
 
   const form = useForm<FormValues>({
     resolver: createZodResolver(schema),
@@ -220,23 +232,70 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
             <CardHeader>
               <CardTitle className="text-base">Imagen de portada</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <Input
-                {...form.register("coverImageUrl")}
-                placeholder="https://res.cloudinary.com/…"
+            <CardContent className="space-y-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) upload(file);
+                  e.target.value = "";
+                }}
               />
-              {form.formState.errors.coverImageUrl && (
-                <p className="text-xs text-destructive">
-                  {form.formState.errors.coverImageUrl.message}
-                </p>
+              {form.watch("coverImageUrl") ? (
+                <div className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={form.watch("coverImageUrl")}
+                    alt="Portada"
+                    className="h-40 w-full rounded-md object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center gap-2 rounded-md bg-black/40 opacity-0 transition-opacity hover:opacity-100">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                    >
+                      {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+                      Cambiar
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => form.setValue("coverImageUrl", "", { shouldDirty: true })}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="flex h-40 w-full flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border bg-muted/30 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {uploading ? (
+                    <>
+                      <Loader2 className="h-6 w-6 animate-spin" />
+                      Subiendo imagen…
+                    </>
+                  ) : (
+                    <>
+                      <ImagePlus className="h-6 w-6" />
+                      Subir imagen de portada
+                      <span className="text-xs">PNG, JPG, WebP · máx. 10 MB</span>
+                    </>
+                  )}
+                </button>
               )}
-              {form.watch("coverImageUrl") && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={form.watch("coverImageUrl")}
-                  alt="Portada"
-                  className="mt-2 h-32 w-full rounded-md object-cover"
-                />
+              {uploadError && (
+                <p className="text-xs text-destructive">{uploadError}</p>
               )}
             </CardContent>
           </Card>
