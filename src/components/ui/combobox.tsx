@@ -30,6 +30,8 @@ export interface ComboboxProps {
   emptyText?: string;
   disabled?: boolean;
   className?: string;
+  searchable?: boolean;
+  allowDeselect?: boolean;
 }
 
 export function Combobox({
@@ -43,6 +45,8 @@ export function Combobox({
   emptyText = "Sin resultados",
   disabled,
   className,
+  searchable = true,
+  allowDeselect = true,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -77,7 +81,7 @@ export function Combobox({
         </PopoverTrigger>
         <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
           <Command>
-            <CommandInput placeholder={searchPlaceholder} />
+            {searchable && <CommandInput placeholder={searchPlaceholder} />}
             <CommandList>
               <CommandEmpty>{emptyText}</CommandEmpty>
               <CommandGroup>
@@ -86,7 +90,11 @@ export function Combobox({
                     key={option.value}
                     value={option.label}
                     onSelect={() => {
-                      onValueChange(option.value === value ? "" : option.value);
+                      if (allowDeselect) {
+                        onValueChange(option.value === value ? "" : option.value);
+                      } else {
+                        onValueChange(option.value);
+                      }
                       setOpen(false);
                     }}
                   >

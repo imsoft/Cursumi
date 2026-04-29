@@ -802,6 +802,8 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                           { value: "true-false", label: "Verdadero / Falso" },
                           { value: "checkbox", label: "Casillas (varias correctas)" },
                         ]}
+                        searchable={false}
+                        allowDeselect={false}
                       />
                     </div>
                     <div>

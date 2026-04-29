@@ -190,6 +190,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
             label="Duración estimada *"
             {...form.register("duration")}
           />
+
           {form.formState.errors.duration && (
             <p className="mt-1 text-xs text-destructive">
               {form.formState.errors.duration.message}
