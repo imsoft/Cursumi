@@ -10,7 +10,7 @@ export async function DELETE() {
     const userId = session.user.id;
 
     // Revoke all sessions first so the cookie becomes invalid immediately
-    await auth.api.revokeUserSessions({
+    await auth.api.revokeSessions({
       headers: await headers(),
     });
 
