@@ -181,19 +181,15 @@ export const auth = betterAuth({
      * si un email está registrado en la plataforma.
      */
     after: createAuthMiddleware(async (ctx) => {
+      // NOTA: en better-auth 1.4.x, ctx.context.returned es una instancia de APIError
+      // cuando el endpoint lanza un error (NO un Response). Solo es un objeto plano
+      // { token, user } en caso de éxito. Por eso los checks usan instanceof APIError.
+
       // ── Sign-in: normalizar EMAIL_NOT_VERIFIED a credenciales inválidas genéricas ──
       if (ctx.path === "/sign-in/email") {
         const returned = ctx.context.returned;
-        // Si la respuesta es un error con código que revela existencia del email
-        // Solo 403: un 200 exitoso no debe pasar por aquí (evita leer el body innecesariamente)
-        if (returned instanceof Response && returned.status === 403) {
-          let body: Record<string, unknown> = {};
-          try {
-            body = await returned.clone().json();
-          } catch {
-            return;
-          }
-          const code = body?.code as string | undefined;
+        if (returned instanceof APIError && returned.statusCode === 403) {
+          const code = (returned.body as Record<string, unknown>)?.code as string | undefined;
           // EMAIL_NOT_VERIFIED revela que el email SÍ existe → neutralizar
           if (code === "EMAIL_NOT_VERIFIED") {
             return {
@@ -212,52 +208,43 @@ export const auth = betterAuth({
       // ── Sign-up: onboarding + referral + normalizar USER_ALREADY_EXISTS ──────
       if (ctx.path === "/sign-up/email") {
         const returned = ctx.context.returned;
-        if (returned instanceof Response) {
-          if (returned.status === 200) {
-            // Registro exitoso — disparar side-effects en background
-            const reqBody = ctx.body as Record<string, unknown> | undefined;
-            const email = reqBody?.["email"] as string | undefined;
-            const name = reqBody?.["name"] as string | undefined;
-            const referralCode = reqBody?.["referral-code"] as string | undefined;
 
-            if (email) {
-              sendWelcomeEmail({ to: email, name: name || "Estudiante" }).catch(
-                (err) => console.error("Welcome email error:", err)
-              );
+        if (returned instanceof APIError) {
+          // Error: normalizar USER_ALREADY_EXISTS para no revelar si el email existe
+          const code = (returned.body as Record<string, unknown>)?.code as string | undefined;
+          if (
+            code === "USER_ALREADY_EXISTS" ||
+            code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
+          ) {
+            // Devolver 200 genérico: el atacante no puede distinguir si el email existía
+            return {
+              response: Response.json(
+                {
+                  message: "Si el correo es válido, recibirás un enlace de verificación en breve.",
+                },
+                { status: 200 }
+              ),
+            };
+          }
+        } else if (returned && typeof returned === "object") {
+          // Éxito: returned es { token, user } (objeto plano, no Response)
+          const data = returned as { token?: string | null; user?: { id?: string } };
+          const reqBody = ctx.body as Record<string, unknown> | undefined;
+          const email = reqBody?.["email"] as string | undefined;
+          const name = reqBody?.["name"] as string | undefined;
+          const referralCode = reqBody?.["referral-code"] as string | undefined;
 
-              // Generar código de referido para el nuevo usuario + aplicar referido
-              const responseClone = returned.clone();
-              responseClone.json().then((body: { user?: { id?: string } }) => {
-                const userId = body?.user?.id;
-                if (!userId) return;
-                ensureReferralCode(userId).catch(() => {});
-                if (referralCode) {
-                  applyReferral(userId, referralCode).catch(() => {});
-                }
-              }).catch(() => {});
-            }
-          } else if (returned.status >= 400) {
-            let body: Record<string, unknown> = {};
-            try {
-              body = await returned.clone().json();
-            } catch {
-              return;
-            }
-            const code = body?.code as string | undefined;
-            // Normalizar cualquier error que revele existencia del email
-            if (
-              code === "USER_ALREADY_EXISTS" ||
-              code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
-            ) {
-              // Devolver 200 genérico: el atacante no puede distinguir si el email existía
-              return {
-                response: Response.json(
-                  {
-                    message: "Si el correo es válido, recibirás un enlace de verificación en breve.",
-                  },
-                  { status: 200 }
-                ),
-              };
+          if (email) {
+            sendWelcomeEmail({ to: email, name: name || "Estudiante" }).catch(
+              (err) => console.error("Welcome email error:", err)
+            );
+
+            const userId = data.user?.id;
+            if (userId) {
+              ensureReferralCode(userId).catch(() => {});
+              if (referralCode) {
+                applyReferral(userId, referralCode).catch(() => {});
+              }
             }
           }
         }
