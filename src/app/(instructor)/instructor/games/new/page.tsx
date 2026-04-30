@@ -106,7 +106,7 @@ export default function NewGamePage() {
               placeholder="Título del juego"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="max-w-md"
+              className="w-full"
             />
           </CardContent>
         </Card>
