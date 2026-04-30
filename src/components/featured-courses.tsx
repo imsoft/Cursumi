@@ -56,7 +56,6 @@ export const FeaturedCourses = ({ courses }: FeaturedCoursesProps) => {
         {/* Grid or empty state */}
         {courses.length === 0 ? (
           <EmptyState
-            icon={BookOpen}
             title="Los cursos están llegando pronto"
             description="Explora la plataforma y sé el primero en inscribirte cuando estén disponibles."
             action={{ label: "Explorar cursos", href: "/courses" }}

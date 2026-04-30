@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import { BookOpen } from "lucide-react";
 import { CourseListItem } from "@/components/instructor/course-list-item";

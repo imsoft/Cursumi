@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { SearchX } from "lucide-react";
 import { Course } from "./types";

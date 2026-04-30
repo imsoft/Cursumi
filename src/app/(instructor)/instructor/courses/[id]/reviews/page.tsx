@@ -113,7 +113,6 @@ export default async function InstructorCourseReviewsPage({
             <EmptyState
               title="Sin reseñas"
               description="Aún no hay reseñas en este curso."
-              icon={MessageSquare}
             />
           ) : (
             <ul className="divide-y divide-border">
