@@ -43,7 +43,7 @@ export function MyCoursesClient({ courses }: MyCoursesClientProps) {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+    <div className="space-y-6">
       <MyCoursesHeader />
       <MyCoursesStats courses={courses} />
       <MyCoursesFilters

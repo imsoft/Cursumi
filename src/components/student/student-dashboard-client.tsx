@@ -49,7 +49,7 @@ export function StudentDashboardClient({
   const upcoming = upcomingFromCourses(courses);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+    <div className="space-y-6">
       <StudentDashboardHeader name={name} />
       {orgName && (
         <div className="rounded-lg border bg-primary/5 px-4 py-3 text-sm">

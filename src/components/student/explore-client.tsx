@@ -123,7 +123,7 @@ export function ExploreClient({
     sortBy !== "newest";
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Explorar cursos"
         description="Descubre cursos y sigue aprendiendo."

@@ -18,7 +18,7 @@ export function AccountPageClient({ initialProfile }: AccountPageClientProps) {
   const defaultTab = tabParam === "settings" ? "settings" : "profile";
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Cuenta"
         description="Tu información personal, nombre y contraseña en un solo lugar."

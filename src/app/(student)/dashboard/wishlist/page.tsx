@@ -41,7 +41,7 @@ export default async function WishlistPage() {
   });
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <div className="space-y-6">
       <div className="flex items-center gap-3 mb-6">
         <Heart className="h-5 w-5 text-rose-500 fill-rose-500" />
         <h1 className="text-2xl font-black">Mis guardados</h1>
