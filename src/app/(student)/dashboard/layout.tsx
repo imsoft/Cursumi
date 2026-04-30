@@ -22,13 +22,23 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
     redirect("/login");
   }
 
-  const [{ role, image: userImage }, orgMembership] = await Promise.all([
-    getUserBasicInfo(session.user.id),
-    prisma.orgMember.findFirst({
-      where: { userId: session.user.id },
-      select: { id: true },
-    }),
-  ]);
+  let role = "";
+  let userImage: string | null = null;
+  let orgMembership: { id: string } | null = null;
+  try {
+    const [info, org] = await Promise.all([
+      getUserBasicInfo(session.user.id),
+      prisma.orgMember.findFirst({
+        where: { userId: session.user.id },
+        select: { id: true },
+      }),
+    ]);
+    role = info.role;
+    userImage = info.image;
+    orgMembership = org;
+  } catch {
+    redirect("/login");
+  }
   if (role === "admin") redirect("/admin");
   if (role === "instructor") redirect("/instructor");
 

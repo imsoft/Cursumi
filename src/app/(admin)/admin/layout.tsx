@@ -21,7 +21,15 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     redirect("/login");
   }
 
-  const { role, image: userImage } = await getUserBasicInfo(session.user.id);
+  let role = "";
+  let userImage: string | null = null;
+  try {
+    const info = await getUserBasicInfo(session.user.id);
+    role = info.role;
+    userImage = info.image;
+  } catch {
+    redirect("/login");
+  }
   if (role !== "admin") {
     if (role === "instructor") redirect("/instructor");
     redirect("/dashboard");

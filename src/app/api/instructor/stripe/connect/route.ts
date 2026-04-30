@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
@@ -26,7 +27,6 @@ export async function POST() {
         type: "express",
         country: "MX",
         capabilities: {
-          card_payments: { requested: true },
           transfers: { requested: true },
         },
       });
@@ -49,6 +49,10 @@ export async function POST() {
 
     return NextResponse.json({ url: accountLink.url });
   } catch (error) {
+    if (error instanceof Stripe.errors.StripeError) {
+      console.error("Stripe error:", error.message);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
     return handleApiError(error);
   }
 }
@@ -81,6 +85,10 @@ export async function GET() {
 
     return NextResponse.json({ connected: true, onboarded });
   } catch (error) {
+    if (error instanceof Stripe.errors.StripeError) {
+      console.error("Stripe error:", error.message);
+      return NextResponse.json({ connected: false, onboarded: false });
+    }
     return handleApiError(error);
   }
 }

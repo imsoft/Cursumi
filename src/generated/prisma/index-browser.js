@@ -227,6 +227,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   city: 'city',
   state: 'state',
   location: 'location',
+  mapsUrl: 'mapsUrl',
   courseType: 'courseType',
   startDate: 'startDate',
   duration: 'duration',
