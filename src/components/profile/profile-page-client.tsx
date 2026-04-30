@@ -25,9 +25,18 @@ const profileSchema = z.object({
   state: z.string().optional(),
   city: z.string().optional(),
   bio: z.string().optional(),
-  website: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
-  linkedinUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
-  instagramUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
+  website: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() && !v.match(/^https?:\/\//i) ? `https://${v.trim()}` : v),
+    z.union([z.string().url("Ingresa una URL válida (ej. https://tusitio.com)"), z.literal("")]).optional(),
+  ),
+  linkedinUrl: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() && !v.match(/^https?:\/\//i) ? `https://${v.trim()}` : v),
+    z.union([z.string().url("Ingresa una URL válida (ej. https://linkedin.com/in/tu-perfil)"), z.literal("")]).optional(),
+  ),
+  instagramUrl: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() && !v.match(/^https?:\/\//i) ? `https://${v.trim()}` : v),
+    z.union([z.string().url("Ingresa una URL válida (ej. https://instagram.com/tu-usuario)"), z.literal("")]).optional(),
+  ),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
