@@ -579,30 +579,9 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                     </div>
                   </div>
                   
-                  {/* Separador O */}
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <Separator />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-card px-3 text-muted-foreground">O</span>
-                    </div>
-                  </div>
-
-                  {/* Opción 2: URL del video */}
-                  <div>
-                    <Input
-                      label="URL del video (YouTube, Vimeo, etc.)"
-                      value={videoUrl.startsWith("http") ? videoUrl : ""}
-                      onChange={(e) => setVideoUrl(e.target.value)}
-                    />
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Puedes usar enlaces de YouTube, Vimeo u otras plataformas de video
-                    </p>
-                    {videoError && (
-                      <p className="mt-2 text-xs text-destructive">{videoError}</p>
-                    )}
-                  </div>
+                  {videoError && (
+                    <p className="mt-2 text-xs text-destructive">{videoError}</p>
+                  )}
                 </div>
               </div>
             </div>
