@@ -53,8 +53,8 @@ export default async function WishlistPage() {
       {items.length === 0 ? (
         <EmptyState
           icon={Heart}
-          title="No tienes cursos guardados"
-          description="Guarda cursos que te interesen para verlos después"
+          title="Aún no tienes cursos guardados"
+          description="Cuando encuentres un curso que te llame la atención, guárdalo aquí con el ícono de corazón para acceder rápido después."
           action={{ label: "Explorar cursos", href: "/courses" }}
         />
       ) : (
