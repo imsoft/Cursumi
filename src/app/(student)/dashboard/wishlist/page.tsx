@@ -54,7 +54,7 @@ export default async function WishlistPage() {
         <EmptyState
           title="Aún no tienes cursos guardados"
           description="Cuando encuentres un curso que te llame la atención, guárdalo aquí con el ícono de corazón para acceder rápido después."
-          action={{ label: "Explorar cursos", href: "/courses" }}
+          action={{ label: "Explorar cursos", href: "/dashboard/explore" }}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
