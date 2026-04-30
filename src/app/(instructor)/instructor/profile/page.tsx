@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { InstructorProfileForm } from "@/components/instructor/instructor-profile-form";
 import { InstructorProfileSummary } from "@/components/instructor/instructor-profile-summary";
 import { SignatureUpload } from "@/components/profile/signature-upload";
+import { DeleteAccountSection } from "@/components/settings/delete-account-section";
 
 interface ProfileData {
   fullName: string;
@@ -60,6 +61,7 @@ export default function InstructorProfilePage() {
         signatureUrl={profile?.signatureUrl ?? null}
         onUploaded={() => void loadProfile()}
       />
+      <DeleteAccountSection userName={profile?.fullName || "Instructor"} />
     </div>
   );
 }

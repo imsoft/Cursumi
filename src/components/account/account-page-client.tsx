@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfilePageClient } from "@/components/profile/profile-page-client";
 import { SettingsForm } from "@/components/settings/settings-form";
+import { DeleteAccountSection } from "@/components/settings/delete-account-section";
 import type { ProfileData } from "@/lib/profile-service";
 import { UserCircle, Settings } from "lucide-react";
 
@@ -41,7 +42,10 @@ export function AccountPageClient({ initialProfile }: AccountPageClientProps) {
           <p className="mb-4 text-sm text-muted-foreground">
             Actualiza tu nombre y contraseña de acceso.
           </p>
-          <SettingsForm />
+          <div className="space-y-6">
+            <SettingsForm />
+            <DeleteAccountSection userName={initialProfile.fullName} />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
