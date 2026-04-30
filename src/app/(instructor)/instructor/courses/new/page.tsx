@@ -51,7 +51,7 @@ const options = [
 
 export default function SelectCourseTypePage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-8 py-4">
+    <div className="space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-foreground">¿Qué tipo de curso quieres crear?</h1>
         <p className="mt-3 text-muted-foreground">
