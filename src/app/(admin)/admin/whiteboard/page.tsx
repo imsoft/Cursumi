@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function AdminWhiteboardPage() {
   return (
-    <div className="flex min-h-0 min-w-0 max-w-full flex-1 flex-col gap-4 overflow-x-hidden">
+    <div className="flex min-h-0 min-w-0 max-w-full flex-1 flex-col gap-4 overflow-hidden">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Pizarrón virtual</h1>
         <p className="mt-1 text-sm text-muted-foreground">

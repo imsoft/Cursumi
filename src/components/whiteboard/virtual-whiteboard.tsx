@@ -77,6 +77,13 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     const size = getCanvasSize();
     if (!canvas || !size) return;
 
+    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    const newW = Math.floor(size.w * dpr);
+    const newH = Math.floor(size.h * dpr);
+
+    // Skip if dimensions haven't changed — breaks ResizeObserver feedback loops
+    if (hasInitialized.current && canvas.width === newW && canvas.height === newH) return;
+
     // Preserve existing content before changing canvas dimensions
     // (assigning canvas.width/height always clears the bitmap)
     let savedContent: HTMLCanvasElement | null = null;
@@ -88,11 +95,10 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
       savedContent = tmp;
     }
 
-    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
-    canvas.width = Math.floor(size.w * dpr);
-    canvas.height = Math.floor(size.h * dpr);
-    canvas.style.width = `${size.w}px`;
-    canvas.style.height = `${size.h}px`;
+    canvas.width = newW;
+    canvas.height = newH;
+    // Display size is controlled by CSS (absolute inset-0); setting style.width/height
+    // would conflict with inset-0 and re-trigger ResizeObserver, so we skip it.
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

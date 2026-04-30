@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   SidebarProvider,
   SidebarInset,
@@ -58,19 +59,32 @@ interface AdminShellProps {
 
 export function AdminShell({ userName, userInitials, userImage, children }: AdminShellProps) {
   const pathname = usePathname();
-  const headerTitle = pathname?.startsWith("/admin/whiteboard") ? "Pizarrón virtual" : undefined;
+  const isWhiteboard = pathname?.startsWith("/admin/whiteboard") ?? false;
+  const headerTitle = isWhiteboard ? "Pizarrón virtual" : undefined;
 
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      className={cn(isWhiteboard && "h-svh max-h-svh overflow-hidden")}
+    >
       <AppSidebar navItems={adminNavItems} title="Cursumi Admin" />
-      <SidebarInset>
+      <SidebarInset className={cn(isWhiteboard && "min-h-0 overflow-hidden")}>
         <DashboardHeader
           title={headerTitle}
           profileHref="/admin/settings"
           user={{ name: userName, initials: userInitials, imageUrl: userImage }}
         />
-        <div className="flex min-h-0 flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
-          <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-6">
+        <div
+          className={cn(
+            "flex min-h-0 flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8",
+            isWhiteboard && "overflow-hidden",
+          )}
+        >
+          <div
+            className={cn(
+              "flex min-h-0 min-w-0 w-full flex-1 flex-col gap-6",
+              isWhiteboard && "overflow-hidden",
+            )}
+          >
             {children}
           </div>
         </div>

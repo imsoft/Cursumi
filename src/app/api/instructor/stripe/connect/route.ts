@@ -27,6 +27,7 @@ export async function POST() {
         type: "express",
         country: "MX",
         capabilities: {
+          card_payments: { requested: true },
           transfers: { requested: true },
         },
       });
