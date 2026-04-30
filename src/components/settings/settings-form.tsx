@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
@@ -29,6 +29,7 @@ type NameValues = z.infer<typeof nameSchema>;
 type PasswordValues = z.infer<typeof passwordSchema>;
 
 export function SettingsForm() {
+  const { data: session } = authClient.useSession();
   const [nameSuccess, setNameSuccess] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
@@ -38,6 +39,12 @@ export function SettingsForm() {
     resolver: createZodResolver(nameSchema),
     defaultValues: { name: "" },
   });
+
+  useEffect(() => {
+    if (session?.user?.name) {
+      nameForm.reset({ name: session.user.name });
+    }
+  }, [session?.user?.name, nameForm]);
 
   const passwordForm = useForm<PasswordValues>({
     resolver: createZodResolver(passwordSchema),
