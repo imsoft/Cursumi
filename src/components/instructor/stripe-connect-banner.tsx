@@ -15,6 +15,7 @@ export function StripeConnectBanner() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<ConnectStatus | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/instructor/stripe/connect")
@@ -25,10 +26,17 @@ export function StripeConnectBanner() {
 
   const handleConnect = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/instructor/stripe/connect", { method: "POST" });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error ?? "No se pudo iniciar la conexión con Stripe. Intenta de nuevo.");
+      }
+    } catch {
+      setError("Error de conexión. Verifica tu internet e intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -64,24 +72,29 @@ export function StripeConnectBanner() {
 
   return (
     <Card className="border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30">
-      <CardContent className="flex items-center justify-between gap-4 p-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <AlertCircle className="h-5 w-5 text-amber-600 shrink-0" />
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
-              {justReturned === "refresh"
-                ? "Onboarding incompleto — vuelve a intentarlo"
-                : "Conecta tu cuenta para recibir pagos"}
-            </p>
-            <p className="text-xs text-amber-700 dark:text-amber-400 truncate">
-              Configura Stripe Connect para recibir el 85% de cada venta en tu cuenta bancaria.
-            </p>
+      <CardContent className="flex flex-col gap-3 p-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <AlertCircle className="h-5 w-5 text-amber-600 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                {justReturned === "refresh"
+                  ? "Onboarding incompleto — vuelve a intentarlo"
+                  : "Conecta tu cuenta para recibir pagos"}
+              </p>
+              <p className="text-xs text-amber-700 dark:text-amber-400 truncate">
+                Configura Stripe Connect para recibir el 85% de cada venta en tu cuenta bancaria.
+              </p>
+            </div>
           </div>
+          <Button size="sm" onClick={handleConnect} disabled={loading} className="shrink-0">
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Conectar cuenta
+          </Button>
         </div>
-        <Button size="sm" onClick={handleConnect} disabled={loading} className="shrink-0">
-          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Conectar cuenta
-        </Button>
+        {error && (
+          <p className="text-xs text-destructive pl-8">{error}</p>
+        )}
       </CardContent>
     </Card>
   );
