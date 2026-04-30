@@ -18,6 +18,7 @@ import {
   Gamepad2,
   FileDown,
   PenLine,
+  Newspaper,
 } from "lucide-react";
 
 const instructorNavItems = [
@@ -28,6 +29,7 @@ const instructorNavItems = [
   { title: "Mis juegos", href: "/instructor/games", icon: Gamepad2 },
   { title: "Ingresos", href: "/instructor/earnings", icon: DollarSign },
   { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
+  { title: "Blog", href: "/instructor/blog", icon: Newspaper },
   { title: "Plantillas", href: "/instructor/templates", icon: FileDown },
   { title: "Perfil", href: "/instructor/profile", icon: UserCircle },
 ];
@@ -38,6 +40,7 @@ const pathnameToTitle: Record<string, string> = {
   "/instructor/games": "Mis juegos",
   "/instructor/earnings": "Ingresos",
   "/instructor/analytics": "Analíticas",
+  "/instructor/blog": "Blog",
   "/instructor/templates": "Plantillas",
   "/instructor/profile": "Perfil",
 };

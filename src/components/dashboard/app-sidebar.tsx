@@ -133,6 +133,15 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
             )}
           </SidebarMenuItem>
         </SidebarMenu>
+        <div className="flex justify-center gap-3 pb-1 group-data-[collapsible=icon]:hidden">
+          <Link href="/privacidad" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            Privacidad
+          </Link>
+          <span className="text-xs text-muted-foreground">·</span>
+          <Link href="/terminos" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            Términos
+          </Link>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

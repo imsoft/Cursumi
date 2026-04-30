@@ -23,6 +23,7 @@ import {
   BookOpen,
   Heart,
   Gift,
+  Newspaper,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -32,6 +33,7 @@ const studentNavItems = [
   { title: "Mis notas", href: "/dashboard/notes", icon: BookOpen },
   { title: "Certificados", href: "/dashboard/certificates", icon: Award },
   { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
+  { title: "Blog", href: "/dashboard/blog", icon: Newspaper },
   { title: "Juegos", href: "/dashboard/games", icon: Gamepad2 },
   { title: "Referidos", href: "/dashboard/referral", icon: Gift },
   { title: "Cuenta", href: "/dashboard/account", icon: UserCircle },
@@ -48,6 +50,7 @@ const pathnameToTitle: Record<string, string> = {
   "/dashboard/account": "Cuenta",
   "/dashboard/profile": "Perfil",
   "/dashboard/settings": "Configuración",
+  "/dashboard/blog": "Blog",
   "/dashboard/become-instructor": "Ser instructor",
   "/dashboard/org-materials": "Materiales",
 };

@@ -19,7 +19,18 @@ export async function proxy(request: NextRequest) {
   );
 
   // Rutas públicas que no deben ser accesibles si el usuario está autenticado
-  const publicOnlyRoutes = ["/", "/login", "/signup", "/forgot-password", "/reset-password"];
+  const publicOnlyRoutes = [
+    "/",
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+    "/courses",
+    "/blog",
+    "/how-it-works",
+    "/pricing",
+    "/contact",
+  ];
   const isPublicOnlyRoute = publicOnlyRoutes.includes(pathname) || pathname.startsWith("/reset-password");
 
   // Si es una ruta protegida y no hay cookie de sesión, redirigir al login
@@ -27,9 +38,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Si es una ruta pública (login, signup, etc.) y hay sesión, redirigir a home; la home redirige por rol (admin/instructor/dashboard)
-  if (isPublicOnlyRoute && sessionCookie && pathname !== "/") {
-    return NextResponse.redirect(new URL("/", request.url));
+  // Si es una ruta pública y hay sesión, redirigir al dashboard
+  if (isPublicOnlyRoute && sessionCookie) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
