@@ -274,6 +274,7 @@ model Course {
   city        String?
   state       String?
   location    String?
+  mapsUrl     String?
   courseType  CourseType
   startDate   DateTime?
   duration    String?

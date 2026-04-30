@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Upload, Loader2 } from "lucide-react";
+import { ArrowRight, Upload, Loader2, MapPin } from "lucide-react";
 import { useRef, useMemo, useEffect, useState, useCallback } from "react";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import type { CourseFormData } from "./course-types";
@@ -35,6 +35,10 @@ const createBasicInfoSchema = (modality: "virtual" | "presencial" | "live") => {
       state: z.string().min(1, "Selecciona un estado"),
       city: z.string().min(1, "Selecciona una ciudad o municipio"),
       location: z.string().min(1, "La dirección es obligatoria para cursos presenciales"),
+      mapsUrl: z.preprocess(
+        (v) => (typeof v === "string" && v.trim() && !v.match(/^https?:\/\//i) ? `https://${v.trim()}` : v),
+        z.union([z.string().url("Ingresa una URL válida de Google Maps"), z.literal("")]).optional(),
+      ),
     });
   }
 
@@ -44,6 +48,7 @@ const createBasicInfoSchema = (modality: "virtual" | "presencial" | "live") => {
     state: z.string().optional(),
     city: z.string().optional(),
     location: z.string().optional(),
+    mapsUrl: z.string().optional(),
   });
 };
 
@@ -97,6 +102,7 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
       state: data.state ?? "",
       city: data.city,
       location: data.location,
+      mapsUrl: data.mapsUrl ?? "",
       imageUrl: data.imageUrl,
     },
   });
@@ -236,12 +242,26 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
             <div>
               <Input
                 label="Dirección / Lugar *"
-                placeholder="Ej: Av. Reforma 222, Col. Juárez"
                 {...form.register("location")}
               />
               {form.formState.errors.location && (
                 <p className="mt-1 text-xs text-destructive">
                   {form.formState.errors.location.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <Input
+                label="Enlace de Google Maps (opcional)"
+                {...form.register("mapsUrl")}
+              />
+              <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPin className="h-3 w-3" />
+                Pega el enlace de Google Maps del lugar para que los alumnos puedan llegar fácilmente
+              </p>
+              {form.formState.errors.mapsUrl && (
+                <p className="mt-1 text-xs text-destructive">
+                  {(form.formState.errors.mapsUrl as { message?: string }).message}
                 </p>
               )}
             </div>

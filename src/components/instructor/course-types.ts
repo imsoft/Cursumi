@@ -22,6 +22,7 @@ export type CourseFormData = {
   state?: string;
   city?: string;
   location?: string;
+  mapsUrl?: string;
   courseType: string;
   startDate: string;
   duration: string;

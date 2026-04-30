@@ -49,6 +49,7 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
     city: course.city,
     state: course.state,
     location: course.location,
+    mapsUrl: course.mapsUrl,
     price: course.price,
     imageUrl: course.imageUrl,
     status: course.status,
