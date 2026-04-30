@@ -51,7 +51,7 @@ export default function StudentGamesPage() {
         description="Únete a un quiz en tiempo real con tu código de juego"
       />
 
-      <div className="max-w-md">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -92,7 +92,7 @@ export default function StudentGamesPage() {
         </Card>
       </div>
 
-      <Card className="max-w-md">
+      <Card>
         <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
           <Gamepad2 className="h-10 w-10 text-muted-foreground" />
           <p className="text-muted-foreground text-sm">
