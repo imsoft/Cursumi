@@ -33,14 +33,7 @@ export function StripeConnectBanner() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        const msg: string = data.error ?? "";
-        const isConnectDisabled =
-          msg.toLowerCase().includes("connect") || msg.toLowerCase().includes("platform");
-        setError(
-          isConnectDisabled
-            ? "Stripe Connect no está habilitado. Actívalo en dashboard.stripe.com → Connect."
-            : (msg || "No se pudo iniciar la conexión con Stripe. Intenta de nuevo."),
-        );
+        setError(data.error ?? "No se pudo iniciar la conexión con Stripe. Intenta de nuevo.");
       }
     } catch {
       setError("Error de conexión. Verifica tu internet e intenta de nuevo.");
