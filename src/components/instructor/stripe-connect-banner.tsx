@@ -11,12 +11,6 @@ interface ConnectStatus {
   onboarded: boolean;
 }
 
-const ERROR_REASONS: Record<string, string> = {
-  access_denied: "Cancelaste la conexión con Stripe. Puedes intentarlo de nuevo cuando quieras.",
-  oauth_failed: "No se pudo completar la conexión con Stripe. Intenta de nuevo.",
-  no_account: "Stripe no devolvió una cuenta válida. Intenta de nuevo.",
-};
-
 export function StripeConnectBanner() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<ConnectStatus | null>(null);
@@ -29,14 +23,6 @@ export function StripeConnectBanner() {
       .then(setStatus)
       .catch(() => setStatus({ connected: false, onboarded: false }));
   }, []);
-
-  // Mostrar error si Stripe redirigió con error
-  useEffect(() => {
-    if (searchParams.get("connect") === "error") {
-      const reason = searchParams.get("reason") ?? "oauth_failed";
-      setError(ERROR_REASONS[reason] ?? "No se pudo conectar con Stripe. Intenta de nuevo.");
-    }
-  }, [searchParams]);
 
   const handleConnect = async () => {
     setLoading(true);
@@ -58,6 +44,8 @@ export function StripeConnectBanner() {
 
   if (!status) return null;
 
+  const justReturned = searchParams.get("connect");
+
   if (status.onboarded) {
     return (
       <Card className="border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/30">
@@ -66,16 +54,16 @@ export function StripeConnectBanner() {
             <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
             <div>
               <p className="text-sm font-semibold text-green-800 dark:text-green-300">
-                Cuenta de Stripe conectada
+                Cuenta de pagos conectada
               </p>
               <p className="text-xs text-green-700 dark:text-green-400">
-                Recibirás el 85% de cada venta directamente en tu cuenta bancaria de Stripe.
+                Recibirás el 85% de cada venta directamente en tu cuenta bancaria.
               </p>
             </div>
           </div>
           <Button variant="outline" size="sm" onClick={handleConnect} disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}
-            <span className="ml-2">Ir a Stripe</span>
+            <span className="ml-2">Dashboard Stripe</span>
           </Button>
         </CardContent>
       </Card>
@@ -90,16 +78,18 @@ export function StripeConnectBanner() {
             <AlertCircle className="h-5 w-5 text-amber-600 shrink-0" />
             <div className="min-w-0">
               <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
-                Conecta tu cuenta de Stripe para recibir pagos
+                {justReturned === "refresh"
+                  ? "Registro incompleto — vuelve a intentarlo"
+                  : "Conecta tu cuenta para recibir pagos"}
               </p>
               <p className="text-xs text-amber-700 dark:text-amber-400">
-                Vincula tu cuenta de Stripe existente o crea una nueva. Recibirás el 85% de cada venta directo a tu banco.
+                Stripe te guiará para crear o conectar tu cuenta bancaria. Solo toma unos minutos.
               </p>
             </div>
           </div>
           <Button size="sm" onClick={handleConnect} disabled={loading} className="shrink-0">
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Conectar con Stripe
+            Conectar cuenta
           </Button>
         </div>
         {error && (
