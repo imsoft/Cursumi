@@ -14,37 +14,29 @@ export async function POST() {
       select: { stripeAccountId: true, stripeOnboarded: true },
     });
 
-    // Si ya está conectado, redirigir al dashboard de Stripe
+    // Ya conectado → abrir dashboard propio del instructor en Stripe
     if (profile?.stripeOnboarded && profile.stripeAccountId) {
-      const loginLink = await stripe.accounts.createLoginLink(profile.stripeAccountId);
-      return NextResponse.json({ url: loginLink.url });
+      return NextResponse.json({ url: "https://dashboard.stripe.com" });
     }
 
-    // Crear o reusar account de Stripe Connect
-    let accountId = profile?.stripeAccountId;
-    if (!accountId) {
-      const account = await stripe.accounts.create({
-        type: "express",
-        country: "MX",
-      });
-      accountId = account.id;
-
-      await prisma.instructorProfile.upsert({
-        where: { userId: session.user.id },
-        update: { stripeAccountId: accountId },
-        create: { userId: session.user.id, stripeAccountId: accountId },
-      });
+    const clientId = process.env.STRIPE_CONNECT_CLIENT_ID;
+    if (!clientId) {
+      return NextResponse.json(
+        { error: "Stripe Connect no está configurado en el servidor (falta STRIPE_CONNECT_CLIENT_ID)." },
+        { status: 500 },
+      );
     }
 
     const origin = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-    const accountLink = await stripe.accountLinks.create({
-      account: accountId,
-      refresh_url: `${origin}/instructor/earnings?connect=refresh`,
-      return_url: `${origin}/instructor/earnings?connect=success`,
-      type: "account_onboarding",
+    const params = new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      scope: "read_write",
+      redirect_uri: `${origin}/api/instructor/stripe/callback`,
+      state: session.user.id,
     });
 
-    return NextResponse.json({ url: accountLink.url });
+    return NextResponse.json({ url: `https://connect.stripe.com/oauth/authorize?${params}` });
   } catch (error) {
     if (error instanceof Stripe.errors.StripeError) {
       console.error("Stripe error:", error.message);
@@ -68,11 +60,10 @@ export async function GET() {
       return NextResponse.json({ connected: false, onboarded: false });
     }
 
-    // Verificar estado actual en Stripe
+    // Para Standard Connect verificamos el estado de la cuenta conectada
     const account = await stripe.accounts.retrieve(profile.stripeAccountId);
-    const onboarded = account.details_submitted && account.charges_enabled;
+    const onboarded = Boolean(account.details_submitted && account.charges_enabled);
 
-    // Actualizar DB si cambió
     if (onboarded && !profile.stripeOnboarded) {
       await prisma.instructorProfile.update({
         where: { userId: session.user.id },
