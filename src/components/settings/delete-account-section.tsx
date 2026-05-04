@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ interface DeleteAccountSectionProps {
 }
 
 export function DeleteAccountSection({ userName }: DeleteAccountSectionProps) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,8 +29,7 @@ export function DeleteAccountSection({ userName }: DeleteAccountSectionProps) {
         throw new Error(data.error ?? "No se pudo eliminar la cuenta");
       }
       await authClient.signOut();
-      router.push("/");
-      router.refresh();
+      window.location.assign("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al eliminar la cuenta");
       setLoading(false);

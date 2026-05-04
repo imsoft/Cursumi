@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -34,12 +34,11 @@ interface AppSidebarProps {
 
 export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/");
-    router.refresh();
+    // Navegación completa: evita refetch pesado de RSC (router.refresh) en el layout actual.
+    window.location.assign("/");
   };
 
   return (

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { X, LayoutDashboard, BookOpenCheck, PlusCircle, UserCircle, LogOut } from "lucide-react";
 import { signOut } from "@/lib/auth-client";
 
@@ -18,12 +17,9 @@ interface SidebarProps {
 }
 
 export const InstructorSidebar = ({ open, onClose }: SidebarProps) => {
-  const router = useRouter();
-
   const handleSignOut = async () => {
     await signOut();
-    router.push("/");
-    router.refresh();
+    window.location.assign("/");
   };
 
   return (

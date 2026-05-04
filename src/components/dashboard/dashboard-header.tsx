@@ -2,7 +2,6 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar } from "@/components/ui/avatar";
 import { ProfilePhotoImg } from "@/components/ui/profile-photo-img";
@@ -37,12 +36,9 @@ export function DashboardHeader({
   user,
   profileHref = "/dashboard/account?tab=profile",
 }: DashboardHeaderProps) {
-  const router = useRouter();
-
   const handleSignOut = async () => {
     await signOut();
-    router.push("/");
-    router.refresh();
+    window.location.assign("/");
   };
 
   return (

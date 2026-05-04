@@ -107,6 +107,11 @@ export const auth = betterAuth({
      *   4. Validación de dominio de email en sign-up.
      */
     before: createAuthMiddleware(async (ctx) => {
+      // Cierre de sesión: no añadir latencia de Redis; el propio endpoint invalida la sesión.
+      if (ctx.path === "/sign-out") {
+        return;
+      }
+
       const ip = getClientIpFromAuthRequest(ctx.request?.headers);
 
       // ── 1. Global Rate Limiting: 50 req/min por IP ────────
