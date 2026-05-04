@@ -53,5 +53,6 @@ next-env.d.ts
 # Claude Code / agentes de IA en el repo
 # — .agents/skills: skills compartidas (Markdown, scripts); conviene versionarlas.
 # — .claude/skills: suelen ser symlinks → .agents/skills para que Claude Code las detecte.
-# — Ajustes solo de tu máquina (no subir):
+# — Ajustes de Claude en tu máquina (permisos, rutas absolutas; no subir):
+.claude/settings.json
 .claude/settings.local.json
