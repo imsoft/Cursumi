@@ -124,6 +124,13 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className="antialiased">
+        {/* Recarga única si falla un chunk tras un deploy (antes de hidratar React). */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var f="cursumi-chunk-reload-done";function c(r){if(r==null)return false;var s=typeof r==="string"?r:String((r&&r.message)||(r&&r.name)||r);return s.indexOf("ChunkLoadError")!==-1||s.indexOf("Loading chunk")!==-1||s.indexOf("Failed to load chunk")!==-1||s.indexOf("Failed to fetch dynamically imported module")!==-1;}function g(){if(sessionStorage.getItem(f))return;sessionStorage.setItem(f,"1");location.reload();}addEventListener("unhandledrejection",function(e){if(c(e.reason))g();});addEventListener("error",function(e){if(c(e.error)||c(e.message))g();});setTimeout(function(){sessionStorage.removeItem(f);},12e4);})();`,
+          }}
+        />
         {/* Skip navigation — visible solo en foco (accesibilidad) */}
         <a
           href="#main-content"

@@ -1,10 +1,11 @@
 // Service Worker de Cursumi
-// - cache-first para _next/static
+// - NO cachear /_next/static: los hashes cambian en cada deploy; cache-first rompe
+//   la app (ChunkLoadError, 404, MIME text/plain) si el usuario tenía una sesión abierta.
 // - network-first para páginas
 // - push notifications (Web Push API)
 // - offline fallback
 
-const CACHE_NAME = "cursumi-v2";
+const CACHE_NAME = "cursumi-v3";
 const STATIC_ASSETS = ["/", "/manifest.json", "/offline"];
 
 self.addEventListener("install", (event) => {
@@ -30,27 +31,14 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== location.origin) return;
   if (url.pathname.startsWith("/api/")) return;
 
+  // Chunks de Next: dejar que el navegador y los headers de Vercel gestionen la caché.
+  if (url.pathname.startsWith("/_next/static/")) return;
+
   // Páginas HTML: network-first con fallback a /offline
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(() =>
         caches.match(request).then((cached) => cached || caches.match("/offline"))
-      )
-    );
-    return;
-  }
-
-  // Assets estáticos (_next/static): cache-first permanente
-  if (url.pathname.startsWith("/_next/static/")) {
-    event.respondWith(
-      caches.match(request).then(
-        (cached) =>
-          cached ||
-          fetch(request).then((res) => {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-            return res;
-          })
       )
     );
     return;
