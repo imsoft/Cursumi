@@ -241,7 +241,7 @@ export default async function MyCourseDetailPage({
               <p className="mt-1 text-sm text-muted-foreground">
                 {formatMexicoLocation(enrolledSession.city, enrolledSession.state)} — {enrolledSession.location}
               </p>
-              {course.modality === "live" && enrolledSession.meetingUrl && (
+              {enrolledSession.meetingUrl && (
                 <p className="mt-2">
                   <a
                     href={enrolledSession.meetingUrl}
@@ -249,7 +249,7 @@ export default async function MyCourseDetailPage({
                     rel="noopener noreferrer"
                     className="text-sm font-medium text-primary underline underline-offset-2"
                   >
-                    Abrir enlace de la reunión
+                    {course.modality === "presencial" ? "Unirse en línea (opción híbrida)" : "Abrir enlace de la reunión"}
                   </a>
                 </p>
               )}

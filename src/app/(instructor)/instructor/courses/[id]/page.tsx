@@ -170,7 +170,7 @@ export default async function CourseDetailPage({
                         >
                           <span className="font-medium text-foreground">{formatMexicoLocation(s.city, s.state)}</span>
                           <span className="text-muted-foreground"> — {s.location}</span>
-                          {course.modality === "live" && s.meetingUrl && (
+                          {s.meetingUrl && (
                             <div className="mt-1 truncate text-xs text-primary">
                               <a href={s.meetingUrl} target="_blank" rel="noopener noreferrer" className="underline">
                                 {s.meetingUrl}

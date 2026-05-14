@@ -7,14 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
-import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
-  CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, ImageIcon, Loader2,
+  CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, Loader2,
   ArrowUp, ArrowDown, Check,
   Gamepad2,
   ClipboardCheck,
@@ -26,41 +24,12 @@ import {
   addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions, reorderSections,
 } from "@/app/actions/course-actions";
 import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
-import type { CourseSessionData } from "@/components/instructor/course-types";
 import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
 import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
 type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
-interface Lesson {
-  id: string;
-  title: string;
-  type: LessonType;
-  duration?: string | null;
-  order: number;
-}
 
-interface Section {
-  id: string;
-  title: string;
-  description?: string | null;
-  order: number;
-  lessons: Lesson[];
-  quiz?: unknown;
-  minigame?: unknown;
-}
-
-interface CourseSessionItem {
-  id: string;
-  state?: string;
-  city: string;
-  location: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  maxStudents: number;
-  _count: { enrollments: number };
-}
 
 interface CourseOverviewClientProps {
   /** Curso serializado desde el servidor (sin objetos `Date`) */
@@ -407,45 +376,6 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     Equivale a ${(editData.price / 100).toLocaleString()}
                   </p>
                 </div>
-                {(editData.modality === "presencial" || editData.modality === "live") && editData.price === 0 && (
-                  <div className="sm:col-span-2 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
-                    <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                      <Lock className="h-4 w-4" />
-                      Inscripción gratuita con código (opcional)
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Si defines un código, solo quienes lo ingresen podrán inscribirse sin pagar.
-                      {course.hasJoinCode ? " Ya hay un código guardado." : ""}
-                    </p>
-                    <PasswordInput
-                      label="Nuevo código"
-                      autoComplete="new-password"
-                      className="mt-1"
-                      value={editData.freeJoinCode}
-                      onChange={(e) =>
-                        setEditData((d) => ({
-                          ...d,
-                          freeJoinCode: e.target.value,
-                          clearFreeJoinCode: false,
-                        }))
-                      }
-                      placeholder={course.hasJoinCode ? "Vacío = no cambiar el código actual" : "Ej. TALLER2025"}
-                    />
-                    {course.hasJoinCode && (
-                      <label className="flex cursor-pointer items-start gap-2 text-sm text-foreground">
-                        <input
-                          type="checkbox"
-                          className="mt-1 rounded border-input"
-                          checked={editData.clearFreeJoinCode}
-                          onChange={(e) =>
-                            setEditData((d) => ({ ...d, clearFreeJoinCode: e.target.checked }))
-                          }
-                        />
-                        <span>Quitar el código (inscripción abierta para todos)</span>
-                      </label>
-                    )}
-                  </div>
-                )}
                 <div>
                   <label className="text-sm font-medium text-foreground">Miniatura del curso</label>
                   <div className="mt-1">

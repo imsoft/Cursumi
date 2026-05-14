@@ -287,6 +287,7 @@ export default async function PublicCourseDetailPage({
                       endTime: s.endTime,
                       isFull: s._count.enrollments >= s.maxStudents,
                       requiresJoinCode: s.requiresJoinCode,
+                      meetingUrl: course.modality === "presencial" ? s.meetingUrl : undefined,
                     }))
                   : undefined
               }

@@ -209,6 +209,20 @@ export function CourseSessionsManager({
                       onChange={(e) => handleUpdate(i, { location: e.target.value })}
                     />
                   </div>
+                  <div>
+                    <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                      <Link2 className="h-3 w-3" /> Enlace online (opcional — para asistencia híbrida)
+                    </label>
+                    <Input
+                      className="mt-1"
+                      type="url"
+                      value={session.meetingUrl ?? ""}
+                      onChange={(e) => handleUpdate(i, { meetingUrl: e.target.value || undefined })}
+                    />
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Si lo defines, los alumnos que no puedan asistir en persona podrán conectarse por videollamada.
+                    </p>
+                  </div>
                 </div>
               )}
 
@@ -349,6 +363,20 @@ export function CourseSessionsManager({
                     value={draft.location}
                     onChange={(e) => setDraft((d) => ({ ...d, location: e.target.value }))}
                   />
+                </div>
+                <div>
+                  <label className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                    <Link2 className="h-3 w-3" /> Enlace online (opcional — para asistencia híbrida)
+                  </label>
+                  <Input
+                    className="mt-1"
+                    type="url"
+                    value={draft.meetingUrl ?? ""}
+                    onChange={(e) => setDraft((d) => ({ ...d, meetingUrl: e.target.value || undefined }))}
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Si lo defines, los alumnos que no puedan asistir en persona podrán conectarse por videollamada.
+                  </p>
                 </div>
               </div>
             )}

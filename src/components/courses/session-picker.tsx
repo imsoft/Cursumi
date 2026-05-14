@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Calendar, Clock, Users, Check } from "lucide-react";
+import { MapPin, Calendar, Clock, Users, Check, Video } from "lucide-react";
 
 export interface PickableSession {
   id: string;
@@ -13,6 +13,7 @@ export interface PickableSession {
   endTime: string;
   isFull: boolean;
   requiresJoinCode?: boolean;
+  meetingUrl?: string | null;
 }
 
 interface SessionPickerProps {
@@ -74,9 +75,15 @@ export function SessionPicker({ sessions, selectedSessionId, onSelect }: Session
           >
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1.5 flex-1">
-                <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-foreground">
                   <MapPin className="h-4 w-4 text-emerald-500 shrink-0" />
                   {session.city} — {session.location}
+                  {session.meetingUrl && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                      <Video className="h-3 w-3" />
+                      Híbrido
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">

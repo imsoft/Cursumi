@@ -63,12 +63,19 @@ export type StudentProgressDetail = {
   status: EnrollmentStatus;
   progress: number;
   enrolledDate: string;
+  sessionId: string | null;
   sessionLabel?: string;
   completedLessonIds: string[];
   lessonScores: Record<string, number>;
   sectionQuizzes: { sectionId: string; activityId: string; score: number; passed: boolean }[];
   examSubmission: { score: number; passed: boolean; submittedAt: string } | null;
   certificateType: string | null;
+};
+
+export type CourseSession = {
+  id: string;
+  label: string;
+  enrolledCount: number;
 };
 
 export type CourseProgressOverview = {
@@ -80,6 +87,7 @@ export type CourseProgressOverview = {
   }[];
   hasFinalExam: boolean;
   students: StudentProgressDetail[];
+  sessions: CourseSession[];
 };
 
 type CreateCourseInput = Omit<CourseFormData, "sections"> & {
@@ -525,7 +533,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
 }
 
 export async function getCourseStudentsProgress(courseId: string): Promise<CourseProgressOverview> {
-  const [course, enrollments] = await Promise.all([
+  const [course, enrollments, courseSessions] = await Promise.all([
     prisma.course.findUnique({
       where: { id: courseId },
       select: {
@@ -550,7 +558,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
       where: { courseId },
       include: {
         student: { select: { id: true, name: true, email: true } },
-        session: { select: { city: true, state: true, date: true } },
+        session: { select: { id: true, city: true, state: true, date: true, location: true } },
         lessonProgress: { select: { lessonId: true, score: true } },
         sectionQuizSubmissions: {
           select: { sectionId: true, activityId: true, score: true, passed: true },
@@ -559,6 +567,18 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
         certificate: { select: { type: true } },
       },
       orderBy: { createdAt: "desc" },
+    }),
+    prisma.courseSession.findMany({
+      where: { courseId },
+      orderBy: { date: "asc" },
+      select: {
+        id: true,
+        city: true,
+        state: true,
+        location: true,
+        date: true,
+        _count: { select: { enrollments: true } },
+      },
     }),
   ]);
 
@@ -582,6 +602,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
     status: e.status,
     progress: e.progress,
     enrolledDate: e.createdAt.toISOString(),
+    sessionId: e.sessionId,
     sessionLabel: e.session
       ? `${formatMexicoLocation(e.session.city, e.session.state)} — ${e.session.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`
       : undefined,
@@ -605,7 +626,13 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
     certificateType: e.certificate?.type ?? null,
   }));
 
-  return { sections, hasFinalExam, students };
+  const sessions: CourseSession[] = courseSessions.map((s) => ({
+    id: s.id,
+    label: `${formatMexicoLocation(s.city, s.state)}${s.location ? ` · ${s.location}` : ""} — ${s.date.toLocaleDateString("es-MX", { timeZone: "UTC" })}`,
+    enrolledCount: s._count.enrollments,
+  }));
+
+  return { sections, hasFinalExam, students, sessions };
 }
 
 // ─── Sesiones presenciales ────────────────────────────────────────────────────

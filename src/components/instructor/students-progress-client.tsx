@@ -12,7 +12,7 @@ import {
   Video, FileText, Gamepad2, Award, Users,
 } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
-import type { CourseProgressOverview, StudentProgressDetail } from "@/lib/course-service";
+import type { CourseProgressOverview, StudentProgressDetail } from "@/lib/course-service-instructor";
 import { UnenrollButton } from "@/components/instructor/unenroll-button";
 
 interface StudentsProgressClientProps {
@@ -210,8 +210,15 @@ function StudentRow({
 
 export function StudentsProgressClient({ courseId, courseTitle, data }: StudentsProgressClientProps) {
   const [search, setSearch] = useState("");
+  const [selectedSession, setSelectedSession] = useState<string | null>(null);
 
-  const filtered = data.students.filter((s) => {
+  const hasSessions = data.sessions && data.sessions.length > 0;
+
+  const sessionFiltered = selectedSession
+    ? data.students.filter((s) => s.sessionId === selectedSession)
+    : data.students;
+
+  const filtered = sessionFiltered.filter((s) => {
     const q = search.toLowerCase();
     return (
       !q ||
@@ -232,6 +239,35 @@ export function StudentsProgressClient({ courseId, courseTitle, data }: Students
         </p>
       </div>
 
+      {/* Session tabs — only shown when the course has multiple sessions */}
+      {hasSessions && (
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setSelectedSession(null)}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              selectedSession === null
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            Todos ({data.students.length})
+          </button>
+          {data.sessions.map((session) => (
+            <button
+              key={session.id}
+              onClick={() => setSelectedSession(session.id)}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                selectedSession === session.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              }`}
+            >
+              {session.label} ({session.enrolledCount})
+            </button>
+          ))}
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -240,7 +276,6 @@ export function StudentsProgressClient({ courseId, courseTitle, data }: Students
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 className="pl-9"
-                placeholder="Buscar alumno..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
