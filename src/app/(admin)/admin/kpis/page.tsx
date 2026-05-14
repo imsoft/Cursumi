@@ -97,8 +97,9 @@ function DeadlineBadge({ deadline }: { deadline: string | null }) {
 }
 
 const progressSchema = z.object({
-  value: z.coerce.number().refine((v) => v !== 0, "El avance no puede ser cero"),
+  value: z.coerce.number().positive("Ingresa un número mayor a 0"),
   note: z.string().max(500).optional(),
+  type: z.enum(["avance", "correccion"]).default("avance"),
 });
 
 type KpiFormValues = z.infer<typeof kpiSchema>;
@@ -147,8 +148,10 @@ function KpiProgressPanel({
 
   const form = useForm<ProgressFormValues>({
     resolver: createZodResolver(progressSchema),
-    defaultValues: { value: undefined, note: "" },
+    defaultValues: { value: undefined, note: "", type: "avance" },
   });
+
+  const watchedType = form.watch("type");
 
   const load = async () => {
     setLoading(true);
@@ -163,16 +166,17 @@ function KpiProgressPanel({
   useEffect(() => { load(); }, [kpi.id]);
 
   const onSubmit = async (values: ProgressFormValues) => {
+    const delta = values.type === "correccion" ? -(values.value as number) : (values.value as number);
     const res = await fetch(`/api/admin/kpis/${kpi.id}/progress`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ value: delta, note: values.note }),
     });
     if (!res.ok) return;
     const entry: KpiProgressEntry = await res.json();
     setEntries((prev) => [entry, ...prev]);
-    onProgressAdded(kpi.id, values.value as number);
-    form.reset({ value: undefined, note: "" });
+    onProgressAdded(kpi.id, delta);
+    form.reset({ value: undefined, note: "", type: "avance" });
     setShowForm(false);
   };
 
@@ -198,20 +202,43 @@ function KpiProgressPanel({
             <TrendingUp className="h-3.5 w-3.5 text-primary" />
             Registrar avance
           </p>
+          {/* Tipo: avance o corrección */}
+          <div className="flex rounded-lg border border-input overflow-hidden text-xs font-medium w-fit">
+            <button
+              type="button"
+              onClick={() => form.setValue("type", "avance")}
+              className={`px-3 py-1.5 transition-colors ${
+                watchedType === "avance"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              + Avance
+            </button>
+            <button
+              type="button"
+              onClick={() => form.setValue("type", "correccion")}
+              className={`px-3 py-1.5 transition-colors border-l border-input ${
+                watchedType === "correccion"
+                  ? "bg-destructive text-destructive-foreground"
+                  : "bg-background text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              − Corrección
+            </button>
+          </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <Input
-                label={`Avance (${kpi.unit || "unidades"})`}
+                label={`Cantidad (${kpi.unit || "unidades"})`}
                 type="number"
+                min="0"
                 step="any"
                 {...form.register("value")}
               />
               {form.formState.errors.value && (
                 <p className="mt-1 text-xs text-destructive">{form.formState.errors.value.message}</p>
               )}
-              <p className="mt-1 text-xs text-muted-foreground">
-                Usa un número negativo para corregir a la baja.
-              </p>
             </div>
             <div>
               <Input
