@@ -11,6 +11,7 @@ const updateSchema = z.object({
   currentValue: z.number().min(0).optional(),
   period: z.enum(["diario", "semanal", "mensual", "trimestral", "anual"]).optional(),
   category: z.enum(["crecimiento", "ingresos", "engagement", "calidad", "general"]).optional(),
+  deadline: z.string().datetime({ offset: true }).optional().nullable(),
 });
 
 export async function PATCH(
@@ -27,9 +28,13 @@ export async function PATCH(
       return NextResponse.json({ error: "Datos inválidos", details: body.error.flatten() }, { status: 400 });
     }
 
+    const { deadline, ...rest } = body.data;
     const kpi = await prisma.kpi.update({
       where: { id },
-      data: body.data,
+      data: {
+        ...rest,
+        ...(deadline !== undefined ? { deadline: deadline ? new Date(deadline) : null } : {}),
+      },
     });
 
     return NextResponse.json(kpi);

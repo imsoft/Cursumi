@@ -9,7 +9,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Trash2, Pencil, X, Check, Target } from "lucide-react";
+import {
+  Plus, Trash2, Pencil, X, Check, Target, TrendingUp,
+  ChevronDown, ChevronUp, Clock, CalendarClock, AlertTriangle,
+} from "lucide-react";
+
+interface KpiProgressEntry {
+  id: string;
+  kpiId: string;
+  value: number;
+  note: string | null;
+  createdAt: string;
+}
 
 interface Kpi {
   id: string;
@@ -20,6 +31,7 @@ interface Kpi {
   currentValue: number;
   period: string;
   category: string;
+  deadline: string | null;
 }
 
 const PERIODS = ["diario", "semanal", "mensual", "trimestral", "anual"] as const;
@@ -49,13 +61,53 @@ const kpiSchema = z.object({
   currentValue: z.coerce.number().min(0).default(0),
   period: z.enum(PERIODS),
   category: z.enum(CATEGORIES),
+  deadline: z.string().optional(),
+});
+
+function deadlineStatus(deadline: string | null): "overdue" | "soon" | "ok" | null {
+  if (!deadline) return null;
+  const diff = new Date(deadline).getTime() - Date.now();
+  if (diff < 0) return "overdue";
+  if (diff < 7 * 24 * 60 * 60 * 1000) return "soon";
+  return "ok";
+}
+
+function DeadlineBadge({ deadline }: { deadline: string | null }) {
+  if (!deadline) return null;
+  const status = deadlineStatus(deadline);
+  const label = new Date(deadline).toLocaleDateString("es-MX", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const cls =
+    status === "overdue"
+      ? "text-destructive border-destructive/40 bg-destructive/10"
+      : status === "soon"
+      ? "text-yellow-600 dark:text-yellow-400 border-yellow-400/40 bg-yellow-50 dark:bg-yellow-900/20"
+      : "text-muted-foreground border-border bg-muted/30";
+  const Icon = status === "overdue" ? AlertTriangle : CalendarClock;
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${cls}`}>
+      <Icon className="h-3 w-3" />
+      {status === "overdue" ? "Vencido · " : "Límite · "}
+      {label}
+    </span>
+  );
+}
+
+const progressSchema = z.object({
+  value: z.coerce.number().refine((v) => v !== 0, "El avance no puede ser cero"),
+  note: z.string().max(500).optional(),
 });
 
 type KpiFormValues = z.infer<typeof kpiSchema>;
+type ProgressFormValues = z.infer<typeof progressSchema>;
 
 function ProgressBar({ value, target }: { value: number; target: number }) {
   const pct = target > 0 ? Math.min((value / target) * 100, 100) : 0;
-  const color = pct >= 100 ? "bg-green-500" : pct >= 60 ? "bg-primary" : pct >= 30 ? "bg-yellow-500" : "bg-destructive";
+  const color =
+    pct >= 100 ? "bg-green-500" : pct >= 60 ? "bg-primary" : pct >= 30 ? "bg-yellow-500" : "bg-destructive";
   return (
     <div className="mt-2 space-y-1">
       <div className="flex justify-between text-xs text-muted-foreground">
@@ -70,6 +122,180 @@ function ProgressBar({ value, target }: { value: number; target: number }) {
   );
 }
 
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("es-MX", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+// ─── Inline progress panel for one KPI ───────────────────────────────────────
+function KpiProgressPanel({
+  kpi,
+  onProgressAdded,
+}: {
+  kpi: Kpi;
+  onProgressAdded: (kpiId: string, delta: number) => void;
+}) {
+  const [entries, setEntries] = useState<KpiProgressEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const form = useForm<ProgressFormValues>({
+    resolver: createZodResolver(progressSchema),
+    defaultValues: { value: undefined, note: "" },
+  });
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/kpis/${kpi.id}/progress`);
+      if (res.ok) setEntries(await res.json());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { load(); }, [kpi.id]);
+
+  const onSubmit = async (values: ProgressFormValues) => {
+    const res = await fetch(`/api/admin/kpis/${kpi.id}/progress`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+    if (!res.ok) return;
+    const entry: KpiProgressEntry = await res.json();
+    setEntries((prev) => [entry, ...prev]);
+    onProgressAdded(kpi.id, values.value as number);
+    form.reset({ value: undefined, note: "" });
+    setShowForm(false);
+  };
+
+  const onDelete = async (entryId: string, delta: number) => {
+    setDeletingId(entryId);
+    const res = await fetch(`/api/admin/kpis/${kpi.id}/progress/${entryId}`, { method: "DELETE" });
+    if (res.ok) {
+      setEntries((prev) => prev.filter((e) => e.id !== entryId));
+      onProgressAdded(kpi.id, -delta);
+    }
+    setDeletingId(null);
+  };
+
+  return (
+    <div className="mt-3 space-y-3">
+      {/* Add progress button / form */}
+      {showForm ? (
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-3"
+        >
+          <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+            <TrendingUp className="h-3.5 w-3.5 text-primary" />
+            Registrar avance
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <Input
+                label={`Avance (${kpi.unit || "unidades"})`}
+                type="number"
+                step="any"
+                {...form.register("value")}
+              />
+              {form.formState.errors.value && (
+                <p className="mt-1 text-xs text-destructive">{form.formState.errors.value.message}</p>
+              )}
+              <p className="mt-1 text-xs text-muted-foreground">
+                Usa un número negativo para corregir a la baja.
+              </p>
+            </div>
+            <div>
+              <Input
+                label="Nota (opcional)"
+                {...form.register("note")}
+              />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button type="submit" size="sm" disabled={form.formState.isSubmitting}>
+              <Check className="mr-1 h-3.5 w-3.5" />
+              {form.formState.isSubmitting ? "Guardando..." : "Guardar avance"}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => { setShowForm(false); form.reset(); }}
+            >
+              <X className="mr-1 h-3.5 w-3.5" />
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full border-dashed"
+          onClick={() => setShowForm(true)}
+        >
+          <TrendingUp className="mr-2 h-3.5 w-3.5" />
+          Registrar avance
+        </Button>
+      )}
+
+      {/* History */}
+      {loading ? (
+        <p className="text-xs text-muted-foreground">Cargando historial...</p>
+      ) : entries.length === 0 ? (
+        <p className="text-xs text-muted-foreground italic">Sin registros de avance aún.</p>
+      ) : (
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+            <Clock className="h-3 w-3" /> Historial ({entries.length})
+          </p>
+          <div className="divide-y divide-border rounded-lg border border-border overflow-hidden">
+            {entries.map((entry) => (
+              <div key={entry.id} className="flex items-start justify-between gap-3 px-3 py-2 bg-background">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <span
+                      className={`text-sm font-semibold ${entry.value >= 0 ? "text-green-600 dark:text-green-400" : "text-destructive"}`}
+                    >
+                      {entry.value >= 0 ? "+" : ""}
+                      {entry.value.toLocaleString("es-MX")}
+                      {kpi.unit ? ` ${kpi.unit}` : ""}
+                    </span>
+                    {entry.note && (
+                      <span className="text-xs text-foreground truncate">{entry.note}</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">{formatDate(entry.createdAt)}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="shrink-0 h-7 w-7 p-0"
+                  disabled={deletingId === entry.id}
+                  onClick={() => onDelete(entry.id, entry.value)}
+                  title="Eliminar este registro"
+                >
+                  <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────────
 export default function AdminKpisPage() {
   const [kpis, setKpis] = useState<Kpi[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,6 +304,7 @@ export default function AdminKpisPage() {
   const [editing, setEditing] = useState<Kpi | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [expandedKpi, setExpandedKpi] = useState<string | null>(null);
 
   const form = useForm<KpiFormValues>({
     resolver: createZodResolver(kpiSchema),
@@ -89,6 +316,7 @@ export default function AdminKpisPage() {
       currentValue: 0,
       period: "mensual",
       category: "general",
+      deadline: "",
     },
   });
 
@@ -111,19 +339,31 @@ export default function AdminKpisPage() {
 
   useEffect(() => { load(); }, []);
 
+  // Called by KpiProgressPanel when a progress entry is added or deleted
+  const handleProgressAdded = (kpiId: string, delta: number) => {
+    setKpis((prev) =>
+      prev.map((k) =>
+        k.id === kpiId ? { ...k, currentValue: k.currentValue + delta } : k
+      )
+    );
+  };
+
+  const serializeDeadline = (raw?: string) =>
+    raw ? new Date(raw).toISOString() : null;
+
   const onCreate = async (values: KpiFormValues) => {
     setError(null);
     try {
       const res = await fetch("/api/admin/kpis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, deadline: serializeDeadline(values.deadline) }),
       });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "Error al crear KPI");
       }
-      form.reset({ name: "", description: "", unit: "", targetValue: 0, currentValue: 0, period: "mensual", category: "general" });
+      form.reset({ name: "", description: "", unit: "", targetValue: 0, currentValue: 0, period: "mensual", category: "general", deadline: "" });
       setShowForm(false);
       await load();
     } catch (err) {
@@ -141,6 +381,7 @@ export default function AdminKpisPage() {
       currentValue: kpi.currentValue,
       period: kpi.period as typeof PERIODS[number],
       category: kpi.category as typeof CATEGORIES[number],
+      deadline: kpi.deadline ? kpi.deadline.substring(0, 10) : "",
     });
   };
 
@@ -151,7 +392,7 @@ export default function AdminKpisPage() {
       const res = await fetch(`/api/admin/kpis/${editing.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, deadline: serializeDeadline(values.deadline) }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -246,7 +487,7 @@ export default function AdminKpisPage() {
                   )}
                 </div>
                 <div>
-                  <Input label="Valor actual" type="number" step="any" {...form.register("currentValue")} />
+                  <Input label="Valor actual inicial" type="number" step="any" {...form.register("currentValue")} />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Período</label>
@@ -271,8 +512,18 @@ export default function AdminKpisPage() {
                   </select>
                 </div>
               </div>
-              <div>
-                <Input label="Descripción (opcional)" {...form.register("description")} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Input label="Descripción (opcional)" {...form.register("description")} />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-foreground">Fecha límite (opcional)</label>
+                  <input
+                    type="date"
+                    {...form.register("deadline")}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
               </div>
               <div className="flex gap-2">
                 <Button type="submit" disabled={form.formState.isSubmitting}>
@@ -290,9 +541,7 @@ export default function AdminKpisPage() {
       {/* KPI list */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            KPIs ({filtered.length})
-          </CardTitle>
+          <CardTitle>KPIs ({filtered.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -304,7 +553,7 @@ export default function AdminKpisPage() {
               {filtered.map((kpi) => (
                 <div key={kpi.id} className="py-4">
                   {editing?.id === kpi.id ? (
-                    /* Edit inline form */
+                    /* ─── Edit inline form ─── */
                     <form onSubmit={editForm.handleSubmit(onUpdate)} className="space-y-3">
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div>
@@ -348,8 +597,18 @@ export default function AdminKpisPage() {
                           </select>
                         </div>
                       </div>
-                      <div>
-                        <Input label="Descripción" {...editForm.register("description")} />
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div>
+                          <Input label="Descripción" {...editForm.register("description")} />
+                        </div>
+                        <div>
+                          <label className="mb-1.5 block text-sm font-medium text-foreground">Fecha límite</label>
+                          <input
+                            type="date"
+                            {...editForm.register("deadline")}
+                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
                       </div>
                       <div className="flex gap-2">
                         <Button type="submit" size="sm" disabled={editForm.formState.isSubmitting}>
@@ -363,7 +622,7 @@ export default function AdminKpisPage() {
                       </div>
                     </form>
                   ) : (
-                    /* Display row */
+                    /* ─── Display row ─── */
                     <div>
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
@@ -375,6 +634,7 @@ export default function AdminKpisPage() {
                             <span className="rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground">
                               {PERIOD_LABELS[kpi.period]}
                             </span>
+                            <DeadlineBadge deadline={kpi.deadline} />
                           </div>
                           {kpi.description && (
                             <p className="mt-0.5 text-sm text-muted-foreground">{kpi.description}</p>
@@ -388,7 +648,18 @@ export default function AdminKpisPage() {
                           <Button
                             variant="ghost"
                             size="sm"
+                            onClick={() => setExpandedKpi(expandedKpi === kpi.id ? null : kpi.id)}
+                            title={expandedKpi === kpi.id ? "Ocultar avances" : "Ver avances"}
+                          >
+                            {expandedKpi === kpi.id
+                              ? <ChevronUp className="h-4 w-4" />
+                              : <ChevronDown className="h-4 w-4" />}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
                             onClick={() => startEdit(kpi)}
+                            title="Editar KPI"
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
@@ -397,11 +668,20 @@ export default function AdminKpisPage() {
                             size="sm"
                             onClick={() => onDelete(kpi.id)}
                             disabled={deleting === kpi.id}
+                            title="Eliminar KPI"
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
                       </div>
+
+                      {/* Progress panel — collapsible */}
+                      {expandedKpi === kpi.id && (
+                        <KpiProgressPanel
+                          kpi={kpi}
+                          onProgressAdded={handleProgressAdded}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
@@ -417,16 +697,24 @@ export default function AdminKpisPage() {
           <Separator />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {Object.entries(grouped).map(([cat, items]) => {
-              const avgPct = items.reduce((sum, k) => sum + (k.targetValue > 0 ? (k.currentValue / k.targetValue) * 100 : 0), 0) / items.length;
+              const avgPct =
+                items.reduce(
+                  (sum, k) => sum + (k.targetValue > 0 ? (k.currentValue / k.targetValue) * 100 : 0),
+                  0
+                ) / items.length;
               return (
                 <Card key={cat} className="border border-border bg-card/90">
                   <CardContent className="p-4">
                     <p className="text-sm font-semibold text-foreground">{CATEGORY_LABELS[cat]}</p>
                     <p className="text-2xl font-bold text-foreground mt-1">{avgPct.toFixed(0)}%</p>
-                    <p className="text-xs text-muted-foreground">promedio de cumplimiento · {items.length} KPI{items.length !== 1 ? "s" : ""}</p>
+                    <p className="text-xs text-muted-foreground">
+                      promedio de cumplimiento · {items.length} KPI{items.length !== 1 ? "s" : ""}
+                    </p>
                     <div className="mt-2 h-1.5 w-full rounded-full bg-muted overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${avgPct >= 100 ? "bg-green-500" : avgPct >= 60 ? "bg-primary" : "bg-yellow-500"}`}
+                        className={`h-full rounded-full ${
+                          avgPct >= 100 ? "bg-green-500" : avgPct >= 60 ? "bg-primary" : "bg-yellow-500"
+                        }`}
                         style={{ width: `${Math.min(avgPct, 100)}%` }}
                       />
                     </div>

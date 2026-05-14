@@ -566,8 +566,17 @@ exports.Prisma.KpiScalarFieldEnum = {
   currentValue: 'currentValue',
   period: 'period',
   category: 'category',
+  deadline: 'deadline',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.KpiProgressScalarFieldEnum = {
+  id: 'id',
+  kpiId: 'kpiId',
+  value: 'value',
+  note: 'note',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SiteSettingScalarFieldEnum = {
@@ -807,6 +816,7 @@ exports.Prisma.ModelName = {
   TeamCourseAccess: 'TeamCourseAccess',
   OrgMaterial: 'OrgMaterial',
   Kpi: 'Kpi',
+  KpiProgress: 'KpiProgress',
   SiteSetting: 'SiteSetting',
   Coupon: 'Coupon',
   CourseNote: 'CourseNote',

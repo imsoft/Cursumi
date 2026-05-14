@@ -204,6 +204,11 @@ export type OrgMaterial = $Result.DefaultSelection<Prisma.$OrgMaterialPayload>
  */
 export type Kpi = $Result.DefaultSelection<Prisma.$KpiPayload>
 /**
+ * Model KpiProgress
+ * 
+ */
+export type KpiProgress = $Result.DefaultSelection<Prisma.$KpiProgressPayload>
+/**
  * Model SiteSetting
  * 
  */
@@ -953,6 +958,16 @@ export class PrismaClient<
   get kpi(): Prisma.KpiDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.kpiProgress`: Exposes CRUD operations for the **KpiProgress** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KpiProgresses
+    * const kpiProgresses = await prisma.kpiProgress.findMany()
+    * ```
+    */
+  get kpiProgress(): Prisma.KpiProgressDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.siteSetting`: Exposes CRUD operations for the **SiteSetting** model.
     * Example usage:
     * ```ts
@@ -1493,6 +1508,7 @@ export namespace Prisma {
     TeamCourseAccess: 'TeamCourseAccess',
     OrgMaterial: 'OrgMaterial',
     Kpi: 'Kpi',
+    KpiProgress: 'KpiProgress',
     SiteSetting: 'SiteSetting',
     Coupon: 'Coupon',
     CourseNote: 'CourseNote',
@@ -1515,7 +1531,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4331,6 +4347,80 @@ export namespace Prisma {
           }
         }
       }
+      KpiProgress: {
+        payload: Prisma.$KpiProgressPayload<ExtArgs>
+        fields: Prisma.KpiProgressFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KpiProgressFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KpiProgressFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>
+          }
+          findFirst: {
+            args: Prisma.KpiProgressFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KpiProgressFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>
+          }
+          findMany: {
+            args: Prisma.KpiProgressFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>[]
+          }
+          create: {
+            args: Prisma.KpiProgressCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>
+          }
+          createMany: {
+            args: Prisma.KpiProgressCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KpiProgressCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>[]
+          }
+          delete: {
+            args: Prisma.KpiProgressDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>
+          }
+          update: {
+            args: Prisma.KpiProgressUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>
+          }
+          deleteMany: {
+            args: Prisma.KpiProgressDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KpiProgressUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.KpiProgressUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>[]
+          }
+          upsert: {
+            args: Prisma.KpiProgressUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiProgressPayload>
+          }
+          aggregate: {
+            args: Prisma.KpiProgressAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKpiProgress>
+          }
+          groupBy: {
+            args: Prisma.KpiProgressGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KpiProgressGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KpiProgressCountArgs<ExtArgs>
+            result: $Utils.Optional<KpiProgressCountAggregateOutputType> | number
+          }
+        }
+      }
       SiteSetting: {
         payload: Prisma.$SiteSettingPayload<ExtArgs>
         fields: Prisma.SiteSettingFieldRefs
@@ -4995,6 +5085,7 @@ export namespace Prisma {
     teamCourseAccess?: TeamCourseAccessOmit
     orgMaterial?: OrgMaterialOmit
     kpi?: KpiOmit
+    kpiProgress?: KpiProgressOmit
     siteSetting?: SiteSettingOmit
     coupon?: CouponOmit
     courseNote?: CourseNoteOmit
@@ -5931,6 +6022,37 @@ export namespace Prisma {
    */
   export type TeamCountOutputTypeCountCourseAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TeamCourseAccessWhereInput
+  }
+
+
+  /**
+   * Count Type KpiCountOutputType
+   */
+
+  export type KpiCountOutputType = {
+    entries: number
+  }
+
+  export type KpiCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | KpiCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * KpiCountOutputType without action
+   */
+  export type KpiCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiCountOutputType
+     */
+    select?: KpiCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * KpiCountOutputType without action
+   */
+  export type KpiCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KpiProgressWhereInput
   }
 
 
@@ -49723,6 +49845,7 @@ export namespace Prisma {
     currentValue: number | null
     period: string | null
     category: string | null
+    deadline: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -49736,6 +49859,7 @@ export namespace Prisma {
     currentValue: number | null
     period: string | null
     category: string | null
+    deadline: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -49749,6 +49873,7 @@ export namespace Prisma {
     currentValue: number
     period: number
     category: number
+    deadline: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -49774,6 +49899,7 @@ export namespace Prisma {
     currentValue?: true
     period?: true
     category?: true
+    deadline?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -49787,6 +49913,7 @@ export namespace Prisma {
     currentValue?: true
     period?: true
     category?: true
+    deadline?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -49800,6 +49927,7 @@ export namespace Prisma {
     currentValue?: true
     period?: true
     category?: true
+    deadline?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -49900,6 +50028,7 @@ export namespace Prisma {
     currentValue: number
     period: string
     category: string
+    deadline: Date | null
     createdAt: Date
     updatedAt: Date
     _count: KpiCountAggregateOutputType | null
@@ -49932,8 +50061,11 @@ export namespace Prisma {
     currentValue?: boolean
     period?: boolean
     category?: boolean
+    deadline?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    entries?: boolean | Kpi$entriesArgs<ExtArgs>
+    _count?: boolean | KpiCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kpi"]>
 
   export type KpiSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -49945,6 +50077,7 @@ export namespace Prisma {
     currentValue?: boolean
     period?: boolean
     category?: boolean
+    deadline?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["kpi"]>
@@ -49958,6 +50091,7 @@ export namespace Prisma {
     currentValue?: boolean
     period?: boolean
     category?: boolean
+    deadline?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["kpi"]>
@@ -49971,15 +50105,24 @@ export namespace Prisma {
     currentValue?: boolean
     period?: boolean
     category?: boolean
+    deadline?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type KpiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "unit" | "targetValue" | "currentValue" | "period" | "category" | "createdAt" | "updatedAt", ExtArgs["result"]["kpi"]>
+  export type KpiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "unit" | "targetValue" | "currentValue" | "period" | "category" | "deadline" | "createdAt" | "updatedAt", ExtArgs["result"]["kpi"]>
+  export type KpiInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | Kpi$entriesArgs<ExtArgs>
+    _count?: boolean | KpiCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type KpiIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type KpiIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $KpiPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Kpi"
-    objects: {}
+    objects: {
+      entries: Prisma.$KpiProgressPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
@@ -49989,6 +50132,7 @@ export namespace Prisma {
       currentValue: number
       period: string
       category: string
+      deadline: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["kpi"]>
@@ -50385,6 +50529,7 @@ export namespace Prisma {
    */
   export interface Prisma__KpiClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    entries<T extends Kpi$entriesArgs<ExtArgs> = {}>(args?: Subset<T, Kpi$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -50422,6 +50567,7 @@ export namespace Prisma {
     readonly currentValue: FieldRef<"Kpi", 'Float'>
     readonly period: FieldRef<"Kpi", 'String'>
     readonly category: FieldRef<"Kpi", 'String'>
+    readonly deadline: FieldRef<"Kpi", 'DateTime'>
     readonly createdAt: FieldRef<"Kpi", 'DateTime'>
     readonly updatedAt: FieldRef<"Kpi", 'DateTime'>
   }
@@ -50441,6 +50587,10 @@ export namespace Prisma {
      */
     omit?: KpiOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+    /**
      * Filter, which Kpi to fetch.
      */
     where: KpiWhereUniqueInput
@@ -50459,6 +50609,10 @@ export namespace Prisma {
      */
     omit?: KpiOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+    /**
      * Filter, which Kpi to fetch.
      */
     where: KpiWhereUniqueInput
@@ -50476,6 +50630,10 @@ export namespace Prisma {
      * Omit specific fields from the Kpi
      */
     omit?: KpiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
     /**
      * Filter, which Kpi to fetch.
      */
@@ -50525,6 +50683,10 @@ export namespace Prisma {
      */
     omit?: KpiOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+    /**
      * Filter, which Kpi to fetch.
      */
     where?: KpiWhereInput
@@ -50573,6 +50735,10 @@ export namespace Prisma {
      */
     omit?: KpiOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+    /**
      * Filter, which Kpis to fetch.
      */
     where?: KpiWhereInput
@@ -50615,6 +50781,10 @@ export namespace Prisma {
      * Omit specific fields from the Kpi
      */
     omit?: KpiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
     /**
      * The data needed to create a Kpi.
      */
@@ -50663,6 +50833,10 @@ export namespace Prisma {
      * Omit specific fields from the Kpi
      */
     omit?: KpiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
     /**
      * The data needed to update a Kpi.
      */
@@ -50730,6 +50904,10 @@ export namespace Prisma {
      */
     omit?: KpiOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+    /**
      * The filter to search for the Kpi to update in case it exists.
      */
     where: KpiWhereUniqueInput
@@ -50756,6 +50934,10 @@ export namespace Prisma {
      */
     omit?: KpiOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+    /**
      * Filter which Kpi to delete.
      */
     where: KpiWhereUniqueInput
@@ -50776,6 +50958,30 @@ export namespace Prisma {
   }
 
   /**
+   * Kpi.entries
+   */
+  export type Kpi$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    where?: KpiProgressWhereInput
+    orderBy?: KpiProgressOrderByWithRelationInput | KpiProgressOrderByWithRelationInput[]
+    cursor?: KpiProgressWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KpiProgressScalarFieldEnum | KpiProgressScalarFieldEnum[]
+  }
+
+  /**
    * Kpi without action
    */
   export type KpiDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -50787,6 +50993,1102 @@ export namespace Prisma {
      * Omit specific fields from the Kpi
      */
     omit?: KpiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model KpiProgress
+   */
+
+  export type AggregateKpiProgress = {
+    _count: KpiProgressCountAggregateOutputType | null
+    _avg: KpiProgressAvgAggregateOutputType | null
+    _sum: KpiProgressSumAggregateOutputType | null
+    _min: KpiProgressMinAggregateOutputType | null
+    _max: KpiProgressMaxAggregateOutputType | null
+  }
+
+  export type KpiProgressAvgAggregateOutputType = {
+    value: number | null
+  }
+
+  export type KpiProgressSumAggregateOutputType = {
+    value: number | null
+  }
+
+  export type KpiProgressMinAggregateOutputType = {
+    id: string | null
+    kpiId: string | null
+    value: number | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type KpiProgressMaxAggregateOutputType = {
+    id: string | null
+    kpiId: string | null
+    value: number | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type KpiProgressCountAggregateOutputType = {
+    id: number
+    kpiId: number
+    value: number
+    note: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type KpiProgressAvgAggregateInputType = {
+    value?: true
+  }
+
+  export type KpiProgressSumAggregateInputType = {
+    value?: true
+  }
+
+  export type KpiProgressMinAggregateInputType = {
+    id?: true
+    kpiId?: true
+    value?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type KpiProgressMaxAggregateInputType = {
+    id?: true
+    kpiId?: true
+    value?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type KpiProgressCountAggregateInputType = {
+    id?: true
+    kpiId?: true
+    value?: true
+    note?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type KpiProgressAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KpiProgress to aggregate.
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KpiProgresses to fetch.
+     */
+    orderBy?: KpiProgressOrderByWithRelationInput | KpiProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: KpiProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KpiProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KpiProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned KpiProgresses
+    **/
+    _count?: true | KpiProgressCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: KpiProgressAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: KpiProgressSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: KpiProgressMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: KpiProgressMaxAggregateInputType
+  }
+
+  export type GetKpiProgressAggregateType<T extends KpiProgressAggregateArgs> = {
+        [P in keyof T & keyof AggregateKpiProgress]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKpiProgress[P]>
+      : GetScalarType<T[P], AggregateKpiProgress[P]>
+  }
+
+
+
+
+  export type KpiProgressGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KpiProgressWhereInput
+    orderBy?: KpiProgressOrderByWithAggregationInput | KpiProgressOrderByWithAggregationInput[]
+    by: KpiProgressScalarFieldEnum[] | KpiProgressScalarFieldEnum
+    having?: KpiProgressScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KpiProgressCountAggregateInputType | true
+    _avg?: KpiProgressAvgAggregateInputType
+    _sum?: KpiProgressSumAggregateInputType
+    _min?: KpiProgressMinAggregateInputType
+    _max?: KpiProgressMaxAggregateInputType
+  }
+
+  export type KpiProgressGroupByOutputType = {
+    id: string
+    kpiId: string
+    value: number
+    note: string | null
+    createdAt: Date
+    _count: KpiProgressCountAggregateOutputType | null
+    _avg: KpiProgressAvgAggregateOutputType | null
+    _sum: KpiProgressSumAggregateOutputType | null
+    _min: KpiProgressMinAggregateOutputType | null
+    _max: KpiProgressMaxAggregateOutputType | null
+  }
+
+  type GetKpiProgressGroupByPayload<T extends KpiProgressGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KpiProgressGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KpiProgressGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KpiProgressGroupByOutputType[P]>
+            : GetScalarType<T[P], KpiProgressGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KpiProgressSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiId?: boolean
+    value?: boolean
+    note?: boolean
+    createdAt?: boolean
+    kpi?: boolean | KpiDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kpiProgress"]>
+
+  export type KpiProgressSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiId?: boolean
+    value?: boolean
+    note?: boolean
+    createdAt?: boolean
+    kpi?: boolean | KpiDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kpiProgress"]>
+
+  export type KpiProgressSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiId?: boolean
+    value?: boolean
+    note?: boolean
+    createdAt?: boolean
+    kpi?: boolean | KpiDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kpiProgress"]>
+
+  export type KpiProgressSelectScalar = {
+    id?: boolean
+    kpiId?: boolean
+    value?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }
+
+  export type KpiProgressOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "kpiId" | "value" | "note" | "createdAt", ExtArgs["result"]["kpiProgress"]>
+  export type KpiProgressInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpi?: boolean | KpiDefaultArgs<ExtArgs>
+  }
+  export type KpiProgressIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpi?: boolean | KpiDefaultArgs<ExtArgs>
+  }
+  export type KpiProgressIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpi?: boolean | KpiDefaultArgs<ExtArgs>
+  }
+
+  export type $KpiProgressPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KpiProgress"
+    objects: {
+      kpi: Prisma.$KpiPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      kpiId: string
+      value: number
+      note: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["kpiProgress"]>
+    composites: {}
+  }
+
+  type KpiProgressGetPayload<S extends boolean | null | undefined | KpiProgressDefaultArgs> = $Result.GetResult<Prisma.$KpiProgressPayload, S>
+
+  type KpiProgressCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<KpiProgressFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: KpiProgressCountAggregateInputType | true
+    }
+
+  export interface KpiProgressDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KpiProgress'], meta: { name: 'KpiProgress' } }
+    /**
+     * Find zero or one KpiProgress that matches the filter.
+     * @param {KpiProgressFindUniqueArgs} args - Arguments to find a KpiProgress
+     * @example
+     * // Get one KpiProgress
+     * const kpiProgress = await prisma.kpiProgress.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KpiProgressFindUniqueArgs>(args: SelectSubset<T, KpiProgressFindUniqueArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one KpiProgress that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {KpiProgressFindUniqueOrThrowArgs} args - Arguments to find a KpiProgress
+     * @example
+     * // Get one KpiProgress
+     * const kpiProgress = await prisma.kpiProgress.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KpiProgressFindUniqueOrThrowArgs>(args: SelectSubset<T, KpiProgressFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KpiProgress that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressFindFirstArgs} args - Arguments to find a KpiProgress
+     * @example
+     * // Get one KpiProgress
+     * const kpiProgress = await prisma.kpiProgress.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KpiProgressFindFirstArgs>(args?: SelectSubset<T, KpiProgressFindFirstArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KpiProgress that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressFindFirstOrThrowArgs} args - Arguments to find a KpiProgress
+     * @example
+     * // Get one KpiProgress
+     * const kpiProgress = await prisma.kpiProgress.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KpiProgressFindFirstOrThrowArgs>(args?: SelectSubset<T, KpiProgressFindFirstOrThrowArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more KpiProgresses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KpiProgresses
+     * const kpiProgresses = await prisma.kpiProgress.findMany()
+     * 
+     * // Get first 10 KpiProgresses
+     * const kpiProgresses = await prisma.kpiProgress.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const kpiProgressWithIdOnly = await prisma.kpiProgress.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends KpiProgressFindManyArgs>(args?: SelectSubset<T, KpiProgressFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a KpiProgress.
+     * @param {KpiProgressCreateArgs} args - Arguments to create a KpiProgress.
+     * @example
+     * // Create one KpiProgress
+     * const KpiProgress = await prisma.kpiProgress.create({
+     *   data: {
+     *     // ... data to create a KpiProgress
+     *   }
+     * })
+     * 
+     */
+    create<T extends KpiProgressCreateArgs>(args: SelectSubset<T, KpiProgressCreateArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many KpiProgresses.
+     * @param {KpiProgressCreateManyArgs} args - Arguments to create many KpiProgresses.
+     * @example
+     * // Create many KpiProgresses
+     * const kpiProgress = await prisma.kpiProgress.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends KpiProgressCreateManyArgs>(args?: SelectSubset<T, KpiProgressCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KpiProgresses and returns the data saved in the database.
+     * @param {KpiProgressCreateManyAndReturnArgs} args - Arguments to create many KpiProgresses.
+     * @example
+     * // Create many KpiProgresses
+     * const kpiProgress = await prisma.kpiProgress.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many KpiProgresses and only return the `id`
+     * const kpiProgressWithIdOnly = await prisma.kpiProgress.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends KpiProgressCreateManyAndReturnArgs>(args?: SelectSubset<T, KpiProgressCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a KpiProgress.
+     * @param {KpiProgressDeleteArgs} args - Arguments to delete one KpiProgress.
+     * @example
+     * // Delete one KpiProgress
+     * const KpiProgress = await prisma.kpiProgress.delete({
+     *   where: {
+     *     // ... filter to delete one KpiProgress
+     *   }
+     * })
+     * 
+     */
+    delete<T extends KpiProgressDeleteArgs>(args: SelectSubset<T, KpiProgressDeleteArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one KpiProgress.
+     * @param {KpiProgressUpdateArgs} args - Arguments to update one KpiProgress.
+     * @example
+     * // Update one KpiProgress
+     * const kpiProgress = await prisma.kpiProgress.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends KpiProgressUpdateArgs>(args: SelectSubset<T, KpiProgressUpdateArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more KpiProgresses.
+     * @param {KpiProgressDeleteManyArgs} args - Arguments to filter KpiProgresses to delete.
+     * @example
+     * // Delete a few KpiProgresses
+     * const { count } = await prisma.kpiProgress.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends KpiProgressDeleteManyArgs>(args?: SelectSubset<T, KpiProgressDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KpiProgresses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KpiProgresses
+     * const kpiProgress = await prisma.kpiProgress.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends KpiProgressUpdateManyArgs>(args: SelectSubset<T, KpiProgressUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KpiProgresses and returns the data updated in the database.
+     * @param {KpiProgressUpdateManyAndReturnArgs} args - Arguments to update many KpiProgresses.
+     * @example
+     * // Update many KpiProgresses
+     * const kpiProgress = await prisma.kpiProgress.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more KpiProgresses and only return the `id`
+     * const kpiProgressWithIdOnly = await prisma.kpiProgress.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends KpiProgressUpdateManyAndReturnArgs>(args: SelectSubset<T, KpiProgressUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one KpiProgress.
+     * @param {KpiProgressUpsertArgs} args - Arguments to update or create a KpiProgress.
+     * @example
+     * // Update or create a KpiProgress
+     * const kpiProgress = await prisma.kpiProgress.upsert({
+     *   create: {
+     *     // ... data to create a KpiProgress
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KpiProgress we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KpiProgressUpsertArgs>(args: SelectSubset<T, KpiProgressUpsertArgs<ExtArgs>>): Prisma__KpiProgressClient<$Result.GetResult<Prisma.$KpiProgressPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of KpiProgresses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressCountArgs} args - Arguments to filter KpiProgresses to count.
+     * @example
+     * // Count the number of KpiProgresses
+     * const count = await prisma.kpiProgress.count({
+     *   where: {
+     *     // ... the filter for the KpiProgresses we want to count
+     *   }
+     * })
+    **/
+    count<T extends KpiProgressCountArgs>(
+      args?: Subset<T, KpiProgressCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KpiProgressCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KpiProgress.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KpiProgressAggregateArgs>(args: Subset<T, KpiProgressAggregateArgs>): Prisma.PrismaPromise<GetKpiProgressAggregateType<T>>
+
+    /**
+     * Group by KpiProgress.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiProgressGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends KpiProgressGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KpiProgressGroupByArgs['orderBy'] }
+        : { orderBy?: KpiProgressGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KpiProgressGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKpiProgressGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KpiProgress model
+   */
+  readonly fields: KpiProgressFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KpiProgress.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KpiProgressClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    kpi<T extends KpiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KpiDefaultArgs<ExtArgs>>): Prisma__KpiClient<$Result.GetResult<Prisma.$KpiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KpiProgress model
+   */
+  interface KpiProgressFieldRefs {
+    readonly id: FieldRef<"KpiProgress", 'String'>
+    readonly kpiId: FieldRef<"KpiProgress", 'String'>
+    readonly value: FieldRef<"KpiProgress", 'Float'>
+    readonly note: FieldRef<"KpiProgress", 'String'>
+    readonly createdAt: FieldRef<"KpiProgress", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * KpiProgress findUnique
+   */
+  export type KpiProgressFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which KpiProgress to fetch.
+     */
+    where: KpiProgressWhereUniqueInput
+  }
+
+  /**
+   * KpiProgress findUniqueOrThrow
+   */
+  export type KpiProgressFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which KpiProgress to fetch.
+     */
+    where: KpiProgressWhereUniqueInput
+  }
+
+  /**
+   * KpiProgress findFirst
+   */
+  export type KpiProgressFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which KpiProgress to fetch.
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KpiProgresses to fetch.
+     */
+    orderBy?: KpiProgressOrderByWithRelationInput | KpiProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KpiProgresses.
+     */
+    cursor?: KpiProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KpiProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KpiProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KpiProgresses.
+     */
+    distinct?: KpiProgressScalarFieldEnum | KpiProgressScalarFieldEnum[]
+  }
+
+  /**
+   * KpiProgress findFirstOrThrow
+   */
+  export type KpiProgressFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which KpiProgress to fetch.
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KpiProgresses to fetch.
+     */
+    orderBy?: KpiProgressOrderByWithRelationInput | KpiProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KpiProgresses.
+     */
+    cursor?: KpiProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KpiProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KpiProgresses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KpiProgresses.
+     */
+    distinct?: KpiProgressScalarFieldEnum | KpiProgressScalarFieldEnum[]
+  }
+
+  /**
+   * KpiProgress findMany
+   */
+  export type KpiProgressFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * Filter, which KpiProgresses to fetch.
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KpiProgresses to fetch.
+     */
+    orderBy?: KpiProgressOrderByWithRelationInput | KpiProgressOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing KpiProgresses.
+     */
+    cursor?: KpiProgressWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KpiProgresses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KpiProgresses.
+     */
+    skip?: number
+    distinct?: KpiProgressScalarFieldEnum | KpiProgressScalarFieldEnum[]
+  }
+
+  /**
+   * KpiProgress create
+   */
+  export type KpiProgressCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * The data needed to create a KpiProgress.
+     */
+    data: XOR<KpiProgressCreateInput, KpiProgressUncheckedCreateInput>
+  }
+
+  /**
+   * KpiProgress createMany
+   */
+  export type KpiProgressCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KpiProgresses.
+     */
+    data: KpiProgressCreateManyInput | KpiProgressCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KpiProgress createManyAndReturn
+   */
+  export type KpiProgressCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * The data used to create many KpiProgresses.
+     */
+    data: KpiProgressCreateManyInput | KpiProgressCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KpiProgress update
+   */
+  export type KpiProgressUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * The data needed to update a KpiProgress.
+     */
+    data: XOR<KpiProgressUpdateInput, KpiProgressUncheckedUpdateInput>
+    /**
+     * Choose, which KpiProgress to update.
+     */
+    where: KpiProgressWhereUniqueInput
+  }
+
+  /**
+   * KpiProgress updateMany
+   */
+  export type KpiProgressUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KpiProgresses.
+     */
+    data: XOR<KpiProgressUpdateManyMutationInput, KpiProgressUncheckedUpdateManyInput>
+    /**
+     * Filter which KpiProgresses to update
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * Limit how many KpiProgresses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiProgress updateManyAndReturn
+   */
+  export type KpiProgressUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * The data used to update KpiProgresses.
+     */
+    data: XOR<KpiProgressUpdateManyMutationInput, KpiProgressUncheckedUpdateManyInput>
+    /**
+     * Filter which KpiProgresses to update
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * Limit how many KpiProgresses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KpiProgress upsert
+   */
+  export type KpiProgressUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * The filter to search for the KpiProgress to update in case it exists.
+     */
+    where: KpiProgressWhereUniqueInput
+    /**
+     * In case the KpiProgress found by the `where` argument doesn't exist, create a new KpiProgress with this data.
+     */
+    create: XOR<KpiProgressCreateInput, KpiProgressUncheckedCreateInput>
+    /**
+     * In case the KpiProgress was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KpiProgressUpdateInput, KpiProgressUncheckedUpdateInput>
+  }
+
+  /**
+   * KpiProgress delete
+   */
+  export type KpiProgressDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
+    /**
+     * Filter which KpiProgress to delete.
+     */
+    where: KpiProgressWhereUniqueInput
+  }
+
+  /**
+   * KpiProgress deleteMany
+   */
+  export type KpiProgressDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KpiProgresses to delete
+     */
+    where?: KpiProgressWhereInput
+    /**
+     * Limit how many KpiProgresses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiProgress without action
+   */
+  export type KpiProgressDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiProgress
+     */
+    select?: KpiProgressSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiProgress
+     */
+    omit?: KpiProgressOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KpiProgressInclude<ExtArgs> | null
   }
 
 
@@ -58980,11 +60282,23 @@ export namespace Prisma {
     currentValue: 'currentValue',
     period: 'period',
     category: 'category',
+    deadline: 'deadline',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type KpiScalarFieldEnum = (typeof KpiScalarFieldEnum)[keyof typeof KpiScalarFieldEnum]
+
+
+  export const KpiProgressScalarFieldEnum: {
+    id: 'id',
+    kpiId: 'kpiId',
+    value: 'value',
+    note: 'note',
+    createdAt: 'createdAt'
+  };
+
+  export type KpiProgressScalarFieldEnum = (typeof KpiProgressScalarFieldEnum)[keyof typeof KpiProgressScalarFieldEnum]
 
 
   export const SiteSettingScalarFieldEnum: {
@@ -62516,8 +63830,10 @@ export namespace Prisma {
     currentValue?: FloatFilter<"Kpi"> | number
     period?: StringFilter<"Kpi"> | string
     category?: StringFilter<"Kpi"> | string
+    deadline?: DateTimeNullableFilter<"Kpi"> | Date | string | null
     createdAt?: DateTimeFilter<"Kpi"> | Date | string
     updatedAt?: DateTimeFilter<"Kpi"> | Date | string
+    entries?: KpiProgressListRelationFilter
   }
 
   export type KpiOrderByWithRelationInput = {
@@ -62529,8 +63845,10 @@ export namespace Prisma {
     currentValue?: SortOrder
     period?: SortOrder
     category?: SortOrder
+    deadline?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    entries?: KpiProgressOrderByRelationAggregateInput
   }
 
   export type KpiWhereUniqueInput = Prisma.AtLeast<{
@@ -62545,8 +63863,10 @@ export namespace Prisma {
     currentValue?: FloatFilter<"Kpi"> | number
     period?: StringFilter<"Kpi"> | string
     category?: StringFilter<"Kpi"> | string
+    deadline?: DateTimeNullableFilter<"Kpi"> | Date | string | null
     createdAt?: DateTimeFilter<"Kpi"> | Date | string
     updatedAt?: DateTimeFilter<"Kpi"> | Date | string
+    entries?: KpiProgressListRelationFilter
   }, "id">
 
   export type KpiOrderByWithAggregationInput = {
@@ -62558,6 +63878,7 @@ export namespace Prisma {
     currentValue?: SortOrder
     period?: SortOrder
     category?: SortOrder
+    deadline?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: KpiCountOrderByAggregateInput
@@ -62579,8 +63900,66 @@ export namespace Prisma {
     currentValue?: FloatWithAggregatesFilter<"Kpi"> | number
     period?: StringWithAggregatesFilter<"Kpi"> | string
     category?: StringWithAggregatesFilter<"Kpi"> | string
+    deadline?: DateTimeNullableWithAggregatesFilter<"Kpi"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Kpi"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Kpi"> | Date | string
+  }
+
+  export type KpiProgressWhereInput = {
+    AND?: KpiProgressWhereInput | KpiProgressWhereInput[]
+    OR?: KpiProgressWhereInput[]
+    NOT?: KpiProgressWhereInput | KpiProgressWhereInput[]
+    id?: StringFilter<"KpiProgress"> | string
+    kpiId?: StringFilter<"KpiProgress"> | string
+    value?: FloatFilter<"KpiProgress"> | number
+    note?: StringNullableFilter<"KpiProgress"> | string | null
+    createdAt?: DateTimeFilter<"KpiProgress"> | Date | string
+    kpi?: XOR<KpiScalarRelationFilter, KpiWhereInput>
+  }
+
+  export type KpiProgressOrderByWithRelationInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    value?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    kpi?: KpiOrderByWithRelationInput
+  }
+
+  export type KpiProgressWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: KpiProgressWhereInput | KpiProgressWhereInput[]
+    OR?: KpiProgressWhereInput[]
+    NOT?: KpiProgressWhereInput | KpiProgressWhereInput[]
+    kpiId?: StringFilter<"KpiProgress"> | string
+    value?: FloatFilter<"KpiProgress"> | number
+    note?: StringNullableFilter<"KpiProgress"> | string | null
+    createdAt?: DateTimeFilter<"KpiProgress"> | Date | string
+    kpi?: XOR<KpiScalarRelationFilter, KpiWhereInput>
+  }, "id">
+
+  export type KpiProgressOrderByWithAggregationInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    value?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: KpiProgressCountOrderByAggregateInput
+    _avg?: KpiProgressAvgOrderByAggregateInput
+    _max?: KpiProgressMaxOrderByAggregateInput
+    _min?: KpiProgressMinOrderByAggregateInput
+    _sum?: KpiProgressSumOrderByAggregateInput
+  }
+
+  export type KpiProgressScalarWhereWithAggregatesInput = {
+    AND?: KpiProgressScalarWhereWithAggregatesInput | KpiProgressScalarWhereWithAggregatesInput[]
+    OR?: KpiProgressScalarWhereWithAggregatesInput[]
+    NOT?: KpiProgressScalarWhereWithAggregatesInput | KpiProgressScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"KpiProgress"> | string
+    kpiId?: StringWithAggregatesFilter<"KpiProgress"> | string
+    value?: FloatWithAggregatesFilter<"KpiProgress"> | number
+    note?: StringNullableWithAggregatesFilter<"KpiProgress"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"KpiProgress"> | Date | string
   }
 
   export type SiteSettingWhereInput = {
@@ -66340,8 +67719,10 @@ export namespace Prisma {
     currentValue?: number
     period?: string
     category?: string
+    deadline?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    entries?: KpiProgressCreateNestedManyWithoutKpiInput
   }
 
   export type KpiUncheckedCreateInput = {
@@ -66353,8 +67734,10 @@ export namespace Prisma {
     currentValue?: number
     period?: string
     category?: string
+    deadline?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    entries?: KpiProgressUncheckedCreateNestedManyWithoutKpiInput
   }
 
   export type KpiUpdateInput = {
@@ -66366,8 +67749,10 @@ export namespace Prisma {
     currentValue?: FloatFieldUpdateOperationsInput | number
     period?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: KpiProgressUpdateManyWithoutKpiNestedInput
   }
 
   export type KpiUncheckedUpdateInput = {
@@ -66379,8 +67764,10 @@ export namespace Prisma {
     currentValue?: FloatFieldUpdateOperationsInput | number
     period?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: KpiProgressUncheckedUpdateManyWithoutKpiNestedInput
   }
 
   export type KpiCreateManyInput = {
@@ -66392,6 +67779,7 @@ export namespace Prisma {
     currentValue?: number
     period?: string
     category?: string
+    deadline?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -66405,6 +67793,7 @@ export namespace Prisma {
     currentValue?: FloatFieldUpdateOperationsInput | number
     period?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -66418,8 +67807,64 @@ export namespace Prisma {
     currentValue?: FloatFieldUpdateOperationsInput | number
     period?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiProgressCreateInput = {
+    id?: string
+    value: number
+    note?: string | null
+    createdAt?: Date | string
+    kpi: KpiCreateNestedOneWithoutEntriesInput
+  }
+
+  export type KpiProgressUncheckedCreateInput = {
+    id?: string
+    kpiId: string
+    value: number
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type KpiProgressUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpi?: KpiUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type KpiProgressUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kpiId?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiProgressCreateManyInput = {
+    id?: string
+    kpiId: string
+    value: number
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type KpiProgressUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiProgressUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kpiId?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SiteSettingCreateInput = {
@@ -69457,6 +70902,16 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type KpiProgressListRelationFilter = {
+    every?: KpiProgressWhereInput
+    some?: KpiProgressWhereInput
+    none?: KpiProgressWhereInput
+  }
+
+  export type KpiProgressOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type KpiCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -69466,6 +70921,7 @@ export namespace Prisma {
     currentValue?: SortOrder
     period?: SortOrder
     category?: SortOrder
+    deadline?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -69484,6 +70940,7 @@ export namespace Prisma {
     currentValue?: SortOrder
     period?: SortOrder
     category?: SortOrder
+    deadline?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -69497,6 +70954,7 @@ export namespace Prisma {
     currentValue?: SortOrder
     period?: SortOrder
     category?: SortOrder
+    deadline?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -69520,6 +70978,43 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type KpiScalarRelationFilter = {
+    is?: KpiWhereInput
+    isNot?: KpiWhereInput
+  }
+
+  export type KpiProgressCountOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    value?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type KpiProgressAvgOrderByAggregateInput = {
+    value?: SortOrder
+  }
+
+  export type KpiProgressMaxOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    value?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type KpiProgressMinOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    value?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type KpiProgressSumOrderByAggregateInput = {
+    value?: SortOrder
   }
 
   export type SiteSettingCountOrderByAggregateInput = {
@@ -73577,12 +75072,68 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutMaterialsInput, OrganizationUpdateWithoutMaterialsInput>, OrganizationUncheckedUpdateWithoutMaterialsInput>
   }
 
+  export type KpiProgressCreateNestedManyWithoutKpiInput = {
+    create?: XOR<KpiProgressCreateWithoutKpiInput, KpiProgressUncheckedCreateWithoutKpiInput> | KpiProgressCreateWithoutKpiInput[] | KpiProgressUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KpiProgressCreateOrConnectWithoutKpiInput | KpiProgressCreateOrConnectWithoutKpiInput[]
+    createMany?: KpiProgressCreateManyKpiInputEnvelope
+    connect?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+  }
+
+  export type KpiProgressUncheckedCreateNestedManyWithoutKpiInput = {
+    create?: XOR<KpiProgressCreateWithoutKpiInput, KpiProgressUncheckedCreateWithoutKpiInput> | KpiProgressCreateWithoutKpiInput[] | KpiProgressUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KpiProgressCreateOrConnectWithoutKpiInput | KpiProgressCreateOrConnectWithoutKpiInput[]
+    createMany?: KpiProgressCreateManyKpiInputEnvelope
+    connect?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+  }
+
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type KpiProgressUpdateManyWithoutKpiNestedInput = {
+    create?: XOR<KpiProgressCreateWithoutKpiInput, KpiProgressUncheckedCreateWithoutKpiInput> | KpiProgressCreateWithoutKpiInput[] | KpiProgressUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KpiProgressCreateOrConnectWithoutKpiInput | KpiProgressCreateOrConnectWithoutKpiInput[]
+    upsert?: KpiProgressUpsertWithWhereUniqueWithoutKpiInput | KpiProgressUpsertWithWhereUniqueWithoutKpiInput[]
+    createMany?: KpiProgressCreateManyKpiInputEnvelope
+    set?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    disconnect?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    delete?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    connect?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    update?: KpiProgressUpdateWithWhereUniqueWithoutKpiInput | KpiProgressUpdateWithWhereUniqueWithoutKpiInput[]
+    updateMany?: KpiProgressUpdateManyWithWhereWithoutKpiInput | KpiProgressUpdateManyWithWhereWithoutKpiInput[]
+    deleteMany?: KpiProgressScalarWhereInput | KpiProgressScalarWhereInput[]
+  }
+
+  export type KpiProgressUncheckedUpdateManyWithoutKpiNestedInput = {
+    create?: XOR<KpiProgressCreateWithoutKpiInput, KpiProgressUncheckedCreateWithoutKpiInput> | KpiProgressCreateWithoutKpiInput[] | KpiProgressUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KpiProgressCreateOrConnectWithoutKpiInput | KpiProgressCreateOrConnectWithoutKpiInput[]
+    upsert?: KpiProgressUpsertWithWhereUniqueWithoutKpiInput | KpiProgressUpsertWithWhereUniqueWithoutKpiInput[]
+    createMany?: KpiProgressCreateManyKpiInputEnvelope
+    set?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    disconnect?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    delete?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    connect?: KpiProgressWhereUniqueInput | KpiProgressWhereUniqueInput[]
+    update?: KpiProgressUpdateWithWhereUniqueWithoutKpiInput | KpiProgressUpdateWithWhereUniqueWithoutKpiInput[]
+    updateMany?: KpiProgressUpdateManyWithWhereWithoutKpiInput | KpiProgressUpdateManyWithWhereWithoutKpiInput[]
+    deleteMany?: KpiProgressScalarWhereInput | KpiProgressScalarWhereInput[]
+  }
+
+  export type KpiCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<KpiCreateWithoutEntriesInput, KpiUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: KpiCreateOrConnectWithoutEntriesInput
+    connect?: KpiWhereUniqueInput
+  }
+
+  export type KpiUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<KpiCreateWithoutEntriesInput, KpiUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: KpiCreateOrConnectWithoutEntriesInput
+    upsert?: KpiUpsertWithoutEntriesInput
+    connect?: KpiWhereUniqueInput
+    update?: XOR<XOR<KpiUpdateToOneWithWhereWithoutEntriesInput, KpiUpdateWithoutEntriesInput>, KpiUncheckedUpdateWithoutEntriesInput>
   }
 
   export type UserCreateNestedOneWithoutCourseNotesInput = {
@@ -86423,6 +87974,129 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
+  export type KpiProgressCreateWithoutKpiInput = {
+    id?: string
+    value: number
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type KpiProgressUncheckedCreateWithoutKpiInput = {
+    id?: string
+    value: number
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type KpiProgressCreateOrConnectWithoutKpiInput = {
+    where: KpiProgressWhereUniqueInput
+    create: XOR<KpiProgressCreateWithoutKpiInput, KpiProgressUncheckedCreateWithoutKpiInput>
+  }
+
+  export type KpiProgressCreateManyKpiInputEnvelope = {
+    data: KpiProgressCreateManyKpiInput | KpiProgressCreateManyKpiInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KpiProgressUpsertWithWhereUniqueWithoutKpiInput = {
+    where: KpiProgressWhereUniqueInput
+    update: XOR<KpiProgressUpdateWithoutKpiInput, KpiProgressUncheckedUpdateWithoutKpiInput>
+    create: XOR<KpiProgressCreateWithoutKpiInput, KpiProgressUncheckedCreateWithoutKpiInput>
+  }
+
+  export type KpiProgressUpdateWithWhereUniqueWithoutKpiInput = {
+    where: KpiProgressWhereUniqueInput
+    data: XOR<KpiProgressUpdateWithoutKpiInput, KpiProgressUncheckedUpdateWithoutKpiInput>
+  }
+
+  export type KpiProgressUpdateManyWithWhereWithoutKpiInput = {
+    where: KpiProgressScalarWhereInput
+    data: XOR<KpiProgressUpdateManyMutationInput, KpiProgressUncheckedUpdateManyWithoutKpiInput>
+  }
+
+  export type KpiProgressScalarWhereInput = {
+    AND?: KpiProgressScalarWhereInput | KpiProgressScalarWhereInput[]
+    OR?: KpiProgressScalarWhereInput[]
+    NOT?: KpiProgressScalarWhereInput | KpiProgressScalarWhereInput[]
+    id?: StringFilter<"KpiProgress"> | string
+    kpiId?: StringFilter<"KpiProgress"> | string
+    value?: FloatFilter<"KpiProgress"> | number
+    note?: StringNullableFilter<"KpiProgress"> | string | null
+    createdAt?: DateTimeFilter<"KpiProgress"> | Date | string
+  }
+
+  export type KpiCreateWithoutEntriesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    unit?: string
+    targetValue: number
+    currentValue?: number
+    period?: string
+    category?: string
+    deadline?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiUncheckedCreateWithoutEntriesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    unit?: string
+    targetValue: number
+    currentValue?: number
+    period?: string
+    category?: string
+    deadline?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiCreateOrConnectWithoutEntriesInput = {
+    where: KpiWhereUniqueInput
+    create: XOR<KpiCreateWithoutEntriesInput, KpiUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type KpiUpsertWithoutEntriesInput = {
+    update: XOR<KpiUpdateWithoutEntriesInput, KpiUncheckedUpdateWithoutEntriesInput>
+    create: XOR<KpiCreateWithoutEntriesInput, KpiUncheckedCreateWithoutEntriesInput>
+    where?: KpiWhereInput
+  }
+
+  export type KpiUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: KpiWhereInput
+    data: XOR<KpiUpdateWithoutEntriesInput, KpiUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type KpiUpdateWithoutEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    currentValue?: FloatFieldUpdateOperationsInput | number
+    period?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiUncheckedUpdateWithoutEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    currentValue?: FloatFieldUpdateOperationsInput | number
+    period?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateWithoutCourseNotesInput = {
     id?: string
     name?: string | null
@@ -90851,6 +92525,34 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiProgressCreateManyKpiInput = {
+    id?: string
+    value: number
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type KpiProgressUpdateWithoutKpiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiProgressUncheckedUpdateWithoutKpiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiProgressUncheckedUpdateManyWithoutKpiInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
