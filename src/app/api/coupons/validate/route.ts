@@ -4,7 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { checkRateLimitAsync } from "@/lib/rate-limit";
 
-const bodySchema = z.object({ code: z.string().min(1) });
+const bodySchema = z.object({
+  code: z.string().min(1),
+  courseId: z.string().optional(),
+});
 
 // POST /api/coupons/validate — valida un cupón y retorna el % de descuento
 export async function POST(req: NextRequest) {
@@ -18,7 +21,8 @@ export async function POST(req: NextRequest) {
       windowSecs: 3600,
     });
     if (limited) return limited;
-    const { code } = bodySchema.parse(await req.json());
+
+    const { code, courseId } = bodySchema.parse(await req.json());
 
     const coupon = await prisma.coupon.findUnique({
       where: { code: code.toUpperCase().trim() },
@@ -32,6 +36,10 @@ export async function POST(req: NextRequest) {
     }
     if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
       return NextResponse.json({ error: "El cupón ya alcanzó su límite de usos" }, { status: 410 });
+    }
+    // Si el cupón está restringido a un curso, verificar que coincida
+    if (coupon.courseId && coupon.courseId !== courseId) {
+      return NextResponse.json({ error: "Este cupón no es válido para este curso" }, { status: 422 });
     }
 
     return NextResponse.json({

@@ -84,7 +84,8 @@ export async function POST(req: NextRequest) {
         coupon &&
         coupon.active &&
         (!coupon.expiresAt || coupon.expiresAt > new Date()) &&
-        (coupon.maxUses === null || coupon.usedCount < coupon.maxUses)
+        (coupon.maxUses === null || coupon.usedCount < coupon.maxUses) &&
+        (!coupon.courseId || coupon.courseId === courseId)
       ) {
         appliedCoupon = { code: coupon.code, discountPct: coupon.discountPct };
       }

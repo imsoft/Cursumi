@@ -9,9 +9,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, PlusCircle, ToggleLeft, ToggleRight, TicketPercent } from "lucide-react";
+import {
+  Trash2, PlusCircle, ToggleLeft, ToggleRight, TicketPercent,
+  ChevronDown, ChevronUp, User, BookOpen, Globe,
+} from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { DatePickerField } from "@/components/ui/date-picker";
+import { formatPriceMXN } from "@/lib/utils";
+
+interface CouponUsage {
+  id: string;
+  couponCode: string | null;
+  courseId: string | null;
+  userId: string | null;
+  amount: number;
+  discountPct: number;
+  createdAt: string;
+  user: { name: string | null; email: string } | null;
+  course: { title: string } | null;
+}
 
 interface Coupon {
   id: string;
@@ -23,6 +39,14 @@ interface Coupon {
   active: boolean;
   expiresAt: string | null;
   createdAt: string;
+  courseId: string | null;
+  course: { id: string; title: string } | null;
+  usages: CouponUsage[];
+}
+
+interface Course {
+  id: string;
+  title: string;
 }
 
 const schema = z.object({
@@ -31,17 +55,34 @@ const schema = z.object({
   discountPct: z.coerce.number().int().min(1).max(100),
   maxUses: z.coerce.number().int().positive().optional().or(z.literal("")),
   expiresAt: z.string().optional(),
+  courseId: z.string().optional(),
 });
 type FormValues = z.infer<typeof schema>;
 
-export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) {
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("es-MX", {
+    day: "numeric", month: "short", year: "numeric",
+    hour: "2-digit", minute: "2-digit",
+  });
+}
+
+export function CouponsClient({
+  initialCoupons,
+  courses,
+}: {
+  initialCoupons: Coupon[];
+  courses: Course[];
+}) {
   const [coupons, setCoupons] = useState(initialCoupons);
   const [loading, setLoading] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
     resolver: createZodResolver(schema),
-    defaultValues: { code: "", description: "", discountPct: 10, maxUses: "", expiresAt: "" },
+    defaultValues: {
+      code: "", description: "", discountPct: 10, maxUses: "", expiresAt: "", courseId: "",
+    },
   });
 
   const onSubmit = async (values: FormValues) => {
@@ -54,6 +95,7 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
         discountPct: values.discountPct,
         maxUses: values.maxUses ? Number(values.maxUses) : null,
         expiresAt: values.expiresAt ? new Date(values.expiresAt).toISOString() : null,
+        courseId: values.courseId || null,
       }),
     });
     if (res.ok) {
@@ -88,13 +130,17 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageHeader title="Cupones de descuento" description={`${coupons.length} cupón${coupons.length !== 1 ? "es" : ""} creado${coupons.length !== 1 ? "s" : ""}`} />
+        <PageHeader
+          title="Cupones de descuento"
+          description={`${coupons.length} cupón${coupons.length !== 1 ? "es" : ""} creado${coupons.length !== 1 ? "s" : ""}`}
+        />
         <Button onClick={() => setShowForm((v) => !v)} className="gap-2">
           <PlusCircle className="h-4 w-4" />
           Nuevo cupón
         </Button>
       </div>
 
+      {/* ── Create form ─────────────────────────────────────────────── */}
       {showForm && (
         <Card className="border border-border bg-card/90">
           <CardHeader><CardTitle>Crear cupón</CardTitle></CardHeader>
@@ -102,14 +148,18 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Input label="Código (ej. PROMO20)" {...form.register("code")} />
-                {form.formState.errors.code && <p className="text-xs text-destructive mt-1">{form.formState.errors.code.message}</p>}
+                {form.formState.errors.code && (
+                  <p className="text-xs text-destructive mt-1">{form.formState.errors.code.message}</p>
+                )}
               </div>
               <div>
                 <Input label="Descripción (opcional)" {...form.register("description")} />
               </div>
               <div>
                 <Input label="Descuento (%)" type="number" min={1} max={100} {...form.register("discountPct")} />
-                {form.formState.errors.discountPct && <p className="text-xs text-destructive mt-1">{form.formState.errors.discountPct.message}</p>}
+                {form.formState.errors.discountPct && (
+                  <p className="text-xs text-destructive mt-1">{form.formState.errors.discountPct.message}</p>
+                )}
               </div>
               <div>
                 <Input label="Máximo de usos (vacío = ilimitado)" type="number" min={1} {...form.register("maxUses")} />
@@ -124,60 +174,162 @@ export function CouponsClient({ initialCoupons }: { initialCoupons: Coupon[] }) 
                   placeholder="Sin expiración"
                 />
               </div>
-              <div className="flex items-end gap-2">
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-foreground">
+                  Curso al que aplica
+                </label>
+                <select
+                  {...form.register("courseId")}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="">Todos los cursos</option>
+                  {courses.map((c) => (
+                    <option key={c.id} value={c.id}>{c.title}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-end gap-2 sm:col-span-2">
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? "Creando..." : "Crear cupón"}
                 </Button>
-                <Button type="button" variant="ghost" onClick={() => setShowForm(false)}>Cancelar</Button>
+                <Button type="button" variant="ghost" onClick={() => setShowForm(false)}>
+                  Cancelar
+                </Button>
               </div>
             </form>
           </CardContent>
         </Card>
       )}
 
+      {/* ── Coupon list ─────────────────────────────────────────────── */}
       <div className="space-y-3">
-        {coupons.map((coupon) => (
-          <Card key={coupon.id} className="border border-border bg-card/90">
-            <CardContent className="p-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-mono text-lg font-bold">{coupon.code}</span>
-                    <Badge variant={coupon.active ? "default" : "outline"}>
-                      {coupon.active ? "Activo" : "Inactivo"}
-                    </Badge>
-                    <Badge variant="outline">{coupon.discountPct}% off</Badge>
+        {coupons.map((coupon) => {
+          const isExpanded = expandedId === coupon.id;
+          return (
+            <Card key={coupon.id} className="border border-border bg-card/90">
+              <CardContent className="p-4 space-y-3">
+                {/* Header row */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-lg font-bold">{coupon.code}</span>
+                      <Badge variant={coupon.active ? "default" : "outline"}>
+                        {coupon.active ? "Activo" : "Inactivo"}
+                      </Badge>
+                      <Badge variant="outline">{coupon.discountPct}% off</Badge>
+                    </div>
+
+                    {coupon.description && (
+                      <p className="text-sm text-muted-foreground">{coupon.description}</p>
+                    )}
+
+                    {/* Course scope badge */}
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      {coupon.course ? (
+                        <>
+                          <BookOpen className="h-3.5 w-3.5 text-primary" />
+                          <span>Solo para: <strong className="text-foreground">{coupon.course.title}</strong></span>
+                        </>
+                      ) : (
+                        <>
+                          <Globe className="h-3.5 w-3.5" />
+                          <span>Aplica a todos los cursos</span>
+                        </>
+                      )}
+                    </div>
+
+                    <p className="text-xs text-muted-foreground">
+                      Usos: {coupon.usedCount}{coupon.maxUses ? ` / ${coupon.maxUses}` : ""}
+                      {coupon.expiresAt && ` · Expira: ${new Date(coupon.expiresAt).toLocaleDateString("es-MX")}`}
+                    </p>
                   </div>
-                  {coupon.description && <p className="text-sm text-muted-foreground">{coupon.description}</p>}
-                  <p className="text-xs text-muted-foreground">
-                    Usos: {coupon.usedCount}{coupon.maxUses ? ` / ${coupon.maxUses}` : ""}
-                    {coupon.expiresAt && ` · Expira: ${new Date(coupon.expiresAt).toLocaleDateString("es-MX")}`}
-                  </p>
+
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setExpandedId(isExpanded ? null : coupon.id)}
+                      className="gap-1"
+                    >
+                      <User className="h-3.5 w-3.5" />
+                      {coupon.usages.length} {coupon.usages.length === 1 ? "uso" : "usos"}
+                      {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => toggleActive(coupon.id, coupon.active)}
+                      disabled={loading === coupon.id}
+                      className="gap-1"
+                    >
+                      {coupon.active
+                        ? <ToggleRight className="h-4 w-4" />
+                        : <ToggleLeft className="h-4 w-4" />}
+                      {coupon.active ? "Desactivar" : "Activar"}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => deleteCoupon(coupon.id)}
+                      disabled={loading === coupon.id}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => toggleActive(coupon.id, coupon.active)}
-                    disabled={loading === coupon.id}
-                    className="gap-1"
-                  >
-                    {coupon.active ? <ToggleRight className="h-4 w-4" /> : <ToggleLeft className="h-4 w-4" />}
-                    {coupon.active ? "Desactivar" : "Activar"}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => deleteCoupon(coupon.id)}
-                    disabled={loading === coupon.id}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+
+                {/* Usage history panel */}
+                {isExpanded && (
+                  <div className="rounded-lg border border-border overflow-hidden">
+                    {coupon.usages.length === 0 ? (
+                      <div className="px-4 py-6 text-center text-sm text-muted-foreground">
+                        Nadie ha usado este cupón todavía.
+                      </div>
+                    ) : (
+                      <table className="w-full text-sm">
+                        <thead className="bg-muted/50">
+                          <tr>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Usuario</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Curso</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Pagó</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {coupon.usages.map((u) => (
+                            <tr key={u.id} className="bg-background">
+                              <td className="px-3 py-2">
+                                <p className="font-medium text-foreground">{u.user?.name ?? "—"}</p>
+                                <p className="text-xs text-muted-foreground">{u.user?.email ?? "—"}</p>
+                              </td>
+                              <td className="px-3 py-2 text-muted-foreground">
+                                {u.course?.title ?? "—"}
+                              </td>
+                              <td className="px-3 py-2">
+                                <span className="text-foreground font-medium">
+                                  {formatPriceMXN(u.amount)}
+                                </span>
+                                {u.discountPct > 0 && (
+                                  <span className="ml-1 text-xs text-green-600 dark:text-green-400">
+                                    -{u.discountPct}%
+                                  </span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 text-xs text-muted-foreground whitespace-nowrap">
+                                {formatDate(u.createdAt)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          );
+        })}
+
         {coupons.length === 0 && (
           <EmptyState
             title="Sin cupones"

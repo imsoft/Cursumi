@@ -5437,6 +5437,7 @@ export namespace Prisma {
     sessionAnonymousQuestions: number
     learningReflections: number
     wishlistItems: number
+    coupons: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5453,6 +5454,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: boolean | CourseCountOutputTypeCountSessionAnonymousQuestionsArgs
     learningReflections?: boolean | CourseCountOutputTypeCountLearningReflectionsArgs
     wishlistItems?: boolean | CourseCountOutputTypeCountWishlistItemsArgs
+    coupons?: boolean | CourseCountOutputTypeCountCouponsArgs
   }
 
   // Custom InputTypes
@@ -5555,6 +5557,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountWishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WishlistItemWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountCouponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouponWhereInput
   }
 
 
@@ -15079,6 +15088,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: boolean | Course$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | Course$wishlistItemsArgs<ExtArgs>
+    coupons?: boolean | Course$couponsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -15190,6 +15200,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: boolean | Course$sessionAnonymousQuestionsArgs<ExtArgs>
     learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | Course$wishlistItemsArgs<ExtArgs>
+    coupons?: boolean | Course$couponsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15219,6 +15230,7 @@ export namespace Prisma {
       sessionAnonymousQuestions: Prisma.$SessionAnonymousQuestionPayload<ExtArgs>[]
       learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
       wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
+      coupons: Prisma.$CouponPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15659,6 +15671,7 @@ export namespace Prisma {
     sessionAnonymousQuestions<T extends Course$sessionAnonymousQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$sessionAnonymousQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionAnonymousQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     learningReflections<T extends Course$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wishlistItems<T extends Course$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, Course$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    coupons<T extends Course$couponsArgs<ExtArgs> = {}>(args?: Subset<T, Course$couponsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16438,6 +16451,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * Course.coupons
+   */
+  export type Course$couponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Coupon
+     */
+    select?: CouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Coupon
+     */
+    omit?: CouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    where?: CouponWhereInput
+    orderBy?: CouponOrderByWithRelationInput | CouponOrderByWithRelationInput[]
+    cursor?: CouponWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CouponScalarFieldEnum | CouponScalarFieldEnum[]
   }
 
   /**
@@ -53090,6 +53127,7 @@ export namespace Prisma {
     usedCount: number | null
     active: boolean | null
     expiresAt: Date | null
+    courseId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -53103,6 +53141,7 @@ export namespace Prisma {
     usedCount: number | null
     active: boolean | null
     expiresAt: Date | null
+    courseId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -53116,6 +53155,7 @@ export namespace Prisma {
     usedCount: number
     active: number
     expiresAt: number
+    courseId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -53143,6 +53183,7 @@ export namespace Prisma {
     usedCount?: true
     active?: true
     expiresAt?: true
+    courseId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -53156,6 +53197,7 @@ export namespace Prisma {
     usedCount?: true
     active?: true
     expiresAt?: true
+    courseId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -53169,6 +53211,7 @@ export namespace Prisma {
     usedCount?: true
     active?: true
     expiresAt?: true
+    courseId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -53269,6 +53312,7 @@ export namespace Prisma {
     usedCount: number
     active: boolean
     expiresAt: Date | null
+    courseId: string | null
     createdAt: Date
     updatedAt: Date
     _count: CouponCountAggregateOutputType | null
@@ -53301,8 +53345,10 @@ export namespace Prisma {
     usedCount?: boolean
     active?: boolean
     expiresAt?: boolean
+    courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    course?: boolean | Coupon$courseArgs<ExtArgs>
   }, ExtArgs["result"]["coupon"]>
 
   export type CouponSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -53314,8 +53360,10 @@ export namespace Prisma {
     usedCount?: boolean
     active?: boolean
     expiresAt?: boolean
+    courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    course?: boolean | Coupon$courseArgs<ExtArgs>
   }, ExtArgs["result"]["coupon"]>
 
   export type CouponSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -53327,8 +53375,10 @@ export namespace Prisma {
     usedCount?: boolean
     active?: boolean
     expiresAt?: boolean
+    courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    course?: boolean | Coupon$courseArgs<ExtArgs>
   }, ExtArgs["result"]["coupon"]>
 
   export type CouponSelectScalar = {
@@ -53340,15 +53390,27 @@ export namespace Prisma {
     usedCount?: boolean
     active?: boolean
     expiresAt?: boolean
+    courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "description" | "discountPct" | "maxUses" | "usedCount" | "active" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["coupon"]>
+  export type CouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "description" | "discountPct" | "maxUses" | "usedCount" | "active" | "expiresAt" | "courseId" | "createdAt" | "updatedAt", ExtArgs["result"]["coupon"]>
+  export type CouponInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | Coupon$courseArgs<ExtArgs>
+  }
+  export type CouponIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | Coupon$courseArgs<ExtArgs>
+  }
+  export type CouponIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | Coupon$courseArgs<ExtArgs>
+  }
 
   export type $CouponPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Coupon"
-    objects: {}
+    objects: {
+      course: Prisma.$CoursePayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       code: string
@@ -53358,6 +53420,7 @@ export namespace Prisma {
       usedCount: number
       active: boolean
       expiresAt: Date | null
+      courseId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["coupon"]>
@@ -53754,6 +53817,7 @@ export namespace Prisma {
    */
   export interface Prisma__CouponClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    course<T extends Coupon$courseArgs<ExtArgs> = {}>(args?: Subset<T, Coupon$courseArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -53791,6 +53855,7 @@ export namespace Prisma {
     readonly usedCount: FieldRef<"Coupon", 'Int'>
     readonly active: FieldRef<"Coupon", 'Boolean'>
     readonly expiresAt: FieldRef<"Coupon", 'DateTime'>
+    readonly courseId: FieldRef<"Coupon", 'String'>
     readonly createdAt: FieldRef<"Coupon", 'DateTime'>
     readonly updatedAt: FieldRef<"Coupon", 'DateTime'>
   }
@@ -53810,6 +53875,10 @@ export namespace Prisma {
      */
     omit?: CouponOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    /**
      * Filter, which Coupon to fetch.
      */
     where: CouponWhereUniqueInput
@@ -53828,6 +53897,10 @@ export namespace Prisma {
      */
     omit?: CouponOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    /**
      * Filter, which Coupon to fetch.
      */
     where: CouponWhereUniqueInput
@@ -53845,6 +53918,10 @@ export namespace Prisma {
      * Omit specific fields from the Coupon
      */
     omit?: CouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
     /**
      * Filter, which Coupon to fetch.
      */
@@ -53894,6 +53971,10 @@ export namespace Prisma {
      */
     omit?: CouponOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    /**
      * Filter, which Coupon to fetch.
      */
     where?: CouponWhereInput
@@ -53942,6 +54023,10 @@ export namespace Prisma {
      */
     omit?: CouponOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    /**
      * Filter, which Coupons to fetch.
      */
     where?: CouponWhereInput
@@ -53985,6 +54070,10 @@ export namespace Prisma {
      */
     omit?: CouponOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    /**
      * The data needed to create a Coupon.
      */
     data: XOR<CouponCreateInput, CouponUncheckedCreateInput>
@@ -54018,6 +54107,10 @@ export namespace Prisma {
      */
     data: CouponCreateManyInput | CouponCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -54032,6 +54125,10 @@ export namespace Prisma {
      * Omit specific fields from the Coupon
      */
     omit?: CouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
     /**
      * The data needed to update a Coupon.
      */
@@ -54084,6 +54181,10 @@ export namespace Prisma {
      * Limit how many Coupons to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -54098,6 +54199,10 @@ export namespace Prisma {
      * Omit specific fields from the Coupon
      */
     omit?: CouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
     /**
      * The filter to search for the Coupon to update in case it exists.
      */
@@ -54125,6 +54230,10 @@ export namespace Prisma {
      */
     omit?: CouponOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
+    /**
      * Filter which Coupon to delete.
      */
     where: CouponWhereUniqueInput
@@ -54145,6 +54254,25 @@ export namespace Prisma {
   }
 
   /**
+   * Coupon.course
+   */
+  export type Coupon$courseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Course
+     */
+    select?: CourseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Course
+     */
+    omit?: CourseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseInclude<ExtArgs> | null
+    where?: CourseWhereInput
+  }
+
+  /**
    * Coupon without action
    */
   export type CouponDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -54156,6 +54284,10 @@ export namespace Prisma {
      * Omit specific fields from the Coupon
      */
     omit?: CouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouponInclude<ExtArgs> | null
   }
 
 
@@ -60319,6 +60451,7 @@ export namespace Prisma {
     usedCount: 'usedCount',
     active: 'active',
     expiresAt: 'expiresAt',
+    courseId: 'courseId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -61446,6 +61579,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
+    coupons?: CouponListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -61490,6 +61624,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionOrderByRelationAggregateInput
     learningReflections?: LearningReflectionOrderByRelationAggregateInput
     wishlistItems?: WishlistItemOrderByRelationAggregateInput
+    coupons?: CouponOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -61537,6 +61672,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionListRelationFilter
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
+    coupons?: CouponListRelationFilter
   }, "id" | "slug">
 
   export type CourseOrderByWithAggregationInput = {
@@ -64016,8 +64152,10 @@ export namespace Prisma {
     usedCount?: IntFilter<"Coupon"> | number
     active?: BoolFilter<"Coupon"> | boolean
     expiresAt?: DateTimeNullableFilter<"Coupon"> | Date | string | null
+    courseId?: StringNullableFilter<"Coupon"> | string | null
     createdAt?: DateTimeFilter<"Coupon"> | Date | string
     updatedAt?: DateTimeFilter<"Coupon"> | Date | string
+    course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
   }
 
   export type CouponOrderByWithRelationInput = {
@@ -64029,8 +64167,10 @@ export namespace Prisma {
     usedCount?: SortOrder
     active?: SortOrder
     expiresAt?: SortOrderInput | SortOrder
+    courseId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    course?: CourseOrderByWithRelationInput
   }
 
   export type CouponWhereUniqueInput = Prisma.AtLeast<{
@@ -64045,8 +64185,10 @@ export namespace Prisma {
     usedCount?: IntFilter<"Coupon"> | number
     active?: BoolFilter<"Coupon"> | boolean
     expiresAt?: DateTimeNullableFilter<"Coupon"> | Date | string | null
+    courseId?: StringNullableFilter<"Coupon"> | string | null
     createdAt?: DateTimeFilter<"Coupon"> | Date | string
     updatedAt?: DateTimeFilter<"Coupon"> | Date | string
+    course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
   }, "id" | "code">
 
   export type CouponOrderByWithAggregationInput = {
@@ -64058,6 +64200,7 @@ export namespace Prisma {
     usedCount?: SortOrder
     active?: SortOrder
     expiresAt?: SortOrderInput | SortOrder
+    courseId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CouponCountOrderByAggregateInput
@@ -64079,6 +64222,7 @@ export namespace Prisma {
     usedCount?: IntWithAggregatesFilter<"Coupon"> | number
     active?: BoolWithAggregatesFilter<"Coupon"> | boolean
     expiresAt?: DateTimeNullableWithAggregatesFilter<"Coupon"> | Date | string | null
+    courseId?: StringNullableWithAggregatesFilter<"Coupon"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
   }
@@ -65228,6 +65372,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -65270,6 +65415,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -65312,6 +65458,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -65354,6 +65501,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -67920,6 +68068,7 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    course?: CourseCreateNestedOneWithoutCouponsInput
   }
 
   export type CouponUncheckedCreateInput = {
@@ -67931,6 +68080,7 @@ export namespace Prisma {
     usedCount?: number
     active?: boolean
     expiresAt?: Date | string | null
+    courseId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -67946,6 +68096,7 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneWithoutCouponsNestedInput
   }
 
   export type CouponUncheckedUpdateInput = {
@@ -67957,6 +68108,7 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     active?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -67970,6 +68122,7 @@ export namespace Prisma {
     usedCount?: number
     active?: boolean
     expiresAt?: Date | string | null
+    courseId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -67996,6 +68149,7 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     active?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69187,6 +69341,12 @@ export namespace Prisma {
     none?: TeamCourseAccessWhereInput
   }
 
+  export type CouponListRelationFilter = {
+    every?: CouponWhereInput
+    some?: CouponWhereInput
+    none?: CouponWhereInput
+  }
+
   export type CourseSectionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -69200,6 +69360,10 @@ export namespace Prisma {
   }
 
   export type TeamCourseAccessOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CouponOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -71033,6 +71197,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type CourseNullableScalarRelationFilter = {
+    is?: CourseWhereInput | null
+    isNot?: CourseWhereInput | null
+  }
+
   export type CouponCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -71042,6 +71211,7 @@ export namespace Prisma {
     usedCount?: SortOrder
     active?: SortOrder
     expiresAt?: SortOrder
+    courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -71061,6 +71231,7 @@ export namespace Prisma {
     usedCount?: SortOrder
     active?: SortOrder
     expiresAt?: SortOrder
+    courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -71074,6 +71245,7 @@ export namespace Prisma {
     usedCount?: SortOrder
     active?: SortOrder
     expiresAt?: SortOrder
+    courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -72557,6 +72729,13 @@ export namespace Prisma {
     connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
   }
 
+  export type CouponCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CouponCreateWithoutCourseInput, CouponUncheckedCreateWithoutCourseInput> | CouponCreateWithoutCourseInput[] | CouponUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CouponCreateOrConnectWithoutCourseInput | CouponCreateOrConnectWithoutCourseInput[]
+    createMany?: CouponCreateManyCourseInputEnvelope
+    connect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+  }
+
   export type CourseSectionUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -72646,6 +72825,13 @@ export namespace Prisma {
     connectOrCreate?: WishlistItemCreateOrConnectWithoutCourseInput | WishlistItemCreateOrConnectWithoutCourseInput[]
     createMany?: WishlistItemCreateManyCourseInputEnvelope
     connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+  }
+
+  export type CouponUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CouponCreateWithoutCourseInput, CouponUncheckedCreateWithoutCourseInput> | CouponCreateWithoutCourseInput[] | CouponUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CouponCreateOrConnectWithoutCourseInput | CouponCreateOrConnectWithoutCourseInput[]
+    createMany?: CouponCreateManyCourseInputEnvelope
+    connect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
   }
 
   export type EnumModalityFieldUpdateOperationsInput = {
@@ -72864,6 +73050,20 @@ export namespace Prisma {
     deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
   }
 
+  export type CouponUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CouponCreateWithoutCourseInput, CouponUncheckedCreateWithoutCourseInput> | CouponCreateWithoutCourseInput[] | CouponUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CouponCreateOrConnectWithoutCourseInput | CouponCreateOrConnectWithoutCourseInput[]
+    upsert?: CouponUpsertWithWhereUniqueWithoutCourseInput | CouponUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CouponCreateManyCourseInputEnvelope
+    set?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    disconnect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    delete?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    connect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    update?: CouponUpdateWithWhereUniqueWithoutCourseInput | CouponUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CouponUpdateManyWithWhereWithoutCourseInput | CouponUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CouponScalarWhereInput | CouponScalarWhereInput[]
+  }
+
   export type CourseSectionUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -73044,6 +73244,20 @@ export namespace Prisma {
     update?: WishlistItemUpdateWithWhereUniqueWithoutCourseInput | WishlistItemUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: WishlistItemUpdateManyWithWhereWithoutCourseInput | WishlistItemUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+  }
+
+  export type CouponUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CouponCreateWithoutCourseInput, CouponUncheckedCreateWithoutCourseInput> | CouponCreateWithoutCourseInput[] | CouponUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CouponCreateOrConnectWithoutCourseInput | CouponCreateOrConnectWithoutCourseInput[]
+    upsert?: CouponUpsertWithWhereUniqueWithoutCourseInput | CouponUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CouponCreateManyCourseInputEnvelope
+    set?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    disconnect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    delete?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    connect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+    update?: CouponUpdateWithWhereUniqueWithoutCourseInput | CouponUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CouponUpdateManyWithWhereWithoutCourseInput | CouponUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CouponScalarWhereInput | CouponScalarWhereInput[]
   }
 
   export type CourseCreateNestedOneWithoutSectionsInput = {
@@ -75136,6 +75350,22 @@ export namespace Prisma {
     update?: XOR<XOR<KpiUpdateToOneWithWhereWithoutEntriesInput, KpiUpdateWithoutEntriesInput>, KpiUncheckedUpdateWithoutEntriesInput>
   }
 
+  export type CourseCreateNestedOneWithoutCouponsInput = {
+    create?: XOR<CourseCreateWithoutCouponsInput, CourseUncheckedCreateWithoutCouponsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutCouponsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type CourseUpdateOneWithoutCouponsNestedInput = {
+    create?: XOR<CourseCreateWithoutCouponsInput, CourseUncheckedCreateWithoutCouponsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutCouponsInput
+    upsert?: CourseUpsertWithoutCouponsInput
+    disconnect?: CourseWhereInput | boolean
+    delete?: CourseWhereInput | boolean
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutCouponsInput, CourseUpdateWithoutCouponsInput>, CourseUncheckedUpdateWithoutCouponsInput>
+  }
+
   export type UserCreateNestedOneWithoutCourseNotesInput = {
     create?: XOR<UserCreateWithoutCourseNotesInput, UserUncheckedCreateWithoutCourseNotesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCourseNotesInput
@@ -76003,6 +76233,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutInstructorInput = {
@@ -76044,6 +76275,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutInstructorInput = {
@@ -78542,6 +78774,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCategoryRefInput = {
@@ -78583,6 +78816,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCategoryRefInput = {
@@ -79137,6 +79371,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CouponCreateWithoutCourseInput = {
+    id?: string
+    code: string
+    description?: string | null
+    discountPct: number
+    maxUses?: number | null
+    usedCount?: number
+    active?: boolean
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CouponUncheckedCreateWithoutCourseInput = {
+    id?: string
+    code: string
+    description?: string | null
+    discountPct: number
+    maxUses?: number | null
+    usedCount?: number
+    active?: boolean
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CouponCreateOrConnectWithoutCourseInput = {
+    where: CouponWhereUniqueInput
+    create: XOR<CouponCreateWithoutCourseInput, CouponUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CouponCreateManyCourseInputEnvelope = {
+    data: CouponCreateManyCourseInput | CouponCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutInstructorCoursesInput = {
     update: XOR<UserUpdateWithoutInstructorCoursesInput, UserUncheckedUpdateWithoutInstructorCoursesInput>
     create: XOR<UserCreateWithoutInstructorCoursesInput, UserUncheckedCreateWithoutInstructorCoursesInput>
@@ -79524,6 +79794,39 @@ export namespace Prisma {
     data: XOR<WishlistItemUpdateManyMutationInput, WishlistItemUncheckedUpdateManyWithoutCourseInput>
   }
 
+  export type CouponUpsertWithWhereUniqueWithoutCourseInput = {
+    where: CouponWhereUniqueInput
+    update: XOR<CouponUpdateWithoutCourseInput, CouponUncheckedUpdateWithoutCourseInput>
+    create: XOR<CouponCreateWithoutCourseInput, CouponUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CouponUpdateWithWhereUniqueWithoutCourseInput = {
+    where: CouponWhereUniqueInput
+    data: XOR<CouponUpdateWithoutCourseInput, CouponUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type CouponUpdateManyWithWhereWithoutCourseInput = {
+    where: CouponScalarWhereInput
+    data: XOR<CouponUpdateManyMutationInput, CouponUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type CouponScalarWhereInput = {
+    AND?: CouponScalarWhereInput | CouponScalarWhereInput[]
+    OR?: CouponScalarWhereInput[]
+    NOT?: CouponScalarWhereInput | CouponScalarWhereInput[]
+    id?: StringFilter<"Coupon"> | string
+    code?: StringFilter<"Coupon"> | string
+    description?: StringNullableFilter<"Coupon"> | string | null
+    discountPct?: IntFilter<"Coupon"> | number
+    maxUses?: IntNullableFilter<"Coupon"> | number | null
+    usedCount?: IntFilter<"Coupon"> | number
+    active?: BoolFilter<"Coupon"> | boolean
+    expiresAt?: DateTimeNullableFilter<"Coupon"> | Date | string | null
+    courseId?: StringNullableFilter<"Coupon"> | string | null
+    createdAt?: DateTimeFilter<"Coupon"> | Date | string
+    updatedAt?: DateTimeFilter<"Coupon"> | Date | string
+  }
+
   export type CourseCreateWithoutSectionsInput = {
     id?: string
     slug?: string | null
@@ -79563,6 +79866,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSectionsInput = {
@@ -79604,6 +79908,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSectionsInput = {
@@ -79737,6 +80042,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSectionsInput = {
@@ -79778,6 +80084,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutSectionInput = {
@@ -80284,6 +80591,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCourseSessionsInput = {
@@ -80325,6 +80633,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCourseSessionsInput = {
@@ -80464,6 +80773,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCourseSessionsInput = {
@@ -80505,6 +80815,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutSessionInput = {
@@ -80617,6 +80928,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -80658,6 +80970,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -80855,6 +81168,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -80896,6 +81210,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutSessionAnonymousQuestionsInput = {
@@ -81038,6 +81353,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -81079,6 +81395,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -81497,6 +81814,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -81538,6 +81856,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutEnrollmentsInput = {
@@ -81993,6 +82312,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutLearningReflectionsInput = {
@@ -82034,6 +82354,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutLearningReflectionsInput = {
@@ -82235,6 +82556,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -82276,6 +82598,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutLearningReflectionsInput = {
@@ -82988,6 +83311,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCertificatesInput = {
@@ -83029,6 +83353,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCertificatesInput = {
@@ -83236,6 +83561,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
@@ -83277,6 +83603,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentCreateWithoutTransactionInput = {
@@ -83456,6 +83783,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTransactionsInput = {
@@ -83497,6 +83825,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTransactionsInput = {
@@ -83729,6 +84058,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTransactionsInput = {
@@ -83770,6 +84100,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type ReferralUpsertWithoutTransactionInput = {
@@ -83842,6 +84173,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutReviewsInput = {
@@ -83883,6 +84215,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutReviewsInput = {
@@ -84035,6 +84368,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutReviewsInput = {
@@ -84076,6 +84410,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutReviewsInput = {
@@ -84414,6 +84749,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutConversationsInput = {
@@ -84455,6 +84791,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutConversationsInput = {
@@ -84728,6 +85065,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutConversationsInput = {
@@ -84769,6 +85107,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutStudentConversationsInput = {
@@ -87462,6 +87801,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutOrgCourseAccessInput = {
@@ -87503,6 +87843,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutOrgCourseAccessInput = {
@@ -87607,6 +87948,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutOrgCourseAccessInput = {
@@ -87648,6 +87990,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type TeamCreateWithoutCourseAccessInput = {
@@ -87714,6 +88057,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTeamCourseAccessInput = {
@@ -87755,6 +88099,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTeamCourseAccessInput = {
@@ -87843,6 +88188,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTeamCourseAccessInput = {
@@ -87884,6 +88230,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type OrganizationCreateWithoutMaterialsInput = {
@@ -88097,6 +88444,190 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseCreateWithoutCouponsInput = {
+    id?: string
+    slug?: string | null
+    title: string
+    description: string
+    category: string
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    state?: string | null
+    location?: string | null
+    mapsUrl?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutInstructorCoursesInput
+    categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
+    sections?: CourseSectionCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    transactions?: TransactionCreateNestedManyWithoutCourseInput
+    reviews?: ReviewCreateNestedManyWithoutCourseInput
+    conversations?: ConversationCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutCouponsInput = {
+    id?: string
+    slug?: string | null
+    instructorId: string
+    title: string
+    description: string
+    category: string
+    categoryId?: string | null
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    state?: string | null
+    location?: string | null
+    mapsUrl?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCourseInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutCouponsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutCouponsInput, CourseUncheckedCreateWithoutCouponsInput>
+  }
+
+  export type CourseUpsertWithoutCouponsInput = {
+    update: XOR<CourseUpdateWithoutCouponsInput, CourseUncheckedUpdateWithoutCouponsInput>
+    create: XOR<CourseCreateWithoutCouponsInput, CourseUncheckedCreateWithoutCouponsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutCouponsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutCouponsInput, CourseUncheckedUpdateWithoutCouponsInput>
+  }
+
+  export type CourseUpdateWithoutCouponsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mapsUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
+    categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
+    sections?: CourseSectionUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutCouponsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mapsUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
   export type UserCreateWithoutCourseNotesInput = {
     id?: string
     name?: string | null
@@ -88231,6 +88762,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutNotesInput = {
@@ -88272,6 +88804,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutNotesInput = {
@@ -88473,6 +89006,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutNotesInput = {
@@ -88514,6 +89048,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithoutNotesInput = {
@@ -88699,6 +89234,7 @@ export namespace Prisma {
     notes?: CourseNoteCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutWishlistItemsInput = {
@@ -88740,6 +89276,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutWishlistItemsInput = {
@@ -88898,6 +89435,7 @@ export namespace Prisma {
     notes?: CourseNoteUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutWishlistItemsInput = {
@@ -88939,6 +89477,7 @@ export namespace Prisma {
     notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserCreateWithoutReferralCommissionsInput = {
@@ -90170,6 +90709,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutInstructorInput = {
@@ -90211,6 +90751,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutInstructorInput = {
@@ -90970,6 +91511,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCategoryRefInput = {
@@ -91011,6 +91553,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutCategoryRefInput = {
@@ -91167,6 +91710,19 @@ export namespace Prisma {
     id?: string
     userId: string
     createdAt?: Date | string
+  }
+
+  export type CouponCreateManyCourseInput = {
+    id?: string
+    code: string
+    description?: string | null
+    discountPct: number
+    maxUses?: number | null
+    usedCount?: number
+    active?: boolean
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CourseSectionUpdateWithoutCourseInput = {
@@ -91577,6 +92133,45 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouponUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    discountPct?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouponUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    discountPct?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouponUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    discountPct?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LessonCreateManySectionInput = {
