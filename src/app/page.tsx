@@ -24,7 +24,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
+        url: `${baseUrl}/api/og`,
         width: 1200,
         height: 630,
         alt: "Cursumi - Formación presencial y online",

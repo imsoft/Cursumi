@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FiltersBar } from "@/components/courses/filters-bar";
 import { CoursesPageHeader } from "@/components/courses/courses-page-header";
@@ -22,8 +23,9 @@ const defaultFilters = {
 
 const pageSize = 9;
 
-export function CoursesPageClient({ initialCourses }: CoursesPageClientProps) {
-  const [searchText, setSearchText] = useState(defaultFilters.searchText);
+function CoursesPageInner({ initialCourses }: CoursesPageClientProps) {
+  const searchParams = useSearchParams();
+  const [searchText, setSearchText] = useState(searchParams.get("q") ?? defaultFilters.searchText);
   const [modality, setModality] = useState(defaultFilters.modality);
   const [category, setCategory] = useState(defaultFilters.category);
   const [city, setCity] = useState(defaultFilters.city);
@@ -169,5 +171,13 @@ export function CoursesPageClient({ initialCourses }: CoursesPageClientProps) {
         </div>
       </main>
     </div>
+  );
+}
+
+export function CoursesPageClient({ initialCourses }: CoursesPageClientProps) {
+  return (
+    <Suspense>
+      <CoursesPageInner initialCourses={initialCourses} />
+    </Suspense>
   );
 }

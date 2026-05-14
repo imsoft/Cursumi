@@ -161,7 +161,10 @@ export default async function PublicCourseDetailPage({
     educationalLevel: course.level,
     inLanguage: "es-MX",
     timeRequired: course.duration,
-    courseMode: course.modality,
+    courseMode:
+      course.modality === "virtual" ? "online" :
+      course.modality === "live"    ? "online" :
+      "onsite",
     courseCode: course.id,
     ...(course.imageUrl && { image: course.imageUrl }),
     offers: {

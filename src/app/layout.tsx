@@ -42,6 +42,14 @@ const websiteJsonLd = {
   url: siteUrl,
   description: "Plataforma de cursos virtuales y presenciales con instructores expertos.",
   publisher: { "@type": "Organization", name: "Cursumi", url: siteUrl },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${siteUrl}/courses?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export const metadata: Metadata = {
