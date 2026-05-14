@@ -345,9 +345,10 @@ model Lesson {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  section  CourseSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  progress LessonProgress[]
-  notes    CourseNote[]
+  section              CourseSection         @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  progress             LessonProgress[]
+  notes                CourseNote[]
+  assignmentSubmissions AssignmentSubmission[]
 
   @@index([sectionId, order])
 }
@@ -384,6 +385,8 @@ model CourseSession {
   startTime   String   // "09:00"
   endTime     String   // "13:00"
   maxStudents Int
+  /// Hash del código de acceso específico de esta sesión (bcrypt/scrypt)
+  joinCodeHash String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -447,6 +450,7 @@ model Enrollment {
   examSubmission         ExamSubmission?
   transaction            Transaction?
   sectionQuizSubmissions SectionQuizSubmission[]
+  assignmentSubmissions  AssignmentSubmission[]
   learningReflectionEmailSentAt DateTime?
   learningReflection     LearningReflection?
 
@@ -492,6 +496,26 @@ model SectionQuizSubmission {
 
   @@unique([enrollmentId, sectionId, activityId])
   @@index([sectionId])
+}
+
+// ─────────────────────────────────────────
+// TAREAS (ASSIGNMENT SUBMISSIONS)
+// ─────────────────────────────────────────
+
+model AssignmentSubmission {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  lessonId     String
+  content      String   @db.Text
+  submittedAt  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  lesson     Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, lessonId])
+  @@index([lessonId])
+  @@index([enrollmentId])
 }
 
 // ─────────────────────────────────────────

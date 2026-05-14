@@ -7,6 +7,7 @@ import { createZodResolver } from "@/lib/form-resolver";
 import { authClient } from "@/lib/auth-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Button } from "@/components/ui/button";
 import { Save, Lock } from "lucide-react";
 
@@ -143,9 +144,8 @@ export function SettingsForm() {
         <CardContent>
           <form onSubmit={passwordForm.handleSubmit(onChangePassword)} className="space-y-4">
             <div>
-              <Input
+              <PasswordInput
                 label="Contraseña actual"
-                type="password"
                 {...passwordForm.register("currentPassword")}
               />
               {passwordForm.formState.errors.currentPassword && (
@@ -155,9 +155,8 @@ export function SettingsForm() {
               )}
             </div>
             <div>
-              <Input
+              <PasswordInput
                 label="Nueva contraseña"
-                type="password"
                 {...passwordForm.register("newPassword")}
               />
               {passwordForm.formState.errors.newPassword && (
@@ -167,9 +166,8 @@ export function SettingsForm() {
               )}
             </div>
             <div>
-              <Input
+              <PasswordInput
                 label="Confirmar nueva contraseña"
-                type="password"
                 {...passwordForm.register("confirmPassword")}
               />
               {passwordForm.formState.errors.confirmPassword && (

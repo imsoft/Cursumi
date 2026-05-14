@@ -283,6 +283,7 @@ export default async function PublicCourseDetailPage({
                       startTime: s.startTime,
                       endTime: s.endTime,
                       isFull: s._count.enrollments >= s.maxStudents,
+                      requiresJoinCode: s.requiresJoinCode,
                     }))
                   : undefined
               }

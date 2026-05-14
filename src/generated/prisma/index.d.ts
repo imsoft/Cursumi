@@ -94,6 +94,11 @@ export type LearningReflection = $Result.DefaultSelection<Prisma.$LearningReflec
  */
 export type SectionQuizSubmission = $Result.DefaultSelection<Prisma.$SectionQuizSubmissionPayload>
 /**
+ * Model AssignmentSubmission
+ * 
+ */
+export type AssignmentSubmission = $Result.DefaultSelection<Prisma.$AssignmentSubmissionPayload>
+/**
  * Model ExamSubmission
  * 
  */
@@ -726,6 +731,16 @@ export class PrismaClient<
     * ```
     */
   get sectionQuizSubmission(): Prisma.SectionQuizSubmissionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.assignmentSubmission`: Exposes CRUD operations for the **AssignmentSubmission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AssignmentSubmissions
+    * const assignmentSubmissions = await prisma.assignmentSubmission.findMany()
+    * ```
+    */
+  get assignmentSubmission(): Prisma.AssignmentSubmissionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.examSubmission`: Exposes CRUD operations for the **ExamSubmission** model.
@@ -1456,6 +1471,7 @@ export namespace Prisma {
     Enrollment: 'Enrollment',
     LearningReflection: 'LearningReflection',
     SectionQuizSubmission: 'SectionQuizSubmission',
+    AssignmentSubmission: 'AssignmentSubmission',
     ExamSubmission: 'ExamSubmission',
     Certificate: 'Certificate',
     Transaction: 'Transaction',
@@ -1499,7 +1515,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2684,6 +2700,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SectionQuizSubmissionCountArgs<ExtArgs>
             result: $Utils.Optional<SectionQuizSubmissionCountAggregateOutputType> | number
+          }
+        }
+      }
+      AssignmentSubmission: {
+        payload: Prisma.$AssignmentSubmissionPayload<ExtArgs>
+        fields: Prisma.AssignmentSubmissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AssignmentSubmissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AssignmentSubmissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>
+          }
+          findFirst: {
+            args: Prisma.AssignmentSubmissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AssignmentSubmissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>
+          }
+          findMany: {
+            args: Prisma.AssignmentSubmissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>[]
+          }
+          create: {
+            args: Prisma.AssignmentSubmissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>
+          }
+          createMany: {
+            args: Prisma.AssignmentSubmissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AssignmentSubmissionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>[]
+          }
+          delete: {
+            args: Prisma.AssignmentSubmissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>
+          }
+          update: {
+            args: Prisma.AssignmentSubmissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.AssignmentSubmissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AssignmentSubmissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AssignmentSubmissionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>[]
+          }
+          upsert: {
+            args: Prisma.AssignmentSubmissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssignmentSubmissionPayload>
+          }
+          aggregate: {
+            args: Prisma.AssignmentSubmissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAssignmentSubmission>
+          }
+          groupBy: {
+            args: Prisma.AssignmentSubmissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AssignmentSubmissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AssignmentSubmissionCountArgs<ExtArgs>
+            result: $Utils.Optional<AssignmentSubmissionCountAggregateOutputType> | number
           }
         }
       }
@@ -4883,6 +4973,7 @@ export namespace Prisma {
     enrollment?: EnrollmentOmit
     learningReflection?: LearningReflectionOmit
     sectionQuizSubmission?: SectionQuizSubmissionOmit
+    assignmentSubmission?: AssignmentSubmissionOmit
     examSubmission?: ExamSubmissionOmit
     certificate?: CertificateOmit
     transaction?: TransactionOmit
@@ -5423,11 +5514,13 @@ export namespace Prisma {
   export type LessonCountOutputType = {
     progress: number
     notes: number
+    assignmentSubmissions: number
   }
 
   export type LessonCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     progress?: boolean | LessonCountOutputTypeCountProgressArgs
     notes?: boolean | LessonCountOutputTypeCountNotesArgs
+    assignmentSubmissions?: boolean | LessonCountOutputTypeCountAssignmentSubmissionsArgs
   }
 
   // Custom InputTypes
@@ -5453,6 +5546,13 @@ export namespace Prisma {
    */
   export type LessonCountOutputTypeCountNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CourseNoteWhereInput
+  }
+
+  /**
+   * LessonCountOutputType without action
+   */
+  export type LessonCountOutputTypeCountAssignmentSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssignmentSubmissionWhereInput
   }
 
 
@@ -5503,11 +5603,13 @@ export namespace Prisma {
   export type EnrollmentCountOutputType = {
     lessonProgress: number
     sectionQuizSubmissions: number
+    assignmentSubmissions: number
   }
 
   export type EnrollmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lessonProgress?: boolean | EnrollmentCountOutputTypeCountLessonProgressArgs
     sectionQuizSubmissions?: boolean | EnrollmentCountOutputTypeCountSectionQuizSubmissionsArgs
+    assignmentSubmissions?: boolean | EnrollmentCountOutputTypeCountAssignmentSubmissionsArgs
   }
 
   // Custom InputTypes
@@ -5533,6 +5635,13 @@ export namespace Prisma {
    */
   export type EnrollmentCountOutputTypeCountSectionQuizSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SectionQuizSubmissionWhereInput
+  }
+
+  /**
+   * EnrollmentCountOutputType without action
+   */
+  export type EnrollmentCountOutputTypeCountAssignmentSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssignmentSubmissionWhereInput
   }
 
 
@@ -17670,6 +17779,7 @@ export namespace Prisma {
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
     progress?: boolean | Lesson$progressArgs<ExtArgs>
     notes?: boolean | Lesson$notesArgs<ExtArgs>
+    assignmentSubmissions?: boolean | Lesson$assignmentSubmissionsArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lesson"]>
 
@@ -17731,6 +17841,7 @@ export namespace Prisma {
     section?: boolean | CourseSectionDefaultArgs<ExtArgs>
     progress?: boolean | Lesson$progressArgs<ExtArgs>
     notes?: boolean | Lesson$notesArgs<ExtArgs>
+    assignmentSubmissions?: boolean | Lesson$assignmentSubmissionsArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LessonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17746,6 +17857,7 @@ export namespace Prisma {
       section: Prisma.$CourseSectionPayload<ExtArgs>
       progress: Prisma.$LessonProgressPayload<ExtArgs>[]
       notes: Prisma.$CourseNotePayload<ExtArgs>[]
+      assignmentSubmissions: Prisma.$AssignmentSubmissionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18159,6 +18271,7 @@ export namespace Prisma {
     section<T extends CourseSectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseSectionDefaultArgs<ExtArgs>>): Prisma__CourseSectionClient<$Result.GetResult<Prisma.$CourseSectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     progress<T extends Lesson$progressArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$progressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notes<T extends Lesson$notesArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignmentSubmissions<T extends Lesson$assignmentSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$assignmentSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18643,6 +18756,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CourseNoteScalarFieldEnum | CourseNoteScalarFieldEnum[]
+  }
+
+  /**
+   * Lesson.assignmentSubmissions
+   */
+  export type Lesson$assignmentSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    where?: AssignmentSubmissionWhereInput
+    orderBy?: AssignmentSubmissionOrderByWithRelationInput | AssignmentSubmissionOrderByWithRelationInput[]
+    cursor?: AssignmentSubmissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssignmentSubmissionScalarFieldEnum | AssignmentSubmissionScalarFieldEnum[]
   }
 
   /**
@@ -19804,6 +19941,7 @@ export namespace Prisma {
     startTime: string | null
     endTime: string | null
     maxStudents: number | null
+    joinCodeHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -19819,6 +19957,7 @@ export namespace Prisma {
     startTime: string | null
     endTime: string | null
     maxStudents: number | null
+    joinCodeHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -19834,6 +19973,7 @@ export namespace Prisma {
     startTime: number
     endTime: number
     maxStudents: number
+    joinCodeHash: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -19859,6 +19999,7 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     maxStudents?: true
+    joinCodeHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -19874,6 +20015,7 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     maxStudents?: true
+    joinCodeHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -19889,6 +20031,7 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     maxStudents?: true
+    joinCodeHash?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -19991,6 +20134,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash: string | null
     createdAt: Date
     updatedAt: Date
     _count: CourseSessionCountAggregateOutputType | null
@@ -20025,6 +20169,7 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     maxStudents?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -20044,6 +20189,7 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     maxStudents?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -20060,6 +20206,7 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     maxStudents?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -20076,11 +20223,12 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     maxStudents?: boolean
+    joinCodeHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
+  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
   export type CourseSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     enrollments?: boolean | CourseSession$enrollmentsArgs<ExtArgs>
@@ -20115,6 +20263,10 @@ export namespace Prisma {
       startTime: string
       endTime: string
       maxStudents: number
+      /**
+       * Hash del código de acceso específico de esta sesión (bcrypt/scrypt)
+       */
+      joinCodeHash: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["courseSession"]>
@@ -20553,6 +20705,7 @@ export namespace Prisma {
     readonly startTime: FieldRef<"CourseSession", 'String'>
     readonly endTime: FieldRef<"CourseSession", 'String'>
     readonly maxStudents: FieldRef<"CourseSession", 'Int'>
+    readonly joinCodeHash: FieldRef<"CourseSession", 'String'>
     readonly createdAt: FieldRef<"CourseSession", 'DateTime'>
     readonly updatedAt: FieldRef<"CourseSession", 'DateTime'>
   }
@@ -22403,6 +22556,7 @@ export namespace Prisma {
     examSubmission?: boolean | Enrollment$examSubmissionArgs<ExtArgs>
     transaction?: boolean | Enrollment$transactionArgs<ExtArgs>
     sectionQuizSubmissions?: boolean | Enrollment$sectionQuizSubmissionsArgs<ExtArgs>
+    assignmentSubmissions?: boolean | Enrollment$assignmentSubmissionsArgs<ExtArgs>
     learningReflection?: boolean | Enrollment$learningReflectionArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -22465,6 +22619,7 @@ export namespace Prisma {
     examSubmission?: boolean | Enrollment$examSubmissionArgs<ExtArgs>
     transaction?: boolean | Enrollment$transactionArgs<ExtArgs>
     sectionQuizSubmissions?: boolean | Enrollment$sectionQuizSubmissionsArgs<ExtArgs>
+    assignmentSubmissions?: boolean | Enrollment$assignmentSubmissionsArgs<ExtArgs>
     learningReflection?: boolean | Enrollment$learningReflectionArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -22493,6 +22648,7 @@ export namespace Prisma {
       examSubmission: Prisma.$ExamSubmissionPayload<ExtArgs> | null
       transaction: Prisma.$TransactionPayload<ExtArgs> | null
       sectionQuizSubmissions: Prisma.$SectionQuizSubmissionPayload<ExtArgs>[]
+      assignmentSubmissions: Prisma.$AssignmentSubmissionPayload<ExtArgs>[]
       learningReflection: Prisma.$LearningReflectionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -22909,6 +23065,7 @@ export namespace Prisma {
     examSubmission<T extends Enrollment$examSubmissionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$examSubmissionArgs<ExtArgs>>): Prisma__ExamSubmissionClient<$Result.GetResult<Prisma.$ExamSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transaction<T extends Enrollment$transactionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sectionQuizSubmissions<T extends Enrollment$sectionQuizSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$sectionQuizSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionQuizSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignmentSubmissions<T extends Enrollment$assignmentSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$assignmentSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     learningReflection<T extends Enrollment$learningReflectionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$learningReflectionArgs<ExtArgs>>): Prisma__LearningReflectionClient<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -23485,6 +23642,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SectionQuizSubmissionScalarFieldEnum | SectionQuizSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * Enrollment.assignmentSubmissions
+   */
+  export type Enrollment$assignmentSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    where?: AssignmentSubmissionWhereInput
+    orderBy?: AssignmentSubmissionOrderByWithRelationInput | AssignmentSubmissionOrderByWithRelationInput[]
+    cursor?: AssignmentSubmissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssignmentSubmissionScalarFieldEnum | AssignmentSubmissionScalarFieldEnum[]
   }
 
   /**
@@ -25748,6 +25929,1085 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SectionQuizSubmissionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AssignmentSubmission
+   */
+
+  export type AggregateAssignmentSubmission = {
+    _count: AssignmentSubmissionCountAggregateOutputType | null
+    _min: AssignmentSubmissionMinAggregateOutputType | null
+    _max: AssignmentSubmissionMaxAggregateOutputType | null
+  }
+
+  export type AssignmentSubmissionMinAggregateOutputType = {
+    id: string | null
+    enrollmentId: string | null
+    lessonId: string | null
+    content: string | null
+    submittedAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssignmentSubmissionMaxAggregateOutputType = {
+    id: string | null
+    enrollmentId: string | null
+    lessonId: string | null
+    content: string | null
+    submittedAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssignmentSubmissionCountAggregateOutputType = {
+    id: number
+    enrollmentId: number
+    lessonId: number
+    content: number
+    submittedAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AssignmentSubmissionMinAggregateInputType = {
+    id?: true
+    enrollmentId?: true
+    lessonId?: true
+    content?: true
+    submittedAt?: true
+    updatedAt?: true
+  }
+
+  export type AssignmentSubmissionMaxAggregateInputType = {
+    id?: true
+    enrollmentId?: true
+    lessonId?: true
+    content?: true
+    submittedAt?: true
+    updatedAt?: true
+  }
+
+  export type AssignmentSubmissionCountAggregateInputType = {
+    id?: true
+    enrollmentId?: true
+    lessonId?: true
+    content?: true
+    submittedAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AssignmentSubmissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AssignmentSubmission to aggregate.
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssignmentSubmissions to fetch.
+     */
+    orderBy?: AssignmentSubmissionOrderByWithRelationInput | AssignmentSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AssignmentSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssignmentSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssignmentSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AssignmentSubmissions
+    **/
+    _count?: true | AssignmentSubmissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AssignmentSubmissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AssignmentSubmissionMaxAggregateInputType
+  }
+
+  export type GetAssignmentSubmissionAggregateType<T extends AssignmentSubmissionAggregateArgs> = {
+        [P in keyof T & keyof AggregateAssignmentSubmission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAssignmentSubmission[P]>
+      : GetScalarType<T[P], AggregateAssignmentSubmission[P]>
+  }
+
+
+
+
+  export type AssignmentSubmissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssignmentSubmissionWhereInput
+    orderBy?: AssignmentSubmissionOrderByWithAggregationInput | AssignmentSubmissionOrderByWithAggregationInput[]
+    by: AssignmentSubmissionScalarFieldEnum[] | AssignmentSubmissionScalarFieldEnum
+    having?: AssignmentSubmissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AssignmentSubmissionCountAggregateInputType | true
+    _min?: AssignmentSubmissionMinAggregateInputType
+    _max?: AssignmentSubmissionMaxAggregateInputType
+  }
+
+  export type AssignmentSubmissionGroupByOutputType = {
+    id: string
+    enrollmentId: string
+    lessonId: string
+    content: string
+    submittedAt: Date
+    updatedAt: Date
+    _count: AssignmentSubmissionCountAggregateOutputType | null
+    _min: AssignmentSubmissionMinAggregateOutputType | null
+    _max: AssignmentSubmissionMaxAggregateOutputType | null
+  }
+
+  type GetAssignmentSubmissionGroupByPayload<T extends AssignmentSubmissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AssignmentSubmissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AssignmentSubmissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AssignmentSubmissionGroupByOutputType[P]>
+            : GetScalarType<T[P], AssignmentSubmissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AssignmentSubmissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    enrollmentId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    submittedAt?: boolean
+    updatedAt?: boolean
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["assignmentSubmission"]>
+
+  export type AssignmentSubmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    enrollmentId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    submittedAt?: boolean
+    updatedAt?: boolean
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["assignmentSubmission"]>
+
+  export type AssignmentSubmissionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    enrollmentId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    submittedAt?: boolean
+    updatedAt?: boolean
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["assignmentSubmission"]>
+
+  export type AssignmentSubmissionSelectScalar = {
+    id?: boolean
+    enrollmentId?: boolean
+    lessonId?: boolean
+    content?: boolean
+    submittedAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AssignmentSubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "lessonId" | "content" | "submittedAt" | "updatedAt", ExtArgs["result"]["assignmentSubmission"]>
+  export type AssignmentSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+  }
+  export type AssignmentSubmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+  }
+  export type AssignmentSubmissionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
+    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+  }
+
+  export type $AssignmentSubmissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AssignmentSubmission"
+    objects: {
+      enrollment: Prisma.$EnrollmentPayload<ExtArgs>
+      lesson: Prisma.$LessonPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      enrollmentId: string
+      lessonId: string
+      content: string
+      submittedAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["assignmentSubmission"]>
+    composites: {}
+  }
+
+  type AssignmentSubmissionGetPayload<S extends boolean | null | undefined | AssignmentSubmissionDefaultArgs> = $Result.GetResult<Prisma.$AssignmentSubmissionPayload, S>
+
+  type AssignmentSubmissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AssignmentSubmissionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AssignmentSubmissionCountAggregateInputType | true
+    }
+
+  export interface AssignmentSubmissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AssignmentSubmission'], meta: { name: 'AssignmentSubmission' } }
+    /**
+     * Find zero or one AssignmentSubmission that matches the filter.
+     * @param {AssignmentSubmissionFindUniqueArgs} args - Arguments to find a AssignmentSubmission
+     * @example
+     * // Get one AssignmentSubmission
+     * const assignmentSubmission = await prisma.assignmentSubmission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AssignmentSubmissionFindUniqueArgs>(args: SelectSubset<T, AssignmentSubmissionFindUniqueArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AssignmentSubmission that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AssignmentSubmissionFindUniqueOrThrowArgs} args - Arguments to find a AssignmentSubmission
+     * @example
+     * // Get one AssignmentSubmission
+     * const assignmentSubmission = await prisma.assignmentSubmission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AssignmentSubmissionFindUniqueOrThrowArgs>(args: SelectSubset<T, AssignmentSubmissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AssignmentSubmission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionFindFirstArgs} args - Arguments to find a AssignmentSubmission
+     * @example
+     * // Get one AssignmentSubmission
+     * const assignmentSubmission = await prisma.assignmentSubmission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AssignmentSubmissionFindFirstArgs>(args?: SelectSubset<T, AssignmentSubmissionFindFirstArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AssignmentSubmission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionFindFirstOrThrowArgs} args - Arguments to find a AssignmentSubmission
+     * @example
+     * // Get one AssignmentSubmission
+     * const assignmentSubmission = await prisma.assignmentSubmission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AssignmentSubmissionFindFirstOrThrowArgs>(args?: SelectSubset<T, AssignmentSubmissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AssignmentSubmissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AssignmentSubmissions
+     * const assignmentSubmissions = await prisma.assignmentSubmission.findMany()
+     * 
+     * // Get first 10 AssignmentSubmissions
+     * const assignmentSubmissions = await prisma.assignmentSubmission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const assignmentSubmissionWithIdOnly = await prisma.assignmentSubmission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AssignmentSubmissionFindManyArgs>(args?: SelectSubset<T, AssignmentSubmissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AssignmentSubmission.
+     * @param {AssignmentSubmissionCreateArgs} args - Arguments to create a AssignmentSubmission.
+     * @example
+     * // Create one AssignmentSubmission
+     * const AssignmentSubmission = await prisma.assignmentSubmission.create({
+     *   data: {
+     *     // ... data to create a AssignmentSubmission
+     *   }
+     * })
+     * 
+     */
+    create<T extends AssignmentSubmissionCreateArgs>(args: SelectSubset<T, AssignmentSubmissionCreateArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AssignmentSubmissions.
+     * @param {AssignmentSubmissionCreateManyArgs} args - Arguments to create many AssignmentSubmissions.
+     * @example
+     * // Create many AssignmentSubmissions
+     * const assignmentSubmission = await prisma.assignmentSubmission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AssignmentSubmissionCreateManyArgs>(args?: SelectSubset<T, AssignmentSubmissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AssignmentSubmissions and returns the data saved in the database.
+     * @param {AssignmentSubmissionCreateManyAndReturnArgs} args - Arguments to create many AssignmentSubmissions.
+     * @example
+     * // Create many AssignmentSubmissions
+     * const assignmentSubmission = await prisma.assignmentSubmission.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AssignmentSubmissions and only return the `id`
+     * const assignmentSubmissionWithIdOnly = await prisma.assignmentSubmission.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AssignmentSubmissionCreateManyAndReturnArgs>(args?: SelectSubset<T, AssignmentSubmissionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AssignmentSubmission.
+     * @param {AssignmentSubmissionDeleteArgs} args - Arguments to delete one AssignmentSubmission.
+     * @example
+     * // Delete one AssignmentSubmission
+     * const AssignmentSubmission = await prisma.assignmentSubmission.delete({
+     *   where: {
+     *     // ... filter to delete one AssignmentSubmission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AssignmentSubmissionDeleteArgs>(args: SelectSubset<T, AssignmentSubmissionDeleteArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AssignmentSubmission.
+     * @param {AssignmentSubmissionUpdateArgs} args - Arguments to update one AssignmentSubmission.
+     * @example
+     * // Update one AssignmentSubmission
+     * const assignmentSubmission = await prisma.assignmentSubmission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AssignmentSubmissionUpdateArgs>(args: SelectSubset<T, AssignmentSubmissionUpdateArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AssignmentSubmissions.
+     * @param {AssignmentSubmissionDeleteManyArgs} args - Arguments to filter AssignmentSubmissions to delete.
+     * @example
+     * // Delete a few AssignmentSubmissions
+     * const { count } = await prisma.assignmentSubmission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AssignmentSubmissionDeleteManyArgs>(args?: SelectSubset<T, AssignmentSubmissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AssignmentSubmissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AssignmentSubmissions
+     * const assignmentSubmission = await prisma.assignmentSubmission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AssignmentSubmissionUpdateManyArgs>(args: SelectSubset<T, AssignmentSubmissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AssignmentSubmissions and returns the data updated in the database.
+     * @param {AssignmentSubmissionUpdateManyAndReturnArgs} args - Arguments to update many AssignmentSubmissions.
+     * @example
+     * // Update many AssignmentSubmissions
+     * const assignmentSubmission = await prisma.assignmentSubmission.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AssignmentSubmissions and only return the `id`
+     * const assignmentSubmissionWithIdOnly = await prisma.assignmentSubmission.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AssignmentSubmissionUpdateManyAndReturnArgs>(args: SelectSubset<T, AssignmentSubmissionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AssignmentSubmission.
+     * @param {AssignmentSubmissionUpsertArgs} args - Arguments to update or create a AssignmentSubmission.
+     * @example
+     * // Update or create a AssignmentSubmission
+     * const assignmentSubmission = await prisma.assignmentSubmission.upsert({
+     *   create: {
+     *     // ... data to create a AssignmentSubmission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AssignmentSubmission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AssignmentSubmissionUpsertArgs>(args: SelectSubset<T, AssignmentSubmissionUpsertArgs<ExtArgs>>): Prisma__AssignmentSubmissionClient<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AssignmentSubmissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionCountArgs} args - Arguments to filter AssignmentSubmissions to count.
+     * @example
+     * // Count the number of AssignmentSubmissions
+     * const count = await prisma.assignmentSubmission.count({
+     *   where: {
+     *     // ... the filter for the AssignmentSubmissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends AssignmentSubmissionCountArgs>(
+      args?: Subset<T, AssignmentSubmissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AssignmentSubmissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AssignmentSubmission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AssignmentSubmissionAggregateArgs>(args: Subset<T, AssignmentSubmissionAggregateArgs>): Prisma.PrismaPromise<GetAssignmentSubmissionAggregateType<T>>
+
+    /**
+     * Group by AssignmentSubmission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssignmentSubmissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AssignmentSubmissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AssignmentSubmissionGroupByArgs['orderBy'] }
+        : { orderBy?: AssignmentSubmissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AssignmentSubmissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssignmentSubmissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AssignmentSubmission model
+   */
+  readonly fields: AssignmentSubmissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AssignmentSubmission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AssignmentSubmissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    enrollment<T extends EnrollmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EnrollmentDefaultArgs<ExtArgs>>): Prisma__EnrollmentClient<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lesson<T extends LessonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LessonDefaultArgs<ExtArgs>>): Prisma__LessonClient<$Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AssignmentSubmission model
+   */
+  interface AssignmentSubmissionFieldRefs {
+    readonly id: FieldRef<"AssignmentSubmission", 'String'>
+    readonly enrollmentId: FieldRef<"AssignmentSubmission", 'String'>
+    readonly lessonId: FieldRef<"AssignmentSubmission", 'String'>
+    readonly content: FieldRef<"AssignmentSubmission", 'String'>
+    readonly submittedAt: FieldRef<"AssignmentSubmission", 'DateTime'>
+    readonly updatedAt: FieldRef<"AssignmentSubmission", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AssignmentSubmission findUnique
+   */
+  export type AssignmentSubmissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which AssignmentSubmission to fetch.
+     */
+    where: AssignmentSubmissionWhereUniqueInput
+  }
+
+  /**
+   * AssignmentSubmission findUniqueOrThrow
+   */
+  export type AssignmentSubmissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which AssignmentSubmission to fetch.
+     */
+    where: AssignmentSubmissionWhereUniqueInput
+  }
+
+  /**
+   * AssignmentSubmission findFirst
+   */
+  export type AssignmentSubmissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which AssignmentSubmission to fetch.
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssignmentSubmissions to fetch.
+     */
+    orderBy?: AssignmentSubmissionOrderByWithRelationInput | AssignmentSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AssignmentSubmissions.
+     */
+    cursor?: AssignmentSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssignmentSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssignmentSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssignmentSubmissions.
+     */
+    distinct?: AssignmentSubmissionScalarFieldEnum | AssignmentSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * AssignmentSubmission findFirstOrThrow
+   */
+  export type AssignmentSubmissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which AssignmentSubmission to fetch.
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssignmentSubmissions to fetch.
+     */
+    orderBy?: AssignmentSubmissionOrderByWithRelationInput | AssignmentSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AssignmentSubmissions.
+     */
+    cursor?: AssignmentSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssignmentSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssignmentSubmissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssignmentSubmissions.
+     */
+    distinct?: AssignmentSubmissionScalarFieldEnum | AssignmentSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * AssignmentSubmission findMany
+   */
+  export type AssignmentSubmissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter, which AssignmentSubmissions to fetch.
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssignmentSubmissions to fetch.
+     */
+    orderBy?: AssignmentSubmissionOrderByWithRelationInput | AssignmentSubmissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AssignmentSubmissions.
+     */
+    cursor?: AssignmentSubmissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssignmentSubmissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssignmentSubmissions.
+     */
+    skip?: number
+    distinct?: AssignmentSubmissionScalarFieldEnum | AssignmentSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * AssignmentSubmission create
+   */
+  export type AssignmentSubmissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AssignmentSubmission.
+     */
+    data: XOR<AssignmentSubmissionCreateInput, AssignmentSubmissionUncheckedCreateInput>
+  }
+
+  /**
+   * AssignmentSubmission createMany
+   */
+  export type AssignmentSubmissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AssignmentSubmissions.
+     */
+    data: AssignmentSubmissionCreateManyInput | AssignmentSubmissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AssignmentSubmission createManyAndReturn
+   */
+  export type AssignmentSubmissionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * The data used to create many AssignmentSubmissions.
+     */
+    data: AssignmentSubmissionCreateManyInput | AssignmentSubmissionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AssignmentSubmission update
+   */
+  export type AssignmentSubmissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AssignmentSubmission.
+     */
+    data: XOR<AssignmentSubmissionUpdateInput, AssignmentSubmissionUncheckedUpdateInput>
+    /**
+     * Choose, which AssignmentSubmission to update.
+     */
+    where: AssignmentSubmissionWhereUniqueInput
+  }
+
+  /**
+   * AssignmentSubmission updateMany
+   */
+  export type AssignmentSubmissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AssignmentSubmissions.
+     */
+    data: XOR<AssignmentSubmissionUpdateManyMutationInput, AssignmentSubmissionUncheckedUpdateManyInput>
+    /**
+     * Filter which AssignmentSubmissions to update
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * Limit how many AssignmentSubmissions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AssignmentSubmission updateManyAndReturn
+   */
+  export type AssignmentSubmissionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * The data used to update AssignmentSubmissions.
+     */
+    data: XOR<AssignmentSubmissionUpdateManyMutationInput, AssignmentSubmissionUncheckedUpdateManyInput>
+    /**
+     * Filter which AssignmentSubmissions to update
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * Limit how many AssignmentSubmissions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AssignmentSubmission upsert
+   */
+  export type AssignmentSubmissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AssignmentSubmission to update in case it exists.
+     */
+    where: AssignmentSubmissionWhereUniqueInput
+    /**
+     * In case the AssignmentSubmission found by the `where` argument doesn't exist, create a new AssignmentSubmission with this data.
+     */
+    create: XOR<AssignmentSubmissionCreateInput, AssignmentSubmissionUncheckedCreateInput>
+    /**
+     * In case the AssignmentSubmission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AssignmentSubmissionUpdateInput, AssignmentSubmissionUncheckedUpdateInput>
+  }
+
+  /**
+   * AssignmentSubmission delete
+   */
+  export type AssignmentSubmissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
+    /**
+     * Filter which AssignmentSubmission to delete.
+     */
+    where: AssignmentSubmissionWhereUniqueInput
+  }
+
+  /**
+   * AssignmentSubmission deleteMany
+   */
+  export type AssignmentSubmissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AssignmentSubmissions to delete
+     */
+    where?: AssignmentSubmissionWhereInput
+    /**
+     * Limit how many AssignmentSubmissions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AssignmentSubmission without action
+   */
+  export type AssignmentSubmissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssignmentSubmission
+     */
+    select?: AssignmentSubmissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssignmentSubmission
+     */
+    omit?: AssignmentSubmissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentSubmissionInclude<ExtArgs> | null
   }
 
 
@@ -57367,6 +58627,7 @@ export namespace Prisma {
     startTime: 'startTime',
     endTime: 'endTime',
     maxStudents: 'maxStudents',
+    joinCodeHash: 'joinCodeHash',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -57430,6 +58691,18 @@ export namespace Prisma {
   };
 
   export type SectionQuizSubmissionScalarFieldEnum = (typeof SectionQuizSubmissionScalarFieldEnum)[keyof typeof SectionQuizSubmissionScalarFieldEnum]
+
+
+  export const AssignmentSubmissionScalarFieldEnum: {
+    id: 'id',
+    enrollmentId: 'enrollmentId',
+    lessonId: 'lessonId',
+    content: 'content',
+    submittedAt: 'submittedAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AssignmentSubmissionScalarFieldEnum = (typeof AssignmentSubmissionScalarFieldEnum)[keyof typeof AssignmentSubmissionScalarFieldEnum]
 
 
   export const ExamSubmissionScalarFieldEnum: {
@@ -59117,6 +60390,7 @@ export namespace Prisma {
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
     progress?: LessonProgressListRelationFilter
     notes?: CourseNoteListRelationFilter
+    assignmentSubmissions?: AssignmentSubmissionListRelationFilter
   }
 
   export type LessonOrderByWithRelationInput = {
@@ -59137,6 +60411,7 @@ export namespace Prisma {
     section?: CourseSectionOrderByWithRelationInput
     progress?: LessonProgressOrderByRelationAggregateInput
     notes?: CourseNoteOrderByRelationAggregateInput
+    assignmentSubmissions?: AssignmentSubmissionOrderByRelationAggregateInput
   }
 
   export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -59160,6 +60435,7 @@ export namespace Prisma {
     section?: XOR<CourseSectionScalarRelationFilter, CourseSectionWhereInput>
     progress?: LessonProgressListRelationFilter
     notes?: CourseNoteListRelationFilter
+    assignmentSubmissions?: AssignmentSubmissionListRelationFilter
   }, "id">
 
   export type LessonOrderByWithAggregationInput = {
@@ -59284,6 +60560,7 @@ export namespace Prisma {
     startTime?: StringFilter<"CourseSession"> | string
     endTime?: StringFilter<"CourseSession"> | string
     maxStudents?: IntFilter<"CourseSession"> | number
+    joinCodeHash?: StringNullableFilter<"CourseSession"> | string | null
     createdAt?: DateTimeFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
@@ -59302,6 +60579,7 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     maxStudents?: SortOrder
+    joinCodeHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     course?: CourseOrderByWithRelationInput
@@ -59323,6 +60601,7 @@ export namespace Prisma {
     startTime?: StringFilter<"CourseSession"> | string
     endTime?: StringFilter<"CourseSession"> | string
     maxStudents?: IntFilter<"CourseSession"> | number
+    joinCodeHash?: StringNullableFilter<"CourseSession"> | string | null
     createdAt?: DateTimeFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
@@ -59341,6 +60620,7 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     maxStudents?: SortOrder
+    joinCodeHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CourseSessionCountOrderByAggregateInput
@@ -59364,6 +60644,7 @@ export namespace Prisma {
     startTime?: StringWithAggregatesFilter<"CourseSession"> | string
     endTime?: StringWithAggregatesFilter<"CourseSession"> | string
     maxStudents?: IntWithAggregatesFilter<"CourseSession"> | number
+    joinCodeHash?: StringNullableWithAggregatesFilter<"CourseSession"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CourseSession"> | Date | string
   }
@@ -59477,6 +60758,7 @@ export namespace Prisma {
     examSubmission?: XOR<ExamSubmissionNullableScalarRelationFilter, ExamSubmissionWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     sectionQuizSubmissions?: SectionQuizSubmissionListRelationFilter
+    assignmentSubmissions?: AssignmentSubmissionListRelationFilter
     learningReflection?: XOR<LearningReflectionNullableScalarRelationFilter, LearningReflectionWhereInput> | null
   }
 
@@ -59500,6 +60782,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionOrderByWithRelationInput
     transaction?: TransactionOrderByWithRelationInput
     sectionQuizSubmissions?: SectionQuizSubmissionOrderByRelationAggregateInput
+    assignmentSubmissions?: AssignmentSubmissionOrderByRelationAggregateInput
     learningReflection?: LearningReflectionOrderByWithRelationInput
   }
 
@@ -59527,6 +60810,7 @@ export namespace Prisma {
     examSubmission?: XOR<ExamSubmissionNullableScalarRelationFilter, ExamSubmissionWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     sectionQuizSubmissions?: SectionQuizSubmissionListRelationFilter
+    assignmentSubmissions?: AssignmentSubmissionListRelationFilter
     learningReflection?: XOR<LearningReflectionNullableScalarRelationFilter, LearningReflectionWhereInput> | null
   }, "id" | "courseId_studentId">
 
@@ -59704,6 +60988,70 @@ export namespace Prisma {
     score?: IntWithAggregatesFilter<"SectionQuizSubmission"> | number
     passed?: BoolWithAggregatesFilter<"SectionQuizSubmission"> | boolean
     submittedAt?: DateTimeWithAggregatesFilter<"SectionQuizSubmission"> | Date | string
+  }
+
+  export type AssignmentSubmissionWhereInput = {
+    AND?: AssignmentSubmissionWhereInput | AssignmentSubmissionWhereInput[]
+    OR?: AssignmentSubmissionWhereInput[]
+    NOT?: AssignmentSubmissionWhereInput | AssignmentSubmissionWhereInput[]
+    id?: StringFilter<"AssignmentSubmission"> | string
+    enrollmentId?: StringFilter<"AssignmentSubmission"> | string
+    lessonId?: StringFilter<"AssignmentSubmission"> | string
+    content?: StringFilter<"AssignmentSubmission"> | string
+    submittedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+    updatedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+    enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
+    lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
+  }
+
+  export type AssignmentSubmissionOrderByWithRelationInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    submittedAt?: SortOrder
+    updatedAt?: SortOrder
+    enrollment?: EnrollmentOrderByWithRelationInput
+    lesson?: LessonOrderByWithRelationInput
+  }
+
+  export type AssignmentSubmissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    enrollmentId_lessonId?: AssignmentSubmissionEnrollmentIdLessonIdCompoundUniqueInput
+    AND?: AssignmentSubmissionWhereInput | AssignmentSubmissionWhereInput[]
+    OR?: AssignmentSubmissionWhereInput[]
+    NOT?: AssignmentSubmissionWhereInput | AssignmentSubmissionWhereInput[]
+    enrollmentId?: StringFilter<"AssignmentSubmission"> | string
+    lessonId?: StringFilter<"AssignmentSubmission"> | string
+    content?: StringFilter<"AssignmentSubmission"> | string
+    submittedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+    updatedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+    enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
+    lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
+  }, "id" | "enrollmentId_lessonId">
+
+  export type AssignmentSubmissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    submittedAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AssignmentSubmissionCountOrderByAggregateInput
+    _max?: AssignmentSubmissionMaxOrderByAggregateInput
+    _min?: AssignmentSubmissionMinOrderByAggregateInput
+  }
+
+  export type AssignmentSubmissionScalarWhereWithAggregatesInput = {
+    AND?: AssignmentSubmissionScalarWhereWithAggregatesInput | AssignmentSubmissionScalarWhereWithAggregatesInput[]
+    OR?: AssignmentSubmissionScalarWhereWithAggregatesInput[]
+    NOT?: AssignmentSubmissionScalarWhereWithAggregatesInput | AssignmentSubmissionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AssignmentSubmission"> | string
+    enrollmentId?: StringWithAggregatesFilter<"AssignmentSubmission"> | string
+    lessonId?: StringWithAggregatesFilter<"AssignmentSubmission"> | string
+    content?: StringWithAggregatesFilter<"AssignmentSubmission"> | string
+    submittedAt?: DateTimeWithAggregatesFilter<"AssignmentSubmission"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AssignmentSubmission"> | Date | string
   }
 
   export type ExamSubmissionWhereInput = {
@@ -62815,6 +64163,7 @@ export namespace Prisma {
     section: CourseSectionCreateNestedOneWithoutLessonsInput
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
     notes?: CourseNoteCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateInput = {
@@ -62834,6 +64183,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
     notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUpdateInput = {
@@ -62853,6 +64203,7 @@ export namespace Prisma {
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
     notes?: CourseNoteUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateInput = {
@@ -62872,6 +64223,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
     notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonCreateManyInput = {
@@ -62995,6 +64347,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
@@ -63013,6 +64366,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -63029,6 +64383,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
@@ -63047,6 +64402,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -63064,6 +64420,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -63078,6 +64435,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63093,6 +64451,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63201,6 +64560,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -63220,6 +64580,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -63239,6 +64600,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -63258,6 +64620,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -63429,6 +64792,67 @@ export namespace Prisma {
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentSubmissionCreateInput = {
+    id?: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+    enrollment: EnrollmentCreateNestedOneWithoutAssignmentSubmissionsInput
+    lesson: LessonCreateNestedOneWithoutAssignmentSubmissionsInput
+  }
+
+  export type AssignmentSubmissionUncheckedCreateInput = {
+    id?: string
+    enrollmentId: string
+    lessonId: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentSubmissionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollment?: EnrollmentUpdateOneRequiredWithoutAssignmentSubmissionsNestedInput
+    lesson?: LessonUpdateOneRequiredWithoutAssignmentSubmissionsNestedInput
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    lessonId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentSubmissionCreateManyInput = {
+    id?: string
+    enrollmentId: string
+    lessonId: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentSubmissionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    lessonId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ExamSubmissionCreateInput = {
@@ -66573,7 +67997,17 @@ export namespace Prisma {
     none?: LessonProgressWhereInput
   }
 
+  export type AssignmentSubmissionListRelationFilter = {
+    every?: AssignmentSubmissionWhereInput
+    some?: AssignmentSubmissionWhereInput
+    none?: AssignmentSubmissionWhereInput
+  }
+
   export type LessonProgressOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AssignmentSubmissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -66701,6 +68135,7 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     maxStudents?: SortOrder
+    joinCodeHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -66720,6 +68155,7 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     maxStudents?: SortOrder
+    joinCodeHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -66735,6 +68171,7 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     maxStudents?: SortOrder
+    joinCodeHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -66975,6 +68412,38 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionSumOrderByAggregateInput = {
     score?: SortOrder
+  }
+
+  export type AssignmentSubmissionEnrollmentIdLessonIdCompoundUniqueInput = {
+    enrollmentId: string
+    lessonId: string
+  }
+
+  export type AssignmentSubmissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    submittedAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssignmentSubmissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    submittedAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssignmentSubmissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    enrollmentId?: SortOrder
+    lessonId?: SortOrder
+    content?: SortOrder
+    submittedAt?: SortOrder
+    updatedAt?: SortOrder
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -70200,6 +71669,13 @@ export namespace Prisma {
     connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
   }
 
+  export type AssignmentSubmissionCreateNestedManyWithoutLessonInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutLessonInput, AssignmentSubmissionUncheckedCreateWithoutLessonInput> | AssignmentSubmissionCreateWithoutLessonInput[] | AssignmentSubmissionUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutLessonInput | AssignmentSubmissionCreateOrConnectWithoutLessonInput[]
+    createMany?: AssignmentSubmissionCreateManyLessonInputEnvelope
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+  }
+
   export type LessonProgressUncheckedCreateNestedManyWithoutLessonInput = {
     create?: XOR<LessonProgressCreateWithoutLessonInput, LessonProgressUncheckedCreateWithoutLessonInput> | LessonProgressCreateWithoutLessonInput[] | LessonProgressUncheckedCreateWithoutLessonInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutLessonInput | LessonProgressCreateOrConnectWithoutLessonInput[]
@@ -70212,6 +71688,13 @@ export namespace Prisma {
     connectOrCreate?: CourseNoteCreateOrConnectWithoutLessonInput | CourseNoteCreateOrConnectWithoutLessonInput[]
     createMany?: CourseNoteCreateManyLessonInputEnvelope
     connect?: CourseNoteWhereUniqueInput | CourseNoteWhereUniqueInput[]
+  }
+
+  export type AssignmentSubmissionUncheckedCreateNestedManyWithoutLessonInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutLessonInput, AssignmentSubmissionUncheckedCreateWithoutLessonInput> | AssignmentSubmissionCreateWithoutLessonInput[] | AssignmentSubmissionUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutLessonInput | AssignmentSubmissionCreateOrConnectWithoutLessonInput[]
+    createMany?: AssignmentSubmissionCreateManyLessonInputEnvelope
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
   }
 
   export type EnumLessonTypeFieldUpdateOperationsInput = {
@@ -70254,6 +71737,20 @@ export namespace Prisma {
     deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
   }
 
+  export type AssignmentSubmissionUpdateManyWithoutLessonNestedInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutLessonInput, AssignmentSubmissionUncheckedCreateWithoutLessonInput> | AssignmentSubmissionCreateWithoutLessonInput[] | AssignmentSubmissionUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutLessonInput | AssignmentSubmissionCreateOrConnectWithoutLessonInput[]
+    upsert?: AssignmentSubmissionUpsertWithWhereUniqueWithoutLessonInput | AssignmentSubmissionUpsertWithWhereUniqueWithoutLessonInput[]
+    createMany?: AssignmentSubmissionCreateManyLessonInputEnvelope
+    set?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    disconnect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    delete?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    update?: AssignmentSubmissionUpdateWithWhereUniqueWithoutLessonInput | AssignmentSubmissionUpdateWithWhereUniqueWithoutLessonInput[]
+    updateMany?: AssignmentSubmissionUpdateManyWithWhereWithoutLessonInput | AssignmentSubmissionUpdateManyWithWhereWithoutLessonInput[]
+    deleteMany?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
+  }
+
   export type LessonProgressUncheckedUpdateManyWithoutLessonNestedInput = {
     create?: XOR<LessonProgressCreateWithoutLessonInput, LessonProgressUncheckedCreateWithoutLessonInput> | LessonProgressCreateWithoutLessonInput[] | LessonProgressUncheckedCreateWithoutLessonInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutLessonInput | LessonProgressCreateOrConnectWithoutLessonInput[]
@@ -70280,6 +71777,20 @@ export namespace Prisma {
     update?: CourseNoteUpdateWithWhereUniqueWithoutLessonInput | CourseNoteUpdateWithWhereUniqueWithoutLessonInput[]
     updateMany?: CourseNoteUpdateManyWithWhereWithoutLessonInput | CourseNoteUpdateManyWithWhereWithoutLessonInput[]
     deleteMany?: CourseNoteScalarWhereInput | CourseNoteScalarWhereInput[]
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateManyWithoutLessonNestedInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutLessonInput, AssignmentSubmissionUncheckedCreateWithoutLessonInput> | AssignmentSubmissionCreateWithoutLessonInput[] | AssignmentSubmissionUncheckedCreateWithoutLessonInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutLessonInput | AssignmentSubmissionCreateOrConnectWithoutLessonInput[]
+    upsert?: AssignmentSubmissionUpsertWithWhereUniqueWithoutLessonInput | AssignmentSubmissionUpsertWithWhereUniqueWithoutLessonInput[]
+    createMany?: AssignmentSubmissionCreateManyLessonInputEnvelope
+    set?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    disconnect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    delete?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    update?: AssignmentSubmissionUpdateWithWhereUniqueWithoutLessonInput | AssignmentSubmissionUpdateWithWhereUniqueWithoutLessonInput[]
+    updateMany?: AssignmentSubmissionUpdateManyWithWhereWithoutLessonInput | AssignmentSubmissionUpdateManyWithWhereWithoutLessonInput[]
+    deleteMany?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
   }
 
   export type EnrollmentCreateNestedOneWithoutLessonProgressInput = {
@@ -70510,6 +72021,13 @@ export namespace Prisma {
     connect?: SectionQuizSubmissionWhereUniqueInput | SectionQuizSubmissionWhereUniqueInput[]
   }
 
+  export type AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutEnrollmentInput, AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput> | AssignmentSubmissionCreateWithoutEnrollmentInput[] | AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput | AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput[]
+    createMany?: AssignmentSubmissionCreateManyEnrollmentInputEnvelope
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+  }
+
   export type LearningReflectionCreateNestedOneWithoutEnrollmentInput = {
     create?: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
     connectOrCreate?: LearningReflectionCreateOrConnectWithoutEnrollmentInput
@@ -70546,6 +72064,13 @@ export namespace Prisma {
     connectOrCreate?: SectionQuizSubmissionCreateOrConnectWithoutEnrollmentInput | SectionQuizSubmissionCreateOrConnectWithoutEnrollmentInput[]
     createMany?: SectionQuizSubmissionCreateManyEnrollmentInputEnvelope
     connect?: SectionQuizSubmissionWhereUniqueInput | SectionQuizSubmissionWhereUniqueInput[]
+  }
+
+  export type AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutEnrollmentInput, AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput> | AssignmentSubmissionCreateWithoutEnrollmentInput[] | AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput | AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput[]
+    createMany?: AssignmentSubmissionCreateManyEnrollmentInputEnvelope
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
   }
 
   export type LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput = {
@@ -70652,6 +72177,20 @@ export namespace Prisma {
     deleteMany?: SectionQuizSubmissionScalarWhereInput | SectionQuizSubmissionScalarWhereInput[]
   }
 
+  export type AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutEnrollmentInput, AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput> | AssignmentSubmissionCreateWithoutEnrollmentInput[] | AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput | AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput[]
+    upsert?: AssignmentSubmissionUpsertWithWhereUniqueWithoutEnrollmentInput | AssignmentSubmissionUpsertWithWhereUniqueWithoutEnrollmentInput[]
+    createMany?: AssignmentSubmissionCreateManyEnrollmentInputEnvelope
+    set?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    disconnect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    delete?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    update?: AssignmentSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput | AssignmentSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput[]
+    updateMany?: AssignmentSubmissionUpdateManyWithWhereWithoutEnrollmentInput | AssignmentSubmissionUpdateManyWithWhereWithoutEnrollmentInput[]
+    deleteMany?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
+  }
+
   export type LearningReflectionUpdateOneWithoutEnrollmentNestedInput = {
     create?: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
     connectOrCreate?: LearningReflectionCreateOrConnectWithoutEnrollmentInput
@@ -70718,6 +72257,20 @@ export namespace Prisma {
     update?: SectionQuizSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput | SectionQuizSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput[]
     updateMany?: SectionQuizSubmissionUpdateManyWithWhereWithoutEnrollmentInput | SectionQuizSubmissionUpdateManyWithWhereWithoutEnrollmentInput[]
     deleteMany?: SectionQuizSubmissionScalarWhereInput | SectionQuizSubmissionScalarWhereInput[]
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput = {
+    create?: XOR<AssignmentSubmissionCreateWithoutEnrollmentInput, AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput> | AssignmentSubmissionCreateWithoutEnrollmentInput[] | AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput[]
+    connectOrCreate?: AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput | AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput[]
+    upsert?: AssignmentSubmissionUpsertWithWhereUniqueWithoutEnrollmentInput | AssignmentSubmissionUpsertWithWhereUniqueWithoutEnrollmentInput[]
+    createMany?: AssignmentSubmissionCreateManyEnrollmentInputEnvelope
+    set?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    disconnect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    delete?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
+    update?: AssignmentSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput | AssignmentSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput[]
+    updateMany?: AssignmentSubmissionUpdateManyWithWhereWithoutEnrollmentInput | AssignmentSubmissionUpdateManyWithWhereWithoutEnrollmentInput[]
+    deleteMany?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
   }
 
   export type LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput = {
@@ -70798,6 +72351,34 @@ export namespace Prisma {
     upsert?: CourseSectionUpsertWithoutSectionQuizSubmissionsInput
     connect?: CourseSectionWhereUniqueInput
     update?: XOR<XOR<CourseSectionUpdateToOneWithWhereWithoutSectionQuizSubmissionsInput, CourseSectionUpdateWithoutSectionQuizSubmissionsInput>, CourseSectionUncheckedUpdateWithoutSectionQuizSubmissionsInput>
+  }
+
+  export type EnrollmentCreateNestedOneWithoutAssignmentSubmissionsInput = {
+    create?: XOR<EnrollmentCreateWithoutAssignmentSubmissionsInput, EnrollmentUncheckedCreateWithoutAssignmentSubmissionsInput>
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutAssignmentSubmissionsInput
+    connect?: EnrollmentWhereUniqueInput
+  }
+
+  export type LessonCreateNestedOneWithoutAssignmentSubmissionsInput = {
+    create?: XOR<LessonCreateWithoutAssignmentSubmissionsInput, LessonUncheckedCreateWithoutAssignmentSubmissionsInput>
+    connectOrCreate?: LessonCreateOrConnectWithoutAssignmentSubmissionsInput
+    connect?: LessonWhereUniqueInput
+  }
+
+  export type EnrollmentUpdateOneRequiredWithoutAssignmentSubmissionsNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutAssignmentSubmissionsInput, EnrollmentUncheckedCreateWithoutAssignmentSubmissionsInput>
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutAssignmentSubmissionsInput
+    upsert?: EnrollmentUpsertWithoutAssignmentSubmissionsInput
+    connect?: EnrollmentWhereUniqueInput
+    update?: XOR<XOR<EnrollmentUpdateToOneWithWhereWithoutAssignmentSubmissionsInput, EnrollmentUpdateWithoutAssignmentSubmissionsInput>, EnrollmentUncheckedUpdateWithoutAssignmentSubmissionsInput>
+  }
+
+  export type LessonUpdateOneRequiredWithoutAssignmentSubmissionsNestedInput = {
+    create?: XOR<LessonCreateWithoutAssignmentSubmissionsInput, LessonUncheckedCreateWithoutAssignmentSubmissionsInput>
+    connectOrCreate?: LessonCreateOrConnectWithoutAssignmentSubmissionsInput
+    upsert?: LessonUpsertWithoutAssignmentSubmissionsInput
+    connect?: LessonWhereUniqueInput
+    update?: XOR<XOR<LessonUpdateToOneWithWhereWithoutAssignmentSubmissionsInput, LessonUpdateWithoutAssignmentSubmissionsInput>, LessonUncheckedUpdateWithoutAssignmentSubmissionsInput>
   }
 
   export type EnrollmentCreateNestedOneWithoutExamSubmissionInput = {
@@ -72939,6 +74520,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -72957,6 +74539,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -75635,6 +77218,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
@@ -75651,6 +77235,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -75682,6 +77267,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -75700,6 +77286,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -76185,6 +77772,7 @@ export namespace Prisma {
     startTime?: StringFilter<"CourseSession"> | string
     endTime?: StringFilter<"CourseSession"> | string
     maxStudents?: IntFilter<"CourseSession"> | number
+    joinCodeHash?: StringNullableFilter<"CourseSession"> | string | null
     createdAt?: DateTimeFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
   }
@@ -76488,6 +78076,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
     notes?: CourseNoteCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutSectionInput = {
@@ -76506,6 +78095,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
     notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonCreateOrConnectWithoutSectionInput = {
@@ -76787,6 +78377,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AssignmentSubmissionCreateWithoutLessonInput = {
+    id?: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+    enrollment: EnrollmentCreateNestedOneWithoutAssignmentSubmissionsInput
+  }
+
+  export type AssignmentSubmissionUncheckedCreateWithoutLessonInput = {
+    id?: string
+    enrollmentId: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentSubmissionCreateOrConnectWithoutLessonInput = {
+    where: AssignmentSubmissionWhereUniqueInput
+    create: XOR<AssignmentSubmissionCreateWithoutLessonInput, AssignmentSubmissionUncheckedCreateWithoutLessonInput>
+  }
+
+  export type AssignmentSubmissionCreateManyLessonInputEnvelope = {
+    data: AssignmentSubmissionCreateManyLessonInput | AssignmentSubmissionCreateManyLessonInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseSectionUpsertWithoutLessonsInput = {
     update: XOR<CourseSectionUpdateWithoutLessonsInput, CourseSectionUncheckedUpdateWithoutLessonsInput>
     create: XOR<CourseSectionCreateWithoutLessonsInput, CourseSectionUncheckedCreateWithoutLessonsInput>
@@ -76866,6 +78482,34 @@ export namespace Prisma {
     data: XOR<CourseNoteUpdateManyMutationInput, CourseNoteUncheckedUpdateManyWithoutLessonInput>
   }
 
+  export type AssignmentSubmissionUpsertWithWhereUniqueWithoutLessonInput = {
+    where: AssignmentSubmissionWhereUniqueInput
+    update: XOR<AssignmentSubmissionUpdateWithoutLessonInput, AssignmentSubmissionUncheckedUpdateWithoutLessonInput>
+    create: XOR<AssignmentSubmissionCreateWithoutLessonInput, AssignmentSubmissionUncheckedCreateWithoutLessonInput>
+  }
+
+  export type AssignmentSubmissionUpdateWithWhereUniqueWithoutLessonInput = {
+    where: AssignmentSubmissionWhereUniqueInput
+    data: XOR<AssignmentSubmissionUpdateWithoutLessonInput, AssignmentSubmissionUncheckedUpdateWithoutLessonInput>
+  }
+
+  export type AssignmentSubmissionUpdateManyWithWhereWithoutLessonInput = {
+    where: AssignmentSubmissionScalarWhereInput
+    data: XOR<AssignmentSubmissionUpdateManyMutationInput, AssignmentSubmissionUncheckedUpdateManyWithoutLessonInput>
+  }
+
+  export type AssignmentSubmissionScalarWhereInput = {
+    AND?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
+    OR?: AssignmentSubmissionScalarWhereInput[]
+    NOT?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
+    id?: StringFilter<"AssignmentSubmission"> | string
+    enrollmentId?: StringFilter<"AssignmentSubmission"> | string
+    lessonId?: StringFilter<"AssignmentSubmission"> | string
+    content?: StringFilter<"AssignmentSubmission"> | string
+    submittedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+    updatedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+  }
+
   export type EnrollmentCreateWithoutLessonProgressInput = {
     id?: string
     status?: $Enums.EnrollmentStatus
@@ -76881,6 +78525,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -76899,6 +78544,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -76923,6 +78569,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
     notes?: CourseNoteCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutProgressInput = {
@@ -76941,6 +78588,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonCreateOrConnectWithoutProgressInput = {
@@ -76974,6 +78622,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -76992,6 +78641,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -77022,6 +78672,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
     notes?: CourseNoteUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutProgressInput = {
@@ -77040,6 +78691,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type CourseCreateWithoutCourseSessionsInput = {
@@ -77144,6 +78796,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -77162,6 +78815,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -77344,6 +78998,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
@@ -77361,6 +79016,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -77574,6 +79230,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
@@ -77591,6 +79248,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -77982,6 +79640,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
@@ -77999,6 +79658,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     anonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutSessionInput
@@ -78184,6 +79844,32 @@ export namespace Prisma {
 
   export type SectionQuizSubmissionCreateManyEnrollmentInputEnvelope = {
     data: SectionQuizSubmissionCreateManyEnrollmentInput | SectionQuizSubmissionCreateManyEnrollmentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AssignmentSubmissionCreateWithoutEnrollmentInput = {
+    id?: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+    lesson: LessonCreateNestedOneWithoutAssignmentSubmissionsInput
+  }
+
+  export type AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput = {
+    id?: string
+    lessonId: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentSubmissionCreateOrConnectWithoutEnrollmentInput = {
+    where: AssignmentSubmissionWhereUniqueInput
+    create: XOR<AssignmentSubmissionCreateWithoutEnrollmentInput, AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput>
+  }
+
+  export type AssignmentSubmissionCreateManyEnrollmentInputEnvelope = {
+    data: AssignmentSubmissionCreateManyEnrollmentInput | AssignmentSubmissionCreateManyEnrollmentInput[]
     skipDuplicates?: boolean
   }
 
@@ -78425,6 +80111,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
@@ -78442,6 +80129,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     anonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionNestedInput
@@ -78627,6 +80315,22 @@ export namespace Prisma {
     data: XOR<SectionQuizSubmissionUpdateManyMutationInput, SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentInput>
   }
 
+  export type AssignmentSubmissionUpsertWithWhereUniqueWithoutEnrollmentInput = {
+    where: AssignmentSubmissionWhereUniqueInput
+    update: XOR<AssignmentSubmissionUpdateWithoutEnrollmentInput, AssignmentSubmissionUncheckedUpdateWithoutEnrollmentInput>
+    create: XOR<AssignmentSubmissionCreateWithoutEnrollmentInput, AssignmentSubmissionUncheckedCreateWithoutEnrollmentInput>
+  }
+
+  export type AssignmentSubmissionUpdateWithWhereUniqueWithoutEnrollmentInput = {
+    where: AssignmentSubmissionWhereUniqueInput
+    data: XOR<AssignmentSubmissionUpdateWithoutEnrollmentInput, AssignmentSubmissionUncheckedUpdateWithoutEnrollmentInput>
+  }
+
+  export type AssignmentSubmissionUpdateManyWithWhereWithoutEnrollmentInput = {
+    where: AssignmentSubmissionScalarWhereInput
+    data: XOR<AssignmentSubmissionUpdateManyMutationInput, AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentInput>
+  }
+
   export type LearningReflectionUpsertWithoutEnrollmentInput = {
     update: XOR<LearningReflectionUpdateWithoutEnrollmentInput, LearningReflectionUncheckedUpdateWithoutEnrollmentInput>
     create: XOR<LearningReflectionCreateWithoutEnrollmentInput, LearningReflectionUncheckedCreateWithoutEnrollmentInput>
@@ -78672,6 +80376,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
   }
 
   export type EnrollmentUncheckedCreateWithoutLearningReflectionInput = {
@@ -78690,6 +80395,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
   export type EnrollmentCreateOrConnectWithoutLearningReflectionInput = {
@@ -78906,6 +80612,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutLearningReflectionInput = {
@@ -78924,6 +80631,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
   export type CourseUpsertWithoutLearningReflectionsInput = {
@@ -79135,6 +80843,7 @@ export namespace Prisma {
     certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79153,6 +80862,7 @@ export namespace Prisma {
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79216,6 +80926,7 @@ export namespace Prisma {
     certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -79234,6 +80945,7 @@ export namespace Prisma {
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -79272,6 +80984,190 @@ export namespace Prisma {
     lessons?: LessonUncheckedUpdateManyWithoutSectionNestedInput
   }
 
+  export type EnrollmentCreateWithoutAssignmentSubmissionsInput = {
+    id?: string
+    status?: $Enums.EnrollmentStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
+    course: CourseCreateNestedOneWithoutEnrollmentsInput
+    student: UserCreateNestedOneWithoutEnrollmentsInput
+    session?: CourseSessionCreateNestedOneWithoutEnrollmentsInput
+    organization?: OrganizationCreateNestedOneWithoutEnrollmentsInput
+    lessonProgress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
+    certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
+    examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
+    transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
+    sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
+  }
+
+  export type EnrollmentUncheckedCreateWithoutAssignmentSubmissionsInput = {
+    id?: string
+    courseId: string
+    studentId: string
+    sessionId?: string | null
+    organizationId?: string | null
+    status?: $Enums.EnrollmentStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    learningReflectionEmailSentAt?: Date | string | null
+    lessonProgress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
+    certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
+    examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
+    transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
+    sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
+  }
+
+  export type EnrollmentCreateOrConnectWithoutAssignmentSubmissionsInput = {
+    where: EnrollmentWhereUniqueInput
+    create: XOR<EnrollmentCreateWithoutAssignmentSubmissionsInput, EnrollmentUncheckedCreateWithoutAssignmentSubmissionsInput>
+  }
+
+  export type LessonCreateWithoutAssignmentSubmissionsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    type: $Enums.LessonType
+    duration?: string | null
+    order: number
+    videoUrl?: string | null
+    content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    section: CourseSectionCreateNestedOneWithoutLessonsInput
+    progress?: LessonProgressCreateNestedManyWithoutLessonInput
+    notes?: CourseNoteCreateNestedManyWithoutLessonInput
+  }
+
+  export type LessonUncheckedCreateWithoutAssignmentSubmissionsInput = {
+    id?: string
+    sectionId: string
+    title: string
+    description?: string | null
+    type: $Enums.LessonType
+    duration?: string | null
+    order: number
+    videoUrl?: string | null
+    content?: string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutLessonInput
+  }
+
+  export type LessonCreateOrConnectWithoutAssignmentSubmissionsInput = {
+    where: LessonWhereUniqueInput
+    create: XOR<LessonCreateWithoutAssignmentSubmissionsInput, LessonUncheckedCreateWithoutAssignmentSubmissionsInput>
+  }
+
+  export type EnrollmentUpsertWithoutAssignmentSubmissionsInput = {
+    update: XOR<EnrollmentUpdateWithoutAssignmentSubmissionsInput, EnrollmentUncheckedUpdateWithoutAssignmentSubmissionsInput>
+    create: XOR<EnrollmentCreateWithoutAssignmentSubmissionsInput, EnrollmentUncheckedCreateWithoutAssignmentSubmissionsInput>
+    where?: EnrollmentWhereInput
+  }
+
+  export type EnrollmentUpdateToOneWithWhereWithoutAssignmentSubmissionsInput = {
+    where?: EnrollmentWhereInput
+    data: XOR<EnrollmentUpdateWithoutAssignmentSubmissionsInput, EnrollmentUncheckedUpdateWithoutAssignmentSubmissionsInput>
+  }
+
+  export type EnrollmentUpdateWithoutAssignmentSubmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
+    student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+    session?: CourseSessionUpdateOneWithoutEnrollmentsNestedInput
+    organization?: OrganizationUpdateOneWithoutEnrollmentsNestedInput
+    lessonProgress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
+    certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
+    examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
+    transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
+    sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateWithoutAssignmentSubmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    learningReflectionEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lessonProgress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
+    certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
+    examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
+    transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
+    sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
+  }
+
+  export type LessonUpsertWithoutAssignmentSubmissionsInput = {
+    update: XOR<LessonUpdateWithoutAssignmentSubmissionsInput, LessonUncheckedUpdateWithoutAssignmentSubmissionsInput>
+    create: XOR<LessonCreateWithoutAssignmentSubmissionsInput, LessonUncheckedCreateWithoutAssignmentSubmissionsInput>
+    where?: LessonWhereInput
+  }
+
+  export type LessonUpdateToOneWithWhereWithoutAssignmentSubmissionsInput = {
+    where?: LessonWhereInput
+    data: XOR<LessonUpdateWithoutAssignmentSubmissionsInput, LessonUncheckedUpdateWithoutAssignmentSubmissionsInput>
+  }
+
+  export type LessonUpdateWithoutAssignmentSubmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
+    progress?: LessonProgressUpdateManyWithoutLessonNestedInput
+    notes?: CourseNoteUpdateManyWithoutLessonNestedInput
+  }
+
+  export type LessonUncheckedUpdateWithoutAssignmentSubmissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    attachments?: NullableJsonNullValueInput | InputJsonValue
+    resources?: NullableJsonNullValueInput | InputJsonValue
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
+  }
+
   export type EnrollmentCreateWithoutExamSubmissionInput = {
     id?: string
     status?: $Enums.EnrollmentStatus
@@ -79287,6 +81183,7 @@ export namespace Prisma {
     certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79305,6 +81202,7 @@ export namespace Prisma {
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79339,6 +81237,7 @@ export namespace Prisma {
     certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -79357,6 +81256,7 @@ export namespace Prisma {
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -79375,6 +81275,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79393,6 +81294,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79609,6 +81511,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -79627,6 +81530,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -79839,6 +81743,7 @@ export namespace Prisma {
     certificate?: CertificateCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -79857,6 +81762,7 @@ export namespace Prisma {
     certificate?: CertificateUncheckedCreateNestedOneWithoutEnrollmentInput
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -80098,6 +82004,7 @@ export namespace Prisma {
     certificate?: CertificateUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -80116,6 +82023,7 @@ export namespace Prisma {
     certificate?: CertificateUncheckedUpdateOneWithoutEnrollmentNestedInput
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -82944,6 +84852,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -82962,6 +84871,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedCreateNestedOneWithoutEnrollmentInput
     transaction?: TransactionUncheckedCreateNestedOneWithoutEnrollmentInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutEnrollmentInput
     learningReflection?: LearningReflectionUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -84711,6 +86621,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     section: CourseSectionCreateNestedOneWithoutLessonsInput
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutNotesInput = {
@@ -84729,6 +86640,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutLessonInput
   }
 
   export type LessonCreateOrConnectWithoutNotesInput = {
@@ -84957,6 +86869,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: CourseSectionUpdateOneRequiredWithoutLessonsNestedInput
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutNotesInput = {
@@ -84975,6 +86888,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type UserCreateWithoutWishlistItemsInput = {
@@ -86668,6 +88582,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -86686,6 +88601,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -87471,6 +89387,7 @@ export namespace Prisma {
     startTime: string
     endTime: string
     maxStudents: number
+    joinCodeHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -87622,6 +89539,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
@@ -87638,6 +89556,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -87654,6 +89573,7 @@ export namespace Prisma {
     startTime?: StringFieldUpdateOperationsInput | string
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87673,6 +89593,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -87691,6 +89612,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -88024,6 +89946,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
     notes?: CourseNoteUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutSectionInput = {
@@ -88042,6 +89965,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
     notes?: CourseNoteUncheckedUpdateManyWithoutLessonNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateManyWithoutSectionInput = {
@@ -88104,6 +90028,14 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type AssignmentSubmissionCreateManyLessonInput = {
+    id?: string
+    enrollmentId: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type LessonProgressUpdateWithoutLessonInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -88155,6 +90087,30 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AssignmentSubmissionUpdateWithoutLessonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollment?: EnrollmentUpdateOneRequiredWithoutAssignmentSubmissionsNestedInput
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateWithoutLessonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateManyWithoutLessonInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EnrollmentCreateManySessionInput = {
     id?: string
     courseId: string
@@ -88194,6 +90150,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -88212,6 +90169,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -88280,6 +90238,14 @@ export namespace Prisma {
     submittedAt?: Date | string
   }
 
+  export type AssignmentSubmissionCreateManyEnrollmentInput = {
+    id?: string
+    lessonId: string
+    content: string
+    submittedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type LessonProgressUpdateWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -88329,6 +90295,30 @@ export namespace Prisma {
     score?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentSubmissionUpdateWithoutEnrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lesson?: LessonUpdateOneRequiredWithoutAssignmentSubmissionsNestedInput
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateWithoutEnrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lessonId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lessonId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageCreateManyConversationInput = {
@@ -88764,6 +90754,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -88782,6 +90773,7 @@ export namespace Prisma {
     examSubmission?: ExamSubmissionUncheckedUpdateOneWithoutEnrollmentNestedInput
     transaction?: TransactionUncheckedUpdateOneWithoutEnrollmentNestedInput
     sectionQuizSubmissions?: SectionQuizSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutEnrollmentNestedInput
     learningReflection?: LearningReflectionUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 

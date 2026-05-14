@@ -6,6 +6,7 @@ import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, TrendingUp } from "lucide-react";
@@ -156,9 +157,8 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 <p className="text-xs text-muted-foreground">
                   Opcional: define un código para que solo quienes lo conozcan puedan inscribirse (por ejemplo lo compartes en clase).
                 </p>
-                <Input
+                <PasswordInput
                   label="Código de inscripción"
-                  type="password"
                   autoComplete="new-password"
                   value={data.freeJoinCode ?? ""}
                   onChange={(e) =>
@@ -214,6 +214,7 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
               variant={isLive ? "live" : "presencial"}
               sessions={data.courseSessions ?? []}
               onChange={(sessions) => onUpdate({ courseSessions: sessions })}
+              isFree={watchedPrice === 0}
             />
             {(data.courseSessions ?? []).length === 0 && (
               <p className="text-xs text-amber-600 dark:text-amber-400">

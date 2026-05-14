@@ -194,22 +194,9 @@ export async function enrollInCourse(courseId: string, sessionId?: string, joinC
     where: { id: courseId, status: "published" },
     select: { joinCodeHash: true, modality: true, price: true },
   });
-  if (
-    enrollmentRules &&
-    shouldUseFreeJoinCode(enrollmentRules.modality, enrollmentRules.price) &&
-    enrollmentRules.joinCodeHash
-  ) {
-    const trimmed = joinCode?.trim() ?? "";
-    if (!trimmed) {
-      throw new Error("Este curso requiere un código de inscripción");
-    }
-    const ok = await verifyJoinCode(trimmed, enrollmentRules.joinCodeHash);
-    if (!ok) {
-      throw new Error("Código de inscripción incorrecto");
-    }
-  }
 
-  // Para cursos presenciales con sesiones, validar la sesión
+  // Para cursos presenciales/live con sesiones, validar la sesión Y su código específico
+  let sessionJoinCodeHash: string | null = null;
   if (sessionId) {
     const courseSession = await prisma.courseSession.findFirst({
       where: { id: sessionId, courseId },
@@ -218,6 +205,22 @@ export async function enrollInCourse(courseId: string, sessionId?: string, joinC
     if (!courseSession) throw new Error("Sesión no encontrada");
     if (courseSession._count.enrollments >= courseSession.maxStudents) {
       throw new Error("Esta sesión ya está llena");
+    }
+    sessionJoinCodeHash = courseSession.joinCodeHash ?? null;
+  }
+
+  // Verificar código: primero sesión, luego curso (fallback)
+  if (enrollmentRules && shouldUseFreeJoinCode(enrollmentRules.modality, enrollmentRules.price)) {
+    const activeHash = sessionJoinCodeHash ?? enrollmentRules.joinCodeHash ?? null;
+    if (activeHash) {
+      const trimmed = joinCode?.trim() ?? "";
+      if (!trimmed) {
+        throw new Error("Esta sesión requiere un código de acceso");
+      }
+      const ok = await verifyJoinCode(trimmed, activeHash);
+      if (!ok) {
+        throw new Error("Código de acceso incorrecto");
+      }
     }
   }
 

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { StudentsProgressClient } from "@/components/instructor/students-progress-client";
+import { AssignmentsReviewClient } from "@/components/instructor/assignments-review-client";
 
 export default async function CourseStudentsPage({
   params,
@@ -49,6 +50,8 @@ export default async function CourseStudentsPage({
         courseTitle={course.title}
         data={data}
       />
+
+      <AssignmentsReviewClient courseId={course.id} />
     </div>
   );
 }

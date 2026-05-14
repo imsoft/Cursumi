@@ -249,6 +249,10 @@ export const CourseSectionsManager = ({
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a secciones
           </Button>
+          <Button onClick={() => { setActiveSectionId(null); onNext(); }}>
+            Continuar
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       </div>
     );

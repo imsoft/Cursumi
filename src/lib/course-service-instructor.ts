@@ -149,7 +149,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       finalExam: data.finalExam ? (data.finalExam as object) : undefined,
       courseSessions: data.courseSessions?.length
         ? {
-            create: data.courseSessions.map((s) => ({
+            create: await Promise.all(data.courseSessions.map(async (s) => ({
               city: s.city,
               state: s.state,
               location: s.location,
@@ -158,7 +158,8 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
               startTime: s.startTime,
               endTime: s.endTime,
               maxStudents: s.maxStudents,
-            })),
+              joinCodeHash: s.joinCode?.trim() ? await hashJoinCode(s.joinCode.trim()) : null,
+            }))),
           }
         : undefined,
       sections: data.sections
@@ -614,6 +615,14 @@ export async function upsertCourseSessions(courseId: string, sessions: CourseSes
   await prisma.courseSession.deleteMany({ where: { courseId, id: { notIn: payloadIds } } });
 
   for (const s of sessions) {
+    // Compute joinCodeHash for this session
+    let sessionJoinCodeHash: string | null | undefined = undefined;
+    if (s.clearJoinCode) {
+      sessionJoinCodeHash = null;
+    } else if (s.joinCode?.trim()) {
+      sessionJoinCodeHash = await hashJoinCode(s.joinCode.trim());
+    }
+
     const data = {
       city: s.city,
       state: s.state,
@@ -623,6 +632,7 @@ export async function upsertCourseSessions(courseId: string, sessions: CourseSes
       startTime: s.startTime,
       endTime: s.endTime,
       maxStudents: s.maxStudents,
+      ...(sessionJoinCodeHash !== undefined ? { joinCodeHash: sessionJoinCodeHash } : {}),
     };
     if (s.id) {
       await prisma.courseSession.update({ where: { id: s.id }, data });

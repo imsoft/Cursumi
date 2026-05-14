@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, ArrowLeft, Plus, Trash2, CheckCircle2, Circle, FileQuestion, Clock, Target, AlertCircle } from "lucide-react";
+import { ArrowRight, ArrowLeft, Plus, Trash2, CheckCircle2, Circle, FileQuestion, Clock, Target, AlertCircle, Pencil, X, Save } from "lucide-react";
 import type { CourseFinalExam, QuizQuestion, CourseFormData } from "./course-types";
 import { stripHtml } from "@/lib/utils";
 
@@ -37,6 +37,37 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
   const [newQuestionOptions, setNewQuestionOptions] = useState<string[]>(["", "", "", ""]);
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
+
+  // Estados para editar pregunta existente
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editOptions, setEditOptions] = useState<string[]>([]);
+  const [editCorrectAnswer, setEditCorrectAnswer] = useState<number | null>(null);
+  const [editPoints, setEditPoints] = useState(10);
+
+  const startEditQuestion = (question: QuizQuestion) => {
+    setEditingQuestionId(question.id);
+    setEditTitle(stripHtml(question.question));
+    setEditOptions(question.options ?? []);
+    setEditCorrectAnswer(typeof question.correctAnswer === "number" ? question.correctAnswer : null);
+    setEditPoints(question.points ?? 10);
+  };
+
+  const cancelEditQuestion = () => {
+    setEditingQuestionId(null);
+  };
+
+  const saveEditQuestion = () => {
+    if (!editingQuestionId) return;
+    const validOptions = editOptions.filter((o) => o.trim());
+    if (!editTitle.trim() || validOptions.length < 2 || editCorrectAnswer === null) return;
+    setQuestions(questions.map((q) =>
+      q.id === editingQuestionId
+        ? { ...q, question: editTitle.trim(), options: validOptions, correctAnswer: editCorrectAnswer, points: editPoints }
+        : q
+    ));
+    setEditingQuestionId(null);
+  };
 
   const handleToggleExam = (enabled: boolean) => {
     setHasExam(enabled);
@@ -316,49 +347,112 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                   {questions.map((question, index) => (
                     <Card key={question.id} className="border border-border bg-muted/20">
                       <CardContent className="p-4 space-y-2">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold text-foreground">
-                              {index + 1}. {stripHtml(question.question)}
-                            </p>
-                            {question.options && question.options.length > 0 && (
-                              <div className="mt-2 space-y-1">
-                                {question.options.map((option, idx) => (
-                                  <div
-                                    key={idx}
-                                    className={`flex items-center gap-2 rounded-md p-2 text-sm ${
-                                      question.correctAnswer === idx
-                                        ? "bg-green-100 dark:bg-green-950/30 border border-green-300 dark:border-green-800"
-                                        : "bg-card"
-                                    }`}
-                                  >
-                                    {question.correctAnswer === idx ? (
-                                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                    ) : (
-                                      <Circle className="h-4 w-4 text-muted-foreground" />
+                        {editingQuestionId === question.id ? (
+                          <div className="space-y-3">
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-foreground">Pregunta</label>
+                              <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+                            </div>
+                            <div>
+                              <div className="mb-2 flex items-center justify-between">
+                                <label className="text-xs font-medium text-foreground">Opciones de respuesta</label>
+                                <Button type="button" variant="outline" size="sm" onClick={() => setEditOptions([...editOptions, ""])} className="h-6 text-xs">
+                                  <Plus className="mr-1 h-3 w-3" />
+                                  Agregar
+                                </Button>
+                              </div>
+                              <div className="space-y-2">
+                                {editOptions.map((opt, idx) => (
+                                  <div key={idx} className="flex items-center gap-2">
+                                    <button type="button" onClick={() => setEditCorrectAnswer(idx)} className="shrink-0">
+                                      {editCorrectAnswer === idx ? (
+                                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                                      ) : (
+                                        <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                                      )}
+                                    </button>
+                                    <Input
+                                      value={opt}
+                                      onChange={(e) => {
+                                        const updated = [...editOptions];
+                                        updated[idx] = e.target.value;
+                                        setEditOptions(updated);
+                                      }}
+                                      className="flex-1"
+                                    />
+                                    {editOptions.length > 2 && (
+                                      <Button type="button" variant="ghost" size="sm" onClick={() => {
+                                        const updated = editOptions.filter((_, i) => i !== idx);
+                                        setEditOptions(updated);
+                                        if (editCorrectAnswer === idx) setEditCorrectAnswer(null);
+                                        else if (editCorrectAnswer !== null && editCorrectAnswer > idx) setEditCorrectAnswer(editCorrectAnswer - 1);
+                                      }}>
+                                        <X className="h-4 w-4" />
+                                      </Button>
                                     )}
-                                    <span className={question.correctAnswer === idx ? "font-medium text-green-900 dark:text-green-100" : ""}>
-                                      {stripHtml(option)}
-                                    </span>
                                   </div>
                                 ))}
                               </div>
-                            )}
-                            <div className="mt-2 flex items-center gap-2">
-                              <Badge variant="outline">
-                                {question.points} puntos
-                              </Badge>
+                            </div>
+                            <div className="w-32">
+                              <Input label="Puntos" type="number" min="1" value={editPoints} onChange={(e) => setEditPoints(Number(e.target.value))} />
+                            </div>
+                            <div className="flex gap-2">
+                              <Button size="sm" onClick={saveEditQuestion} disabled={!editTitle.trim() || editOptions.filter((o) => o.trim()).length < 2 || editCorrectAnswer === null}>
+                                <Save className="mr-1.5 h-3.5 w-3.5" />
+                                Guardar
+                              </Button>
+                              <Button variant="outline" size="sm" onClick={cancelEditQuestion}>
+                                <X className="mr-1.5 h-3.5 w-3.5" />
+                                Cancelar
+                              </Button>
                             </div>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteQuestion(question.id)}
-                            className="ml-2"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                        ) : (
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="text-sm font-semibold text-foreground">
+                                {index + 1}. {stripHtml(question.question)}
+                              </p>
+                              {question.options && question.options.length > 0 && (
+                                <div className="mt-2 space-y-1">
+                                  {question.options.map((option, idx) => (
+                                    <div
+                                      key={idx}
+                                      className={`flex items-center gap-2 rounded-md p-2 text-sm ${
+                                        question.correctAnswer === idx
+                                          ? "bg-green-100 dark:bg-green-950/30 border border-green-300 dark:border-green-800"
+                                          : "bg-card"
+                                      }`}
+                                    >
+                                      {question.correctAnswer === idx ? (
+                                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                      ) : (
+                                        <Circle className="h-4 w-4 text-muted-foreground" />
+                                      )}
+                                      <span className={question.correctAnswer === idx ? "font-medium text-green-900 dark:text-green-100" : ""}>
+                                        {stripHtml(option)}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              <div className="mt-2 flex items-center gap-2">
+                                <Badge variant="outline">
+                                  {question.points} puntos
+                                </Badge>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1 ml-2 shrink-0">
+                              <Button variant="ghost" size="sm" onClick={() => startEditQuestion(question)}>
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" onClick={() => handleDeleteQuestion(question.id)}>
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))}

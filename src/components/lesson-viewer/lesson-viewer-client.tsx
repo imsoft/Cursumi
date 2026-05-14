@@ -146,6 +146,22 @@ export function LessonViewerClient({
     window.scrollTo({ top: 0 });
   }, [lesson.id]);
 
+  // Load existing assignment submission
+  useEffect(() => {
+    if (lesson.type !== "assignment") return;
+    setAssignmentText("");
+    setAssignmentSaved(false);
+    fetch(`/api/lessons/${lesson.id}/assignment?courseId=${courseId}`)
+      .then((r) => r.json())
+      .then(({ submission }) => {
+        if (submission?.content) {
+          setAssignmentText(submission.content);
+          setAssignmentSaved(true);
+        }
+      })
+      .catch(() => {});
+  }, [lesson.id, lesson.type, courseId]);
+
   // Restore saved quiz answers if they exist
   const hasSavedQuiz = savedQuizScore !== null && savedQuizAnswers !== null;
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>(() => {
@@ -170,6 +186,7 @@ export function LessonViewerClient({
   const [quizTimerStarted, setQuizTimerStarted] = useState(false);
   const [assignmentText, setAssignmentText] = useState("");
   const [assignmentSaved, setAssignmentSaved] = useState(false);
+  const [assignmentLoading, setAssignmentLoading] = useState(false);
 
   // Parse quiz config early so hooks can reference it
   const quizConfig = useMemo(() => {
@@ -366,6 +383,19 @@ export function LessonViewerClient({
   };
 
   const handleAssignmentSubmit = async () => {
+    if (!assignmentText.trim() || assignmentLoading) return;
+    setAssignmentLoading(true);
+    try {
+      await fetch(`/api/lessons/${lesson.id}/assignment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseId, content: assignmentText }),
+      });
+    } catch {
+      // continue even if save fails
+    } finally {
+      setAssignmentLoading(false);
+    }
     setAssignmentSaved(true);
     await markComplete();
   };
@@ -690,20 +720,20 @@ export function LessonViewerClient({
             <textarea
               value={assignmentText}
               onChange={(e) => setAssignmentText(e.target.value)}
-              disabled={assignmentSaved}
               rows={6}
-              className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60"
+              className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
-          {!assignmentSaved ? (
-            <Button onClick={handleAssignmentSubmit} disabled={!assignmentText.trim()}>
-              Enviar tarea
+          <div className="flex items-center gap-3">
+            <Button onClick={handleAssignmentSubmit} disabled={!assignmentText.trim() || assignmentLoading}>
+              {assignmentLoading ? "Enviando..." : assignmentSaved ? "Actualizar tarea" : "Enviar tarea"}
             </Button>
-          ) : (
-            <p className="text-sm text-green-600 dark:text-green-400">
-              Tarea enviada correctamente.
-            </p>
-          )}
+            {assignmentSaved && (
+              <p className="text-sm text-green-600 dark:text-green-400">
+                Tarea enviada correctamente.
+              </p>
+            )}
+          </div>
         </div>
       );
     }

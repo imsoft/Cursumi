@@ -39,6 +39,13 @@ export function PublicCourseDetailCTA({
   const hasSessions = sessions && sessions.length > 0;
   const requiresSession = hasSessions;
 
+  const selectedSession = hasSessions
+    ? sessions.find((s) => s.id === selectedSessionId) ?? null
+    : null;
+  const effectiveRequiresJoinCode = selectedSession
+    ? selectedSession.requiresJoinCode ?? false
+    : (requiresJoinCode ?? false);
+
   if (!isLoggedIn) {
     const loginUrl = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
     const signupUrl = `/signup?returnUrl=${encodeURIComponent(returnUrl)}`;
@@ -81,7 +88,7 @@ export function PublicCourseDetailCTA({
           courseId={courseId}
           sessionId={selectedSessionId ?? undefined}
           disabled={requiresSession && !selectedSessionId}
-          requiresJoinCode={requiresJoinCode}
+          requiresJoinCode={effectiveRequiresJoinCode}
         />
       ) : (
         <CheckoutButton

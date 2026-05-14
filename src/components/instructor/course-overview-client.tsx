@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { Separator } from "@/components/ui/separator";
@@ -416,9 +417,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                       Si defines un código, solo quienes lo ingresen podrán inscribirse sin pagar.
                       {course.hasJoinCode ? " Ya hay un código guardado." : ""}
                     </p>
-                    <Input
+                    <PasswordInput
                       label="Nuevo código"
-                      type="password"
                       autoComplete="new-password"
                       className="mt-1"
                       value={editData.freeJoinCode}
@@ -778,6 +778,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
           <CardContent>
             <CourseSessionsManager
               variant={course.modality === "live" ? "live" : "presencial"}
+              isFree={course.price === 0}
               sessions={(course.courseSessions ?? []).map((s) => ({
                 id: s.id,
                 state: s.state ?? findStateForMunicipality(s.city) ?? "",
@@ -788,6 +789,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                 startTime: s.startTime,
                 endTime: s.endTime,
                 maxStudents: s.maxStudents,
+                hasJoinCode: !!(s as { joinCodeHash?: string | null }).joinCodeHash,
               }))}
               enrollmentCounts={Object.fromEntries(
                 (course.courseSessions ?? []).map((s) => [s.id, s._count.enrollments])

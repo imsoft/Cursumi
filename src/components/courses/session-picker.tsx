@@ -12,6 +12,7 @@ export interface PickableSession {
   startTime: string;
   endTime: string;
   isFull: boolean;
+  requiresJoinCode?: boolean;
 }
 
 interface SessionPickerProps {

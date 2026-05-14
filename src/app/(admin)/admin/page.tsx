@@ -1,8 +1,11 @@
+export const dynamic = "force-dynamic";
+
 import { loadAdminStats } from "@/app/actions/admin-actions";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatsGrid, StatItem } from "@/components/shared/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const defaultStats = {
   totalUsers: 0,
@@ -79,14 +82,14 @@ export default async function AdminDashboardPage() {
             <CardTitle>Acciones rápidas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button className="w-full" variant="default">
-              Gestionar usuarios
+            <Button className="w-full" variant="default" asChild>
+              <Link href="/admin/users">Gestionar usuarios</Link>
             </Button>
-            <Button className="w-full" variant="outline">
-              Revisar cursos
+            <Button className="w-full" variant="outline" asChild>
+              <Link href="/admin/courses">Revisar cursos</Link>
             </Button>
-            <Button className="w-full" variant="outline">
-              Ver reportes
+            <Button className="w-full" variant="outline" asChild>
+              <Link href="/admin/kpis">Ver KPIs</Link>
             </Button>
           </CardContent>
         </Card>

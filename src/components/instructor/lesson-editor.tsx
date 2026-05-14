@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/ui/combobox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon } from "lucide-react";
+import { Save, X, Video, FileQuestion, BookOpen, Plus, Trash2, CheckCircle2, Circle, Upload, FileText, Image as ImageIcon, File, Link as LinkIcon, Pencil } from "lucide-react";
 import type {
   CourseLesson,
   QuizQuestion,
@@ -119,6 +119,41 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
   const [newQuestionCorrectAnswers, setNewQuestionCorrectAnswers] = useState<Set<number>>(new Set());
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
+
+  // Estados para editar pregunta existente
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editType, setEditType] = useState<"multiple-choice" | "true-false" | "checkbox">("multiple-choice");
+  const [editOptions, setEditOptions] = useState<string[]>([]);
+  const [editCorrectAnswer, setEditCorrectAnswer] = useState<number | null>(null);
+  const [editCorrectAnswers, setEditCorrectAnswers] = useState<Set<number>>(new Set());
+  const [editPoints, setEditPoints] = useState(10);
+
+  const startEditQuestion = (q: QuizQuestion) => {
+    setEditingQuestionId(q.id);
+    setEditTitle(stripHtml(q.question));
+    setEditType(q.type as "multiple-choice" | "true-false" | "checkbox");
+    setEditOptions(q.options ?? []);
+    setEditCorrectAnswer(typeof q.correctAnswer === "number" ? q.correctAnswer : null);
+    setEditCorrectAnswers(new Set(q.correctAnswers ?? []));
+    setEditPoints(q.points ?? 10);
+  };
+
+  const saveEditQuestion = () => {
+    if (!editingQuestionId || !editTitle.trim()) return;
+    setQuizQuestions(quizQuestions.map((q) => {
+      if (q.id !== editingQuestionId) return q;
+      const validOptions = editOptions.filter((o) => o.trim());
+      if (editType === "true-false") {
+        return { ...q, question: editTitle.trim(), type: editType, options: ["Verdadero", "Falso"], correctAnswer: editCorrectAnswer ?? 0, points: editPoints };
+      }
+      if (editType === "checkbox") {
+        return { ...q, question: editTitle.trim(), type: editType, options: validOptions, correctAnswers: Array.from(editCorrectAnswers).sort(), points: editPoints };
+      }
+      return { ...q, question: editTitle.trim(), type: editType, options: validOptions, correctAnswer: editCorrectAnswer ?? 0, points: editPoints };
+    }));
+    setEditingQuestionId(null);
+  };
 
   const handleSave = () => {
     let savedContent = content;
@@ -699,57 +734,159 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                           key={question.id}
                           className="rounded-lg border border-border bg-card p-4 space-y-2"
                         >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-foreground">{stripHtml(question.question)}</p>
-                              {question.options && question.options.length > 0 && (
-                                <div className="mt-2 space-y-1">
-                                  {question.options.map((option, idx) => (
-                                    <div
-                                      key={idx}
-                                      className={`flex items-center gap-2 rounded-md p-2 text-sm ${
-                                        isCorrect(idx)
-                                          ? "bg-primary/10 border border-primary/30"
-                                          : "bg-muted/30"
-                                      }`}
-                                    >
-                                      {isCorrect(idx) ? (
-                                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                                      ) : (
-                                        <Circle className="h-4 w-4 text-muted-foreground" />
-                                      )}
-                                      <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>
-                                        {stripHtml(option)}
-                                      </span>
-                                      {isCorrect(idx) && (
-                                        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">
-                                          Correcta
-                                        </span>
-                                      )}
-                                    </div>
-                                  ))}
+                          {editingQuestionId === question.id ? (
+                            <div className="space-y-3">
+                              <div>
+                                <label className="mb-1 block text-xs font-medium text-foreground">Pregunta</label>
+                                <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+                              </div>
+                              <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-foreground">Tipo</label>
+                                  <Combobox
+                                    value={editType}
+                                    onValueChange={(v) => {
+                                      const t = v as typeof editType;
+                                      setEditType(t);
+                                      setEditCorrectAnswer(null);
+                                      setEditCorrectAnswers(new Set());
+                                      if (t === "true-false") setEditOptions(["Verdadero", "Falso"]);
+                                      else setEditOptions(["", ""]);
+                                    }}
+                                    options={[
+                                      { value: "multiple-choice", label: "Opción múltiple" },
+                                      { value: "true-false", label: "Verdadero / Falso" },
+                                      { value: "checkbox", label: "Casillas" },
+                                    ]}
+                                    searchable={false}
+                                    allowDeselect={false}
+                                  />
+                                </div>
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-foreground">Puntos</label>
+                                  <Input type="number" min="1" value={editPoints} onChange={(e) => setEditPoints(Number(e.target.value))} />
+                                </div>
+                              </div>
+                              {editType === "true-false" ? (
+                                <div>
+                                  <label className="mb-2 block text-xs font-medium text-foreground">Respuesta correcta</label>
+                                  <div className="flex gap-3">
+                                    {["Verdadero", "Falso"].map((label, idx) => (
+                                      <button key={idx} type="button" onClick={() => setEditCorrectAnswer(idx)}
+                                        className={`flex items-center gap-2 rounded-lg border-2 px-4 py-2 text-sm font-medium transition-colors ${editCorrectAnswer === idx ? "border-primary bg-primary/10 text-primary" : "border-border bg-background text-foreground hover:border-primary/50"}`}>
+                                        {editCorrectAnswer === idx ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+                                        {label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              ) : (
+                                <div>
+                                  <div className="mb-2 flex items-center justify-between">
+                                    <label className="text-xs font-medium text-foreground">Opciones</label>
+                                    <Button type="button" variant="outline" size="sm" onClick={() => setEditOptions([...editOptions, ""])} className="h-6 text-xs">
+                                      <Plus className="mr-1 h-3 w-3" />Agregar
+                                    </Button>
+                                  </div>
+                                  <div className="space-y-2">
+                                    {editOptions.map((opt, idx) => (
+                                      <div key={idx} className="flex items-center gap-2">
+                                        <button type="button" onClick={() => {
+                                          if (editType === "checkbox") {
+                                            const next = new Set(editCorrectAnswers);
+                                            if (next.has(idx)) next.delete(idx); else next.add(idx);
+                                            setEditCorrectAnswers(next);
+                                          } else {
+                                            setEditCorrectAnswer(idx);
+                                          }
+                                        }} className="shrink-0">
+                                          {editType === "checkbox" ? (
+                                            editCorrectAnswers.has(idx) ? <CheckCircle2 className="h-5 w-5 text-primary" /> : <div className="h-5 w-5 rounded border-2 border-muted-foreground hover:border-primary transition-colors" />
+                                          ) : editCorrectAnswer === idx ? (
+                                            <CheckCircle2 className="h-5 w-5 text-primary" />
+                                          ) : (
+                                            <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                                          )}
+                                        </button>
+                                        <Input value={opt} onChange={(e) => { const u = [...editOptions]; u[idx] = e.target.value; setEditOptions(u); }} className="flex-1" />
+                                        {editOptions.length > 1 && (
+                                          <Button type="button" variant="ghost" size="sm" onClick={() => {
+                                            const u = editOptions.filter((_, i) => i !== idx);
+                                            setEditOptions(u);
+                                            if (editCorrectAnswer === idx) setEditCorrectAnswer(null);
+                                            else if (editCorrectAnswer !== null && editCorrectAnswer > idx) setEditCorrectAnswer(editCorrectAnswer - 1);
+                                            const next = new Set<number>();
+                                            editCorrectAnswers.forEach((i) => { if (i < idx) next.add(i); else if (i > idx) next.add(i - 1); });
+                                            setEditCorrectAnswers(next);
+                                          }} className="h-8 w-8 p-0"><X className="h-4 w-4" /></Button>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>
                               )}
-                              <div className="mt-2 flex items-center gap-2">
-                                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
-                                  {typeLabel}
-                                </span>
-                                {question.points && (
-                                  <span className="text-xs text-muted-foreground">
-                                    {question.points} puntos
-                                  </span>
-                                )}
+                              <div className="flex gap-2">
+                                <Button size="sm" onClick={saveEditQuestion}>
+                                  <Save className="mr-1.5 h-3.5 w-3.5" />Guardar
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => setEditingQuestionId(null)}>
+                                  <X className="mr-1.5 h-3.5 w-3.5" />Cancelar
+                                </Button>
                               </div>
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteQuestion(question.id)}
-                              className="ml-2"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
+                          ) : (
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-foreground">{stripHtml(question.question)}</p>
+                                {question.options && question.options.length > 0 && (
+                                  <div className="mt-2 space-y-1">
+                                    {question.options.map((option, idx) => (
+                                      <div
+                                        key={idx}
+                                        className={`flex items-center gap-2 rounded-md p-2 text-sm ${
+                                          isCorrect(idx)
+                                            ? "bg-primary/10 border border-primary/30"
+                                            : "bg-muted/30"
+                                        }`}
+                                      >
+                                        {isCorrect(idx) ? (
+                                          <CheckCircle2 className="h-4 w-4 text-primary" />
+                                        ) : (
+                                          <Circle className="h-4 w-4 text-muted-foreground" />
+                                        )}
+                                        <span className={isCorrect(idx) ? "font-medium text-primary" : "text-foreground"}>
+                                          {stripHtml(option)}
+                                        </span>
+                                        {isCorrect(idx) && (
+                                          <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">
+                                            Correcta
+                                          </span>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                                <div className="mt-2 flex items-center gap-2">
+                                  <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">
+                                    {typeLabel}
+                                  </span>
+                                  {question.points && (
+                                    <span className="text-xs text-muted-foreground">
+                                      {question.points} puntos
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 ml-2 shrink-0">
+                                <Button variant="ghost" size="sm" onClick={() => startEditQuestion(question)}>
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => handleDeleteQuestion(question.id)}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}

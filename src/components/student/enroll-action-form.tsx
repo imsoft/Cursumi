@@ -4,6 +4,7 @@ import { useActionState, useEffect, useOptimistic } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
 type EnrollState = {
@@ -54,10 +55,9 @@ export function EnrollActionForm({
       {sessionId && <input type="hidden" name="sessionId" value={sessionId} />}
       {requiresJoinCode && (
         <div className="w-full sm:max-w-xs">
-          <Input
+          <PasswordInput
             label="Código de inscripción"
             name="joinCode"
-            type="password"
             autoComplete="off"
             placeholder="Código que te dio el instructor"
             required

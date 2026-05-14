@@ -291,6 +291,7 @@ exports.Prisma.CourseSessionScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   maxStudents: 'maxStudents',
+  joinCodeHash: 'joinCodeHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -339,6 +340,15 @@ exports.Prisma.SectionQuizSubmissionScalarFieldEnum = {
   score: 'score',
   passed: 'passed',
   submittedAt: 'submittedAt'
+};
+
+exports.Prisma.AssignmentSubmissionScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  lessonId: 'lessonId',
+  content: 'content',
+  submittedAt: 'submittedAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ExamSubmissionScalarFieldEnum = {
@@ -775,6 +785,7 @@ exports.Prisma.ModelName = {
   Enrollment: 'Enrollment',
   LearningReflection: 'LearningReflection',
   SectionQuizSubmission: 'SectionQuizSubmission',
+  AssignmentSubmission: 'AssignmentSubmission',
   ExamSubmission: 'ExamSubmission',
   Certificate: 'Certificate',
   Transaction: 'Transaction',

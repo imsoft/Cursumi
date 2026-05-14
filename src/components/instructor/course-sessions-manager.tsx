@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DatePickerField } from "@/components/ui/date-picker";
-import { Plus, MapPin, Calendar, Clock, Users, Trash2, Video, Link2 } from "lucide-react";
+import { Plus, MapPin, Calendar, Clock, Users, Trash2, Video, Link2, KeyRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CourseSessionData } from "./course-types";
 import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
+import { PasswordInput } from "@/components/ui/password-input";
 
 /**
  * Input nativo para date/time que NO es controlado por React en cada keystroke.
@@ -65,6 +66,8 @@ interface CourseSessionsManagerProps {
   variant?: "presencial" | "live";
   /** Si true, cada sesión muestra inscritos / capacidad (modo edición de curso existente) */
   enrollmentCounts?: Record<string, number>;
+  /** Si el curso es gratuito, se muestra el campo de código por sesión */
+  isFree?: boolean;
 }
 
 const EMPTY_SESSION: Omit<CourseSessionData, "id"> = {
@@ -83,6 +86,7 @@ export function CourseSessionsManager({
   onChange,
   enrollmentCounts,
   variant = "presencial",
+  isFree = false,
 }: CourseSessionsManagerProps) {
   const isLive = variant === "live";
   const [adding, setAdding] = useState(false);
@@ -264,6 +268,35 @@ export function CourseSessionsManager({
                   </div>
                 )}
               </div>
+
+              {isFree && (
+                <div className="rounded-lg border border-border bg-muted/20 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                    <KeyRound className="h-3.5 w-3.5 text-primary" />
+                    Código de acceso para esta sesión (opcional)
+                  </div>
+                  <PasswordInput
+                    autoComplete="new-password"
+                    value={session.joinCode ?? ""}
+                    onChange={(e) => handleUpdate(i, { joinCode: e.target.value, clearJoinCode: false })}
+                    placeholder={session.hasJoinCode ? "Vacío = no cambiar el código actual" : "Ej. SESION1-2025"}
+                  />
+                  {session.hasJoinCode && (
+                    <label className="flex cursor-pointer items-start gap-2 text-xs text-foreground">
+                      <input
+                        type="checkbox"
+                        className="mt-0.5 rounded border-input"
+                        checked={!!session.clearJoinCode}
+                        onChange={(e) => handleUpdate(i, { clearJoinCode: e.target.checked })}
+                      />
+                      <span>Quitar el código (cualquiera podrá inscribirse a esta sesión sin código)</span>
+                    </label>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Si defines un código, solo quienes lo ingresen podrán inscribirse a esta sesión específica.
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         );
@@ -357,6 +390,23 @@ export function CourseSessionsManager({
                 onChange={(e) => setDraft((d) => ({ ...d, maxStudents: Number(e.target.value) }))}
               />
             </div>
+            {isFree && (
+              <div className="rounded-lg border border-border bg-muted/20 p-3 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                  <KeyRound className="h-3.5 w-3.5 text-primary" />
+                  Código de acceso para esta sesión (opcional)
+                </div>
+                <PasswordInput
+                  autoComplete="new-password"
+                  value={draft.joinCode ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, joinCode: e.target.value }))}
+                  placeholder="Ej. SESION1-2025"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Si defines un código, solo quienes lo ingresen podrán inscribirse a esta sesión.
+                </p>
+              </div>
+            )}
             <div className="flex gap-2">
               <Button
                 size="sm"
