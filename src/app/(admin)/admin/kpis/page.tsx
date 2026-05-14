@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { DatePickerField } from "@/components/ui/date-picker";
 import {
   Plus, Trash2, Pencil, X, Check, Target, TrendingUp,
   ChevronDown, ChevronUp, Clock, CalendarClock, AlertTriangle,
@@ -545,10 +546,10 @@ export default function AdminKpisPage() {
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Fecha límite (opcional)</label>
-                  <input
-                    type="date"
-                    {...form.register("deadline")}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  <DatePickerField
+                    value={form.watch("deadline") || ""}
+                    onChange={(v) => form.setValue("deadline", v, { shouldValidate: true })}
+                    placeholder="Sin fecha límite"
                   />
                 </div>
               </div>
@@ -630,10 +631,10 @@ export default function AdminKpisPage() {
                         </div>
                         <div>
                           <label className="mb-1.5 block text-sm font-medium text-foreground">Fecha límite</label>
-                          <input
-                            type="date"
-                            {...editForm.register("deadline")}
-                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                          <DatePickerField
+                            value={editForm.watch("deadline") || ""}
+                            onChange={(v) => editForm.setValue("deadline", v, { shouldValidate: true })}
+                            placeholder="Sin fecha límite"
                           />
                         </div>
                       </div>
