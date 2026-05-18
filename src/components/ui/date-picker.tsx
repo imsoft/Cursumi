@@ -57,7 +57,6 @@ export function DatePicker({
           onSelect={onChange}
           locale={es}
           disabled={disablePast ? (date) => date < new Date(new Date().setHours(0, 0, 0, 0)) : undefined}
-          initialFocus
         />
       </PopoverContent>
     </Popover>

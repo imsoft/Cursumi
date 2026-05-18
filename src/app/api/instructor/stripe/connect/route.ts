@@ -44,7 +44,7 @@ export async function POST() {
     return NextResponse.json({ url: accountLink.url });
   } catch (error) {
     if (error instanceof Stripe.errors.StripeError) {
-      console.error("Stripe Express error:", error.message, (error as Stripe.errors.StripeError).code);
+      console.error("Stripe Express error:", error.message, (error as InstanceType<typeof Stripe.errors.StripeError>).code);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
     return handleApiError(error);
