@@ -50,8 +50,8 @@ export const InstructorsSteps = () => {
           </Card>
         ))}
       </div>
-      <div className="mt-6 flex justify-end">
-        <Button size="lg" className="rounded-full" id="convertir">
+      <div id="convertir" className="mt-6 flex justify-end">
+        <Button size="lg" className="rounded-full">
           Empezar ahora
         </Button>
       </div>

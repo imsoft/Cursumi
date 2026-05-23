@@ -37,12 +37,13 @@ export function stripHtml(html: string | null | undefined): string {
 }
 
 export function formatPriceMXN(price: number, showDecimals: boolean = false): string {
+  if (price === 0) return "Gratis";
   return new Intl.NumberFormat("es-MX", {
     style: "currency",
     currency: "MXN",
     minimumFractionDigits: showDecimals ? 2 : 0,
     maximumFractionDigits: showDecimals ? 2 : 0,
-  }).format(price)
+  }).format(price);
 }
 
 /** Primer nombre para saludos (ej. "María López" → "María"). */

@@ -14,9 +14,10 @@ interface LayoutShellProps {
 export const LayoutShell = ({ children }: LayoutShellProps) => {
   const pathname = usePathname();
   const hideGlobalShell =
-    pathname?.startsWith("/instructor") ||
+    (pathname?.startsWith("/instructor/") || pathname === "/instructor") ||
     pathname?.startsWith("/dashboard") ||
-    pathname?.startsWith("/admin");
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/business/dashboard");
 
   return (
     <>

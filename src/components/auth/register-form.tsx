@@ -45,16 +45,21 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileError, setTurnstileError] = useState(false);
   const turnstileRef = useRef<HTMLDivElement>(null);
 
-  // Callback global que Turnstile llama cuando el usuario completa el desafío
   const onTurnstileSuccess = useCallback((token: string) => {
     setTurnstileToken(token);
+    setTurnstileError(false);
   }, []);
 
-  // Exponer el callback globalmente para que el script de Turnstile pueda llamarlo
+  const onTurnstileError = useCallback(() => {
+    setTurnstileError(true);
+  }, []);
+
   if (typeof window !== "undefined") {
     (window as unknown as Record<string, unknown>)["__turnstileCallback"] = onTurnstileSuccess;
+    (window as unknown as Record<string, unknown>)["__turnstileErrorCallback"] = onTurnstileError;
   }
 
   const form = useForm<RegisterFormValues>({
@@ -72,8 +77,8 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
     try {
       setError(null);
 
-      // Si Turnstile está configurado y no hay token, bloquear el envío
-      if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      // Si Turnstile está configurado, no hay token y no hubo error de carga, bloquear el envío
+      if (TURNSTILE_SITE_KEY && !turnstileToken && !turnstileError) {
         setError("Por favor completa el desafío de seguridad antes de continuar.");
         return;
       }
@@ -194,16 +199,21 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
               <p className="text-xs text-destructive">{form.formState.errors.acceptTerms.message}</p>
             )}
 
-            {/* Widget de Cloudflare Turnstile */}
-            {TURNSTILE_SITE_KEY && (
+            {TURNSTILE_SITE_KEY && !turnstileError && (
               <div
                 ref={turnstileRef}
                 className="cf-turnstile"
                 data-sitekey={TURNSTILE_SITE_KEY}
                 data-callback="__turnstileCallback"
+                data-error-callback="__turnstileErrorCallback"
                 data-theme="auto"
                 data-size="flexible"
               />
+            )}
+            {TURNSTILE_SITE_KEY && turnstileError && (
+              <p className="text-xs text-muted-foreground rounded-md border border-border bg-muted/50 px-3 py-2">
+                La verificación de seguridad no está disponible en este momento. Puedes continuar de todos modos.
+              </p>
             )}
 
             {error && (
@@ -213,7 +223,7 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
               type="submit"
               size="lg"
               className="w-full"
-              disabled={form.formState.isSubmitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}
+              disabled={form.formState.isSubmitting || (!!TURNSTILE_SITE_KEY && !turnstileToken && !turnstileError)}
             >
               {form.formState.isSubmitting ? "Creando cuenta..." : "Crear cuenta"}
             </Button>
@@ -226,7 +236,7 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
           </div>
           {googleAuthEnabled && (
             <>
-              <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+              <div className="mt-6 flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="flex-1 h-px bg-border" />
                 o regístrate con
                 <span className="flex-1 h-px bg-border" />

@@ -67,13 +67,13 @@ export const Hero = ({ stats }: HeroProps) => {
 
       <motion.div variants={itemVariants} className="flex gap-4">
         <Link href="/courses">
-          <Button size="lg" className="gap-2">
+          <Button size="lg" className="gap-2 rounded-full">
             Explorar cursos
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
         <Link href="/how-it-works">
-          <Button size="lg" variant="outline">
+          <Button size="lg" variant="outline" className="rounded-full">
             Cómo funciona
           </Button>
         </Link>

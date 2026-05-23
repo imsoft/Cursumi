@@ -61,7 +61,7 @@ export default async function BlogPage() {
         </Empty>
       )}
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={`grid gap-6 ${posts.length === 1 ? "max-w-lg mx-auto" : posts.length === 2 ? "sm:grid-cols-2 max-w-2xl mx-auto" : "sm:grid-cols-2 lg:grid-cols-3"}`}>
         {posts.map((post) => (
           <Link key={post.id} href={`/blog/${post.slug}`} className="group">
             <Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
@@ -114,6 +114,16 @@ export default async function BlogPage() {
           </Link>
         ))}
       </div>
+
+      {posts.length > 0 && posts.length < 6 && (
+        <div className="mt-12 rounded-2xl border border-dashed border-border bg-muted/30 px-8 py-10 text-center">
+          <Newspaper className="mx-auto mb-3 h-8 w-8 text-muted-foreground/50" />
+          <p className="font-semibold text-foreground">Más artículos en camino</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Publicamos guías, tutoriales y recursos de formación regularmente. ¡Vuelve pronto!
+          </p>
+        </div>
+      )}
     </main>
   );
 }

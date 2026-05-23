@@ -39,7 +39,7 @@ export function BusinessHero() {
 
           <div className="flex flex-wrap gap-4 pt-2">
             <Link href="/contact">
-              <Button size="lg" className="gap-2 font-semibold shadow-lg">
+              <Button size="lg" className="gap-2 rounded-full font-semibold shadow-lg">
                 Solicitar demo
                 <ArrowRight className="h-4 w-4" />
               </Button>
@@ -48,7 +48,7 @@ export function BusinessHero() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white/20 bg-transparent font-semibold text-white hover:bg-white/10 hover:text-white"
+                className="rounded-full border-white/20 bg-transparent font-semibold text-white hover:bg-white/10 hover:text-white"
               >
                 Cómo funciona
               </Button>

@@ -17,10 +17,10 @@ export const InstructorsHero = () => {
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="#convertir">
-              <Button size="lg">Convertirme en instructor</Button>
+              <Button size="lg" className="rounded-full">Convertirme en instructor</Button>
             </Link>
             <Link href="/how-it-works">
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="rounded-full">
                 Ver cómo funciona
               </Button>
             </Link>

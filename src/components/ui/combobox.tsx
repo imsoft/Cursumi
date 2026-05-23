@@ -57,7 +57,7 @@ export function Combobox({
       {label && (
         <label
           htmlFor={id}
-          className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground"
+          className="text-sm font-medium text-foreground"
         >
           {label}
         </label>

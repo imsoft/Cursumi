@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
 import { LoginForm } from "@/components/auth/login-form";
+import { AuthPageShell } from "@/components/auth/auth-page-shell";
 import { safeRedirectTarget } from "@/lib/safe-redirect";
 
 function isGoogleAuthConfigured() {
@@ -25,11 +26,9 @@ export default async function LoginPage({ searchParams }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center px-4 py-8 sm:py-12 lg:py-16">
-        <LoginForm returnUrl={returnUrl} googleAuthEnabled={isGoogleAuthConfigured()} />
-      </main>
-    </div>
+    <AuthPageShell>
+      <LoginForm returnUrl={returnUrl} googleAuthEnabled={isGoogleAuthConfigured()} />
+    </AuthPageShell>
   );
 }
 

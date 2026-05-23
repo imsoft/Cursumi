@@ -21,8 +21,8 @@ describe("formatPriceMXN", () => {
   it("formatea precios en MXN sin decimales", () => {
     expect(formatPriceMXN(1500)).toMatch(/1[,.]?500/);
   });
-  it("formatea precio 0 como gratis", () => {
-    expect(formatPriceMXN(0)).toMatch(/0/);
+  it("formatea precio 0 como 'Gratis'", () => {
+    expect(formatPriceMXN(0)).toBe("Gratis");
   });
   it("formatea con decimales cuando showDecimals=true", () => {
     expect(formatPriceMXN(1500, true)).toMatch(/1[,.]?500[.,]00/);

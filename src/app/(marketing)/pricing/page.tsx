@@ -138,7 +138,7 @@ export default function PricingPage() {
                 incluyendo actualizaciones futuras del instructor.
               </p>
               <Link href="/courses" className="mt-6 w-fit">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2 rounded-full">
                   Ver cursos disponibles
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -202,7 +202,7 @@ export default function PricingPage() {
               ))}
             </ul>
             <Link href={plan.ctaHref} className="block">
-              <Button size="lg" className="w-full gap-2">
+              <Button size="lg" className="w-full gap-2 rounded-full">
                 {plan.cta}
                 <ArrowRight className="h-4 w-4" />
               </Button>

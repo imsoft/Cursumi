@@ -1,10 +1,11 @@
- "use client";
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useSession } from "@/lib/auth-client";
 
 const navLinks = [
   { label: "Cursos", href: "/courses" },
@@ -17,6 +18,7 @@ const navLinks = [
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
@@ -47,14 +49,25 @@ export const Navbar = () => {
         </nav>
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
-          <Link href="/login">
-            <Button variant="ghost" className="px-4 py-2 text-xs" size="sm">
-              Iniciar sesión
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button size="sm">Crear cuenta</Button>
-          </Link>
+          {session ? (
+            <Link href="/dashboard">
+              <Button size="sm" className="gap-2">
+                <LayoutDashboard className="h-4 w-4" />
+                Mi dashboard
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" className="px-4 py-2 text-xs" size="sm">
+                  Iniciar sesión
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm">Crear cuenta</Button>
+              </Link>
+            </>
+          )}
         </div>
         <button
           type="button"
@@ -83,16 +96,27 @@ export const Navbar = () => {
               <ThemeToggle />
             </div>
             <div className="flex flex-col gap-2 pt-2">
-              <Link href="/login">
-                <Button variant="outline" className="w-full" size="sm">
-                  Iniciar sesión
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button className="w-full" size="sm">
-                  Crear cuenta
-                </Button>
-              </Link>
+              {session ? (
+                <Link href="/dashboard" onClick={() => setOpen(false)}>
+                  <Button className="w-full gap-2" size="sm">
+                    <LayoutDashboard className="h-4 w-4" />
+                    Mi dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="outline" className="w-full" size="sm">
+                      Iniciar sesión
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button className="w-full" size="sm">
+                      Crear cuenta
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

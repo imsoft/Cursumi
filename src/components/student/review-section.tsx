@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -163,11 +162,22 @@ export function ReviewSection({ courseId, canReview, userHasReviewed }: ReviewSe
         {loading ? (
           <p className="text-sm text-muted-foreground">Cargando reseñas...</p>
         ) : reviews.length === 0 ? (
-          <EmptyState
-            title="Sin reseñas"
-            description="Sé el primero en dejar una reseña para este curso."
-            icon={Star}
-          />
+          <div className="flex flex-col items-center gap-3 py-8 text-center">
+            <Star className="h-8 w-8 text-muted-foreground/40" />
+            <div>
+              <p className="font-medium text-foreground">Sin reseñas aún</p>
+              <p className="text-sm text-muted-foreground">
+                {canReview && !userHasReviewed
+                  ? "Sé el primero en compartir tu experiencia con este curso."
+                  : "Aún no hay reseñas para este curso."}
+              </p>
+            </div>
+            {canReview && !userHasReviewed && !showForm && (
+              <Button size="sm" variant="outline" onClick={() => setShowForm(true)}>
+                Escribir reseña
+              </Button>
+            )}
+          </div>
         ) : (
           <div className="space-y-4">
             {reviews.map((review) => (

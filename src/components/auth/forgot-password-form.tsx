@@ -25,16 +25,21 @@ export const ForgotPasswordForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileError, setTurnstileError] = useState(false);
   const turnstileRef = useRef<HTMLDivElement>(null);
 
-  // Callback global que Turnstile llama cuando el usuario completa el desafío
   const onTurnstileSuccess = useCallback((token: string) => {
     setTurnstileToken(token);
+    setTurnstileError(false);
   }, []);
 
-  // Exponer el callback globalmente para que el script de Turnstile pueda llamarlo
+  const onTurnstileError = useCallback(() => {
+    setTurnstileError(true);
+  }, []);
+
   if (typeof window !== "undefined") {
     (window as unknown as Record<string, unknown>)["__turnstileCallback"] = onTurnstileSuccess;
+    (window as unknown as Record<string, unknown>)["__turnstileErrorCallback"] = onTurnstileError;
   }
   
   const form = useForm<ForgotPasswordFormValues>({
@@ -47,8 +52,7 @@ export const ForgotPasswordForm = () => {
   const onSubmit = async (values: ForgotPasswordFormValues) => {
     try {
       setError(null);
-      // Si Turnstile está configurado y no hay token, bloquear el envío
-      if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      if (TURNSTILE_SITE_KEY && !turnstileToken && !turnstileError) {
         setError("Por favor completa el desafío de seguridad antes de continuar.");
         return;
       }
@@ -140,13 +144,19 @@ export const ForgotPasswordForm = () => {
               </p>
             )}
           </div>
-          {TURNSTILE_SITE_KEY && (
+          {TURNSTILE_SITE_KEY && !turnstileError && (
             <div
               ref={turnstileRef}
               className="cf-turnstile mt-4 flex justify-center"
               data-sitekey={TURNSTILE_SITE_KEY}
               data-callback="__turnstileCallback"
+              data-error-callback="__turnstileErrorCallback"
             ></div>
+          )}
+          {TURNSTILE_SITE_KEY && turnstileError && (
+            <p className="text-xs text-muted-foreground rounded-md border border-border bg-muted/50 px-3 py-2">
+              La verificación de seguridad no está disponible en este momento. Puedes continuar de todos modos.
+            </p>
           )}
           {error && (
             <p className="text-xs text-destructive">{error}</p>
@@ -155,7 +165,7 @@ export const ForgotPasswordForm = () => {
             type="submit"
             size="lg"
             className="w-full"
-            disabled={form.formState.isSubmitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}
+            disabled={form.formState.isSubmitting || (!!TURNSTILE_SITE_KEY && !turnstileToken && !turnstileError)}
           >
             {form.formState.isSubmitting ? "Enviando..." : "Enviar enlace de recuperación"}
           </Button>

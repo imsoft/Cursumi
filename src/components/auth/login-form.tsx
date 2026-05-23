@@ -167,7 +167,7 @@ export const LoginForm = ({ returnUrl, googleAuthEnabled = false }: LoginFormPro
         </form>
         {googleAuthEnabled && (
           <>
-            <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <span className="flex-1 h-px bg-border" />
               o continúa con
               <span className="flex-1 h-px bg-border" />
