@@ -1,3 +1,6 @@
+"use client";
+
+import { motion, type Variants } from "framer-motion";
 import { Globe, CalendarDays, MonitorPlay, BadgeCheck } from "lucide-react";
 
 const steps = [
@@ -31,11 +34,34 @@ const steps = [
   },
 ];
 
+const container: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const stepVariant: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] } },
+};
+
+const headerVariant: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 export const HowItWorks = () => {
   return (
     <section id="como-funciona" className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
       {/* Header */}
-      <div className="flex flex-col gap-2 text-center">
+      <motion.div
+        className="flex flex-col gap-2 text-center"
+        variants={headerVariant}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
+      >
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
           Cómo funciona
         </p>
@@ -46,15 +72,22 @@ export const HowItWorks = () => {
           Un flujo claro, sin fricciones. Desde que descubres un curso hasta que
           recibes tu certificado.
         </p>
-      </div>
+      </motion.div>
 
       {/* Steps */}
-      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4"
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
+      >
         {steps.map((step) => {
           const Icon = step.icon;
           return (
-            <article
+            <motion.article
               key={step.title}
+              variants={stepVariant}
               className="group relative flex flex-col gap-3 rounded-3xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10"
             >
               {/* Big step number (decorative) */}
@@ -83,10 +116,10 @@ export const HowItWorks = () => {
                   {step.description}
                 </p>
               </div>
-            </article>
+            </motion.article>
           );
         })}
-      </div>
+      </motion.div>
     </section>
   );
 };

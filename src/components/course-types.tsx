@@ -1,3 +1,6 @@
+"use client";
+
+import { motion, type Variants } from "framer-motion";
 import { Video, Globe, Zap } from "lucide-react";
 
 const modalityCards = [
@@ -39,12 +42,35 @@ const modalityCards = [
   },
 ];
 
+const container: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const cardVariant: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] } },
+};
+
+const headerVariant: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 export const CourseTypes = () => {
   return (
     <section id="cursos" className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
-        <div className="flex flex-col gap-2 text-center">
+        <motion.div
+          className="flex flex-col gap-2 text-center"
+          variants={headerVariant}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
             Modalidades
           </p>
@@ -55,15 +81,22 @@ export const CourseTypes = () => {
             Tres modalidades de aprendizaje diseñadas para adaptarse a tu ritmo,
             ubicación y objetivos.
           </p>
-        </div>
+        </motion.div>
 
         {/* Cards */}
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <motion.div
+          className="mt-10 grid gap-6 md:grid-cols-3"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
           {modalityCards.map((card) => {
             const Icon = card.icon;
             return (
-              <div
+              <motion.div
                 key={card.title}
+                variants={cardVariant}
                 className={`group relative overflow-hidden rounded-3xl border border-border bg-linear-to-br ${card.accent} p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8`}
               >
                 {/* Icon */}
@@ -85,10 +118,10 @@ export const CourseTypes = () => {
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {card.description}
                 </p>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

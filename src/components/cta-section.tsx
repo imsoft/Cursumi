@@ -1,11 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const CTASection = () => {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-8">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-card px-8 py-16 text-center shadow-xl">
+      <motion.div
+        className="relative overflow-hidden rounded-3xl border border-border bg-card px-8 py-16 text-center shadow-xl"
+        initial={{ opacity: 0, scale: 0.97 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
+      >
         {/* Decorative gradient accent */}
         <div
           aria-hidden
@@ -18,12 +27,23 @@ export const CTASection = () => {
 
         <div className="relative flex flex-col items-center gap-6">
           {/* Icon */}
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 shadow-inner">
+          <motion.div
+            className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 shadow-inner"
+            initial={{ opacity: 0, scale: 0.7 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.45, type: "spring", stiffness: 200 }}
+          >
             <Sparkles className="h-7 w-7 text-primary" aria-hidden />
-          </div>
+          </motion.div>
 
           {/* Copy */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15, duration: 0.5, ease: "easeOut" as const }}
+          >
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
               ¿Listo para el siguiente paso?
             </p>
@@ -34,10 +54,16 @@ export const CTASection = () => {
               Publica tu curso presencial u online y deja que nuestro equipo te
               acompañe en la promoción, logística y certificación.
             </p>
-          </div>
+          </motion.div>
 
           {/* Buttons */}
-          <div className="flex flex-wrap justify-center gap-3">
+          <motion.div
+            className="flex flex-wrap justify-center gap-3"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" as const }}
+          >
             <Link href="/signup">
               <Button
                 size="lg"
@@ -56,9 +82,9 @@ export const CTASection = () => {
                 Hablar con un asesor
               </Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
