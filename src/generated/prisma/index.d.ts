@@ -44,6 +44,11 @@ export type InstructorApplication = $Result.DefaultSelection<Prisma.$InstructorA
  */
 export type InstructorProfile = $Result.DefaultSelection<Prisma.$InstructorProfilePayload>
 /**
+ * Model PortfolioProject
+ * 
+ */
+export type PortfolioProject = $Result.DefaultSelection<Prisma.$PortfolioProjectPayload>
+/**
  * Model Category
  * 
  */
@@ -640,6 +645,16 @@ export class PrismaClient<
     * ```
     */
   get instructorProfile(): Prisma.InstructorProfileDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.portfolioProject`: Exposes CRUD operations for the **PortfolioProject** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PortfolioProjects
+    * const portfolioProjects = await prisma.portfolioProject.findMany()
+    * ```
+    */
+  get portfolioProject(): Prisma.PortfolioProjectDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.category`: Exposes CRUD operations for the **Category** model.
@@ -1480,6 +1495,7 @@ export namespace Prisma {
     Verification: 'Verification',
     InstructorApplication: 'InstructorApplication',
     InstructorProfile: 'InstructorProfile',
+    PortfolioProject: 'PortfolioProject',
     Category: 'Category',
     Course: 'Course',
     CourseSection: 'CourseSection',
@@ -1535,7 +1551,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "portfolioProject" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1980,6 +1996,80 @@ export namespace Prisma {
           count: {
             args: Prisma.InstructorProfileCountArgs<ExtArgs>
             result: $Utils.Optional<InstructorProfileCountAggregateOutputType> | number
+          }
+        }
+      }
+      PortfolioProject: {
+        payload: Prisma.$PortfolioProjectPayload<ExtArgs>
+        fields: Prisma.PortfolioProjectFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PortfolioProjectFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PortfolioProjectFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
+          }
+          findFirst: {
+            args: Prisma.PortfolioProjectFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PortfolioProjectFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
+          }
+          findMany: {
+            args: Prisma.PortfolioProjectFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>[]
+          }
+          create: {
+            args: Prisma.PortfolioProjectCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
+          }
+          createMany: {
+            args: Prisma.PortfolioProjectCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PortfolioProjectCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>[]
+          }
+          delete: {
+            args: Prisma.PortfolioProjectDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
+          }
+          update: {
+            args: Prisma.PortfolioProjectUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
+          }
+          deleteMany: {
+            args: Prisma.PortfolioProjectDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PortfolioProjectUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PortfolioProjectUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>[]
+          }
+          upsert: {
+            args: Prisma.PortfolioProjectUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortfolioProjectPayload>
+          }
+          aggregate: {
+            args: Prisma.PortfolioProjectAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePortfolioProject>
+          }
+          groupBy: {
+            args: Prisma.PortfolioProjectGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PortfolioProjectGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PortfolioProjectCountArgs<ExtArgs>
+            result: $Utils.Optional<PortfolioProjectCountAggregateOutputType> | number
           }
         }
       }
@@ -5057,6 +5147,7 @@ export namespace Prisma {
     verification?: VerificationOmit
     instructorApplication?: InstructorApplicationOmit
     instructorProfile?: InstructorProfileOmit
+    portfolioProject?: PortfolioProjectOmit
     category?: CategoryOmit
     course?: CourseOmit
     courseSection?: CourseSectionOmit
@@ -5199,6 +5290,7 @@ export namespace Prisma {
     referrals: number
     referralCommissions: number
     blogPosts: number
+    portfolioProjects: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5224,6 +5316,7 @@ export namespace Prisma {
     referrals?: boolean | UserCountOutputTypeCountReferralsArgs
     referralCommissions?: boolean | UserCountOutputTypeCountReferralCommissionsArgs
     blogPosts?: boolean | UserCountOutputTypeCountBlogPostsArgs
+    portfolioProjects?: boolean | UserCountOutputTypeCountPortfolioProjectsArgs
   }
 
   // Custom InputTypes
@@ -5389,6 +5482,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountBlogPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BlogPostWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPortfolioProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortfolioProjectWhereInput
   }
 
 
@@ -6367,6 +6467,7 @@ export namespace Prisma {
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
     referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
     blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
+    portfolioProjects?: boolean | User$portfolioProjectsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6463,6 +6564,7 @@ export namespace Prisma {
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
     referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
     blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
+    portfolioProjects?: boolean | User$portfolioProjectsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6507,6 +6609,7 @@ export namespace Prisma {
        */
       referralEntry: Prisma.$ReferralPayload<ExtArgs> | null
       blogPosts: Prisma.$BlogPostPayload<ExtArgs>[]
+      portfolioProjects: Prisma.$PortfolioProjectPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6956,6 +7059,7 @@ export namespace Prisma {
     referralCommissions<T extends User$referralCommissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralCommissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     referralEntry<T extends User$referralEntryArgs<ExtArgs> = {}>(args?: Subset<T, User$referralEntryArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     blogPosts<T extends User$blogPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    portfolioProjects<T extends User$portfolioProjectsArgs<ExtArgs> = {}>(args?: Subset<T, User$portfolioProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8005,6 +8109,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * User.portfolioProjects
+   */
+  export type User$portfolioProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    where?: PortfolioProjectWhereInput
+    orderBy?: PortfolioProjectOrderByWithRelationInput | PortfolioProjectOrderByWithRelationInput[]
+    cursor?: PortfolioProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PortfolioProjectScalarFieldEnum | PortfolioProjectScalarFieldEnum[]
   }
 
   /**
@@ -13647,6 +13775,1181 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: InstructorProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PortfolioProject
+   */
+
+  export type AggregatePortfolioProject = {
+    _count: PortfolioProjectCountAggregateOutputType | null
+    _avg: PortfolioProjectAvgAggregateOutputType | null
+    _sum: PortfolioProjectSumAggregateOutputType | null
+    _min: PortfolioProjectMinAggregateOutputType | null
+    _max: PortfolioProjectMaxAggregateOutputType | null
+  }
+
+  export type PortfolioProjectAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type PortfolioProjectSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type PortfolioProjectMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    description: string | null
+    url: string | null
+    imageUrl: string | null
+    tags: string | null
+    category: string | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PortfolioProjectMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    description: string | null
+    url: string | null
+    imageUrl: string | null
+    tags: string | null
+    category: string | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PortfolioProjectCountAggregateOutputType = {
+    id: number
+    userId: number
+    title: number
+    description: number
+    url: number
+    imageUrl: number
+    tags: number
+    category: number
+    order: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PortfolioProjectAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type PortfolioProjectSumAggregateInputType = {
+    order?: true
+  }
+
+  export type PortfolioProjectMinAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    url?: true
+    imageUrl?: true
+    tags?: true
+    category?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PortfolioProjectMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    url?: true
+    imageUrl?: true
+    tags?: true
+    category?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PortfolioProjectCountAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    url?: true
+    imageUrl?: true
+    tags?: true
+    category?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PortfolioProjectAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PortfolioProject to aggregate.
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortfolioProjects to fetch.
+     */
+    orderBy?: PortfolioProjectOrderByWithRelationInput | PortfolioProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PortfolioProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortfolioProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortfolioProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PortfolioProjects
+    **/
+    _count?: true | PortfolioProjectCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PortfolioProjectAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PortfolioProjectSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PortfolioProjectMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PortfolioProjectMaxAggregateInputType
+  }
+
+  export type GetPortfolioProjectAggregateType<T extends PortfolioProjectAggregateArgs> = {
+        [P in keyof T & keyof AggregatePortfolioProject]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePortfolioProject[P]>
+      : GetScalarType<T[P], AggregatePortfolioProject[P]>
+  }
+
+
+
+
+  export type PortfolioProjectGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortfolioProjectWhereInput
+    orderBy?: PortfolioProjectOrderByWithAggregationInput | PortfolioProjectOrderByWithAggregationInput[]
+    by: PortfolioProjectScalarFieldEnum[] | PortfolioProjectScalarFieldEnum
+    having?: PortfolioProjectScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PortfolioProjectCountAggregateInputType | true
+    _avg?: PortfolioProjectAvgAggregateInputType
+    _sum?: PortfolioProjectSumAggregateInputType
+    _min?: PortfolioProjectMinAggregateInputType
+    _max?: PortfolioProjectMaxAggregateInputType
+  }
+
+  export type PortfolioProjectGroupByOutputType = {
+    id: string
+    userId: string
+    title: string
+    description: string | null
+    url: string | null
+    imageUrl: string | null
+    tags: string | null
+    category: string | null
+    order: number
+    createdAt: Date
+    updatedAt: Date
+    _count: PortfolioProjectCountAggregateOutputType | null
+    _avg: PortfolioProjectAvgAggregateOutputType | null
+    _sum: PortfolioProjectSumAggregateOutputType | null
+    _min: PortfolioProjectMinAggregateOutputType | null
+    _max: PortfolioProjectMaxAggregateOutputType | null
+  }
+
+  type GetPortfolioProjectGroupByPayload<T extends PortfolioProjectGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PortfolioProjectGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PortfolioProjectGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PortfolioProjectGroupByOutputType[P]>
+            : GetScalarType<T[P], PortfolioProjectGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PortfolioProjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    url?: boolean
+    imageUrl?: boolean
+    tags?: boolean
+    category?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["portfolioProject"]>
+
+  export type PortfolioProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    url?: boolean
+    imageUrl?: boolean
+    tags?: boolean
+    category?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["portfolioProject"]>
+
+  export type PortfolioProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    url?: boolean
+    imageUrl?: boolean
+    tags?: boolean
+    category?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["portfolioProject"]>
+
+  export type PortfolioProjectSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    url?: boolean
+    imageUrl?: boolean
+    tags?: boolean
+    category?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PortfolioProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "url" | "imageUrl" | "tags" | "category" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["portfolioProject"]>
+  export type PortfolioProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PortfolioProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PortfolioProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PortfolioProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PortfolioProject"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      title: string
+      description: string | null
+      url: string | null
+      imageUrl: string | null
+      tags: string | null
+      category: string | null
+      order: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["portfolioProject"]>
+    composites: {}
+  }
+
+  type PortfolioProjectGetPayload<S extends boolean | null | undefined | PortfolioProjectDefaultArgs> = $Result.GetResult<Prisma.$PortfolioProjectPayload, S>
+
+  type PortfolioProjectCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PortfolioProjectFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PortfolioProjectCountAggregateInputType | true
+    }
+
+  export interface PortfolioProjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PortfolioProject'], meta: { name: 'PortfolioProject' } }
+    /**
+     * Find zero or one PortfolioProject that matches the filter.
+     * @param {PortfolioProjectFindUniqueArgs} args - Arguments to find a PortfolioProject
+     * @example
+     * // Get one PortfolioProject
+     * const portfolioProject = await prisma.portfolioProject.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PortfolioProjectFindUniqueArgs>(args: SelectSubset<T, PortfolioProjectFindUniqueArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PortfolioProject that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PortfolioProjectFindUniqueOrThrowArgs} args - Arguments to find a PortfolioProject
+     * @example
+     * // Get one PortfolioProject
+     * const portfolioProject = await prisma.portfolioProject.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PortfolioProjectFindUniqueOrThrowArgs>(args: SelectSubset<T, PortfolioProjectFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PortfolioProject that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectFindFirstArgs} args - Arguments to find a PortfolioProject
+     * @example
+     * // Get one PortfolioProject
+     * const portfolioProject = await prisma.portfolioProject.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PortfolioProjectFindFirstArgs>(args?: SelectSubset<T, PortfolioProjectFindFirstArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PortfolioProject that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectFindFirstOrThrowArgs} args - Arguments to find a PortfolioProject
+     * @example
+     * // Get one PortfolioProject
+     * const portfolioProject = await prisma.portfolioProject.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PortfolioProjectFindFirstOrThrowArgs>(args?: SelectSubset<T, PortfolioProjectFindFirstOrThrowArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PortfolioProjects that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PortfolioProjects
+     * const portfolioProjects = await prisma.portfolioProject.findMany()
+     * 
+     * // Get first 10 PortfolioProjects
+     * const portfolioProjects = await prisma.portfolioProject.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const portfolioProjectWithIdOnly = await prisma.portfolioProject.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PortfolioProjectFindManyArgs>(args?: SelectSubset<T, PortfolioProjectFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PortfolioProject.
+     * @param {PortfolioProjectCreateArgs} args - Arguments to create a PortfolioProject.
+     * @example
+     * // Create one PortfolioProject
+     * const PortfolioProject = await prisma.portfolioProject.create({
+     *   data: {
+     *     // ... data to create a PortfolioProject
+     *   }
+     * })
+     * 
+     */
+    create<T extends PortfolioProjectCreateArgs>(args: SelectSubset<T, PortfolioProjectCreateArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PortfolioProjects.
+     * @param {PortfolioProjectCreateManyArgs} args - Arguments to create many PortfolioProjects.
+     * @example
+     * // Create many PortfolioProjects
+     * const portfolioProject = await prisma.portfolioProject.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PortfolioProjectCreateManyArgs>(args?: SelectSubset<T, PortfolioProjectCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PortfolioProjects and returns the data saved in the database.
+     * @param {PortfolioProjectCreateManyAndReturnArgs} args - Arguments to create many PortfolioProjects.
+     * @example
+     * // Create many PortfolioProjects
+     * const portfolioProject = await prisma.portfolioProject.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PortfolioProjects and only return the `id`
+     * const portfolioProjectWithIdOnly = await prisma.portfolioProject.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PortfolioProjectCreateManyAndReturnArgs>(args?: SelectSubset<T, PortfolioProjectCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PortfolioProject.
+     * @param {PortfolioProjectDeleteArgs} args - Arguments to delete one PortfolioProject.
+     * @example
+     * // Delete one PortfolioProject
+     * const PortfolioProject = await prisma.portfolioProject.delete({
+     *   where: {
+     *     // ... filter to delete one PortfolioProject
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PortfolioProjectDeleteArgs>(args: SelectSubset<T, PortfolioProjectDeleteArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PortfolioProject.
+     * @param {PortfolioProjectUpdateArgs} args - Arguments to update one PortfolioProject.
+     * @example
+     * // Update one PortfolioProject
+     * const portfolioProject = await prisma.portfolioProject.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PortfolioProjectUpdateArgs>(args: SelectSubset<T, PortfolioProjectUpdateArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PortfolioProjects.
+     * @param {PortfolioProjectDeleteManyArgs} args - Arguments to filter PortfolioProjects to delete.
+     * @example
+     * // Delete a few PortfolioProjects
+     * const { count } = await prisma.portfolioProject.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PortfolioProjectDeleteManyArgs>(args?: SelectSubset<T, PortfolioProjectDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PortfolioProjects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PortfolioProjects
+     * const portfolioProject = await prisma.portfolioProject.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PortfolioProjectUpdateManyArgs>(args: SelectSubset<T, PortfolioProjectUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PortfolioProjects and returns the data updated in the database.
+     * @param {PortfolioProjectUpdateManyAndReturnArgs} args - Arguments to update many PortfolioProjects.
+     * @example
+     * // Update many PortfolioProjects
+     * const portfolioProject = await prisma.portfolioProject.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PortfolioProjects and only return the `id`
+     * const portfolioProjectWithIdOnly = await prisma.portfolioProject.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PortfolioProjectUpdateManyAndReturnArgs>(args: SelectSubset<T, PortfolioProjectUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PortfolioProject.
+     * @param {PortfolioProjectUpsertArgs} args - Arguments to update or create a PortfolioProject.
+     * @example
+     * // Update or create a PortfolioProject
+     * const portfolioProject = await prisma.portfolioProject.upsert({
+     *   create: {
+     *     // ... data to create a PortfolioProject
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PortfolioProject we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PortfolioProjectUpsertArgs>(args: SelectSubset<T, PortfolioProjectUpsertArgs<ExtArgs>>): Prisma__PortfolioProjectClient<$Result.GetResult<Prisma.$PortfolioProjectPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PortfolioProjects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectCountArgs} args - Arguments to filter PortfolioProjects to count.
+     * @example
+     * // Count the number of PortfolioProjects
+     * const count = await prisma.portfolioProject.count({
+     *   where: {
+     *     // ... the filter for the PortfolioProjects we want to count
+     *   }
+     * })
+    **/
+    count<T extends PortfolioProjectCountArgs>(
+      args?: Subset<T, PortfolioProjectCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PortfolioProjectCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PortfolioProject.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PortfolioProjectAggregateArgs>(args: Subset<T, PortfolioProjectAggregateArgs>): Prisma.PrismaPromise<GetPortfolioProjectAggregateType<T>>
+
+    /**
+     * Group by PortfolioProject.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortfolioProjectGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PortfolioProjectGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PortfolioProjectGroupByArgs['orderBy'] }
+        : { orderBy?: PortfolioProjectGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PortfolioProjectGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPortfolioProjectGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PortfolioProject model
+   */
+  readonly fields: PortfolioProjectFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PortfolioProject.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PortfolioProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PortfolioProject model
+   */
+  interface PortfolioProjectFieldRefs {
+    readonly id: FieldRef<"PortfolioProject", 'String'>
+    readonly userId: FieldRef<"PortfolioProject", 'String'>
+    readonly title: FieldRef<"PortfolioProject", 'String'>
+    readonly description: FieldRef<"PortfolioProject", 'String'>
+    readonly url: FieldRef<"PortfolioProject", 'String'>
+    readonly imageUrl: FieldRef<"PortfolioProject", 'String'>
+    readonly tags: FieldRef<"PortfolioProject", 'String'>
+    readonly category: FieldRef<"PortfolioProject", 'String'>
+    readonly order: FieldRef<"PortfolioProject", 'Int'>
+    readonly createdAt: FieldRef<"PortfolioProject", 'DateTime'>
+    readonly updatedAt: FieldRef<"PortfolioProject", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PortfolioProject findUnique
+   */
+  export type PortfolioProjectFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which PortfolioProject to fetch.
+     */
+    where: PortfolioProjectWhereUniqueInput
+  }
+
+  /**
+   * PortfolioProject findUniqueOrThrow
+   */
+  export type PortfolioProjectFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which PortfolioProject to fetch.
+     */
+    where: PortfolioProjectWhereUniqueInput
+  }
+
+  /**
+   * PortfolioProject findFirst
+   */
+  export type PortfolioProjectFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which PortfolioProject to fetch.
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortfolioProjects to fetch.
+     */
+    orderBy?: PortfolioProjectOrderByWithRelationInput | PortfolioProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PortfolioProjects.
+     */
+    cursor?: PortfolioProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortfolioProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortfolioProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortfolioProjects.
+     */
+    distinct?: PortfolioProjectScalarFieldEnum | PortfolioProjectScalarFieldEnum[]
+  }
+
+  /**
+   * PortfolioProject findFirstOrThrow
+   */
+  export type PortfolioProjectFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which PortfolioProject to fetch.
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortfolioProjects to fetch.
+     */
+    orderBy?: PortfolioProjectOrderByWithRelationInput | PortfolioProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PortfolioProjects.
+     */
+    cursor?: PortfolioProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortfolioProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortfolioProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortfolioProjects.
+     */
+    distinct?: PortfolioProjectScalarFieldEnum | PortfolioProjectScalarFieldEnum[]
+  }
+
+  /**
+   * PortfolioProject findMany
+   */
+  export type PortfolioProjectFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * Filter, which PortfolioProjects to fetch.
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PortfolioProjects to fetch.
+     */
+    orderBy?: PortfolioProjectOrderByWithRelationInput | PortfolioProjectOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PortfolioProjects.
+     */
+    cursor?: PortfolioProjectWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PortfolioProjects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PortfolioProjects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PortfolioProjects.
+     */
+    distinct?: PortfolioProjectScalarFieldEnum | PortfolioProjectScalarFieldEnum[]
+  }
+
+  /**
+   * PortfolioProject create
+   */
+  export type PortfolioProjectCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PortfolioProject.
+     */
+    data: XOR<PortfolioProjectCreateInput, PortfolioProjectUncheckedCreateInput>
+  }
+
+  /**
+   * PortfolioProject createMany
+   */
+  export type PortfolioProjectCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PortfolioProjects.
+     */
+    data: PortfolioProjectCreateManyInput | PortfolioProjectCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PortfolioProject createManyAndReturn
+   */
+  export type PortfolioProjectCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * The data used to create many PortfolioProjects.
+     */
+    data: PortfolioProjectCreateManyInput | PortfolioProjectCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PortfolioProject update
+   */
+  export type PortfolioProjectUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PortfolioProject.
+     */
+    data: XOR<PortfolioProjectUpdateInput, PortfolioProjectUncheckedUpdateInput>
+    /**
+     * Choose, which PortfolioProject to update.
+     */
+    where: PortfolioProjectWhereUniqueInput
+  }
+
+  /**
+   * PortfolioProject updateMany
+   */
+  export type PortfolioProjectUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PortfolioProjects.
+     */
+    data: XOR<PortfolioProjectUpdateManyMutationInput, PortfolioProjectUncheckedUpdateManyInput>
+    /**
+     * Filter which PortfolioProjects to update
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * Limit how many PortfolioProjects to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortfolioProject updateManyAndReturn
+   */
+  export type PortfolioProjectUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * The data used to update PortfolioProjects.
+     */
+    data: XOR<PortfolioProjectUpdateManyMutationInput, PortfolioProjectUncheckedUpdateManyInput>
+    /**
+     * Filter which PortfolioProjects to update
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * Limit how many PortfolioProjects to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PortfolioProject upsert
+   */
+  export type PortfolioProjectUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PortfolioProject to update in case it exists.
+     */
+    where: PortfolioProjectWhereUniqueInput
+    /**
+     * In case the PortfolioProject found by the `where` argument doesn't exist, create a new PortfolioProject with this data.
+     */
+    create: XOR<PortfolioProjectCreateInput, PortfolioProjectUncheckedCreateInput>
+    /**
+     * In case the PortfolioProject was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PortfolioProjectUpdateInput, PortfolioProjectUncheckedUpdateInput>
+  }
+
+  /**
+   * PortfolioProject delete
+   */
+  export type PortfolioProjectDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
+    /**
+     * Filter which PortfolioProject to delete.
+     */
+    where: PortfolioProjectWhereUniqueInput
+  }
+
+  /**
+   * PortfolioProject deleteMany
+   */
+  export type PortfolioProjectDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PortfolioProjects to delete
+     */
+    where?: PortfolioProjectWhereInput
+    /**
+     * Limit how many PortfolioProjects to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PortfolioProject without action
+   */
+  export type PortfolioProjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortfolioProject
+     */
+    select?: PortfolioProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PortfolioProject
+     */
+    omit?: PortfolioProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortfolioProjectInclude<ExtArgs> | null
   }
 
 
@@ -60196,6 +61499,23 @@ export namespace Prisma {
   export type InstructorProfileScalarFieldEnum = (typeof InstructorProfileScalarFieldEnum)[keyof typeof InstructorProfileScalarFieldEnum]
 
 
+  export const PortfolioProjectScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    title: 'title',
+    description: 'description',
+    url: 'url',
+    imageUrl: 'imageUrl',
+    tags: 'tags',
+    category: 'category',
+    order: 'order',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PortfolioProjectScalarFieldEnum = (typeof PortfolioProjectScalarFieldEnum)[keyof typeof PortfolioProjectScalarFieldEnum]
+
+
   export const CategoryScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -61164,6 +62484,7 @@ export namespace Prisma {
     referralCommissions?: ReferralListRelationFilter
     referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
     blogPosts?: BlogPostListRelationFilter
+    portfolioProjects?: PortfolioProjectListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -61211,6 +62532,7 @@ export namespace Prisma {
     referralCommissions?: ReferralOrderByRelationAggregateInput
     referralEntry?: ReferralOrderByWithRelationInput
     blogPosts?: BlogPostOrderByRelationAggregateInput
+    portfolioProjects?: PortfolioProjectOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -61261,6 +62583,7 @@ export namespace Prisma {
     referralCommissions?: ReferralListRelationFilter
     referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
     blogPosts?: BlogPostListRelationFilter
+    portfolioProjects?: PortfolioProjectListRelationFilter
   }, "id" | "email" | "referralCode">
 
   export type UserOrderByWithAggregationInput = {
@@ -61714,6 +63037,93 @@ export namespace Prisma {
     stripeOnboarded?: BoolWithAggregatesFilter<"InstructorProfile"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"InstructorProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"InstructorProfile"> | Date | string
+  }
+
+  export type PortfolioProjectWhereInput = {
+    AND?: PortfolioProjectWhereInput | PortfolioProjectWhereInput[]
+    OR?: PortfolioProjectWhereInput[]
+    NOT?: PortfolioProjectWhereInput | PortfolioProjectWhereInput[]
+    id?: StringFilter<"PortfolioProject"> | string
+    userId?: StringFilter<"PortfolioProject"> | string
+    title?: StringFilter<"PortfolioProject"> | string
+    description?: StringNullableFilter<"PortfolioProject"> | string | null
+    url?: StringNullableFilter<"PortfolioProject"> | string | null
+    imageUrl?: StringNullableFilter<"PortfolioProject"> | string | null
+    tags?: StringNullableFilter<"PortfolioProject"> | string | null
+    category?: StringNullableFilter<"PortfolioProject"> | string | null
+    order?: IntFilter<"PortfolioProject"> | number
+    createdAt?: DateTimeFilter<"PortfolioProject"> | Date | string
+    updatedAt?: DateTimeFilter<"PortfolioProject"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PortfolioProjectOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    url?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    tags?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PortfolioProjectWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PortfolioProjectWhereInput | PortfolioProjectWhereInput[]
+    OR?: PortfolioProjectWhereInput[]
+    NOT?: PortfolioProjectWhereInput | PortfolioProjectWhereInput[]
+    userId?: StringFilter<"PortfolioProject"> | string
+    title?: StringFilter<"PortfolioProject"> | string
+    description?: StringNullableFilter<"PortfolioProject"> | string | null
+    url?: StringNullableFilter<"PortfolioProject"> | string | null
+    imageUrl?: StringNullableFilter<"PortfolioProject"> | string | null
+    tags?: StringNullableFilter<"PortfolioProject"> | string | null
+    category?: StringNullableFilter<"PortfolioProject"> | string | null
+    order?: IntFilter<"PortfolioProject"> | number
+    createdAt?: DateTimeFilter<"PortfolioProject"> | Date | string
+    updatedAt?: DateTimeFilter<"PortfolioProject"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type PortfolioProjectOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    url?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    tags?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PortfolioProjectCountOrderByAggregateInput
+    _avg?: PortfolioProjectAvgOrderByAggregateInput
+    _max?: PortfolioProjectMaxOrderByAggregateInput
+    _min?: PortfolioProjectMinOrderByAggregateInput
+    _sum?: PortfolioProjectSumOrderByAggregateInput
+  }
+
+  export type PortfolioProjectScalarWhereWithAggregatesInput = {
+    AND?: PortfolioProjectScalarWhereWithAggregatesInput | PortfolioProjectScalarWhereWithAggregatesInput[]
+    OR?: PortfolioProjectScalarWhereWithAggregatesInput[]
+    NOT?: PortfolioProjectScalarWhereWithAggregatesInput | PortfolioProjectScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PortfolioProject"> | string
+    userId?: StringWithAggregatesFilter<"PortfolioProject"> | string
+    title?: StringWithAggregatesFilter<"PortfolioProject"> | string
+    description?: StringNullableWithAggregatesFilter<"PortfolioProject"> | string | null
+    url?: StringNullableWithAggregatesFilter<"PortfolioProject"> | string | null
+    imageUrl?: StringNullableWithAggregatesFilter<"PortfolioProject"> | string | null
+    tags?: StringNullableWithAggregatesFilter<"PortfolioProject"> | string | null
+    category?: StringNullableWithAggregatesFilter<"PortfolioProject"> | string | null
+    order?: IntWithAggregatesFilter<"PortfolioProject"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"PortfolioProject"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PortfolioProject"> | Date | string
   }
 
   export type CategoryWhereInput = {
@@ -64853,6 +66263,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -64899,6 +66310,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -64945,6 +66357,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -64991,6 +66404,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -65509,6 +66923,103 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioProjectCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    url?: string | null
+    imageUrl?: string | null
+    tags?: string | null
+    category?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPortfolioProjectsInput
+  }
+
+  export type PortfolioProjectUncheckedCreateInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    url?: string | null
+    imageUrl?: string | null
+    tags?: string | null
+    category?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioProjectUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPortfolioProjectsNestedInput
+  }
+
+  export type PortfolioProjectUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioProjectCreateManyInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    url?: string | null
+    imageUrl?: string | null
+    tags?: string | null
+    category?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioProjectUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioProjectUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68934,6 +70445,12 @@ export namespace Prisma {
     none?: BlogPostWhereInput
   }
 
+  export type PortfolioProjectListRelationFilter = {
+    every?: PortfolioProjectWhereInput
+    some?: PortfolioProjectWhereInput
+    none?: PortfolioProjectWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -69020,6 +70537,10 @@ export namespace Prisma {
   }
 
   export type BlogPostOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PortfolioProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -69450,6 +70971,72 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type PortfolioProjectCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    url?: SortOrder
+    imageUrl?: SortOrder
+    tags?: SortOrder
+    category?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortfolioProjectAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type PortfolioProjectMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    url?: SortOrder
+    imageUrl?: SortOrder
+    tags?: SortOrder
+    category?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortfolioProjectMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    url?: SortOrder
+    imageUrl?: SortOrder
+    tags?: SortOrder
+    category?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortfolioProjectSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type CategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -69477,22 +71064,6 @@ export namespace Prisma {
 
   export type CategorySumOrderByAggregateInput = {
     order?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumModalityFilter<$PrismaModel = never> = {
@@ -71860,6 +73431,13 @@ export namespace Prisma {
     connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
   }
 
+  export type PortfolioProjectCreateNestedManyWithoutUserInput = {
+    create?: XOR<PortfolioProjectCreateWithoutUserInput, PortfolioProjectUncheckedCreateWithoutUserInput> | PortfolioProjectCreateWithoutUserInput[] | PortfolioProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PortfolioProjectCreateOrConnectWithoutUserInput | PortfolioProjectCreateOrConnectWithoutUserInput[]
+    createMany?: PortfolioProjectCreateManyUserInputEnvelope
+    connect?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -72030,6 +73608,13 @@ export namespace Prisma {
     connectOrCreate?: BlogPostCreateOrConnectWithoutAuthorInput | BlogPostCreateOrConnectWithoutAuthorInput[]
     createMany?: BlogPostCreateManyAuthorInputEnvelope
     connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
+  }
+
+  export type PortfolioProjectUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PortfolioProjectCreateWithoutUserInput, PortfolioProjectUncheckedCreateWithoutUserInput> | PortfolioProjectCreateWithoutUserInput[] | PortfolioProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PortfolioProjectCreateOrConnectWithoutUserInput | PortfolioProjectCreateOrConnectWithoutUserInput[]
+    createMany?: PortfolioProjectCreateManyUserInputEnvelope
+    connect?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -72400,6 +73985,20 @@ export namespace Prisma {
     deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
   }
 
+  export type PortfolioProjectUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PortfolioProjectCreateWithoutUserInput, PortfolioProjectUncheckedCreateWithoutUserInput> | PortfolioProjectCreateWithoutUserInput[] | PortfolioProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PortfolioProjectCreateOrConnectWithoutUserInput | PortfolioProjectCreateOrConnectWithoutUserInput[]
+    upsert?: PortfolioProjectUpsertWithWhereUniqueWithoutUserInput | PortfolioProjectUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PortfolioProjectCreateManyUserInputEnvelope
+    set?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    disconnect?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    delete?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    connect?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    update?: PortfolioProjectUpdateWithWhereUniqueWithoutUserInput | PortfolioProjectUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PortfolioProjectUpdateManyWithWhereWithoutUserInput | PortfolioProjectUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PortfolioProjectScalarWhereInput | PortfolioProjectScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -72738,6 +74337,20 @@ export namespace Prisma {
     deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
   }
 
+  export type PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PortfolioProjectCreateWithoutUserInput, PortfolioProjectUncheckedCreateWithoutUserInput> | PortfolioProjectCreateWithoutUserInput[] | PortfolioProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PortfolioProjectCreateOrConnectWithoutUserInput | PortfolioProjectCreateOrConnectWithoutUserInput[]
+    upsert?: PortfolioProjectUpsertWithWhereUniqueWithoutUserInput | PortfolioProjectUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PortfolioProjectCreateManyUserInputEnvelope
+    set?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    disconnect?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    delete?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    connect?: PortfolioProjectWhereUniqueInput | PortfolioProjectWhereUniqueInput[]
+    update?: PortfolioProjectUpdateWithWhereUniqueWithoutUserInput | PortfolioProjectUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PortfolioProjectUpdateManyWithWhereWithoutUserInput | PortfolioProjectUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PortfolioProjectScalarWhereInput | PortfolioProjectScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -72810,6 +74423,28 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInstructorProfileInput, UserUpdateWithoutInstructorProfileInput>, UserUncheckedUpdateWithoutInstructorProfileInput>
   }
 
+  export type UserCreateNestedOneWithoutPortfolioProjectsInput = {
+    create?: XOR<UserCreateWithoutPortfolioProjectsInput, UserUncheckedCreateWithoutPortfolioProjectsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPortfolioProjectsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutPortfolioProjectsNestedInput = {
+    create?: XOR<UserCreateWithoutPortfolioProjectsInput, UserUncheckedCreateWithoutPortfolioProjectsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPortfolioProjectsInput
+    upsert?: UserUpsertWithoutPortfolioProjectsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPortfolioProjectsInput, UserUpdateWithoutPortfolioProjectsInput>, UserUncheckedUpdateWithoutPortfolioProjectsInput>
+  }
+
   export type CourseCreateNestedManyWithoutCategoryRefInput = {
     create?: XOR<CourseCreateWithoutCategoryRefInput, CourseUncheckedCreateWithoutCategoryRefInput> | CourseCreateWithoutCategoryRefInput[] | CourseUncheckedCreateWithoutCategoryRefInput[]
     connectOrCreate?: CourseCreateOrConnectWithoutCategoryRefInput | CourseCreateOrConnectWithoutCategoryRefInput[]
@@ -72822,14 +74457,6 @@ export namespace Prisma {
     connectOrCreate?: CourseCreateOrConnectWithoutCategoryRefInput | CourseCreateOrConnectWithoutCategoryRefInput[]
     createMany?: CourseCreateManyCategoryRefInputEnvelope
     connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type CourseUpdateManyWithoutCategoryRefNestedInput = {
@@ -77055,6 +78682,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -77100,6 +78728,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -77150,6 +78779,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredByInput = {
@@ -77195,6 +78825,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredByInput = {
@@ -77297,6 +78928,42 @@ export namespace Prisma {
 
   export type BlogPostCreateManyAuthorInputEnvelope = {
     data: BlogPostCreateManyAuthorInput | BlogPostCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PortfolioProjectCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    url?: string | null
+    imageUrl?: string | null
+    tags?: string | null
+    category?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioProjectUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    url?: string | null
+    imageUrl?: string | null
+    tags?: string | null
+    category?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioProjectCreateOrConnectWithoutUserInput = {
+    where: PortfolioProjectWhereUniqueInput
+    create: XOR<PortfolioProjectCreateWithoutUserInput, PortfolioProjectUncheckedCreateWithoutUserInput>
+  }
+
+  export type PortfolioProjectCreateManyUserInputEnvelope = {
+    data: PortfolioProjectCreateManyUserInput | PortfolioProjectCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -78003,6 +79670,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -78048,6 +79716,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
@@ -78185,6 +79854,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
   }
 
+  export type PortfolioProjectUpsertWithWhereUniqueWithoutUserInput = {
+    where: PortfolioProjectWhereUniqueInput
+    update: XOR<PortfolioProjectUpdateWithoutUserInput, PortfolioProjectUncheckedUpdateWithoutUserInput>
+    create: XOR<PortfolioProjectCreateWithoutUserInput, PortfolioProjectUncheckedCreateWithoutUserInput>
+  }
+
+  export type PortfolioProjectUpdateWithWhereUniqueWithoutUserInput = {
+    where: PortfolioProjectWhereUniqueInput
+    data: XOR<PortfolioProjectUpdateWithoutUserInput, PortfolioProjectUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PortfolioProjectUpdateManyWithWhereWithoutUserInput = {
+    where: PortfolioProjectScalarWhereInput
+    data: XOR<PortfolioProjectUpdateManyMutationInput, PortfolioProjectUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PortfolioProjectScalarWhereInput = {
+    AND?: PortfolioProjectScalarWhereInput | PortfolioProjectScalarWhereInput[]
+    OR?: PortfolioProjectScalarWhereInput[]
+    NOT?: PortfolioProjectScalarWhereInput | PortfolioProjectScalarWhereInput[]
+    id?: StringFilter<"PortfolioProject"> | string
+    userId?: StringFilter<"PortfolioProject"> | string
+    title?: StringFilter<"PortfolioProject"> | string
+    description?: StringNullableFilter<"PortfolioProject"> | string | null
+    url?: StringNullableFilter<"PortfolioProject"> | string | null
+    imageUrl?: StringNullableFilter<"PortfolioProject"> | string | null
+    tags?: StringNullableFilter<"PortfolioProject"> | string | null
+    category?: StringNullableFilter<"PortfolioProject"> | string | null
+    order?: IntFilter<"PortfolioProject"> | number
+    createdAt?: DateTimeFilter<"PortfolioProject"> | Date | string
+    updatedAt?: DateTimeFilter<"PortfolioProject"> | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -78228,6 +79930,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -78273,6 +79976,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -78334,6 +80038,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -78379,6 +80084,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -78424,6 +80130,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -78469,6 +80176,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -78530,6 +80238,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -78575,6 +80284,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorApplicationInput = {
@@ -78620,6 +80330,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorApplicationInput = {
@@ -78665,6 +80376,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorApplicationInput = {
@@ -78726,6 +80438,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorApplicationInput = {
@@ -78771,6 +80484,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorProfileInput = {
@@ -78816,6 +80530,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorProfileInput = {
@@ -78861,6 +80576,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorProfileInput = {
@@ -78922,6 +80638,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorProfileInput = {
@@ -78945,6 +80662,207 @@ export namespace Prisma {
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPortfolioProjectsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutPortfolioProjectsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutPortfolioProjectsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPortfolioProjectsInput, UserUncheckedCreateWithoutPortfolioProjectsInput>
+  }
+
+  export type UserUpsertWithoutPortfolioProjectsInput = {
+    update: XOR<UserUpdateWithoutPortfolioProjectsInput, UserUncheckedUpdateWithoutPortfolioProjectsInput>
+    create: XOR<UserCreateWithoutPortfolioProjectsInput, UserUncheckedCreateWithoutPortfolioProjectsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPortfolioProjectsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPortfolioProjectsInput, UserUncheckedUpdateWithoutPortfolioProjectsInput>
+  }
+
+  export type UserUpdateWithoutPortfolioProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPortfolioProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
     instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -79122,6 +81040,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorCoursesInput = {
@@ -79167,6 +81086,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorCoursesInput = {
@@ -79695,6 +81615,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorCoursesInput = {
@@ -79740,6 +81661,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -81255,6 +83177,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -81300,6 +83223,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -81501,6 +83425,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -81546,6 +83471,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutEnrollmentsInput = {
@@ -81680,6 +83606,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -81725,6 +83652,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -82147,6 +84075,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -82192,6 +84121,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseSessionUpsertWithoutEnrollmentsInput = {
@@ -82639,6 +84569,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLearningReflectionsInput = {
@@ -82684,6 +84615,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLearningReflectionsInput = {
@@ -82889,6 +84821,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -82934,6 +84867,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
@@ -83454,6 +85388,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -83499,6 +85434,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -83698,6 +85634,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -83743,6 +85680,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -83926,6 +85864,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -83971,6 +85910,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -84195,6 +86135,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -84240,6 +86181,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutTransactionsInput = {
@@ -84500,6 +86442,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -84545,6 +86488,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -84701,6 +86645,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -84746,6 +86691,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -84791,6 +86737,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -84836,6 +86783,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -84897,6 +86845,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -84942,6 +86891,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutConversationsInput = {
@@ -85076,6 +87026,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentConversationsInput = {
@@ -85121,6 +87072,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentConversationsInput = {
@@ -85171,6 +87123,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorConversationsInput = {
@@ -85216,6 +87169,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorConversationsInput = {
@@ -85398,6 +87352,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentConversationsInput = {
@@ -85443,6 +87398,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructorConversationsInput = {
@@ -85499,6 +87455,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorConversationsInput = {
@@ -85544,6 +87501,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -85628,6 +87586,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -85673,6 +87632,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -85763,6 +87723,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -85808,6 +87769,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutHostedGamesInput = {
@@ -85853,6 +87815,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedGamesInput = {
@@ -85898,6 +87861,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedGamesInput = {
@@ -86049,6 +88013,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedGamesInput = {
@@ -86094,6 +88059,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizGameQuestionUpsertWithWhereUniqueWithoutGameInput = {
@@ -86366,6 +88332,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGameParticipationsInput = {
@@ -86411,6 +88378,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGameParticipationsInput = {
@@ -86541,6 +88509,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGameParticipationsInput = {
@@ -86586,6 +88555,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizGameAnswerUpsertWithWhereUniqueWithoutParticipantInput = {
@@ -87268,6 +89238,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrgMembershipsInput = {
@@ -87313,6 +89284,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrgMembershipsInput = {
@@ -87441,6 +89413,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrgMembershipsInput = {
@@ -87486,6 +89459,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TeamMemberUpsertWithWhereUniqueWithoutMemberInput = {
@@ -88905,6 +90879,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourseNotesInput = {
@@ -88950,6 +90925,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourseNotesInput = {
@@ -89143,6 +91119,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourseNotesInput = {
@@ -89188,6 +91165,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutNotesInput = {
@@ -89377,6 +91355,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistItemsInput = {
@@ -89422,6 +91401,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistItemsInput = {
@@ -89572,6 +91552,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistItemsInput = {
@@ -89617,6 +91598,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutWishlistItemsInput = {
@@ -89757,6 +91739,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralCommissionsInput = {
@@ -89802,6 +91785,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralCommissionsInput = {
@@ -89852,6 +91836,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralEntryInput = {
@@ -89897,6 +91882,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralEntryInput = {
@@ -89997,6 +91983,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralCommissionsInput = {
@@ -90042,6 +92029,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReferralEntryInput = {
@@ -90098,6 +92086,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralEntryInput = {
@@ -90143,6 +92132,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TransactionUpsertWithoutReferralInput = {
@@ -90233,6 +92223,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
@@ -90278,6 +92269,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
@@ -90339,6 +92331,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
@@ -90384,6 +92377,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBlogPostsInput = {
@@ -90429,6 +92423,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    portfolioProjects?: PortfolioProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBlogPostsInput = {
@@ -90474,6 +92469,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    portfolioProjects?: PortfolioProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBlogPostsInput = {
@@ -90535,6 +92531,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBlogPostsInput = {
@@ -90580,6 +92577,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -90825,6 +92823,19 @@ export namespace Prisma {
     published?: boolean
     publishedAt?: Date | string | null
     tags?: BlogPostCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortfolioProjectCreateManyUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    url?: string | null
+    imageUrl?: string | null
+    tags?: string | null
+    category?: string | null
+    order?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -91539,6 +93550,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredByInput = {
@@ -91584,6 +93596,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    portfolioProjects?: PortfolioProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferredByInput = {
@@ -91674,6 +93687,45 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tags?: BlogPostUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioProjectUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioProjectUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortfolioProjectUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
