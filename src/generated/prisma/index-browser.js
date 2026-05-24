@@ -207,20 +207,6 @@ exports.Prisma.InstructorProfileScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.PortfolioProjectScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  title: 'title',
-  description: 'description',
-  url: 'url',
-  imageUrl: 'imageUrl',
-  tags: 'tags',
-  category: 'category',
-  order: 'order',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -799,7 +785,6 @@ exports.Prisma.ModelName = {
   Verification: 'Verification',
   InstructorApplication: 'InstructorApplication',
   InstructorProfile: 'InstructorProfile',
-  PortfolioProject: 'PortfolioProject',
   Category: 'Category',
   Course: 'Course',
   CourseSection: 'CourseSection',

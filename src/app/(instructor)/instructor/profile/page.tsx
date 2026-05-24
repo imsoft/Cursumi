@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { InstructorProfileForm } from "@/components/instructor/instructor-profile-form";
 import { InstructorProfileSummary } from "@/components/instructor/instructor-profile-summary";
-import { PortfolioProjectsSection } from "@/components/instructor/portfolio-projects-section";
 import { SignatureUpload } from "@/components/profile/signature-upload";
 import { DeleteAccountSection } from "@/components/settings/delete-account-section";
 
@@ -58,7 +57,6 @@ export default function InstructorProfilePage() {
         onAvatarUploaded={() => void loadProfile()}
       />
       <InstructorProfileForm onSaved={loadProfile} />
-      <PortfolioProjectsSection />
       <SignatureUpload
         signatureUrl={profile?.signatureUrl ?? null}
         onUploaded={() => void loadProfile()}
