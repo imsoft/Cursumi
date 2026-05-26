@@ -631,13 +631,12 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                       {/* Add lesson inline form */}
                       {isAddingLesson ? (
                         <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-3">
-                          <p className="text-sm font-semibold text-foreground">Nueva lección</p>
                           <Input
-                            placeholder="Título de la lección..."
                             value={addLessonState.title}
                             onChange={(e) => setAddLessonState((prev) => prev ? { ...prev, title: e.target.value } : null)}
                             autoFocus
                           />
+                          <p className="text-xs text-muted-foreground">Escribe el título de la nueva lección</p>
                           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                             {LESSON_TYPE_OPTIONS.map((opt) => (
                               <button
