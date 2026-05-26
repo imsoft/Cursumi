@@ -33,19 +33,21 @@ export async function POST(req: Request) {
       }
     }
 
-    // 2. Call Better Auth internal forget password method strictly using the native API on the backend
+    // Llamar a Better Auth: el método correcto es requestPasswordReset (no forgetPassword)
     try {
-      // @ts-ignore (Tipos ocultos por better-auth/email-otp plugin mismatch)
-      await auth.api.forgetPassword({
+      await auth.api.requestPasswordReset({
         body: {
           email,
-          redirectTo: process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/reset-password` : "http://localhost:3000/reset-password",
+          redirectTo: process.env.NEXT_PUBLIC_APP_URL
+            ? `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`
+            : "http://localhost:3000/reset-password",
         },
         headers: reqHeaders,
       });
-    } catch (authError: any) {
-      console.error("Error from Better Auth core:", authError);
-      // Even if Better Auth throws "User not found", we continue (OWASP recommendation: do not leak existance of user)
+    } catch (authError: unknown) {
+      // Si el usuario no existe Better Auth devuelve 200 silenciosamente (OWASP).
+      // Otros errores los logueamos pero no los exponemos al cliente.
+      console.error("[password-reset] Better Auth error:", authError);
     }
 
     return NextResponse.json({ success: true, message: "Correo enviado" });
