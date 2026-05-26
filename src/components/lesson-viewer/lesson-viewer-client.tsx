@@ -21,7 +21,16 @@ import {
   Lock,
   Gamepad2,
   ClipboardCheck,
+  Trophy,
+  Award,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 // Note: PlayCircle, FileText, HelpCircle, ClipboardList used in lessonTypeIcon below
 import type { SectionActivity } from "@/components/instructor/course-types";
 import { LessonSidebar } from "./lesson-sidebar";
@@ -133,6 +142,7 @@ export function LessonViewerClient({
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
   const [marking, setMarking] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [gateCompletion, setGateCompletion] = useState<Record<string, boolean>>(
     () => initialSectionGateCompletion,
   );
@@ -289,6 +299,11 @@ export function LessonViewerClient({
           next.delete(lesson.id);
           return next;
         });
+      } else {
+        // ¿Era la última lección y no hay examen final? → modal de felicitaciones
+        if (nextLesson === null && !hasFinalExam) {
+          setShowCompletionModal(true);
+        }
       }
     } catch {
       // Rollback on network error
@@ -300,7 +315,7 @@ export function LessonViewerClient({
     } finally {
       setMarking(false);
     }
-  }, [isCompleted, marking, lesson.id, courseId]);
+  }, [isCompleted, marking, lesson.id, courseId, nextLesson, hasFinalExam]);
 
   // Parse quiz questions from content JSON (lección tipo quiz)
   type ParsedQuizQuestion = {
@@ -420,12 +435,8 @@ export function LessonViewerClient({
                 streamType="on-demand"
                 className="h-full w-full"
                 onEnded={() => markComplete()}
-                style={
-                  {
-                    "--media-primary-color": "#6d28d9",
-                    "--media-secondary-color": "#ffffff",
-                  } as React.CSSProperties
-                }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                style={{ "--media-primary-color": "#6d28d9", "--media-secondary-color": "#ffffff" } as any}
               />
             </div>
           );
@@ -1006,6 +1017,42 @@ export function LessonViewerClient({
           )}
         </div>
       </main>
+
+      {/* Modal de felicitaciones al completar el curso */}
+      <Dialog open={showCompletionModal} onOpenChange={setShowCompletionModal}>
+        <DialogContent className="sm:max-w-md text-center">
+          <DialogHeader className="items-center gap-4">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mx-auto">
+              <Trophy className="h-10 w-10 text-primary" />
+            </div>
+            <DialogTitle className="text-2xl font-bold">
+              ¡Felicidades!
+            </DialogTitle>
+            <DialogDescription className="text-base text-muted-foreground">
+              Completaste el curso. Tu certificado ya está disponible.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 mt-2">
+            <Button
+              className="w-full gap-2"
+              onClick={() => router.push(`/dashboard/certificates`)}
+            >
+              <Award className="h-4 w-4" />
+              Ver mi certificado
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                setShowCompletionModal(false);
+                router.push(`/dashboard/my-courses/${courseId}`);
+              }}
+            >
+              Volver al curso
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
