@@ -420,6 +420,12 @@ export function LessonViewerClient({
                 streamType="on-demand"
                 className="h-full w-full"
                 onEnded={() => markComplete()}
+                style={
+                  {
+                    "--media-primary-color": "#6d28d9",
+                    "--media-secondary-color": "#ffffff",
+                  } as React.CSSProperties
+                }
               />
             </div>
           );
