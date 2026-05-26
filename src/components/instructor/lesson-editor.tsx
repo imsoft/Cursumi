@@ -63,6 +63,8 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
   const [newResourceUrl, setNewResourceUrl] = useState("");
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null);
+  const [uploadStep, setUploadStep] = useState<"idle" | "preparing" | "uploading" | "processing" | "done">("idle");
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [, setUploadId] = useState<string | null>(null);
   
   const [isFree, setIsFree] = useState(lesson.isFree ?? false);
@@ -390,6 +392,51 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
     return `${secs} seg${secs > 1 ? 's' : ''}`;
   };
 
+  // Sube el archivo via XHR para tener progreso real y mejor manejo de CORS
+  const uploadFileToMux = (uploadUrl: string, file: File): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("PUT", uploadUrl, true);
+      xhr.setRequestHeader("Content-Type", file.type || "video/mp4");
+
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          setUploadProgress(Math.round((e.loaded / e.total) * 100));
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve();
+        } else {
+          reject(new Error(`Error al subir el video (HTTP ${xhr.status}). Intenta de nuevo.`));
+        }
+      };
+
+      xhr.onerror = () => reject(new Error("Error de red al subir el video. Verifica tu conexión e inténtalo de nuevo."));
+      xhr.ontimeout = () => reject(new Error("El upload tardó demasiado. Intenta con un archivo más pequeño."));
+      xhr.timeout = 30 * 60 * 1000; // 30 min max
+      xhr.send(file);
+    });
+  };
+
+  // Mux necesita tiempo para procesar el upload antes de que esté disponible el asset_id
+  // Reintenta hasta 15 veces con 4s de espera entre intentos (~1 min total)
+  const pollForPlaybackId = async (uploadId: string, maxRetries = 15, delayMs = 4000) => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const playback = await getMuxPlaybackId(uploadId);
+        return playback;
+      } catch {
+        if (i === maxRetries - 1) {
+          throw new Error("Mux tardó demasiado en procesar el video. Guarda la lección y recarga la página en unos minutos para ver el video.");
+        }
+        await new Promise((res) => setTimeout(res, delayMs));
+      }
+    }
+    throw new Error("No se pudo obtener el playback ID.");
+  };
+
   const detectVideoDuration = (file: File) => {
     setIsDetectingDuration(true);
     const video = document.createElement('video');
@@ -531,71 +578,120 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                         id="video-upload"
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
-                          if (file) {
-                            detectVideoDuration(file);
-                            setUploadingVideo(true);
-                            setVideoError(null);
-                            try {
-                              const { uploadUrl, uploadId } = await createMuxUploadUrl("*", {
-                                lessonTitle: title,
-                              });
-                              setUploadId(uploadId);
-                              const res = await fetch(uploadUrl, {
-                                method: "PUT",
-                                headers: { "Content-Type": file.type },
-                                body: file,
-                              });
-                              if (!res.ok) {
-                                throw new Error(`Mux upload failed: ${res.statusText}`);
-                              }
-                              // Nota: en un flujo real se consultaría el asset para obtener playback_id
-                              // Recuperar playbackId después del procesado
-                              const playback = await getMuxPlaybackId(uploadId);
-                              setVideoUrl(playback.playbackUrl);
-                            } catch (err) {
-                              setVideoError(err instanceof Error ? err.message : "Error al subir video");
-                              setVideoUrl("");
-                              setDuration("");
-                              setUploadId(null);
-                            } finally {
-                              setUploadingVideo(false);
-                            }
+                          if (!file) return;
+
+                          detectVideoDuration(file);
+                          setUploadingVideo(true);
+                          setVideoError(null);
+                          setUploadProgress(0);
+                          setUploadStep("preparing");
+
+                          try {
+                            // Paso 1: obtener URL de upload de Mux
+                            const corsOrigin =
+                              typeof window !== "undefined"
+                                ? window.location.origin
+                                : "https://www.cursumi.com";
+
+                            const { uploadUrl, uploadId } = await createMuxUploadUrl(corsOrigin, {
+                              lessonTitle: title,
+                            });
+                            setUploadId(uploadId);
+
+                            // Paso 2: subir el archivo directamente a Mux (via XHR con progreso)
+                            setUploadStep("uploading");
+                            await uploadFileToMux(uploadUrl, file);
+
+                            // Paso 3: Mux necesita procesar el upload → pollear hasta obtener playback_id
+                            setUploadStep("processing");
+                            setUploadProgress(100);
+                            const playback = await pollForPlaybackId(uploadId);
+
+                            // Éxito
+                            setVideoUrl(playback.playbackUrl);
+                            setUploadStep("done");
+                          } catch (err) {
+                            setVideoError(
+                              err instanceof Error
+                                ? err.message
+                                : "Error al subir el video. Inténtalo de nuevo."
+                            );
+                            setVideoUrl("");
+                            setDuration("");
+                            setUploadId(null);
+                            setUploadStep("idle");
+                          } finally {
+                            setUploadingVideo(false);
                           }
                         }}
                       />
-                      <label
-                        htmlFor="video-upload"
-                        className="flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-primary/40 bg-linear-to-br from-primary/5 to-primary/10 p-12 transition-all hover:border-primary/60 hover:bg-primary/15"
-                      >
-                        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 shadow-lg">
-                          <Video className="h-10 w-10 text-primary" />
-                        </div>
-                        <div className="text-center space-y-2">
-                          <p className="text-lg font-semibold text-foreground">
-                            Haz clic para subir un video
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            O arrastra el archivo aquí
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            Formatos: MP4, MOV, AVI, WebM (máx. 500MB)
-                          </p>
-                        </div>
-                      </label>
-                      {videoUrl && videoUrl.includes(".") && !videoUrl.startsWith("http") && (
-                        <div className="mt-3 space-y-2">
-                          <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/20 p-3">
-                            <Video className="h-4 w-4 text-primary" />
-                            <span className="text-sm text-foreground">{videoUrl}</span>
-                            {isDetectingDuration && (
-                              <span className="text-xs text-muted-foreground">Detectando duración...</span>
+                      {/* Área de upload — solo visible cuando no hay video subido y no se está procesando */}
+                      {!uploadingVideo && uploadStep !== "done" && !videoUrl && (
+                        <label
+                          htmlFor="video-upload"
+                          className="flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-primary/40 bg-linear-to-br from-primary/5 to-primary/10 p-12 transition-all hover:border-primary/60 hover:bg-primary/15"
+                        >
+                          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 shadow-lg">
+                            <Video className="h-10 w-10 text-primary" />
+                          </div>
+                          <div className="text-center space-y-2">
+                            <p className="text-lg font-semibold text-foreground">
+                              Haz clic para subir un video
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              MP4, MOV, AVI, WebM (máx. 500MB)
+                            </p>
+                          </div>
+                        </label>
+                      )}
+
+                      {/* Estado de progreso durante el upload */}
+                      {uploadingVideo && (
+                        <div className="flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-primary/40 bg-primary/5 p-12">
+                          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 shadow-lg animate-pulse">
+                            <Video className="h-10 w-10 text-primary" />
+                          </div>
+                          <div className="w-full max-w-xs text-center space-y-3">
+                            {uploadStep === "preparing" && (
+                              <p className="text-sm font-medium text-foreground">Preparando upload…</p>
                             )}
-                            {uploadingVideo && (
-                              <span className="text-xs text-muted-foreground">Subiendo a Mux...</span>
+                            {uploadStep === "uploading" && (
+                              <>
+                                <p className="text-sm font-medium text-foreground">Subiendo video… {uploadProgress}%</p>
+                                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                                  <div
+                                    className="h-full rounded-full bg-primary transition-all duration-300"
+                                    style={{ width: `${uploadProgress}%` }}
+                                  />
+                                </div>
+                              </>
+                            )}
+                            {uploadStep === "processing" && (
+                              <p className="text-sm font-medium text-foreground">
+                                Procesando en Mux… puede tardar hasta 1 min
+                              </p>
+                            )}
+                            <p className="text-xs text-muted-foreground">No cierres esta pestaña</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Video subido con éxito */}
+                      {!uploadingVideo && videoUrl && (
+                        <div className="mt-3 space-y-2">
+                          <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 p-3">
+                            <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                            <span className="text-sm text-foreground truncate flex-1">
+                              {videoUrl.includes("stream.mux.com")
+                                ? "Video subido correctamente a Mux ✓"
+                                : videoUrl}
+                            </span>
+                            {isDetectingDuration && (
+                              <span className="text-xs text-muted-foreground shrink-0">Detectando duración…</span>
                             )}
                             {duration && !isDetectingDuration && (
-                              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground ml-auto">
-                                Duración: {duration}
+                              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold border border-border bg-background text-muted-foreground shrink-0">
+                                {duration}
                               </span>
                             )}
                             <Button
@@ -604,6 +700,8 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                               onClick={() => {
                                 setVideoUrl("");
                                 setDuration("");
+                                setUploadStep("idle");
+                                setUploadProgress(0);
                               }}
                             >
                               <X className="h-4 w-4" />
