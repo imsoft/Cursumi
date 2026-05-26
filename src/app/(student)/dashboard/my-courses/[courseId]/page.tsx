@@ -107,12 +107,15 @@ export default async function MyCourseDetailPage({
       })
     : null;
 
-  // Recalcular progreso si el enrollment dice 100% pero hay lecciones sin completar
-  // (puede pasar cuando el instructor agrega lecciones nuevas después de que el alumno completó el curso)
+  // Recalcular progreso cuando:
+  // a) El enrollment dice 100% pero quedan lecciones sin completar (instructor añadió lecciones)
+  // b) Todas las lecciones están completas pero no existe certificado (puede pasar si la creación
+  //    del cert falló silenciosamente en una sesión anterior o si el progress en BD es incorrecto)
   const enrollmentProgressStale = progress === 100 && !allLessonsCompleted;
+  const needsCertRepair = allLessonsCompleted && !certificate;
   let displayProgress = progress;
 
-  if (session && (enrollmentProgressStale || (progress === 100 && !certificate))) {
+  if (session && (enrollmentProgressStale || needsCertRepair)) {
     try {
       displayProgress = await recalculateEnrollmentProgress(enrollmentDetail.id, courseId);
       certificate = await prisma.certificate.findFirst({
