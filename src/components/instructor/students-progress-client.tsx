@@ -57,25 +57,8 @@ function StudentRow({
         className="w-full p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between hover:bg-muted/30 transition-colors text-left"
       >
         <div className="flex items-center gap-4">
-          <Avatar className="h-10 w-10">
-            {student.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={student.image}
-                alt={student.name ?? student.email}
-                className="h-full w-full object-cover rounded-full"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  e.currentTarget.nextElementSibling?.removeAttribute("style");
-                }}
-              />
-            ) : null}
-            <span
-              className="flex h-full w-full items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary"
-              style={student.image ? { display: "none" } : undefined}
-            >
-              {initials}
-            </span>
+          <Avatar className="h-10 w-10 text-sm" src={student.image} alt={student.name ?? student.email}>
+            <span className="flex h-full w-full items-center justify-center text-primary text-sm font-semibold">{initials}</span>
           </Avatar>
           <div>
             <p className="font-semibold text-foreground">{student.name || "Sin nombre"}</p>

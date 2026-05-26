@@ -36,10 +36,8 @@ function SubmissionRow({ sub }: { sub: AssignmentSubmission }) {
         className="w-full p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between hover:bg-muted/30 transition-colors text-left"
       >
         <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <div className="h-full w-full flex items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-semibold">
-              {initials}
-            </div>
+          <Avatar className="h-9 w-9 text-sm" src={student.image} alt={student.name ?? student.email}>
+            <span className="flex h-full w-full items-center justify-center text-primary text-sm font-semibold">{initials}</span>
           </Avatar>
           <div>
             <p className="font-medium text-foreground text-sm">{student.name || "—"}</p>

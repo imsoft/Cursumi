@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { UserPlus, Mail, Trash2, X } from "lucide-react";
+import { Avatar } from "@/components/ui/avatar";
 
 interface Member {
   id: string;
@@ -180,9 +181,9 @@ export default function EmployeesPage() {
               return (
                 <div key={m.id} className="flex items-center justify-between rounded-lg border p-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                      {m.user.name?.[0]?.toUpperCase() || m.user.email[0].toUpperCase()}
-                    </div>
+                    <Avatar className="h-8 w-8 text-sm font-bold" src={m.user.image} alt={m.user.name ?? m.user.email}>
+                      <span>{m.user.name?.[0]?.toUpperCase() || m.user.email[0].toUpperCase()}</span>
+                    </Avatar>
                     <div>
                       <p className="text-sm font-medium">{m.user.name || m.user.email}</p>
                       <p className="text-xs text-muted-foreground">{m.user.email}</p>
