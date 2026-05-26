@@ -71,6 +71,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs: build
+    # E2E requiere una BD real y datos de prueba.
+    # Solo se ejecuta cuando el secret NEON_DATABASE_URL está configurado.
+    # En PRs y pushes normales se omite para no bloquear el CI.
+    if: ${{ secrets.NEON_DATABASE_URL != '' }}
 
     env:
       DATABASE_URL: "postgresql://fake:fake@localhost:5432/fake"
