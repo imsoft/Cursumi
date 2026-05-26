@@ -637,7 +637,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                             autoFocus
                           />
                           <p className="text-xs text-muted-foreground">Escribe el título de la nueva lección</p>
-                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                             {LESSON_TYPE_OPTIONS.map((opt) => (
                               <button
                                 key={opt.value}
