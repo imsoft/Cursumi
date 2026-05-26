@@ -230,20 +230,20 @@ export async function sendEnrollmentEmail({ to, name, courseTitle, courseUrl }: 
   const body = `
     <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
     <p style="font-size:16px;margin-bottom:20px;">
-      Tu inscripcion a <strong>${courseTitle}</strong> ha sido confirmada. Ya puedes comenzar a aprender!
+      Tu inscripción a <strong>${courseTitle}</strong> ha sido confirmada. ¡Ya puedes comenzar a aprender!
     </p>
     <div style="text-align:center;margin:30px 0;">
       <a href="${courseUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Ir al curso
       </a>
     </div>
-    <p style="font-size:14px;color:#6b7280;">Si tienes alguna pregunta, contactanos desde la plataforma.</p>`;
+    <p style="font-size:14px;color:#6b7280;">Si tienes alguna pregunta, contáctanos desde la plataforma.</p>`;
   try {
     await resend.emails.send({
       from: FROM(),
       to: [to],
-      subject: `Inscripcion confirmada: ${courseTitle} - Cursumi`,
-      html: emailWrapper("Inscripcion confirmada!", body),
+      subject: `¡Inscripción confirmada! ${courseTitle} - Cursumi`,
+      html: emailWrapper("¡Inscripción confirmada!", body),
     });
   } catch (err) {
     console.error("Error al enviar email de inscripcion:", err);
@@ -262,20 +262,20 @@ export async function sendCertificateEmail({ to, name, courseTitle, certificateU
   const body = `
     <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
     <p style="font-size:16px;margin-bottom:20px;">
-      Felicidades! Has completado <strong>${courseTitle}</strong> y tu certificado esta listo.
+      ¡Felicidades! Has completado <strong>${courseTitle}</strong> y tu certificado está listo.
     </p>
     <div style="text-align:center;margin:30px 0;">
       <a href="${certificateUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Ver mi certificado
       </a>
     </div>
-    <p style="font-size:14px;color:#6b7280;">Puedes descargarlo e imprimirlo desde la plataforma. Sigue aprendiendo!</p>`;
+    <p style="font-size:14px;color:#6b7280;">Puedes descargarlo e imprimirlo desde la plataforma. ¡Sigue aprendiendo!</p>`;
   try {
     await resend.emails.send({
       from: FROM(),
       to: [to],
-      subject: `Certificado listo! ${courseTitle} - Cursumi`,
-      html: emailWrapper("Certificado obtenido!", body),
+      subject: `¡Certificado listo! ${courseTitle} - Cursumi`,
+      html: emailWrapper("¡Certificado obtenido!", body),
     });
   } catch (err) {
     console.error("Error al enviar email de certificado:", err);
@@ -353,20 +353,20 @@ export async function sendProgressReminderEmail({ to, name, courseTitle, progres
   const body = `
     <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
     <p style="font-size:16px;margin-bottom:20px;">
-      Hace 7 dias que no entras a <strong>${courseTitle}</strong>. Ya llevas el ${progress}% completado, no te rindas!
+      Hace 7 días que no entras a <strong>${courseTitle}</strong>. Ya llevas el ${progress}% completado, ¡no te rindas!
     </p>
     <div style="text-align:center;margin:30px 0;">
       <a href="${courseUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
         Continuar aprendiendo
       </a>
     </div>
-    <p style="font-size:14px;color:#6b7280;">Ajusta tus preferencias de notificacion en la configuracion de tu cuenta.</p>`;
+    <p style="font-size:14px;color:#6b7280;">Ajusta tus preferencias de notificación en la configuración de tu cuenta.</p>`;
   try {
     await resend.emails.send({
       from: FROM(),
       to: [to],
-      subject: `Sigues ahi? Continua con ${courseTitle} - Cursumi`,
-      html: emailWrapper("Tu curso te espera!", body),
+      subject: `¿Sigues ahí? Continúa con ${courseTitle} - Cursumi`,
+      html: emailWrapper("¡Tu curso te espera!", body),
     });
   } catch (err) {
     console.error("Error al enviar email de recordatorio:", err);
