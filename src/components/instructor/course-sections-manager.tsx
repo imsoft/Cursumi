@@ -108,7 +108,7 @@ export const CourseSectionsManager = ({
   const addLesson = (sectionId: string) => {
     const newLesson: CourseLesson = {
       id: crypto.randomUUID(),
-      title: "Nueva lección",
+      title: "",
       type: "video",
       order: sections.find((s) => s.id === sectionId)?.lessons.length ?? 0,
     };

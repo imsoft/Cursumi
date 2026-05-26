@@ -16,7 +16,25 @@ import {
 } from "lucide-react";
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource, SectionMinigame } from "./course-types";
 import { SectionActivityEditor } from "./section-activity-editor";
-import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
+// API routes en lugar de server actions (más robustos, evitan "Failed to fetch")
+async function createMuxUploadUrlViaApi(params: { courseId?: string; lessonId?: string; lessonTitle?: string }) {
+  const res = await fetch("/api/mux/upload-url", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error ?? `Error ${res.status} al preparar el upload`);
+  }
+  return res.json() as Promise<{ uploadId: string; uploadUrl: string }>;
+}
+
+async function getMuxPlaybackIdViaApi(uploadId: string) {
+  const res = await fetch(`/api/mux/playback/${uploadId}`);
+  if (!res.ok) throw new Error("Asset aún no disponible");
+  return res.json() as Promise<{ playbackId: string; playbackUrl: string }>;
+}
 import { saveLessonContent } from "@/app/actions/course-actions";
 import { stripHtml } from "@/lib/utils";
 import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
@@ -56,6 +74,8 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [fileUploadError, setFileUploadError] = useState<string | null>(null);
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null);
+  const [uploadStep, setUploadStep] = useState<"idle" | "preparing" | "uploading" | "processing" | "done">("idle");
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [isDetectingDuration, setIsDetectingDuration] = useState(false);
   const [, setUploadId] = useState<string | null>(null);
   const [newResourceTitle, setNewResourceTitle] = useState("");
@@ -146,6 +166,39 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
     };
     video.onerror = () => setIsDetectingDuration(false);
     video.src = URL.createObjectURL(file);
+  };
+
+  // Sube el video via XHR (soporta progreso y maneja CORS correctamente)
+  const uploadFileToMux = (uploadUrl: string, file: File): Promise<void> =>
+    new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("PUT", uploadUrl, true);
+      xhr.setRequestHeader("Content-Type", file.type || "video/mp4");
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+      };
+      xhr.onload = () =>
+        xhr.status >= 200 && xhr.status < 300
+          ? resolve()
+          : reject(new Error(`Error HTTP ${xhr.status} al subir. Intenta de nuevo.`));
+      xhr.onerror = () => reject(new Error("Error de red al subir el video. Verifica tu conexión."));
+      xhr.ontimeout = () => reject(new Error("Tiempo de espera agotado. Intenta con un archivo más pequeño."));
+      xhr.timeout = 30 * 60 * 1000;
+      xhr.send(file);
+    });
+
+  // Mux tarda en procesar: reintentar hasta que asset_id esté disponible
+  const pollForPlaybackId = async (uploadId: string, maxRetries = 15, delayMs = 4000) => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        return await getMuxPlaybackIdViaApi(uploadId);
+      } catch {
+        if (i === maxRetries - 1)
+          throw new Error("El video tardó demasiado en procesar. Guarda la lección y recarga en unos minutos.");
+        await new Promise((r) => setTimeout(r, delayMs));
+      }
+    }
+    throw new Error("No se pudo obtener el playback ID.");
   };
 
   // ── Files ──────────────────────────────────────────────────────────────────
@@ -326,7 +379,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
             <RichTextEditor
               value={description}
               onChange={setDescription}
-              placeholder="Describe esta lección…"
+              
               minHeight="80px"
               className="mt-1"
             />
@@ -336,57 +389,121 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
           {type === "video" && (
             <div className="space-y-4">
               <label className="block text-sm font-medium text-foreground">Video de la lección *</label>
-              <div>
+              <div className="relative">
                 <input
                   type="file" accept="video/*" className="hidden" id="video-upload"
                   onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
-                    detectVideoDuration(file);
+                    detectVideoDuration(file); // duración detectada automáticamente
                     setUploadingVideo(true);
                     setVideoError(null);
+                    setUploadProgress(0);
+                    setUploadStep("preparing");
                     try {
-                      const { uploadUrl, uploadId } = await createMuxUploadUrl("*", {
-                        courseId,
-                        lessonId: lesson.id,
-                        lessonTitle: title,
+                      // Paso 1: URL de upload vía API route (no server action)
+                      const { uploadUrl, uploadId } = await createMuxUploadUrlViaApi({
+                        courseId, lessonId: lesson.id, lessonTitle: title,
                       });
                       setUploadId(uploadId);
-                      const res = await fetch(uploadUrl, { method: "PUT", headers: { "Content-Type": file.type }, body: file });
-                      if (!res.ok) throw new Error("Mux upload failed");
-                      const playback = await getMuxPlaybackId(uploadId);
+                      // Paso 2: subir via XHR con progreso real
+                      setUploadStep("uploading");
+                      await uploadFileToMux(uploadUrl, file);
+                      // Paso 3: esperar a que Mux procese el asset
+                      setUploadStep("processing");
+                      setUploadProgress(100);
+                      const playback = await pollForPlaybackId(uploadId);
                       setVideoUrl(playback.playbackUrl);
+                      setUploadStep("done");
                     } catch (err) {
-                      setVideoError(err instanceof Error ? err.message : "Error al subir video");
+                      setVideoError(err instanceof Error ? err.message : "Error al subir el video. Inténtalo de nuevo.");
+                      setUploadStep("idle");
+                      setUploadProgress(0);
                     } finally {
                       setUploadingVideo(false);
                     }
                   }}
                 />
-                <label
-                  htmlFor="video-upload"
-                  className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 p-10 transition-all hover:border-primary/60 hover:bg-primary/10"
-                >
-                  <Video className="h-10 w-10 text-primary" />
-                  <div className="text-center">
-                    <p className="font-semibold text-foreground">Haz clic para subir un video</p>
-                    <p className="text-sm text-muted-foreground">MP4, MOV, AVI, WebM (máx. 500MB)</p>
-                    {uploadingVideo && <p className="text-xs text-primary mt-1">Subiendo a Mux...</p>}
-                    {isDetectingDuration && <p className="text-xs text-muted-foreground mt-1">Detectando duración...</p>}
+
+                {/* Área de clic — solo cuando no hay video ni upload en curso */}
+                {!uploadingVideo && !videoUrl && (
+                  <label
+                    htmlFor="video-upload"
+                    className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 p-10 transition-all hover:border-primary/60 hover:bg-primary/10"
+                  >
+                    <Video className="h-10 w-10 text-primary" />
+                    <div className="text-center space-y-1">
+                      <p className="font-semibold text-foreground">Haz clic para subir un video</p>
+                      <p className="text-sm text-muted-foreground">MP4, MOV, AVI, WebM (máx. 500MB)</p>
+                      {isDetectingDuration && (
+                        <p className="text-xs text-muted-foreground">Detectando duración…</p>
+                      )}
+                    </div>
+                  </label>
+                )}
+
+                {/* Progreso de upload */}
+                {uploadingVideo && (
+                  <div className="flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-primary/40 bg-primary/5 p-10">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 animate-pulse">
+                      <Video className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="w-full max-w-xs text-center space-y-3">
+                      {uploadStep === "preparing" && (
+                        <p className="text-sm font-medium text-foreground">Preparando upload…</p>
+                      )}
+                      {uploadStep === "uploading" && (
+                        <>
+                          <p className="text-sm font-medium text-foreground">Subiendo video… {uploadProgress}%</p>
+                          <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-primary transition-all duration-300"
+                              style={{ width: `${uploadProgress}%` }}
+                            />
+                          </div>
+                        </>
+                      )}
+                      {uploadStep === "processing" && (
+                        <p className="text-sm font-medium text-foreground">Procesando en Mux… puede tardar hasta 1 min</p>
+                      )}
+                      <p className="text-xs text-muted-foreground">No cierres esta pestaña</p>
+                    </div>
                   </div>
-                </label>
+                )}
+
+                {/* Video subido con éxito */}
+                {!uploadingVideo && videoUrl && (
+                  <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 p-3">
+                    <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                    <span className="text-sm text-foreground flex-1 truncate">
+                      {videoUrl.includes("stream.mux.com") ? "Video subido correctamente ✓" : videoUrl}
+                    </span>
+                    {isDetectingDuration && (
+                      <span className="text-xs text-muted-foreground shrink-0">Detectando duración…</span>
+                    )}
+                    {duration && !isDetectingDuration && (
+                      <span className="text-xs font-medium text-muted-foreground shrink-0 border border-border rounded-full px-2 py-0.5">
+                        {duration}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      className="ml-1 rounded p-1 hover:bg-muted/40"
+                      onClick={() => { setVideoUrl(""); setDuration(""); setUploadStep("idle"); setUploadProgress(0); }}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+
                 {videoError && <p className="mt-2 text-xs text-destructive">{videoError}</p>}
               </div>
 
-              {duration && (
-                <p className="text-sm text-muted-foreground">Duración detectada: <strong>{duration}</strong></p>
-              )}
-              {!duration && (
-                <Input
-                  label="Duración (opcional, ej: 10 min)"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                />
+              {/* Duración: siempre automática desde el archivo */}
+              {duration && !uploadingVideo && (
+                <p className="text-sm text-muted-foreground">
+                  Duración detectada automáticamente: <strong>{duration}</strong>
+                </p>
               )}
             </div>
           )}
@@ -398,7 +515,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
               <RichTextEditor
                 value={content}
                 onChange={setContent}
-                placeholder="Escribe el contenido de la lección…"
+                
                 minHeight="250px"
                 className="mt-1"
               />
@@ -413,7 +530,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                 <RichTextEditor
                   value={content}
                   onChange={setContent}
-                  placeholder="Escribe las instrucciones del quiz…"
+                  
                   minHeight="100px"
                   className="mt-1"
                 />
@@ -425,11 +542,11 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="mb-1 block text-xs font-medium text-foreground">Tiempo límite (minutos)</label>
-                    <Input type="number" min="1" placeholder="Sin límite" value={quizTimeLimit ?? ""} onChange={(e) => setQuizTimeLimit(e.target.value ? Number(e.target.value) : undefined)} />
+                    <Input type="number" min="1" value={quizTimeLimit ?? ""} onChange={(e) => setQuizTimeLimit(e.target.value ? Number(e.target.value) : undefined)} />
                   </div>
                   <div>
                     <label className="mb-1 block text-xs font-medium text-foreground">Intentos permitidos</label>
-                    <Input type="number" min="1" placeholder="Ilimitados" value={quizAttempts ?? ""} onChange={(e) => setQuizAttempts(e.target.value ? Number(e.target.value) : undefined)} />
+                    <Input type="number" min="1" value={quizAttempts ?? ""} onChange={(e) => setQuizAttempts(e.target.value ? Number(e.target.value) : undefined)} />
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -653,7 +770,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                 ))}
                 <div className="flex gap-2 pt-2 border-t border-border">
                   <Input
-                    placeholder="Criterio de evaluación..."
+                   
                     value={newCriterionText}
                     onChange={(e) => setNewCriterionText(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddCriterion(); } }}
@@ -787,9 +904,9 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
               </div>
             ))}
             <div className="space-y-2">
-              <Input placeholder="Título del recurso" value={newResourceTitle} onChange={(e) => setNewResourceTitle(e.target.value)} />
+              <Input value={newResourceTitle} onChange={(e) => setNewResourceTitle(e.target.value)} />
               <div className="flex gap-2">
-                <Input placeholder="URL (https://...)" type="url" value={newResourceUrl} onChange={(e) => setNewResourceUrl(e.target.value)} className="flex-1" />
+                <Input type="url" value={newResourceUrl} onChange={(e) => setNewResourceUrl(e.target.value)} className="flex-1" />
                 <Button
                   variant="outline" size="sm"
                   onClick={() => {

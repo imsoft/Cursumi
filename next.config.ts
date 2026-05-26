@@ -30,7 +30,7 @@ const securityHeaders = [
       img-src 'self' blob: data: https://images.unsplash.com https://res.cloudinary.com https://image.mux.com https://*.googleusercontent.com;
       media-src 'self' blob: data: https://stream.mux.com;
       worker-src 'self' blob:;
-      connect-src 'self' blob: https://challenges.cloudflare.com https://api.stripe.com https://api.cloudinary.com *.sentry.io;
+      connect-src 'self' blob: https://challenges.cloudflare.com https://api.stripe.com https://api.cloudinary.com *.sentry.io https://storage.googleapis.com https://*.storage.googleapis.com https://api.mux.com https://upload.mux.com;
       frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com;
       font-src 'self' data:;
       object-src 'none';

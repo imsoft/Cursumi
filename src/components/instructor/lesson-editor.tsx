@@ -557,7 +557,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
             <RichTextEditor
               value={description}
               onChange={setDescription}
-              placeholder="Describe esta lección…"
               minHeight="80px"
               className="mt-1"
             />
@@ -745,7 +744,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
               <RichTextEditor
                 value={content}
                 onChange={setContent}
-                placeholder="Escribe el contenido de la lección…"
                 minHeight="250px"
                 className="mt-1"
               />
@@ -759,7 +757,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                 <RichTextEditor
                   value={content}
                   onChange={setContent}
-                  placeholder="Escribe las instrucciones del quiz…"
                   minHeight="100px"
                   className="mt-1"
                 />
@@ -776,7 +773,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                     <Input
                       type="number"
                       min="1"
-                      placeholder="Sin límite"
                       value={quizTimeLimit ?? ""}
                       onChange={(e) => setQuizTimeLimit(e.target.value ? Number(e.target.value) : undefined)}
                     />
@@ -788,7 +784,6 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                     <Input
                       type="number"
                       min="1"
-                      placeholder="Ilimitados"
                       value={quizAttempts ?? ""}
                       onChange={(e) => setQuizAttempts(e.target.value ? Number(e.target.value) : undefined)}
                     />
@@ -1406,13 +1401,11 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
               <div className="space-y-3 pt-2 border-t border-border">
                 <Input
                   label="Nombre del enlace"
-                  placeholder="Ej: Material de apoyo - Clase 1"
                   value={newResourceTitle}
                   onChange={(e) => setNewResourceTitle(e.target.value)}
                 />
                 <Input
                   label="Liga (URL)"
-                  placeholder="Ej: https://drive.google.com/drive/folders/..."
                   value={newResourceUrl}
                   onChange={(e) => setNewResourceUrl(e.target.value)}
                   type="url"
