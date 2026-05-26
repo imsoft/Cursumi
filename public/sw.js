@@ -5,7 +5,7 @@
 // - push notifications (Web Push API)
 // - offline fallback
 
-const CACHE_NAME = "cursumi-v3";
+const CACHE_NAME = "cursumi-v4";
 const STATIC_ASSETS = ["/", "/manifest.json", "/offline"];
 
 self.addEventListener("install", (event) => {
