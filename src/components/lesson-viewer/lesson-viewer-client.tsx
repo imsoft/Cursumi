@@ -414,7 +414,7 @@ export function LessonViewerClient({
 
         if (muxId) {
           return (
-            <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
+            <div className="aspect-video w-full overflow-hidden bg-black">
               <MuxPlayer
                 playbackId={muxId}
                 streamType="on-demand"
@@ -427,7 +427,7 @@ export function LessonViewerClient({
 
         if (ytId) {
           return (
-            <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
+            <div className="aspect-video w-full overflow-hidden bg-black">
               <iframe
                 src={`https://www.youtube.com/embed/${ytId}?rel=0`}
                 className="h-full w-full"
@@ -439,7 +439,7 @@ export function LessonViewerClient({
         }
 
         return (
-          <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
+          <div className="aspect-video w-full overflow-hidden bg-black">
             <video
               src={lesson.videoUrl}
               controls
@@ -450,7 +450,7 @@ export function LessonViewerClient({
         );
       }
       return (
-        <div className="flex aspect-video w-full items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground">
+        <div className="flex aspect-video w-full items-center justify-center border-b border-border bg-muted text-muted-foreground">
           Video no disponible
         </div>
       );
@@ -792,8 +792,15 @@ export function LessonViewerClient({
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-        <div className="mx-auto max-w-3xl space-y-6">
+      <main className="flex-1 overflow-y-auto">
+        {/* Video: ocupa todo el ancho del área de contenido */}
+        {lesson.type === "video" && (
+          <div className="w-full bg-black">
+            {renderContent()}
+          </div>
+        )}
+
+        <div className={`mx-auto max-w-4xl space-y-6 p-4 md:p-6 lg:p-8 ${lesson.type === "video" ? "pt-4 md:pt-5" : ""}`}>
           {/* Lesson title */}
           <div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -816,8 +823,8 @@ export function LessonViewerClient({
             )}
           </div>
 
-          {/* Content */}
-          {renderContent()}
+          {/* Content (non-video types) */}
+          {lesson.type !== "video" && renderContent()}
 
           {/* Mark complete button (for video/text) — hidden on lg where sticky bar shows */}
           {(lesson.type === "video" || lesson.type === "text") && (
