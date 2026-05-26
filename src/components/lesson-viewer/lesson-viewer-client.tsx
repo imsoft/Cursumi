@@ -436,7 +436,7 @@ export function LessonViewerClient({
                 className="h-full w-full"
                 onEnded={() => markComplete()}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                style={{ "--media-primary-color": "#6d28d9", "--media-secondary-color": "#ffffff" } as any}
+                style={{ "--media-range-bar-color": "#6d28d9", "--media-accent-color": "#6d28d9" } as any}
               />
             </div>
           );
