@@ -3,11 +3,19 @@ import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { repairCertificatesForStudent } from "@/lib/enrollment-progress";
 
+// Nunca cachear — los certificados cambian al completar cursos
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const session = await requireSession();
 
-    await repairCertificatesForStudent(session.user.id);
+    // Intentar reparar certificados faltantes, pero NO bloquear si falla
+    try {
+      await repairCertificatesForStudent(session.user.id);
+    } catch (repairErr) {
+      console.error("[certificates] repairCertificatesForStudent failed:", repairErr);
+    }
 
     const dbCerts = await prisma.certificate.findMany({
       where: { userId: session.user.id },
@@ -42,7 +50,11 @@ export async function GET() {
       imageUrl: cert.course.imageUrl || null,
     }));
 
-    return NextResponse.json(certificates);
+    return NextResponse.json(certificates, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+      },
+    });
   } catch (error) {
     return handleApiError(error);
   }
