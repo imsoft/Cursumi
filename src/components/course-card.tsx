@@ -23,13 +23,10 @@ export const CourseCard = ({
   imageSrc,
   imageAlt,
 }: CourseCardProps) => {
-  const borderClass =
-    mode === "Presencial" ? "border-l-emerald-500" : mode === "En vivo" ? "border-l-violet-500" : "border-l-blue-500";
-
   return (
     <Link
       href={href}
-      className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8 border-l-4 ${borderClass}`}
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/8"
     >
       {/* Image */}
       <div className="relative aspect-video w-full overflow-hidden">

@@ -24,13 +24,7 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
   const statusLabel = statusLabelMap[course.status];
   return (
     <div
-      className={`flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between border-l-4 ${
-        course.modality === "presencial"
-          ? "border-l-emerald-500"
-          : course.modality === "live"
-            ? "border-l-violet-500"
-            : "border-l-blue-500"
-      }`}
+      className="flex flex-col gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between"
     >
       <div className="space-y-1">
         <div className="flex items-center gap-3">
