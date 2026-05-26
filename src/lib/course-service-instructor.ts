@@ -60,6 +60,7 @@ export type StudentProgressDetail = {
   enrollmentId: string;
   name: string | null;
   email: string;
+  image: string | null;
   status: EnrollmentStatus;
   progress: number;
   enrolledDate: string;
@@ -511,7 +512,7 @@ export async function listCourseStudents(courseId: string, sessionId?: string): 
   const enrollments = await prisma.enrollment.findMany({
     where: { courseId, ...(sessionId ? { sessionId } : {}) },
     include: {
-      student: { select: { id: true, name: true, email: true } },
+      student: { select: { id: true, name: true, email: true, image: true } },
       session: { select: { id: true, city: true, state: true, date: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -557,7 +558,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
     prisma.enrollment.findMany({
       where: { courseId },
       include: {
-        student: { select: { id: true, name: true, email: true } },
+        student: { select: { id: true, name: true, email: true, image: true } },
         session: { select: { id: true, city: true, state: true, date: true, location: true } },
         lessonProgress: { select: { lessonId: true, score: true } },
         sectionQuizSubmissions: {
@@ -599,6 +600,7 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
     enrollmentId: e.id,
     name: e.student.name,
     email: e.student.email,
+    image: e.student.image ?? null,
     status: e.status,
     progress: e.progress,
     enrolledDate: e.createdAt.toISOString(),
