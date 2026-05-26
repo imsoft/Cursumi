@@ -865,6 +865,36 @@ export function LessonViewerClient({
             </div>
           )}
 
+          {/* Banner de curso completado — última lección sin examen final */}
+          {isCompleted && nextLesson === null && !hasFinalExam && (
+            <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center space-y-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 mx-auto">
+                <Trophy className="h-8 w-8 text-primary" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-foreground">¡Felicidades! Completaste el curso</h3>
+                <p className="text-sm text-muted-foreground">
+                  Tu certificado está listo para descargarlo.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button
+                  className="gap-2"
+                  onClick={() => router.push(`/dashboard/certificates`)}
+                >
+                  <Award className="h-4 w-4" />
+                  Ver mi certificado
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push(`/dashboard/my-courses/${courseId}`)}
+                >
+                  Ver resumen del curso
+                </Button>
+              </div>
+            </div>
+          )}
+
           {sectionGatesRequired && (isGateLesson || isCompleted) && (
             <SectionGatesPanel
               activities={currentSectionGateActivities}
