@@ -1,0 +1,61 @@
+# Cursumi
+
+> Plataforma de formación online y presencial para aprender con instructores expertos verificados. Cursos virtuales, presenciales y en vivo con certificados digitales incluidos, sin suscripción mensual.
+
+Cursumi es una plataforma LMS (Learning Management System) mexicana disponible en https://www.cursumi.com. Permite a cualquier persona aprender habilidades prácticas a través de cursos en video, texto, quizzes y ejercicios, impartidos por instructores verificados. Los estudiantes pagan una sola vez por curso y obtienen acceso de por vida más un certificado digital al completarlo.
+
+## Páginas principales
+
+- [Inicio](https://www.cursumi.com/): Presentación de la plataforma, cursos destacados, cómo funciona y testimonios.
+- [Explorar cursos](https://www.cursumi.com/courses): Catálogo completo de cursos filtrables por categoría, precio y modalidad (virtual, presencial, en vivo).
+- [Precios](https://www.cursumi.com/pricing): Modelo de pago por curso (sin suscripción), planes para instructores y solución empresarial.
+- [Cómo funciona](https://www.cursumi.com/how-it-works): Guía paso a paso para estudiantes e instructores.
+- [Instructores](https://www.cursumi.com/instructors): Directorio de instructores verificados con especialidades y biografía.
+- [Blog](https://www.cursumi.com/blog): Artículos sobre aprendizaje, tecnología y desarrollo profesional.
+- [Cursumi Business](https://www.cursumi.com/business): Solución de capacitación para empresas con gestión de equipos y métricas.
+- [Contacto](https://www.cursumi.com/contact): Formulario de contacto y soporte.
+
+## Documentación para estudiantes
+
+- [Registro](https://www.cursumi.com/signup): Crear cuenta gratuita como estudiante.
+- [Iniciar sesión](https://www.cursumi.com/login): Acceso con correo/contraseña o Google.
+- [Mi dashboard](https://www.cursumi.com/dashboard): Panel principal del estudiante con progreso, cursos activos y recomendaciones.
+- [Mis cursos](https://www.cursumi.com/dashboard/my-courses): Lista de cursos inscritos con progreso por lección.
+- [Certificados](https://www.cursumi.com/dashboard/certificates): Certificados digitales obtenidos al completar cursos.
+- [Lista de deseos](https://www.cursumi.com/dashboard/wishlist): Cursos guardados para comprar después.
+- [Juegos educativos](https://www.cursumi.com/dashboard/games): Actividades interactivas de repaso.
+- [Perfil](https://www.cursumi.com/dashboard/profile): Foto de perfil, nombre y datos personales.
+- [Configuración](https://www.cursumi.com/dashboard/settings): Cambio de contraseña y preferencias de cuenta.
+- [Convertirse en instructor](https://www.cursumi.com/dashboard/become-instructor): Solicitud para enseñar en la plataforma.
+
+## Documentación para instructores
+
+- [Panel de instructor](https://www.cursumi.com/instructor): Dashboard con métricas de ingresos, estudiantes y cursos.
+- [Mis cursos (instructor)](https://www.cursumi.com/instructor/courses): Gestión y edición de cursos publicados.
+- [Crear curso](https://www.cursumi.com/instructor/courses/new): Asistente para publicar cursos virtuales, presenciales o en vivo.
+- [Analíticas](https://www.cursumi.com/instructor/analytics): Estadísticas de vistas, inscripciones e ingresos.
+- [Ingresos](https://www.cursumi.com/instructor/earnings): Historial de pagos y retiros vía Stripe Connect.
+- [Pizarrón virtual](https://www.cursumi.com/instructor/whiteboard): Herramienta de pizarrón colaborativo para clases en vivo.
+- [Mis juegos](https://www.cursumi.com/instructor/games): Creación de quizzes y juegos interactivos para estudiantes.
+- [Blog del instructor](https://www.cursumi.com/instructor/blog): Publicar artículos desde el panel de instructor.
+- [Plantillas](https://www.cursumi.com/instructor/templates): Plantillas descargables para materiales educativos.
+- [Perfil público](https://www.cursumi.com/instructor/profile): Editar biografía, especialidades y foto visible en cursos.
+
+## Documentación empresarial (Cursumi Business)
+
+- [Panel empresarial](https://www.cursumi.com/business/dashboard): Vista general de la organización.
+- [Empleados](https://www.cursumi.com/business/dashboard/employees): Gestión de usuarios y roles dentro de la empresa.
+- [Equipos](https://www.cursumi.com/business/dashboard/teams): Agrupación de empleados por área o proyecto.
+- [Cursos asignados](https://www.cursumi.com/business/dashboard/courses): Catálogo de cursos asignados a la organización.
+- [Métricas](https://www.cursumi.com/business/dashboard/metrics): Progreso y completación de cada empleado.
+- [Materiales](https://www.cursumi.com/business/dashboard/materials): Documentos y recursos internos de la empresa.
+- [Suscripción](https://www.cursumi.com/business/dashboard/subscription): Plan activo y facturación empresarial.
+
+## Legal
+
+- [Términos y condiciones](https://www.cursumi.com/terminos)
+- [Política de privacidad](https://www.cursumi.com/privacidad)
+
+## Información adicional
+
+- [llms-full.txt](https://www.cursumi.com/llms-full.txt): Descripción completa y detallada de todas las funcionalidades de Cursumi.

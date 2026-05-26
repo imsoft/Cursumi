@@ -1,0 +1,365 @@
+# Cursumi — Documentación completa para modelos de lenguaje
+
+**URL:** https://www.cursumi.com
+**Tipo:** Plataforma LMS (Learning Management System)
+**País:** México
+**Idioma principal:** Español (es-MX)
+**Moneda:** Peso mexicano (MXN)
+**Pagos:** Stripe
+**Última actualización de este archivo:** 2026-05-26
+
+---
+
+## ¿Qué es Cursumi?
+
+Cursumi es una plataforma educativa mexicana que conecta a estudiantes con instructores expertos a través de cursos en modalidad virtual (en video y texto), presencial y en vivo. Está diseñada para que cualquier persona pueda aprender habilidades prácticas sin necesidad de una suscripción mensual: el modelo es de pago único por curso con acceso de por vida.
+
+### Propuesta de valor principal
+
+- **Para estudiantes:** Aprende a tu ritmo con cursos de calidad de instructores verificados. Paga una vez, accede siempre. Obtén un certificado digital al completar cada curso.
+- **Para instructores:** Publica cursos de forma gratuita, llega a miles de estudiantes y monetiza tu conocimiento. La plataforma cobra una comisión del 20% por venta.
+- **Para empresas:** Capacita a todo tu equipo desde un solo panel, mide el progreso de cada empleado y asigna cursos por área o proyecto con Cursumi Business.
+
+---
+
+## Modalidades de cursos
+
+### 1. Cursos virtuales (online)
+- Lecciones en **video** alojado con Mux (streaming adaptivo, calidad automática)
+- Lecciones en **texto** con editor enriquecido
+- **Quizzes** por sección para reforzar el aprendizaje
+- **Tareas y ejercicios** con entrega de archivos o texto
+- **Examen final** optativo para certificación por acreditación
+- Archivos adjuntos descargables por lección
+- Notas personales por lección
+- Mensajería directa con el instructor del curso
+
+### 2. Cursos presenciales
+- Misma estructura de contenido que los virtuales
+- Fecha, ciudad y estado del evento (México)
+- Cupo limitado de estudiantes
+- Sesiones grupales gestionadas desde el panel del instructor
+
+### 3. Cursos en vivo (livestream)
+- Sesiones programadas con fecha y hora
+- Pizarrón virtual colaborativo integrado para el instructor
+- Interacción en tiempo real con los estudiantes
+
+---
+
+## Funcionalidades para estudiantes
+
+### Registro y acceso
+- Registro con correo electrónico y contraseña (verificación de correo requerida)
+- Inicio de sesión con Google (OAuth)
+- Recuperación de contraseña por correo electrónico
+- Opción "Recordarme" para sesiones persistentes
+- Protección CAPTCHA (Cloudflare Turnstile) en formularios sensibles
+
+### Dashboard del estudiante
+- Resumen de cursos activos con porcentaje de avance
+- Estadísticas: horas vistas, cursos completados, certificados obtenidos
+- Recomendaciones de cursos basadas en el historial
+- Acceso rápido a cursos en progreso
+
+### Visualizador de lecciones
+- Reproductor de video Mux con calidad adaptiva y barra de progreso personalizada
+- Soporte para lecciones de texto con rich text
+- Quizzes interactivos con puntuación inmediata
+- Formulario de entrega de tareas (texto o archivo)
+- Marcado de lección como completada
+- Avance automático a la siguiente lección
+- Modal de felicitaciones al completar el último contenido del curso
+- Banner permanente de curso completado con acceso directo al certificado
+
+### Progreso y certificados
+- Progreso calculado automáticamente en base a lecciones completadas y actividades de sección
+- Certificado digital generado automáticamente al completar el 100% del contenido
+- Dos tipos de certificado: **Acreditación** (con examen final aprobado) y **Participación** (sin examen)
+- Página de certificados en `/dashboard/certificates`
+- Descarga/impresión del certificado desde el navegador (PDF via `window.print()`)
+
+### Otras funciones del estudiante
+- **Lista de deseos:** guardar cursos para comprar después
+- **Notas:** apuntes personales por lección
+- **Historial de compras:** registro de transacciones
+- **Juegos educativos:** actividades de repaso tipo quiz gamificado (Kahoot-style) creadas por instructores
+- **Referidos:** programa de referidos con enlace único
+- **Materiales de organización:** acceso a documentos internos si el estudiante pertenece a una empresa con Cursumi Business
+- **Solicitar ser instructor:** formulario para aplicar como instructor desde el panel de estudiante
+
+---
+
+## Funcionalidades para instructores
+
+### Acceso al panel de instructor
+- URL: `/instructor`
+- Rol asignado por el administrador de la plataforma tras revisar la solicitud
+- Redirección automática al panel de instructor al iniciar sesión
+
+### Creación de cursos
+El asistente de creación de cursos guía al instructor en 6 pasos:
+
+1. **Información básica:** título, descripción, categoría, nivel (principiante/intermedio/avanzado), idioma, imagen de portada (Cloudinary)
+2. **Precio:** monto en MXN o gratuito
+3. **Modalidad:** virtual, presencial o en vivo
+4. **Secciones y lecciones:** organización del contenido por módulos
+5. **Examen final:** preguntas de opción múltiple con puntaje mínimo para aprobar
+6. **Publicación:** estado (borrador / publicado)
+
+### Tipos de lecciones disponibles
+- **Video:** carga directa a Mux desde el panel (upload directo vía API)
+- **Texto:** editor rich text con soporte para encabezados, listas, negrita, cursiva, links, imágenes inline
+- **Quiz:** preguntas de opción múltiple con puntaje mínimo para desbloquear la siguiente sección (gate)
+- **Tarea:** ejercicio con campo de entrega de texto o archivo
+
+### Edición de cursos
+- Arrastrar y reordenar secciones y lecciones (drag & drop)
+- Editar cualquier campo del curso en cualquier momento
+- Adjuntar archivos a lecciones (PDF, imágenes, ZIP, etc.) vía Cloudinary
+- Vista previa del curso como lo vería un estudiante
+
+### Panel de analíticas por curso
+- Total de estudiantes inscritos
+- Tasa de completación
+- Ingresos generados por ese curso
+- Progreso individual de cada estudiante
+
+### Gestión de estudiantes
+- Lista de todos los estudiantes con progreso detallado por lección y sección
+- Ver si un estudiante aprobó el examen final y su calificación
+- Desinscribir a un estudiante del curso
+- Revisar tareas entregadas con contenido completo
+
+### Ingresos y pagos
+- Integración con **Stripe Connect** para pagos directos al instructor
+- Panel de ingresos con historial de transacciones
+- Comisión de plataforma: **20% por venta**
+- Retiros disponibles cuando el saldo supere el mínimo de Stripe
+
+### Herramientas adicionales del instructor
+- **Pizarrón virtual:** lienzo colaborativo integrado en el panel para usar durante clases en vivo
+- **Juegos educativos:** crear quizzes gamificados (tipo Kahoot) asignados a cursos; los estudiantes juegan en sesión en tiempo real o asíncrona
+- **Blog:** publicar artículos de contenido educativo accesibles públicamente en `/blog`
+- **Plantillas:** subir y gestionar plantillas descargables para estudiantes
+- **Mensajería:** responder mensajes de estudiantes directamente desde el panel del curso
+- **Preguntas anónimas:** módulo para que los estudiantes envíen preguntas de forma anónima en clases presenciales
+- **Perfil público:** foto, nombre, biografía, especialidades y localización visible en la página de detalle de cada curso
+
+### Analíticas generales del instructor
+- Total de estudiantes en todos los cursos
+- Ingresos acumulados
+- Cursos más populares
+- Tasa de satisfacción (basada en reseñas)
+
+---
+
+## Funcionalidades de Cursumi Business
+
+Cursumi Business es la solución para empresas que quieren capacitar a sus equipos.
+
+### Creación de organización
+- Una empresa crea una organización en Cursumi
+- Puede invitar a empleados por correo electrónico
+- Los empleados aceptan la invitación y se vinculan a la organización
+
+### Gestión de equipos y empleados
+- Crear equipos por área, proyecto o departamento
+- Asignar empleados a uno o varios equipos
+- Roles dentro de la organización: dueño, admin, empleado
+- Ver progreso individual de cada empleado en los cursos asignados
+
+### Asignación de cursos
+- La empresa asigna cursos del catálogo de Cursumi a toda la organización o por equipo
+- Los empleados ven los cursos asignados en su panel de estudiante
+
+### Métricas empresariales
+- Porcentaje de completación por empleado y por curso
+- Tiempo promedio de aprendizaje
+- Certificados obtenidos en la organización
+
+### Materiales corporativos
+- La empresa puede subir documentos internos (PDF, presentaciones, etc.)
+- Los empleados acceden a estos materiales desde su dashboard
+
+### Facturación
+- Plan de suscripción empresarial con facturación centralizada
+- Soporte dedicado para empresas
+
+---
+
+## Tecnología y arquitectura
+
+### Stack técnico
+- **Frontend:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4
+- **Autenticación:** Better Auth (email/password + Google OAuth)
+- **Base de datos:** Neon PostgreSQL (serverless)
+- **ORM:** Prisma 7
+- **Pagos:** Stripe + Stripe Connect
+- **Video:** Mux (alojamiento, streaming adaptivo, thumbnails automáticos)
+- **Almacenamiento de archivos:** Cloudinary
+- **Email transaccional:** Resend (dominio verificado cursumi.com)
+- **Hosting:** Vercel (Edge Network, CDN global)
+- **PWA:** Service Worker con soporte offline
+
+### Seguridad
+- CAPTCHA con Cloudflare Turnstile en registro, login y recuperación de contraseña
+- Rate limiting por IP y por email en endpoints sensibles
+- Tokens de sesión seguros con HttpOnly cookies
+- Verificación de correo electrónico obligatoria al registrarse
+- Roles de acceso separados: student, instructor, admin, business
+
+### SEO y accesibilidad
+- Metadatos Open Graph en todas las páginas públicas
+- JSON-LD estructurado (FAQ, Course schema) en páginas clave
+- Imágenes optimizadas con Next.js Image
+- Canonical URLs configurados
+- Sitemap dinámico
+- Soporte para modo oscuro y claro (system preference + toggle manual)
+
+---
+
+## Precios y modelo de negocio
+
+### Para estudiantes
+- **Modelo:** Pago único por curso (no hay suscripción)
+- **Precio:** varía por curso (en MXN), determinado por el instructor
+- **Incluye:** acceso de por vida, certificado digital, mensajería con instructor, materiales adjuntos, notas personales, juegos educativos
+- **Reembolsos:** disponibles en los primeros 7 días tras la compra, sujeto a revisión
+
+### Para instructores
+- **Registro como instructor:** gratuito (requiere aprobación del equipo de Cursumi)
+- **Publicar cursos:** sin costo
+- **Comisión de plataforma:** 20% por cada venta
+- **El instructor recibe:** 80% de cada venta directamente a su cuenta Stripe Connect
+- **Beneficios incluidos:** cursos ilimitados, video con Mux, panel de analíticas, mensajería, certificados automáticos, pizarrón virtual, juegos, blog, plantillas
+
+### Para empresas (Cursumi Business)
+- **Modelo:** suscripción empresarial (precio a convenir según tamaño del equipo)
+- **Incluye:** acceso al catálogo completo, gestión de equipos, métricas, materiales corporativos, facturación centralizada, soporte dedicado
+- **Contacto:** https://www.cursumi.com/contact
+
+---
+
+## Flujo de compra de un curso
+
+1. El estudiante navega el catálogo en `/courses` o la página de inicio
+2. Hace clic en un curso para ver su detalle: temario, instructor, precio, reseñas
+3. Hace clic en "Comprar ahora" → se crea una sesión de pago en Stripe Checkout
+4. El estudiante completa el pago con tarjeta de crédito/débito
+5. Stripe notifica a Cursumi vía webhook → se crea la inscripción automáticamente
+6. El estudiante es redirigido a su panel y puede comenzar el curso de inmediato
+
+---
+
+## Flujo de completación de un curso y obtención del certificado
+
+1. El estudiante completa todas las lecciones del curso (video, texto, quiz, tarea)
+2. Si el curso tiene examen final, puede presentarlo en `/dashboard/my-courses/[courseId]/exam`
+3. Al completar el 100% del contenido, el sistema calcula automáticamente el progreso
+4. Se genera un certificado digital (tipo "acreditación" si aprobó el examen, "participación" si no hay examen)
+5. El certificado aparece en `/dashboard/certificates`
+6. El estudiante puede descargarlo como PDF directamente desde el navegador
+7. Recibe un correo de felicitaciones con enlace al certificado
+
+---
+
+## Notificaciones y correos transaccionales
+
+Cursumi envía correos automáticos en los siguientes eventos:
+
+| Evento | Destinatario | Contenido |
+|---|---|---|
+| Inscripción a curso | Estudiante | Confirmación de inscripción con nombre del curso y enlace |
+| Certificado generado | Estudiante | Felicitaciones y enlace al certificado |
+| Recordatorio de progreso | Estudiante | Si lleva 7 días sin avanzar, recordatorio amigable |
+| Verificación de correo | Usuario nuevo | Enlace de verificación para activar la cuenta |
+| Recuperación de contraseña | Usuario | Enlace seguro para restablecer contraseña |
+
+Todos los correos se envían desde `no-reply@cursumi.com` usando Resend con DKIM configurado.
+
+---
+
+## Categorías de cursos disponibles
+
+Las categorías son gestionadas dinámicamente desde el panel de administración. Ejemplos típicos:
+
+- Programación y tecnología
+- Diseño gráfico y UX/UI
+- Marketing digital
+- Negocios y emprendimiento
+- Idiomas
+- Fotografía y video
+- Música
+- Salud y bienestar
+- Desarrollo personal
+- Finanzas personales
+
+---
+
+## Páginas públicas (sin autenticación)
+
+| URL | Descripción |
+|---|---|
+| `https://www.cursumi.com/` | Página de inicio |
+| `https://www.cursumi.com/courses` | Catálogo de cursos con búsqueda y filtros |
+| `https://www.cursumi.com/courses/[slug]` | Detalle de un curso específico |
+| `https://www.cursumi.com/instructors` | Directorio de instructores |
+| `https://www.cursumi.com/blog` | Blog de artículos educativos |
+| `https://www.cursumi.com/blog/[slug]` | Artículo específico del blog |
+| `https://www.cursumi.com/pricing` | Página de precios |
+| `https://www.cursumi.com/how-it-works` | Cómo funciona la plataforma |
+| `https://www.cursumi.com/business` | Landing de Cursumi Business |
+| `https://www.cursumi.com/contact` | Contacto y soporte |
+| `https://www.cursumi.com/terminos` | Términos y condiciones |
+| `https://www.cursumi.com/privacidad` | Política de privacidad |
+| `https://www.cursumi.com/login` | Inicio de sesión |
+| `https://www.cursumi.com/signup` | Registro de nueva cuenta |
+| `https://www.cursumi.com/forgot-password` | Recuperación de contraseña |
+
+---
+
+## Preguntas frecuentes (FAQ)
+
+**¿Necesito una suscripción para aprender en Cursumi?**
+No. Pagas una sola vez por cada curso y tienes acceso de por vida. No hay cargos mensuales ni sorpresas.
+
+**¿Qué métodos de pago aceptan?**
+Aceptamos tarjetas de crédito y débito (Visa, Mastercard, American Express) a través de Stripe. Los precios están en pesos mexicanos (MXN).
+
+**¿Los certificados tienen validez oficial?**
+Los certificados de Cursumi son documentos digitales emitidos por la plataforma que acreditan la completación de un curso. No son títulos universitarios ni tienen validez ante la SEP, pero son reconocidos por empleadores que valoran el aprendizaje continuo y las habilidades prácticas.
+
+**¿Puedo ver los cursos desde mi celular?**
+Sí. Cursumi es totalmente responsiva y funciona en cualquier dispositivo: computadora, tablet o smartphone. También está disponible como PWA (Progressive Web App) para instalar en tu dispositivo.
+
+**¿Cómo me convierto en instructor?**
+Desde tu cuenta de estudiante, visita `/dashboard/become-instructor` y completa la solicitud. El equipo de Cursumi revisará tu perfil y te notificará por correo electrónico con la decisión.
+
+**¿Qué pasa si no termino un curso?**
+Tu progreso se guarda automáticamente. Puedes retomar cualquier lección en cualquier momento. Si llevas 7 días sin avanzar, recibirás un recordatorio por correo.
+
+**¿Hay política de reembolso?**
+Si no estás satisfecho con tu compra, contáctanos a través de `/contact` dentro de los primeros 7 días y revisamos tu caso.
+
+**¿Cómo funciona Cursumi Business para empresas?**
+La empresa crea una organización en Cursumi, invita a sus empleados y les asigna cursos del catálogo. Desde el panel empresarial puede ver el progreso de cada persona, crear equipos y subir materiales internos. Contáctanos en `/contact` para una demostración.
+
+**¿Los instructores pueden crear cursos gratuitos?**
+Sí. El precio del curso es definido por el instructor y puede ser $0 (gratuito) o cualquier monto en MXN.
+
+**¿Cómo se paga a los instructores?**
+A través de Stripe Connect. El instructor conecta su cuenta bancaria o Stripe y recibe el 80% de cada venta directamente. Cursumi retiene el 20% como comisión de plataforma.
+
+---
+
+## Contacto y soporte
+
+- **Sitio web:** https://www.cursumi.com
+- **Formulario de contacto:** https://www.cursumi.com/contact
+- **Correo de soporte:** no-reply@cursumi.com
+- **Redes sociales:** disponibles en el footer del sitio
+
+---
+
+*Este archivo sigue el estándar llms.txt (https://llmstxt.org/) para facilitar la indexación y comprensión de Cursumi por parte de modelos de lenguaje de gran tamaño (LLMs).*
