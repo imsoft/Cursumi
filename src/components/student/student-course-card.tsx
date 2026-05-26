@@ -85,7 +85,8 @@ export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
           )}
         </div>
 
-        <div className="flex min-h-[80px] flex-1 flex-col justify-start space-y-2 border-t border-border pt-3">
+        {(course.status === "completed" && course.endDate) || (course.status === "in-progress" && course.nextSession) || (course.startDate && course.status !== "completed") || course.purchaseDate ? (
+        <div className="flex flex-col space-y-2 border-t border-border pt-3">
           {course.status === "completed" && course.endDate && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CheckCircle2 className="h-3 w-3 text-green-600" />
@@ -110,6 +111,7 @@ export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
             </div>
           )}
         </div>
+        ) : null}
 
         <div className="flex gap-2 pt-2">
           {course.status !== "completed" && course.lastLessonId ? (
