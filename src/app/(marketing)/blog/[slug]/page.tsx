@@ -62,11 +62,16 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const posts = await prisma.blogPost.findMany({
-    where: { published: true },
-    select: { slug: true },
-  });
-  return posts.map((p) => ({ slug: p.slug }));
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { published: true },
+      select: { slug: true },
+    });
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    // Sin BD disponible (ej: CI con DATABASE_URL fake) → sin páginas pre-renderizadas
+    return [];
+  }
 }
 
 export default async function BlogPostPage({ params }: Params) {
