@@ -15,20 +15,24 @@ export const metadata: Metadata = {
 };
 
 async function getPosts() {
-  return prisma.blogPost.findMany({
-    where: { published: true },
-    orderBy: { publishedAt: "desc" },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      coverImageUrl: true,
-      tags: true,
-      publishedAt: true,
-      author: { select: { name: true } },
-    },
-  });
+  try {
+    return await prisma.blogPost.findMany({
+      where: { published: true },
+      orderBy: { publishedAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        coverImageUrl: true,
+        tags: true,
+        publishedAt: true,
+        author: { select: { name: true } },
+      },
+    });
+  } catch {
+    return [];
+  }
 }
 
 export default async function StudentBlogPage() {

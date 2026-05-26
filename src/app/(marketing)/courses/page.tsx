@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-  const courses = await listPublicCourses();
+  const courses = await listPublicCourses().catch(() => []);
   const itemList = {
     "@context": "https://schema.org",
     "@type": "ItemList",
