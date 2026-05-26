@@ -26,7 +26,29 @@ import {
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { stripHtml } from "@/lib/utils";
 import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
-import { createMuxUploadUrl, getMuxPlaybackId } from "@/app/actions/mux-actions";
+// Usamos rutas API REST en lugar de server actions para evitar
+// el "Failed to fetch" que ocurre por timeouts/serialización de server actions
+async function createMuxUploadUrlViaApi(lessonTitle?: string) {
+  const res = await fetch("/api/mux/upload-url", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lessonTitle }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error ?? `Error ${res.status} al obtener URL de upload`);
+  }
+  return res.json() as Promise<{ uploadId: string; uploadUrl: string }>;
+}
+
+async function getMuxPlaybackIdViaApi(uploadId: string) {
+  const res = await fetch(`/api/mux/playback/${uploadId}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error ?? "Asset aún no disponible para este upload");
+  }
+  return res.json() as Promise<{ playbackId: string; playbackUrl: string }>;
+}
 
 interface LessonEditorProps {
   lesson: CourseLesson;
@@ -422,11 +444,15 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
 
   // Mux necesita tiempo para procesar el upload antes de que esté disponible el asset_id
   // Reintenta hasta 15 veces con 4s de espera entre intentos (~1 min total)
-  const pollForPlaybackId = async (uploadId: string, maxRetries = 15, delayMs = 4000) => {
+  const pollForPlaybackId = async (
+    uploadId: string,
+    fetcher: (id: string) => Promise<{ playbackId: string; playbackUrl: string }>,
+    maxRetries = 15,
+    delayMs = 4000,
+  ) => {
     for (let i = 0; i < maxRetries; i++) {
       try {
-        const playback = await getMuxPlaybackId(uploadId);
-        return playback;
+        return await fetcher(uploadId);
       } catch {
         if (i === maxRetries - 1) {
           throw new Error("Mux tardó demasiado en procesar el video. Guarda la lección y recarga la página en unos minutos para ver el video.");
@@ -587,15 +613,8 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                           setUploadStep("preparing");
 
                           try {
-                            // Paso 1: obtener URL de upload de Mux
-                            const corsOrigin =
-                              typeof window !== "undefined"
-                                ? window.location.origin
-                                : "https://www.cursumi.com";
-
-                            const { uploadUrl, uploadId } = await createMuxUploadUrl(corsOrigin, {
-                              lessonTitle: title,
-                            });
+                            // Paso 1: obtener URL de upload de Mux via API route
+                            const { uploadUrl, uploadId } = await createMuxUploadUrlViaApi(title);
                             setUploadId(uploadId);
 
                             // Paso 2: subir el archivo directamente a Mux (via XHR con progreso)
@@ -605,7 +624,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                             // Paso 3: Mux necesita procesar el upload → pollear hasta obtener playback_id
                             setUploadStep("processing");
                             setUploadProgress(100);
-                            const playback = await pollForPlaybackId(uploadId);
+                            const playback = await pollForPlaybackId(uploadId, getMuxPlaybackIdViaApi);
 
                             // Éxito
                             setVideoUrl(playback.playbackUrl);

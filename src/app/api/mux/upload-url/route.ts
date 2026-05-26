@@ -12,7 +12,9 @@ export async function POST(req: NextRequest) {
       lessonId?: string;
       lessonTitle?: string;
     };
-    const upload = await createMuxUploadUrl("*", { courseId, lessonId, lessonTitle });
+    // Usar el origen de la request para CORS correcto en el upload de Mux
+    const origin = req.headers.get("origin") ?? "https://www.cursumi.com";
+    const upload = await createMuxUploadUrl(origin, { courseId, lessonId, lessonTitle });
     return NextResponse.json(upload);
   } catch (error) {
     return handleApiError(error);
