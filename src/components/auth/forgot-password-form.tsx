@@ -23,6 +23,7 @@ type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export const ForgotPasswordForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileError, setTurnstileError] = useState(false);
@@ -79,6 +80,7 @@ export const ForgotPasswordForm = () => {
       }
 
       // Si fue exitoso, mostrar mensaje de confirmación
+      setSubmittedEmail(values.email);
       setIsSubmitted(true);
     } catch (err) {
       console.error("Error al solicitar reset:", err);
@@ -98,9 +100,11 @@ export const ForgotPasswordForm = () => {
           </p>
         </CardHeader>
         <CardContent className="px-6 pb-6 space-y-4">
-          <div className="rounded-lg border border-border bg-muted/50 p-4">
+          <div className="rounded-lg border border-border bg-muted/50 p-4 space-y-2">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Correo enviado a</p>
+            <p className="font-semibold text-foreground break-all">{submittedEmail}</p>
             <p className="text-sm text-muted-foreground">
-              Revisa tu bandeja de entrada y sigue las instrucciones del correo. 
+              Revisa tu bandeja de entrada y sigue las instrucciones del correo.
               Si no lo encuentras, revisa tu carpeta de spam.
             </p>
           </div>
