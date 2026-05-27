@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,19 +14,16 @@ interface CertificateCardProps {
 }
 
 export const CertificateCard = ({ certificate }: CertificateCardProps) => {
+  const router = useRouter();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleDownload = async () => {
+  // Navega a la página de detalle con ?download=1 para que se dispare
+  // automáticamente la generación del PDF (necesita el DOM del certificado).
+  const handleDownload = () => {
     setIsDownloading(true);
-    // Simular descarga (en producción, esto generaría un PDF real)
-    setTimeout(() => {
-      setIsDownloading(false);
-      // En producción, aquí se generaría y descargaría el PDF
-      // Por ahora, solo mostramos un mensaje
-      alert(`Descargando certificado: ${certificate.certificateNumber}`);
-    }, 500);
+    router.push(`/dashboard/certificates/${certificate.id}?download=1`);
   };
 
   const handleShare = async () => {

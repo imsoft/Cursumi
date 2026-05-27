@@ -19,9 +19,11 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   const { id } = use(params);
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new") === "1";
+  const autoDownload = searchParams.get("download") === "1";
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -79,6 +81,25 @@ export default function CertificatePage({ params }: CertificatePageProps) {
         if (isNew) {
           setTimeout(() => fireConfetti(), 300);
         }
+        if (autoDownload) {
+          // Dar tiempo al DOM para renderizar el certificado antes de capturarlo
+          setTimeout(async () => {
+            setIsDownloading(true);
+            setDownloadError(null);
+            try {
+              await downloadCertificateAsPdf({
+                studentName: data.studentName,
+                certificateNumber: data.certificateNumber,
+              });
+            } catch (e) {
+              setDownloadError(
+                e instanceof Error ? e.message : "No se pudo generar el PDF"
+              );
+            } finally {
+              setIsDownloading(false);
+            }
+          }, 600);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "No pudimos cargar el certificado");
       } finally {
@@ -91,11 +112,16 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   const handleDownload = async () => {
     if (!certificate) return;
     setIsDownloading(true);
+    setDownloadError(null);
     try {
       await downloadCertificateAsPdf({
         studentName: certificate.studentName,
         certificateNumber: certificate.certificateNumber,
       });
+    } catch (e) {
+      setDownloadError(
+        e instanceof Error ? e.message : "No se pudo generar el PDF"
+      );
     } finally {
       setIsDownloading(false);
     }
@@ -214,6 +240,12 @@ export default function CertificatePage({ params }: CertificatePageProps) {
           </Button>
         </div>
       </div>
+
+      {downloadError && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive print:hidden">
+          <strong>No se pudo generar el PDF:</strong> {downloadError}
+        </div>
+      )}
 
       <CertificateView certificate={certificate} />
 

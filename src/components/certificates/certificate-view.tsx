@@ -21,7 +21,7 @@ const L = {
 
 export function CertificateView({ certificate }: CertificateViewProps) {
   const isAccreditation = certificate.type === "accreditation";
-  const sigH = certificate.signatureHeight ?? 64;
+  const sigH = certificate.signatureHeight ?? 96;
 
   return (
     <div
@@ -47,6 +47,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
                 alt="Cursumi"
                 width={160}
                 height={46}
+                crossOrigin="anonymous"
                 className="h-12 w-auto"
               />
             </div>
@@ -172,12 +173,12 @@ export function CertificateView({ certificate }: CertificateViewProps) {
           </div>
 
           {/* Firma del instructor (única) */}
-          <div className="pt-6 print:pt-3">
+          <div className="pt-8 print:pt-4">
             <div className="flex justify-center">
-              <div className="text-center" style={{ minWidth: 200 }}>
+              <div className="text-center" style={{ minWidth: 260 }}>
                 {certificate.instructorSignatureUrl ? (
                   <div
-                    className="flex items-end justify-center mb-1"
+                    className="flex items-end justify-center mb-2"
                     style={{ height: sigH }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -185,21 +186,22 @@ export function CertificateView({ certificate }: CertificateViewProps) {
                       src={certificate.instructorSignatureUrl}
                       alt={`Firma de ${certificate.instructorName}`}
                       data-signature
+                      crossOrigin="anonymous"
                       className="w-auto object-contain"
-                      style={{ maxHeight: sigH }}
+                      style={{ maxHeight: sigH, maxWidth: 260 }}
                     />
                   </div>
                 ) : (
-                  <div className="mb-1" style={{ height: sigH }} />
+                  <div className="mb-2" style={{ height: sigH }} />
                 )}
                 <div
-                  className="pt-1"
+                  className="pt-2"
                   style={{ borderTop: `1px solid ${L.fg}4D` }}
                 >
-                  <p className="text-xs" style={{ color: L.mutedFg }}>
+                  <p className="text-sm font-medium mt-1" style={{ color: L.fg }}>
                     {certificate.instructorName}
                   </p>
-                  <p className="text-xs" style={{ color: L.mutedFg }}>
+                  <p className="text-xs mt-0.5" style={{ color: L.mutedFg }}>
                     Instructor
                   </p>
                 </div>
@@ -207,7 +209,7 @@ export function CertificateView({ certificate }: CertificateViewProps) {
             </div>
 
             {/* CURSUMI centrado debajo de la firma */}
-            <div className="text-center mt-6 print:mt-4">
+            <div className="text-center mt-8 print:mt-5">
               <p
                 className="text-sm font-bold tracking-wide"
                 style={{ color: L.fg }}
