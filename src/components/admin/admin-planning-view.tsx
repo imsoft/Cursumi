@@ -12,6 +12,7 @@ import { QualityAssessmentDocument } from "@/components/instructor/planning/qual
 import { AnswerSheetDocument } from "@/components/instructor/planning/answer-sheet-document";
 import { ActivitiesGuideDocument } from "@/components/instructor/planning/activities-guide-document";
 import { ParticipantManualDocument } from "@/components/instructor/planning/participant-manual-document";
+import { ActivityScheduleDocument } from "@/components/instructor/planning/activity-schedule-document";
 import { hydrateQualityAssessment, QUALITY_ASSESSMENT_TYPE } from "@/lib/planning/quality-assessment";
 import { hydrateAnswerSheet, ANSWER_SHEET_TYPE } from "@/lib/planning/answer-sheet";
 import { hydrateActivitiesGuide, ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/activities-guide";
@@ -26,6 +27,7 @@ import {
   ASSESSMENT_TITLE,
   QUESTIONNAIRE_TITLE,
 } from "@/lib/planning/quiz-assessment";
+import { hydrateActivitySchedule, ACTIVITY_SCHEDULE_TYPE } from "@/lib/planning/activity-schedule";
 import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
@@ -71,6 +73,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === PARTICIPANT_MANUAL_TYPE) {
     const d = hydrateParticipantManual(data);
     return { node: <ParticipantManualDocument data={d} />, filename: `Manual-del-participante-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+  }
+  if (type === ACTIVITY_SCHEDULE_TYPE) {
+    const d = hydrateActivitySchedule(data);
+    return { node: <ActivityScheduleDocument data={d} />, filename: `Cronograma-${sanitizeFilename(d.courseName || "curso")}.pdf` };
   }
   return null;
 }

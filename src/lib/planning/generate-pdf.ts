@@ -2,7 +2,11 @@
  * Exporta un elemento HTML a PDF A4 multipágina con html2canvas + jsPDF.
  * Se importa dinámicamente para no inflar el bundle inicial.
  */
-export async function generateElementPdf(el: HTMLElement, filename: string): Promise<void> {
+export async function generateElementPdf(
+  el: HTMLElement,
+  filename: string,
+  orientation: "portrait" | "landscape" = "portrait",
+): Promise<void> {
   const [html2canvasMod, jsPDFMod] = await Promise.all([
     import("html2canvas"),
     import("jspdf"),
@@ -21,7 +25,7 @@ export async function generateElementPdf(el: HTMLElement, filename: string): Pro
     backgroundColor: "#ffffff",
   });
 
-  const pdf = new JsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const pdf = new JsPDF({ orientation, unit: "mm", format: "a4" });
   const pageW = pdf.internal.pageSize.getWidth();
   const pageH = pdf.internal.pageSize.getHeight();
 

@@ -3,7 +3,8 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Circle, Clock, Lock } from "lucide
 import { Button } from "@/components/ui/button";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { listPlanningStatuses } from "@/app/actions/planning-actions";
-import { PLANNING_DOCUMENTS } from "@/lib/planning/registry";
+import { getPlanningDocsByModality } from "@/lib/planning/registry";
+import type { CourseModality } from "@/lib/planning/registry";
 
 export default async function CoursePlanningIndexPage({
   params,
@@ -17,7 +18,8 @@ export default async function CoursePlanningIndexPage({
     return <div className="p-8 text-center text-muted-foreground">Curso no encontrado.</div>;
   }
 
-  if (course.modality !== "presencial") {
+  const modality = course.modality as CourseModality;
+  if (modality !== "presencial" && modality !== "virtual") {
     return (
       <div className="space-y-6">
         <Button variant="ghost" size="sm" asChild>
@@ -26,28 +28,31 @@ export default async function CoursePlanningIndexPage({
           </Link>
         </Button>
         <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground">
-          La planeación didáctica solo está disponible para cursos presenciales.
+          La planeación didáctica está disponible para cursos presenciales y virtuales.
         </div>
       </div>
     );
   }
 
+  const docs = getPlanningDocsByModality(modality);
   const statuses = await listPlanningStatuses(id).catch(() => ({} as Record<string, string>));
 
-  const available = PLANNING_DOCUMENTS.filter((d) => d.available);
+  const available = docs.filter((d) => d.available);
   const completed = available.filter((d) => statuses[d.type] === "completed").length;
   const pct = available.length > 0 ? Math.round((completed / available.length) * 100) : 0;
   const isExpedientComplete = completed >= available.length;
-
   const nextPending = available.find((d) => statuses[d.type] !== "completed");
+
+  const sectionLabel = modality === "presencial"
+    ? "Documentos de certificación (CONOCER / STPS)"
+    : "Documentos de producción del curso";
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/instructor/planning">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver a planeación
+            <ArrowLeft className="mr-2 h-4 w-4" /> Volver a planeación
           </Link>
         </Button>
       </div>
@@ -55,11 +60,11 @@ export default async function CoursePlanningIndexPage({
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Planeación didáctica</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {course.title} — completa los documentos de certificación. Cada uno se guarda y puede descargarse en PDF.
+          {course.title} — {sectionLabel}. Cada documento se guarda y puede descargarse en PDF.
         </p>
       </div>
 
-      {/* ── Progreso del expediente ── */}
+      {/* ── Barra de progreso del expediente ── */}
       <div className="rounded-2xl border border-border bg-card/80 p-5 space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-foreground">
@@ -97,7 +102,7 @@ export default async function CoursePlanningIndexPage({
 
       {/* ── Lista guiada de documentos ── */}
       <div className="space-y-2">
-        {PLANNING_DOCUMENTS.map((doc, index) => {
+        {docs.map((doc, index) => {
           const status = statuses[doc.type];
           const isCompleted = status === "completed";
           const isDraft = status === "draft";
@@ -112,7 +117,6 @@ export default async function CoursePlanningIndexPage({
                   : "border-dashed border-border bg-muted/30 opacity-60"
               }`}
             >
-              {/* Icono de estado */}
               <div className="mt-0.5 shrink-0">
                 {!doc.available ? (
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
@@ -133,28 +137,18 @@ export default async function CoursePlanningIndexPage({
                 )}
               </div>
 
-              {/* Número + contenido */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs font-mono text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
                   <h3 className="text-sm font-semibold text-foreground truncate">{doc.title}</h3>
-                  {!doc.available && (
-                    <span className="shrink-0 text-xs text-muted-foreground">Próximamente</span>
-                  )}
-                  {isCompleted && (
-                    <span className="shrink-0 text-xs font-medium text-green-600">Completado</span>
-                  )}
-                  {isDraft && (
-                    <span className="shrink-0 text-xs font-medium text-amber-600">Borrador</span>
-                  )}
+                  {!doc.available && <span className="shrink-0 text-xs text-muted-foreground">Próximamente</span>}
+                  {isCompleted && <span className="shrink-0 text-xs font-medium text-green-600">Completado</span>}
+                  {isDraft && <span className="shrink-0 text-xs font-medium text-amber-600">Borrador</span>}
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{doc.description}</p>
               </div>
 
-              {/* Flecha */}
-              {doc.available && (
-                <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />
-              )}
+              {doc.available && <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />}
             </div>
           );
 

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { getPlanningDocument, getPlanningPrefill } from "@/app/actions/planning-actions";
 import { getPlanningDocMeta } from "@/lib/planning/registry";
+// ── Presencial ────────────────────────────────────────────────────────────────
 import { DESCRIPTIVE_CHART_TYPE } from "@/lib/planning/descriptive-chart";
 import { CHECKLIST_TYPE } from "@/lib/planning/checklist";
 import { ATTENDANCE_LIST_TYPE } from "@/lib/planning/attendance-list";
@@ -22,6 +23,9 @@ import { QualityAssessmentClient } from "@/components/instructor/planning/qualit
 import { AnswerSheetClient } from "@/components/instructor/planning/answer-sheet-client";
 import { ActivitiesGuideClient } from "@/components/instructor/planning/activities-guide-client";
 import { ParticipantManualClient } from "@/components/instructor/planning/participant-manual-client";
+// ── Virtual ───────────────────────────────────────────────────────────────────
+import { ACTIVITY_SCHEDULE_TYPE } from "@/lib/planning/activity-schedule";
+import { ActivityScheduleClient } from "@/components/instructor/planning/activity-schedule-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -34,14 +38,6 @@ export default async function PlanningDocumentPage({
 
   if (!course || !meta) {
     return <div className="p-8 text-center text-muted-foreground">Documento no encontrado.</div>;
-  }
-
-  if (course.modality !== "presencial") {
-    return (
-      <div className="p-8 text-center text-muted-foreground">
-        La planeación didáctica solo está disponible para cursos presenciales.
-      </div>
-    );
   }
 
   const Header = (
@@ -77,6 +73,8 @@ export default async function PlanningDocumentPage({
   return (
     <div className="space-y-6">
       {Header}
+
+      {/* ── Presencial ── */}
       {type === DESCRIPTIVE_CHART_TYPE && (
         <DescriptiveChartClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
@@ -103,6 +101,16 @@ export default async function PlanningDocumentPage({
       )}
       {type === PARTICIPANT_MANUAL_TYPE && (
         <ParticipantManualClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+
+      {/* ── Virtual ── */}
+      {type === ACTIVITY_SCHEDULE_TYPE && (
+        <ActivityScheduleClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
+        />
       )}
     </div>
   );

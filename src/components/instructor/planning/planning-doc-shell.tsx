@@ -19,6 +19,7 @@ type Props<T> = {
   renderForm: (value: T, onChange: (next: T) => void) => ReactNode;
   renderDocument: (value: T) => ReactNode;
   pdfFilename: (value: T) => string;
+  pdfOrientation?: "portrait" | "landscape";
 };
 
 /**
@@ -34,6 +35,7 @@ export function PlanningDocShell<T>({
   renderForm,
   renderDocument,
   pdfFilename,
+  pdfOrientation = "portrait",
 }: Props<T>) {
   const [data, setData] = useState<T>(() => hydrate(initialData));
   const [saveState, setSaveState] = useState<SaveState>("idle");
@@ -93,7 +95,7 @@ export function PlanningDocShell<T>({
     setPdfError(null);
     setDownloading(true);
     try {
-      await generateElementPdf(docRef.current, pdfFilename(data));
+      await generateElementPdf(docRef.current, pdfFilename(data), pdfOrientation);
     } catch {
       setPdfError("No se pudo generar el PDF. Inténtalo de nuevo.");
     } finally {
