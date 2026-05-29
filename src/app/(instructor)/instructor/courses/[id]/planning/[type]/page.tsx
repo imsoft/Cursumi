@@ -26,6 +26,8 @@ import { ParticipantManualClient } from "@/components/instructor/planning/partic
 // ── Virtual ───────────────────────────────────────────────────────────────────
 import { ACTIVITY_SCHEDULE_TYPE } from "@/lib/planning/activity-schedule";
 import { ActivityScheduleClient } from "@/components/instructor/planning/activity-schedule-client";
+import { COURSE_INFO_TYPE } from "@/lib/planning/course-info-document";
+import { CourseInfoDocumentClient } from "@/components/instructor/planning/course-info-document-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -106,6 +108,14 @@ export default async function PlanningDocumentPage({
       {/* ── Virtual ── */}
       {type === ACTIVITY_SCHEDULE_TYPE && (
         <ActivityScheduleClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
+        />
+      )}
+      {type === COURSE_INFO_TYPE && (
+        <CourseInfoDocumentClient
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}

@@ -1,5 +1,6 @@
 import { DESCRIPTIVE_CHART_TYPE } from "./descriptive-chart";
 import { ACTIVITY_SCHEDULE_TYPE } from "./activity-schedule";
+import { COURSE_INFO_TYPE } from "./course-info-document";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -117,6 +118,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: ACTIVITY_SCHEDULE_TYPE,
     title: "Cronograma de actividades",
     description: "Diagrama de Gantt del proceso de producción del curso: actividades planeadas vs. reales, agrupadas por semana.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: COURSE_INFO_TYPE,
+    title: "Documento de información general",
+    description: "Objetivo general, temas con objetivos particulares y horas, introducción, metodología, perfil de ingreso, evaluación y duración.",
     available: true,
     modality: "virtual",
   },
