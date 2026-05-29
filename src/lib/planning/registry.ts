@@ -60,7 +60,12 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     available: true,
   },
   // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
-  { type: "evaluacion-satisfaccion", title: "Evaluación de satisfacción", description: "Encuesta de satisfacción del participante.", available: false },
+  {
+    type: "evaluacion-calidad",
+    title: "Evaluación de calidad",
+    description: "Encuesta de satisfacción del participante por secciones (instructor, contenido, curso), con portada.",
+    available: true,
+  },
   { type: "manual-instructor", title: "Manual del instructor", description: "Guía de contenidos para el facilitador.", available: false },
   { type: "manual-participante", title: "Manual del participante", description: "Material de apoyo para el alumno.", available: false },
   { type: "constancia", title: "Constancia / reconocimiento", description: "Formato de constancia de participación.", available: false },

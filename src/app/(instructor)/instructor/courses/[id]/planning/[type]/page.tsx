@@ -9,11 +9,13 @@ import { LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
 import { CONTRATO_APRENDIZAJE_TYPE } from "@/lib/planning/contrato-aprendizaje";
 import { EVALUACION_QUIZ_TYPES } from "@/lib/planning/evaluacion-quiz";
+import { EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
 import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
 import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
 import { ContratoAprendizajeClient } from "@/components/instructor/planning/contrato-aprendizaje-client";
 import { EvaluacionQuizClient } from "@/components/instructor/planning/evaluacion-quiz-client";
+import { EvaluacionCalidadClient } from "@/components/instructor/planning/evaluacion-calidad-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -83,6 +85,9 @@ export default async function PlanningDocumentPage({
       )}
       {EVALUACION_QUIZ_TYPES.includes(type) && (
         <EvaluacionQuizClient courseId={id} type={type} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === EVALUACION_CALIDAD_TYPE && (
+        <EvaluacionCalidadClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );

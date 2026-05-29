@@ -8,6 +8,8 @@ import { ListaVerificacionDocument } from "@/components/instructor/planning/list
 import { ListaAsistenciaDocument } from "@/components/instructor/planning/lista-asistencia-document";
 import { ContratoAprendizajeDocument } from "@/components/instructor/planning/contrato-aprendizaje-document";
 import { EvaluacionQuizDocument } from "@/components/instructor/planning/evaluacion-quiz-document";
+import { EvaluacionCalidadDocument } from "@/components/instructor/planning/evaluacion-calidad-document";
+import { hydrateEvaluacionCalidad, EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
 import { hydrateCartaDescriptiva, CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { hydrateListaVerificacion, LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { hydrateListaAsistencia, LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
@@ -47,6 +49,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
       ),
       filename: `${sanitizeFilename(documentTitle)}-${sanitizeFilename(d.nombreCurso || "curso")}.pdf`,
     };
+  }
+  if (type === EVALUACION_CALIDAD_TYPE) {
+    const d = hydrateEvaluacionCalidad(data);
+    return { node: <EvaluacionCalidadDocument data={d} />, filename: `Evaluacion-de-calidad-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
   }
   return null;
 }
