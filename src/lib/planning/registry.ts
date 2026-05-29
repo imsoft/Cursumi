@@ -41,8 +41,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Compromisos del facilitador y del participante, con firmas.",
     available: true,
   },
+  {
+    type: "evaluacion-diagnostica",
+    title: "Evaluación diagnóstica",
+    description: "Cuestionario inicial de conocimientos, con portada.",
+    available: true,
+  },
   // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
-  { type: "evaluacion-diagnostica", title: "Evaluación diagnóstica", description: "Cuestionario inicial de conocimientos.", available: false },
   { type: "evaluacion-formativa", title: "Evaluación formativa", description: "Instrumento de evaluación intermedia.", available: false },
   { type: "evaluacion-sumativa", title: "Evaluación sumativa", description: "Instrumento de evaluación final.", available: false },
   { type: "evaluacion-satisfaccion", title: "Evaluación de satisfacción", description: "Encuesta de satisfacción del participante.", available: false },

@@ -7,10 +7,12 @@ import { CartaDescriptivaDocument } from "@/components/instructor/planning/carta
 import { ListaVerificacionDocument } from "@/components/instructor/planning/lista-verificacion-document";
 import { ListaAsistenciaDocument } from "@/components/instructor/planning/lista-asistencia-document";
 import { ContratoAprendizajeDocument } from "@/components/instructor/planning/contrato-aprendizaje-document";
+import { EvaluacionDiagnosticaDocument } from "@/components/instructor/planning/evaluacion-diagnostica-document";
 import { hydrateCartaDescriptiva, CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { hydrateListaVerificacion, LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { hydrateListaAsistencia, LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
 import { hydrateContratoAprendizaje, CONTRATO_APRENDIZAJE_TYPE } from "@/lib/planning/contrato-aprendizaje";
+import { hydrateEvaluacionDiagnostica, EVALUACION_DIAGNOSTICA_TYPE } from "@/lib/planning/evaluacion-diagnostica";
 import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
@@ -29,6 +31,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === CONTRATO_APRENDIZAJE_TYPE) {
     const d = hydrateContratoAprendizaje(data);
     return { node: <ContratoAprendizajeDocument data={d} />, filename: `Contrato-aprendizaje-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
+  }
+  if (type === EVALUACION_DIAGNOSTICA_TYPE) {
+    const d = hydrateEvaluacionDiagnostica(data);
+    return { node: <EvaluacionDiagnosticaDocument data={d} />, filename: `Evaluacion-diagnostica-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
   }
   return null;
 }

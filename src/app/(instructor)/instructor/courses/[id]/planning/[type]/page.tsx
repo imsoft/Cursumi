@@ -8,10 +8,12 @@ import { CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
 import { CONTRATO_APRENDIZAJE_TYPE } from "@/lib/planning/contrato-aprendizaje";
+import { EVALUACION_DIAGNOSTICA_TYPE } from "@/lib/planning/evaluacion-diagnostica";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
 import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
 import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
 import { ContratoAprendizajeClient } from "@/components/instructor/planning/contrato-aprendizaje-client";
+import { EvaluacionDiagnosticaClient } from "@/components/instructor/planning/evaluacion-diagnostica-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -78,6 +80,9 @@ export default async function PlanningDocumentPage({
       )}
       {type === CONTRATO_APRENDIZAJE_TYPE && (
         <ContratoAprendizajeClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === EVALUACION_DIAGNOSTICA_TYPE && (
+        <EvaluacionDiagnosticaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );
