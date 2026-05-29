@@ -80,6 +80,7 @@ export async function savePlanningDocument(
   });
 
   revalidatePath(`/instructor/courses/${courseId}/planning`);
+  revalidatePath("/instructor/planning");
   return { success: true };
 }
 
