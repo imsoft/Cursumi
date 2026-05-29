@@ -4,15 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
-import {
-  type EvaluacionDiagnosticaData,
-  emptyPregunta,
-  opcionLetra,
-} from "@/lib/planning/evaluacion-diagnostica";
+import { type EvaluacionQuizData, emptyPregunta, opcionLetra } from "@/lib/planning/evaluacion-quiz";
 
 type Props = {
-  value: EvaluacionDiagnosticaData;
-  onChange: (next: EvaluacionDiagnosticaData) => void;
+  value: EvaluacionQuizData;
+  onChange: (next: EvaluacionQuizData) => void;
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -27,8 +23,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function EvaluacionDiagnosticaForm({ value, onChange }: Props) {
-  const set = (patch: Partial<EvaluacionDiagnosticaData>) => onChange({ ...value, ...patch });
+export function EvaluacionQuizForm({ value, onChange }: Props) {
+  const set = (patch: Partial<EvaluacionQuizData>) => onChange({ ...value, ...patch });
 
   const updatePregunta = (id: string, patch: Partial<{ enunciado: string; opciones: string[] }>) =>
     set({ preguntas: value.preguntas.map((p) => (p.id === id ? { ...p, ...patch } : p)) });
