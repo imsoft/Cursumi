@@ -7,9 +7,11 @@ import { getPlanningDocMeta } from "@/lib/planning/registry";
 import { CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
+import { CONTRATO_APRENDIZAJE_TYPE } from "@/lib/planning/contrato-aprendizaje";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
 import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
 import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
+import { ContratoAprendizajeClient } from "@/components/instructor/planning/contrato-aprendizaje-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -73,6 +75,9 @@ export default async function PlanningDocumentPage({
       )}
       {type === LISTA_ASISTENCIA_TYPE && (
         <ListaAsistenciaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === CONTRATO_APRENDIZAJE_TYPE && (
+        <ContratoAprendizajeClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );

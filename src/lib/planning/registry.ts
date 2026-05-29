@@ -35,6 +35,12 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Registro de participantes y firmas por sesión.",
     available: true,
   },
+  {
+    type: "contrato-aprendizaje",
+    title: "Contrato de aprendizaje",
+    description: "Compromisos del facilitador y del participante, con firmas.",
+    available: true,
+  },
   // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
   { type: "evaluacion-diagnostica", title: "Evaluación diagnóstica", description: "Cuestionario inicial de conocimientos.", available: false },
   { type: "evaluacion-formativa", title: "Evaluación formativa", description: "Instrumento de evaluación intermedia.", available: false },
