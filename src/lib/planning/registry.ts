@@ -3,6 +3,7 @@ import { ACTIVITY_SCHEDULE_TYPE } from "./activity-schedule";
 import { COURSE_INFO_TYPE } from "./course-info-document";
 import { VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "./virtual-activities-guide";
 import { ACTIVITY_CALENDAR_TYPE } from "./activity-calendar";
+import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "./virtual-participant-manual";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -141,6 +142,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: ACTIVITY_CALENDAR_TYPE,
     title: "Calendario general de actividades",
     description: "Vista resumen de todas las unidades con fecha programada, actividades, ponderación y período de realización.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: VIRTUAL_PARTICIPANT_MANUAL_TYPE,
+    title: "Manual del participante",
+    description: "Manual del curso con portada Cursumi, tabla de contenido, secciones de contenido en dos niveles y bibliografía.",
     available: true,
     modality: "virtual",
   },

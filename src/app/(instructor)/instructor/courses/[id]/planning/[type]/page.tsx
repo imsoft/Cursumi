@@ -32,6 +32,8 @@ import { VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/virtual-activities
 import { VirtualActivitiesGuideClient } from "@/components/instructor/planning/virtual-activities-guide-client";
 import { ACTIVITY_CALENDAR_TYPE } from "@/lib/planning/activity-calendar";
 import { ActivityCalendarClient } from "@/components/instructor/planning/activity-calendar-client";
+import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/virtual-participant-manual";
+import { VirtualParticipantManualClient } from "@/components/instructor/planning/virtual-participant-manual-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -136,6 +138,14 @@ export default async function PlanningDocumentPage({
       )}
       {type === ACTIVITY_CALENDAR_TYPE && (
         <ActivityCalendarClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName }}
+        />
+      )}
+      {type === VIRTUAL_PARTICIPANT_MANUAL_TYPE && (
+        <VirtualParticipantManualClient
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}

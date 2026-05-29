@@ -16,6 +16,7 @@ import { ActivityScheduleDocument } from "@/components/instructor/planning/activ
 import { CourseInfoDocumentDocument } from "@/components/instructor/planning/course-info-document-document";
 import { VirtualActivitiesGuideDocument } from "@/components/instructor/planning/virtual-activities-guide-document";
 import { ActivityCalendarDocument } from "@/components/instructor/planning/activity-calendar-document";
+import { VirtualParticipantManualDocument } from "@/components/instructor/planning/virtual-participant-manual-document";
 import { hydrateQualityAssessment, QUALITY_ASSESSMENT_TYPE } from "@/lib/planning/quality-assessment";
 import { hydrateAnswerSheet, ANSWER_SHEET_TYPE } from "@/lib/planning/answer-sheet";
 import { hydrateActivitiesGuide, ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/activities-guide";
@@ -34,6 +35,7 @@ import { hydrateActivitySchedule, ACTIVITY_SCHEDULE_TYPE } from "@/lib/planning/
 import { hydrateCourseInfoDocument, COURSE_INFO_TYPE } from "@/lib/planning/course-info-document";
 import { hydrateVirtualActivitiesGuide, VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/virtual-activities-guide";
 import { hydrateActivityCalendar, ACTIVITY_CALENDAR_TYPE } from "@/lib/planning/activity-calendar";
+import { hydrateVirtualParticipantManual, VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/virtual-participant-manual";
 import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
@@ -95,6 +97,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === ACTIVITY_CALENDAR_TYPE) {
     const d = hydrateActivityCalendar(data);
     return { node: <ActivityCalendarDocument data={d} />, filename: `Calendario-actividades-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+  }
+  if (type === VIRTUAL_PARTICIPANT_MANUAL_TYPE) {
+    const d = hydrateVirtualParticipantManual(data);
+    return { node: <VirtualParticipantManualDocument data={d} />, filename: `Manual-participante-${sanitizeFilename(d.courseName || "curso")}.pdf` };
   }
   return null;
 }
