@@ -1,0 +1,33 @@
+"use client";
+
+import { PlanningDocShell } from "./planning-doc-shell";
+import { ActivityCalendarForm } from "./activity-calendar-form";
+import { ActivityCalendarDocument } from "./activity-calendar-document";
+import {
+  type ActivityCalendarData,
+  hydrateActivityCalendar,
+  ACTIVITY_CALENDAR_TYPE,
+} from "@/lib/planning/activity-calendar";
+import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+
+type Props = {
+  courseId: string;
+  initialData: unknown;
+  initialStatus?: string;
+  prefill?: { courseName?: string };
+};
+
+export function ActivityCalendarClient({ courseId, initialData, initialStatus, prefill }: Props) {
+  return (
+    <PlanningDocShell<ActivityCalendarData>
+      courseId={courseId}
+      type={ACTIVITY_CALENDAR_TYPE}
+      initialData={initialData}
+      initialStatus={initialStatus}
+      hydrate={(raw) => hydrateActivityCalendar(raw, prefill)}
+      renderForm={(value, onChange) => <ActivityCalendarForm value={value} onChange={onChange} />}
+      renderDocument={(value) => <ActivityCalendarDocument data={value} />}
+      pdfFilename={(value) => `Calendario-actividades-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+    />
+  );
+}

@@ -1,0 +1,79 @@
+export const ACTIVITY_CALENDAR_TYPE = "activity-calendar" as const;
+
+export type CalendarActivity = {
+  id: string;
+  name: string;
+  weight: string;
+  duration: string;
+};
+
+export type CalendarUnit = {
+  id: string;
+  name: string;
+  scheduledDate: string; // "YYYY-MM-DD"
+  activities: CalendarActivity[];
+};
+
+export type ActivityCalendarData = {
+  courseName: string;
+  generalWeight: string;
+  units: CalendarUnit[];
+};
+
+export function emptyCalendarActivity(): CalendarActivity {
+  return { id: crypto.randomUUID(), name: "", weight: "0%", duration: "" };
+}
+
+export function emptyCalendarUnit(index: number): CalendarUnit {
+  return {
+    id: crypto.randomUUID(),
+    name: `Unidad ${index}: `,
+    scheduledDate: "",
+    activities: [emptyCalendarActivity()],
+  };
+}
+
+export function createEmptyActivityCalendar(prefill?: {
+  courseName?: string;
+}): ActivityCalendarData {
+  return {
+    courseName: prefill?.courseName ?? "",
+    generalWeight: "100%",
+    units: [emptyCalendarUnit(1)],
+  };
+}
+
+export function hydrateActivityCalendar(
+  raw: unknown,
+  prefill?: Parameters<typeof createEmptyActivityCalendar>[0],
+): ActivityCalendarData {
+  const base = createEmptyActivityCalendar(prefill);
+  if (!raw || typeof raw !== "object") return base;
+  const data = raw as Partial<ActivityCalendarData>;
+
+  const units =
+    Array.isArray(data.units) && data.units.length > 0
+      ? data.units.map((u) => ({
+          id: u.id || crypto.randomUUID(),
+          name: u.name ?? "",
+          scheduledDate: u.scheduledDate ?? "",
+          activities:
+            Array.isArray(u.activities) && u.activities.length > 0
+              ? u.activities.map((a) => ({
+                  id: a.id || crypto.randomUUID(),
+                  name: a.name ?? "",
+                  weight: a.weight ?? "0%",
+                  duration: a.duration ?? "",
+                }))
+              : [emptyCalendarActivity()],
+        }))
+      : base.units;
+
+  return { ...base, ...data, units };
+}
+
+export function formatCalendarDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-");
+  return `${d}/${m}/${y}`;
+}
