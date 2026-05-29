@@ -18,30 +18,18 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith(route)
   );
 
-  // Rutas públicas que no deben ser accesibles si el usuario está autenticado
-  const publicOnlyRoutes = [
-    "/",
-    "/login",
-    "/signup",
-    "/forgot-password",
-    "/reset-password",
-    "/courses",
-    "/blog",
-    "/how-it-works",
-    "/pricing",
-    "/contact",
-  ];
-  const isPublicOnlyRoute = publicOnlyRoutes.includes(pathname) || pathname.startsWith("/reset-password");
-
-  // Si es una ruta protegida y no hay cookie de sesión, redirigir al login
+  // Si es una ruta protegida y no hay cookie de sesión, redirigir al login.
+  // (Guarda rápida en el edge; el layout valida la sesión real.)
   if (isProtectedRoute && !sessionCookie) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Si es una ruta pública y hay sesión, redirigir al dashboard
-  if (isPublicOnlyRoute && sessionCookie) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
+  // NOTA: No redirigimos las rutas públicas (/, /login, /signup…) al dashboard
+  // basándonos solo en la existencia de la cookie. Esa comprobación optimista,
+  // combinada con la validación real de sesión en los layouts, provocaba un
+  // bucle de redirecciones (ERR_TOO_MANY_REDIRECTS) cuando la cookie existía
+  // pero la sesión era inválida/vencida. Las páginas públicas ya redirigen al
+  // dashboard por su cuenta usando la sesión validada (getSessionSafe).
 
   return NextResponse.next();
 }
