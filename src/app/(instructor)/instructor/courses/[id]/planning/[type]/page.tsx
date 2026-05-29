@@ -5,7 +5,9 @@ import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { getPlanningDocument, getPlanningPrefill } from "@/app/actions/planning-actions";
 import { getPlanningDocMeta } from "@/lib/planning/registry";
 import { CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
+import { LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
+import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -45,21 +47,20 @@ export default async function PlanningDocumentPage({
     );
   }
 
-  // Carta descriptiva (único documento disponible por ahora)
   const [doc, prefill] = await Promise.all([
-    getPlanningDocument(id, CARTA_DESCRIPTIVA_TYPE).catch(() => null),
+    getPlanningDocument(id, type).catch(() => null),
     getPlanningPrefill(id).catch(() => undefined),
   ]);
 
   return (
     <div className="space-y-6">
       {Header}
-      <CartaDescriptivaClient
-        courseId={id}
-        initialData={doc?.data ?? null}
-        initialStatus={doc?.status}
-        prefill={prefill}
-      />
+      {type === CARTA_DESCRIPTIVA_TYPE && (
+        <CartaDescriptivaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === LISTA_VERIFICACION_TYPE && (
+        <ListaVerificacionClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
     </div>
   );
 }

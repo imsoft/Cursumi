@@ -1,22 +1,45 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { CartaDescriptivaDocument } from "@/components/instructor/planning/carta-descriptiva-document";
-import { hydrateCartaDescriptiva } from "@/lib/planning/carta-descriptiva";
+import { ListaVerificacionDocument } from "@/components/instructor/planning/lista-verificacion-document";
+import { hydrateCartaDescriptiva, CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
+import { hydrateListaVerificacion, LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
 
-export function AdminCartaDescriptivaView({ data }: { data: unknown }) {
-  const hydrated = hydrateCartaDescriptiva(data);
+function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
+  if (type === CARTA_DESCRIPTIVA_TYPE) {
+    const d = hydrateCartaDescriptiva(data);
+    return { node: <CartaDescriptivaDocument data={d} />, filename: `Carta-descriptiva-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
+  }
+  if (type === LISTA_VERIFICACION_TYPE) {
+    const d = hydrateListaVerificacion(data);
+    return { node: <ListaVerificacionDocument data={d} />, filename: `Lista-verificacion-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
+  }
+  return null;
+}
+
+export function AdminPlanningDocView({ type, data }: { type: string; data: unknown }) {
   const docRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
+
+  const rendered = renderByType(type, data);
+
+  if (!rendered) {
+    return (
+      <p className="text-sm text-muted-foreground">
+        Vista previa no disponible para este tipo de documento todavía.
+      </p>
+    );
+  }
 
   const handleDownload = async () => {
     if (!docRef.current) return;
     setDownloading(true);
     try {
-      await generateElementPdf(docRef.current, `Carta-descriptiva-${sanitizeFilename(hydrated.nombreCurso || "curso")}.pdf`);
+      await generateElementPdf(docRef.current, rendered.filename);
     } finally {
       setDownloading(false);
     }
@@ -32,7 +55,7 @@ export function AdminCartaDescriptivaView({ data }: { data: unknown }) {
       </div>
       <div className="overflow-x-auto rounded-2xl border border-border bg-white p-4">
         <div ref={docRef} className="mx-auto">
-          <CartaDescriptivaDocument data={hydrated} />
+          {rendered.node}
         </div>
       </div>
     </div>

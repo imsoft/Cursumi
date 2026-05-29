@@ -23,9 +23,14 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
       "Documento de planeación del curso: información general, objetivos, requerimientos, evaluación, apertura, desarrollo y cierre.",
     available: true,
   },
+  {
+    type: "lista-verificacion",
+    title: "Lista de verificación de requerimientos",
+    description: "Comprobación de instalaciones, equipo, materiales, recursos humanos y seguridad antes del curso.",
+    available: true,
+  },
   // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
   { type: "lista-asistencia", title: "Lista de asistencia", description: "Registro de participantes por sesión.", available: false },
-  { type: "lista-verificacion", title: "Lista de verificación de requerimientos", description: "Comprobación de recursos antes del curso.", available: false },
   { type: "evaluacion-diagnostica", title: "Evaluación diagnóstica", description: "Cuestionario inicial de conocimientos.", available: false },
   { type: "evaluacion-formativa", title: "Evaluación formativa", description: "Instrumento de evaluación intermedia.", available: false },
   { type: "evaluacion-sumativa", title: "Evaluación sumativa", description: "Instrumento de evaluación final.", available: false },

@@ -5,8 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { getCoursePlanningForAdmin } from "@/app/actions/planning-actions";
 import { getPlanningDocMeta } from "@/lib/planning/registry";
-import { CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
-import { AdminCartaDescriptivaView } from "@/components/admin/admin-planning-view";
+import { AdminPlanningDocView } from "@/components/admin/admin-planning-view";
 
 export default async function AdminCoursePlanningPage({
   params,
@@ -58,13 +57,7 @@ export default async function AdminCoursePlanningPage({
                       </p>
                     </div>
                   </div>
-                  {doc.type === CARTA_DESCRIPTIVA_TYPE ? (
-                    <AdminCartaDescriptivaView data={doc.data} />
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Vista previa no disponible para este tipo de documento todavía.
-                    </p>
-                  )}
+                  <AdminPlanningDocView type={doc.type} data={doc.data} />
                 </CardContent>
               </Card>
             );
