@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { ClipboardList, FileText, ArrowRight, PlusCircle } from "lucide-react";
+import { ClipboardList, FileText, ArrowRight, PlusCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { listInstructorCourses } from "@/app/actions/course-actions";
-import { PLANNING_DOCUMENTS } from "@/lib/planning/registry";
+import { getCoursesPlanningProgress } from "@/app/actions/planning-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +17,9 @@ const STATUS_LABEL: Record<string, string> = {
 export default async function InstructorPlanningPage() {
   const courses = await listInstructorCourses().catch(() => []);
   const presenciales = courses.filter((c) => c.modality === "presencial");
-  const totalDocs = PLANNING_DOCUMENTS.filter((d) => d.available).length;
+  const progress = await getCoursesPlanningProgress(presenciales.map((c) => c.id)).catch(
+    () => ({}) as Record<string, { completed: number; total: number }>,
+  );
 
   return (
     <div className="space-y-6">
@@ -55,25 +57,58 @@ export default async function InstructorPlanningPage() {
         </Card>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
-          {presenciales.map((course) => (
-            <Link key={course.id} href={`/instructor/courses/${course.id}/planning`} className="block">
-              <Card className="h-full border border-border transition hover:border-primary/50">
-                <CardContent className="flex h-full flex-col gap-3 p-5">
-                  <div className="flex items-center justify-between gap-2">
-                    <ModalityBadge modality={course.modality} size="sm" />
-                    <span className="text-xs text-muted-foreground">{STATUS_LABEL[course.status] ?? course.status}</span>
-                  </div>
-                  <h3 className="line-clamp-2 text-base font-semibold text-foreground">{course.title || "Curso sin título"}</h3>
-                  <div className="mt-auto flex items-center justify-between pt-2">
-                    <span className="text-xs text-muted-foreground">{totalDocs} documentos disponibles</span>
-                    <span className="flex items-center gap-1 text-sm font-medium text-primary">
-                      Abrir planeación <ArrowRight className="h-4 w-4" />
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+          {presenciales.map((course) => {
+            const prog = progress[course.id] ?? { completed: 0, total: 0 };
+            const pct = prog.total > 0 ? Math.round((prog.completed / prog.total) * 100) : 0;
+            const isComplete = prog.total > 0 && prog.completed >= prog.total;
+
+            return (
+              <Link key={course.id} href={`/instructor/courses/${course.id}/planning`} className="block">
+                <Card className="h-full border border-border transition hover:border-primary/50">
+                  <CardContent className="flex h-full flex-col gap-3 p-5">
+                    <div className="flex items-center justify-between gap-2">
+                      <ModalityBadge modality={course.modality} size="sm" />
+                      <span className="text-xs text-muted-foreground">{STATUS_LABEL[course.status] ?? course.status}</span>
+                    </div>
+                    <h3 className="line-clamp-2 text-base font-semibold text-foreground">{course.title || "Curso sin título"}</h3>
+
+                    {prog.total > 0 && (
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">
+                            {prog.completed} de {prog.total} documentos
+                          </span>
+                          {isComplete ? (
+                            <span className="flex items-center gap-1 font-medium text-green-600">
+                              <CheckCircle2 className="h-3 w-3" /> Expediente completo
+                            </span>
+                          ) : (
+                            <span className="font-medium text-primary">{pct}%</span>
+                          )}
+                        </div>
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                          <div
+                            className={`h-full rounded-full transition-all ${isComplete ? "bg-green-500" : "bg-primary"}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {prog.total === 0 && (
+                      <p className="text-xs text-muted-foreground">Sin documentos iniciados</p>
+                    )}
+
+                    <div className="mt-auto flex items-center justify-end pt-1">
+                      <span className="flex items-center gap-1 text-sm font-medium text-primary">
+                        Abrir planeación <ArrowRight className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

@@ -480,6 +480,64 @@ interface SendContactEmailParams {
   message: string;
 }
 
+// ─────────────────────────────────────────
+// PLANNING REMINDER (INSTRUCTOR)
+// ─────────────────────────────────────────
+
+interface SendPlanningReminderEmailParams {
+  to: string;
+  name: string;
+  courseTitle: string;
+  completed: number;
+  total: number;
+  pendingDocs: string[];
+  planningUrl: string;
+}
+
+export async function sendPlanningReminderEmail({
+  to,
+  name,
+  courseTitle,
+  completed,
+  total,
+  pendingDocs,
+  planningUrl,
+}: SendPlanningReminderEmailParams) {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const docList = pendingDocs
+    .map((d) => `<li style="padding:3px 0;color:#374151;">${d}</li>`)
+    .join("");
+
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      El expediente de planeación didáctica de <strong>${courseTitle}</strong> está incompleto.
+      Llevas <strong>${completed} de ${total} documentos</strong> terminados.
+    </p>
+    <p style="font-size:14px;margin-bottom:8px;font-weight:600;color:#374151;">Documentos pendientes:</p>
+    <ul style="margin:0 0 24px;padding-left:20px;font-size:14px;">${docList}</ul>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:24px;">
+      Un expediente completo es necesario para presentar tu curso a evaluación de certificación.
+    </p>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${planningUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Continuar planeación
+      </a>
+    </div>`;
+
+  try {
+    await resend.emails.send({
+      from: FROM(),
+      to: [to],
+      subject: `Expediente incompleto: ${courseTitle} — Cursumi`,
+      html: emailWrapper("Completa tu expediente de planeación", body),
+    });
+  } catch (err) {
+    console.error("Error al enviar recordatorio de planeación:", err);
+  }
+}
+
 export async function sendContactEmail({ name, email, subject, reason, message }: SendContactEmailParams) {
   if (!process.env.RESEND_API_KEY) throw new Error("Email no configurado");
   const body = `

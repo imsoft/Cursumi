@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getUserRole } from "@/lib/user-service";
+import { PLANNING_DOCUMENTS } from "@/lib/planning/registry";
 
 async function requireSession() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -49,6 +50,27 @@ export async function listPlanningStatuses(courseId: string): Promise<Record<str
     select: { type: true, status: true },
   });
   return Object.fromEntries(docs.map((d) => [d.type, d.status]));
+}
+
+export type PlanningProgress = { completed: number; total: number };
+
+/** Progreso del expediente de planeación para múltiples cursos en una sola query. */
+export async function getCoursesPlanningProgress(
+  courseIds: string[],
+): Promise<Record<string, PlanningProgress>> {
+  const total = PLANNING_DOCUMENTS.filter((d) => d.available).length;
+  if (courseIds.length === 0) return {};
+
+  const docs = await prisma.coursePlanningDocument.findMany({
+    where: { courseId: { in: courseIds }, status: "completed" },
+    select: { courseId: true },
+  });
+
+  const counts: Record<string, number> = {};
+  for (const id of courseIds) counts[id] = 0;
+  for (const doc of docs) counts[doc.courseId] = (counts[doc.courseId] ?? 0) + 1;
+
+  return Object.fromEntries(courseIds.map((id) => [id, { completed: counts[id] ?? 0, total }]));
 }
 
 /** Carga el documento de planeación (instructor titular). Devuelve null si no existe. */
