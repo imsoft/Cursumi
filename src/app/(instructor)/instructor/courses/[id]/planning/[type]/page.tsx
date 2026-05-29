@@ -11,6 +11,7 @@ import { CONTRATO_APRENDIZAJE_TYPE } from "@/lib/planning/contrato-aprendizaje";
 import { EVALUACION_QUIZ_TYPES } from "@/lib/planning/evaluacion-quiz";
 import { EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
 import { HOJA_RESPUESTAS_TYPE } from "@/lib/planning/hoja-respuestas";
+import { GUIA_ACTIVIDADES_TYPE } from "@/lib/planning/guia-actividades";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
 import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
 import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
@@ -18,6 +19,7 @@ import { ContratoAprendizajeClient } from "@/components/instructor/planning/cont
 import { EvaluacionQuizClient } from "@/components/instructor/planning/evaluacion-quiz-client";
 import { EvaluacionCalidadClient } from "@/components/instructor/planning/evaluacion-calidad-client";
 import { HojaRespuestasClient } from "@/components/instructor/planning/hoja-respuestas-client";
+import { GuiaActividadesClient } from "@/components/instructor/planning/guia-actividades-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -93,6 +95,9 @@ export default async function PlanningDocumentPage({
       )}
       {type === HOJA_RESPUESTAS_TYPE && (
         <HojaRespuestasClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === GUIA_ACTIVIDADES_TYPE && (
+        <GuiaActividadesClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );

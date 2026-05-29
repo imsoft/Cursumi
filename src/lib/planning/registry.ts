@@ -72,6 +72,12 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Clave de respuestas por temas, con la opción correcta resaltada, y portada.",
     available: true,
   },
+  {
+    type: "guia-actividades",
+    title: "Guía de actividades de aprendizaje",
+    description: "Actividades por unidad del curso: objetivo, criterios y tabla de actividades.",
+    available: true,
+  },
   { type: "manual-instructor", title: "Manual del instructor", description: "Guía de contenidos para el facilitador.", available: false },
   { type: "manual-participante", title: "Manual del participante", description: "Material de apoyo para el alumno.", available: false },
   { type: "constancia", title: "Constancia / reconocimiento", description: "Formato de constancia de participación.", available: false },
