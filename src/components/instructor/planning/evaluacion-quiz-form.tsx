@@ -71,6 +71,13 @@ export function EvaluacionQuizForm({ value, onChange }: Props) {
 
       <Section title="Cuestionario">
         <Input label="Título del cuestionario" value={value.tituloCuestionario} onChange={(e) => set({ tituloCuestionario: e.target.value })} />
+        <Textarea
+          label="Instrucciones (opcional)"
+          value={value.instrucciones}
+          placeholder="Ej. El participante debe elegir la respuesta correcta. Cada pregunta vale 5 puntos."
+          className="min-h-[60px]"
+          onChange={(e) => set({ instrucciones: e.target.value })}
+        />
 
         <div className="space-y-4">
           {value.preguntas.map((p, idx) => (

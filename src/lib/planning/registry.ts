@@ -53,8 +53,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Cuestionario de seguimiento del aprendizaje, con portada.",
     available: true,
   },
+  {
+    type: "evaluacion-sumativa",
+    title: "Evaluación sumativa",
+    description: "Cuestionario final de conocimientos, con portada e instrucciones.",
+    available: true,
+  },
   // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
-  { type: "evaluacion-sumativa", title: "Evaluación sumativa", description: "Instrumento de evaluación final.", available: false },
   { type: "evaluacion-satisfaccion", title: "Evaluación de satisfacción", description: "Encuesta de satisfacción del participante.", available: false },
   { type: "manual-instructor", title: "Manual del instructor", description: "Guía de contenidos para el facilitador.", available: false },
   { type: "manual-participante", title: "Manual del participante", description: "Material de apoyo para el alumno.", available: false },

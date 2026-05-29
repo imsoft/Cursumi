@@ -37,9 +37,13 @@ export function EvaluacionQuizDocument({ documentTitle, fallbackCuestionarioTitu
 
       {/* Cuestionario */}
       <div style={{ padding: 48, color: TEXT, boxSizing: "border-box" }}>
-        <h2 style={{ fontSize: 20, fontWeight: 800, color: TEXT, marginBottom: 20 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 800, color: TEXT, marginBottom: data.instrucciones.trim() ? 10 : 20 }}>
           {data.tituloCuestionario || fallbackCuestionarioTitulo}
         </h2>
+
+        {data.instrucciones.trim() ? (
+          <p style={{ fontSize: 13, lineHeight: 1.5, color: MUTED, marginBottom: 20 }}>{data.instrucciones}</p>
+        ) : null}
 
         <ol style={{ margin: 0, paddingLeft: 22 }}>
           {preguntas.length === 0 ? (

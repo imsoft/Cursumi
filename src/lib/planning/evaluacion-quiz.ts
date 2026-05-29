@@ -46,6 +46,8 @@ export type EvaluacionQuizData = {
   duracion: string;
   // Cuestionario
   tituloCuestionario: string;
+  /** Texto opcional con indicaciones (p. ej. "Cada pregunta vale 5 puntos"). */
+  instrucciones: string;
   preguntas: PreguntaQuiz[];
 };
 
@@ -65,6 +67,7 @@ export function createEmptyEvaluacionQuiz(
     horario: "",
     duracion: prefill?.duracion ?? "",
     tituloCuestionario: defaultCuestionarioTitulo,
+    instrucciones: "",
     preguntas: [emptyPregunta()],
   };
 }
