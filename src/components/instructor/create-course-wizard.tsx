@@ -20,11 +20,14 @@ import type { Modality } from "@/lib/modality";
 
 const AUTO_SAVE_INTERVAL_MS = 30_000;
 
-const steps = [
+// La planeación didáctica solo aplica a cursos presenciales.
+const buildSteps = (modality: Modality | string) => [
   { id: "info", label: "Información básica", icon: CheckCircle2 },
   { id: "sections", label: "Secciones y lecciones", icon: CheckCircle2 },
   { id: "exam", label: "Examen final", icon: CheckCircle2 },
-  { id: "planning", label: "Planeación didáctica", icon: CheckCircle2 },
+  ...(modality === "presencial"
+    ? [{ id: "planning", label: "Planeación didáctica", icon: CheckCircle2 }]
+    : []),
   { id: "pricing", label: "Precio y configuración", icon: CheckCircle2 },
   { id: "preview", label: "Vista previa", icon: CheckCircle2 },
 ];
@@ -40,6 +43,7 @@ function wizardModalityKey(m: Modality | string): Modality {
 export const CreateCourseWizard = ({ initialData, modality }: { initialData?: CourseFormData; modality?: Modality }) => {
   const resolvedModality = modality || initialData?.modality || "virtual";
   const modalityConfig = MODALITY_CONFIG[wizardModalityKey(resolvedModality)];
+  const steps = buildSteps(resolvedModality);
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState("info");
   const [isPending, startTransition] = useTransition();

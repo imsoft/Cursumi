@@ -18,6 +18,21 @@ export default async function CoursePlanningIndexPage({
     return <div className="p-8 text-center text-muted-foreground">Curso no encontrado.</div>;
   }
 
+  if (course.modality !== "presencial") {
+    return (
+      <div className="space-y-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href={`/instructor/courses/${id}`}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> Volver al curso
+          </Link>
+        </Button>
+        <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground">
+          La planeación didáctica solo está disponible para cursos presenciales.
+        </div>
+      </div>
+    );
+  }
+
   const statuses = await listPlanningStatuses(id).catch(() => ({} as Record<string, string>));
 
   return (

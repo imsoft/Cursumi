@@ -22,6 +22,14 @@ export default async function PlanningDocumentPage({
     return <div className="p-8 text-center text-muted-foreground">Documento no encontrado.</div>;
   }
 
+  if (course.modality !== "presencial") {
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        La planeación didáctica solo está disponible para cursos presenciales.
+      </div>
+    );
+  }
+
   const Header = (
     <div className="space-y-4">
       <Button variant="ghost" size="sm" asChild>
