@@ -243,6 +243,16 @@ exports.Prisma.CourseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CoursePlanningDocumentScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  type: 'type',
+  data: 'data',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.CourseSectionScalarFieldEnum = {
   id: 'id',
   courseId: 'courseId',
@@ -787,6 +797,7 @@ exports.Prisma.ModelName = {
   InstructorProfile: 'InstructorProfile',
   Category: 'Category',
   Course: 'Course',
+  CoursePlanningDocument: 'CoursePlanningDocument',
   CourseSection: 'CourseSection',
   Lesson: 'Lesson',
   LessonProgress: 'LessonProgress',

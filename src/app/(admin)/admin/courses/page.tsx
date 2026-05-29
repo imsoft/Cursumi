@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
-import { BookOpenCheck, ExternalLink, Ban, ToggleRight } from "lucide-react";
+import { BookOpenCheck, ExternalLink, Ban, ToggleRight, FileText } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import Link from "next/link";
 
@@ -269,6 +269,12 @@ export default function AdminCoursesPage() {
                       </div>
                     </div>
                     <div className="flex gap-2 shrink-0">
+                      <Link href={`/admin/courses/${course.id}/planning`}>
+                        <Button variant="outline" size="sm">
+                          <FileText className="mr-1.5 h-3.5 w-3.5" />
+                          Planeación
+                        </Button>
+                      </Link>
                       {course.slug && (
                         <Link href={`/courses/${course.slug}`} target="_blank">
                           <Button variant="outline" size="sm">

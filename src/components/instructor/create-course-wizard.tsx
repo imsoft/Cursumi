@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import { CourseSectionsManager } from "@/components/instructor/course-sections-m
 import { CoursePricing } from "@/components/instructor/course-pricing";
 import { CourseFinalExamComponent } from "@/components/instructor/course-final-exam";
 import { CoursePreview } from "@/components/instructor/course-preview";
-import { CheckCircle2, Save, Loader2 } from "lucide-react";
+import { CheckCircle2, Save, Loader2, FileText } from "lucide-react";
 import type { CourseFormData } from "@/components/instructor/course-types";
 import { createCourseDraft, publishCourse } from "@/app/actions/course-actions";
 import { ModalityBadge } from "@/components/ui/modality-badge";
@@ -23,6 +24,7 @@ const steps = [
   { id: "info", label: "Información básica", icon: CheckCircle2 },
   { id: "sections", label: "Secciones y lecciones", icon: CheckCircle2 },
   { id: "exam", label: "Examen final", icon: CheckCircle2 },
+  { id: "planning", label: "Planeación didáctica", icon: CheckCircle2 },
   { id: "pricing", label: "Precio y configuración", icon: CheckCircle2 },
   { id: "preview", label: "Vista previa", icon: CheckCircle2 },
 ];
@@ -298,6 +300,38 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
                 onNext={handleNext}
                 onPrevious={handlePrevious}
               />
+            </TabsContent>
+
+            <TabsContent value="planning" className="mt-0">
+              <div className="space-y-4">
+                <div className="rounded-xl border border-border bg-muted/30 p-5">
+                  <h3 className="text-base font-semibold text-foreground">Planeación didáctica</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Llena la carta descriptiva y los documentos de certificación. Se guardan junto al
+                    curso y puedes descargarlos en PDF cuando quieras.
+                  </p>
+                </div>
+                {courseData.id ? (
+                  <Button asChild className="gap-2">
+                    <Link href={`/instructor/courses/${courseData.id}/planning`}>
+                      <FileText className="h-4 w-4" /> Abrir planeación didáctica
+                    </Link>
+                  </Button>
+                ) : (
+                  <div className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground">
+                    Guarda primero el borrador del curso para habilitar la planeación.
+                    <div className="mt-3">
+                      <Button variant="outline" onClick={performAutoSave} disabled={isPending} className="gap-2">
+                        <Save className="h-4 w-4" /> Guardar borrador
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                <div className="flex justify-between border-t border-border pt-4">
+                  <Button variant="outline" onClick={handlePrevious}>Anterior</Button>
+                  <Button onClick={handleNext}>Siguiente</Button>
+                </div>
+              </div>
             </TabsContent>
 
             <TabsContent value="pricing" className="mt-0">

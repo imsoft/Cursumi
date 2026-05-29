@@ -306,11 +306,36 @@ model Course {
   learningReflections LearningReflection[]
   wishlistItems      WishlistItem[]
   coupons            Coupon[]
+  planningDocuments  CoursePlanningDocument[]
 
   @@index([instructorId])
   @@index([status])
   @@index([category])
   @@index([categoryId])
+}
+
+// ─────────────────────────────────────────
+// PLANEACIÓN DIDÁCTICA / DOCUMENTOS DE CERTIFICACIÓN
+// ─────────────────────────────────────────
+
+/// Documentos de planeación que el instructor llena por curso (carta descriptiva, etc.).
+/// `data` guarda la estructura específica de cada `type` para poder editarla y generar PDF.
+model CoursePlanningDocument {
+  id        String   @id @default(cuid())
+  courseId  String
+  /// Identificador del tipo de documento, p. ej. "carta-descriptiva"
+  type      String
+  /// Contenido del formulario serializado (estructura depende de `type`)
+  data      Json
+  /// draft | completed
+  status    String   @default("draft")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, type])
+  @@index([courseId])
 }
 
 model CourseSection {

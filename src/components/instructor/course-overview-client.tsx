@@ -763,6 +763,27 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
         </CardContent>
       </Card>
 
+      {/* Planeación didáctica */}
+      <Card>
+        <CardContent className="flex items-center justify-between p-5">
+          <div className="flex items-center gap-3">
+            <FileText className="h-5 w-5 text-primary" />
+            <div>
+              <p className="font-semibold text-foreground">Planeación didáctica</p>
+              <p className="text-sm text-muted-foreground">
+                Carta descriptiva y documentos de certificación (PDF)
+              </p>
+            </div>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/instructor/courses/${course.id}/planning`}>
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Abrir planeación
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Publish actions */}
       <Card>
         <CardContent className="p-5 space-y-3">

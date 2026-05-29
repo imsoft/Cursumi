@@ -54,6 +54,12 @@ export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
  */
 export type Course = $Result.DefaultSelection<Prisma.$CoursePayload>
 /**
+ * Model CoursePlanningDocument
+ * Documentos de planeación que el instructor llena por curso (carta descriptiva, etc.).
+ * `data` guarda la estructura específica de cada `type` para poder editarla y generar PDF.
+ */
+export type CoursePlanningDocument = $Result.DefaultSelection<Prisma.$CoursePlanningDocumentPayload>
+/**
  * Model CourseSection
  * 
  */
@@ -660,6 +666,16 @@ export class PrismaClient<
     * ```
     */
   get course(): Prisma.CourseDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.coursePlanningDocument`: Exposes CRUD operations for the **CoursePlanningDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CoursePlanningDocuments
+    * const coursePlanningDocuments = await prisma.coursePlanningDocument.findMany()
+    * ```
+    */
+  get coursePlanningDocument(): Prisma.CoursePlanningDocumentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.courseSection`: Exposes CRUD operations for the **CourseSection** model.
@@ -1482,6 +1498,7 @@ export namespace Prisma {
     InstructorProfile: 'InstructorProfile',
     Category: 'Category',
     Course: 'Course',
+    CoursePlanningDocument: 'CoursePlanningDocument',
     CourseSection: 'CourseSection',
     Lesson: 'Lesson',
     LessonProgress: 'LessonProgress',
@@ -1535,7 +1552,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2128,6 +2145,80 @@ export namespace Prisma {
           count: {
             args: Prisma.CourseCountArgs<ExtArgs>
             result: $Utils.Optional<CourseCountAggregateOutputType> | number
+          }
+        }
+      }
+      CoursePlanningDocument: {
+        payload: Prisma.$CoursePlanningDocumentPayload<ExtArgs>
+        fields: Prisma.CoursePlanningDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CoursePlanningDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CoursePlanningDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.CoursePlanningDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CoursePlanningDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.CoursePlanningDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.CoursePlanningDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.CoursePlanningDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CoursePlanningDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.CoursePlanningDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>
+          }
+          update: {
+            args: Prisma.CoursePlanningDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CoursePlanningDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CoursePlanningDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CoursePlanningDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>[]
+          }
+          upsert: {
+            args: Prisma.CoursePlanningDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePlanningDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.CoursePlanningDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCoursePlanningDocument>
+          }
+          groupBy: {
+            args: Prisma.CoursePlanningDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CoursePlanningDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CoursePlanningDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<CoursePlanningDocumentCountAggregateOutputType> | number
           }
         }
       }
@@ -5059,6 +5150,7 @@ export namespace Prisma {
     instructorProfile?: InstructorProfileOmit
     category?: CategoryOmit
     course?: CourseOmit
+    coursePlanningDocument?: CoursePlanningDocumentOmit
     courseSection?: CourseSectionOmit
     lesson?: LessonOmit
     lessonProgress?: LessonProgressOmit
@@ -5442,6 +5534,7 @@ export namespace Prisma {
     learningReflections: number
     wishlistItems: number
     coupons: number
+    planningDocuments: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5459,6 +5552,7 @@ export namespace Prisma {
     learningReflections?: boolean | CourseCountOutputTypeCountLearningReflectionsArgs
     wishlistItems?: boolean | CourseCountOutputTypeCountWishlistItemsArgs
     coupons?: boolean | CourseCountOutputTypeCountCouponsArgs
+    planningDocuments?: boolean | CourseCountOutputTypeCountPlanningDocumentsArgs
   }
 
   // Custom InputTypes
@@ -5568,6 +5662,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountCouponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouponWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountPlanningDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoursePlanningDocumentWhereInput
   }
 
 
@@ -15128,6 +15229,7 @@ export namespace Prisma {
     learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | Course$wishlistItemsArgs<ExtArgs>
     coupons?: boolean | Course$couponsArgs<ExtArgs>
+    planningDocuments?: boolean | Course$planningDocumentsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -15240,6 +15342,7 @@ export namespace Prisma {
     learningReflections?: boolean | Course$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | Course$wishlistItemsArgs<ExtArgs>
     coupons?: boolean | Course$couponsArgs<ExtArgs>
+    planningDocuments?: boolean | Course$planningDocumentsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15270,6 +15373,7 @@ export namespace Prisma {
       learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
       wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
       coupons: Prisma.$CouponPayload<ExtArgs>[]
+      planningDocuments: Prisma.$CoursePlanningDocumentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15711,6 +15815,7 @@ export namespace Prisma {
     learningReflections<T extends Course$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, Course$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wishlistItems<T extends Course$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, Course$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     coupons<T extends Course$couponsArgs<ExtArgs> = {}>(args?: Subset<T, Course$couponsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    planningDocuments<T extends Course$planningDocumentsArgs<ExtArgs> = {}>(args?: Subset<T, Course$planningDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16522,6 +16627,30 @@ export namespace Prisma {
   }
 
   /**
+   * Course.planningDocuments
+   */
+  export type Course$planningDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    where?: CoursePlanningDocumentWhereInput
+    orderBy?: CoursePlanningDocumentOrderByWithRelationInput | CoursePlanningDocumentOrderByWithRelationInput[]
+    cursor?: CoursePlanningDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CoursePlanningDocumentScalarFieldEnum | CoursePlanningDocumentScalarFieldEnum[]
+  }
+
+  /**
    * Course without action
    */
   export type CourseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16537,6 +16666,1100 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CourseInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CoursePlanningDocument
+   */
+
+  export type AggregateCoursePlanningDocument = {
+    _count: CoursePlanningDocumentCountAggregateOutputType | null
+    _min: CoursePlanningDocumentMinAggregateOutputType | null
+    _max: CoursePlanningDocumentMaxAggregateOutputType | null
+  }
+
+  export type CoursePlanningDocumentMinAggregateOutputType = {
+    id: string | null
+    courseId: string | null
+    type: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CoursePlanningDocumentMaxAggregateOutputType = {
+    id: string | null
+    courseId: string | null
+    type: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CoursePlanningDocumentCountAggregateOutputType = {
+    id: number
+    courseId: number
+    type: number
+    data: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CoursePlanningDocumentMinAggregateInputType = {
+    id?: true
+    courseId?: true
+    type?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CoursePlanningDocumentMaxAggregateInputType = {
+    id?: true
+    courseId?: true
+    type?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CoursePlanningDocumentCountAggregateInputType = {
+    id?: true
+    courseId?: true
+    type?: true
+    data?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CoursePlanningDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoursePlanningDocument to aggregate.
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePlanningDocuments to fetch.
+     */
+    orderBy?: CoursePlanningDocumentOrderByWithRelationInput | CoursePlanningDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CoursePlanningDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePlanningDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePlanningDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CoursePlanningDocuments
+    **/
+    _count?: true | CoursePlanningDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CoursePlanningDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CoursePlanningDocumentMaxAggregateInputType
+  }
+
+  export type GetCoursePlanningDocumentAggregateType<T extends CoursePlanningDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCoursePlanningDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCoursePlanningDocument[P]>
+      : GetScalarType<T[P], AggregateCoursePlanningDocument[P]>
+  }
+
+
+
+
+  export type CoursePlanningDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoursePlanningDocumentWhereInput
+    orderBy?: CoursePlanningDocumentOrderByWithAggregationInput | CoursePlanningDocumentOrderByWithAggregationInput[]
+    by: CoursePlanningDocumentScalarFieldEnum[] | CoursePlanningDocumentScalarFieldEnum
+    having?: CoursePlanningDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CoursePlanningDocumentCountAggregateInputType | true
+    _min?: CoursePlanningDocumentMinAggregateInputType
+    _max?: CoursePlanningDocumentMaxAggregateInputType
+  }
+
+  export type CoursePlanningDocumentGroupByOutputType = {
+    id: string
+    courseId: string
+    type: string
+    data: JsonValue
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: CoursePlanningDocumentCountAggregateOutputType | null
+    _min: CoursePlanningDocumentMinAggregateOutputType | null
+    _max: CoursePlanningDocumentMaxAggregateOutputType | null
+  }
+
+  type GetCoursePlanningDocumentGroupByPayload<T extends CoursePlanningDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CoursePlanningDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CoursePlanningDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CoursePlanningDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], CoursePlanningDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CoursePlanningDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseId?: boolean
+    type?: boolean
+    data?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coursePlanningDocument"]>
+
+  export type CoursePlanningDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseId?: boolean
+    type?: boolean
+    data?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coursePlanningDocument"]>
+
+  export type CoursePlanningDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseId?: boolean
+    type?: boolean
+    data?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coursePlanningDocument"]>
+
+  export type CoursePlanningDocumentSelectScalar = {
+    id?: boolean
+    courseId?: boolean
+    type?: boolean
+    data?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CoursePlanningDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "type" | "data" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["coursePlanningDocument"]>
+  export type CoursePlanningDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type CoursePlanningDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type CoursePlanningDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+
+  export type $CoursePlanningDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CoursePlanningDocument"
+    objects: {
+      course: Prisma.$CoursePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      courseId: string
+      /**
+       * Identificador del tipo de documento, p. ej. "carta-descriptiva"
+       */
+      type: string
+      /**
+       * Contenido del formulario serializado (estructura depende de `type`)
+       */
+      data: Prisma.JsonValue
+      /**
+       * draft | completed
+       */
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["coursePlanningDocument"]>
+    composites: {}
+  }
+
+  type CoursePlanningDocumentGetPayload<S extends boolean | null | undefined | CoursePlanningDocumentDefaultArgs> = $Result.GetResult<Prisma.$CoursePlanningDocumentPayload, S>
+
+  type CoursePlanningDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CoursePlanningDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CoursePlanningDocumentCountAggregateInputType | true
+    }
+
+  export interface CoursePlanningDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CoursePlanningDocument'], meta: { name: 'CoursePlanningDocument' } }
+    /**
+     * Find zero or one CoursePlanningDocument that matches the filter.
+     * @param {CoursePlanningDocumentFindUniqueArgs} args - Arguments to find a CoursePlanningDocument
+     * @example
+     * // Get one CoursePlanningDocument
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CoursePlanningDocumentFindUniqueArgs>(args: SelectSubset<T, CoursePlanningDocumentFindUniqueArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CoursePlanningDocument that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CoursePlanningDocumentFindUniqueOrThrowArgs} args - Arguments to find a CoursePlanningDocument
+     * @example
+     * // Get one CoursePlanningDocument
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CoursePlanningDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, CoursePlanningDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoursePlanningDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentFindFirstArgs} args - Arguments to find a CoursePlanningDocument
+     * @example
+     * // Get one CoursePlanningDocument
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CoursePlanningDocumentFindFirstArgs>(args?: SelectSubset<T, CoursePlanningDocumentFindFirstArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoursePlanningDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentFindFirstOrThrowArgs} args - Arguments to find a CoursePlanningDocument
+     * @example
+     * // Get one CoursePlanningDocument
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CoursePlanningDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, CoursePlanningDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CoursePlanningDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CoursePlanningDocuments
+     * const coursePlanningDocuments = await prisma.coursePlanningDocument.findMany()
+     * 
+     * // Get first 10 CoursePlanningDocuments
+     * const coursePlanningDocuments = await prisma.coursePlanningDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const coursePlanningDocumentWithIdOnly = await prisma.coursePlanningDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CoursePlanningDocumentFindManyArgs>(args?: SelectSubset<T, CoursePlanningDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CoursePlanningDocument.
+     * @param {CoursePlanningDocumentCreateArgs} args - Arguments to create a CoursePlanningDocument.
+     * @example
+     * // Create one CoursePlanningDocument
+     * const CoursePlanningDocument = await prisma.coursePlanningDocument.create({
+     *   data: {
+     *     // ... data to create a CoursePlanningDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends CoursePlanningDocumentCreateArgs>(args: SelectSubset<T, CoursePlanningDocumentCreateArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CoursePlanningDocuments.
+     * @param {CoursePlanningDocumentCreateManyArgs} args - Arguments to create many CoursePlanningDocuments.
+     * @example
+     * // Create many CoursePlanningDocuments
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CoursePlanningDocumentCreateManyArgs>(args?: SelectSubset<T, CoursePlanningDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CoursePlanningDocuments and returns the data saved in the database.
+     * @param {CoursePlanningDocumentCreateManyAndReturnArgs} args - Arguments to create many CoursePlanningDocuments.
+     * @example
+     * // Create many CoursePlanningDocuments
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CoursePlanningDocuments and only return the `id`
+     * const coursePlanningDocumentWithIdOnly = await prisma.coursePlanningDocument.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CoursePlanningDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, CoursePlanningDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CoursePlanningDocument.
+     * @param {CoursePlanningDocumentDeleteArgs} args - Arguments to delete one CoursePlanningDocument.
+     * @example
+     * // Delete one CoursePlanningDocument
+     * const CoursePlanningDocument = await prisma.coursePlanningDocument.delete({
+     *   where: {
+     *     // ... filter to delete one CoursePlanningDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CoursePlanningDocumentDeleteArgs>(args: SelectSubset<T, CoursePlanningDocumentDeleteArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CoursePlanningDocument.
+     * @param {CoursePlanningDocumentUpdateArgs} args - Arguments to update one CoursePlanningDocument.
+     * @example
+     * // Update one CoursePlanningDocument
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CoursePlanningDocumentUpdateArgs>(args: SelectSubset<T, CoursePlanningDocumentUpdateArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CoursePlanningDocuments.
+     * @param {CoursePlanningDocumentDeleteManyArgs} args - Arguments to filter CoursePlanningDocuments to delete.
+     * @example
+     * // Delete a few CoursePlanningDocuments
+     * const { count } = await prisma.coursePlanningDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CoursePlanningDocumentDeleteManyArgs>(args?: SelectSubset<T, CoursePlanningDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoursePlanningDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CoursePlanningDocuments
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CoursePlanningDocumentUpdateManyArgs>(args: SelectSubset<T, CoursePlanningDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoursePlanningDocuments and returns the data updated in the database.
+     * @param {CoursePlanningDocumentUpdateManyAndReturnArgs} args - Arguments to update many CoursePlanningDocuments.
+     * @example
+     * // Update many CoursePlanningDocuments
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CoursePlanningDocuments and only return the `id`
+     * const coursePlanningDocumentWithIdOnly = await prisma.coursePlanningDocument.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CoursePlanningDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, CoursePlanningDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CoursePlanningDocument.
+     * @param {CoursePlanningDocumentUpsertArgs} args - Arguments to update or create a CoursePlanningDocument.
+     * @example
+     * // Update or create a CoursePlanningDocument
+     * const coursePlanningDocument = await prisma.coursePlanningDocument.upsert({
+     *   create: {
+     *     // ... data to create a CoursePlanningDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CoursePlanningDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CoursePlanningDocumentUpsertArgs>(args: SelectSubset<T, CoursePlanningDocumentUpsertArgs<ExtArgs>>): Prisma__CoursePlanningDocumentClient<$Result.GetResult<Prisma.$CoursePlanningDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CoursePlanningDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentCountArgs} args - Arguments to filter CoursePlanningDocuments to count.
+     * @example
+     * // Count the number of CoursePlanningDocuments
+     * const count = await prisma.coursePlanningDocument.count({
+     *   where: {
+     *     // ... the filter for the CoursePlanningDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CoursePlanningDocumentCountArgs>(
+      args?: Subset<T, CoursePlanningDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CoursePlanningDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CoursePlanningDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CoursePlanningDocumentAggregateArgs>(args: Subset<T, CoursePlanningDocumentAggregateArgs>): Prisma.PrismaPromise<GetCoursePlanningDocumentAggregateType<T>>
+
+    /**
+     * Group by CoursePlanningDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePlanningDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CoursePlanningDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CoursePlanningDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: CoursePlanningDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CoursePlanningDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCoursePlanningDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CoursePlanningDocument model
+   */
+  readonly fields: CoursePlanningDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CoursePlanningDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CoursePlanningDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CoursePlanningDocument model
+   */
+  interface CoursePlanningDocumentFieldRefs {
+    readonly id: FieldRef<"CoursePlanningDocument", 'String'>
+    readonly courseId: FieldRef<"CoursePlanningDocument", 'String'>
+    readonly type: FieldRef<"CoursePlanningDocument", 'String'>
+    readonly data: FieldRef<"CoursePlanningDocument", 'Json'>
+    readonly status: FieldRef<"CoursePlanningDocument", 'String'>
+    readonly createdAt: FieldRef<"CoursePlanningDocument", 'DateTime'>
+    readonly updatedAt: FieldRef<"CoursePlanningDocument", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CoursePlanningDocument findUnique
+   */
+  export type CoursePlanningDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePlanningDocument to fetch.
+     */
+    where: CoursePlanningDocumentWhereUniqueInput
+  }
+
+  /**
+   * CoursePlanningDocument findUniqueOrThrow
+   */
+  export type CoursePlanningDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePlanningDocument to fetch.
+     */
+    where: CoursePlanningDocumentWhereUniqueInput
+  }
+
+  /**
+   * CoursePlanningDocument findFirst
+   */
+  export type CoursePlanningDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePlanningDocument to fetch.
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePlanningDocuments to fetch.
+     */
+    orderBy?: CoursePlanningDocumentOrderByWithRelationInput | CoursePlanningDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoursePlanningDocuments.
+     */
+    cursor?: CoursePlanningDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePlanningDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePlanningDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoursePlanningDocuments.
+     */
+    distinct?: CoursePlanningDocumentScalarFieldEnum | CoursePlanningDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CoursePlanningDocument findFirstOrThrow
+   */
+  export type CoursePlanningDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePlanningDocument to fetch.
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePlanningDocuments to fetch.
+     */
+    orderBy?: CoursePlanningDocumentOrderByWithRelationInput | CoursePlanningDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoursePlanningDocuments.
+     */
+    cursor?: CoursePlanningDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePlanningDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePlanningDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoursePlanningDocuments.
+     */
+    distinct?: CoursePlanningDocumentScalarFieldEnum | CoursePlanningDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CoursePlanningDocument findMany
+   */
+  export type CoursePlanningDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePlanningDocuments to fetch.
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePlanningDocuments to fetch.
+     */
+    orderBy?: CoursePlanningDocumentOrderByWithRelationInput | CoursePlanningDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CoursePlanningDocuments.
+     */
+    cursor?: CoursePlanningDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePlanningDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePlanningDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoursePlanningDocuments.
+     */
+    distinct?: CoursePlanningDocumentScalarFieldEnum | CoursePlanningDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CoursePlanningDocument create
+   */
+  export type CoursePlanningDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CoursePlanningDocument.
+     */
+    data: XOR<CoursePlanningDocumentCreateInput, CoursePlanningDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * CoursePlanningDocument createMany
+   */
+  export type CoursePlanningDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CoursePlanningDocuments.
+     */
+    data: CoursePlanningDocumentCreateManyInput | CoursePlanningDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CoursePlanningDocument createManyAndReturn
+   */
+  export type CoursePlanningDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to create many CoursePlanningDocuments.
+     */
+    data: CoursePlanningDocumentCreateManyInput | CoursePlanningDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CoursePlanningDocument update
+   */
+  export type CoursePlanningDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CoursePlanningDocument.
+     */
+    data: XOR<CoursePlanningDocumentUpdateInput, CoursePlanningDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which CoursePlanningDocument to update.
+     */
+    where: CoursePlanningDocumentWhereUniqueInput
+  }
+
+  /**
+   * CoursePlanningDocument updateMany
+   */
+  export type CoursePlanningDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CoursePlanningDocuments.
+     */
+    data: XOR<CoursePlanningDocumentUpdateManyMutationInput, CoursePlanningDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which CoursePlanningDocuments to update
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * Limit how many CoursePlanningDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoursePlanningDocument updateManyAndReturn
+   */
+  export type CoursePlanningDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update CoursePlanningDocuments.
+     */
+    data: XOR<CoursePlanningDocumentUpdateManyMutationInput, CoursePlanningDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which CoursePlanningDocuments to update
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * Limit how many CoursePlanningDocuments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CoursePlanningDocument upsert
+   */
+  export type CoursePlanningDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CoursePlanningDocument to update in case it exists.
+     */
+    where: CoursePlanningDocumentWhereUniqueInput
+    /**
+     * In case the CoursePlanningDocument found by the `where` argument doesn't exist, create a new CoursePlanningDocument with this data.
+     */
+    create: XOR<CoursePlanningDocumentCreateInput, CoursePlanningDocumentUncheckedCreateInput>
+    /**
+     * In case the CoursePlanningDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CoursePlanningDocumentUpdateInput, CoursePlanningDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * CoursePlanningDocument delete
+   */
+  export type CoursePlanningDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which CoursePlanningDocument to delete.
+     */
+    where: CoursePlanningDocumentWhereUniqueInput
+  }
+
+  /**
+   * CoursePlanningDocument deleteMany
+   */
+  export type CoursePlanningDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoursePlanningDocuments to delete
+     */
+    where?: CoursePlanningDocumentWhereInput
+    /**
+     * Limit how many CoursePlanningDocuments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoursePlanningDocument without action
+   */
+  export type CoursePlanningDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePlanningDocument
+     */
+    select?: CoursePlanningDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePlanningDocument
+     */
+    omit?: CoursePlanningDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePlanningDocumentInclude<ExtArgs> | null
   }
 
 
@@ -60238,6 +61461,19 @@ export namespace Prisma {
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
 
 
+  export const CoursePlanningDocumentScalarFieldEnum: {
+    id: 'id',
+    courseId: 'courseId',
+    type: 'type',
+    data: 'data',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CoursePlanningDocumentScalarFieldEnum = (typeof CoursePlanningDocumentScalarFieldEnum)[keyof typeof CoursePlanningDocumentScalarFieldEnum]
+
+
   export const CourseSectionScalarFieldEnum: {
     id: 'id',
     courseId: 'courseId',
@@ -61814,6 +63050,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
     coupons?: CouponListRelationFilter
+    planningDocuments?: CoursePlanningDocumentListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -61859,6 +63096,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionOrderByRelationAggregateInput
     wishlistItems?: WishlistItemOrderByRelationAggregateInput
     coupons?: CouponOrderByRelationAggregateInput
+    planningDocuments?: CoursePlanningDocumentOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -61907,6 +63145,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
     coupons?: CouponListRelationFilter
+    planningDocuments?: CoursePlanningDocumentListRelationFilter
   }, "id" | "slug">
 
   export type CourseOrderByWithAggregationInput = {
@@ -61973,6 +63212,72 @@ export namespace Prisma {
     joinCodeHash?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
+  }
+
+  export type CoursePlanningDocumentWhereInput = {
+    AND?: CoursePlanningDocumentWhereInput | CoursePlanningDocumentWhereInput[]
+    OR?: CoursePlanningDocumentWhereInput[]
+    NOT?: CoursePlanningDocumentWhereInput | CoursePlanningDocumentWhereInput[]
+    id?: StringFilter<"CoursePlanningDocument"> | string
+    courseId?: StringFilter<"CoursePlanningDocument"> | string
+    type?: StringFilter<"CoursePlanningDocument"> | string
+    data?: JsonFilter<"CoursePlanningDocument">
+    status?: StringFilter<"CoursePlanningDocument"> | string
+    createdAt?: DateTimeFilter<"CoursePlanningDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"CoursePlanningDocument"> | Date | string
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+  }
+
+  export type CoursePlanningDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    type?: SortOrder
+    data?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    course?: CourseOrderByWithRelationInput
+  }
+
+  export type CoursePlanningDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    courseId_type?: CoursePlanningDocumentCourseIdTypeCompoundUniqueInput
+    AND?: CoursePlanningDocumentWhereInput | CoursePlanningDocumentWhereInput[]
+    OR?: CoursePlanningDocumentWhereInput[]
+    NOT?: CoursePlanningDocumentWhereInput | CoursePlanningDocumentWhereInput[]
+    courseId?: StringFilter<"CoursePlanningDocument"> | string
+    type?: StringFilter<"CoursePlanningDocument"> | string
+    data?: JsonFilter<"CoursePlanningDocument">
+    status?: StringFilter<"CoursePlanningDocument"> | string
+    createdAt?: DateTimeFilter<"CoursePlanningDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"CoursePlanningDocument"> | Date | string
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+  }, "id" | "courseId_type">
+
+  export type CoursePlanningDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    type?: SortOrder
+    data?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CoursePlanningDocumentCountOrderByAggregateInput
+    _max?: CoursePlanningDocumentMaxOrderByAggregateInput
+    _min?: CoursePlanningDocumentMinOrderByAggregateInput
+  }
+
+  export type CoursePlanningDocumentScalarWhereWithAggregatesInput = {
+    AND?: CoursePlanningDocumentScalarWhereWithAggregatesInput | CoursePlanningDocumentScalarWhereWithAggregatesInput[]
+    OR?: CoursePlanningDocumentScalarWhereWithAggregatesInput[]
+    NOT?: CoursePlanningDocumentScalarWhereWithAggregatesInput | CoursePlanningDocumentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CoursePlanningDocument"> | string
+    courseId?: StringWithAggregatesFilter<"CoursePlanningDocument"> | string
+    type?: StringWithAggregatesFilter<"CoursePlanningDocument"> | string
+    data?: JsonWithAggregatesFilter<"CoursePlanningDocument">
+    status?: StringWithAggregatesFilter<"CoursePlanningDocument"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CoursePlanningDocument"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CoursePlanningDocument"> | Date | string
   }
 
   export type CourseSectionWhereInput = {
@@ -65607,6 +66912,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -65650,6 +66956,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -65693,6 +67000,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -65736,6 +67044,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -65819,6 +67128,75 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePlanningDocumentCreateInput = {
+    id?: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutPlanningDocumentsInput
+  }
+
+  export type CoursePlanningDocumentUncheckedCreateInput = {
+    id?: string
+    courseId: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePlanningDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutPlanningDocumentsNestedInput
+  }
+
+  export type CoursePlanningDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePlanningDocumentCreateManyInput = {
+    id?: string
+    courseId: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePlanningDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePlanningDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69581,6 +70959,12 @@ export namespace Prisma {
     none?: CouponWhereInput
   }
 
+  export type CoursePlanningDocumentListRelationFilter = {
+    every?: CoursePlanningDocumentWhereInput
+    some?: CoursePlanningDocumentWhereInput
+    none?: CoursePlanningDocumentWhereInput
+  }
+
   export type CourseSectionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -69598,6 +70982,10 @@ export namespace Prisma {
   }
 
   export type CouponOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CoursePlanningDocumentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -69761,10 +71149,92 @@ export namespace Prisma {
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type CourseScalarRelationFilter = {
     is?: CourseWhereInput
     isNot?: CourseWhereInput
+  }
+
+  export type CoursePlanningDocumentCourseIdTypeCompoundUniqueInput = {
+    courseId: string
+    type: string
+  }
+
+  export type CoursePlanningDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    type?: SortOrder
+    data?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoursePlanningDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoursePlanningDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type LessonListRelationFilter = {
@@ -70288,29 +71758,6 @@ export namespace Prisma {
     submittedAt?: SortOrder
     updatedAt?: SortOrder
   }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type ExamSubmissionCountOrderByAggregateInput = {
     id?: SortOrder
@@ -70343,32 +71790,6 @@ export namespace Prisma {
 
   export type ExamSubmissionSumOrderByAggregateInput = {
     score?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type EnumCertificateTypeFilter<$PrismaModel = never> = {
@@ -72970,6 +74391,13 @@ export namespace Prisma {
     connect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
   }
 
+  export type CoursePlanningDocumentCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CoursePlanningDocumentCreateWithoutCourseInput, CoursePlanningDocumentUncheckedCreateWithoutCourseInput> | CoursePlanningDocumentCreateWithoutCourseInput[] | CoursePlanningDocumentUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePlanningDocumentCreateOrConnectWithoutCourseInput | CoursePlanningDocumentCreateOrConnectWithoutCourseInput[]
+    createMany?: CoursePlanningDocumentCreateManyCourseInputEnvelope
+    connect?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+  }
+
   export type CourseSectionUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -73066,6 +74494,13 @@ export namespace Prisma {
     connectOrCreate?: CouponCreateOrConnectWithoutCourseInput | CouponCreateOrConnectWithoutCourseInput[]
     createMany?: CouponCreateManyCourseInputEnvelope
     connect?: CouponWhereUniqueInput | CouponWhereUniqueInput[]
+  }
+
+  export type CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CoursePlanningDocumentCreateWithoutCourseInput, CoursePlanningDocumentUncheckedCreateWithoutCourseInput> | CoursePlanningDocumentCreateWithoutCourseInput[] | CoursePlanningDocumentUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePlanningDocumentCreateOrConnectWithoutCourseInput | CoursePlanningDocumentCreateOrConnectWithoutCourseInput[]
+    createMany?: CoursePlanningDocumentCreateManyCourseInputEnvelope
+    connect?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
   }
 
   export type EnumModalityFieldUpdateOperationsInput = {
@@ -73298,6 +74733,20 @@ export namespace Prisma {
     deleteMany?: CouponScalarWhereInput | CouponScalarWhereInput[]
   }
 
+  export type CoursePlanningDocumentUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CoursePlanningDocumentCreateWithoutCourseInput, CoursePlanningDocumentUncheckedCreateWithoutCourseInput> | CoursePlanningDocumentCreateWithoutCourseInput[] | CoursePlanningDocumentUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePlanningDocumentCreateOrConnectWithoutCourseInput | CoursePlanningDocumentCreateOrConnectWithoutCourseInput[]
+    upsert?: CoursePlanningDocumentUpsertWithWhereUniqueWithoutCourseInput | CoursePlanningDocumentUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CoursePlanningDocumentCreateManyCourseInputEnvelope
+    set?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    disconnect?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    delete?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    connect?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    update?: CoursePlanningDocumentUpdateWithWhereUniqueWithoutCourseInput | CoursePlanningDocumentUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CoursePlanningDocumentUpdateManyWithWhereWithoutCourseInput | CoursePlanningDocumentUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CoursePlanningDocumentScalarWhereInput | CoursePlanningDocumentScalarWhereInput[]
+  }
+
   export type CourseSectionUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<CourseSectionCreateWithoutCourseInput, CourseSectionUncheckedCreateWithoutCourseInput> | CourseSectionCreateWithoutCourseInput[] | CourseSectionUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseSectionCreateOrConnectWithoutCourseInput | CourseSectionCreateOrConnectWithoutCourseInput[]
@@ -73492,6 +74941,34 @@ export namespace Prisma {
     update?: CouponUpdateWithWhereUniqueWithoutCourseInput | CouponUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: CouponUpdateManyWithWhereWithoutCourseInput | CouponUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: CouponScalarWhereInput | CouponScalarWhereInput[]
+  }
+
+  export type CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CoursePlanningDocumentCreateWithoutCourseInput, CoursePlanningDocumentUncheckedCreateWithoutCourseInput> | CoursePlanningDocumentCreateWithoutCourseInput[] | CoursePlanningDocumentUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePlanningDocumentCreateOrConnectWithoutCourseInput | CoursePlanningDocumentCreateOrConnectWithoutCourseInput[]
+    upsert?: CoursePlanningDocumentUpsertWithWhereUniqueWithoutCourseInput | CoursePlanningDocumentUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CoursePlanningDocumentCreateManyCourseInputEnvelope
+    set?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    disconnect?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    delete?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    connect?: CoursePlanningDocumentWhereUniqueInput | CoursePlanningDocumentWhereUniqueInput[]
+    update?: CoursePlanningDocumentUpdateWithWhereUniqueWithoutCourseInput | CoursePlanningDocumentUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CoursePlanningDocumentUpdateManyWithWhereWithoutCourseInput | CoursePlanningDocumentUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CoursePlanningDocumentScalarWhereInput | CoursePlanningDocumentScalarWhereInput[]
+  }
+
+  export type CourseCreateNestedOneWithoutPlanningDocumentsInput = {
+    create?: XOR<CourseCreateWithoutPlanningDocumentsInput, CourseUncheckedCreateWithoutPlanningDocumentsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutPlanningDocumentsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type CourseUpdateOneRequiredWithoutPlanningDocumentsNestedInput = {
+    create?: XOR<CourseCreateWithoutPlanningDocumentsInput, CourseUncheckedCreateWithoutPlanningDocumentsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutPlanningDocumentsInput
+    upsert?: CourseUpsertWithoutPlanningDocumentsInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutPlanningDocumentsInput, CourseUpdateWithoutPlanningDocumentsInput>, CourseUncheckedUpdateWithoutPlanningDocumentsInput>
   }
 
   export type CourseCreateNestedOneWithoutSectionsInput = {
@@ -76082,6 +77559,29 @@ export namespace Prisma {
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumLessonTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.LessonType | EnumLessonTypeFieldRefInput<$PrismaModel>
@@ -76132,29 +77632,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEnrollmentStatusFilter<$PrismaModel>
     _max?: NestedEnumEnrollmentStatusFilter<$PrismaModel>
-  }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumCertificateTypeFilter<$PrismaModel = never> = {
@@ -76468,6 +77945,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutInstructorInput = {
@@ -76510,6 +77988,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutInstructorInput = {
@@ -79009,6 +80488,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCategoryRefInput = {
@@ -79051,6 +80531,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCategoryRefInput = {
@@ -79641,6 +81122,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CoursePlanningDocumentCreateWithoutCourseInput = {
+    id?: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePlanningDocumentUncheckedCreateWithoutCourseInput = {
+    id?: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePlanningDocumentCreateOrConnectWithoutCourseInput = {
+    where: CoursePlanningDocumentWhereUniqueInput
+    create: XOR<CoursePlanningDocumentCreateWithoutCourseInput, CoursePlanningDocumentUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CoursePlanningDocumentCreateManyCourseInputEnvelope = {
+    data: CoursePlanningDocumentCreateManyCourseInput | CoursePlanningDocumentCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutInstructorCoursesInput = {
     update: XOR<UserUpdateWithoutInstructorCoursesInput, UserUncheckedUpdateWithoutInstructorCoursesInput>
     create: XOR<UserCreateWithoutInstructorCoursesInput, UserUncheckedCreateWithoutInstructorCoursesInput>
@@ -80061,6 +81570,223 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Coupon"> | Date | string
   }
 
+  export type CoursePlanningDocumentUpsertWithWhereUniqueWithoutCourseInput = {
+    where: CoursePlanningDocumentWhereUniqueInput
+    update: XOR<CoursePlanningDocumentUpdateWithoutCourseInput, CoursePlanningDocumentUncheckedUpdateWithoutCourseInput>
+    create: XOR<CoursePlanningDocumentCreateWithoutCourseInput, CoursePlanningDocumentUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CoursePlanningDocumentUpdateWithWhereUniqueWithoutCourseInput = {
+    where: CoursePlanningDocumentWhereUniqueInput
+    data: XOR<CoursePlanningDocumentUpdateWithoutCourseInput, CoursePlanningDocumentUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type CoursePlanningDocumentUpdateManyWithWhereWithoutCourseInput = {
+    where: CoursePlanningDocumentScalarWhereInput
+    data: XOR<CoursePlanningDocumentUpdateManyMutationInput, CoursePlanningDocumentUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type CoursePlanningDocumentScalarWhereInput = {
+    AND?: CoursePlanningDocumentScalarWhereInput | CoursePlanningDocumentScalarWhereInput[]
+    OR?: CoursePlanningDocumentScalarWhereInput[]
+    NOT?: CoursePlanningDocumentScalarWhereInput | CoursePlanningDocumentScalarWhereInput[]
+    id?: StringFilter<"CoursePlanningDocument"> | string
+    courseId?: StringFilter<"CoursePlanningDocument"> | string
+    type?: StringFilter<"CoursePlanningDocument"> | string
+    data?: JsonFilter<"CoursePlanningDocument">
+    status?: StringFilter<"CoursePlanningDocument"> | string
+    createdAt?: DateTimeFilter<"CoursePlanningDocument"> | Date | string
+    updatedAt?: DateTimeFilter<"CoursePlanningDocument"> | Date | string
+  }
+
+  export type CourseCreateWithoutPlanningDocumentsInput = {
+    id?: string
+    slug?: string | null
+    title: string
+    description: string
+    category: string
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    state?: string | null
+    location?: string | null
+    mapsUrl?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    instructor: UserCreateNestedOneWithoutInstructorCoursesInput
+    categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
+    sections?: CourseSectionCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    transactions?: TransactionCreateNestedManyWithoutCourseInput
+    reviews?: ReviewCreateNestedManyWithoutCourseInput
+    conversations?: ConversationCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    coupons?: CouponCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutPlanningDocumentsInput = {
+    id?: string
+    slug?: string | null
+    instructorId: string
+    title: string
+    description: string
+    category: string
+    categoryId?: string | null
+    level?: string | null
+    modality: $Enums.Modality
+    city?: string | null
+    state?: string | null
+    location?: string | null
+    mapsUrl?: string | null
+    courseType: $Enums.CourseType
+    startDate?: Date | string | null
+    duration?: string | null
+    price: number
+    maxStudents?: number | null
+    imageUrl?: string | null
+    status?: $Enums.CourseStatus
+    visibility?: $Enums.CourseVisibility
+    nextSession?: Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
+    courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCourseInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutCourseInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutCourseInput
+    orgCourseAccess?: OrgCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    teamCourseAccess?: TeamCourseAccessUncheckedCreateNestedManyWithoutCourseInput
+    notes?: CourseNoteUncheckedCreateNestedManyWithoutCourseInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutPlanningDocumentsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutPlanningDocumentsInput, CourseUncheckedCreateWithoutPlanningDocumentsInput>
+  }
+
+  export type CourseUpsertWithoutPlanningDocumentsInput = {
+    update: XOR<CourseUpdateWithoutPlanningDocumentsInput, CourseUncheckedUpdateWithoutPlanningDocumentsInput>
+    create: XOR<CourseCreateWithoutPlanningDocumentsInput, CourseUncheckedCreateWithoutPlanningDocumentsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutPlanningDocumentsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutPlanningDocumentsInput, CourseUncheckedUpdateWithoutPlanningDocumentsInput>
+  }
+
+  export type CourseUpdateWithoutPlanningDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mapsUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
+    categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
+    sections?: CourseSectionUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutPlanningDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    instructorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    modality?: EnumModalityFieldUpdateOperationsInput | $Enums.Modality
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mapsUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    courseType?: EnumCourseTypeFieldUpdateOperationsInput | $Enums.CourseType
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: IntFieldUpdateOperationsInput | number
+    maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    visibility?: EnumCourseVisibilityFieldUpdateOperationsInput | $Enums.CourseVisibility
+    nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    finalExam?: NullableJsonNullValueInput | InputJsonValue
+    joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
+    courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCourseNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutCourseNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutCourseNestedInput
+    orgCourseAccess?: OrgCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    teamCourseAccess?: TeamCourseAccessUncheckedUpdateManyWithoutCourseNestedInput
+    notes?: CourseNoteUncheckedUpdateManyWithoutCourseNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
   export type CourseCreateWithoutSectionsInput = {
     id?: string
     slug?: string | null
@@ -80101,6 +81827,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSectionsInput = {
@@ -80143,6 +81870,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSectionsInput = {
@@ -80277,6 +82005,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSectionsInput = {
@@ -80319,6 +82048,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutSectionInput = {
@@ -80826,6 +82556,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCourseSessionsInput = {
@@ -80868,6 +82599,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCourseSessionsInput = {
@@ -81008,6 +82740,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCourseSessionsInput = {
@@ -81050,6 +82783,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutSessionInput = {
@@ -81163,6 +82897,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -81205,6 +82940,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -81403,6 +83139,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -81445,6 +83182,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutSessionAnonymousQuestionsInput = {
@@ -81588,6 +83326,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -81630,6 +83369,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -82049,6 +83789,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -82091,6 +83832,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutEnrollmentsInput = {
@@ -82547,6 +84289,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutLearningReflectionsInput = {
@@ -82589,6 +84332,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutLearningReflectionsInput = {
@@ -82791,6 +84535,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -82833,6 +84578,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutLearningReflectionsInput = {
@@ -83546,6 +85292,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCertificatesInput = {
@@ -83588,6 +85335,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCertificatesInput = {
@@ -83796,6 +85544,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
@@ -83838,6 +85587,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type EnrollmentCreateWithoutTransactionInput = {
@@ -84018,6 +85768,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTransactionsInput = {
@@ -84060,6 +85811,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTransactionsInput = {
@@ -84293,6 +86045,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTransactionsInput = {
@@ -84335,6 +86088,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type ReferralUpsertWithoutTransactionInput = {
@@ -84408,6 +86162,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutReviewsInput = {
@@ -84450,6 +86205,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutReviewsInput = {
@@ -84603,6 +86359,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutReviewsInput = {
@@ -84645,6 +86402,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutReviewsInput = {
@@ -84984,6 +86742,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutConversationsInput = {
@@ -85026,6 +86785,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutConversationsInput = {
@@ -85300,6 +87060,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutConversationsInput = {
@@ -85342,6 +87103,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutStudentConversationsInput = {
@@ -88036,6 +89798,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutOrgCourseAccessInput = {
@@ -88078,6 +89841,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutOrgCourseAccessInput = {
@@ -88183,6 +89947,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutOrgCourseAccessInput = {
@@ -88225,6 +89990,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type TeamCreateWithoutCourseAccessInput = {
@@ -88292,6 +90058,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutTeamCourseAccessInput = {
@@ -88334,6 +90101,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutTeamCourseAccessInput = {
@@ -88423,6 +90191,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutTeamCourseAccessInput = {
@@ -88465,6 +90234,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type OrganizationCreateWithoutMaterialsInput = {
@@ -88718,6 +90488,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCouponsInput = {
@@ -88760,6 +90531,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCouponsInput = {
@@ -88818,6 +90590,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCouponsInput = {
@@ -88860,6 +90633,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserCreateWithoutCourseNotesInput = {
@@ -88997,6 +90771,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutNotesInput = {
@@ -89039,6 +90814,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutNotesInput = {
@@ -89241,6 +91017,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutNotesInput = {
@@ -89283,6 +91060,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithoutNotesInput = {
@@ -89469,6 +91247,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutCourseInput
     coupons?: CouponCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutWishlistItemsInput = {
@@ -89511,6 +91290,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutCourseInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutCourseInput
     coupons?: CouponUncheckedCreateNestedManyWithoutCourseInput
+    planningDocuments?: CoursePlanningDocumentUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutWishlistItemsInput = {
@@ -89670,6 +91450,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutWishlistItemsInput = {
@@ -89712,6 +91493,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutCourseNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserCreateWithoutReferralCommissionsInput = {
@@ -90944,6 +92726,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutInstructorInput = {
@@ -90986,6 +92769,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutInstructorInput = {
@@ -91746,6 +93530,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutCourseNestedInput
     coupons?: CouponUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCategoryRefInput = {
@@ -91788,6 +93573,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutCourseNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutCourseNestedInput
     coupons?: CouponUncheckedUpdateManyWithoutCourseNestedInput
+    planningDocuments?: CoursePlanningDocumentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutCategoryRefInput = {
@@ -91955,6 +93741,15 @@ export namespace Prisma {
     usedCount?: number
     active?: boolean
     expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePlanningDocumentCreateManyCourseInput = {
+    id?: string
+    type: string
+    data: JsonNullValueInput | InputJsonValue
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -92404,6 +94199,33 @@ export namespace Prisma {
     usedCount?: IntFieldUpdateOperationsInput | number
     active?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePlanningDocumentUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePlanningDocumentUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePlanningDocumentUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    data?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
