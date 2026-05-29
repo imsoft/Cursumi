@@ -12,6 +12,7 @@ import { EVALUACION_QUIZ_TYPES } from "@/lib/planning/evaluacion-quiz";
 import { EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
 import { HOJA_RESPUESTAS_TYPE } from "@/lib/planning/hoja-respuestas";
 import { GUIA_ACTIVIDADES_TYPE } from "@/lib/planning/guia-actividades";
+import { MANUAL_PARTICIPANTE_TYPE } from "@/lib/planning/manual-participante";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
 import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
 import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
@@ -20,6 +21,7 @@ import { EvaluacionQuizClient } from "@/components/instructor/planning/evaluacio
 import { EvaluacionCalidadClient } from "@/components/instructor/planning/evaluacion-calidad-client";
 import { HojaRespuestasClient } from "@/components/instructor/planning/hoja-respuestas-client";
 import { GuiaActividadesClient } from "@/components/instructor/planning/guia-actividades-client";
+import { ManualParticipanteClient } from "@/components/instructor/planning/manual-participante-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -98,6 +100,9 @@ export default async function PlanningDocumentPage({
       )}
       {type === GUIA_ACTIVIDADES_TYPE && (
         <GuiaActividadesClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === MANUAL_PARTICIPANTE_TYPE && (
+        <ManualParticipanteClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );

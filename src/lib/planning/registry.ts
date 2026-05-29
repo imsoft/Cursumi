@@ -79,7 +79,12 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     available: true,
   },
   { type: "manual-instructor", title: "Manual del instructor", description: "Guía de contenidos para el facilitador.", available: false },
-  { type: "manual-participante", title: "Manual del participante", description: "Material de apoyo para el alumno.", available: false },
+  {
+    type: "manual-participante",
+    title: "Manual del participante",
+    description: "Manual del curso con portada, índice, secciones de contenido y bibliografía.",
+    available: true,
+  },
   { type: "constancia", title: "Constancia / reconocimiento", description: "Formato de constancia de participación.", available: false },
   { type: "informe-final", title: "Informe final del curso", description: "Reporte de resultados y cierre del curso.", available: false },
 ];

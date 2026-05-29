@@ -11,9 +11,11 @@ import { EvaluacionQuizDocument } from "@/components/instructor/planning/evaluac
 import { EvaluacionCalidadDocument } from "@/components/instructor/planning/evaluacion-calidad-document";
 import { HojaRespuestasDocument } from "@/components/instructor/planning/hoja-respuestas-document";
 import { GuiaActividadesDocument } from "@/components/instructor/planning/guia-actividades-document";
+import { ManualParticipanteDocument } from "@/components/instructor/planning/manual-participante-document";
 import { hydrateEvaluacionCalidad, EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
 import { hydrateHojaRespuestas, HOJA_RESPUESTAS_TYPE } from "@/lib/planning/hoja-respuestas";
 import { hydrateGuiaActividades, GUIA_ACTIVIDADES_TYPE } from "@/lib/planning/guia-actividades";
+import { hydrateManualParticipante, MANUAL_PARTICIPANTE_TYPE } from "@/lib/planning/manual-participante";
 import { hydrateCartaDescriptiva, CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { hydrateListaVerificacion, LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { hydrateListaAsistencia, LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
@@ -65,6 +67,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === GUIA_ACTIVIDADES_TYPE) {
     const d = hydrateGuiaActividades(data);
     return { node: <GuiaActividadesDocument data={d} />, filename: `Guia-de-actividades-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
+  }
+  if (type === MANUAL_PARTICIPANTE_TYPE) {
+    const d = hydrateManualParticipante(data);
+    return { node: <ManualParticipanteDocument data={d} />, filename: `Manual-del-participante-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
   }
   return null;
 }
