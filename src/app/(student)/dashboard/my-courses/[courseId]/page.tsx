@@ -280,7 +280,7 @@ export default async function MyCourseDetailPage({
                 Puedes compartirlo en la ficha pública del curso; solo mostraremos tu nombre de pila.
               </p>
               <Link
-                href={`/dashboard/my-courses/${courseId}/que-aprendiste`}
+                href={`/dashboard/my-courses/${courseId}/what-you-learned`}
                 className="mt-2 inline-block text-sm font-medium text-primary underline underline-offset-2"
               >
                 Escribir qué aprendí

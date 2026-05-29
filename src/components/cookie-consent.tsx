@@ -73,7 +73,7 @@ export function CookieConsent() {
       <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
         Usamos cookies propias y de terceros para mejorar tu experiencia, analizar el tráfico y
         personalizar contenido.{" "}
-        <Link href="/privacidad" className="underline hover:text-foreground transition-colors">
+        <Link href="/privacy" className="underline hover:text-foreground transition-colors">
           Política de privacidad
         </Link>
       </p>

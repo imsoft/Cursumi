@@ -4,24 +4,24 @@ import { Button } from "@/components/ui/button";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
 import { getPlanningDocument, getPlanningPrefill } from "@/app/actions/planning-actions";
 import { getPlanningDocMeta } from "@/lib/planning/registry";
-import { CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
-import { LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
-import { LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
-import { CONTRATO_APRENDIZAJE_TYPE } from "@/lib/planning/contrato-aprendizaje";
-import { EVALUACION_QUIZ_TYPES } from "@/lib/planning/evaluacion-quiz";
-import { EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
-import { HOJA_RESPUESTAS_TYPE } from "@/lib/planning/hoja-respuestas";
-import { GUIA_ACTIVIDADES_TYPE } from "@/lib/planning/guia-actividades";
-import { MANUAL_PARTICIPANTE_TYPE } from "@/lib/planning/manual-participante";
-import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
-import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
-import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
-import { ContratoAprendizajeClient } from "@/components/instructor/planning/contrato-aprendizaje-client";
-import { EvaluacionQuizClient } from "@/components/instructor/planning/evaluacion-quiz-client";
-import { EvaluacionCalidadClient } from "@/components/instructor/planning/evaluacion-calidad-client";
-import { HojaRespuestasClient } from "@/components/instructor/planning/hoja-respuestas-client";
-import { GuiaActividadesClient } from "@/components/instructor/planning/guia-actividades-client";
-import { ManualParticipanteClient } from "@/components/instructor/planning/manual-participante-client";
+import { DESCRIPTIVE_CHART_TYPE } from "@/lib/planning/descriptive-chart";
+import { CHECKLIST_TYPE } from "@/lib/planning/checklist";
+import { ATTENDANCE_LIST_TYPE } from "@/lib/planning/attendance-list";
+import { LEARNING_CONTRACT_TYPE } from "@/lib/planning/learning-contract";
+import { QUIZ_ASSESSMENT_TYPES } from "@/lib/planning/quiz-assessment";
+import { QUALITY_ASSESSMENT_TYPE } from "@/lib/planning/quality-assessment";
+import { ANSWER_SHEET_TYPE } from "@/lib/planning/answer-sheet";
+import { ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/activities-guide";
+import { PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/participant-manual";
+import { DescriptiveChartClient } from "@/components/instructor/planning/descriptive-chart-client";
+import { ChecklistClient } from "@/components/instructor/planning/checklist-client";
+import { AttendanceListClient } from "@/components/instructor/planning/attendance-list-client";
+import { LearningContractClient } from "@/components/instructor/planning/learning-contract-client";
+import { QuizAssessmentClient } from "@/components/instructor/planning/quiz-assessment-client";
+import { QualityAssessmentClient } from "@/components/instructor/planning/quality-assessment-client";
+import { AnswerSheetClient } from "@/components/instructor/planning/answer-sheet-client";
+import { ActivitiesGuideClient } from "@/components/instructor/planning/activities-guide-client";
+import { ParticipantManualClient } from "@/components/instructor/planning/participant-manual-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -77,32 +77,32 @@ export default async function PlanningDocumentPage({
   return (
     <div className="space-y-6">
       {Header}
-      {type === CARTA_DESCRIPTIVA_TYPE && (
-        <CartaDescriptivaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === DESCRIPTIVE_CHART_TYPE && (
+        <DescriptiveChartClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === LISTA_VERIFICACION_TYPE && (
-        <ListaVerificacionClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === CHECKLIST_TYPE && (
+        <ChecklistClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === LISTA_ASISTENCIA_TYPE && (
-        <ListaAsistenciaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === ATTENDANCE_LIST_TYPE && (
+        <AttendanceListClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === CONTRATO_APRENDIZAJE_TYPE && (
-        <ContratoAprendizajeClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === LEARNING_CONTRACT_TYPE && (
+        <LearningContractClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {EVALUACION_QUIZ_TYPES.includes(type) && (
-        <EvaluacionQuizClient courseId={id} type={type} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {QUIZ_ASSESSMENT_TYPES.includes(type) && (
+        <QuizAssessmentClient courseId={id} type={type} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === EVALUACION_CALIDAD_TYPE && (
-        <EvaluacionCalidadClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === QUALITY_ASSESSMENT_TYPE && (
+        <QualityAssessmentClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === HOJA_RESPUESTAS_TYPE && (
-        <HojaRespuestasClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === ANSWER_SHEET_TYPE && (
+        <AnswerSheetClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === GUIA_ACTIVIDADES_TYPE && (
-        <GuiaActividadesClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === ACTIVITIES_GUIDE_TYPE && (
+        <ActivitiesGuideClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
-      {type === MANUAL_PARTICIPANTE_TYPE && (
-        <ManualParticipanteClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      {type === PARTICIPANT_MANUAL_TYPE && (
+        <ParticipantManualClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );

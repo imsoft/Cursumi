@@ -62,7 +62,7 @@ function greetingTitle(userName: string) {
 function getPageTitle(pathname: string | null, userName: string): string {
   if (!pathname) return greetingTitle(userName);
   if (pathname === "/dashboard" || pathname === "/dashboard/") return greetingTitle(userName);
-  if (pathname.includes("/que-aprendiste")) return "¿Qué aprendiste?";
+  if (pathname.includes("/what-you-learned")) return "¿Qué aprendiste?";
   const base = pathname.split("/").slice(0, 4).join("/");
   return (
     pathnameToTitle[base] ??

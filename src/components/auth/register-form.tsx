@@ -191,8 +191,8 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
                 {...form.register("acceptTerms")}
               />
               <span>
-                Acepto los <a href="/terminos" className="text-primary underline">Términos y Condiciones</a> y el{" "}
-                <a href="/privacidad" className="text-primary underline">Aviso de Privacidad</a>.
+                Acepto los <a href="/terms" className="text-primary underline">Términos y Condiciones</a> y el{" "}
+                <a href="/privacy" className="text-primary underline">Aviso de Privacidad</a>.
               </span>
             </label>
             {form.formState.errors.acceptTerms && (

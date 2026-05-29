@@ -18,7 +18,7 @@ export async function sendLearningReflectionInviteIfNeeded(enrollmentId: string)
   if (!en || en.learningReflectionEmailSentAt) return false;
 
   const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/$/, "");
-  const respondUrl = `${baseUrl}/dashboard/my-courses/${en.course.id}/que-aprendiste`;
+  const respondUrl = `${baseUrl}/dashboard/my-courses/${en.course.id}/what-you-learned`;
   const coursePublicUrl = en.course.slug
     ? `${baseUrl}/courses/${en.course.slug}`
     : `${baseUrl}/dashboard/explore`;

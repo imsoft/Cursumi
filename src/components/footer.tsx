@@ -15,8 +15,8 @@ const footerNav = [
 ];
 
 const legalNav = [
-  { label: "Privacidad", href: "/privacidad" },
-  { label: "Términos de uso", href: "/terminos" },
+  { label: "Privacidad", href: "/privacy" },
+  { label: "Términos de uso", href: "/terms" },
 ];
 
 export const Footer = () => {

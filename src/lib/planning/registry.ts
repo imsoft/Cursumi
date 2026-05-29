@@ -1,23 +1,15 @@
-/**
- * Registro de documentos de planeación didáctica / certificación.
- *
- * Por ahora solo "carta-descriptiva" está implementado; el resto quedan listados
- * como "próximamente" para construirlos sobre la misma plantilla base.
- */
-
-import { CARTA_DESCRIPTIVA_TYPE } from "./carta-descriptiva";
+import { DESCRIPTIVE_CHART_TYPE } from "./descriptive-chart";
 
 export type PlanningDocMeta = {
   type: string;
   title: string;
   description: string;
-  /** true si el formulario y el PDF ya están implementados. */
   available: boolean;
 };
 
 export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
   {
-    type: CARTA_DESCRIPTIVA_TYPE,
+    type: DESCRIPTIVE_CHART_TYPE,
     title: "Carta descriptiva",
     description:
       "Documento de planeación del curso: información general, objetivos, requerimientos, evaluación, apertura, desarrollo y cierre.",
@@ -59,7 +51,6 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Cuestionario final de conocimientos, con portada e instrucciones.",
     available: true,
   },
-  // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
   {
     type: "evaluacion-calidad",
     title: "Evaluación de calidad",

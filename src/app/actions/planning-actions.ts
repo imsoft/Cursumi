@@ -21,12 +21,11 @@ async function verifyCourseOwner(courseId: string, userId: string) {
 }
 
 export type PlanningPrefill = {
-  nombreCurso: string;
-  nombreInstructor: string;
-  duracion: string;
+  courseName: string;
+  instructorName: string;
+  duration: string;
 };
 
-/** Datos del curso para autocompletar campos del documento. */
 export async function getPlanningPrefill(courseId: string): Promise<PlanningPrefill> {
   const session = await requireSession();
   await verifyCourseOwner(courseId, session.user.id);
@@ -35,9 +34,9 @@ export async function getPlanningPrefill(courseId: string): Promise<PlanningPref
     select: { title: true, duration: true, instructor: { select: { name: true } } },
   });
   return {
-    nombreCurso: course?.title ?? "",
-    nombreInstructor: course?.instructor?.name ?? "",
-    duracion: course?.duration ?? "",
+    courseName: course?.title ?? "",
+    instructorName: course?.instructor?.name ?? "",
+    duration: course?.duration ?? "",
   };
 }
 
