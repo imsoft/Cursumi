@@ -9,7 +9,9 @@ import { ListaAsistenciaDocument } from "@/components/instructor/planning/lista-
 import { ContratoAprendizajeDocument } from "@/components/instructor/planning/contrato-aprendizaje-document";
 import { EvaluacionQuizDocument } from "@/components/instructor/planning/evaluacion-quiz-document";
 import { EvaluacionCalidadDocument } from "@/components/instructor/planning/evaluacion-calidad-document";
+import { HojaRespuestasDocument } from "@/components/instructor/planning/hoja-respuestas-document";
 import { hydrateEvaluacionCalidad, EVALUACION_CALIDAD_TYPE } from "@/lib/planning/evaluacion-calidad";
+import { hydrateHojaRespuestas, HOJA_RESPUESTAS_TYPE } from "@/lib/planning/hoja-respuestas";
 import { hydrateCartaDescriptiva, CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { hydrateListaVerificacion, LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
 import { hydrateListaAsistencia, LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
@@ -53,6 +55,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === EVALUACION_CALIDAD_TYPE) {
     const d = hydrateEvaluacionCalidad(data);
     return { node: <EvaluacionCalidadDocument data={d} />, filename: `Evaluacion-de-calidad-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
+  }
+  if (type === HOJA_RESPUESTAS_TYPE) {
+    const d = hydrateHojaRespuestas(data);
+    return { node: <HojaRespuestasDocument data={d} />, filename: `Hoja-de-respuestas-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
   }
   return null;
 }

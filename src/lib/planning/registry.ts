@@ -66,6 +66,12 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Encuesta de satisfacción del participante por secciones (instructor, contenido, curso), con portada.",
     available: true,
   },
+  {
+    type: "hoja-respuestas",
+    title: "Hoja de respuestas",
+    description: "Clave de respuestas por temas, con la opción correcta resaltada, y portada.",
+    available: true,
+  },
   { type: "manual-instructor", title: "Manual del instructor", description: "Guía de contenidos para el facilitador.", available: false },
   { type: "manual-participante", title: "Manual del participante", description: "Material de apoyo para el alumno.", available: false },
   { type: "constancia", title: "Constancia / reconocimiento", description: "Formato de constancia de participación.", available: false },
