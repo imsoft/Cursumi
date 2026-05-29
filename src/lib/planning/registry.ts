@@ -1,6 +1,7 @@
 import { DESCRIPTIVE_CHART_TYPE } from "./descriptive-chart";
 import { ACTIVITY_SCHEDULE_TYPE } from "./activity-schedule";
 import { COURSE_INFO_TYPE } from "./course-info-document";
+import { VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "./virtual-activities-guide";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -125,6 +126,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: COURSE_INFO_TYPE,
     title: "Documento de información general",
     description: "Objetivo general, temas con objetivos particulares y horas, introducción, metodología, perfil de ingreso, evaluación y duración.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: VIRTUAL_ACTIVITIES_GUIDE_TYPE,
+    title: "Guía de actividades de aprendizaje",
+    description: "Una página por unidad con objetivo, criterios de evaluación y tabla de actividades (instrucciones, materiales, participación, medio de entrega, ponderación).",
     available: true,
     modality: "virtual",
   },

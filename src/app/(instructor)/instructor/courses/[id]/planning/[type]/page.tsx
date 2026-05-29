@@ -28,6 +28,8 @@ import { ACTIVITY_SCHEDULE_TYPE } from "@/lib/planning/activity-schedule";
 import { ActivityScheduleClient } from "@/components/instructor/planning/activity-schedule-client";
 import { COURSE_INFO_TYPE } from "@/lib/planning/course-info-document";
 import { CourseInfoDocumentClient } from "@/components/instructor/planning/course-info-document-client";
+import { VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/virtual-activities-guide";
+import { VirtualActivitiesGuideClient } from "@/components/instructor/planning/virtual-activities-guide-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -120,6 +122,14 @@ export default async function PlanningDocumentPage({
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
           prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
+        />
+      )}
+      {type === VIRTUAL_ACTIVITIES_GUIDE_TYPE && (
+        <VirtualActivitiesGuideClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName }}
         />
       )}
     </div>
