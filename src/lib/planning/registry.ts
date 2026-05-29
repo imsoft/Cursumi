@@ -4,6 +4,7 @@ import { COURSE_INFO_TYPE } from "./course-info-document";
 import { VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "./virtual-activities-guide";
 import { ACTIVITY_CALENDAR_TYPE } from "./activity-calendar";
 import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "./virtual-participant-manual";
+import { MULTIMEDIA_MATERIAL_TYPE } from "./multimedia-material";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -149,6 +150,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: VIRTUAL_PARTICIPANT_MANUAL_TYPE,
     title: "Manual del participante",
     description: "Manual del curso con portada Cursumi, tabla de contenido, secciones de contenido en dos niveles y bibliografía.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: MULTIMEDIA_MATERIAL_TYPE,
+    title: "Material multimedia",
+    description: "Documento de evidencias de los videos del curso: presentación + capturas de pantalla de cada video.",
     available: true,
     modality: "virtual",
   },

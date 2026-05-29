@@ -34,6 +34,8 @@ import { ACTIVITY_CALENDAR_TYPE } from "@/lib/planning/activity-calendar";
 import { ActivityCalendarClient } from "@/components/instructor/planning/activity-calendar-client";
 import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/virtual-participant-manual";
 import { VirtualParticipantManualClient } from "@/components/instructor/planning/virtual-participant-manual-client";
+import { MULTIMEDIA_MATERIAL_TYPE } from "@/lib/planning/multimedia-material";
+import { MultimediaMaterialClient } from "@/components/instructor/planning/multimedia-material-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -146,6 +148,14 @@ export default async function PlanningDocumentPage({
       )}
       {type === VIRTUAL_PARTICIPANT_MANUAL_TYPE && (
         <VirtualParticipantManualClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName }}
+        />
+      )}
+      {type === MULTIMEDIA_MATERIAL_TYPE && (
+        <MultimediaMaterialClient
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}

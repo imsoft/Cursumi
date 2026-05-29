@@ -1,0 +1,33 @@
+"use client";
+
+import { PlanningDocShell } from "./planning-doc-shell";
+import { MultimediaMaterialForm } from "./multimedia-material-form";
+import { MultimediaMaterialDocument } from "./multimedia-material-document";
+import {
+  type MultimediaMaterialData,
+  hydrateMultimediaMaterial,
+  MULTIMEDIA_MATERIAL_TYPE,
+} from "@/lib/planning/multimedia-material";
+import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+
+type Props = {
+  courseId: string;
+  initialData: unknown;
+  initialStatus?: string;
+  prefill?: { courseName?: string };
+};
+
+export function MultimediaMaterialClient({ courseId, initialData, initialStatus, prefill }: Props) {
+  return (
+    <PlanningDocShell<MultimediaMaterialData>
+      courseId={courseId}
+      type={MULTIMEDIA_MATERIAL_TYPE}
+      initialData={initialData}
+      initialStatus={initialStatus}
+      hydrate={(raw) => hydrateMultimediaMaterial(raw, prefill)}
+      renderForm={(value, onChange) => <MultimediaMaterialForm value={value} onChange={onChange} />}
+      renderDocument={(value) => <MultimediaMaterialDocument data={value} />}
+      pdfFilename={(value) => `Material-multimedia-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+    />
+  );
+}
