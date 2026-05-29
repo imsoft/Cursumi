@@ -6,8 +6,10 @@ import { getPlanningDocument, getPlanningPrefill } from "@/app/actions/planning-
 import { getPlanningDocMeta } from "@/lib/planning/registry";
 import { CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
+import { LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
 import { CartaDescriptivaClient } from "@/components/instructor/planning/carta-descriptiva-client";
 import { ListaVerificacionClient } from "@/components/instructor/planning/lista-verificacion-client";
+import { ListaAsistenciaClient } from "@/components/instructor/planning/lista-asistencia-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -68,6 +70,9 @@ export default async function PlanningDocumentPage({
       )}
       {type === LISTA_VERIFICACION_TYPE && (
         <ListaVerificacionClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === LISTA_ASISTENCIA_TYPE && (
+        <ListaAsistenciaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
     </div>
   );

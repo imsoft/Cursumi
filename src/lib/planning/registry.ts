@@ -29,8 +29,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     description: "Comprobación de instalaciones, equipo, materiales, recursos humanos y seguridad antes del curso.",
     available: true,
   },
+  {
+    type: "lista-asistencia",
+    title: "Lista de asistencia",
+    description: "Registro de participantes y firmas por sesión.",
+    available: true,
+  },
   // Los siguientes documentos se irán habilitando sobre la misma plantilla base.
-  { type: "lista-asistencia", title: "Lista de asistencia", description: "Registro de participantes por sesión.", available: false },
   { type: "evaluacion-diagnostica", title: "Evaluación diagnóstica", description: "Cuestionario inicial de conocimientos.", available: false },
   { type: "evaluacion-formativa", title: "Evaluación formativa", description: "Instrumento de evaluación intermedia.", available: false },
   { type: "evaluacion-sumativa", title: "Evaluación sumativa", description: "Instrumento de evaluación final.", available: false },

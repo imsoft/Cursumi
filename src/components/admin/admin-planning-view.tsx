@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { CartaDescriptivaDocument } from "@/components/instructor/planning/carta-descriptiva-document";
 import { ListaVerificacionDocument } from "@/components/instructor/planning/lista-verificacion-document";
+import { ListaAsistenciaDocument } from "@/components/instructor/planning/lista-asistencia-document";
 import { hydrateCartaDescriptiva, CARTA_DESCRIPTIVA_TYPE } from "@/lib/planning/carta-descriptiva";
 import { hydrateListaVerificacion, LISTA_VERIFICACION_TYPE } from "@/lib/planning/lista-verificacion";
+import { hydrateListaAsistencia, LISTA_ASISTENCIA_TYPE } from "@/lib/planning/lista-asistencia";
 import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
@@ -17,6 +19,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === LISTA_VERIFICACION_TYPE) {
     const d = hydrateListaVerificacion(data);
     return { node: <ListaVerificacionDocument data={d} />, filename: `Lista-verificacion-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
+  }
+  if (type === LISTA_ASISTENCIA_TYPE) {
+    const d = hydrateListaAsistencia(data);
+    return { node: <ListaAsistenciaDocument data={d} />, filename: `Lista-asistencia-${sanitizeFilename(d.nombreCurso || "curso")}.pdf` };
   }
   return null;
 }
