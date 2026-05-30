@@ -36,6 +36,8 @@ import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/virtual-particip
 import { VirtualParticipantManualClient } from "@/components/instructor/planning/virtual-participant-manual-client";
 import { MULTIMEDIA_MATERIAL_TYPE } from "@/lib/planning/multimedia-material";
 import { MultimediaMaterialClient } from "@/components/instructor/planning/multimedia-material-client";
+import { VIRTUAL_EVALUATION_TYPE } from "@/lib/planning/virtual-evaluation";
+import { VirtualEvaluationClient } from "@/components/instructor/planning/virtual-evaluation-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -156,6 +158,14 @@ export default async function PlanningDocumentPage({
       )}
       {type === MULTIMEDIA_MATERIAL_TYPE && (
         <MultimediaMaterialClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName }}
+        />
+      )}
+      {type === VIRTUAL_EVALUATION_TYPE && (
+        <VirtualEvaluationClient
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}

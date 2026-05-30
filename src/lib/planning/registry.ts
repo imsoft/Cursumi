@@ -5,6 +5,7 @@ import { VIRTUAL_ACTIVITIES_GUIDE_TYPE } from "./virtual-activities-guide";
 import { ACTIVITY_CALENDAR_TYPE } from "./activity-calendar";
 import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "./virtual-participant-manual";
 import { MULTIMEDIA_MATERIAL_TYPE } from "./multimedia-material";
+import { VIRTUAL_EVALUATION_TYPE } from "./virtual-evaluation";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -157,6 +158,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: MULTIMEDIA_MATERIAL_TYPE,
     title: "Material multimedia",
     description: "Documento de evidencias de los videos del curso: presentación + capturas de pantalla de cada video.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: VIRTUAL_EVALUATION_TYPE,
+    title: "Evaluación",
+    description: "Cuestionarios de conocimiento por tema (con respuesta correcta resaltada) y cuestionario de calidad del curso.",
     available: true,
     modality: "virtual",
   },
