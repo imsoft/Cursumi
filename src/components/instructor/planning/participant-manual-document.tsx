@@ -4,7 +4,7 @@
  * Solo colores fijos (hex) para no romper html2canvas.
  */
 
-import { PlanningCover } from "./planning-cover";
+import { PlanningCoverV2 } from "./planning-cover-v2";
 import { type ParticipantManualData } from "@/lib/planning/participant-manual";
 
 const PURPLE = "#6d28d9";
@@ -26,7 +26,7 @@ export function ParticipantManualDocument({ data }: { data: ParticipantManualDat
   return (
     <div style={{ width: 794, background: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" }}>
       {/* Portada */}
-      <PlanningCover
+      <PlanningCoverV2
         documentTitle="Manual del participante"
         courseName={data.courseName}
         meta={[{ label: "Estándar de referencia", value: data.referenceStandard }]}

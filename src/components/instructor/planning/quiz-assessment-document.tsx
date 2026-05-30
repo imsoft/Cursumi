@@ -4,7 +4,7 @@
  * Solo colores fijos (hex) para no romper html2canvas.
  */
 
-import { PlanningCover } from "./planning-cover";
+import { PlanningCoverV2 } from "./planning-cover-v2";
 import { type QuizAssessmentData, optionLetter } from "@/lib/planning/quiz-assessment";
 
 const PURPLE = "#6d28d9";
@@ -23,7 +23,7 @@ export function QuizAssessmentDocument({ documentTitle, fallbackQuestionnaireTit
   return (
     <div style={{ width: 794, background: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" }}>
       {/* Portada (una página A4) */}
-      <PlanningCover
+      <PlanningCoverV2
         documentTitle={documentTitle}
         courseName={data.courseName}
         meta={[

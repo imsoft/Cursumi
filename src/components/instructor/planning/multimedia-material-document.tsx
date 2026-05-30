@@ -1,88 +1,11 @@
 import { type MultimediaMaterialData } from "@/lib/planning/multimedia-material";
+import { PlanningCoverV2 } from "./planning-cover-v2";
 
 const W = 794;
 const PURPLE = "#6d28d9";
-const PURPLE_DARK = "#4300d0";
-const PURPLE_LIGHT = "#a400e3";
-const GRADIENT = `linear-gradient(135deg, ${PURPLE_DARK} 0%, ${PURPLE} 50%, ${PURPLE_LIGHT} 100%)`;
 const TEXT = "#111827";
 const MUTED = "#6b7280";
 const WHITE = "#ffffff";
-
-// ── Cover ──────────────────────────────────────────────────────────────────
-
-function CoverPage({ data }: { data: MultimediaMaterialData }) {
-  return (
-    <div
-      style={{
-        width: W,
-        minHeight: 1123,
-        background: WHITE,
-        fontFamily: "'Helvetica Neue', Arial, Helvetica, sans-serif",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        overflow: "hidden",
-        boxSizing: "border-box" as const,
-      }}
-    >
-      <div style={{ height: 6, background: GRADIENT, flexShrink: 0 }} />
-
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "64px 72px 56px" }}>
-        <p style={{ fontSize: 13, color: PURPLE, fontWeight: 500, margin: "0 0 48px" }}>
-          {data.courseName}
-        </p>
-
-        <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: 40 }}>
-          <div
-            style={{
-              width: 80, height: 80,
-              background: GRADIENT,
-              borderRadius: 16,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 8px 32px rgba(109,40,217,0.25)",
-            }}
-          >
-            <span style={{ color: WHITE, fontWeight: 900, fontSize: 38, letterSpacing: "-2px", lineHeight: 1 }}>C</span>
-          </div>
-        </div>
-
-        <h1
-          style={{
-            fontSize: 56, fontWeight: 900, color: PURPLE,
-            margin: "0 0 20px", lineHeight: 1.05, letterSpacing: "-1px",
-          }}
-        >
-          MATERIAL<br />MULTIMEDIA
-        </h1>
-
-        <div style={{ height: 5, width: 80, background: GRADIENT, borderRadius: 3, marginBottom: 28 }} />
-
-        <div style={{ flex: 1 }} />
-
-        {data.referenceStandard && (
-          <div style={{ textAlign: "right", maxWidth: 280, alignSelf: "flex-end" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: PURPLE, margin: "0 0 6px", letterSpacing: "0.05em" }}>
-              Estándar de Referencia
-            </p>
-            <p style={{ fontSize: 11, color: MUTED, margin: 0, lineHeight: 1.5 }}>
-              {data.referenceStandard}
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div style={{ height: 6, background: GRADIENT, flexShrink: 0 }} />
-
-      <div
-        style={{
-          position: "absolute", left: 0, top: 6, bottom: 6,
-          width: 4, background: GRADIENT, opacity: 0.35,
-        }}
-      />
-    </div>
-  );
-}
 
 // ── Table of contents ───────────────────────────────────────────────────────
 
@@ -197,7 +120,7 @@ function ContentPages({ data }: { data: MultimediaMaterialData }) {
 export function MultimediaMaterialDocument({ data }: { data: MultimediaMaterialData }) {
   return (
     <div style={{ width: W, background: WHITE }}>
-      <CoverPage data={data} />
+      <PlanningCoverV2 documentTitle="Material Multimedia" courseName={data.courseName} referenceStandard={data.referenceStandard} />
       {data.showTableOfContents && <TocPage videos={data.videos} />}
       <ContentPages data={data} />
     </div>

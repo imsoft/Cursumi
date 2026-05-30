@@ -4,7 +4,7 @@
  * Solo colores fijos (hex) para no romper html2canvas.
  */
 
-import { PlanningCover } from "./planning-cover";
+import { PlanningCoverV2 } from "./planning-cover-v2";
 import { type QualityAssessmentData } from "@/lib/planning/quality-assessment";
 import { optionLetter } from "@/lib/planning/quiz-assessment";
 
@@ -19,7 +19,7 @@ export function QualityAssessmentDocument({ data }: { data: QualityAssessmentDat
   return (
     <div style={{ width: 794, background: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" }}>
       {/* Portada (una página A4) */}
-      <PlanningCover
+      <PlanningCoverV2
         documentTitle="Evaluación de calidad"
         courseName={data.courseName}
         meta={[
