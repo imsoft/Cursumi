@@ -6,6 +6,7 @@ import { ACTIVITY_CALENDAR_TYPE } from "./activity-calendar";
 import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "./virtual-participant-manual";
 import { MULTIMEDIA_MATERIAL_TYPE } from "./multimedia-material";
 import { VIRTUAL_EVALUATION_TYPE } from "./virtual-evaluation";
+import { COURSE_REVIEW_REPORT_TYPE } from "./course-review-report";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -165,6 +166,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: VIRTUAL_EVALUATION_TYPE,
     title: "Evaluación",
     description: "Cuestionarios de conocimiento por tema (con respuesta correcta resaltada) y cuestionario de calidad del curso.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: COURSE_REVIEW_REPORT_TYPE,
+    title: "Reporte de revisión del funcionamiento",
+    description: "Observaciones de diseño, contenido y funcionalidad de la plataforma con propuestas de modificación.",
     available: true,
     modality: "virtual",
   },

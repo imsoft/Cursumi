@@ -38,6 +38,8 @@ import { MULTIMEDIA_MATERIAL_TYPE } from "@/lib/planning/multimedia-material";
 import { MultimediaMaterialClient } from "@/components/instructor/planning/multimedia-material-client";
 import { VIRTUAL_EVALUATION_TYPE } from "@/lib/planning/virtual-evaluation";
 import { VirtualEvaluationClient } from "@/components/instructor/planning/virtual-evaluation-client";
+import { COURSE_REVIEW_REPORT_TYPE } from "@/lib/planning/course-review-report";
+import { CourseReviewReportClient } from "@/components/instructor/planning/course-review-report-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -170,6 +172,14 @@ export default async function PlanningDocumentPage({
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
           prefill={{ courseName: prefill?.courseName }}
+        />
+      )}
+      {type === COURSE_REVIEW_REPORT_TYPE && (
+        <CourseReviewReportClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName, developerName: prefill?.instructorName }}
         />
       )}
     </div>

@@ -19,6 +19,7 @@ import { ActivityCalendarDocument } from "@/components/instructor/planning/activ
 import { VirtualParticipantManualDocument } from "@/components/instructor/planning/virtual-participant-manual-document";
 import { MultimediaMaterialDocument } from "@/components/instructor/planning/multimedia-material-document";
 import { VirtualEvaluationDocument } from "@/components/instructor/planning/virtual-evaluation-document";
+import { CourseReviewReportDocument } from "@/components/instructor/planning/course-review-report-document";
 import { hydrateQualityAssessment, QUALITY_ASSESSMENT_TYPE } from "@/lib/planning/quality-assessment";
 import { hydrateAnswerSheet, ANSWER_SHEET_TYPE } from "@/lib/planning/answer-sheet";
 import { hydrateActivitiesGuide, ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/activities-guide";
@@ -40,6 +41,7 @@ import { hydrateActivityCalendar, ACTIVITY_CALENDAR_TYPE } from "@/lib/planning/
 import { hydrateVirtualParticipantManual, VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/virtual-participant-manual";
 import { hydrateMultimediaMaterial, MULTIMEDIA_MATERIAL_TYPE } from "@/lib/planning/multimedia-material";
 import { hydrateVirtualEvaluation, VIRTUAL_EVALUATION_TYPE } from "@/lib/planning/virtual-evaluation";
+import { hydrateCourseReviewReport, COURSE_REVIEW_REPORT_TYPE } from "@/lib/planning/course-review-report";
 import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
@@ -113,6 +115,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
   if (type === VIRTUAL_EVALUATION_TYPE) {
     const d = hydrateVirtualEvaluation(data);
     return { node: <VirtualEvaluationDocument data={d} />, filename: `Evaluacion-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+  }
+  if (type === COURSE_REVIEW_REPORT_TYPE) {
+    const d = hydrateCourseReviewReport(data);
+    return { node: <CourseReviewReportDocument data={d} />, filename: `Reporte-revision-${sanitizeFilename(d.courseName || "curso")}.pdf` };
   }
   return null;
 }
