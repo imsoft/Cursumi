@@ -8,7 +8,7 @@ import {
   hydrateMultimediaMaterial,
   MULTIMEDIA_MATERIAL_TYPE,
 } from "@/lib/planning/multimedia-material";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function MultimediaMaterialClient({ courseId, initialData, initialStatus,
       hydrate={(raw) => hydrateMultimediaMaterial(raw, prefill)}
       renderForm={(value, onChange) => <MultimediaMaterialForm value={value} onChange={onChange} />}
       renderDocument={(value) => <MultimediaMaterialDocument data={value} />}
-      pdfFilename={(value) => `Material-multimedia-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(MULTIMEDIA_MATERIAL_TYPE, value.courseName)}
     />
   );
 }

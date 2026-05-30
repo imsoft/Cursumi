@@ -8,7 +8,7 @@ import {
   hydrateActivitySchedule,
   ACTIVITY_SCHEDULE_TYPE,
 } from "@/lib/planning/activity-schedule";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function ActivityScheduleClient({ courseId, initialData, initialStatus, p
       hydrate={(raw) => hydrateActivitySchedule(raw, prefill)}
       renderForm={(value, onChange) => <ActivityScheduleForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ActivityScheduleDocument data={value} />}
-      pdfFilename={(value) => `Cronograma-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(ACTIVITY_SCHEDULE_TYPE, value.courseName)}
       pdfOrientation="landscape"
     />
   );

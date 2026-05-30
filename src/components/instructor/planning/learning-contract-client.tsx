@@ -8,7 +8,7 @@ import {
   hydrateLearningContract,
   LEARNING_CONTRACT_TYPE,
 } from "@/lib/planning/learning-contract";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function LearningContractClient({ courseId, initialData, initialStatus, p
       hydrate={(raw) => hydrateLearningContract(raw, prefill)}
       renderForm={(value, onChange) => <LearningContractForm value={value} onChange={onChange} />}
       renderDocument={(value) => <LearningContractDocument data={value} />}
-      pdfFilename={(value) => `Contrato-aprendizaje-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(LEARNING_CONTRACT_TYPE, value.courseName)}
     />
   );
 }

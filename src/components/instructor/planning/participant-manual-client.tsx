@@ -8,7 +8,7 @@ import {
   hydrateParticipantManual,
   PARTICIPANT_MANUAL_TYPE,
 } from "@/lib/planning/participant-manual";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function ParticipantManualClient({ courseId, initialData, initialStatus, 
       hydrate={(raw) => hydrateParticipantManual(raw, prefill)}
       renderForm={(value, onChange) => <ParticipantManualForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ParticipantManualDocument data={value} />}
-      pdfFilename={(value) => `Manual-del-participante-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(PARTICIPANT_MANUAL_TYPE, value.courseName)}
     />
   );
 }

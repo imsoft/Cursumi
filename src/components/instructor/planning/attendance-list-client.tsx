@@ -8,7 +8,7 @@ import {
   hydrateAttendanceList,
   ATTENDANCE_LIST_TYPE,
 } from "@/lib/planning/attendance-list";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function AttendanceListClient({ courseId, initialData, initialStatus, pre
       hydrate={(raw) => hydrateAttendanceList(raw, prefill)}
       renderForm={(value, onChange) => <AttendanceListForm value={value} onChange={onChange} />}
       renderDocument={(value) => <AttendanceListDocument data={value} />}
-      pdfFilename={(value) => `Lista-asistencia-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(ATTENDANCE_LIST_TYPE, value.courseName)}
     />
   );
 }

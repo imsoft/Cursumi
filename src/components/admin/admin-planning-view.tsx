@@ -42,24 +42,25 @@ import { hydrateVirtualParticipantManual, VIRTUAL_PARTICIPANT_MANUAL_TYPE } from
 import { hydrateMultimediaMaterial, MULTIMEDIA_MATERIAL_TYPE } from "@/lib/planning/multimedia-material";
 import { hydrateVirtualEvaluation, VIRTUAL_EVALUATION_TYPE } from "@/lib/planning/virtual-evaluation";
 import { hydrateCourseReviewReport, COURSE_REVIEW_REPORT_TYPE } from "@/lib/planning/course-review-report";
-import { generateElementPdf, sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { generateElementPdf } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
   if (type === DESCRIPTIVE_CHART_TYPE) {
     const d = hydrateDescriptiveChart(data);
-    return { node: <DescriptiveChartDocument data={d} />, filename: `Carta-descriptiva-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <DescriptiveChartDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === CHECKLIST_TYPE) {
     const d = hydrateChecklist(data);
-    return { node: <ChecklistDocument data={d} />, filename: `Lista-verificacion-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <ChecklistDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === ATTENDANCE_LIST_TYPE) {
     const d = hydrateAttendanceList(data);
-    return { node: <AttendanceListDocument data={d} />, filename: `Lista-asistencia-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <AttendanceListDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === LEARNING_CONTRACT_TYPE) {
     const d = hydrateLearningContract(data);
-    return { node: <LearningContractDocument data={d} />, filename: `Contrato-aprendizaje-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <LearningContractDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (QUIZ_ASSESSMENT_TYPES.includes(type)) {
     const documentTitle = ASSESSMENT_TITLE[type] ?? "Evaluación";
@@ -69,56 +70,56 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
       node: (
         <QuizAssessmentDocument documentTitle={documentTitle} fallbackQuestionnaireTitle={fallbackQuestionnaireTitle} data={d} />
       ),
-      filename: `${sanitizeFilename(documentTitle)}-${sanitizeFilename(d.courseName || "curso")}.pdf`,
+      filename: buildPlanningFilename(type, d.courseName),
     };
   }
   if (type === QUALITY_ASSESSMENT_TYPE) {
     const d = hydrateQualityAssessment(data);
-    return { node: <QualityAssessmentDocument data={d} />, filename: `Evaluacion-de-calidad-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <QualityAssessmentDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === ANSWER_SHEET_TYPE) {
     const d = hydrateAnswerSheet(data);
-    return { node: <AnswerSheetDocument data={d} />, filename: `Hoja-de-respuestas-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <AnswerSheetDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === ACTIVITIES_GUIDE_TYPE) {
     const d = hydrateActivitiesGuide(data);
-    return { node: <ActivitiesGuideDocument data={d} />, filename: `Guia-de-actividades-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <ActivitiesGuideDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === PARTICIPANT_MANUAL_TYPE) {
     const d = hydrateParticipantManual(data);
-    return { node: <ParticipantManualDocument data={d} />, filename: `Manual-del-participante-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <ParticipantManualDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === ACTIVITY_SCHEDULE_TYPE) {
     const d = hydrateActivitySchedule(data);
-    return { node: <ActivityScheduleDocument data={d} />, filename: `Cronograma-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <ActivityScheduleDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === COURSE_INFO_TYPE) {
     const d = hydrateCourseInfoDocument(data);
-    return { node: <CourseInfoDocumentDocument data={d} />, filename: `Informacion-general-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <CourseInfoDocumentDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === VIRTUAL_ACTIVITIES_GUIDE_TYPE) {
     const d = hydrateVirtualActivitiesGuide(data);
-    return { node: <VirtualActivitiesGuideDocument data={d} />, filename: `Guia-actividades-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <VirtualActivitiesGuideDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === ACTIVITY_CALENDAR_TYPE) {
     const d = hydrateActivityCalendar(data);
-    return { node: <ActivityCalendarDocument data={d} />, filename: `Calendario-actividades-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <ActivityCalendarDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === VIRTUAL_PARTICIPANT_MANUAL_TYPE) {
     const d = hydrateVirtualParticipantManual(data);
-    return { node: <VirtualParticipantManualDocument data={d} />, filename: `Manual-participante-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <VirtualParticipantManualDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === MULTIMEDIA_MATERIAL_TYPE) {
     const d = hydrateMultimediaMaterial(data);
-    return { node: <MultimediaMaterialDocument data={d} />, filename: `Material-multimedia-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <MultimediaMaterialDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === VIRTUAL_EVALUATION_TYPE) {
     const d = hydrateVirtualEvaluation(data);
-    return { node: <VirtualEvaluationDocument data={d} />, filename: `Evaluacion-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <VirtualEvaluationDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   if (type === COURSE_REVIEW_REPORT_TYPE) {
     const d = hydrateCourseReviewReport(data);
-    return { node: <CourseReviewReportDocument data={d} />, filename: `Reporte-revision-${sanitizeFilename(d.courseName || "curso")}.pdf` };
+    return { node: <CourseReviewReportDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
   return null;
 }

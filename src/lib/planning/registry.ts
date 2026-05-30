@@ -189,3 +189,20 @@ export function getPlanningDocsByModality(modality: CourseModality): PlanningDoc
 export function getPlanningTotal(modality: CourseModality): number {
   return PLANNING_DOCUMENTS.filter((d) => d.modality === modality && d.available).length;
 }
+
+/**
+ * Nombre de archivo descriptivo y consistente para descargar un documento:
+ * "{Título del documento} - {Curso} - Cursumi.pdf".
+ * Conserva espacios y acentos; solo elimina caracteres inválidos en nombres de archivo.
+ */
+export function buildPlanningFilename(type: string, courseName: string): string {
+  const title = getPlanningDocMeta(type)?.title ?? "Documento de planeación";
+  const course = (courseName || "").trim();
+  const base = course ? `${title} - ${course}` : title;
+  const clean = base
+    .replace(/[\\/:*?"<>|]/g, "") // caracteres no válidos en nombres de archivo
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
+  return `${clean} - Cursumi.pdf`;
+}

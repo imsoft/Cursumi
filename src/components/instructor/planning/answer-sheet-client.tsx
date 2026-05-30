@@ -8,7 +8,7 @@ import {
   hydrateAnswerSheet,
   ANSWER_SHEET_TYPE,
 } from "@/lib/planning/answer-sheet";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function AnswerSheetClient({ courseId, initialData, initialStatus, prefil
       hydrate={(raw) => hydrateAnswerSheet(raw, prefill)}
       renderForm={(value, onChange) => <AnswerSheetForm value={value} onChange={onChange} />}
       renderDocument={(value) => <AnswerSheetDocument data={value} />}
-      pdfFilename={(value) => `Hoja-de-respuestas-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(ANSWER_SHEET_TYPE, value.courseName)}
     />
   );
 }

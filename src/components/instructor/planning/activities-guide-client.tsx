@@ -8,7 +8,7 @@ import {
   hydrateActivitiesGuide,
   ACTIVITIES_GUIDE_TYPE,
 } from "@/lib/planning/activities-guide";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function ActivitiesGuideClient({ courseId, initialData, initialStatus, pr
       hydrate={(raw) => hydrateActivitiesGuide(raw, prefill)}
       renderForm={(value, onChange) => <ActivitiesGuideForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ActivitiesGuideDocument data={value} />}
-      pdfFilename={(value) => `Guia-de-actividades-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(ACTIVITIES_GUIDE_TYPE, value.courseName)}
     />
   );
 }

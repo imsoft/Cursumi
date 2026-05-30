@@ -8,7 +8,7 @@ import {
   hydrateChecklist,
   CHECKLIST_TYPE,
 } from "@/lib/planning/checklist";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function ChecklistClient({ courseId, initialData, initialStatus, prefill 
       hydrate={(raw) => hydrateChecklist(raw, prefill)}
       renderForm={(value, onChange) => <ChecklistForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ChecklistDocument data={value} />}
-      pdfFilename={(value) => `Lista-verificacion-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(CHECKLIST_TYPE, value.courseName)}
     />
   );
 }

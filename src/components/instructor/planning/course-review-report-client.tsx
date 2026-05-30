@@ -8,7 +8,7 @@ import {
   hydrateCourseReviewReport,
   COURSE_REVIEW_REPORT_TYPE,
 } from "@/lib/planning/course-review-report";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function CourseReviewReportClient({ courseId, initialData, initialStatus,
       hydrate={(raw) => hydrateCourseReviewReport(raw, prefill)}
       renderForm={(value, onChange) => <CourseReviewReportForm value={value} onChange={onChange} />}
       renderDocument={(value) => <CourseReviewReportDocument data={value} />}
-      pdfFilename={(value) => `Reporte-revision-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(COURSE_REVIEW_REPORT_TYPE, value.courseName)}
     />
   );
 }

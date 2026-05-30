@@ -8,7 +8,7 @@ import {
   hydrateQualityAssessment,
   QUALITY_ASSESSMENT_TYPE,
 } from "@/lib/planning/quality-assessment";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function QualityAssessmentClient({ courseId, initialData, initialStatus, 
       hydrate={(raw) => hydrateQualityAssessment(raw, prefill)}
       renderForm={(value, onChange) => <QualityAssessmentForm value={value} onChange={onChange} />}
       renderDocument={(value) => <QualityAssessmentDocument data={value} />}
-      pdfFilename={(value) => `Evaluacion-de-calidad-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(QUALITY_ASSESSMENT_TYPE, value.courseName)}
     />
   );
 }

@@ -8,7 +8,7 @@ import {
   hydrateCourseInfoDocument,
   COURSE_INFO_TYPE,
 } from "@/lib/planning/course-info-document";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function CourseInfoDocumentClient({ courseId, initialData, initialStatus,
       hydrate={(raw) => hydrateCourseInfoDocument(raw, prefill)}
       renderForm={(value, onChange) => <CourseInfoDocumentForm value={value} onChange={onChange} />}
       renderDocument={(value) => <CourseInfoDocumentDocument data={value} />}
-      pdfFilename={(value) => `Informacion-general-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(COURSE_INFO_TYPE, value.courseName)}
     />
   );
 }

@@ -9,7 +9,7 @@ import {
   ASSESSMENT_TITLE,
   QUESTIONNAIRE_TITLE,
 } from "@/lib/planning/quiz-assessment";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -38,7 +38,7 @@ export function QuizAssessmentClient({ courseId, type, initialData, initialStatu
           data={value}
         />
       )}
-      pdfFilename={(value) => `${sanitizeFilename(documentTitle)}-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(type, value.courseName)}
     />
   );
 }

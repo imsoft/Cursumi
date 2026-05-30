@@ -8,7 +8,7 @@ import {
   hydrateActivityCalendar,
   ACTIVITY_CALENDAR_TYPE,
 } from "@/lib/planning/activity-calendar";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function ActivityCalendarClient({ courseId, initialData, initialStatus, p
       hydrate={(raw) => hydrateActivityCalendar(raw, prefill)}
       renderForm={(value, onChange) => <ActivityCalendarForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ActivityCalendarDocument data={value} />}
-      pdfFilename={(value) => `Calendario-actividades-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(ACTIVITY_CALENDAR_TYPE, value.courseName)}
     />
   );
 }

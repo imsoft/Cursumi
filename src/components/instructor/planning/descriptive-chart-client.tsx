@@ -8,7 +8,7 @@ import {
   hydrateDescriptiveChart,
   DESCRIPTIVE_CHART_TYPE,
 } from "@/lib/planning/descriptive-chart";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function DescriptiveChartClient({ courseId, initialData, initialStatus, p
       hydrate={(raw) => hydrateDescriptiveChart(raw, prefill)}
       renderForm={(value, onChange) => <DescriptiveChartForm value={value} onChange={onChange} />}
       renderDocument={(value) => <DescriptiveChartDocument data={value} />}
-      pdfFilename={(value) => `Carta-descriptiva-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(DESCRIPTIVE_CHART_TYPE, value.courseName)}
     />
   );
 }

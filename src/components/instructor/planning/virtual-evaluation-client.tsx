@@ -8,7 +8,7 @@ import {
   hydrateVirtualEvaluation,
   VIRTUAL_EVALUATION_TYPE,
 } from "@/lib/planning/virtual-evaluation";
-import { sanitizeFilename } from "@/lib/planning/generate-pdf";
+import { buildPlanningFilename } from "@/lib/planning/registry";
 
 type Props = {
   courseId: string;
@@ -27,7 +27,7 @@ export function VirtualEvaluationClient({ courseId, initialData, initialStatus, 
       hydrate={(raw) => hydrateVirtualEvaluation(raw, prefill)}
       renderForm={(value, onChange) => <VirtualEvaluationForm value={value} onChange={onChange} />}
       renderDocument={(value) => <VirtualEvaluationDocument data={value} />}
-      pdfFilename={(value) => `Evaluacion-${sanitizeFilename(value.courseName || "curso")}.pdf`}
+      pdfFilename={(value) => buildPlanningFilename(VIRTUAL_EVALUATION_TYPE, value.courseName)}
     />
   );
 }
