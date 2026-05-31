@@ -40,6 +40,8 @@ import { VIRTUAL_EVALUATION_TYPE } from "@/lib/planning/virtual-evaluation";
 import { VirtualEvaluationClient } from "@/components/instructor/planning/virtual-evaluation-client";
 import { COURSE_REVIEW_REPORT_TYPE } from "@/lib/planning/course-review-report";
 import { CourseReviewReportClient } from "@/components/instructor/planning/course-review-report-client";
+import { PRESENTATION_TYPE } from "@/lib/planning/presentation";
+import { PresentationClient } from "@/components/instructor/planning/presentation-client";
 
 export default async function PlanningDocumentPage({
   params,
@@ -180,6 +182,14 @@ export default async function PlanningDocumentPage({
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
           prefill={{ courseName: prefill?.courseName, developerName: prefill?.instructorName }}
+        />
+      )}
+      {type === PRESENTATION_TYPE && (
+        <PresentationClient
+          courseId={id}
+          initialData={doc?.data ?? null}
+          initialStatus={doc?.status}
+          prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
         />
       )}
     </div>

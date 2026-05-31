@@ -20,6 +20,8 @@ type Props<T> = {
   renderDocument: (value: T) => ReactNode;
   pdfFilename: (value: T) => string;
   pdfOrientation?: "portrait" | "landscape";
+  /** Override de exportación (p. ej. presentaciones a PDF 16:9). Recibe el contenedor del documento. */
+  exportPdf?: (el: HTMLElement, filename: string) => Promise<void>;
 };
 
 /**
@@ -36,6 +38,7 @@ export function PlanningDocShell<T>({
   renderDocument,
   pdfFilename,
   pdfOrientation = "portrait",
+  exportPdf,
 }: Props<T>) {
   const [data, setData] = useState<T>(() => hydrate(initialData));
   const [saveState, setSaveState] = useState<SaveState>("idle");
@@ -95,7 +98,11 @@ export function PlanningDocShell<T>({
     setPdfError(null);
     setDownloading(true);
     try {
-      await generateElementPdf(docRef.current, pdfFilename(data), pdfOrientation);
+      if (exportPdf) {
+        await exportPdf(docRef.current, pdfFilename(data));
+      } else {
+        await generateElementPdf(docRef.current, pdfFilename(data), pdfOrientation);
+      }
     } catch {
       setPdfError("No se pudo generar el PDF. Inténtalo de nuevo.");
     } finally {

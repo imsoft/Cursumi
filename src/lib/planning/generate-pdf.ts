@@ -122,6 +122,41 @@ export async function generateElementPdf(
   pdf.save(filename);
 }
 
+/**
+ * Exporta una presentación a PDF 16:9 (una diapositiva por página).
+ * Cada elemento con [data-slide] dentro del contenedor se captura por separado
+ * y ocupa una página completa widescreen (formato PowerPoint 960×540 pt).
+ */
+export async function generateSlidesPdf(container: HTMLElement, filename: string): Promise<void> {
+  const slides = Array.from(container.querySelectorAll<HTMLElement>("[data-slide]"));
+  if (slides.length === 0) return;
+
+  const [html2canvasMod, jsPDFMod] = await Promise.all([import("html2canvas"), import("jspdf")]);
+  const html2canvas = html2canvasMod.default;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const jsPDFMods = jsPDFMod as any;
+  const JsPDF = jsPDFMods.jsPDF ?? jsPDFMods.default?.jsPDF ?? jsPDFMods.default;
+  if (!JsPDF) throw new Error("No se pudo cargar jsPDF");
+
+  const PAGE_W = 960; // pt — 13.333in (16:9)
+  const PAGE_H = 540; // pt — 7.5in
+  const pdf = new JsPDF({ orientation: "landscape", unit: "pt", format: [PAGE_W, PAGE_H] });
+
+  for (let i = 0; i < slides.length; i++) {
+    const canvas = await html2canvas(slides[i], {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: "#ffffff",
+    });
+    const imgData = canvas.toDataURL("image/png");
+    if (i > 0) pdf.addPage([PAGE_W, PAGE_H], "landscape");
+    pdf.addImage(imgData, "PNG", 0, 0, PAGE_W, PAGE_H);
+  }
+
+  pdf.save(filename);
+}
+
 export function sanitizeFilename(s: string): string {
   return s
     .replace(/[^a-zA-Z0-9À-ÿ\s-]/g, "")

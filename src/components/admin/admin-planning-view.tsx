@@ -20,6 +20,7 @@ import { VirtualParticipantManualDocument } from "@/components/instructor/planni
 import { MultimediaMaterialDocument } from "@/components/instructor/planning/multimedia-material-document";
 import { VirtualEvaluationDocument } from "@/components/instructor/planning/virtual-evaluation-document";
 import { CourseReviewReportDocument } from "@/components/instructor/planning/course-review-report-document";
+import { PresentationDocument } from "@/components/instructor/planning/presentation-document";
 import { hydrateQualityAssessment, QUALITY_ASSESSMENT_TYPE } from "@/lib/planning/quality-assessment";
 import { hydrateAnswerSheet, ANSWER_SHEET_TYPE } from "@/lib/planning/answer-sheet";
 import { hydrateActivitiesGuide, ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/activities-guide";
@@ -42,7 +43,8 @@ import { hydrateVirtualParticipantManual, VIRTUAL_PARTICIPANT_MANUAL_TYPE } from
 import { hydrateMultimediaMaterial, MULTIMEDIA_MATERIAL_TYPE } from "@/lib/planning/multimedia-material";
 import { hydrateVirtualEvaluation, VIRTUAL_EVALUATION_TYPE } from "@/lib/planning/virtual-evaluation";
 import { hydrateCourseReviewReport, COURSE_REVIEW_REPORT_TYPE } from "@/lib/planning/course-review-report";
-import { generateElementPdf } from "@/lib/planning/generate-pdf";
+import { hydratePresentation, PRESENTATION_TYPE } from "@/lib/planning/presentation";
+import { generateElementPdf, generateSlidesPdf } from "@/lib/planning/generate-pdf";
 import { buildPlanningFilename } from "@/lib/planning/registry";
 
 function renderByType(type: string, data: unknown): { node: ReactNode; filename: string } | null {
@@ -121,6 +123,10 @@ function renderByType(type: string, data: unknown): { node: ReactNode; filename:
     const d = hydrateCourseReviewReport(data);
     return { node: <CourseReviewReportDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
   }
+  if (type === PRESENTATION_TYPE) {
+    const d = hydratePresentation(data);
+    return { node: <PresentationDocument data={d} />, filename: buildPlanningFilename(type, d.courseName) };
+  }
   return null;
 }
 
@@ -142,7 +148,11 @@ export function AdminPlanningDocView({ type, data }: { type: string; data: unkno
     if (!docRef.current) return;
     setDownloading(true);
     try {
-      await generateElementPdf(docRef.current, rendered.filename);
+      if (type === PRESENTATION_TYPE) {
+        await generateSlidesPdf(docRef.current, rendered.filename);
+      } else {
+        await generateElementPdf(docRef.current, rendered.filename);
+      }
     } finally {
       setDownloading(false);
     }

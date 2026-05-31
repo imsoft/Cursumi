@@ -7,6 +7,7 @@ import { VIRTUAL_PARTICIPANT_MANUAL_TYPE } from "./virtual-participant-manual";
 import { MULTIMEDIA_MATERIAL_TYPE } from "./multimedia-material";
 import { VIRTUAL_EVALUATION_TYPE } from "./virtual-evaluation";
 import { COURSE_REVIEW_REPORT_TYPE } from "./course-review-report";
+import { PRESENTATION_TYPE } from "./presentation";
 
 export type CourseModality = "presencial" | "virtual";
 
@@ -173,6 +174,13 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
     type: COURSE_REVIEW_REPORT_TYPE,
     title: "Reporte de revisión del funcionamiento",
     description: "Observaciones de diseño, contenido y funcionalidad de la plataforma con propuestas de modificación.",
+    available: true,
+    modality: "virtual",
+  },
+  {
+    type: PRESENTATION_TYPE,
+    title: "Presentación del curso",
+    description: "Diapositivas 16:9 con la marca Cursumi (portada, temas, contenido y cierre) para grabar el curso. Exporta a PDF widescreen.",
     available: true,
     modality: "virtual",
   },
