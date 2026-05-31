@@ -29,11 +29,11 @@ export function emptyAnswerQuestion(): AnswerQuestion {
   return { id: crypto.randomUUID(), statement: "", options: ["", "", ""], correctIndex: null };
 }
 
-export function emptyAnswerTopic(number: number): AnswerTopic {
+export function emptyAnswerTopic(): AnswerTopic {
   return {
     id: crypto.randomUUID(),
-    title: `Tema ${number}: `,
-    instructions: `El participante elegirá la respuesta correcta con base en lo aprendido en el tema ${number} del curso.`,
+    title: "",
+    instructions: "",
     questions: [emptyAnswerQuestion()],
   };
 }
@@ -51,7 +51,7 @@ export function createEmptyAnswerSheet(prefill?: {
     schedule: "",
     duration: prefill?.duration ?? "",
     documentTitle: "Hoja de Respuestas",
-    topics: [emptyAnswerTopic(1)],
+    topics: [emptyAnswerTopic()],
   };
 }
 

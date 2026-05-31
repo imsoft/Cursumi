@@ -14,10 +14,10 @@ export type MultimediaMaterialData = {
   videos: MultimediaVideo[];
 };
 
-export function emptyVideo(index: number): MultimediaVideo {
+export function emptyVideo(): MultimediaVideo {
   return {
     id: crypto.randomUUID(),
-    title: index === 0 ? "Video de bienvenida." : `Video del tema ${index}: `,
+    title: "",
     imageUrl: "",
   };
 }
@@ -29,8 +29,8 @@ export function createEmptyMultimediaMaterial(prefill?: {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
-    presentation: "En este documento se presentan las pruebas del material multimedia generado para el curso.",
-    videos: [emptyVideo(0), emptyVideo(1)],
+    presentation: "",
+    videos: [emptyVideo()],
   };
 }
 

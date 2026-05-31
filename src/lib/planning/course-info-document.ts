@@ -33,10 +33,10 @@ export function totalHours(topics: CourseTopic[]): number {
   return topics.reduce((sum, t) => sum + (t.hours || 0), 0);
 }
 
-export function emptyTopic(index: number): CourseTopic {
+export function emptyTopic(): CourseTopic {
   return {
     id: crypto.randomUUID(),
-    title: `Tema ${index}: `,
+    title: "",
     objective: "",
     hours: 1,
   };
@@ -53,18 +53,15 @@ export function createEmptyCourseInfoDocument(prefill?: {
   return {
     courseName: prefill?.courseName ?? "",
     generalObjective: "",
-    topics: [emptyTopic(1)],
+    topics: [emptyTopic()],
     introduction: "",
     methodology: "",
     visualGuide: "",
     targetAudience: "",
-    noPriorKnowledge: "No necesita tener conocimientos previos para poder tomar el curso.",
+    noPriorKnowledge: "",
     requiredSkills: "",
     requiredMaterials: "",
-    evaluationItems: [
-      emptyEvaluationItem("Formativa: Cuestionario"),
-      emptyEvaluationItem("Sumativa: Cuestionario"),
-    ],
+    evaluationItems: [emptyEvaluationItem()],
     durationDays: 1,
     developerName: prefill?.instructorName ?? "",
     developerRole: "DESARROLLADOR",

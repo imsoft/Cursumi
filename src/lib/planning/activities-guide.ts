@@ -31,15 +31,13 @@ export type ActivitiesGuideData = {
   units: LearningUnit[];
 };
 
-const MATERIALS_DEFAULT = "Acceso a internet\nAcceso a la plataforma educativa\nEstar registrado en la plataforma.";
-
 export function emptyActivity(): UnitActivity {
   return {
     id: crypto.randomUUID(),
     title: "",
     instructions: "",
-    materials: MATERIALS_DEFAULT,
-    participation: "Individual",
+    materials: "",
+    participation: "",
     midTerm: "",
     weight: "",
   };
@@ -50,7 +48,7 @@ export function emptyUnit(): LearningUnit {
     id: crypto.randomUUID(),
     name: "",
     objective: "",
-    period: "Indefinido",
+    period: "",
     generalWeight: "",
     criteria: { knowledge: false, skills: false, attitudes: false },
     activities: [emptyActivity()],

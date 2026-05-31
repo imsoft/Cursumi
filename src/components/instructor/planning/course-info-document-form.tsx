@@ -47,7 +47,7 @@ export function CourseInfoDocumentForm({ value, onChange }: Props) {
     onChange({ ...value, topics: value.topics.filter((t) => t.id !== id) });
 
   const addTopic = () =>
-    onChange({ ...value, topics: [...value.topics, emptyTopic(value.topics.length + 1)] });
+    onChange({ ...value, topics: [...value.topics, emptyTopic()] });
 
   const updateEvalItem = (id: string, text: string) =>
     onChange({ ...value, evaluationItems: value.evaluationItems.map((e) => (e.id === id ? { ...e, text } : e)) });

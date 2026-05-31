@@ -61,11 +61,11 @@ export function emptyEvaluationQuestion(): EvaluationQuestion {
   };
 }
 
-export function emptyKnowledgeEvaluation(index: number): KnowledgeEvaluation {
+export function emptyKnowledgeEvaluation(): KnowledgeEvaluation {
   return {
     id: crypto.randomUUID(),
-    title: `Evaluación del Tema ${index}: `,
-    instructions: `El participante elegirá la respuesta correcta con base en lo aprendido en el tema ${index} del curso. Tendrá 30 minutos para poder contestarlo por completo. Tendrá un valor del 50% de su calificación final.`,
+    title: "",
+    instructions: "",
     questions: [emptyEvaluationQuestion()],
   };
 }
@@ -78,42 +78,6 @@ export function emptyQualitySection(): QualitySection {
   return { id: crypto.randomUUID(), title: "", questions: [emptyQualityQuestion()] };
 }
 
-function question(statement: string): QualityQuestion {
-  return { id: crypto.randomUUID(), statement };
-}
-
-function defaultQualitySections(): QualitySection[] {
-  return [
-    {
-      id: crypto.randomUUID(),
-      title: "Instructor",
-      questions: [
-        question("¿Cómo calificarías el dominio del tema por parte del instructor?"),
-        question("¿Cómo calificarías la forma en que el instructor expuso la información?"),
-        question("¿Cómo calificarías la forma en que el instructor expone las instrucciones de las actividades?"),
-      ],
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Contenido",
-      questions: [
-        question("¿Cómo calificarías el contenido expuesto en el curso?"),
-        question("¿Cómo calificarías la relevancia que tiene la información que acabas de aprender con tu día a día?"),
-        question("¿Cómo calificarías la claridad que tiene la información expuesta?"),
-        question("¿Cómo calificarías el material de apoyo del curso?"),
-      ],
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Curso",
-      questions: [
-        question("¿Cómo calificarías la extensión del curso?"),
-        question("¿Cómo calificarías el diseño del curso?"),
-      ],
-    },
-  ];
-}
-
 export function createEmptyVirtualEvaluation(prefill?: {
   courseName?: string;
 }): VirtualEvaluationData {
@@ -122,11 +86,10 @@ export function createEmptyVirtualEvaluation(prefill?: {
     referenceStandard: "",
     showTableOfContents: true,
     presentation: "",
-    knowledgeEvaluations: [emptyKnowledgeEvaluation(1), emptyKnowledgeEvaluation(2)],
-    qualityInstructions:
-      "El participante elegirá las respuestas que decida sean las más apropiadas a cada pregunta para poder calificar el curso, el contenido y al instructor. Tendrá 30 minutos para contestarlo y no tendrá ponderación alguna sobre su calificación final.",
+    knowledgeEvaluations: [emptyKnowledgeEvaluation()],
+    qualityInstructions: "",
     qualityScale: [...DEFAULT_QUALITY_SCALE],
-    qualitySections: defaultQualitySections(),
+    qualitySections: [emptyQualitySection()],
   };
 }
 

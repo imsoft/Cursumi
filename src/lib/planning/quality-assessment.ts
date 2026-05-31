@@ -38,38 +38,6 @@ export function emptyQualitySection(): QualitySection {
   return { id: crypto.randomUUID(), title: "", questions: [emptyQualityQuestion()] };
 }
 
-function defaultSections(): QualitySection[] {
-  return [
-    {
-      id: crypto.randomUUID(),
-      title: "Instructor",
-      questions: [
-        question("¿Cómo calificarías el dominio del tema por parte del instructor?"),
-        question("¿Cómo calificarías la forma en que el instructor expuso la información?"),
-        question("¿Cómo calificarías la forma en que el instructor expone las instrucciones de las actividades?"),
-      ],
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Contenido",
-      questions: [
-        question("¿Cómo calificarías el contenido expuesto en el curso?"),
-        question("¿Cómo calificarías la relevancia que tiene la información que acabas de aprender con tu día a día?"),
-        question("¿Cómo calificarías la claridad que tiene la información expuesta?"),
-        question("¿Cómo calificarías el material de apoyo del curso?"),
-      ],
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Curso",
-      questions: [
-        question("¿Cómo calificarías la extensión del curso?"),
-        question("¿Cómo calificarías el diseño del curso?"),
-      ],
-    },
-  ];
-}
-
 export function createEmptyQualityAssessment(prefill?: {
   courseName?: string;
   instructorName?: string;
@@ -83,10 +51,9 @@ export function createEmptyQualityAssessment(prefill?: {
     schedule: "",
     duration: prefill?.duration ?? "",
     questionnaireTitle: "Cuestionario de calidad",
-    instructions:
-      "El participante elegirá las respuestas que decida sean las más apropiadas a cada pregunta para poder calificar el curso, el contenido y al instructor. Tendrá 30 minutos para contestarlo y no tendrá ponderación alguna sobre su calificación final.",
+    instructions: "",
     scale: [...DEFAULT_QUALITY_SCALE],
-    sections: defaultSections(),
+    sections: [emptyQualitySection()],
   };
 }
 

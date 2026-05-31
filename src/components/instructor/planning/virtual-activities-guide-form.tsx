@@ -195,7 +195,7 @@ export function VirtualActivitiesGuideForm({ value, onChange }: Props) {
     onChange({ ...value, units: value.units.filter((u) => u.id !== id) });
 
   const addUnit = () =>
-    onChange({ ...value, units: [...value.units, emptyVirtualUnit(value.units.length + 1)] });
+    onChange({ ...value, units: [...value.units, emptyVirtualUnit()] });
 
   return (
     <div className="space-y-6">

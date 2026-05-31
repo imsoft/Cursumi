@@ -29,29 +29,26 @@ export type VirtualActivitiesGuideData = {
   units: VirtualLearningUnit[];
 };
 
-const DEFAULT_MATERIALS =
-  "Acceso a internet\nAcceso a la plataforma educativa\nEstar registrado en la plataforma.";
-
 export function emptyVirtualActivity(): VirtualActivity {
   return {
     id: crypto.randomUUID(),
     title: "",
     instructions: "",
-    materials: DEFAULT_MATERIALS,
-    participation: "Individual",
+    materials: "",
+    participation: "",
     deliveryMethod: "",
-    weight: "0%",
+    weight: "",
   };
 }
 
-export function emptyVirtualUnit(index: number): VirtualLearningUnit {
+export function emptyVirtualUnit(): VirtualLearningUnit {
   return {
     id: crypto.randomUUID(),
-    name: `Unidad ${index}: `,
+    name: "",
     specificObjective: "",
-    activityPeriod: "Indefinido",
-    generalWeight: "50%",
-    criteria: { knowledge: true, skills: false, attitudes: false },
+    activityPeriod: "",
+    generalWeight: "",
+    criteria: { knowledge: false, skills: false, attitudes: false },
     activities: [emptyVirtualActivity()],
   };
 }
@@ -61,7 +58,7 @@ export function createEmptyVirtualActivitiesGuide(prefill?: {
 }): VirtualActivitiesGuideData {
   return {
     courseName: prefill?.courseName ?? "",
-    units: [emptyVirtualUnit(1)],
+    units: [emptyVirtualUnit()],
   };
 }
 

@@ -68,7 +68,7 @@ export type DescriptiveChartData = {
 };
 
 function emptySpecificObjective(): SpecificObjective {
-  return { subject: "El participante", action: "", condition: "", topics: "" };
+  return { subject: "", action: "", condition: "", topics: "" };
 }
 
 export function emptyActivityRow(): ActivityRow {
@@ -82,14 +82,14 @@ export function emptyActivityRow(): ActivityRow {
   };
 }
 
-export function emptyEvaluationCriteria(aspect: string, moment: string): EvaluationCriteria {
+export function emptyEvaluationCriteria(aspect = "", moment = ""): EvaluationCriteria {
   return {
     id: crypto.randomUUID(),
     aspect,
     percentage: "",
-    instrument: "Cuestionario",
+    instrument: "",
     moment,
-    type: "Heteroevaluación",
+    type: "",
   };
 }
 
@@ -109,7 +109,7 @@ export function createEmptyDescriptiveChart(prefill?: {
     knowledgeProfile: "",
     skillsProfile: "",
     purpose: "",
-    generalObjective: { subject: "El participante", action: "", condition: "" },
+    generalObjective: { subject: "", action: "", condition: "" },
     cognitiveObjective: emptySpecificObjective(),
     psychomotorObjective: emptySpecificObjective(),
     affectiveObjective: emptySpecificObjective(),
@@ -119,17 +119,13 @@ export function createEmptyDescriptiveChart(prefill?: {
     humanResourcesRequirement: "",
     safetyRequirement: "",
     assessmentDescription: "",
-    assessmentCriteria: [
-      emptyEvaluationCriteria("Evaluación diagnóstica", "Al inicio"),
-      emptyEvaluationCriteria("Evaluación formativa", "Intermedia"),
-      emptyEvaluationCriteria("Evaluación sumativa", "Al final"),
-    ],
+    assessmentCriteria: [emptyEvaluationCriteria()],
     resourceVerification: {
-      stage: "Comprobación de la existencia y funcionamiento de los recursos requeridos",
+      stage: "",
       activities: "",
       duration: "",
       techniques: "",
-      materials: "Lista de verificación de requerimientos",
+      materials: "",
     },
     opening: [emptyActivityRow()],
     development: [emptyActivityRow()],

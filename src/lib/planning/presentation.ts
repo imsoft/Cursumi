@@ -26,13 +26,13 @@ export const SLIDE_KIND_LABEL: Record<SlideKind, string> = {
 export function emptySlide(kind: SlideKind): Slide {
   switch (kind) {
     case "cover":
-      return { id: crypto.randomUUID(), kind, heading: "", sub: "Curso en línea", bullets: [] };
+      return { id: crypto.randomUUID(), kind, heading: "", sub: "", bullets: [] };
     case "section":
-      return { id: crypto.randomUUID(), kind, heading: "Tema 1", sub: "", bullets: [] };
+      return { id: crypto.randomUUID(), kind, heading: "", sub: "", bullets: [] };
     case "content":
       return { id: crypto.randomUUID(), kind, heading: "", sub: "", bullets: [""] };
     case "closing":
-      return { id: crypto.randomUUID(), kind, heading: "¡Gracias!", sub: "Has terminado este tema.", bullets: [] };
+      return { id: crypto.randomUUID(), kind, heading: "", sub: "", bullets: [] };
   }
 }
 
@@ -45,10 +45,9 @@ export function createEmptyPresentation(prefill?: {
     courseName,
     presenter: prefill?.instructorName ?? "",
     slides: [
-      { id: crypto.randomUUID(), kind: "cover", heading: courseName, sub: "Curso en línea", bullets: [] },
-      { id: crypto.randomUUID(), kind: "section", heading: "Tema 1", sub: "", bullets: [] },
-      { id: crypto.randomUUID(), kind: "content", heading: "Puntos clave", sub: "", bullets: ["", "", ""] },
-      { id: crypto.randomUUID(), kind: "closing", heading: "¡Gracias!", sub: "Has terminado este tema.", bullets: [] },
+      // La portada arranca con el nombre real del curso; el resto en blanco.
+      { id: crypto.randomUUID(), kind: "cover", heading: courseName, sub: "", bullets: [] },
+      { id: crypto.randomUUID(), kind: "content", heading: "", sub: "", bullets: [""] },
     ],
   };
 }

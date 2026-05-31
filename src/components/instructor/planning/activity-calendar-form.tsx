@@ -141,7 +141,7 @@ export function ActivityCalendarForm({ value, onChange }: Props) {
     onChange({ ...value, units: value.units.filter((u) => u.id !== id) });
 
   const addUnit = () =>
-    onChange({ ...value, units: [...value.units, emptyCalendarUnit(value.units.length + 1)] });
+    onChange({ ...value, units: [...value.units, emptyCalendarUnit()] });
 
   return (
     <div className="space-y-6">

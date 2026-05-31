@@ -156,7 +156,7 @@ export function VirtualEvaluationForm({ value, onChange }: Props) {
     onChange({ ...value, knowledgeEvaluations: value.knowledgeEvaluations.filter((ev) => ev.id !== id) });
 
   const addEval = () =>
-    onChange({ ...value, knowledgeEvaluations: [...value.knowledgeEvaluations, emptyKnowledgeEvaluation(value.knowledgeEvaluations.length + 1)] });
+    onChange({ ...value, knowledgeEvaluations: [...value.knowledgeEvaluations, emptyKnowledgeEvaluation()] });
 
   // Quality sections
   const updateSection = (id: string, patch: Partial<QualitySection>) =>

@@ -95,25 +95,6 @@ export function formatDateES(dateStr: string): string {
   return `${d.getDate()} de ${MONTHS_FULL_ES[d.getMonth()]} de ${d.getFullYear()}`;
 }
 
-// ── Default activities ──────────────────────────────────────────────────────
-
-const DEFAULT_ACTIVITIES: Omit<ScheduleActivity, "id">[] = [
-  { name: "1.- Análisis de objetivos del curso.",                                                     planStart: 1,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "2.- Definición del contenido general.",                                                    planStart: 1,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "3.- Definición de los temas para el cumplimiento de los objetivos particulares.",          planStart: 1,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "4.- Diseño y elaboración del documento de información general del curso.",                 planStart: 1,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "5.- Diseño y elaboración de instrumentos de evaluación.",                                  planStart: 2,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "6.- Diseño y elaboración de actividades didácticas por tema.",                             planStart: 3,  planDuration: 2, realStart: 0, realDuration: 0 },
-  { name: "7.- Elaboración de la guía de actividades.",                                               planStart: 5,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "8.- Diseño y elaboración del calendario de actividades.",                                  planStart: 6,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "9.- Diseño y elaboración del manual de aprendizaje.",                                      planStart: 7,  planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "10.- Diseño y elaboración de la presentación.",                                            planStart: 8,  planDuration: 2, realStart: 0, realDuration: 0 },
-  { name: "11.- Diseño y grabación del contenido multimedia.",                                        planStart: 10, planDuration: 3, realStart: 0, realDuration: 0 },
-  { name: "12.- Edición del contenido multimedia.",                                                   planStart: 13, planDuration: 2, realStart: 0, realDuration: 0 },
-  { name: "13.- Ensamblado del curso en línea.",                                                      planStart: 15, planDuration: 1, realStart: 0, realDuration: 0 },
-  { name: "14.- Inicio del curso.",                                                                   planStart: 19, planDuration: 1, realStart: 0, realDuration: 0 },
-];
-
 export function emptyActivity(planStart = 1): ScheduleActivity {
   return { id: crypto.randomUUID(), name: "", planStart, planDuration: 1, realStart: 0, realDuration: 0 };
 }
@@ -131,7 +112,7 @@ export function createEmptyActivitySchedule(prefill?: {
     highlightedPeriod: 1,
     elaboratedBy: prefill?.instructorName ?? "",
     approvedBy: prefill?.instructorName ?? "",
-    activities: DEFAULT_ACTIVITIES.map((a) => ({ ...a, id: crypto.randomUUID() })),
+    activities: [emptyActivity()],
   };
 }
 

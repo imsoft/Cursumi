@@ -16,22 +16,6 @@ export type LearningContractData = {
   participantCommitments: CommitmentRow[];
 };
 
-const DEFAULT_FACILITATOR = [
-  "Se compromete a respetar a los participantes y escuchar y entender las dudas que tengan.",
-  "Se compromete a impartir de manera clara y directa toda la información del curso.",
-  "Se compromete a proporcionar todo el material que necesitan los participantes para cumplir con el curso.",
-  "Se compromete a evaluar de manera correcta y justa a todos los participantes.",
-];
-
-const DEFAULT_PARTICIPANT = [
-  "Se compromete a prestar atención en todo momento.",
-  "Se compromete a respetar al instructor y a sus compañeros en todo momento.",
-  "Se compromete a ser participativo en las actividades que sean impartidas durante el curso.",
-  "Se compromete a exponer sus dudas con respeto.",
-  "Se compromete a cuidar y respetar el material didáctico y material del lugar.",
-  "Se compromete a no divulgar el material de estudio sin permiso.",
-];
-
 export function emptyCommitment(description = ""): CommitmentRow {
   return { id: crypto.randomUUID(), description };
 }
@@ -48,8 +32,8 @@ export function createEmptyLearningContract(prefill?: {
     duration: prefill?.duration ?? "",
     schedule: "",
     date: "",
-    facilitatorCommitments: DEFAULT_FACILITATOR.map((d) => emptyCommitment(d)),
-    participantCommitments: DEFAULT_PARTICIPANT.map((d) => emptyCommitment(d)),
+    facilitatorCommitments: [emptyCommitment()],
+    participantCommitments: [emptyCommitment()],
   };
 }
 

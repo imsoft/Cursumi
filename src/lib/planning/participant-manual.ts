@@ -21,30 +21,12 @@ export function emptyManualSection(level: SectionLevel = 1): ManualSection {
   return { id: crypto.randomUUID(), level, title: "", body: "" };
 }
 
-function section(level: SectionLevel, title: string): ManualSection {
-  return { id: crypto.randomUUID(), level, title, body: "" };
-}
-
-function defaultSections(): ManualSection[] {
-  return [
-    section(1, "Presentación"),
-    section(2, "Bienvenida"),
-    section(2, "Recomendaciones de la forma de utilizar el manual"),
-    section(2, "Otras recomendaciones para el estudio"),
-    section(2, "Esquema de las unidades"),
-    section(2, "Objetivo general"),
-    section(1, "Introducción"),
-    section(1, "Fundamentos"),
-    section(1, "Desarrollo"),
-  ];
-}
-
 export function createEmptyParticipantManual(prefill?: { courseName?: string }): ParticipantManualData {
   return {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
-    sections: defaultSections(),
+    sections: [emptyManualSection()],
     bibliography: [""],
   };
 }

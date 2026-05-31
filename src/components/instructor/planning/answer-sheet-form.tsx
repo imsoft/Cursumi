@@ -35,10 +35,10 @@ export function AnswerSheetForm({ value, onChange }: Props) {
 
   const updateTopic = (id: string, patch: Partial<TopicPatch>) =>
     set({ topics: value.topics.map((t) => (t.id === id ? { ...t, ...patch } : t)) });
-  const addTopic = () => set({ topics: [...value.topics, emptyAnswerTopic(value.topics.length + 1)] });
+  const addTopic = () => set({ topics: [...value.topics, emptyAnswerTopic()] });
   const removeTopic = (id: string) => {
     const next = value.topics.filter((t) => t.id !== id);
-    set({ topics: next.length > 0 ? next : [emptyAnswerTopic(1)] });
+    set({ topics: next.length > 0 ? next : [emptyAnswerTopic()] });
   };
 
   const updateQuestion = (tid: string, pid: string, patch: Partial<AnswerQuestion>) => {

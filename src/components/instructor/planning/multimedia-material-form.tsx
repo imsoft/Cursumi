@@ -46,7 +46,7 @@ export function MultimediaMaterialForm({ value, onChange }: Props) {
     onChange({ ...value, videos: value.videos.filter((v) => v.id !== id) });
 
   const addVideo = () =>
-    onChange({ ...value, videos: [...value.videos, emptyVideo(value.videos.length)] });
+    onChange({ ...value, videos: [...value.videos, emptyVideo()] });
 
   return (
     <div className="space-y-6">

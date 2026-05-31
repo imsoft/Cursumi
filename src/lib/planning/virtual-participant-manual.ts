@@ -21,25 +21,6 @@ export function emptyVirtualManualSection(level: VirtualManualSectionLevel = 1):
   return { id: crypto.randomUUID(), level, title: "", body: "" };
 }
 
-function section(level: VirtualManualSectionLevel, title: string, body = ""): VirtualManualSection {
-  return { id: crypto.randomUUID(), level, title, body };
-}
-
-function defaultSections(): VirtualManualSection[] {
-  return [
-    section(1, "Presentación"),
-    section(2, "Bienvenida"),
-    section(2, "Recomendaciones de la forma de utilizar el manual"),
-    section(2, "Otras recomendaciones para el estudio"),
-    section(2, "Esquema de las unidades"),
-    section(2, "Objetivo general"),
-    section(1, "Introducción"),
-    section(1, "Fundamentos"),
-    section(1, "Desarrollo"),
-    section(1, "Bibliografía"),
-  ];
-}
-
 export function createEmptyVirtualParticipantManual(prefill?: {
   courseName?: string;
 }): VirtualParticipantManualData {
@@ -47,7 +28,7 @@ export function createEmptyVirtualParticipantManual(prefill?: {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
-    sections: defaultSections(),
+    sections: [emptyVirtualManualSection()],
     bibliography: [""],
   };
 }

@@ -21,13 +21,13 @@ export type ActivityCalendarData = {
 };
 
 export function emptyCalendarActivity(): CalendarActivity {
-  return { id: crypto.randomUUID(), name: "", weight: "0%", duration: "" };
+  return { id: crypto.randomUUID(), name: "", weight: "", duration: "" };
 }
 
-export function emptyCalendarUnit(index: number): CalendarUnit {
+export function emptyCalendarUnit(): CalendarUnit {
   return {
     id: crypto.randomUUID(),
-    name: `Unidad ${index}: `,
+    name: "",
     scheduledDate: "",
     activities: [emptyCalendarActivity()],
   };
@@ -38,8 +38,8 @@ export function createEmptyActivityCalendar(prefill?: {
 }): ActivityCalendarData {
   return {
     courseName: prefill?.courseName ?? "",
-    generalWeight: "100%",
-    units: [emptyCalendarUnit(1)],
+    generalWeight: "",
+    units: [emptyCalendarUnit()],
   };
 }
 
