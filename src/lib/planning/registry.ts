@@ -11,12 +11,15 @@ import { PRESENTATION_TYPE } from "./presentation";
 
 export type CourseModality = "presencial" | "virtual";
 
+/** Modalidad de un documento: una específica o "both" (aplica a ambas). */
+export type DocModality = CourseModality | "both";
+
 export type PlanningDocMeta = {
   type: string;
   title: string;
   description: string;
   available: boolean;
-  modality: CourseModality;
+  modality: DocModality;
 };
 
 export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
@@ -180,9 +183,9 @@ export const PLANNING_DOCUMENTS: PlanningDocMeta[] = [
   {
     type: PRESENTATION_TYPE,
     title: "Presentación del curso",
-    description: "Diapositivas 16:9 con la marca Cursumi (portada, temas, contenido y cierre) para grabar el curso. Exporta a PDF widescreen.",
+    description: "Diapositivas 16:9 con la marca Cursumi (portada, temas, contenido y cierre) para impartir o grabar el curso. Exporta a PDF widescreen.",
     available: true,
-    modality: "virtual",
+    modality: "both",
   },
 ];
 
@@ -191,11 +194,13 @@ export function getPlanningDocMeta(type: string): PlanningDocMeta | undefined {
 }
 
 export function getPlanningDocsByModality(modality: CourseModality): PlanningDocMeta[] {
-  return PLANNING_DOCUMENTS.filter((d) => d.modality === modality);
+  return PLANNING_DOCUMENTS.filter((d) => d.modality === modality || d.modality === "both");
 }
 
 export function getPlanningTotal(modality: CourseModality): number {
-  return PLANNING_DOCUMENTS.filter((d) => d.modality === modality && d.available).length;
+  return PLANNING_DOCUMENTS.filter(
+    (d) => (d.modality === modality || d.modality === "both") && d.available,
+  ).length;
 }
 
 /**
