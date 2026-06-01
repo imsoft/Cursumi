@@ -109,7 +109,7 @@ export default async function CoursePlanningIndexPage({
 
           const row = (
             <div
-              className={`flex items-start gap-4 rounded-2xl border p-4 transition ${
+              className={`flex items-center gap-4 rounded-2xl border p-4 transition ${
                 doc.available
                   ? isCompleted
                     ? "border-green-200 bg-green-50/50 dark:border-green-900/40 dark:bg-green-950/20"
@@ -117,7 +117,7 @@ export default async function CoursePlanningIndexPage({
                   : "border-dashed border-border bg-muted/30 opacity-60"
               }`}
             >
-              <div className="mt-0.5 shrink-0">
+              <div className="shrink-0">
                 {!doc.available ? (
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
                     <Lock className="h-3.5 w-3.5" />
@@ -148,7 +148,7 @@ export default async function CoursePlanningIndexPage({
                 <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{doc.description}</p>
               </div>
 
-              {doc.available && <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />}
+              {doc.available && <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />}
             </div>
           );
 
