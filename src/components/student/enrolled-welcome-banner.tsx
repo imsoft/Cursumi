@@ -1,17 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 interface EnrolledWelcomeBannerProps {
   courseId: string;
   firstLessonId?: string | null;
+  /** Precio pagado en MXN; 0 si el curso es gratuito. */
+  price?: number;
+  courseTitle?: string;
 }
 
-export function EnrolledWelcomeBanner({ courseId, firstLessonId }: EnrolledWelcomeBannerProps) {
+export function EnrolledWelcomeBanner({ courseId, firstLessonId, price, courseTitle }: EnrolledWelcomeBannerProps) {
   const [dismissed, setDismissed] = useState(false);
+
+  // Evento de conversión: compra completada. Solo cursos de pago y una sola vez.
+  const tracked = useRef(false);
+  useEffect(() => {
+    if (tracked.current) return;
+    tracked.current = true;
+    if (price && price > 0) {
+      track("purchase", { courseId, price, course: courseTitle ?? "" });
+    }
+  }, [courseId, price, courseTitle]);
+
   if (dismissed) return null;
 
   const contentHref = firstLessonId

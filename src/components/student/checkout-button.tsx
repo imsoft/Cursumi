@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, ShoppingCart, Tag, X, Check } from "lucide-react";
@@ -64,6 +65,12 @@ export function CheckoutButton({ courseId, price, label, sessionId, disabled }: 
   const handleCheckout = async () => {
     setLoading(true);
     setError(null);
+    // Evento de conversión: inicio de checkout (antes de redirigir a Stripe)
+    track("checkout_started", {
+      courseId,
+      price: discountedPrice,
+      coupon: appliedCoupon?.code ?? "",
+    });
     try {
       const res = await fetch("/api/payments/checkout", {
         method: "POST",

@@ -142,7 +142,12 @@ export default async function MyCourseDetailPage({
   return (
     <div className="space-y-6">
       {enrolled === "true" && (
-        <EnrolledWelcomeBanner courseId={courseId} firstLessonId={firstLesson?.id} />
+        <EnrolledWelcomeBanner
+          courseId={courseId}
+          firstLessonId={firstLesson?.id}
+          price={course.price}
+          courseTitle={course.title}
+        />
       )}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Link href="/dashboard/my-courses" className="underline">
