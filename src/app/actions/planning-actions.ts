@@ -103,7 +103,7 @@ export async function savePlanningDocument(
   });
 
   revalidatePath(`/instructor/courses/${courseId}/planning`);
-  revalidatePath("/instructor/planning");
+  revalidatePath(`/instructor/courses/${courseId}`);
   return { success: true };
 }
 

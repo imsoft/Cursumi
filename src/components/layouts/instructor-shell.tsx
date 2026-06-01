@@ -39,7 +39,6 @@ const instructorNavItems = [
 
 const pathnameToTitle: Record<string, string> = {
   "/instructor": "Dashboard",
-  "/instructor/planning": "Planeación didáctica",
   "/instructor/courses": "Mis cursos",
   "/instructor/games": "Mis juegos",
   "/instructor/earnings": "Ingresos",
@@ -53,7 +52,6 @@ function getPageTitle(pathname: string | null): string {
   if (!pathname) return "Dashboard";
   if (pathname.includes("/anonymous-questions")) return "Preguntas anónimas";
   if (pathname.startsWith("/instructor/whiteboard")) return "Pizarrón virtual";
-  if (pathname.startsWith("/instructor/planning")) return "Planeación didáctica";
   if (pathname.includes("/planning")) return "Planeación didáctica";
   const base = pathname.split("/").slice(0, 3).join("/");
   return pathnameToTitle[base] ?? instructorNavItems.find((n) => pathname.startsWith(n.href))?.title ?? "Dashboard";
