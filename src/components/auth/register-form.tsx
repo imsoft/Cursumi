@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
+import { track } from "@vercel/analytics";
 import { signUp, signIn } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
@@ -15,20 +16,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 
-const registerSchema = z
-  .object({
-    fullName: z.string().min(2, "El nombre es obligatorio"),
-    email: z.string().email("Correo inválido"),
-    password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-    confirmPassword: z.string().min(6, "Confirma tu contraseña"),
-    acceptTerms: z.boolean().refine((val) => val === true, {
-      message: "Debes aceptar los términos y condiciones",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Las contraseñas no coinciden",
-  });
+const registerSchema = z.object({
+  fullName: z.string().min(2, "El nombre es obligatorio"),
+  email: z.string().email("Correo inválido"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "Debes aceptar los términos y condiciones",
+  }),
+});
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
@@ -68,7 +63,6 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
       fullName: "",
       email: "",
       password: "",
-      confirmPassword: "",
       acceptTerms: false,
     },
   });
@@ -109,6 +103,9 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
         }
         return;
       }
+
+      // Evento de conversión: registro completado (email)
+      track("signup_completed", { method: "email" });
 
       // Si el registro fue exitoso, redirigir a la página de verificación de email
       const params = new URLSearchParams({ email: values.email });
@@ -170,17 +167,6 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
               {form.formState.errors.password && (
                 <p className="mt-1 text-xs text-destructive">
                   {form.formState.errors.password.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <PasswordInput
-                label="Confirmar contraseña"
-                {...form.register("confirmPassword")}
-              />
-              {form.formState.errors.confirmPassword && (
-                <p className="mt-1 text-xs text-destructive">
-                  {form.formState.errors.confirmPassword.message}
                 </p>
               )}
             </div>
@@ -249,6 +235,8 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
                   className="flex w-full items-center justify-center gap-2"
                   onClick={async () => {
                     try {
+                      // Evento de conversión: inicio de registro con Google (redirige a Google)
+                      track("signup_started", { method: "google" });
                       await signIn.social({
                         provider: "google",
                       });
