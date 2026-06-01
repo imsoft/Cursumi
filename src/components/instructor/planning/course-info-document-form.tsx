@@ -94,8 +94,8 @@ export function CourseInfoDocumentForm({ value, onChange }: Props) {
               </Field>
               <Field label="Horas">
                 <Input
-                  type="number" min={1} value={topic.hours}
-                  onChange={(e) => updateTopic(topic.id, { hours: Math.max(1, parseInt(e.target.value) || 1) })}
+                  type="number" min={0} value={topic.hours}
+                  onChange={(e) => updateTopic(topic.id, { hours: Math.max(0, parseInt(e.target.value) || 0) })}
                   className="w-24"
                 />
               </Field>
@@ -171,8 +171,8 @@ export function CourseInfoDocumentForm({ value, onChange }: Props) {
           </Field>
           <Field label="Días">
             <Input
-              type="number" min={1} value={value.durationDays}
-              onChange={(e) => set("durationDays", Math.max(1, parseInt(e.target.value) || 1))}
+              type="number" min={0} value={value.durationDays}
+              onChange={(e) => set("durationDays", Math.max(0, parseInt(e.target.value) || 0))}
               className="w-24"
             />
           </Field>

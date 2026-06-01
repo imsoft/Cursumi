@@ -38,7 +38,7 @@ export function emptyTopic(): CourseTopic {
     id: crypto.randomUUID(),
     title: "",
     objective: "",
-    hours: 1,
+    hours: 0,
   };
 }
 
@@ -62,7 +62,7 @@ export function createEmptyCourseInfoDocument(prefill?: {
     requiredSkills: "",
     requiredMaterials: "",
     evaluationItems: [emptyEvaluationItem()],
-    durationDays: 1,
+    durationDays: 0,
     developerName: prefill?.instructorName ?? "",
     developerRole: "DESARROLLADOR",
   };

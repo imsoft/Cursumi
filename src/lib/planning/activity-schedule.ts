@@ -95,8 +95,8 @@ export function formatDateES(dateStr: string): string {
   return `${d.getDate()} de ${MONTHS_FULL_ES[d.getMonth()]} de ${d.getFullYear()}`;
 }
 
-export function emptyActivity(planStart = 1): ScheduleActivity {
-  return { id: crypto.randomUUID(), name: "", planStart, planDuration: 1, realStart: 0, realDuration: 0 };
+export function emptyActivity(planStart = 0): ScheduleActivity {
+  return { id: crypto.randomUUID(), name: "", planStart, planDuration: 0, realStart: 0, realDuration: 0 };
 }
 
 export function createEmptyActivitySchedule(prefill?: {
@@ -108,8 +108,8 @@ export function createEmptyActivitySchedule(prefill?: {
     courseName: prefill?.courseName ?? "",
     creationDate: today,
     objective: "",
-    totalPeriods: 43,
-    highlightedPeriod: 1,
+    totalPeriods: 0,
+    highlightedPeriod: 0,
     elaboratedBy: prefill?.instructorName ?? "",
     approvedBy: prefill?.instructorName ?? "",
     activities: [emptyActivity()],

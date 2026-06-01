@@ -40,7 +40,7 @@ export function ActivityScheduleDocument({ data }: { data: ActivityScheduleData 
   const weekGroups = computeWeekGroups(dates);
 
   const ganttWidth = Math.max(data.totalPeriods * MIN_CELL, DOC_WIDTH - INFO_WIDTH);
-  const cellW = Math.floor(ganttWidth / data.totalPeriods);
+  const cellW = data.totalPeriods > 0 ? Math.floor(ganttWidth / data.totalPeriods) : 0;
   const docWidth = INFO_WIDTH + data.totalPeriods * cellW;
 
   const periods = Array.from({ length: data.totalPeriods }, (_, i) => i + 1);

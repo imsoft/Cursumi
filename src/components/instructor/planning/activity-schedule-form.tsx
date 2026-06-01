@@ -90,10 +90,10 @@ export function ActivityScheduleForm({ value, onChange }: Props) {
         <h2 className="text-base font-semibold text-foreground">Configuración del cronograma</h2>
         <div className="flex flex-wrap gap-6">
           <Field label="Total de períodos" hint="Días hábiles que dura el proyecto">
-            <NumInput value={value.totalPeriods} min={1} onChange={(n) => set("totalPeriods", n)} />
+            <NumInput value={value.totalPeriods} min={0} onChange={(n) => set("totalPeriods", n)} />
           </Field>
           <Field label="Período resaltado" hint="Columna a destacar en el diagrama">
-            <NumInput value={value.highlightedPeriod} min={1} onChange={(n) => set("highlightedPeriod", Math.min(n, value.totalPeriods))} />
+            <NumInput value={value.highlightedPeriod} min={0} onChange={(n) => set("highlightedPeriod", n)} />
           </Field>
         </div>
       </section>
@@ -125,10 +125,10 @@ export function ActivityScheduleForm({ value, onChange }: Props) {
                     />
                   </td>
                   <td className="py-2 px-2 text-center">
-                    <NumInput value={a.planStart} min={1} onChange={(n) => updateActivity(a.id, { planStart: Math.min(n, value.totalPeriods) })} />
+                    <NumInput value={a.planStart} min={0} onChange={(n) => updateActivity(a.id, { planStart: n })} />
                   </td>
                   <td className="py-2 px-2 text-center">
-                    <NumInput value={a.planDuration} min={1} onChange={(n) => updateActivity(a.id, { planDuration: n })} />
+                    <NumInput value={a.planDuration} min={0} onChange={(n) => updateActivity(a.id, { planDuration: n })} />
                   </td>
                   <td className="py-2 px-2 text-center">
                     <NumInput value={a.realStart} min={0} onChange={(n) => updateActivity(a.id, { realStart: n })} />
