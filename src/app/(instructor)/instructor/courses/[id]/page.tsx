@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit, Users, MessageSquare, MapPin, Calendar, Clock, DollarSign, MessageCircleQuestion, Star, BarChart3 } from "lucide-react";
+import { ArrowLeft, Edit, Users, MessageSquare, MapPin, Calendar, Clock, DollarSign, MessageCircleQuestion, Star, BarChart3, ClipboardList, ArrowRight, CheckCircle2 } from "lucide-react";
 import { getCourseDetailForUser } from "@/app/actions/course-actions";
+import { getCoursesPlanningProgress } from "@/app/actions/planning-actions";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
@@ -45,6 +46,18 @@ export default async function CourseDetailPage({
   };
 
   const statusLabel = statusLabelMap[course.status] || statusLabelMap.draft;
+
+  // La planeación didáctica aplica a cursos presenciales y virtuales.
+  const hasPlanning = course.modality === "presencial" || course.modality === "virtual";
+  const planning = hasPlanning
+    ? (
+        await getCoursesPlanningProgress([
+          { id: course.id, modality: course.modality as "presencial" | "virtual" },
+        ]).catch(() => ({}) as Record<string, { completed: number; total: number }>)
+      )[course.id]
+    : undefined;
+  const planningPct = planning && planning.total > 0 ? Math.round((planning.completed / planning.total) * 100) : 0;
+  const planningComplete = !!planning && planning.total > 0 && planning.completed >= planning.total;
 
   return (
     <div className="space-y-6">
@@ -214,6 +227,46 @@ export default async function CourseDetailPage({
               </Button>
             </CardContent>
           </Card>
+
+          {hasPlanning && planning && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ClipboardList className="h-5 w-5" />
+                  Planeación didáctica
+                </CardTitle>
+                <p className="text-sm text-muted-foreground font-normal mt-1">
+                  Documentos del curso ({course.modality === "presencial" ? "certificación" : "producción"})
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {planning.completed} de {planning.total} documentos
+                  </span>
+                  {planningComplete ? (
+                    <span className="flex items-center gap-1 font-medium text-green-600">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> Completo
+                    </span>
+                  ) : (
+                    <span className="font-medium text-primary">{planningPct}%</span>
+                  )}
+                </div>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                  <div
+                    className={`h-full rounded-full transition-all ${planningComplete ? "bg-green-500" : "bg-primary"}`}
+                    style={{ width: `${planningPct}%` }}
+                  />
+                </div>
+                <Button className="w-full justify-between" asChild>
+                  <Link href={`/instructor/courses/${course.id}/planning`}>
+                    Abrir planeación
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
             <CardHeader>

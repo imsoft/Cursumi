@@ -23,8 +23,8 @@ export default async function CoursePlanningIndexPage({
     return (
       <div className="space-y-6">
         <Button variant="ghost" size="sm" asChild>
-          <Link href="/instructor/planning">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Volver a planeación
+          <Link href={`/instructor/courses/${id}`}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> Volver al curso
           </Link>
         </Button>
         <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground">
@@ -51,8 +51,8 @@ export default async function CoursePlanningIndexPage({
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
-          <Link href="/instructor/planning">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Volver a planeación
+          <Link href={`/instructor/courses/${id}`}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> Volver al curso
           </Link>
         </Button>
       </div>

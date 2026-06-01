@@ -10,7 +10,6 @@ import {
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import {
-  ClipboardList,
   LayoutDashboard,
   BookOpenCheck,
   PlusCircle,
@@ -25,7 +24,8 @@ import {
 
 const instructorNavItems = [
   { title: "Dashboard", href: "/instructor", icon: LayoutDashboard },
-  { title: "Planeación didáctica", href: "/instructor/planning", icon: ClipboardList },
+  // La planeación didáctica ahora vive dentro de cada curso (pestaña del workspace),
+  // por eso ya no es un item de nivel superior del sidebar.
   { title: "Mis cursos", href: "/instructor/courses", icon: BookOpenCheck },
   { title: "Crear curso", href: "/instructor/courses/new", icon: PlusCircle },
   { title: "Pizarrón virtual", href: "/instructor/whiteboard", icon: PenLine },

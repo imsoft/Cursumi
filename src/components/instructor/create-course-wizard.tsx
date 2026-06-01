@@ -147,7 +147,9 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
           setCourseData((prev) => ({ ...prev, id }));
         }
         setSaveStatus("saved");
-        router.push(id && isNew ? `/instructor/courses/${id}/edit` : "/instructor/courses");
+        // Entrar al workspace del curso (no a la lista) para ver "qué sigue".
+        const targetId = id ?? courseData.id;
+        router.push(targetId ? `/instructor/courses/${targetId}` : "/instructor/courses");
       } catch {
         setSaveStatus("idle");
       }
@@ -157,7 +159,7 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
   const handlePublish = () => {
     startTransition(async () => {
       await publishCourse(courseData);
-      router.push("/instructor/courses");
+      router.push(courseData.id ? `/instructor/courses/${courseData.id}` : "/instructor/courses");
     });
   };
 
