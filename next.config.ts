@@ -72,6 +72,7 @@ const nextConfig: NextConfig = {
     "@prisma/client",
     "@prisma/client-runtime-utils",
     "@prisma/adapter-neon",
+    "@cursumi/shared",
   ],
 };
 

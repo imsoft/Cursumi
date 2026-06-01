@@ -21,6 +21,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@cursumi/shared": "workspace:*",
     "@google/genai": "^2.3.0",
     "@hookform/resolvers": "^5.2.2",
     "@lexical/html": "^0.44.0",

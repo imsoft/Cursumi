@@ -36,15 +36,9 @@ export function stripHtml(html: string | null | undefined): string {
   return html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
 }
 
-export function formatPriceMXN(price: number, showDecimals: boolean = false): string {
-  if (price === 0) return "Gratis";
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: "MXN",
-    minimumFractionDigits: showDecimals ? 2 : 0,
-    maximumFractionDigits: showDecimals ? 2 : 0,
-  }).format(price);
-}
+// formatPriceMXN ahora vive en el paquete compartido (@cursumi/shared) para que
+// la web y la futura app móvil usen exactamente la misma implementación.
+export { formatPriceMXN } from "@cursumi/shared";
 
 /** Primer nombre para saludos (ej. "María López" → "María"). */
 export function firstNameFromFullName(name: string | null | undefined): string {
