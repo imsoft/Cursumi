@@ -28,6 +28,7 @@ import {
   PenLine,
   Sparkles,
   Newspaper,
+  Building2,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -37,6 +38,7 @@ const adminNavItems = [
   { title: "Usuarios", href: "/admin/users", icon: Users },
   { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
   { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },
+  { title: "Empresas", href: "/admin/business", icon: Building2 },
   { title: "Categorías", href: "/admin/categories", icon: Tag },
   { title: "Reseñas", href: "/admin/reviews", icon: MessageSquare },
   { title: "Cupones", href: "/admin/coupons", icon: Ticket },

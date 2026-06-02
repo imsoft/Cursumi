@@ -193,6 +193,7 @@ enum OrgInviteStatus {
 }
 
 enum OrgSubscriptionStatus {
+  pending
   active
   past_due
   canceled
@@ -864,10 +865,15 @@ model TeamMember {
 model OrgSubscription {
   id                   String                @id @default(cuid())
   organizationId       String                @unique
-  stripeCustomerId     String                @unique
+  // Opcional: se provisiona (cotización) antes de que exista el customer en Stripe.
+  stripeCustomerId     String?               @unique
   stripeSubscriptionId String?               @unique
-  status               OrgSubscriptionStatus @default(active)
+  status               OrgSubscriptionStatus @default(pending)
   maxSeats             Int
+  // Monto acordado en la cotización (centavos) e intervalo de cobro.
+  amountCents          Int?
+  billingInterval      String? // "month" | "year"
+  currency             String                @default("MXN")
   currentPeriodStart   DateTime?
   currentPeriodEnd     DateTime?
   cancelAtPeriodEnd    Boolean               @default(false)
@@ -917,6 +923,24 @@ model OrgMaterial {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
+}
+
+/// Solicitud pública de cotización empresarial (lead). El admin la revisa y
+/// luego provisiona la organización con el precio acordado.
+model BusinessQuoteRequest {
+  id           String   @id @default(cuid())
+  companyName  String
+  contactName  String
+  contactEmail String
+  contactPhone String?
+  companySize  String? // rango de empleados (ej. "11-50")
+  interests    String?  @db.Text // cursos / áreas de interés
+  message      String?  @db.Text
+  status       String   @default("new") // new | contacted | converted | closed
+  createdAt    DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
 }
 
 model Kpi {

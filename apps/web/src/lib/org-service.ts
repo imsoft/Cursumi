@@ -198,6 +198,93 @@ export async function getOrgMetrics(orgId: string) {
 }
 
 /**
+ * Provisión por admin (modelo de cotización a medida): crea la organización con
+ * el precio acordado, los asientos y los cursos incluidos, y deja la suscripción
+ * en estado `pending` (la empresa la paga después en su panel).
+ *
+ * Si el correo del dueño ya tiene cuenta, se agrega como `owner` directamente; si
+ * no, se crea una invitación con rol `owner` para que la acepte al registrarse.
+ */
+export async function provisionOrganization(data: {
+  name: string;
+  contactEmail: string;
+  contactPhone?: string | null;
+  address?: string | null;
+  ownerEmail: string;
+  maxSeats: number;
+  amountCents: number;
+  billingInterval: "month" | "year";
+  courseIds: string[];
+  provisionedBy: string; // userId del admin
+}) {
+  const slug = slugifyOrg(data.name);
+  const existing = await prisma.organization.findUnique({ where: { slug } });
+  if (existing) {
+    throw new ApiError(400, "Ya existe una organización con ese identificador");
+  }
+
+  const ownerUser = await prisma.user.findUnique({
+    where: { email: data.ownerEmail.toLowerCase().trim() },
+    select: { id: true },
+  });
+
+  return prisma.$transaction(async (tx) => {
+    const org = await tx.organization.create({
+      data: {
+        name: data.name,
+        slug,
+        contactEmail: data.contactEmail,
+        contactPhone: data.contactPhone ?? undefined,
+        address: data.address ?? undefined,
+      },
+    });
+
+    let inviteToken: string | null = null;
+    if (ownerUser) {
+      await tx.orgMember.create({
+        data: { organizationId: org.id, userId: ownerUser.id, orgRole: "owner" },
+      });
+    } else {
+      // 14 días para aceptar la invitación de dueño.
+      const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+      const invite = await tx.orgInvite.create({
+        data: {
+          organizationId: org.id,
+          email: data.ownerEmail.toLowerCase().trim(),
+          orgRole: "owner",
+          invitedBy: data.provisionedBy,
+          expiresAt,
+        },
+      });
+      inviteToken = invite.token;
+    }
+
+    await tx.orgSubscription.create({
+      data: {
+        organizationId: org.id,
+        status: "pending",
+        maxSeats: data.maxSeats,
+        amountCents: data.amountCents,
+        billingInterval: data.billingInterval,
+        currency: "MXN",
+      },
+    });
+
+    if (data.courseIds.length > 0) {
+      await tx.orgCourseAccess.createMany({
+        data: data.courseIds.map((courseId) => ({
+          organizationId: org.id,
+          courseId,
+        })),
+        skipDuplicates: true,
+      });
+    }
+
+    return { org, inviteToken, ownerHadAccount: Boolean(ownerUser) };
+  });
+}
+
+/**
  * Slugify a string for org slugs.
  */
 export function slugifyOrg(name: string): string {

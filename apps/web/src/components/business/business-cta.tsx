@@ -15,17 +15,17 @@ export function BusinessCTA() {
             Empieza a capacitar a tu equipo hoy
           </h2>
           <p className="mx-auto max-w-xl text-base text-white/75">
-            Agenda una demo personalizada y descubre cómo Cursumi Business puede
-            transformar la capacitación de tu empresa.
+            Solicita una cotización a la medida y descubre cómo Cursumi Business
+            puede transformar la capacitación de tu empresa.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/contact">
+            <Link href="/business/cotizacion">
               <Button
                 size="lg"
                 variant="secondary"
                 className="gap-2 font-semibold shadow-lg"
               >
-                Agendar demo
+                Solicitar cotización
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

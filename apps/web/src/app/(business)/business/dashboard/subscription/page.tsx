@@ -5,23 +5,58 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, BookOpenCheck, Calendar, Check } from "lucide-react";
+import { Users, BookOpenCheck, Calendar } from "lucide-react";
 
-type CheckoutPlan = "starter" | "business";
+interface OrgData {
+  name: string;
+  subscription: {
+    status: string;
+    maxSeats: number;
+    amountCents: number | null;
+    billingInterval: string | null;
+    currentPeriodEnd: string | null;
+    cancelAtPeriodEnd: boolean;
+  } | null;
+  _count: { members: number; courseAccess: number };
+}
 
-function PlanSelector() {
-  const [loading, setLoading] = useState<CheckoutPlan | null>(null);
+const statusLabels: Record<string, string> = {
+  pending: "Pendiente de pago",
+  active: "Activa",
+  past_due: "Pago pendiente",
+  canceled: "Cancelada",
+  trialing: "Prueba",
+};
+
+function formatMoney(cents: number | null, interval: string | null) {
+  if (cents == null) return "—";
+  const v = (cents / 100).toLocaleString("es-MX", {
+    style: "currency",
+    currency: "MXN",
+  });
+  return interval === "year" ? `${v} / año` : `${v} / mes`;
+}
+
+/** Cotización provisionada por el equipo de Cursumi, pendiente de pago. */
+function PendingQuote({
+  amountCents,
+  billingInterval,
+  maxSeats,
+  courseAccess,
+}: {
+  amountCents: number | null;
+  billingInterval: string | null;
+  maxSeats: number;
+  courseAccess: number;
+}) {
+  const [paying, setPaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function subscribe(plan: CheckoutPlan) {
+  async function pay() {
     setError(null);
-    setLoading(plan);
+    setPaying(true);
     try {
-      const res = await fetch("/api/business/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
-      });
+      const res = await fetch("/api/business/checkout", { method: "POST" });
       const data = await res.json();
       if (!res.ok || !data.url) {
         setError(data.error ?? "No se pudo iniciar el pago. Inténtalo de nuevo.");
@@ -31,109 +66,39 @@ function PlanSelector() {
     } catch {
       setError("Error de conexión. Inténtalo de nuevo.");
     } finally {
-      setLoading(null);
+      setPaying(false);
     }
   }
 
-  const plans: {
-    id: CheckoutPlan;
-    name: string;
-    seats: string;
-    features: string[];
-    highlighted?: boolean;
-  }[] = [
-    {
-      id: "starter",
-      name: "Starter",
-      seats: "Hasta 10 empleados",
-      features: ["Catálogo completo", "Métricas", "Certificados", "1 equipo"],
-    },
-    {
-      id: "business",
-      name: "Business",
-      seats: "Hasta 50 empleados",
-      highlighted: true,
-      features: [
-        "Todo lo de Starter",
-        "Cursos exclusivos",
-        "Equipos ilimitados",
-        "Materiales internos",
-      ],
-    },
-  ];
-
   return (
-    <div className="flex flex-col gap-4">
-      <Card>
-        <CardContent className="py-6 text-center">
-          <p className="text-muted-foreground">
-            Aún no tienes un plan activo. Elige uno para empezar a capacitar a tu equipo.
+    <Card className="border-primary">
+      <CardHeader>
+        <div className="flex items-center gap-3">
+          <CardTitle className="text-lg">Tu cotización</CardTitle>
+          <Badge variant="outline">Pendiente de pago</Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-5">
+        <div>
+          <p className="text-3xl font-black text-foreground">
+            {formatMoney(amountCents, billingInterval)}
           </p>
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        {plans.map((plan) => (
-          <Card key={plan.id} className={plan.highlighted ? "border-primary" : undefined}>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <CardTitle className="text-lg">{plan.name}</CardTitle>
-                {plan.highlighted && <Badge>Popular</Badge>}
-              </div>
-              <p className="text-sm text-muted-foreground">{plan.seats}</p>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              <ul className="flex flex-col gap-2">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-primary" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={() => subscribe(plan.id)}
-                disabled={loading !== null}
-                variant={plan.highlighted ? "default" : "outline"}
-              >
-                {loading === plan.id ? "Redirigiendo..." : "Suscribirme"}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {error && <p className="text-sm text-destructive">{error}</p>}
-
-      <Card>
-        <CardContent className="py-6 text-center text-sm text-muted-foreground">
-          ¿Necesitas más de 50 empleados o un plan a medida?{" "}
-          <a href="mailto:contacto@cursumi.com" className="text-primary underline">
-            Contáctanos para Enterprise
-          </a>
-        </CardContent>
-      </Card>
-    </div>
+          <p className="text-sm text-muted-foreground">
+            {maxSeats} asientos · {courseAccess} cursos incluidos
+          </p>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Tu plan fue preparado por nuestro equipo. Actívalo para dar acceso a tu
+          equipo.
+        </p>
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        <Button onClick={pay} disabled={paying} className="self-start">
+          {paying ? "Redirigiendo..." : "Pagar y activar"}
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
-
-interface OrgData {
-  name: string;
-  subscription: {
-    status: string;
-    maxSeats: number;
-    currentPeriodEnd: string | null;
-    cancelAtPeriodEnd: boolean;
-  } | null;
-  _count: { members: number; courseAccess: number };
-}
-
-const statusLabels: Record<string, string> = {
-  active: "Activa",
-  past_due: "Pago pendiente",
-  canceled: "Cancelada",
-  trialing: "Prueba",
-};
 
 export default function SubscriptionPage() {
   const [org, setOrg] = useState<OrgData | null>(null);
@@ -155,22 +120,38 @@ export default function SubscriptionPage() {
   }
 
   const sub = org?.subscription;
+  const isPending = sub && sub.status !== "active";
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title="Suscripción" description="Detalles de tu plan de Cursumi Business" />
 
       {!sub ? (
-        <PlanSelector />
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="text-muted-foreground">
+              Aún no tienes una cotización.{" "}
+              <a href="/business/cotizacion" className="text-primary underline">
+                Solicita una
+              </a>{" "}
+              y nuestro equipo preparará tu plan.
+            </p>
+          </CardContent>
+        </Card>
+      ) : isPending ? (
+        <PendingQuote
+          amountCents={sub.amountCents}
+          billingInterval={sub.billingInterval}
+          maxSeats={sub.maxSeats}
+          courseAccess={org?._count.courseAccess || 0}
+        />
       ) : (
         <>
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">
                 <CardTitle className="text-lg">Plan actual</CardTitle>
-                <Badge variant={sub.status === "active" ? "default" : "outline"}>
-                  {statusLabels[sub.status] || sub.status}
-                </Badge>
+                <Badge variant="default">{statusLabels[sub.status] || sub.status}</Badge>
               </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
