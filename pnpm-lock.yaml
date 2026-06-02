@@ -6,11 +6,13 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  apps/web:
     dependencies:
       '@cursumi/shared':
         specifier: workspace:*
-        version: link:packages/shared
+        version: link:../../packages/shared
       '@google/genai':
         specifier: ^2.3.0
         version: 2.3.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))
