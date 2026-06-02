@@ -158,11 +158,26 @@ export async function POST(req: NextRequest) {
       ? new Date(sub.current_period_end * 1000)
       : undefined;
 
+    // Asientos según el plan contratado (lo envía business/checkout en
+    // subscription_data.metadata). Fallback a 10 por compatibilidad.
+    const parsedSeats = Number.parseInt((sub.metadata?.maxSeats as string) || "", 10);
+    const maxSeats = Number.isFinite(parsedSeats) && parsedSeats > 0 ? parsedSeats : 10;
+
+    const normalizedStatus =
+      sub.status === "active"
+        ? "active"
+        : sub.status === "trialing"
+          ? "trialing"
+          : sub.status === "past_due"
+            ? "past_due"
+            : "canceled";
+
     await prisma.orgSubscription.upsert({
       where: { stripeCustomerId },
       update: {
         stripeSubscriptionId: sub.id,
-        status: sub.status === "active" ? "active" : sub.status === "trialing" ? "trialing" : sub.status === "past_due" ? "past_due" : "canceled",
+        status: normalizedStatus,
+        maxSeats,
         ...(periodStart && { currentPeriodStart: periodStart }),
         ...(periodEnd && { currentPeriodEnd: periodEnd }),
         cancelAtPeriodEnd: sub.cancel_at_period_end,
@@ -170,8 +185,8 @@ export async function POST(req: NextRequest) {
       create: {
         stripeCustomerId,
         stripeSubscriptionId: sub.id,
-        status: "active",
-        maxSeats: 10,
+        status: normalizedStatus,
+        maxSeats,
         ...(periodStart && { currentPeriodStart: periodStart }),
         ...(periodEnd && { currentPeriodEnd: periodEnd }),
         cancelAtPeriodEnd: sub.cancel_at_period_end,
