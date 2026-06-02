@@ -101,10 +101,12 @@ export function StudentShell({
     ? [...studentNavItems.slice(0, 3), { title: "Materiales", href: "/dashboard/org-materials", icon: FileText }, ...studentNavItems.slice(3)]
     : studentNavItems;
 
-  // Owner/admin de una empresa: acceso directo a su panel empresarial.
-  const finalNavItems = isOrgAdmin
-    ? [...navItems, { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }]
-    : navItems;
+  // Owner/admin de una empresa: acceso directo a su panel; el resto, enlace a la
+  // landing empresarial (descubrimiento).
+  const businessItem = isOrgAdmin
+    ? { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }
+    : { title: "Para empresas", href: "/business", icon: Building2 };
+  const finalNavItems = [...navItems, businessItem];
 
   return (
     <SidebarProvider

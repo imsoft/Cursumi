@@ -20,6 +20,7 @@ import {
   FileDown,
   PenLine,
   Newspaper,
+  Building2,
 } from "lucide-react";
 
 const instructorNavItems = [
@@ -34,6 +35,7 @@ const instructorNavItems = [
   { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
   { title: "Blog", href: "/instructor/blog", icon: Newspaper },
   { title: "Plantillas", href: "/instructor/templates", icon: FileDown },
+  { title: "Para empresas", href: "/business", icon: Building2 },
   { title: "Perfil", href: "/instructor/profile", icon: UserCircle },
 ];
 
