@@ -115,7 +115,7 @@ export default function MaterialsPage() {
             <form onSubmit={handleUpload} className="flex flex-col gap-4">
               <Input
                 label="Nombre del material"
-                placeholder="Ej: Manual de onboarding"
+                hint="Ej: Manual de onboarding"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="max-w-md"

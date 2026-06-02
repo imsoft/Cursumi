@@ -123,10 +123,10 @@ export default function EmployeesPage() {
               <div className="flex-1 min-w-[250px]">
                 <Input
                   type="email"
-                  placeholder="email@empresa.com"
+                  label="Email del empleado"
+                  hint="Le enviaremos una invitación a este correo."
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
-                  label="Email del empleado"
                 />
               </div>
               <Button type="submit" disabled={inviting} className="gap-2">

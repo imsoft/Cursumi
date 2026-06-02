@@ -4,7 +4,118 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, BookOpenCheck, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, BookOpenCheck, Calendar, Check } from "lucide-react";
+
+type CheckoutPlan = "starter" | "business";
+
+function PlanSelector() {
+  const [loading, setLoading] = useState<CheckoutPlan | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function subscribe(plan: CheckoutPlan) {
+    setError(null);
+    setLoading(plan);
+    try {
+      const res = await fetch("/api/business/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        setError(data.error ?? "No se pudo iniciar el pago. Inténtalo de nuevo.");
+        return;
+      }
+      window.location.href = data.url;
+    } catch {
+      setError("Error de conexión. Inténtalo de nuevo.");
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  const plans: {
+    id: CheckoutPlan;
+    name: string;
+    seats: string;
+    features: string[];
+    highlighted?: boolean;
+  }[] = [
+    {
+      id: "starter",
+      name: "Starter",
+      seats: "Hasta 10 empleados",
+      features: ["Catálogo completo", "Métricas", "Certificados", "1 equipo"],
+    },
+    {
+      id: "business",
+      name: "Business",
+      seats: "Hasta 50 empleados",
+      highlighted: true,
+      features: [
+        "Todo lo de Starter",
+        "Cursos exclusivos",
+        "Equipos ilimitados",
+        "Materiales internos",
+      ],
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Card>
+        <CardContent className="py-6 text-center">
+          <p className="text-muted-foreground">
+            Aún no tienes un plan activo. Elige uno para empezar a capacitar a tu equipo.
+          </p>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {plans.map((plan) => (
+          <Card key={plan.id} className={plan.highlighted ? "border-primary" : undefined}>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg">{plan.name}</CardTitle>
+                {plan.highlighted && <Badge>Popular</Badge>}
+              </div>
+              <p className="text-sm text-muted-foreground">{plan.seats}</p>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <ul className="flex flex-col gap-2">
+                {plan.features.map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm">
+                    <Check className="h-4 w-4 text-primary" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => subscribe(plan.id)}
+                disabled={loading !== null}
+                variant={plan.highlighted ? "default" : "outline"}
+              >
+                {loading === plan.id ? "Redirigiendo..." : "Suscribirme"}
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {error && <p className="text-sm text-destructive">{error}</p>}
+
+      <Card>
+        <CardContent className="py-6 text-center text-sm text-muted-foreground">
+          ¿Necesitas más de 50 empleados o un plan a medida?{" "}
+          <a href="mailto:contacto@cursumi.com" className="text-primary underline">
+            Contáctanos para Enterprise
+          </a>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
 
 interface OrgData {
   name: string;
@@ -50,13 +161,7 @@ export default function SubscriptionPage() {
       <PageHeader title="Suscripción" description="Detalles de tu plan de Cursumi Business" />
 
       {!sub ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">
-              No tienes una suscripción activa. Contacta a ventas para activar tu plan.
-            </p>
-          </CardContent>
-        </Card>
+        <PlanSelector />
       ) : (
         <>
           <Card>

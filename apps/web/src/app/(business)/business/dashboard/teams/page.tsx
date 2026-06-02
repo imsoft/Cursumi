@@ -82,10 +82,10 @@ export default function TeamsPage() {
             <form onSubmit={handleCreate} className="flex items-end gap-3">
               <div className="flex-1 max-w-sm">
                 <Input
-                  placeholder="Nombre del equipo"
+                  label="Nombre"
+                  hint="Ej: Ventas, Soporte, Operaciones"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  label="Nombre"
                 />
               </div>
               <Button type="submit" disabled={creating}>

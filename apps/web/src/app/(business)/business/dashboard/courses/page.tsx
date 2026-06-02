@@ -123,7 +123,7 @@ export default function BusinessCoursesPage() {
               className="flex gap-2"
             >
               <Input
-                placeholder="Buscar cursos..."
+                label="Buscar cursos"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="max-w-sm"
