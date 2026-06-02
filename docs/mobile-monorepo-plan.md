@@ -84,3 +84,38 @@ Eso elimina de raíz los conflictos de versiones entre web y móvil.
 2. **App base:** `apps/mobile` con Expo + auth unificada + pantalla de cursos (solo lectura).
 3. **Acceso:** modelo de entitlement único (web Stripe + futuro móvil).
 4. **Monetización:** decidir IAP vs reader.
+
+---
+
+## Notas de la 1ª ejecución (aprendizajes)
+
+### ✅ Lo que SÍ funcionó (ya en la rama `chore/monorepo`)
+- Activar pnpm workspaces (`packages/*` + `apps/*`).
+- Crear `packages/shared` (`@cursumi/shared`, TS puro) con tipos de dominio + `formatPriceMXN`.
+- Que la **web (en la raíz)** consuma el paquete: `transpilePackages: ["@cursumi/shared"]`,
+  dependencia `workspace:*`, y re-export de `formatPriceMXN` sin cambiar call sites.
+- `pnpm build` verde. **No requiere tocar Vercel** porque la web sigue en la raíz.
+- Conclusión: la fundación es de bajo riesgo y mergeable a `main` por sí sola.
+
+### ↩️ Lo que falló: mover la web a `apps/web` (revertido)
+- Al mover todo a `apps/web` + reinstalar, el **type-check de `next/script` empezó a fallar**
+  (`Property 'src' does not exist on type ScriptProps`) en `forgot-password-form.tsx` y
+  `register-form.tsx`, **aunque pasaba minutos antes** con la web en la raíz.
+- **Causa:** NO fue deriva de versión (TypeScript ya era `^6.0.3`). Fue la **resolución/hoisting
+  de `node_modules` del layout workspace**: con `apps/web` teniendo su propio árbol, `@types/react`
+  / tipos de Next se resolvieron de forma distinta y rompieron el JSX typing.
+- **Además:** el cambio de **Root Directory → `apps/web` en Vercel** no se puede validar en remoto;
+  hay que ver el preview deploy.
+
+### 🔧 Para el próximo intento del move (hacerlo hands-on)
+1. Hacerlo **localmente con capacidad de iterar** install/build (no a ciegas).
+2. Asegurar **una sola copia de `@types/react`/`react`**: revisar hoisting de pnpm
+   (`public-hoist-pattern[]=*react*` o `node-linker`), o `typeRoots`/`paths` en `apps/web/tsconfig.json`.
+3. Verificar que `apps/web/tsconfig.json` resuelve bien tras el move (alias `@/*` → `./src/*`).
+4. Mover artefactos correctamente: `.env` a `apps/web/.env`; des-anclar patrones del `.gitignore`
+   (`/.next/`, `/node_modules`, `/coverage`, `/test-results/`, etc.) — ya hecho en el intento.
+5. Cambiar Root Directory en Vercel y **validar preview ANTES** de merge.
+
+### Estado actual
+- Fundación en rama `chore/monorepo` (1 commit sobre `main`), verde y pusheada.
+- El move y `apps/mobile` quedan pendientes para una sesión con validación en vivo.
