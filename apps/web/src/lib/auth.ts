@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { expo } from "@better-auth/expo";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prisma } from "./prisma";
 import { sendVerificationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "./email";
@@ -77,6 +78,7 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // Actualizar cada 24 horas
   },
   plugins: [
+    expo(), // Soporte para la app móvil (Expo): auth por token + deep links.
     nextCookies(), // Debe ser el último plugin
   ],
   /**
@@ -285,6 +287,8 @@ function getTrustedOrigins(): string[] {
     const v = vercel.startsWith("http") ? vercel : `https://${vercel}`;
     origins.add(v);
   }
+  // Deep-link scheme de la app móvil (Expo, app.json: "mobile") para @better-auth/expo.
+  origins.add("mobile://");
   return [...origins];
 }
 
