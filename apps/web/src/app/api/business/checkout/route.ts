@@ -62,6 +62,17 @@ export async function POST() {
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
+    // Reutilizar una sesión de checkout abierta del customer (evita crear varias
+    // si el usuario hace clic en "Pagar" más de una vez).
+    const openSessions = await stripe.checkout.sessions.list({
+      customer: stripeCustomerId,
+      status: "open",
+      limit: 1,
+    });
+    if (openSessions.data[0]?.url) {
+      return NextResponse.json({ url: openSessions.data[0].url });
+    }
+
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],

@@ -198,6 +198,23 @@ export async function getOrgMetrics(orgId: string) {
 }
 
 /**
+ * Exige que la organización tenga una suscripción ACTIVA. Se usa para bloquear la
+ * gestión del equipo (invitar/asignar cursos) mientras la cotización no esté pagada.
+ */
+export async function requireActiveOrgSubscription(orgId: string) {
+  const sub = await prisma.orgSubscription.findUnique({
+    where: { organizationId: orgId },
+  });
+  if (!sub || sub.status !== "active") {
+    throw new ApiError(
+      403,
+      "La suscripción de tu organización no está activa. Actívala para gestionar a tu equipo."
+    );
+  }
+  return sub;
+}
+
+/**
  * Provisión por admin (modelo de cotización a medida): crea la organización con
  * el precio acordado, los asientos y los cursos incluidos, y deja la suscripción
  * en estado `pending` (la empresa la paga después en su panel).
@@ -278,6 +295,19 @@ export async function provisionOrganization(data: {
         })),
         skipDuplicates: true,
       });
+
+      // Si el dueño ya tiene cuenta, inscribirlo en los cursos de la org para que
+      // también pueda tomarlos (le aparecen en "Mis cursos").
+      if (ownerUser) {
+        await tx.enrollment.createMany({
+          data: data.courseIds.map((courseId) => ({
+            courseId,
+            studentId: ownerUser.id,
+            organizationId: org.id,
+          })),
+          skipDuplicates: true,
+        });
+      }
     }
 
     return { org, inviteToken, ownerHadAccount: Boolean(ownerUser) };

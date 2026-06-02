@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSession, handleApiError, ApiError } from "@/lib/api-helpers";
-import { resolveOrgAdmin } from "@/lib/org-service";
+import { resolveOrgAdmin, requireActiveOrgSubscription } from "@/lib/org-service";
 import { sendOrgInviteEmail } from "@/lib/email";
 import type { OrgRole } from "@/generated/prisma";
 
@@ -11,6 +11,9 @@ export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
     const { org } = await resolveOrgAdmin(session.user.id);
+
+    // No se puede gestionar al equipo hasta que la suscripción esté activa (pagada).
+    await requireActiveOrgSubscription(org.id);
 
     const { email, orgRole = "member" } = (await req.json()) as {
       email: string;
@@ -38,16 +41,20 @@ export async function POST(req: NextRequest) {
       throw new ApiError(400, "Ya existe una invitación pendiente para este email");
     }
 
-    // Check seat limit
+    // Check seat limit: cuenta miembros actuales + invitaciones pendientes para
+    // no sobre-asignar asientos.
     const sub = await prisma.orgSubscription.findUnique({
       where: { organizationId: org.id },
     });
     if (sub) {
-      const currentMembers = await prisma.orgMember.count({
-        where: { organizationId: org.id },
-      });
-      if (currentMembers >= sub.maxSeats) {
-        throw new ApiError(400, `Has alcanzado el límite de ${sub.maxSeats} asientos. Actualiza tu suscripción.`);
+      const [currentMembers, pendingInvites] = await Promise.all([
+        prisma.orgMember.count({ where: { organizationId: org.id } }),
+        prisma.orgInvite.count({
+          where: { organizationId: org.id, status: "pending" },
+        }),
+      ]);
+      if (currentMembers + pendingInvites >= sub.maxSeats) {
+        throw new ApiError(400, `Has alcanzado el límite de ${sub.maxSeats} asientos (incluye invitaciones pendientes). Actualiza tu suscripción.`);
       }
     }
 

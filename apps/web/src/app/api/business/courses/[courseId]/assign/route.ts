@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSession, handleApiError, ApiError } from "@/lib/api-helpers";
-import { resolveOrgAdmin } from "@/lib/org-service";
+import { resolveOrgAdmin, requireActiveOrgSubscription } from "@/lib/org-service";
 
 export async function POST(
   req: NextRequest,
@@ -11,6 +11,7 @@ export async function POST(
     const { courseId } = await params;
     const session = await requireSession();
     const { org } = await resolveOrgAdmin(session.user.id);
+    await requireActiveOrgSubscription(org.id);
 
     // Verify org has access to this course
     const access = await prisma.orgCourseAccess.findUnique({

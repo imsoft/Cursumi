@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSession, handleApiError, ApiError } from "@/lib/api-helpers";
-import { resolveOrgAdmin } from "@/lib/org-service";
+import { resolveOrgAdmin, requireActiveOrgSubscription } from "@/lib/org-service";
 import { enrollOrgInCourse } from "@/lib/org-enrollment";
 
 export async function GET() {
@@ -62,6 +62,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
     const { org } = await resolveOrgAdmin(session.user.id);
+    await requireActiveOrgSubscription(org.id);
 
     const { courseId } = await req.json();
     if (!courseId) throw new ApiError(400, "courseId es requerido");
