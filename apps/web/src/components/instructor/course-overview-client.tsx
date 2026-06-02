@@ -373,7 +373,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
                     onChange={(e) => setEditData((d) => ({ ...d, price: Number(e.target.value) }))}
                   />
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Equivale a ${(editData.price / 100).toLocaleString()}
+                    Precio en pesos mexicanos (MXN)
                   </p>
                 </div>
                 <div>
