@@ -6,6 +6,14 @@ import type { CourseModality } from "@cursumi/shared";
  */
 export const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "https://cursumi.vercel.app";
 
+/**
+ * Site key de Cloudflare Turnstile (CAPTCHA). Es un valor PÚBLICO (también viaja
+ * en el bundle de la web). Se renderiza dentro de un WebView en el registro para
+ * obtener el token `cf-turnstile-response` que el servidor exige en /sign-up/email.
+ */
+export const TURNSTILE_SITE_KEY =
+  process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY ?? "0x4AAAAAACyo73SS8jWrE9tZ";
+
 export type CourseSummary = {
   id: string;
   title: string;

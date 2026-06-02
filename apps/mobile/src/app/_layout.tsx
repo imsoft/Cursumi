@@ -3,7 +3,7 @@ import { ActivityIndicator, useColorScheme, View } from "react-native";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import AppTabs from "@/components/app-tabs";
-import { LoginScreen } from "@/components/login-screen";
+import { AuthScreen } from "@/components/auth-screen";
 import { useSession } from "@/lib/auth";
 
 export default function RootLayout() {
@@ -22,7 +22,7 @@ export default function RootLayout() {
           <AppTabs />
         </>
       ) : (
-        <LoginScreen />
+        <AuthScreen />
       )}
     </ThemeProvider>
   );
