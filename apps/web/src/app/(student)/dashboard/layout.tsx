@@ -24,13 +24,13 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
 
   let role = "";
   let userImage: string | null = null;
-  let orgMembership: { id: string } | null = null;
+  let orgMembership: { id: string; orgRole: string } | null = null;
   try {
     const [info, org] = await Promise.all([
       getUserBasicInfo(session.user.id),
       prisma.orgMember.findFirst({
         where: { userId: session.user.id },
-        select: { id: true },
+        select: { id: true, orgRole: true },
       }),
     ]);
     role = info.role;
@@ -52,7 +52,13 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
       .slice(0, 2) || "U";
 
   return (
-    <StudentShell userName={userName} userInitials={userInitials} userImage={userImage} hasOrg={!!orgMembership}>
+    <StudentShell
+      userName={userName}
+      userInitials={userInitials}
+      userImage={userImage}
+      hasOrg={!!orgMembership}
+      isOrgAdmin={orgMembership?.orgRole === "owner" || orgMembership?.orgRole === "admin"}
+    >
       {children}
     </StudentShell>
   );

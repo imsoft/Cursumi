@@ -24,6 +24,7 @@ import {
   Heart,
   Gift,
   Newspaper,
+  Building2,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -78,6 +79,7 @@ interface StudentShellProps {
   children: ReactNode;
   pageTitle?: string;
   hasOrg?: boolean;
+  isOrgAdmin?: boolean;
 }
 
 export function StudentShell({
@@ -87,6 +89,7 @@ export function StudentShell({
   children,
   pageTitle: pageTitleProp,
   hasOrg,
+  isOrgAdmin,
 }: StudentShellProps) {
   const pathname = usePathname();
   const pageTitle = pageTitleProp ?? getPageTitle(pathname, userName);
@@ -98,11 +101,16 @@ export function StudentShell({
     ? [...studentNavItems.slice(0, 3), { title: "Materiales", href: "/dashboard/org-materials", icon: FileText }, ...studentNavItems.slice(3)]
     : studentNavItems;
 
+  // Owner/admin de una empresa: acceso directo a su panel empresarial.
+  const finalNavItems = isOrgAdmin
+    ? [...navItems, { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }]
+    : navItems;
+
   return (
     <SidebarProvider
       className={cn(isCertificatePrintPage && "print-certificate-layout")}
     >
-      <AppSidebar navItems={navItems} title="Cursumi" />
+      <AppSidebar navItems={finalNavItems} title="Cursumi" />
       <SidebarInset>
         <DashboardHeader
           title={pageTitle}

@@ -13,6 +13,7 @@ const navLinks = [
   { label: "Cómo funciona", href: "/how-it-works" },
   { label: "Precios", href: "/pricing" },
   { label: "Para instructores", href: "/instructors" },
+  { label: "Para empresas", href: "/business" },
   { label: "Contacto", href: "/contact" },
 ];
 
