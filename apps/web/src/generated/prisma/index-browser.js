@@ -534,6 +534,9 @@ exports.Prisma.OrgSubscriptionScalarFieldEnum = {
   stripeSubscriptionId: 'stripeSubscriptionId',
   status: 'status',
   maxSeats: 'maxSeats',
+  amountCents: 'amountCents',
+  billingInterval: 'billingInterval',
+  currency: 'currency',
   currentPeriodStart: 'currentPeriodStart',
   currentPeriodEnd: 'currentPeriodEnd',
   cancelAtPeriodEnd: 'cancelAtPeriodEnd',
@@ -564,6 +567,19 @@ exports.Prisma.OrgMaterialScalarFieldEnum = {
   fileType: 'fileType',
   fileSize: 'fileSize',
   uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BusinessQuoteRequestScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  contactName: 'contactName',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
+  companySize: 'companySize',
+  interests: 'interests',
+  message: 'message',
+  status: 'status',
   createdAt: 'createdAt'
 };
 
@@ -776,6 +792,7 @@ exports.OrgInviteStatus = exports.$Enums.OrgInviteStatus = {
 };
 
 exports.OrgSubscriptionStatus = exports.$Enums.OrgSubscriptionStatus = {
+  pending: 'pending',
   active: 'active',
   past_due: 'past_due',
   canceled: 'canceled',
@@ -827,6 +844,7 @@ exports.Prisma.ModelName = {
   OrgCourseAccess: 'OrgCourseAccess',
   TeamCourseAccess: 'TeamCourseAccess',
   OrgMaterial: 'OrgMaterial',
+  BusinessQuoteRequest: 'BusinessQuoteRequest',
   Kpi: 'Kpi',
   KpiProgress: 'KpiProgress',
   SiteSetting: 'SiteSetting',

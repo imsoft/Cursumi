@@ -205,6 +205,12 @@ export type TeamCourseAccess = $Result.DefaultSelection<Prisma.$TeamCourseAccess
  */
 export type OrgMaterial = $Result.DefaultSelection<Prisma.$OrgMaterialPayload>
 /**
+ * Model BusinessQuoteRequest
+ * Solicitud pública de cotización empresarial (lead). El admin la revisa y
+ * luego provisiona la organización con el precio acordado.
+ */
+export type BusinessQuoteRequest = $Result.DefaultSelection<Prisma.$BusinessQuoteRequestPayload>
+/**
  * Model Kpi
  * 
  */
@@ -357,6 +363,7 @@ export type OrgInviteStatus = (typeof OrgInviteStatus)[keyof typeof OrgInviteSta
 
 
 export const OrgSubscriptionStatus: {
+  pending: 'pending',
   active: 'active',
   past_due: 'past_due',
   canceled: 'canceled',
@@ -968,6 +975,16 @@ export class PrismaClient<
   get orgMaterial(): Prisma.OrgMaterialDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.businessQuoteRequest`: Exposes CRUD operations for the **BusinessQuoteRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BusinessQuoteRequests
+    * const businessQuoteRequests = await prisma.businessQuoteRequest.findMany()
+    * ```
+    */
+  get businessQuoteRequest(): Prisma.BusinessQuoteRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.kpi`: Exposes CRUD operations for the **Kpi** model.
     * Example usage:
     * ```ts
@@ -1528,6 +1545,7 @@ export namespace Prisma {
     OrgCourseAccess: 'OrgCourseAccess',
     TeamCourseAccess: 'TeamCourseAccess',
     OrgMaterial: 'OrgMaterial',
+    BusinessQuoteRequest: 'BusinessQuoteRequest',
     Kpi: 'Kpi',
     KpiProgress: 'KpiProgress',
     SiteSetting: 'SiteSetting',
@@ -1552,7 +1570,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
+      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "businessQuoteRequest" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "blogPost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4368,6 +4386,80 @@ export namespace Prisma {
           }
         }
       }
+      BusinessQuoteRequest: {
+        payload: Prisma.$BusinessQuoteRequestPayload<ExtArgs>
+        fields: Prisma.BusinessQuoteRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BusinessQuoteRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BusinessQuoteRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.BusinessQuoteRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BusinessQuoteRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>
+          }
+          findMany: {
+            args: Prisma.BusinessQuoteRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>[]
+          }
+          create: {
+            args: Prisma.BusinessQuoteRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>
+          }
+          createMany: {
+            args: Prisma.BusinessQuoteRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BusinessQuoteRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.BusinessQuoteRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>
+          }
+          update: {
+            args: Prisma.BusinessQuoteRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.BusinessQuoteRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BusinessQuoteRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BusinessQuoteRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.BusinessQuoteRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BusinessQuoteRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.BusinessQuoteRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBusinessQuoteRequest>
+          }
+          groupBy: {
+            args: Prisma.BusinessQuoteRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BusinessQuoteRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BusinessQuoteRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<BusinessQuoteRequestCountAggregateOutputType> | number
+          }
+        }
+      }
       Kpi: {
         payload: Prisma.$KpiPayload<ExtArgs>
         fields: Prisma.KpiFieldRefs
@@ -5180,6 +5272,7 @@ export namespace Prisma {
     orgCourseAccess?: OrgCourseAccessOmit
     teamCourseAccess?: TeamCourseAccessOmit
     orgMaterial?: OrgMaterialOmit
+    businessQuoteRequest?: BusinessQuoteRequestOmit
     kpi?: KpiOmit
     kpiProgress?: KpiProgressOmit
     siteSetting?: SiteSettingOmit
@@ -46837,10 +46930,12 @@ export namespace Prisma {
 
   export type OrgSubscriptionAvgAggregateOutputType = {
     maxSeats: number | null
+    amountCents: number | null
   }
 
   export type OrgSubscriptionSumAggregateOutputType = {
     maxSeats: number | null
+    amountCents: number | null
   }
 
   export type OrgSubscriptionMinAggregateOutputType = {
@@ -46850,6 +46945,9 @@ export namespace Prisma {
     stripeSubscriptionId: string | null
     status: $Enums.OrgSubscriptionStatus | null
     maxSeats: number | null
+    amountCents: number | null
+    billingInterval: string | null
+    currency: string | null
     currentPeriodStart: Date | null
     currentPeriodEnd: Date | null
     cancelAtPeriodEnd: boolean | null
@@ -46864,6 +46962,9 @@ export namespace Prisma {
     stripeSubscriptionId: string | null
     status: $Enums.OrgSubscriptionStatus | null
     maxSeats: number | null
+    amountCents: number | null
+    billingInterval: string | null
+    currency: string | null
     currentPeriodStart: Date | null
     currentPeriodEnd: Date | null
     cancelAtPeriodEnd: boolean | null
@@ -46878,6 +46979,9 @@ export namespace Prisma {
     stripeSubscriptionId: number
     status: number
     maxSeats: number
+    amountCents: number
+    billingInterval: number
+    currency: number
     currentPeriodStart: number
     currentPeriodEnd: number
     cancelAtPeriodEnd: number
@@ -46889,10 +46993,12 @@ export namespace Prisma {
 
   export type OrgSubscriptionAvgAggregateInputType = {
     maxSeats?: true
+    amountCents?: true
   }
 
   export type OrgSubscriptionSumAggregateInputType = {
     maxSeats?: true
+    amountCents?: true
   }
 
   export type OrgSubscriptionMinAggregateInputType = {
@@ -46902,6 +47008,9 @@ export namespace Prisma {
     stripeSubscriptionId?: true
     status?: true
     maxSeats?: true
+    amountCents?: true
+    billingInterval?: true
+    currency?: true
     currentPeriodStart?: true
     currentPeriodEnd?: true
     cancelAtPeriodEnd?: true
@@ -46916,6 +47025,9 @@ export namespace Prisma {
     stripeSubscriptionId?: true
     status?: true
     maxSeats?: true
+    amountCents?: true
+    billingInterval?: true
+    currency?: true
     currentPeriodStart?: true
     currentPeriodEnd?: true
     cancelAtPeriodEnd?: true
@@ -46930,6 +47042,9 @@ export namespace Prisma {
     stripeSubscriptionId?: true
     status?: true
     maxSeats?: true
+    amountCents?: true
+    billingInterval?: true
+    currency?: true
     currentPeriodStart?: true
     currentPeriodEnd?: true
     cancelAtPeriodEnd?: true
@@ -47027,10 +47142,13 @@ export namespace Prisma {
   export type OrgSubscriptionGroupByOutputType = {
     id: string
     organizationId: string
-    stripeCustomerId: string
+    stripeCustomerId: string | null
     stripeSubscriptionId: string | null
     status: $Enums.OrgSubscriptionStatus
     maxSeats: number
+    amountCents: number | null
+    billingInterval: string | null
+    currency: string
     currentPeriodStart: Date | null
     currentPeriodEnd: Date | null
     cancelAtPeriodEnd: boolean
@@ -47064,6 +47182,9 @@ export namespace Prisma {
     stripeSubscriptionId?: boolean
     status?: boolean
     maxSeats?: boolean
+    amountCents?: boolean
+    billingInterval?: boolean
+    currency?: boolean
     currentPeriodStart?: boolean
     currentPeriodEnd?: boolean
     cancelAtPeriodEnd?: boolean
@@ -47079,6 +47200,9 @@ export namespace Prisma {
     stripeSubscriptionId?: boolean
     status?: boolean
     maxSeats?: boolean
+    amountCents?: boolean
+    billingInterval?: boolean
+    currency?: boolean
     currentPeriodStart?: boolean
     currentPeriodEnd?: boolean
     cancelAtPeriodEnd?: boolean
@@ -47094,6 +47218,9 @@ export namespace Prisma {
     stripeSubscriptionId?: boolean
     status?: boolean
     maxSeats?: boolean
+    amountCents?: boolean
+    billingInterval?: boolean
+    currency?: boolean
     currentPeriodStart?: boolean
     currentPeriodEnd?: boolean
     cancelAtPeriodEnd?: boolean
@@ -47109,6 +47236,9 @@ export namespace Prisma {
     stripeSubscriptionId?: boolean
     status?: boolean
     maxSeats?: boolean
+    amountCents?: boolean
+    billingInterval?: boolean
+    currency?: boolean
     currentPeriodStart?: boolean
     currentPeriodEnd?: boolean
     cancelAtPeriodEnd?: boolean
@@ -47116,7 +47246,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type OrgSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "stripeCustomerId" | "stripeSubscriptionId" | "status" | "maxSeats" | "currentPeriodStart" | "currentPeriodEnd" | "cancelAtPeriodEnd" | "createdAt" | "updatedAt", ExtArgs["result"]["orgSubscription"]>
+  export type OrgSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "stripeCustomerId" | "stripeSubscriptionId" | "status" | "maxSeats" | "amountCents" | "billingInterval" | "currency" | "currentPeriodStart" | "currentPeriodEnd" | "cancelAtPeriodEnd" | "createdAt" | "updatedAt", ExtArgs["result"]["orgSubscription"]>
   export type OrgSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
@@ -47135,10 +47265,13 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       organizationId: string
-      stripeCustomerId: string
+      stripeCustomerId: string | null
       stripeSubscriptionId: string | null
       status: $Enums.OrgSubscriptionStatus
       maxSeats: number
+      amountCents: number | null
+      billingInterval: string | null
+      currency: string
       currentPeriodStart: Date | null
       currentPeriodEnd: Date | null
       cancelAtPeriodEnd: boolean
@@ -47574,6 +47707,9 @@ export namespace Prisma {
     readonly stripeSubscriptionId: FieldRef<"OrgSubscription", 'String'>
     readonly status: FieldRef<"OrgSubscription", 'OrgSubscriptionStatus'>
     readonly maxSeats: FieldRef<"OrgSubscription", 'Int'>
+    readonly amountCents: FieldRef<"OrgSubscription", 'Int'>
+    readonly billingInterval: FieldRef<"OrgSubscription", 'String'>
+    readonly currency: FieldRef<"OrgSubscription", 'String'>
     readonly currentPeriodStart: FieldRef<"OrgSubscription", 'DateTime'>
     readonly currentPeriodEnd: FieldRef<"OrgSubscription", 'DateTime'>
     readonly cancelAtPeriodEnd: FieldRef<"OrgSubscription", 'Boolean'>
@@ -51260,6 +51396,1071 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OrgMaterialInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BusinessQuoteRequest
+   */
+
+  export type AggregateBusinessQuoteRequest = {
+    _count: BusinessQuoteRequestCountAggregateOutputType | null
+    _min: BusinessQuoteRequestMinAggregateOutputType | null
+    _max: BusinessQuoteRequestMaxAggregateOutputType | null
+  }
+
+  export type BusinessQuoteRequestMinAggregateOutputType = {
+    id: string | null
+    companyName: string | null
+    contactName: string | null
+    contactEmail: string | null
+    contactPhone: string | null
+    companySize: string | null
+    interests: string | null
+    message: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type BusinessQuoteRequestMaxAggregateOutputType = {
+    id: string | null
+    companyName: string | null
+    contactName: string | null
+    contactEmail: string | null
+    contactPhone: string | null
+    companySize: string | null
+    interests: string | null
+    message: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type BusinessQuoteRequestCountAggregateOutputType = {
+    id: number
+    companyName: number
+    contactName: number
+    contactEmail: number
+    contactPhone: number
+    companySize: number
+    interests: number
+    message: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BusinessQuoteRequestMinAggregateInputType = {
+    id?: true
+    companyName?: true
+    contactName?: true
+    contactEmail?: true
+    contactPhone?: true
+    companySize?: true
+    interests?: true
+    message?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type BusinessQuoteRequestMaxAggregateInputType = {
+    id?: true
+    companyName?: true
+    contactName?: true
+    contactEmail?: true
+    contactPhone?: true
+    companySize?: true
+    interests?: true
+    message?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type BusinessQuoteRequestCountAggregateInputType = {
+    id?: true
+    companyName?: true
+    contactName?: true
+    contactEmail?: true
+    contactPhone?: true
+    companySize?: true
+    interests?: true
+    message?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BusinessQuoteRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BusinessQuoteRequest to aggregate.
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BusinessQuoteRequests to fetch.
+     */
+    orderBy?: BusinessQuoteRequestOrderByWithRelationInput | BusinessQuoteRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BusinessQuoteRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BusinessQuoteRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BusinessQuoteRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BusinessQuoteRequests
+    **/
+    _count?: true | BusinessQuoteRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BusinessQuoteRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BusinessQuoteRequestMaxAggregateInputType
+  }
+
+  export type GetBusinessQuoteRequestAggregateType<T extends BusinessQuoteRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateBusinessQuoteRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBusinessQuoteRequest[P]>
+      : GetScalarType<T[P], AggregateBusinessQuoteRequest[P]>
+  }
+
+
+
+
+  export type BusinessQuoteRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BusinessQuoteRequestWhereInput
+    orderBy?: BusinessQuoteRequestOrderByWithAggregationInput | BusinessQuoteRequestOrderByWithAggregationInput[]
+    by: BusinessQuoteRequestScalarFieldEnum[] | BusinessQuoteRequestScalarFieldEnum
+    having?: BusinessQuoteRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BusinessQuoteRequestCountAggregateInputType | true
+    _min?: BusinessQuoteRequestMinAggregateInputType
+    _max?: BusinessQuoteRequestMaxAggregateInputType
+  }
+
+  export type BusinessQuoteRequestGroupByOutputType = {
+    id: string
+    companyName: string
+    contactName: string
+    contactEmail: string
+    contactPhone: string | null
+    companySize: string | null
+    interests: string | null
+    message: string | null
+    status: string
+    createdAt: Date
+    _count: BusinessQuoteRequestCountAggregateOutputType | null
+    _min: BusinessQuoteRequestMinAggregateOutputType | null
+    _max: BusinessQuoteRequestMaxAggregateOutputType | null
+  }
+
+  type GetBusinessQuoteRequestGroupByPayload<T extends BusinessQuoteRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BusinessQuoteRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BusinessQuoteRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BusinessQuoteRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], BusinessQuoteRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BusinessQuoteRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyName?: boolean
+    contactName?: boolean
+    contactEmail?: boolean
+    contactPhone?: boolean
+    companySize?: boolean
+    interests?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["businessQuoteRequest"]>
+
+  export type BusinessQuoteRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyName?: boolean
+    contactName?: boolean
+    contactEmail?: boolean
+    contactPhone?: boolean
+    companySize?: boolean
+    interests?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["businessQuoteRequest"]>
+
+  export type BusinessQuoteRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyName?: boolean
+    contactName?: boolean
+    contactEmail?: boolean
+    contactPhone?: boolean
+    companySize?: boolean
+    interests?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["businessQuoteRequest"]>
+
+  export type BusinessQuoteRequestSelectScalar = {
+    id?: boolean
+    companyName?: boolean
+    contactName?: boolean
+    contactEmail?: boolean
+    contactPhone?: boolean
+    companySize?: boolean
+    interests?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type BusinessQuoteRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyName" | "contactName" | "contactEmail" | "contactPhone" | "companySize" | "interests" | "message" | "status" | "createdAt", ExtArgs["result"]["businessQuoteRequest"]>
+
+  export type $BusinessQuoteRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BusinessQuoteRequest"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      companyName: string
+      contactName: string
+      contactEmail: string
+      contactPhone: string | null
+      companySize: string | null
+      interests: string | null
+      message: string | null
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["businessQuoteRequest"]>
+    composites: {}
+  }
+
+  type BusinessQuoteRequestGetPayload<S extends boolean | null | undefined | BusinessQuoteRequestDefaultArgs> = $Result.GetResult<Prisma.$BusinessQuoteRequestPayload, S>
+
+  type BusinessQuoteRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BusinessQuoteRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BusinessQuoteRequestCountAggregateInputType | true
+    }
+
+  export interface BusinessQuoteRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BusinessQuoteRequest'], meta: { name: 'BusinessQuoteRequest' } }
+    /**
+     * Find zero or one BusinessQuoteRequest that matches the filter.
+     * @param {BusinessQuoteRequestFindUniqueArgs} args - Arguments to find a BusinessQuoteRequest
+     * @example
+     * // Get one BusinessQuoteRequest
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BusinessQuoteRequestFindUniqueArgs>(args: SelectSubset<T, BusinessQuoteRequestFindUniqueArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BusinessQuoteRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BusinessQuoteRequestFindUniqueOrThrowArgs} args - Arguments to find a BusinessQuoteRequest
+     * @example
+     * // Get one BusinessQuoteRequest
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BusinessQuoteRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, BusinessQuoteRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BusinessQuoteRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestFindFirstArgs} args - Arguments to find a BusinessQuoteRequest
+     * @example
+     * // Get one BusinessQuoteRequest
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BusinessQuoteRequestFindFirstArgs>(args?: SelectSubset<T, BusinessQuoteRequestFindFirstArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BusinessQuoteRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestFindFirstOrThrowArgs} args - Arguments to find a BusinessQuoteRequest
+     * @example
+     * // Get one BusinessQuoteRequest
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BusinessQuoteRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, BusinessQuoteRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BusinessQuoteRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BusinessQuoteRequests
+     * const businessQuoteRequests = await prisma.businessQuoteRequest.findMany()
+     * 
+     * // Get first 10 BusinessQuoteRequests
+     * const businessQuoteRequests = await prisma.businessQuoteRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const businessQuoteRequestWithIdOnly = await prisma.businessQuoteRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BusinessQuoteRequestFindManyArgs>(args?: SelectSubset<T, BusinessQuoteRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BusinessQuoteRequest.
+     * @param {BusinessQuoteRequestCreateArgs} args - Arguments to create a BusinessQuoteRequest.
+     * @example
+     * // Create one BusinessQuoteRequest
+     * const BusinessQuoteRequest = await prisma.businessQuoteRequest.create({
+     *   data: {
+     *     // ... data to create a BusinessQuoteRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends BusinessQuoteRequestCreateArgs>(args: SelectSubset<T, BusinessQuoteRequestCreateArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BusinessQuoteRequests.
+     * @param {BusinessQuoteRequestCreateManyArgs} args - Arguments to create many BusinessQuoteRequests.
+     * @example
+     * // Create many BusinessQuoteRequests
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BusinessQuoteRequestCreateManyArgs>(args?: SelectSubset<T, BusinessQuoteRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BusinessQuoteRequests and returns the data saved in the database.
+     * @param {BusinessQuoteRequestCreateManyAndReturnArgs} args - Arguments to create many BusinessQuoteRequests.
+     * @example
+     * // Create many BusinessQuoteRequests
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BusinessQuoteRequests and only return the `id`
+     * const businessQuoteRequestWithIdOnly = await prisma.businessQuoteRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BusinessQuoteRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, BusinessQuoteRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BusinessQuoteRequest.
+     * @param {BusinessQuoteRequestDeleteArgs} args - Arguments to delete one BusinessQuoteRequest.
+     * @example
+     * // Delete one BusinessQuoteRequest
+     * const BusinessQuoteRequest = await prisma.businessQuoteRequest.delete({
+     *   where: {
+     *     // ... filter to delete one BusinessQuoteRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BusinessQuoteRequestDeleteArgs>(args: SelectSubset<T, BusinessQuoteRequestDeleteArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BusinessQuoteRequest.
+     * @param {BusinessQuoteRequestUpdateArgs} args - Arguments to update one BusinessQuoteRequest.
+     * @example
+     * // Update one BusinessQuoteRequest
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BusinessQuoteRequestUpdateArgs>(args: SelectSubset<T, BusinessQuoteRequestUpdateArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BusinessQuoteRequests.
+     * @param {BusinessQuoteRequestDeleteManyArgs} args - Arguments to filter BusinessQuoteRequests to delete.
+     * @example
+     * // Delete a few BusinessQuoteRequests
+     * const { count } = await prisma.businessQuoteRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BusinessQuoteRequestDeleteManyArgs>(args?: SelectSubset<T, BusinessQuoteRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BusinessQuoteRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BusinessQuoteRequests
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BusinessQuoteRequestUpdateManyArgs>(args: SelectSubset<T, BusinessQuoteRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BusinessQuoteRequests and returns the data updated in the database.
+     * @param {BusinessQuoteRequestUpdateManyAndReturnArgs} args - Arguments to update many BusinessQuoteRequests.
+     * @example
+     * // Update many BusinessQuoteRequests
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BusinessQuoteRequests and only return the `id`
+     * const businessQuoteRequestWithIdOnly = await prisma.businessQuoteRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BusinessQuoteRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, BusinessQuoteRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BusinessQuoteRequest.
+     * @param {BusinessQuoteRequestUpsertArgs} args - Arguments to update or create a BusinessQuoteRequest.
+     * @example
+     * // Update or create a BusinessQuoteRequest
+     * const businessQuoteRequest = await prisma.businessQuoteRequest.upsert({
+     *   create: {
+     *     // ... data to create a BusinessQuoteRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BusinessQuoteRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BusinessQuoteRequestUpsertArgs>(args: SelectSubset<T, BusinessQuoteRequestUpsertArgs<ExtArgs>>): Prisma__BusinessQuoteRequestClient<$Result.GetResult<Prisma.$BusinessQuoteRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BusinessQuoteRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestCountArgs} args - Arguments to filter BusinessQuoteRequests to count.
+     * @example
+     * // Count the number of BusinessQuoteRequests
+     * const count = await prisma.businessQuoteRequest.count({
+     *   where: {
+     *     // ... the filter for the BusinessQuoteRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends BusinessQuoteRequestCountArgs>(
+      args?: Subset<T, BusinessQuoteRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BusinessQuoteRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BusinessQuoteRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BusinessQuoteRequestAggregateArgs>(args: Subset<T, BusinessQuoteRequestAggregateArgs>): Prisma.PrismaPromise<GetBusinessQuoteRequestAggregateType<T>>
+
+    /**
+     * Group by BusinessQuoteRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BusinessQuoteRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BusinessQuoteRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BusinessQuoteRequestGroupByArgs['orderBy'] }
+        : { orderBy?: BusinessQuoteRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BusinessQuoteRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBusinessQuoteRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BusinessQuoteRequest model
+   */
+  readonly fields: BusinessQuoteRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BusinessQuoteRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BusinessQuoteRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BusinessQuoteRequest model
+   */
+  interface BusinessQuoteRequestFieldRefs {
+    readonly id: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly companyName: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly contactName: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly contactEmail: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly contactPhone: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly companySize: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly interests: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly message: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly status: FieldRef<"BusinessQuoteRequest", 'String'>
+    readonly createdAt: FieldRef<"BusinessQuoteRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BusinessQuoteRequest findUnique
+   */
+  export type BusinessQuoteRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which BusinessQuoteRequest to fetch.
+     */
+    where: BusinessQuoteRequestWhereUniqueInput
+  }
+
+  /**
+   * BusinessQuoteRequest findUniqueOrThrow
+   */
+  export type BusinessQuoteRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which BusinessQuoteRequest to fetch.
+     */
+    where: BusinessQuoteRequestWhereUniqueInput
+  }
+
+  /**
+   * BusinessQuoteRequest findFirst
+   */
+  export type BusinessQuoteRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which BusinessQuoteRequest to fetch.
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BusinessQuoteRequests to fetch.
+     */
+    orderBy?: BusinessQuoteRequestOrderByWithRelationInput | BusinessQuoteRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BusinessQuoteRequests.
+     */
+    cursor?: BusinessQuoteRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BusinessQuoteRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BusinessQuoteRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BusinessQuoteRequests.
+     */
+    distinct?: BusinessQuoteRequestScalarFieldEnum | BusinessQuoteRequestScalarFieldEnum[]
+  }
+
+  /**
+   * BusinessQuoteRequest findFirstOrThrow
+   */
+  export type BusinessQuoteRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which BusinessQuoteRequest to fetch.
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BusinessQuoteRequests to fetch.
+     */
+    orderBy?: BusinessQuoteRequestOrderByWithRelationInput | BusinessQuoteRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BusinessQuoteRequests.
+     */
+    cursor?: BusinessQuoteRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BusinessQuoteRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BusinessQuoteRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BusinessQuoteRequests.
+     */
+    distinct?: BusinessQuoteRequestScalarFieldEnum | BusinessQuoteRequestScalarFieldEnum[]
+  }
+
+  /**
+   * BusinessQuoteRequest findMany
+   */
+  export type BusinessQuoteRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * Filter, which BusinessQuoteRequests to fetch.
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BusinessQuoteRequests to fetch.
+     */
+    orderBy?: BusinessQuoteRequestOrderByWithRelationInput | BusinessQuoteRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BusinessQuoteRequests.
+     */
+    cursor?: BusinessQuoteRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BusinessQuoteRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BusinessQuoteRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BusinessQuoteRequests.
+     */
+    distinct?: BusinessQuoteRequestScalarFieldEnum | BusinessQuoteRequestScalarFieldEnum[]
+  }
+
+  /**
+   * BusinessQuoteRequest create
+   */
+  export type BusinessQuoteRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * The data needed to create a BusinessQuoteRequest.
+     */
+    data: XOR<BusinessQuoteRequestCreateInput, BusinessQuoteRequestUncheckedCreateInput>
+  }
+
+  /**
+   * BusinessQuoteRequest createMany
+   */
+  export type BusinessQuoteRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BusinessQuoteRequests.
+     */
+    data: BusinessQuoteRequestCreateManyInput | BusinessQuoteRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BusinessQuoteRequest createManyAndReturn
+   */
+  export type BusinessQuoteRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many BusinessQuoteRequests.
+     */
+    data: BusinessQuoteRequestCreateManyInput | BusinessQuoteRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BusinessQuoteRequest update
+   */
+  export type BusinessQuoteRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * The data needed to update a BusinessQuoteRequest.
+     */
+    data: XOR<BusinessQuoteRequestUpdateInput, BusinessQuoteRequestUncheckedUpdateInput>
+    /**
+     * Choose, which BusinessQuoteRequest to update.
+     */
+    where: BusinessQuoteRequestWhereUniqueInput
+  }
+
+  /**
+   * BusinessQuoteRequest updateMany
+   */
+  export type BusinessQuoteRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BusinessQuoteRequests.
+     */
+    data: XOR<BusinessQuoteRequestUpdateManyMutationInput, BusinessQuoteRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which BusinessQuoteRequests to update
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * Limit how many BusinessQuoteRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BusinessQuoteRequest updateManyAndReturn
+   */
+  export type BusinessQuoteRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update BusinessQuoteRequests.
+     */
+    data: XOR<BusinessQuoteRequestUpdateManyMutationInput, BusinessQuoteRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which BusinessQuoteRequests to update
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * Limit how many BusinessQuoteRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BusinessQuoteRequest upsert
+   */
+  export type BusinessQuoteRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * The filter to search for the BusinessQuoteRequest to update in case it exists.
+     */
+    where: BusinessQuoteRequestWhereUniqueInput
+    /**
+     * In case the BusinessQuoteRequest found by the `where` argument doesn't exist, create a new BusinessQuoteRequest with this data.
+     */
+    create: XOR<BusinessQuoteRequestCreateInput, BusinessQuoteRequestUncheckedCreateInput>
+    /**
+     * In case the BusinessQuoteRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BusinessQuoteRequestUpdateInput, BusinessQuoteRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * BusinessQuoteRequest delete
+   */
+  export type BusinessQuoteRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
+    /**
+     * Filter which BusinessQuoteRequest to delete.
+     */
+    where: BusinessQuoteRequestWhereUniqueInput
+  }
+
+  /**
+   * BusinessQuoteRequest deleteMany
+   */
+  export type BusinessQuoteRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BusinessQuoteRequests to delete
+     */
+    where?: BusinessQuoteRequestWhereInput
+    /**
+     * Limit how many BusinessQuoteRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BusinessQuoteRequest without action
+   */
+  export type BusinessQuoteRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BusinessQuoteRequest
+     */
+    select?: BusinessQuoteRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BusinessQuoteRequest
+     */
+    omit?: BusinessQuoteRequestOmit<ExtArgs> | null
   }
 
 
@@ -61830,6 +63031,9 @@ export namespace Prisma {
     stripeSubscriptionId: 'stripeSubscriptionId',
     status: 'status',
     maxSeats: 'maxSeats',
+    amountCents: 'amountCents',
+    billingInterval: 'billingInterval',
+    currency: 'currency',
     currentPeriodStart: 'currentPeriodStart',
     currentPeriodEnd: 'currentPeriodEnd',
     cancelAtPeriodEnd: 'cancelAtPeriodEnd',
@@ -61873,6 +63077,22 @@ export namespace Prisma {
   };
 
   export type OrgMaterialScalarFieldEnum = (typeof OrgMaterialScalarFieldEnum)[keyof typeof OrgMaterialScalarFieldEnum]
+
+
+  export const BusinessQuoteRequestScalarFieldEnum: {
+    id: 'id',
+    companyName: 'companyName',
+    contactName: 'contactName',
+    contactEmail: 'contactEmail',
+    contactPhone: 'contactPhone',
+    companySize: 'companySize',
+    interests: 'interests',
+    message: 'message',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type BusinessQuoteRequestScalarFieldEnum = (typeof BusinessQuoteRequestScalarFieldEnum)[keyof typeof BusinessQuoteRequestScalarFieldEnum]
 
 
   export const KpiScalarFieldEnum: {
@@ -65227,10 +66447,13 @@ export namespace Prisma {
     NOT?: OrgSubscriptionWhereInput | OrgSubscriptionWhereInput[]
     id?: StringFilter<"OrgSubscription"> | string
     organizationId?: StringFilter<"OrgSubscription"> | string
-    stripeCustomerId?: StringFilter<"OrgSubscription"> | string
+    stripeCustomerId?: StringNullableFilter<"OrgSubscription"> | string | null
     stripeSubscriptionId?: StringNullableFilter<"OrgSubscription"> | string | null
     status?: EnumOrgSubscriptionStatusFilter<"OrgSubscription"> | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFilter<"OrgSubscription"> | number
+    amountCents?: IntNullableFilter<"OrgSubscription"> | number | null
+    billingInterval?: StringNullableFilter<"OrgSubscription"> | string | null
+    currency?: StringFilter<"OrgSubscription"> | string
     currentPeriodStart?: DateTimeNullableFilter<"OrgSubscription"> | Date | string | null
     currentPeriodEnd?: DateTimeNullableFilter<"OrgSubscription"> | Date | string | null
     cancelAtPeriodEnd?: BoolFilter<"OrgSubscription"> | boolean
@@ -65242,10 +66465,13 @@ export namespace Prisma {
   export type OrgSubscriptionOrderByWithRelationInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    stripeCustomerId?: SortOrder
+    stripeCustomerId?: SortOrderInput | SortOrder
     stripeSubscriptionId?: SortOrderInput | SortOrder
     status?: SortOrder
     maxSeats?: SortOrder
+    amountCents?: SortOrderInput | SortOrder
+    billingInterval?: SortOrderInput | SortOrder
+    currency?: SortOrder
     currentPeriodStart?: SortOrderInput | SortOrder
     currentPeriodEnd?: SortOrderInput | SortOrder
     cancelAtPeriodEnd?: SortOrder
@@ -65264,6 +66490,9 @@ export namespace Prisma {
     NOT?: OrgSubscriptionWhereInput | OrgSubscriptionWhereInput[]
     status?: EnumOrgSubscriptionStatusFilter<"OrgSubscription"> | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFilter<"OrgSubscription"> | number
+    amountCents?: IntNullableFilter<"OrgSubscription"> | number | null
+    billingInterval?: StringNullableFilter<"OrgSubscription"> | string | null
+    currency?: StringFilter<"OrgSubscription"> | string
     currentPeriodStart?: DateTimeNullableFilter<"OrgSubscription"> | Date | string | null
     currentPeriodEnd?: DateTimeNullableFilter<"OrgSubscription"> | Date | string | null
     cancelAtPeriodEnd?: BoolFilter<"OrgSubscription"> | boolean
@@ -65275,10 +66504,13 @@ export namespace Prisma {
   export type OrgSubscriptionOrderByWithAggregationInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    stripeCustomerId?: SortOrder
+    stripeCustomerId?: SortOrderInput | SortOrder
     stripeSubscriptionId?: SortOrderInput | SortOrder
     status?: SortOrder
     maxSeats?: SortOrder
+    amountCents?: SortOrderInput | SortOrder
+    billingInterval?: SortOrderInput | SortOrder
+    currency?: SortOrder
     currentPeriodStart?: SortOrderInput | SortOrder
     currentPeriodEnd?: SortOrderInput | SortOrder
     cancelAtPeriodEnd?: SortOrder
@@ -65297,10 +66529,13 @@ export namespace Prisma {
     NOT?: OrgSubscriptionScalarWhereWithAggregatesInput | OrgSubscriptionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"OrgSubscription"> | string
     organizationId?: StringWithAggregatesFilter<"OrgSubscription"> | string
-    stripeCustomerId?: StringWithAggregatesFilter<"OrgSubscription"> | string
+    stripeCustomerId?: StringNullableWithAggregatesFilter<"OrgSubscription"> | string | null
     stripeSubscriptionId?: StringNullableWithAggregatesFilter<"OrgSubscription"> | string | null
     status?: EnumOrgSubscriptionStatusWithAggregatesFilter<"OrgSubscription"> | $Enums.OrgSubscriptionStatus
     maxSeats?: IntWithAggregatesFilter<"OrgSubscription"> | number
+    amountCents?: IntNullableWithAggregatesFilter<"OrgSubscription"> | number | null
+    billingInterval?: StringNullableWithAggregatesFilter<"OrgSubscription"> | string | null
+    currency?: StringWithAggregatesFilter<"OrgSubscription"> | string
     currentPeriodStart?: DateTimeNullableWithAggregatesFilter<"OrgSubscription"> | Date | string | null
     currentPeriodEnd?: DateTimeNullableWithAggregatesFilter<"OrgSubscription"> | Date | string | null
     cancelAtPeriodEnd?: BoolWithAggregatesFilter<"OrgSubscription"> | boolean
@@ -65491,6 +66726,83 @@ export namespace Prisma {
     fileSize?: IntNullableWithAggregatesFilter<"OrgMaterial"> | number | null
     uploadedBy?: StringWithAggregatesFilter<"OrgMaterial"> | string
     createdAt?: DateTimeWithAggregatesFilter<"OrgMaterial"> | Date | string
+  }
+
+  export type BusinessQuoteRequestWhereInput = {
+    AND?: BusinessQuoteRequestWhereInput | BusinessQuoteRequestWhereInput[]
+    OR?: BusinessQuoteRequestWhereInput[]
+    NOT?: BusinessQuoteRequestWhereInput | BusinessQuoteRequestWhereInput[]
+    id?: StringFilter<"BusinessQuoteRequest"> | string
+    companyName?: StringFilter<"BusinessQuoteRequest"> | string
+    contactName?: StringFilter<"BusinessQuoteRequest"> | string
+    contactEmail?: StringFilter<"BusinessQuoteRequest"> | string
+    contactPhone?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    companySize?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    interests?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    message?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    status?: StringFilter<"BusinessQuoteRequest"> | string
+    createdAt?: DateTimeFilter<"BusinessQuoteRequest"> | Date | string
+  }
+
+  export type BusinessQuoteRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    companyName?: SortOrder
+    contactName?: SortOrder
+    contactEmail?: SortOrder
+    contactPhone?: SortOrderInput | SortOrder
+    companySize?: SortOrderInput | SortOrder
+    interests?: SortOrderInput | SortOrder
+    message?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BusinessQuoteRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BusinessQuoteRequestWhereInput | BusinessQuoteRequestWhereInput[]
+    OR?: BusinessQuoteRequestWhereInput[]
+    NOT?: BusinessQuoteRequestWhereInput | BusinessQuoteRequestWhereInput[]
+    companyName?: StringFilter<"BusinessQuoteRequest"> | string
+    contactName?: StringFilter<"BusinessQuoteRequest"> | string
+    contactEmail?: StringFilter<"BusinessQuoteRequest"> | string
+    contactPhone?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    companySize?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    interests?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    message?: StringNullableFilter<"BusinessQuoteRequest"> | string | null
+    status?: StringFilter<"BusinessQuoteRequest"> | string
+    createdAt?: DateTimeFilter<"BusinessQuoteRequest"> | Date | string
+  }, "id">
+
+  export type BusinessQuoteRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    companyName?: SortOrder
+    contactName?: SortOrder
+    contactEmail?: SortOrder
+    contactPhone?: SortOrderInput | SortOrder
+    companySize?: SortOrderInput | SortOrder
+    interests?: SortOrderInput | SortOrder
+    message?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: BusinessQuoteRequestCountOrderByAggregateInput
+    _max?: BusinessQuoteRequestMaxOrderByAggregateInput
+    _min?: BusinessQuoteRequestMinOrderByAggregateInput
+  }
+
+  export type BusinessQuoteRequestScalarWhereWithAggregatesInput = {
+    AND?: BusinessQuoteRequestScalarWhereWithAggregatesInput | BusinessQuoteRequestScalarWhereWithAggregatesInput[]
+    OR?: BusinessQuoteRequestScalarWhereWithAggregatesInput[]
+    NOT?: BusinessQuoteRequestScalarWhereWithAggregatesInput | BusinessQuoteRequestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BusinessQuoteRequest"> | string
+    companyName?: StringWithAggregatesFilter<"BusinessQuoteRequest"> | string
+    contactName?: StringWithAggregatesFilter<"BusinessQuoteRequest"> | string
+    contactEmail?: StringWithAggregatesFilter<"BusinessQuoteRequest"> | string
+    contactPhone?: StringNullableWithAggregatesFilter<"BusinessQuoteRequest"> | string | null
+    companySize?: StringNullableWithAggregatesFilter<"BusinessQuoteRequest"> | string | null
+    interests?: StringNullableWithAggregatesFilter<"BusinessQuoteRequest"> | string | null
+    message?: StringNullableWithAggregatesFilter<"BusinessQuoteRequest"> | string | null
+    status?: StringWithAggregatesFilter<"BusinessQuoteRequest"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"BusinessQuoteRequest"> | Date | string
   }
 
   export type KpiWhereInput = {
@@ -69198,10 +70510,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionCreateInput = {
     id?: string
-    stripeCustomerId: string
+    stripeCustomerId?: string | null
     stripeSubscriptionId?: string | null
     status?: $Enums.OrgSubscriptionStatus
     maxSeats: number
+    amountCents?: number | null
+    billingInterval?: string | null
+    currency?: string
     currentPeriodStart?: Date | string | null
     currentPeriodEnd?: Date | string | null
     cancelAtPeriodEnd?: boolean
@@ -69213,10 +70528,13 @@ export namespace Prisma {
   export type OrgSubscriptionUncheckedCreateInput = {
     id?: string
     organizationId: string
-    stripeCustomerId: string
+    stripeCustomerId?: string | null
     stripeSubscriptionId?: string | null
     status?: $Enums.OrgSubscriptionStatus
     maxSeats: number
+    amountCents?: number | null
+    billingInterval?: string | null
+    currency?: string
     currentPeriodStart?: Date | string | null
     currentPeriodEnd?: Date | string | null
     cancelAtPeriodEnd?: boolean
@@ -69226,10 +70544,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrgSubscriptionStatusFieldUpdateOperationsInput | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFieldUpdateOperationsInput | number
+    amountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    billingInterval?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
     currentPeriodStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentPeriodEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
@@ -69241,10 +70562,13 @@ export namespace Prisma {
   export type OrgSubscriptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrgSubscriptionStatusFieldUpdateOperationsInput | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFieldUpdateOperationsInput | number
+    amountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    billingInterval?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
     currentPeriodStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentPeriodEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
@@ -69255,10 +70579,13 @@ export namespace Prisma {
   export type OrgSubscriptionCreateManyInput = {
     id?: string
     organizationId: string
-    stripeCustomerId: string
+    stripeCustomerId?: string | null
     stripeSubscriptionId?: string | null
     status?: $Enums.OrgSubscriptionStatus
     maxSeats: number
+    amountCents?: number | null
+    billingInterval?: string | null
+    currency?: string
     currentPeriodStart?: Date | string | null
     currentPeriodEnd?: Date | string | null
     cancelAtPeriodEnd?: boolean
@@ -69268,10 +70595,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrgSubscriptionStatusFieldUpdateOperationsInput | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFieldUpdateOperationsInput | number
+    amountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    billingInterval?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
     currentPeriodStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentPeriodEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
@@ -69282,10 +70612,13 @@ export namespace Prisma {
   export type OrgSubscriptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrgSubscriptionStatusFieldUpdateOperationsInput | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFieldUpdateOperationsInput | number
+    amountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    billingInterval?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
     currentPeriodStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentPeriodEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
@@ -69467,6 +70800,97 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
     uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BusinessQuoteRequestCreateInput = {
+    id?: string
+    companyName: string
+    contactName: string
+    contactEmail: string
+    contactPhone?: string | null
+    companySize?: string | null
+    interests?: string | null
+    message?: string | null
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type BusinessQuoteRequestUncheckedCreateInput = {
+    id?: string
+    companyName: string
+    contactName: string
+    contactEmail: string
+    contactPhone?: string | null
+    companySize?: string | null
+    interests?: string | null
+    message?: string | null
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type BusinessQuoteRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactEmail?: StringFieldUpdateOperationsInput | string
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    interests?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BusinessQuoteRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactEmail?: StringFieldUpdateOperationsInput | string
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    interests?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BusinessQuoteRequestCreateManyInput = {
+    id?: string
+    companyName: string
+    contactName: string
+    contactEmail: string
+    contactPhone?: string | null
+    companySize?: string | null
+    interests?: string | null
+    message?: string | null
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type BusinessQuoteRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactEmail?: StringFieldUpdateOperationsInput | string
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    interests?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BusinessQuoteRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactEmail?: StringFieldUpdateOperationsInput | string
+    contactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    interests?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -72561,6 +73985,9 @@ export namespace Prisma {
     stripeSubscriptionId?: SortOrder
     status?: SortOrder
     maxSeats?: SortOrder
+    amountCents?: SortOrder
+    billingInterval?: SortOrder
+    currency?: SortOrder
     currentPeriodStart?: SortOrder
     currentPeriodEnd?: SortOrder
     cancelAtPeriodEnd?: SortOrder
@@ -72570,6 +73997,7 @@ export namespace Prisma {
 
   export type OrgSubscriptionAvgOrderByAggregateInput = {
     maxSeats?: SortOrder
+    amountCents?: SortOrder
   }
 
   export type OrgSubscriptionMaxOrderByAggregateInput = {
@@ -72579,6 +74007,9 @@ export namespace Prisma {
     stripeSubscriptionId?: SortOrder
     status?: SortOrder
     maxSeats?: SortOrder
+    amountCents?: SortOrder
+    billingInterval?: SortOrder
+    currency?: SortOrder
     currentPeriodStart?: SortOrder
     currentPeriodEnd?: SortOrder
     cancelAtPeriodEnd?: SortOrder
@@ -72593,6 +74024,9 @@ export namespace Prisma {
     stripeSubscriptionId?: SortOrder
     status?: SortOrder
     maxSeats?: SortOrder
+    amountCents?: SortOrder
+    billingInterval?: SortOrder
+    currency?: SortOrder
     currentPeriodStart?: SortOrder
     currentPeriodEnd?: SortOrder
     cancelAtPeriodEnd?: SortOrder
@@ -72602,6 +74036,7 @@ export namespace Prisma {
 
   export type OrgSubscriptionSumOrderByAggregateInput = {
     maxSeats?: SortOrder
+    amountCents?: SortOrder
   }
 
   export type EnumOrgSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -72708,6 +74143,45 @@ export namespace Prisma {
 
   export type OrgMaterialSumOrderByAggregateInput = {
     fileSize?: SortOrder
+  }
+
+  export type BusinessQuoteRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    companyName?: SortOrder
+    contactName?: SortOrder
+    contactEmail?: SortOrder
+    contactPhone?: SortOrder
+    companySize?: SortOrder
+    interests?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BusinessQuoteRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    companyName?: SortOrder
+    contactName?: SortOrder
+    contactEmail?: SortOrder
+    contactPhone?: SortOrder
+    companySize?: SortOrder
+    interests?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BusinessQuoteRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    companyName?: SortOrder
+    contactName?: SortOrder
+    contactEmail?: SortOrder
+    contactPhone?: SortOrder
+    companySize?: SortOrder
+    interests?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -88640,10 +90114,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionCreateWithoutOrganizationInput = {
     id?: string
-    stripeCustomerId: string
+    stripeCustomerId?: string | null
     stripeSubscriptionId?: string | null
     status?: $Enums.OrgSubscriptionStatus
     maxSeats: number
+    amountCents?: number | null
+    billingInterval?: string | null
+    currency?: string
     currentPeriodStart?: Date | string | null
     currentPeriodEnd?: Date | string | null
     cancelAtPeriodEnd?: boolean
@@ -88653,10 +90130,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionUncheckedCreateWithoutOrganizationInput = {
     id?: string
-    stripeCustomerId: string
+    stripeCustomerId?: string | null
     stripeSubscriptionId?: string | null
     status?: $Enums.OrgSubscriptionStatus
     maxSeats: number
+    amountCents?: number | null
+    billingInterval?: string | null
+    currency?: string
     currentPeriodStart?: Date | string | null
     currentPeriodEnd?: Date | string | null
     cancelAtPeriodEnd?: boolean
@@ -88859,10 +90339,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrgSubscriptionStatusFieldUpdateOperationsInput | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFieldUpdateOperationsInput | number
+    amountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    billingInterval?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
     currentPeriodStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentPeriodEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean
@@ -88872,10 +90355,13 @@ export namespace Prisma {
 
   export type OrgSubscriptionUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeSubscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrgSubscriptionStatusFieldUpdateOperationsInput | $Enums.OrgSubscriptionStatus
     maxSeats?: IntFieldUpdateOperationsInput | number
+    amountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    billingInterval?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
     currentPeriodStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentPeriodEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelAtPeriodEnd?: BoolFieldUpdateOperationsInput | boolean

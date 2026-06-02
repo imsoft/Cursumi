@@ -38,19 +38,19 @@ export function BusinessHero() {
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2">
-            <Link href="/business/onboarding">
+            <Link href="/business/cotizacion">
               <Button size="lg" className="gap-2 rounded-full font-semibold shadow-lg">
-                Crear mi empresa
+                Solicitar cotización
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="#como-funciona">
               <Button
                 size="lg"
                 variant="outline"
                 className="rounded-full border-white/20 bg-transparent font-semibold text-white hover:bg-white/10 hover:text-white"
               >
-                Solicitar demo
+                Cómo funciona
               </Button>
             </Link>
           </div>
