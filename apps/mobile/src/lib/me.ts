@@ -141,6 +141,32 @@ export type QuizQuestion = {
   type?: "multiple-choice" | "true-false" | "checkbox";
 };
 
+export type QuizConfig = {
+  /** Límite de tiempo en minutos (0 = sin límite). */
+  timeLimitMin: number;
+  /** Máximo de intentos (0 = ilimitados). */
+  maxAttempts: number;
+  /** Puntaje mínimo para aprobar (0–100). */
+  passingScore: number;
+};
+
+/** Parsea la configuración del quiz (tiempo, intentos, puntaje de aprobación). */
+export function parseQuizConfig(content: string | null | undefined): QuizConfig {
+  const fallback: QuizConfig = { timeLimitMin: 0, maxAttempts: 0, passingScore: 70 };
+  if (!content) return fallback;
+  try {
+    const p = JSON.parse(content);
+    if (p && typeof p === "object" && !Array.isArray(p)) {
+      return {
+        timeLimitMin: Number(p.timeLimit) || 0,
+        maxAttempts: Number(p.attempts) || 0,
+        passingScore: Number(p.passingScore) || 70,
+      };
+    }
+  } catch {}
+  return fallback;
+}
+
 /** Parsea las preguntas del quiz desde el JSON de lesson.content. */
 export function parseQuizQuestions(content: string | null | undefined): QuizQuestion[] {
   if (!content) return [];
