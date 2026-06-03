@@ -36,3 +36,35 @@ export async function getMyCourses(): Promise<StudentCourse[]> {
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as StudentCourse[];
 }
+
+export type CourseLesson = {
+  id: string;
+  title: string;
+  type?: string;
+};
+
+export type CourseSection = {
+  id: string;
+  title: string;
+  lessons: CourseLesson[];
+};
+
+export type CourseDetail = {
+  progress: number;
+  course: {
+    title: string;
+    description?: string | null;
+    instructor?: { name?: string | null } | null;
+    sections: CourseSection[];
+  };
+  lessonProgress: { lessonId: string }[];
+};
+
+/** Detalle (temario + progreso) de un curso inscrito. */
+export async function getMyCourseDetail(courseId: string): Promise<CourseDetail> {
+  const res = await fetch(`${API_URL}/api/me/courses/${courseId}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as CourseDetail;
+}

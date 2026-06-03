@@ -5,12 +5,14 @@ import {
   Image,
   RefreshControl,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { CourseDetail } from "@/components/course-detail";
 import { getMyCourses, type StudentCourse } from "@/lib/me";
 
 const PURPLE = "#6d28d9";
@@ -35,6 +37,7 @@ export default function MyCoursesScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setError(null);
@@ -55,6 +58,10 @@ export default function MyCoursesScreen() {
     await load();
     setRefreshing(false);
   }, [load]);
+
+  if (selectedId) {
+    return <CourseDetail courseId={selectedId} onBack={() => setSelectedId(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -83,6 +90,7 @@ export default function MyCoursesScreen() {
           renderItem={({ item }) => {
             const cat = categoryLabel(item.category);
             return (
+              <TouchableOpacity activeOpacity={0.7} onPress={() => setSelectedId(item.id)}>
               <ThemedView style={styles.card}>
                 <Image source={{ uri: item.imageUrl }} style={styles.thumb} resizeMode="cover" />
                 <View style={styles.cardBody}>
@@ -101,6 +109,7 @@ export default function MyCoursesScreen() {
                   </ThemedText>
                 </View>
               </ThemedView>
+              </TouchableOpacity>
             );
           }}
         />
