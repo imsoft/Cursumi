@@ -13,7 +13,8 @@ export async function downloadCertificateAsPdf(info: {
 
   // Importar ambas librerías en paralelo
   const [html2canvasMod, jsPDFMod] = await Promise.all([
-    import("html2canvas"),
+    // html2canvas-pro: soporta oklch/lab/color() de Tailwind v4.
+    import("html2canvas-pro"),
     import("jspdf"),
   ]);
 

@@ -36,7 +36,9 @@ export async function generateElementPdf(
   orientation: "portrait" | "landscape" = "portrait",
 ): Promise<void> {
   const [html2canvasMod, jsPDFMod, logo] = await Promise.all([
-    import("html2canvas"),
+    // html2canvas-pro: soporta colores oklch/lab/color() de Tailwind v4
+    // (html2canvas clásico lanza error al parsearlos).
+    import("html2canvas-pro"),
     import("jspdf"),
     loadLogoDataUrl(),
   ]);
@@ -131,7 +133,7 @@ export async function generateSlidesPdf(container: HTMLElement, filename: string
   const slides = Array.from(container.querySelectorAll<HTMLElement>("[data-slide]"));
   if (slides.length === 0) return;
 
-  const [html2canvasMod, jsPDFMod] = await Promise.all([import("html2canvas"), import("jspdf")]);
+  const [html2canvasMod, jsPDFMod] = await Promise.all([import("html2canvas-pro"), import("jspdf")]);
   const html2canvas = html2canvasMod.default;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const jsPDFMods = jsPDFMod as any;
