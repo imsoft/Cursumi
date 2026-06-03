@@ -1,54 +1,108 @@
-import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { getCourses, type CourseSummary } from "@/lib/api";
-import { formatPriceMXN } from "@cursumi/shared";
+import { getMyCourses, type StudentCourse } from "@/lib/me";
 
-export default function CoursesScreen() {
-  const [courses, setCourses] = useState<CourseSummary[]>([]);
+const PURPLE = "#6d28d9";
+
+function categoryLabel(category: StudentCourse["category"]): string | null {
+  if (!category) return null;
+  if (typeof category === "string") return category;
+  return category.name ?? null;
+}
+
+function ProgressBar({ value }: { value: number }) {
+  const pct = Math.max(0, Math.min(100, Math.round(value)));
+  return (
+    <View style={styles.progressOuter}>
+      <View style={[styles.progressInner, { width: `${pct}%` }]} />
+    </View>
+  );
+}
+
+export default function MyCoursesScreen() {
+  const [courses, setCourses] = useState<StudentCourse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
-    getCourses()
-      .then((data) => active && setCourses(data))
-      .catch((e) => active && setError(e instanceof Error ? e.message : "Error"))
-      .finally(() => active && setLoading(false));
-    return () => {
-      active = false;
-    };
+  const load = useCallback(async () => {
+    setError(null);
+    try {
+      const data = await getMyCourses();
+      setCourses(data);
+    } catch {
+      setError("No se pudieron cargar tus cursos. Desliza para reintentar.");
+    }
   }, []);
+
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await load();
+    setRefreshing(false);
+  }, [load]);
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <ThemedText type="title" style={styles.heading}>
-        Cursos
+        Mis cursos
       </ThemedText>
 
-      {loading && <ActivityIndicator style={styles.loader} />}
-
-      {error && (
-        <ThemedText style={styles.error}>
-          No se pudieron cargar los cursos: {error}
-        </ThemedText>
-      )}
-
-      {!loading && !error && (
+      {loading ? (
+        <ActivityIndicator style={styles.loader} color={PURPLE} />
+      ) : (
         <FlatList
           data={courses}
           keyExtractor={(c) => c.id}
           contentContainerStyle={styles.list}
-          ListEmptyComponent={<ThemedText>No hay cursos disponibles.</ThemedText>}
-          renderItem={({ item }) => (
-            <ThemedView style={styles.card}>
-              <ThemedText type="subtitle">{item.title}</ThemedText>
-              <ThemedText style={styles.price}>{formatPriceMXN(item.price)}</ThemedText>
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={PURPLE} />
+          }
+          ListEmptyComponent={
+            <ThemedView style={styles.empty}>
+              <ThemedText type="subtitle">Aún no tienes cursos</ThemedText>
+              <ThemedText style={styles.emptyText}>
+                {error ?? "Cuando te inscribas a un curso aparecerá aquí."}
+              </ThemedText>
             </ThemedView>
-          )}
+          }
+          renderItem={({ item }) => {
+            const cat = categoryLabel(item.category);
+            return (
+              <ThemedView style={styles.card}>
+                <Image source={{ uri: item.imageUrl }} style={styles.thumb} resizeMode="cover" />
+                <View style={styles.cardBody}>
+                  <ThemedText type="subtitle" numberOfLines={2}>
+                    {item.title}
+                  </ThemedText>
+                  <ThemedText style={styles.meta}>
+                    {item.instructorName}
+                    {cat ? ` · ${cat}` : ""}
+                  </ThemedText>
+                  <ProgressBar value={item.progress} />
+                  <ThemedText style={styles.progressLabel}>
+                    {item.status === "completed"
+                      ? "Completado"
+                      : `${Math.round(item.progress)}% completado`}
+                  </ThemedText>
+                </View>
+              </ThemedView>
+            );
+          }}
         />
       )}
     </SafeAreaView>
@@ -58,15 +112,32 @@ export default function CoursesScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   heading: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
-  loader: { marginTop: 32 },
-  error: { paddingHorizontal: 16, color: "#dc2626" },
-  list: { padding: 16, gap: 12 },
+  loader: { marginTop: 40 },
+  list: { padding: 16, gap: 12, flexGrow: 1 },
   card: {
-    padding: 16,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(127,127,127,0.2)",
-    gap: 6,
+    overflow: "hidden",
   },
-  price: { color: "#6d28d9", fontWeight: "600" },
+  thumb: { width: "100%", height: 140, backgroundColor: "rgba(127,127,127,0.1)" },
+  cardBody: { padding: 16, gap: 8 },
+  meta: { opacity: 0.7, fontSize: 13 },
+  progressOuter: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "rgba(127,127,127,0.2)",
+    overflow: "hidden",
+    marginTop: 2,
+  },
+  progressInner: { height: 8, borderRadius: 4, backgroundColor: PURPLE },
+  progressLabel: { fontSize: 12, opacity: 0.7 },
+  empty: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 60,
+  },
+  emptyText: { textAlign: "center", opacity: 0.7, paddingHorizontal: 24 },
 });
