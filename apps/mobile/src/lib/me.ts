@@ -90,14 +90,74 @@ export async function getLesson(lessonId: string): Promise<Lesson> {
   return (await res.json()) as Lesson;
 }
 
-/** Marca una lección como completada. */
-export async function completeLesson(lessonId: string, courseId: string): Promise<void> {
+/** Marca una lección como completada (opcionalmente con puntaje de quiz). */
+export async function completeLesson(
+  lessonId: string,
+  courseId: string,
+  extra?: { score?: number; answers?: Record<string, number | number[]> }
+): Promise<void> {
   const res = await fetch(`${API_URL}/api/lessons/${lessonId}/complete`, {
     method: "POST",
     headers: { ...authHeaders(), "Content-Type": "application/json" },
-    body: JSON.stringify({ courseId }),
+    body: JSON.stringify({ courseId, ...extra }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
+/** Respuesta de tarea (assignment) ya enviada, si existe. */
+export async function getAssignment(
+  lessonId: string,
+  courseId: string
+): Promise<{ content: string; submittedAt: string } | null> {
+  const res = await fetch(
+    `${API_URL}/api/lessons/${lessonId}/assignment?courseId=${encodeURIComponent(courseId)}`,
+    { headers: authHeaders() }
+  );
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.submission ?? null;
+}
+
+/** Envía/actualiza la respuesta de una tarea. */
+export async function submitAssignment(
+  lessonId: string,
+  courseId: string,
+  content: string
+): Promise<void> {
+  const res = await fetch(`${API_URL}/api/lessons/${lessonId}/assignment`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId, content }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
+/** Pregunta de quiz (parseada de lesson.content). */
+export type QuizQuestion = {
+  question: string;
+  options: string[];
+  correctAnswer?: number;
+  correctAnswers?: number[];
+  type?: "multiple-choice" | "true-false" | "checkbox";
+};
+
+/** Parsea las preguntas del quiz desde el JSON de lesson.content. */
+export function parseQuizQuestions(content: string | null | undefined): QuizQuestion[] {
+  if (!content) return [];
+  try {
+    const parsed = JSON.parse(content);
+    const list = Array.isArray(parsed) ? parsed : parsed?.questions;
+    if (!Array.isArray(list)) return [];
+    return list.map((q: Record<string, unknown>) => ({
+      question: String(q.question ?? ""),
+      options: Array.isArray(q.options) ? (q.options as string[]) : [],
+      correctAnswer: typeof q.correctAnswer === "number" ? q.correctAnswer : undefined,
+      correctAnswers: Array.isArray(q.correctAnswers) ? (q.correctAnswers as number[]) : undefined,
+      type: (q.type as QuizQuestion["type"]) ?? "multiple-choice",
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export type MyProfile = {
