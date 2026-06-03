@@ -7,11 +7,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as WebBrowser from "expo-web-browser";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { API_URL } from "@/lib/api";
+import { LessonView } from "@/components/lesson-view";
 import { getMyCourseDetail, type CourseDetail as Detail } from "@/lib/me";
 
 const PURPLE = "#6d28d9";
@@ -29,6 +28,8 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
   const [detail, setDetail] = useState<Detail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
+  const [extraCompleted, setExtraCompleted] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let active = true;
@@ -41,7 +42,20 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
     };
   }, [courseId]);
 
-  const completed = new Set((detail?.lessonProgress ?? []).map((p) => p.lessonId));
+  const completed = new Set([
+    ...(detail?.lessonProgress ?? []).map((p) => p.lessonId),
+    ...extraCompleted,
+  ]);
+
+  if (selectedLessonId) {
+    return (
+      <LessonView
+        lessonId={selectedLessonId}
+        onBack={() => setSelectedLessonId(null)}
+        onCompleted={(id) => setExtraCompleted((prev) => new Set(prev).add(id))}
+      />
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -62,15 +76,6 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
             {detail.course.instructor?.name ?? "Instructor"} · {Math.round(detail.progress)}% completado
           </ThemedText>
 
-          <TouchableOpacity
-            style={styles.openButton}
-            onPress={() =>
-              WebBrowser.openBrowserAsync(`${API_URL}/dashboard/my-courses/${courseId}`)
-            }
-          >
-            <ThemedText style={styles.openButtonText}>Continuar en cursumi.com</ThemedText>
-          </TouchableOpacity>
-
           {detail.course.sections.map((section) => (
             <ThemedView key={section.id} style={styles.section}>
               <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -79,7 +84,12 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
               {section.lessons.map((lesson) => {
                 const done = completed.has(lesson.id);
                 return (
-                  <View key={lesson.id} style={styles.lessonRow}>
+                  <TouchableOpacity
+                    key={lesson.id}
+                    style={styles.lessonRow}
+                    activeOpacity={0.6}
+                    onPress={() => setSelectedLessonId(lesson.id)}
+                  >
                     <ThemedText style={[styles.check, done && styles.checkDone]}>
                       {done ? "✓" : "○"}
                     </ThemedText>
@@ -89,7 +99,8 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
                     {lesson.type && typeLabels[lesson.type] && (
                       <ThemedText style={styles.typeBadge}>{typeLabels[lesson.type]}</ThemedText>
                     )}
-                  </View>
+                    <ThemedText style={styles.chevron}>›</ThemedText>
+                  </TouchableOpacity>
                 );
               })}
             </ThemedView>
@@ -108,14 +119,6 @@ const styles = StyleSheet.create({
   error: { padding: 16, color: "#dc2626" },
   scroll: { padding: 16, gap: 12 },
   meta: { opacity: 0.7, fontSize: 13 },
-  openButton: {
-    backgroundColor: PURPLE,
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: "center",
-    marginVertical: 4,
-  },
-  openButtonText: { color: "#fff", fontWeight: "700" },
   section: {
     borderRadius: 16,
     borderWidth: 1,
@@ -128,6 +131,7 @@ const styles = StyleSheet.create({
   check: { fontSize: 16, color: "rgba(127,127,127,0.6)", width: 18 },
   checkDone: { color: "#16a34a" },
   lessonTitle: { flex: 1 },
+  chevron: { fontSize: 20, opacity: 0.4, marginLeft: 4 },
   typeBadge: {
     fontSize: 11,
     opacity: 0.6,
