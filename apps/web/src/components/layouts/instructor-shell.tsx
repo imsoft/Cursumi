@@ -35,7 +35,7 @@ const instructorNavItems = [
   { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
   { title: "Blog", href: "/instructor/blog", icon: Newspaper },
   { title: "Plantillas", href: "/instructor/templates", icon: FileDown },
-  { title: "Para empresas", href: "/business", icon: Building2 },
+  { title: "Para empresas", href: "/instructor/business", icon: Building2 },
   { title: "Perfil", href: "/instructor/profile", icon: UserCircle },
 ];
 

@@ -105,7 +105,7 @@ export function StudentShell({
   // landing empresarial (descubrimiento).
   const businessItem = isOrgAdmin
     ? { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }
-    : { title: "Para empresas", href: "/business", icon: Building2 };
+    : { title: "Para empresas", href: "/dashboard/business", icon: Building2 };
   const finalNavItems = [...navItems, businessItem];
 
   return (
