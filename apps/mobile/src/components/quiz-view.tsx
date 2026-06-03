@@ -1,13 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { completeLesson, parseQuizQuestions, type Lesson } from "@/lib/me";
+import {
+  completeLesson,
+  parseQuizConfig,
+  parseQuizQuestions,
+  type Lesson,
+} from "@/lib/me";
 
 const PURPLE = "#6d28d9";
 const GREEN = "#16a34a";
 const RED = "#dc2626";
+
+function mmss(total: number): string {
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
 
 export function QuizView({
   lesson,
@@ -17,11 +28,33 @@ export function QuizView({
   onCompleted?: (lessonId: string) => void;
 }) {
   const questions = useMemo(() => parseQuizQuestions(lesson.content), [lesson.content]);
+  const config = useMemo(() => parseQuizConfig(lesson.content), [lesson.content]);
   // answers[i] = índice (single) o lista de índices (checkbox)
   const [answers, setAnswers] = useState<Record<number, number | number[]>>({});
   const [submitted, setSubmitted] = useState(false);
   const [scorePct, setScorePct] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [timeLeft, setTimeLeft] = useState<number | null>(
+    config.timeLimitMin > 0 ? config.timeLimitMin * 60 : null
+  );
+  const submitRef = useRef<() => void>(() => {});
+
+  const passed = scorePct >= config.passingScore;
+  const attemptsLeft =
+    config.maxAttempts > 0 ? Math.max(0, config.maxAttempts - attemptCount) : null;
+  const canRetake = !passed && (config.maxAttempts === 0 || attemptCount < config.maxAttempts);
+
+  // Cuenta regresiva: al llegar a 0 envía automáticamente.
+  useEffect(() => {
+    if (timeLeft === null || submitted) return;
+    if (timeLeft <= 0) {
+      submitRef.current();
+      return;
+    }
+    const t = setTimeout(() => setTimeLeft((s) => (s === null ? null : s - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [timeLeft, submitted]);
 
   function selectSingle(qi: number, oi: number) {
     if (submitted) return;
@@ -59,9 +92,12 @@ export function QuizView({
   }
 
   async function submit() {
+    if (submitted) return;
     const pct = computeScore();
     setScorePct(pct);
     setSubmitted(true);
+    setTimeLeft(null);
+    setAttemptCount((n) => n + 1);
     setSaving(true);
     try {
       const toSave: Record<string, number | number[]> = {};
@@ -75,6 +111,14 @@ export function QuizView({
     } finally {
       setSaving(false);
     }
+  }
+  submitRef.current = submit;
+
+  function retake() {
+    setAnswers({});
+    setSubmitted(false);
+    setScorePct(0);
+    setTimeLeft(config.timeLimitMin > 0 ? config.timeLimitMin * 60 : null);
   }
 
   function isCorrectOption(qi: number, oi: number): boolean {
@@ -94,12 +138,32 @@ export function QuizView({
 
   return (
     <View style={styles.container}>
+      {/* Temporizador */}
+      {timeLeft !== null && !submitted && (
+        <ThemedView
+          style={[styles.timer, { borderColor: timeLeft <= 30 ? RED : "rgba(127,127,127,0.3)" }]}
+        >
+          <ThemedText style={[styles.timerText, timeLeft <= 30 && { color: RED }]}>
+            ⏱ {mmss(timeLeft)}
+          </ThemedText>
+        </ThemedView>
+      )}
+
       {submitted && (
-        <ThemedView style={[styles.resultCard, { borderColor: scorePct >= 70 ? GREEN : RED }]}>
+        <ThemedView style={[styles.resultCard, { borderColor: passed ? GREEN : RED }]}>
           <ThemedText type="subtitle">Tu resultado: {scorePct}%</ThemedText>
           <ThemedText style={styles.muted}>
-            {scorePct >= 70 ? "¡Aprobado!" : "Sigue practicando."}
+            {passed
+              ? "¡Aprobado!"
+              : `No alcanzaste el ${config.passingScore}% mínimo.`}
           </ThemedText>
+          {attemptsLeft !== null && !passed && (
+            <ThemedText style={styles.muted}>
+              {attemptsLeft > 0
+                ? `Intentos restantes: ${attemptsLeft}`
+                : "Sin intentos restantes."}
+            </ThemedText>
+          )}
         </ThemedView>
       )}
 
@@ -149,6 +213,10 @@ export function QuizView({
         </TouchableOpacity>
       ) : saving ? (
         <ActivityIndicator color={PURPLE} />
+      ) : canRetake ? (
+        <TouchableOpacity style={[styles.button, styles.buttonGhost]} onPress={retake}>
+          <ThemedText style={styles.buttonGhostText}>Reintentar</ThemedText>
+        </TouchableOpacity>
       ) : (
         <ThemedText style={[styles.muted, { textAlign: "center" }]}>
           Respuestas guardadas ✓
@@ -160,6 +228,14 @@ export function QuizView({
 
 const styles = StyleSheet.create({
   container: { gap: 14 },
+  timer: {
+    alignSelf: "center",
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  timerText: { fontWeight: "700", fontSize: 15 },
   resultCard: { borderWidth: 2, borderRadius: 16, padding: 16, gap: 4, alignItems: "center" },
   muted: { opacity: 0.7 },
   questionCard: {
@@ -194,5 +270,7 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: { opacity: 0.5 },
   buttonText: { color: "#fff", fontWeight: "700" },
+  buttonGhost: { backgroundColor: "transparent", borderWidth: 1, borderColor: PURPLE },
+  buttonGhostText: { color: PURPLE, fontWeight: "700" },
   notice: { opacity: 0.7, fontStyle: "italic", paddingVertical: 12 },
 });
