@@ -42,7 +42,7 @@ const plans = [
   },
 ];
 
-export function BusinessPricing() {
+export function BusinessPricing({ quoteHref = "/business/cotizacion" }: { quoteHref?: string }) {
   return (
     <section className="mx-auto max-w-6xl px-4 py-20">
       <div className="mb-12 text-center">
@@ -86,7 +86,7 @@ export function BusinessPricing() {
                   </li>
                 ))}
               </ul>
-              <Link href="/contact" className="w-full">
+              <Link href={quoteHref} className="w-full">
                 <Button
                   className="w-full"
                   variant={plan.highlighted ? "default" : "outline"}

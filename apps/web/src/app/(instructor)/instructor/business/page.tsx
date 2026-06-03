@@ -14,11 +14,11 @@ export const metadata: Metadata = {
 export default function InstructorBusinessPage() {
   return (
     <div className="-mx-4 -my-4 flex flex-col md:-mx-6 md:-my-6 lg:-mx-8 lg:-my-8">
-      <BusinessHero />
+      <BusinessHero quoteHref="/instructor/business/cotizacion" />
       <BusinessBenefits />
       <BusinessHowItWorks />
-      <BusinessPricing />
-      <BusinessCTA />
+      <BusinessPricing quoteHref="/instructor/business/cotizacion" />
+      <BusinessCTA quoteHref="/instructor/business/cotizacion" />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function BusinessCTA() {
+export function BusinessCTA({ quoteHref = "/business/cotizacion" }: { quoteHref?: string }) {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-20">
       <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary via-violet-600 to-purple-700 px-8 py-16 text-center shadow-2xl shadow-primary/30">
@@ -19,7 +19,7 @@ export function BusinessCTA() {
             puede transformar la capacitación de tu empresa.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/business/cotizacion">
+            <Link href={quoteHref}>
               <Button
                 size="lg"
                 variant="secondary"

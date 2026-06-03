@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function BusinessHero() {
+export function BusinessHero({ quoteHref = "/business/cotizacion" }: { quoteHref?: string }) {
   return (
     <section className="relative overflow-hidden">
       {/* Background */}
@@ -38,7 +38,7 @@ export function BusinessHero() {
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2">
-            <Link href="/business/cotizacion">
+            <Link href={quoteHref}>
               <Button size="lg" className="gap-2 rounded-full font-semibold shadow-lg">
                 Solicitar cotización
                 <ArrowRight className="h-4 w-4" />

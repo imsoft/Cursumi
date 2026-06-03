@@ -15,11 +15,11 @@ export const metadata: Metadata = {
 export default function DashboardBusinessPage() {
   return (
     <div className="-mx-4 -my-4 flex flex-col md:-mx-6 md:-my-6 lg:-mx-8 lg:-my-8">
-      <BusinessHero />
+      <BusinessHero quoteHref="/dashboard/business/cotizacion" />
       <BusinessBenefits />
       <BusinessHowItWorks />
-      <BusinessPricing />
-      <BusinessCTA />
+      <BusinessPricing quoteHref="/dashboard/business/cotizacion" />
+      <BusinessCTA quoteHref="/dashboard/business/cotizacion" />
     </div>
   );
 }
