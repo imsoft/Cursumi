@@ -69,6 +69,37 @@ export async function getMyCourseDetail(courseId: string): Promise<CourseDetail>
   return (await res.json()) as CourseDetail;
 }
 
+export type Lesson = {
+  id: string;
+  courseId: string;
+  title: string;
+  description?: string | null;
+  type: string;
+  duration?: string | null;
+  videoUrl?: string | null;
+  content?: string | null;
+  completed: boolean;
+};
+
+/** Contenido de una lección (verifica inscripción en el servidor). */
+export async function getLesson(lessonId: string): Promise<Lesson> {
+  const res = await fetch(`${API_URL}/api/me/lessons/${lessonId}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as Lesson;
+}
+
+/** Marca una lección como completada. */
+export async function completeLesson(lessonId: string, courseId: string): Promise<void> {
+  const res = await fetch(`${API_URL}/api/lessons/${lessonId}/complete`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;
