@@ -12,6 +12,8 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import { WebView } from "react-native-webview";
 
 import { ThemedText } from "@/components/themed-text";
+import { QuizView } from "@/components/quiz-view";
+import { AssignmentView } from "@/components/assignment-view";
 import { completeLesson, getLesson, type Lesson } from "@/lib/me";
 
 const PURPLE = "#6d28d9";
@@ -150,43 +152,59 @@ export function LessonView({
             </View>
           )}
 
-          {/* Contenido de texto/HTML */}
-          {lesson.content ? (
-            <View style={styles.textWrap}>
-              <WebView
-                originWhitelist={["*"]}
-                source={{ html: contentToHtml(lesson.content), baseUrl: "https://cursumi.vercel.app" }}
-                style={styles.textWebview}
-                scrollEnabled={false}
-              />
-            </View>
-          ) : null}
+          {/* Quiz nativo */}
+          {lesson.type === "quiz" ? (
+            <QuizView lesson={lesson} onCompleted={onCompleted} />
+          ) : lesson.type === "assignment" ? (
+            <>
+              {/* Enunciado de la tarea (si viene en content como texto/HTML) */}
+              {lesson.content ? (
+                <View style={styles.textWrap}>
+                  <WebView
+                    originWhitelist={["*"]}
+                    source={{
+                      html: contentToHtml(lesson.content),
+                      baseUrl: "https://cursumi.vercel.app",
+                    }}
+                    style={styles.textWebview}
+                    scrollEnabled={false}
+                  />
+                </View>
+              ) : null}
+              <AssignmentView lesson={lesson} onCompleted={onCompleted} />
+            </>
+          ) : (
+            <>
+              {/* Contenido de texto/HTML (video/lectura) */}
+              {lesson.content ? (
+                <View style={styles.textWrap}>
+                  <WebView
+                    originWhitelist={["*"]}
+                    source={{
+                      html: contentToHtml(lesson.content),
+                      baseUrl: "https://cursumi.vercel.app",
+                    }}
+                    style={styles.textWebview}
+                    scrollEnabled={false}
+                  />
+                </View>
+              ) : null}
 
-          {/* Actividades interactivas: aún no nativas */}
-          {!lesson.videoUrl &&
-            !lesson.content &&
-            (lesson.type === "quiz" ||
-              lesson.type === "assignment" ||
-              lesson.type === "section_quiz" ||
-              lesson.type === "section_minigame") && (
-              <ThemedText style={styles.notice}>
-                Esta actividad interactiva estará disponible pronto en la app.
-              </ThemedText>
-            )}
-
-          <TouchableOpacity
-            style={[styles.button, done && styles.buttonDone]}
-            onPress={markComplete}
-            disabled={completing || done}
-          >
-            {completing ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <ThemedText style={styles.buttonText}>
-                {done ? "✓ Completada" : "Marcar como completada"}
-              </ThemedText>
-            )}
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, done && styles.buttonDone]}
+                onPress={markComplete}
+                disabled={completing || done}
+              >
+                {completing ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <ThemedText style={styles.buttonText}>
+                    {done ? "✓ Completada" : "Marcar como completada"}
+                  </ThemedText>
+                )}
+              </TouchableOpacity>
+            </>
+          )}
         </ScrollView>
       )}
     </SafeAreaView>
