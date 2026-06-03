@@ -68,3 +68,45 @@ export async function getMyCourseDetail(courseId: string): Promise<CourseDetail>
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as CourseDetail;
 }
+
+export type MyProfile = {
+  fullName: string;
+  email: string;
+  joinDate: string;
+  avatar: string | null;
+  phone: string;
+  state: string;
+  city: string;
+  bio: string;
+  website: string;
+  linkedinUrl: string;
+  instagramUrl: string;
+  coursesCompleted: number;
+  coursesInProgress: number;
+};
+
+/** Perfil del usuario + estadísticas de cursos. */
+export async function getMyProfile(): Promise<MyProfile> {
+  const res = await fetch(`${API_URL}/api/me/profile`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as MyProfile;
+}
+
+/** Actualiza campos editables del perfil. */
+export async function updateMyProfile(data: {
+  fullName?: string;
+  phone?: string | null;
+  state?: string | null;
+  city?: string | null;
+  bio?: string | null;
+}): Promise<void> {
+  const res = await fetch(`${API_URL}/api/me/profile`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}

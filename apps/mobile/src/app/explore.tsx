@@ -1,68 +1,303 @@
-import { useState } from "react";
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { signOut, useSession } from "@/lib/auth";
+import { getMyProfile, updateMyProfile, type MyProfile } from "@/lib/me";
+
+const PURPLE = "#6d28d9";
+
+function initials(name: string): string {
+  return (
+    name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "U"
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChangeText,
+  multiline,
+}: {
+  label: string;
+  value: string;
+  onChangeText: (t: string) => void;
+  multiline?: boolean;
+}) {
+  return (
+    <View style={styles.field}>
+      <ThemedText style={styles.fieldLabel}>{label}</ThemedText>
+      <TextInput
+        style={[styles.input, multiline && styles.inputMultiline]}
+        value={value}
+        onChangeText={onChangeText}
+        multiline={multiline}
+        placeholderTextColor="#9ca3af"
+      />
+    </View>
+  );
+}
 
 export default function ProfileScreen() {
   const { data: session } = useSession();
-  const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState<MyProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSignOut = async () => {
-    setLoading(true);
+  // Borrador de edición
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [bio, setBio] = useState("");
+
+  const load = useCallback(async () => {
+    try {
+      const p = await getMyProfile();
+      setProfile(p);
+    } catch {
+      setError("No se pudo cargar tu perfil.");
+    }
+  }, []);
+
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+
+  function startEdit() {
+    if (!profile) return;
+    setFullName(profile.fullName);
+    setPhone(profile.phone);
+    setCity(profile.city);
+    setStateName(profile.state);
+    setBio(profile.bio);
+    setError(null);
+    setEditing(true);
+  }
+
+  async function save() {
+    setError(null);
+    setSaving(true);
+    try {
+      await updateMyProfile({
+        fullName: fullName.trim(),
+        phone: phone.trim() || null,
+        city: city.trim() || null,
+        state: stateName.trim() || null,
+        bio: bio.trim() || null,
+      });
+      await load();
+      setEditing(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo guardar.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleSignOut() {
+    setSigningOut(true);
     try {
       await signOut();
-      // El layout detecta la sesión nula y vuelve al login.
     } finally {
-      setLoading(false);
+      setSigningOut(false);
     }
-  };
+  }
 
-  const user = session?.user;
+  const name = profile?.fullName ?? session?.user?.name ?? "Usuario";
+  const email = profile?.email ?? session?.user?.email ?? "";
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <ThemedText type="title" style={styles.heading}>
-        Perfil
-      </ThemedText>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <ThemedText type="title" style={styles.heading}>
+          Perfil
+        </ThemedText>
 
-      <ThemedView style={styles.card}>
-        <ThemedText type="subtitle">{user?.name ?? "—"}</ThemedText>
-        <ThemedText style={styles.email}>{user?.email ?? ""}</ThemedText>
-      </ThemedView>
+        {/* Cabecera: avatar + nombre */}
+        <View style={styles.header}>
+          {profile?.avatar ? (
+            <Image source={{ uri: profile.avatar }} style={styles.avatar} />
+          ) : (
+            <View style={styles.avatarFallback}>
+              <ThemedText style={styles.avatarInitials}>{initials(name)}</ThemedText>
+            </View>
+          )}
+          <View style={styles.headerText}>
+            <ThemedText type="subtitle">{name}</ThemedText>
+            <ThemedText style={styles.muted}>{email}</ThemedText>
+          </View>
+        </View>
 
-      <TouchableOpacity style={styles.signOut} onPress={handleSignOut} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator color="#dc2626" />
-        ) : (
-          <ThemedText style={styles.signOutText}>Cerrar sesión</ThemedText>
+        {loading && <ActivityIndicator style={styles.loader} color={PURPLE} />}
+
+        {!loading && profile && (
+          <>
+            {/* Estadísticas */}
+            <View style={styles.statsRow}>
+              <ThemedView style={styles.statCard}>
+                <ThemedText style={styles.statNumber}>{profile.coursesInProgress}</ThemedText>
+                <ThemedText style={styles.statLabel}>En progreso</ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.statCard}>
+                <ThemedText style={styles.statNumber}>{profile.coursesCompleted}</ThemedText>
+                <ThemedText style={styles.statLabel}>Completados</ThemedText>
+              </ThemedView>
+            </View>
+
+            {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+
+            {editing ? (
+              <ThemedView style={styles.card}>
+                <Field label="Nombre completo" value={fullName} onChangeText={setFullName} />
+                <Field label="Teléfono" value={phone} onChangeText={setPhone} />
+                <Field label="Ciudad" value={city} onChangeText={setCity} />
+                <Field label="Estado" value={stateName} onChangeText={setStateName} />
+                <Field label="Bio" value={bio} onChangeText={setBio} multiline />
+                <View style={styles.editActions}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonGhost]}
+                    onPress={() => setEditing(false)}
+                    disabled={saving}
+                  >
+                    <ThemedText style={styles.buttonGhostText}>Cancelar</ThemedText>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.button} onPress={save} disabled={saving}>
+                    {saving ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <ThemedText style={styles.buttonText}>Guardar</ThemedText>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </ThemedView>
+            ) : (
+              <ThemedView style={styles.card}>
+                <Detail label="Teléfono" value={profile.phone} />
+                <Detail
+                  label="Ubicación"
+                  value={[profile.city, profile.state].filter(Boolean).join(", ")}
+                />
+                <Detail label="Bio" value={profile.bio} />
+                <TouchableOpacity style={styles.button} onPress={startEdit}>
+                  <ThemedText style={styles.buttonText}>Editar perfil</ThemedText>
+                </TouchableOpacity>
+              </ThemedView>
+            )}
+          </>
         )}
-      </TouchableOpacity>
+
+        <TouchableOpacity style={styles.signOut} onPress={handleSignOut} disabled={signingOut}>
+          {signingOut ? (
+            <ActivityIndicator color="#dc2626" />
+          ) : (
+            <ThemedText style={styles.signOutText}>Cerrar sesión</ThemedText>
+          )}
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.detailRow}>
+      <ThemedText style={styles.detailLabel}>{label}</ThemedText>
+      <ThemedText style={styles.detailValue}>{value || "—"}</ThemedText>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  heading: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
-  card: {
-    margin: 16,
-    padding: 20,
+  scroll: { padding: 16, gap: 16 },
+  heading: { paddingTop: 4 },
+  header: { flexDirection: "row", alignItems: "center", gap: 14 },
+  avatar: { width: 64, height: 64, borderRadius: 32, backgroundColor: "rgba(127,127,127,0.1)" },
+  avatarFallback: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: PURPLE,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarInitials: { color: "#fff", fontSize: 22, fontWeight: "700" },
+  headerText: { flex: 1, gap: 2 },
+  muted: { opacity: 0.7 },
+  error: { color: "#dc2626" },
+  loader: { marginTop: 20 },
+  statsRow: { flexDirection: "row", gap: 12 },
+  statCard: {
+    flex: 1,
+    padding: 16,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(127,127,127,0.2)",
-    gap: 6,
+    alignItems: "center",
+    gap: 4,
   },
-  email: { opacity: 0.7 },
+  statNumber: { fontSize: 26, fontWeight: "800", color: PURPLE },
+  statLabel: { fontSize: 13, opacity: 0.7 },
+  card: {
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(127,127,127,0.2)",
+    gap: 12,
+  },
+  detailRow: { gap: 2 },
+  detailLabel: { fontSize: 12, opacity: 0.6 },
+  detailValue: { fontSize: 15 },
+  field: { gap: 4 },
+  fieldLabel: { fontSize: 13, fontWeight: "600" },
+  input: {
+    borderWidth: 1,
+    borderColor: "rgba(127,127,127,0.3)",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+    color: "#111827",
+    backgroundColor: "#fff",
+  },
+  inputMultiline: { minHeight: 72, textAlignVertical: "top" },
+  editActions: { flexDirection: "row", gap: 12 },
+  button: {
+    flex: 1,
+    backgroundColor: PURPLE,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: "center",
+  },
+  buttonText: { color: "#fff", fontWeight: "700" },
+  buttonGhost: { backgroundColor: "transparent", borderWidth: 1, borderColor: "rgba(127,127,127,0.4)" },
+  buttonGhostText: { fontWeight: "600" },
   signOut: {
-    marginHorizontal: 16,
     paddingVertical: 14,
     alignItems: "center",
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "#dc2626",
+    marginTop: 4,
   },
   signOutText: { color: "#dc2626", fontWeight: "600" },
 });
