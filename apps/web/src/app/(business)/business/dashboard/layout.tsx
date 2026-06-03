@@ -52,6 +52,7 @@ export default async function BusinessDashboardLayout({
       userInitials={userInitials}
       userImage={userImage}
       orgName={org.name}
+      subscriptionActive={org.subscription?.status === "active"}
     >
       {children}
     </BusinessShell>
