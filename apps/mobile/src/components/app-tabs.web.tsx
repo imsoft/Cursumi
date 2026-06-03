@@ -6,6 +6,7 @@ import {
   TabTriggerSlotProps,
   TabListProps,
 } from 'expo-router/ui';
+import type { Href } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
 
@@ -23,6 +24,10 @@ export default function AppTabs() {
         <CustomTabList>
           <TabTrigger name="home" href="/" asChild>
             <TabButton>Mis cursos</TabButton>
+          </TabTrigger>
+          {/* href casteado: la ruta tipada /catalog se genera al correr `expo start`. */}
+          <TabTrigger name="catalog" href={"/catalog" as Href} asChild>
+            <TabButton>Explorar</TabButton>
           </TabTrigger>
           <TabTrigger name="explore" href="/explore" asChild>
             <TabButton>Perfil</TabButton>
@@ -55,7 +60,7 @@ export function CustomTabList(props: TabListProps) {
     <View {...props} style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
-          Expo Starter
+          Cursumi
         </ThemedText>
 
         {props.children}
