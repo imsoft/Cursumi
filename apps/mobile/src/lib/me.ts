@@ -593,6 +593,66 @@ export async function getInstructorAnalytics(): Promise<InstructorAnalytics> {
   return (await res.json()) as InstructorAnalytics;
 }
 
+export type InstructorProfile = {
+  fullName: string;
+  email: string;
+  headline: string;
+  bio: string;
+  specialties: string;
+  teachingYears: number | null;
+  state: string;
+  city: string;
+  website: string;
+  linkedinUrl: string;
+  instagramUrl: string;
+  avatar: string | null;
+};
+
+export async function getInstructorProfile(): Promise<InstructorProfile> {
+  const res = await fetch(`${API_URL}/api/instructor/profile`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as InstructorProfile;
+}
+
+export async function updateInstructorProfile(data: {
+  headline?: string;
+  bio?: string;
+  specialties?: string;
+  teachingYears?: number;
+  website?: string;
+  linkedinUrl?: string;
+  instagramUrl?: string;
+}): Promise<void> {
+  const res = await fetch(`${API_URL}/api/instructor/profile`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
+/** Estado de Stripe Connect del instructor (cobros). */
+export async function getStripeStatus(): Promise<{ connected: boolean; onboarded: boolean }> {
+  const res = await fetch(`${API_URL}/api/instructor/stripe/connect`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return { connected: Boolean(data.connected), onboarded: Boolean(data.onboarded) };
+}
+
+/** Inicia/continúa el onboarding de Stripe Connect; devuelve la URL a abrir. */
+export async function startStripeConnect(): Promise<string> {
+  const res = await fetch(`${API_URL}/api/instructor/stripe/connect`, {
+    method: "POST",
+    headers: authHeaders(),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.url) throw new Error(data.error ?? "No se pudo conectar con Stripe.");
+  return data.url as string;
+}
+
 export type InstructorCourse = {
   id: string;
   title: string;
