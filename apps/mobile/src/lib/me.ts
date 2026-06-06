@@ -246,6 +246,26 @@ export async function markAllNotificationsRead(): Promise<void> {
   });
 }
 
+/** IDs de cursos en la lista de deseos del usuario. */
+export async function getWishlist(): Promise<string[]> {
+  const res = await fetch(`${API_URL}/api/wishlist`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as string[];
+}
+
+/** Agrega/quita un curso de la lista de deseos (toggle). Devuelve si quedó guardado. */
+export async function toggleWishlist(courseId: string): Promise<boolean> {
+  const res = await fetch(`${API_URL}/api/wishlist`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return Boolean(data.saved);
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;

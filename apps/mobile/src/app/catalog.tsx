@@ -5,6 +5,7 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as WebBrowser from "expo-web-browser";
@@ -12,12 +13,14 @@ import * as WebBrowser from "expo-web-browser";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getCourses, API_URL, type CourseSummary } from "@/lib/api";
+import { getWishlist, toggleWishlist } from "@/lib/me";
 import { formatPriceMXN } from "@cursumi/shared";
 
 const PURPLE = "#6d28d9";
 
 export default function CatalogScreen() {
   const [courses, setCourses] = useState<CourseSummary[]>([]);
+  const [saved, setSaved] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,11 +28,37 @@ export default function CatalogScreen() {
   const load = useCallback(async () => {
     setError(null);
     try {
-      setCourses(await getCourses());
+      const [list, wishlist] = await Promise.all([
+        getCourses(),
+        getWishlist().catch(() => [] as string[]),
+      ]);
+      setCourses(list);
+      setSaved(new Set(wishlist));
     } catch {
       setError("No se pudieron cargar los cursos. Desliza para reintentar.");
     }
   }, []);
+
+  async function toggleSaved(courseId: string) {
+    // Optimista
+    setSaved((prev) => {
+      const next = new Set(prev);
+      if (next.has(courseId)) next.delete(courseId);
+      else next.add(courseId);
+      return next;
+    });
+    try {
+      await toggleWishlist(courseId);
+    } catch {
+      // revertir si falla
+      setSaved((prev) => {
+        const next = new Set(prev);
+        if (next.has(courseId)) next.delete(courseId);
+        else next.add(courseId);
+        return next;
+      });
+    }
+  }
 
   useEffect(() => {
     load().finally(() => setLoading(false));
@@ -70,9 +99,20 @@ export default function CatalogScreen() {
               }
             >
               <ThemedView style={styles.card}>
-                <ThemedText type="subtitle" numberOfLines={2}>
-                  {item.title}
-                </ThemedText>
+                <View style={styles.cardHeader}>
+                  <ThemedText type="subtitle" numberOfLines={2} style={styles.cardTitle}>
+                    {item.title}
+                  </ThemedText>
+                  <TouchableOpacity
+                    onPress={() => toggleSaved(item.id)}
+                    hitSlop={10}
+                    style={styles.heart}
+                  >
+                    <ThemedText style={[styles.heartIcon, saved.has(item.id) && styles.heartActive]}>
+                      {saved.has(item.id) ? "♥" : "♡"}
+                    </ThemedText>
+                  </TouchableOpacity>
+                </View>
                 <ThemedText style={styles.price}>{formatPriceMXN(item.price)}</ThemedText>
                 <ThemedText style={styles.cta}>Ver e inscribirme →</ThemedText>
               </ThemedView>
@@ -99,4 +139,10 @@ const styles = StyleSheet.create({
   },
   price: { color: PURPLE, fontWeight: "600" },
   cta: { fontSize: 13, opacity: 0.7 },
+  cardHeader: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
+  cardTitle: { flex: 1 },
+  heart: { padding: 2 },
+  heartIcon: { fontSize: 22, color: "rgba(127,127,127,0.6)" },
+  heartActive: { color: "#dc2626" },
 });
+

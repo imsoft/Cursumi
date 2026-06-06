@@ -14,10 +14,12 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { CertificatesView } from "@/components/certificates-view";
 import { NotificationsView } from "@/components/notifications-view";
+import { WishlistView } from "@/components/wishlist-view";
+import { SettingsView } from "@/components/settings-view";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, type MyProfile } from "@/lib/me";
 
-type ProfileMenu = "certificates" | "notifications";
+type ProfileMenu = "certificates" | "notifications" | "wishlist" | "settings";
 
 const PURPLE = "#6d28d9";
 
@@ -136,6 +138,12 @@ export default function ProfileScreen() {
   if (menu === "notifications") {
     return <NotificationsView onBack={() => setMenu(null)} />;
   }
+  if (menu === "wishlist") {
+    return <WishlistView onBack={() => setMenu(null)} />;
+  }
+  if (menu === "settings") {
+    return <SettingsView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -222,6 +230,10 @@ export default function ProfileScreen() {
           <MenuRow label="Certificados" onPress={() => setMenu("certificates")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Notificaciones" onPress={() => setMenu("notifications")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Lista de deseos" onPress={() => setMenu("wishlist")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Configuración" onPress={() => setMenu("settings")} />
         </ThemedView>
 
         <TouchableOpacity style={styles.signOut} onPress={handleSignOut} disabled={signingOut}>
