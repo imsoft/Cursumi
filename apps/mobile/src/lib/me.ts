@@ -186,6 +186,66 @@ export function parseQuizQuestions(content: string | null | undefined): QuizQues
   }
 }
 
+export type Certificate = {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  instructorName: string;
+  issueDate: string;
+  certificateNumber: string;
+  category?: { name?: string } | string | null;
+  hours?: number;
+  imageUrl?: string | null;
+};
+
+/** Certificados obtenidos por el usuario. */
+export async function getCertificates(): Promise<Certificate[]> {
+  const res = await fetch(`${API_URL}/api/me/certificates`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as Certificate[];
+}
+
+export type Notification = {
+  id: string;
+  type: string;
+  title: string;
+  body: string;
+  read: boolean;
+  link?: string | null;
+  createdAt: string;
+};
+
+/** Notificaciones del usuario + conteo de no leídas. */
+export async function getNotifications(): Promise<{
+  notifications: Notification[];
+  unreadCount: number;
+}> {
+  const res = await fetch(`${API_URL}/api/notifications`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return {
+    notifications: Array.isArray(data.notifications) ? data.notifications : [],
+    unreadCount: data.unreadCount ?? 0,
+  };
+}
+
+/** Marca una notificación como leída. */
+export async function markNotificationRead(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/notifications/${id}/read`, {
+    method: "PATCH",
+    headers: authHeaders(),
+  });
+}
+
+/** Marca todas las notificaciones como leídas. */
+export async function markAllNotificationsRead(): Promise<void> {
+  await fetch(`${API_URL}/api/notifications/read-all`, {
+    method: "PATCH",
+    headers: authHeaders(),
+  });
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;
