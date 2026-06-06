@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { LessonView } from "@/components/lesson-view";
+import { ExamView } from "@/components/exam-view";
 import { getMyCourseDetail, type CourseDetail as Detail } from "@/lib/me";
 
 const PURPLE = "#6d28d9";
@@ -30,6 +31,7 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
   const [error, setError] = useState<string | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const [extraCompleted, setExtraCompleted] = useState<Set<string>>(new Set());
+  const [showExam, setShowExam] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -55,6 +57,10 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
         onCompleted={(id) => setExtraCompleted((prev) => new Set(prev).add(id))}
       />
     );
+  }
+
+  if (showExam) {
+    return <ExamView courseId={courseId} onBack={() => setShowExam(false)} />;
   }
 
   return (
@@ -105,6 +111,11 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
               })}
             </ThemedView>
           ))}
+
+          {/* Examen final del curso */}
+          <TouchableOpacity style={styles.examButton} onPress={() => setShowExam(true)}>
+            <ThemedText style={styles.examButtonText}>Examen final 🎓</ThemedText>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -132,6 +143,14 @@ const styles = StyleSheet.create({
   checkDone: { color: "#16a34a" },
   lessonTitle: { flex: 1 },
   chevron: { fontSize: 20, opacity: 0.4, marginLeft: 4 },
+  examButton: {
+    backgroundColor: PURPLE,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 4,
+  },
+  examButtonText: { color: "#fff", fontWeight: "700", fontSize: 15 },
   typeBadge: {
     fontSize: 11,
     opacity: 0.6,
