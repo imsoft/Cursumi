@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { TurnstileWebView } from "@/components/turnstile-webview";
+import { GoogleIcon } from "@/components/google-icon";
 import { signIn, signUp } from "@/lib/auth";
 
 const PURPLE = "#6d28d9";
@@ -164,9 +165,10 @@ export function AuthScreen() {
             {googleLoading ? (
               <ActivityIndicator color={PURPLE} />
             ) : (
-              <ThemedText style={styles.googleText}>
-                Continuar con Google
-              </ThemedText>
+              <View style={styles.googleInner}>
+                <GoogleIcon size={20} />
+                <ThemedText style={styles.googleText}>Continuar con Google</ThemedText>
+              </View>
             )}
           </TouchableOpacity>
 
@@ -280,6 +282,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
   },
+  googleInner: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 },
   googleText: { color: "#111827", fontWeight: "600", fontSize: 15 },
   dividerRow: { flexDirection: "row", alignItems: "center", gap: 12, marginVertical: 2 },
   divider: { flex: 1, height: 1, backgroundColor: "rgba(127,127,127,0.25)" },
