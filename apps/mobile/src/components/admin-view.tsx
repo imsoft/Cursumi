@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -12,22 +13,81 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import {
+  deleteReview,
+  getAdminAnalytics,
+  getAdminFinances,
+  getAdminReviews,
+  getAdminStats,
   getAdminUsers,
   getInstructorApplications,
   getQuoteRequests,
   reviewApplication,
+  setReviewApproved,
   setUserRole,
   updateQuoteRequest,
   type AdminApplication,
+  type AdminReview,
   type AdminUser,
   type QuoteRequest,
 } from "@/lib/me";
+import { formatPriceMXN } from "@cursumi/shared";
 
 const PURPLE = "#6d28d9";
-type Tab = "applications" | "users" | "business";
+
+type Section =
+  | "stats"
+  | "applications"
+  | "users"
+  | "reviews"
+  | "finances"
+  | "analytics"
+  | "business";
+
+const SECTIONS: { id: Section; label: string }[] = [
+  { id: "stats", label: "Resumen" },
+  { id: "applications", label: "Solicitudes de instructor" },
+  { id: "users", label: "Usuarios" },
+  { id: "reviews", label: "Moderar reseñas" },
+  { id: "finances", label: "Finanzas" },
+  { id: "analytics", label: "Analíticas" },
+  { id: "business", label: "Empresas" },
+];
+
+const SECTION_TITLE: Record<Section, string> = {
+  stats: "Resumen",
+  applications: "Solicitudes",
+  users: "Usuarios",
+  reviews: "Moderar reseñas",
+  finances: "Finanzas",
+  analytics: "Analíticas",
+  business: "Empresas",
+};
 
 export function AdminView({ onBack }: { onBack: () => void }) {
-  const [tab, setTab] = useState<Tab>("applications");
+  const [section, setSection] = useState<Section | null>(null);
+
+  if (section) {
+    return (
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <View style={styles.topbar}>
+          <TouchableOpacity onPress={() => setSection(null)} hitSlop={12}>
+            <ThemedText style={styles.back}>‹ Admin</ThemedText>
+          </TouchableOpacity>
+        </View>
+        <ThemedText type="title" style={styles.heading}>
+          {SECTION_TITLE[section]}
+        </ThemedText>
+        {section === "stats" && <StatsSection />}
+        {section === "applications" && <ApplicationsSection />}
+        {section === "users" && <UsersSection />}
+        {section === "reviews" && <ReviewsSection />}
+        {section === "finances" && <FinancesSection />}
+        {section === "analytics" && <AnalyticsSection />}
+        {section === "business" && <BusinessSection />}
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <View style={styles.topbar}>
@@ -38,34 +98,186 @@ export function AdminView({ onBack }: { onBack: () => void }) {
       <ThemedText type="title" style={styles.heading}>
         Administración
       </ThemedText>
-      <View style={styles.tabs}>
-        {(["applications", "users", "business"] as Tab[]).map((t) => (
-          <TouchableOpacity
-            key={t}
-            style={[styles.tab, tab === t && styles.tabActive]}
-            onPress={() => setTab(t)}
-          >
-            <ThemedText style={[styles.tabText, tab === t && styles.tabTextActive]}>
-              {t === "applications" ? "Solicitudes" : t === "users" ? "Usuarios" : "Empresas"}
-            </ThemedText>
-          </TouchableOpacity>
+      <ThemedView style={styles.menuCard}>
+        {SECTIONS.map((s, i) => (
+          <View key={s.id}>
+            <TouchableOpacity style={styles.menuRow} onPress={() => setSection(s.id)}>
+              <ThemedText style={styles.menuLabel}>{s.label}</ThemedText>
+              <ThemedText style={styles.chevron}>›</ThemedText>
+            </TouchableOpacity>
+            {i < SECTIONS.length - 1 && <View style={styles.menuDivider} />}
+          </View>
         ))}
-      </View>
-
-      {tab === "applications" && <ApplicationsTab />}
-      {tab === "users" && <UsersTab />}
-      {tab === "business" && <BusinessTab />}
+      </ThemedView>
     </SafeAreaView>
   );
 }
 
-function ApplicationsTab() {
+// ── Resumen ─────────────────────────────────────────────────────────────────
+function StatsSection() {
+  const [data, setData] = useState<Awaited<ReturnType<typeof getAdminStats>> | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getAdminStats().then(setData).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  if (!data) return <ThemedText style={styles.error}>No se pudo cargar.</ThemedText>;
+  const cards = [
+    { n: data.totalUsers, l: "Usuarios" },
+    { n: data.totalCourses, l: "Cursos" },
+    { n: data.publishedCourses, l: "Publicados" },
+    { n: data.draftCourses, l: "Borradores" },
+    { n: data.totalEnrollments, l: "Inscripciones" },
+    { n: formatPriceMXN(data.estimatedRevenue), l: "Ingreso estimado" },
+  ];
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <View style={styles.grid}>
+        {cards.map((c, i) => (
+          <ThemedView key={i} style={styles.gridStat}>
+            <ThemedText style={styles.statNum}>{c.n}</ThemedText>
+            <ThemedText style={styles.statLbl}>{c.l}</ThemedText>
+          </ThemedView>
+        ))}
+      </View>
+    </ScrollView>
+  );
+}
+
+// ── Finanzas ────────────────────────────────────────────────────────────────
+function FinancesSection() {
+  const [data, setData] = useState<Awaited<ReturnType<typeof getAdminFinances>> | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getAdminFinances().then(setData).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  if (!data) return <ThemedText style={styles.error}>No se pudo cargar.</ThemedText>;
+  const cards = [
+    { n: formatPriceMXN(data.totalRevenue ?? 0), l: "Ingresos totales" },
+    { n: formatPriceMXN(data.totalPlatformFee ?? 0), l: "Comisión plataforma" },
+    { n: formatPriceMXN(data.totalInstructorPayouts ?? 0), l: "Pagos a instructores" },
+    { n: formatPriceMXN(data.thisMonthRevenue ?? 0), l: "Este mes" },
+  ];
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <View style={styles.grid}>
+        {cards.map((c, i) => (
+          <ThemedView key={i} style={styles.gridStat}>
+            <ThemedText style={styles.statNum}>{c.n}</ThemedText>
+            <ThemedText style={styles.statLbl}>{c.l}</ThemedText>
+          </ThemedView>
+        ))}
+      </View>
+    </ScrollView>
+  );
+}
+
+// ── Analíticas ──────────────────────────────────────────────────────────────
+function AnalyticsSection() {
+  const [data, setData] = useState<Awaited<ReturnType<typeof getAdminAnalytics>> | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getAdminAnalytics().then(setData).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  if (!data) return <ThemedText style={styles.error}>No se pudo cargar.</ThemedText>;
+  const maxRev = Math.max(1, ...data.revenueByMonth.map((m) => m.amount));
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ThemedText style={styles.subhead}>Ingresos por mes</ThemedText>
+      {data.revenueByMonth.map((m, i) => (
+        <View key={i} style={styles.barRow}>
+          <ThemedText style={styles.barLabel}>{m.month}</ThemedText>
+          <View style={styles.barTrack}>
+            <View style={[styles.barFill, { width: `${Math.round((m.amount / maxRev) * 100)}%` }]} />
+          </View>
+          <ThemedText style={styles.barVal}>{formatPriceMXN(m.amount)}</ThemedText>
+        </View>
+      ))}
+      <ThemedText style={[styles.subhead, { marginTop: 12 }]}>Usuarios nuevos por mes</ThemedText>
+      {data.usersByMonth.map((m, i) => (
+        <View key={i} style={styles.barRow}>
+          <ThemedText style={styles.barLabel}>{m.month}</ThemedText>
+          <ThemedText style={styles.barVal}>{m.users}</ThemedText>
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
+// ── Moderar reseñas ─────────────────────────────────────────────────────────
+function ReviewsSection() {
+  const [items, setItems] = useState<AdminReview[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState<string | null>(null);
+  const load = useCallback(async () => {
+    try {
+      setItems(await getAdminReviews(false));
+    } catch {
+      /* */
+    }
+  }, []);
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+  async function approve(id: string) {
+    setBusy(id);
+    try {
+      await setReviewApproved(id, true);
+      setItems((p) => p.filter((r) => r.id !== id));
+    } finally {
+      setBusy(null);
+    }
+  }
+  async function remove(id: string) {
+    setBusy(id);
+    try {
+      await deleteReview(id);
+      setItems((p) => p.filter((r) => r.id !== id));
+    } finally {
+      setBusy(null);
+    }
+  }
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  return (
+    <FlatList
+      data={items}
+      keyExtractor={(r) => r.id}
+      contentContainerStyle={styles.scroll}
+      ListEmptyComponent={<ThemedText style={styles.empty}>No hay reseñas pendientes.</ThemedText>}
+      renderItem={({ item }) => (
+        <ThemedView style={styles.card}>
+          <ThemedText style={styles.stars}>{"★".repeat(item.rating)}{"☆".repeat(5 - item.rating)}</ThemedText>
+          <ThemedText style={styles.sub}>
+            {item.user?.name ?? "Estudiante"} · {item.course?.title ?? ""}
+          </ThemedText>
+          {item.comment ? <ThemedText>{item.comment}</ThemedText> : null}
+          {busy === item.id ? (
+            <ActivityIndicator color={PURPLE} />
+          ) : (
+            <View style={styles.actions}>
+              <TouchableOpacity style={styles.btn} onPress={() => approve(item.id)}>
+                <ThemedText style={styles.btnText}>Aprobar</ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.btn, styles.btnDanger]} onPress={() => remove(item.id)}>
+                <ThemedText style={styles.btnText}>Eliminar</ThemedText>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ThemedView>
+      )}
+    />
+  );
+}
+
+// ── Solicitudes de instructor ───────────────────────────────────────────────
+function ApplicationsSection() {
   const [apps, setApps] = useState<AdminApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [rejecting, setRejecting] = useState<string | null>(null);
   const [reason, setReason] = useState("");
-
   const load = useCallback(async () => {
     try {
       setApps(await getInstructorApplications());
@@ -76,7 +288,6 @@ function ApplicationsTab() {
   useEffect(() => {
     load().finally(() => setLoading(false));
   }, [load]);
-
   async function approve(id: string) {
     setBusy(id);
     try {
@@ -98,7 +309,6 @@ function ApplicationsTab() {
       setBusy(null);
     }
   }
-
   if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
   return (
     <FlatList
@@ -110,8 +320,8 @@ function ApplicationsTab() {
         <ThemedView style={styles.card}>
           <ThemedText style={styles.name}>{item.user?.name ?? "—"}</ThemedText>
           <ThemedText style={styles.sub}>{item.user?.email}</ThemedText>
-          {item.headline ? <ThemedText style={styles.headline}>{item.headline}</ThemedText> : null}
-          {item.reason ? <ThemedText style={styles.reason}>{item.reason}</ThemedText> : null}
+          {item.headline ? <ThemedText style={styles.bold}>{item.headline}</ThemedText> : null}
+          {item.reason ? <ThemedText>{item.reason}</ThemedText> : null}
           {rejecting === item.id ? (
             <View style={{ gap: 8 }}>
               <TextInput
@@ -123,11 +333,11 @@ function ApplicationsTab() {
                 multiline
               />
               <View style={styles.actions}>
-                <TouchableOpacity style={[styles.btn, styles.btnGhost]} onPress={() => setRejecting(null)}>
-                  <ThemedText style={styles.btnGhostText}>Cancelar</ThemedText>
+                <TouchableOpacity style={[styles.btn, styles.ghost]} onPress={() => setRejecting(null)}>
+                  <ThemedText style={styles.ghostText}>Cancelar</ThemedText>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.btn, styles.btnDanger]} onPress={() => reject(item.id)}>
-                  <ThemedText style={styles.btnText}>Confirmar rechazo</ThemedText>
+                  <ThemedText style={styles.btnText}>Confirmar</ThemedText>
                 </TouchableOpacity>
               </View>
             </View>
@@ -138,14 +348,8 @@ function ApplicationsTab() {
               <TouchableOpacity style={styles.btn} onPress={() => approve(item.id)}>
                 <ThemedText style={styles.btnText}>Aprobar</ThemedText>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.btn, styles.btnGhost]}
-                onPress={() => {
-                  setRejecting(item.id);
-                  setReason("");
-                }}
-              >
-                <ThemedText style={styles.btnGhostText}>Rechazar</ThemedText>
+              <TouchableOpacity style={[styles.btn, styles.ghost]} onPress={() => { setRejecting(item.id); setReason(""); }}>
+                <ThemedText style={styles.ghostText}>Rechazar</ThemedText>
               </TouchableOpacity>
             </View>
           )}
@@ -155,14 +359,13 @@ function ApplicationsTab() {
   );
 }
 
+// ── Usuarios ────────────────────────────────────────────────────────────────
 const ROLES: ("student" | "instructor" | "admin")[] = ["student", "instructor", "admin"];
 const ROLE_LABEL: Record<string, string> = { student: "Alumno", instructor: "Instructor", admin: "Admin" };
-
-function UsersTab() {
+function UsersSection() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
-
   const load = useCallback(async () => {
     try {
       setUsers(await getAdminUsers());
@@ -173,7 +376,6 @@ function UsersTab() {
   useEffect(() => {
     load().finally(() => setLoading(false));
   }, [load]);
-
   async function change(id: string, role: "student" | "instructor" | "admin") {
     setBusy(id);
     try {
@@ -183,7 +385,6 @@ function UsersTab() {
       setBusy(null);
     }
   }
-
   if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
   return (
     <FlatList
@@ -219,17 +420,11 @@ function UsersTab() {
   );
 }
 
-const QSTATUS: Record<string, string> = {
-  new: "Nueva",
-  contacted: "Contactada",
-  converted: "Convertida",
-  closed: "Cerrada",
-};
-
-function BusinessTab() {
+// ── Empresas (solicitudes de cotización) ────────────────────────────────────
+const QSTATUS: Record<string, string> = { new: "Nueva", contacted: "Contactada", converted: "Convertida", closed: "Cerrada" };
+function BusinessSection() {
   const [reqs, setReqs] = useState<QuoteRequest[]>([]);
   const [loading, setLoading] = useState(true);
-
   const load = useCallback(async () => {
     try {
       setReqs(await getQuoteRequests());
@@ -240,19 +435,17 @@ function BusinessTab() {
   useEffect(() => {
     load().finally(() => setLoading(false));
   }, [load]);
-
   async function mark(id: string, status: "contacted" | "closed") {
     setReqs((p) => p.map((r) => (r.id === id ? { ...r, status } : r)));
     await updateQuoteRequest(id, status);
   }
-
   if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
   return (
     <FlatList
       data={reqs}
       keyExtractor={(r) => r.id}
       contentContainerStyle={styles.scroll}
-      ListEmptyComponent={<ThemedText style={styles.empty}>No hay solicitudes de cotización.</ThemedText>}
+      ListEmptyComponent={<ThemedText style={styles.empty}>No hay solicitudes.</ThemedText>}
       renderItem={({ item }) => (
         <ThemedView style={styles.card}>
           <View style={styles.cardTop}>
@@ -263,22 +456,22 @@ function BusinessTab() {
             {item.contactName} · {item.contactEmail}
             {item.contactPhone ? ` · ${item.contactPhone}` : ""}
           </ThemedText>
-          {item.companySize ? <ThemedText style={styles.detail}>Tamaño: {item.companySize}</ThemedText> : null}
-          {item.interests ? <ThemedText style={styles.detail}>Interés: {item.interests}</ThemedText> : null}
-          {item.message ? <ThemedText style={styles.detail}>{item.message}</ThemedText> : null}
+          {item.companySize ? <ThemedText style={styles.sub}>Tamaño: {item.companySize}</ThemedText> : null}
+          {item.interests ? <ThemedText style={styles.sub}>Interés: {item.interests}</ThemedText> : null}
+          {item.message ? <ThemedText>{item.message}</ThemedText> : null}
           <View style={styles.actions}>
             {item.status === "new" && (
-              <TouchableOpacity style={[styles.btn, styles.btnGhost]} onPress={() => mark(item.id, "contacted")}>
-                <ThemedText style={styles.btnGhostText}>Marcar contactada</ThemedText>
+              <TouchableOpacity style={[styles.btn, styles.ghost]} onPress={() => mark(item.id, "contacted")}>
+                <ThemedText style={styles.ghostText}>Contactada</ThemedText>
               </TouchableOpacity>
             )}
             {item.status !== "closed" && item.status !== "converted" && (
-              <TouchableOpacity style={[styles.btn, styles.btnGhost]} onPress={() => mark(item.id, "closed")}>
-                <ThemedText style={styles.btnGhostText}>Cerrar</ThemedText>
+              <TouchableOpacity style={[styles.btn, styles.ghost]} onPress={() => mark(item.id, "closed")}>
+                <ThemedText style={styles.ghostText}>Cerrar</ThemedText>
               </TouchableOpacity>
             )}
           </View>
-          <ThemedText style={styles.note}>Provisionar empresa: desde la web.</ThemedText>
+          <ThemedText style={styles.note}>Provisionar: desde la web.</ThemedText>
         </ThemedView>
       )}
     />
@@ -293,52 +486,40 @@ const styles = StyleSheet.create({
   loader: { marginTop: 40 },
   scroll: { padding: 16, gap: 12, flexGrow: 1 },
   empty: { textAlign: "center", opacity: 0.7, paddingVertical: 60, paddingHorizontal: 24 },
-  tabs: { flexDirection: "row", paddingHorizontal: 16, gap: 8, marginBottom: 4 },
-  tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: "center", backgroundColor: "rgba(127,127,127,0.12)" },
-  tabActive: { backgroundColor: PURPLE },
-  tabText: { fontWeight: "600", fontSize: 13 },
-  tabTextActive: { color: "#fff" },
-  card: {
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: "rgba(127,127,127,0.2)",
-    padding: 14,
-    gap: 6,
-  },
+  error: { padding: 16, color: "#dc2626" },
+  menuCard: { marginHorizontal: 16, borderRadius: 16, borderWidth: 1, borderColor: "rgba(127,127,127,0.2)", overflow: "hidden" },
+  menuRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16, paddingVertical: 16 },
+  menuLabel: { fontSize: 15, fontWeight: "500" },
+  chevron: { fontSize: 22, opacity: 0.4 },
+  menuDivider: { height: 1, backgroundColor: "rgba(127,127,127,0.15)", marginLeft: 16 },
+  card: { borderRadius: 14, borderWidth: 1, borderColor: "rgba(127,127,127,0.2)", padding: 14, gap: 6 },
   cardTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   name: { fontWeight: "700", fontSize: 15 },
   sub: { opacity: 0.7, fontSize: 13 },
-  headline: { fontWeight: "600" },
-  reason: { opacity: 0.85 },
-  detail: { opacity: 0.8, fontSize: 13 },
+  bold: { fontWeight: "600" },
+  stars: { color: "#f59e0b", fontSize: 16 },
   statusTag: { fontSize: 12, color: PURPLE, fontWeight: "700" },
-  note: { fontSize: 11, opacity: 0.5, fontStyle: "italic", marginTop: 2 },
-  input: {
-    borderWidth: 1,
-    borderColor: "rgba(127,127,127,0.3)",
-    borderRadius: 10,
-    padding: 10,
-    minHeight: 60,
-    textAlignVertical: "top",
-    color: "#111827",
-    backgroundColor: "#fff",
-  },
+  note: { fontSize: 11, opacity: 0.5, fontStyle: "italic" },
+  input: { borderWidth: 1, borderColor: "rgba(127,127,127,0.3)", borderRadius: 10, padding: 10, minHeight: 56, textAlignVertical: "top", color: "#111827", backgroundColor: "#fff" },
   actions: { flexDirection: "row", gap: 8, flexWrap: "wrap", marginTop: 4 },
   btn: { backgroundColor: PURPLE, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 10 },
   btnText: { color: "#fff", fontWeight: "700", fontSize: 13 },
-  btnGhost: { backgroundColor: "transparent", borderWidth: 1, borderColor: "rgba(127,127,127,0.4)" },
-  btnGhostText: { fontWeight: "600", fontSize: 13 },
   btnDanger: { backgroundColor: "#dc2626" },
+  ghost: { backgroundColor: "transparent", borderWidth: 1, borderColor: "rgba(127,127,127,0.4)" },
+  ghostText: { fontWeight: "600", fontSize: 13 },
   roleRow: { flexDirection: "row", gap: 8, marginTop: 4 },
-  roleBtn: {
-    flex: 1,
-    paddingVertical: 8,
-    borderRadius: 8,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(127,127,127,0.3)",
-  },
+  roleBtn: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: "center", borderWidth: 1, borderColor: "rgba(127,127,127,0.3)" },
   roleActive: { backgroundColor: PURPLE, borderColor: PURPLE },
   roleText: { fontSize: 13, fontWeight: "600" },
   roleTextActive: { color: "#fff" },
+  grid: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
+  gridStat: { width: "47%", padding: 16, borderRadius: 16, borderWidth: 1, borderColor: "rgba(127,127,127,0.2)", alignItems: "center", gap: 4 },
+  statNum: { fontSize: 22, fontWeight: "800", color: PURPLE },
+  statLbl: { fontSize: 12, opacity: 0.7, textAlign: "center" },
+  subhead: { fontWeight: "700" },
+  barRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+  barLabel: { width: 40, fontSize: 12, opacity: 0.7 },
+  barTrack: { flex: 1, height: 10, borderRadius: 5, backgroundColor: "rgba(127,127,127,0.15)", overflow: "hidden" },
+  barFill: { height: 10, borderRadius: 5, backgroundColor: PURPLE },
+  barVal: { width: 90, fontSize: 12, textAlign: "right" },
 });
