@@ -13,6 +13,7 @@ import { ThemedView } from "@/components/themed-view";
 import { LessonView } from "@/components/lesson-view";
 import { ExamView } from "@/components/exam-view";
 import { ReviewsSection } from "@/components/reviews-section";
+import { ChatView } from "@/components/chat-view";
 import { getMyCourseDetail, type CourseDetail as Detail } from "@/lib/me";
 
 const PURPLE = "#6d28d9";
@@ -33,6 +34,7 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const [extraCompleted, setExtraCompleted] = useState<Set<string>>(new Set());
   const [showExam, setShowExam] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -62,6 +64,10 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
 
   if (showExam) {
     return <ExamView courseId={courseId} onBack={() => setShowExam(false)} />;
+  }
+
+  if (showChat) {
+    return <ChatView courseId={courseId} onBack={() => setShowChat(false)} />;
   }
 
   return (
@@ -113,6 +119,11 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
             </ThemedView>
           ))}
 
+          {/* Mensajes con el instructor */}
+          <TouchableOpacity style={styles.chatButton} onPress={() => setShowChat(true)}>
+            <ThemedText style={styles.chatButtonText}>💬 Mensajes con el instructor</ThemedText>
+          </TouchableOpacity>
+
           {/* Examen final del curso */}
           <TouchableOpacity style={styles.examButton} onPress={() => setShowExam(true)}>
             <ThemedText style={styles.examButtonText}>Examen final 🎓</ThemedText>
@@ -155,6 +166,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   examButtonText: { color: "#fff", fontWeight: "700", fontSize: 15 },
+  chatButton: {
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: PURPLE,
+  },
+  chatButtonText: { color: PURPLE, fontWeight: "700", fontSize: 15 },
   typeBadge: {
     fontSize: 11,
     opacity: 0.6,
