@@ -499,11 +499,95 @@ export async function updateMyProfile(data: {
   state?: string | null;
   city?: string | null;
   bio?: string | null;
+  website?: string | null;
+  linkedinUrl?: string | null;
+  instagramUrl?: string | null;
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/me/profile`, {
     method: "PATCH",
     headers: { ...authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
+// ─── Blog ───────────────────────────────────────────────────────────────────
+export type BlogPostSummary = {
+  id?: string;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  coverImageUrl?: string | null;
+  publishedAt?: string | null;
+};
+
+export type BlogPost = BlogPostSummary & {
+  content: string;
+  author?: { name?: string | null; image?: string | null } | null;
+};
+
+/** Artículos publicados del blog. */
+export async function getBlogPosts(): Promise<BlogPostSummary[]> {
+  const res = await fetch(`${API_URL}/api/blog`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  const list = Array.isArray(data)
+    ? data
+    : ((data as { posts?: unknown }).posts ?? []);
+  return (Array.isArray(list) ? list : []) as BlogPostSummary[];
+}
+
+/** Artículo completo por slug. */
+export async function getBlogPost(slug: string): Promise<BlogPost> {
+  const res = await fetch(`${API_URL}/api/blog/${slug}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as BlogPost;
+}
+
+// ─── Volverse instructor ────────────────────────────────────────────────────
+/** Envía la solicitud para volverse instructor. */
+export async function applyInstructor(data: {
+  headline: string;
+  bio: string;
+  reason: string;
+}): Promise<void> {
+  const res = await fetch(`${API_URL}/api/instructor/apply`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
+// ─── Reflexiones de aprendizaje (qué aprendiste) ────────────────────────────
+export type Reflection = {
+  id: string;
+  content: string;
+  user?: { name?: string | null };
+};
+
+/** Reflexiones de aprendizaje de un curso. */
+export async function getReflections(courseId: string): Promise<Reflection[]> {
+  const res = await fetch(`${API_URL}/api/courses/${courseId}/learning-reflections`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data.reflections) ? data.reflections : [];
+}
+
+/** Crea/actualiza la reflexión del usuario para un curso. */
+export async function postReflection(courseId: string, content: string): Promise<void> {
+  const res = await fetch(`${API_URL}/api/courses/${courseId}/learning-reflections`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ content }),
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
