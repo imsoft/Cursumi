@@ -420,6 +420,55 @@ export async function deleteNote(noteId: string): Promise<void> {
   });
 }
 
+export type ChatMessage = {
+  id: string;
+  body: string;
+  senderId: string;
+  createdAt: string;
+  sender?: { name?: string | null };
+};
+
+/** Obtiene (o crea) la conversación del curso con su instructor, con mensajes. */
+export async function getConversation(
+  courseId: string
+): Promise<{ id: string; messages: ChatMessage[] }> {
+  const res = await fetch(`${API_URL}/api/conversations?courseId=${encodeURIComponent(courseId)}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return { id: data.id, messages: Array.isArray(data.messages) ? data.messages : [] };
+}
+
+/** Mensajes de una conversación. */
+export async function getMessages(conversationId: string): Promise<ChatMessage[]> {
+  const res = await fetch(`${API_URL}/api/conversations/${conversationId}/messages`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as ChatMessage[];
+}
+
+/** Envía un mensaje a la conversación. */
+export async function sendMessage(conversationId: string, body: string): Promise<ChatMessage> {
+  const res = await fetch(`${API_URL}/api/conversations/${conversationId}/messages`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ body }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as ChatMessage;
+}
+
+/** Marca la conversación como leída. */
+export async function markConversationRead(conversationId: string): Promise<void> {
+  await fetch(`${API_URL}/api/conversations/${conversationId}/read`, {
+    method: "PATCH",
+    headers: authHeaders(),
+  });
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;
