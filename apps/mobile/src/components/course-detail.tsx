@@ -13,6 +13,7 @@ import { ThemedView } from "@/components/themed-view";
 import { LessonView } from "@/components/lesson-view";
 import { ExamView } from "@/components/exam-view";
 import { ReviewsSection } from "@/components/reviews-section";
+import { ReflectionsSection } from "@/components/reflections-section";
 import { ChatView } from "@/components/chat-view";
 import { getMyCourseDetail, type CourseDetail as Detail } from "@/lib/me";
 
@@ -128,6 +129,9 @@ export function CourseDetail({ courseId, onBack }: { courseId: string; onBack: (
           <TouchableOpacity style={styles.examButton} onPress={() => setShowExam(true)}>
             <ThemedText style={styles.examButtonText}>Examen final 🎓</ThemedText>
           </TouchableOpacity>
+
+          {/* Qué aprendiste */}
+          <ReflectionsSection courseId={courseId} />
 
           {/* Reseñas */}
           <ReviewsSection courseId={courseId} />

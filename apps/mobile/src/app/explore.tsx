@@ -18,6 +18,8 @@ import { WishlistView } from "@/components/wishlist-view";
 import { SettingsView } from "@/components/settings-view";
 import { ReferralView } from "@/components/referral-view";
 import { NotesView } from "@/components/notes-view";
+import { BlogView } from "@/components/blog-view";
+import { BecomeInstructorView } from "@/components/become-instructor-view";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, type MyProfile } from "@/lib/me";
 
@@ -27,7 +29,9 @@ type ProfileMenu =
   | "wishlist"
   | "settings"
   | "referral"
-  | "notes";
+  | "notes"
+  | "blog"
+  | "becomeInstructor";
 
 const PURPLE = "#6d28d9";
 
@@ -83,6 +87,9 @@ export default function ProfileScreen() {
   const [city, setCity] = useState("");
   const [stateName, setStateName] = useState("");
   const [bio, setBio] = useState("");
+  const [website, setWebsite] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [instagramUrl, setInstagramUrl] = useState("");
 
   const load = useCallback(async () => {
     try {
@@ -104,6 +111,9 @@ export default function ProfileScreen() {
     setCity(profile.city);
     setStateName(profile.state);
     setBio(profile.bio);
+    setWebsite(profile.website);
+    setLinkedinUrl(profile.linkedinUrl);
+    setInstagramUrl(profile.instagramUrl);
     setError(null);
     setEditing(true);
   }
@@ -118,6 +128,9 @@ export default function ProfileScreen() {
         city: city.trim() || null,
         state: stateName.trim() || null,
         bio: bio.trim() || null,
+        website: website.trim() || null,
+        linkedinUrl: linkedinUrl.trim() || null,
+        instagramUrl: instagramUrl.trim() || null,
       });
       await load();
       setEditing(false);
@@ -157,6 +170,12 @@ export default function ProfileScreen() {
   }
   if (menu === "notes") {
     return <NotesView onBack={() => setMenu(null)} />;
+  }
+  if (menu === "blog") {
+    return <BlogView onBack={() => setMenu(null)} />;
+  }
+  if (menu === "becomeInstructor") {
+    return <BecomeInstructorView onBack={() => setMenu(null)} />;
   }
 
   return (
@@ -206,6 +225,9 @@ export default function ProfileScreen() {
                 <Field label="Ciudad" value={city} onChangeText={setCity} />
                 <Field label="Estado" value={stateName} onChangeText={setStateName} />
                 <Field label="Bio" value={bio} onChangeText={setBio} multiline />
+                <Field label="Sitio web" value={website} onChangeText={setWebsite} />
+                <Field label="LinkedIn (URL)" value={linkedinUrl} onChangeText={setLinkedinUrl} />
+                <Field label="Instagram (URL)" value={instagramUrl} onChangeText={setInstagramUrl} />
                 <View style={styles.editActions}>
                   <TouchableOpacity
                     style={[styles.button, styles.buttonGhost]}
@@ -250,6 +272,10 @@ export default function ProfileScreen() {
           <MenuRow label="Lista de deseos" onPress={() => setMenu("wishlist")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Referidos" onPress={() => setMenu("referral")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Blog" onPress={() => setMenu("blog")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Conviértete en instructor" onPress={() => setMenu("becomeInstructor")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Configuración" onPress={() => setMenu("settings")} />
         </ThemedView>
