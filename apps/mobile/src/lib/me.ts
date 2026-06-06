@@ -941,6 +941,47 @@ export async function updateQuoteRequest(
   });
 }
 
+// ─── Juegos (lado anfitrión / instructor) ───────────────────────────────────
+export type HostGame = {
+  id: string;
+  title: string;
+  code: string;
+  status: string;
+  _count?: { participants: number; questions: number };
+};
+
+export type NewGameQuestion = { question: string; options: string[]; correct: number };
+
+/** Lista los juegos creados por el instructor. */
+export async function listMyGames(): Promise<HostGame[]> {
+  const res = await fetch(`${API_URL}/api/games`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data.games) ? data.games : [];
+}
+
+/** Crea un juego con preguntas. Devuelve el gameId. */
+export async function createGame(title: string, questions: NewGameQuestion[]): Promise<string> {
+  const res = await fetch(`${API_URL}/api/games`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ title, questions }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+  return data.game?.id as string;
+}
+
+export async function startGame(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/games/${id}/start`, { method: "POST", headers: authHeaders() });
+}
+export async function nextGameQuestion(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/games/${id}/next`, { method: "POST", headers: authHeaders() });
+}
+export async function finishGame(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/games/${id}/finish`, { method: "POST", headers: authHeaders() });
+}
+
 // ─── Materiales de empresa ──────────────────────────────────────────────────
 export type OrgMaterial = {
   id: string;

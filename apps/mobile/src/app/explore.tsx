@@ -25,6 +25,7 @@ import { GamesView } from "@/components/games-view";
 import { InstructorView } from "@/components/instructor-view";
 import { AdminView } from "@/components/admin-view";
 import { InstructorAccountView } from "@/components/instructor-account-view";
+import { HostGamesView } from "@/components/host-games-view";
 import { BusinessView } from "@/components/business-view";
 import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
@@ -44,7 +45,8 @@ type ProfileMenu =
   | "instructor"
   | "admin"
   | "business"
-  | "instructorAccount";
+  | "instructorAccount"
+  | "hostGames";
 
 const PURPLE = "#6d28d9";
 
@@ -230,6 +232,9 @@ export default function ProfileScreen() {
   if (menu === "instructorAccount") {
     return <InstructorAccountView onBack={() => setMenu(null)} />;
   }
+  if (menu === "hostGames") {
+    return <HostGamesView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -330,6 +335,8 @@ export default function ProfileScreen() {
               <MenuRow label="Panel de instructor" onPress={() => setMenu("instructor")} />
               <View style={styles.menuDivider} />
               <MenuRow label="Perfil de instructor" onPress={() => setMenu("instructorAccount")} />
+              <View style={styles.menuDivider} />
+              <MenuRow label="Hostear juegos" onPress={() => setMenu("hostGames")} />
               <View style={styles.menuDivider} />
             </>
           )}
