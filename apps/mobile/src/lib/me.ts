@@ -593,6 +593,40 @@ export async function getInstructorAnalytics(): Promise<InstructorAnalytics> {
   return (await res.json()) as InstructorAnalytics;
 }
 
+export type InstructorCourse = {
+  id: string;
+  title: string;
+  modality?: string;
+  status: string; // draft | published | archived
+  price?: number;
+  imageUrl?: string | null;
+  studentsCount?: number;
+};
+
+/** Cursos del instructor. */
+export async function getInstructorCourses(): Promise<InstructorCourse[]> {
+  const res = await fetch(`${API_URL}/api/instructor/courses`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as InstructorCourse[];
+}
+
+/** Cambia el estado de un curso (publicar/despublicar/archivar). */
+export async function setCourseStatus(
+  courseId: string,
+  status: "draft" | "published" | "archived"
+): Promise<void> {
+  const res = await fetch(`${API_URL}/api/instructor/courses/${courseId}`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `No se pudo actualizar (HTTP ${res.status}).`);
+  }
+}
+
 export async function getInstructorConversations(): Promise<InstructorConversation[]> {
   const res = await fetch(`${API_URL}/api/instructor/conversations`, { headers: authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);

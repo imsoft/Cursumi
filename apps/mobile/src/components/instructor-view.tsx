@@ -18,19 +18,28 @@ import { useSession } from "@/lib/auth";
 import {
   getInstructorAnalytics,
   getInstructorConversations,
+  getInstructorCourses,
   getInstructorEarnings,
   getMessages,
   markConversationRead,
   sendMessage,
+  setCourseStatus,
   type ChatMessage,
   type InstructorAnalytics,
   type InstructorConversation,
+  type InstructorCourse,
   type InstructorEarnings,
 } from "@/lib/me";
 import { formatPriceMXN } from "@cursumi/shared";
 
 const PURPLE = "#6d28d9";
-type Tab = "earnings" | "analytics" | "messages";
+type Tab = "earnings" | "analytics" | "courses" | "messages";
+
+const STATUS_LABEL: Record<string, string> = {
+  draft: "Borrador",
+  published: "Publicado",
+  archived: "Archivado",
+};
 
 export function InstructorView({ onBack }: { onBack: () => void }) {
   const [tab, setTab] = useState<Tab>("earnings");
@@ -52,14 +61,20 @@ export function InstructorView({ onBack }: { onBack: () => void }) {
       </ThemedText>
 
       <View style={styles.tabs}>
-        {(["earnings", "analytics", "messages"] as Tab[]).map((t) => (
+        {(["earnings", "analytics", "courses", "messages"] as Tab[]).map((t) => (
           <TouchableOpacity
             key={t}
             style={[styles.tab, tab === t && styles.tabActive]}
             onPress={() => setTab(t)}
           >
             <ThemedText style={[styles.tabText, tab === t && styles.tabTextActive]}>
-              {t === "earnings" ? "Ingresos" : t === "analytics" ? "Analíticas" : "Mensajes"}
+              {t === "earnings"
+                ? "Ingresos"
+                : t === "analytics"
+                  ? "Datos"
+                  : t === "courses"
+                    ? "Cursos"
+                    : "Chats"}
             </ThemedText>
           </TouchableOpacity>
         ))}
@@ -67,6 +82,7 @@ export function InstructorView({ onBack }: { onBack: () => void }) {
 
       {tab === "earnings" && <EarningsTab />}
       {tab === "analytics" && <AnalyticsTab />}
+      {tab === "courses" && <CoursesTab />}
       {tab === "messages" && <MessagesTab onOpen={setOpenConv} />}
     </SafeAreaView>
   );
@@ -125,6 +141,103 @@ function AnalyticsTab() {
         ))}
       </View>
     </ScrollView>
+  );
+}
+
+function CoursesTab() {
+  const [courses, setCourses] = useState<InstructorCourse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setCourses(await getInstructorCourses());
+    } catch {
+      setError("No se pudieron cargar tus cursos.");
+    }
+  }, []);
+
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+
+  async function change(courseId: string, status: "draft" | "published" | "archived") {
+    setBusy(courseId);
+    setError(null);
+    try {
+      await setCourseStatus(courseId, status);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo actualizar.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+
+  return (
+    <FlatList
+      data={courses}
+      keyExtractor={(c) => c.id}
+      contentContainerStyle={styles.scroll}
+      ListHeaderComponent={
+        error ? <ThemedText style={styles.error}>{error}</ThemedText> : null
+      }
+      ListEmptyComponent={
+        <ThemedText style={styles.empty}>Aún no tienes cursos. Créalos desde la web.</ThemedText>
+      }
+      renderItem={({ item }) => (
+        <ThemedView style={styles.courseCard}>
+          <View style={styles.courseTop}>
+            <ThemedText type="subtitle" numberOfLines={2} style={{ flex: 1 }}>
+              {item.title}
+            </ThemedText>
+            <View
+              style={[
+                styles.badge,
+                item.status === "published"
+                  ? styles.badgePub
+                  : item.status === "archived"
+                    ? styles.badgeArch
+                    : styles.badgeDraft,
+              ]}
+            >
+              <ThemedText style={styles.badgeText}>{STATUS_LABEL[item.status] ?? item.status}</ThemedText>
+            </View>
+          </View>
+          <ThemedText style={styles.courseMeta}>
+            {item.studentsCount ?? 0} estudiantes
+            {typeof item.price === "number" ? ` · ${formatPriceMXN(item.price)}` : ""}
+          </ThemedText>
+          <View style={styles.courseActions}>
+            {busy === item.id ? (
+              <ActivityIndicator color={PURPLE} />
+            ) : item.status === "draft" || item.status === "archived" ? (
+              <TouchableOpacity style={styles.actBtn} onPress={() => change(item.id, "published")}>
+                <ThemedText style={styles.actText}>Publicar</ThemedText>
+              </TouchableOpacity>
+            ) : (
+              <>
+                <TouchableOpacity
+                  style={[styles.actBtn, styles.actGhost]}
+                  onPress={() => change(item.id, "draft")}
+                >
+                  <ThemedText style={styles.actGhostText}>Despublicar</ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.actBtn, styles.actGhost]}
+                  onPress={() => change(item.id, "archived")}
+                >
+                  <ThemedText style={styles.actGhostText}>Archivar</ThemedText>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </ThemedView>
+      )}
+    />
   );
 }
 
@@ -332,6 +445,31 @@ const styles = StyleSheet.create({
   convName: { fontWeight: "700" },
   convCourse: { fontSize: 12, opacity: 0.6 },
   convLast: { opacity: 0.8, marginTop: 2 },
+  // courses
+  courseCard: {
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "rgba(127,127,127,0.2)",
+    padding: 14,
+    gap: 8,
+  },
+  courseTop: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
+  courseMeta: { fontSize: 13, opacity: 0.7 },
+  courseActions: { flexDirection: "row", gap: 8, flexWrap: "wrap" },
+  badge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 },
+  badgeText: { fontSize: 11, fontWeight: "700", color: "#fff" },
+  badgePub: { backgroundColor: "#16a34a" },
+  badgeDraft: { backgroundColor: "#9ca3af" },
+  badgeArch: { backgroundColor: "#6b7280" },
+  actBtn: {
+    backgroundColor: PURPLE,
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  actText: { color: "#fff", fontWeight: "700", fontSize: 13 },
+  actGhost: { backgroundColor: "transparent", borderWidth: 1, borderColor: "rgba(127,127,127,0.4)" },
+  actGhostText: { fontWeight: "600", fontSize: 13 },
   // thread
   threadName: { fontWeight: "700", fontSize: 15 },
   threadList: { padding: 16, gap: 8, flexGrow: 1 },
