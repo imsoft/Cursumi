@@ -24,6 +24,7 @@ import { OrgMaterialsView } from "@/components/org-materials-view";
 import { GamesView } from "@/components/games-view";
 import { InstructorView } from "@/components/instructor-view";
 import { AdminView } from "@/components/admin-view";
+import { BusinessView } from "@/components/business-view";
 import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, uploadAvatar, type MyProfile } from "@/lib/me";
@@ -40,7 +41,8 @@ type ProfileMenu =
   | "orgMaterials"
   | "games"
   | "instructor"
-  | "admin";
+  | "admin"
+  | "business";
 
 const PURPLE = "#6d28d9";
 
@@ -220,6 +222,9 @@ export default function ProfileScreen() {
   if (menu === "admin") {
     return <AdminView onBack={() => setMenu(null)} />;
   }
+  if (menu === "business") {
+    return <BusinessView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -342,6 +347,8 @@ export default function ProfileScreen() {
           <MenuRow label="Blog" onPress={() => setMenu("blog")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Conviértete en instructor" onPress={() => setMenu("becomeInstructor")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Para empresas" onPress={() => setMenu("business")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Materiales de empresa" onPress={() => setMenu("orgMaterials")} />
           <View style={styles.menuDivider} />
