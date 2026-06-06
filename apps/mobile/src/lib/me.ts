@@ -266,6 +266,54 @@ export async function toggleWishlist(courseId: string): Promise<boolean> {
   return Boolean(data.saved);
 }
 
+export type ExamQuestion = {
+  id: string;
+  question: string;
+  type?: string;
+  options?: string[];
+  points?: number;
+};
+
+export type Exam = {
+  id: string;
+  passingScore: number;
+  timeLimit?: number;
+  questions: ExamQuestion[];
+};
+
+/** Examen final del curso (sin respuestas). 404 si el curso no tiene examen. */
+export async function getExam(courseId: string): Promise<Exam | null> {
+  const res = await fetch(`${API_URL}/api/courses/${courseId}/exam`, {
+    headers: authHeaders(),
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as Exam;
+}
+
+export type ExamResult = {
+  score: number;
+  passed: boolean;
+  certificate: { id: string; number: string } | null;
+};
+
+/** Envía el examen final. answers = { [questionId]: índice de opción }. */
+export async function submitExam(
+  courseId: string,
+  answers: Record<string, number>
+): Promise<ExamResult> {
+  const res = await fetch(`${API_URL}/api/courses/${courseId}/exam/submit`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ answers }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error ?? `HTTP ${res.status}`);
+  }
+  return (await res.json()) as ExamResult;
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;
