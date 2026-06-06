@@ -25,7 +25,7 @@ export async function GET(
         videoUrl: true,
         content: true,
         isFree: true,
-        section: { select: { id: true, courseId: true, quiz: true } },
+        section: { select: { id: true, courseId: true, quiz: true, minigame: true } },
       },
     });
 
@@ -56,6 +56,7 @@ export async function GET(
       content: lesson.content,
       // Para lecciones de tipo section_quiz: las preguntas viven en la sección.
       sectionQuiz: lesson.type === "section_quiz" ? lesson.section.quiz : null,
+      sectionMinigame: lesson.type === "section_minigame" ? lesson.section.minigame : null,
       completed: (enrollment?.lessonProgress.length ?? 0) > 0,
     });
   } catch (error) {

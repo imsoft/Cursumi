@@ -86,8 +86,38 @@ export type Lesson = {
   videoUrl?: string | null;
   content?: string | null;
   sectionQuiz?: unknown; // Json: array u objeto { questions: [...] }
+  sectionMinigame?: unknown; // Json: { type, ... }
   completed: boolean;
 };
+
+// Minijuegos de sección
+export type Minigame =
+  | { type: "memory"; instruction?: string; pairs: { term: string; definition: string }[] }
+  | { type: "hangman"; instruction?: string; words: { word: string; hint: string }[] }
+  | { type: "sort"; instruction: string; items: string[] }
+  | { type: "match"; instruction: string; pairs: { left: string; right: string }[] };
+
+/** Normaliza el Json del minijuego de sección a su tipo. */
+export function parseMinigame(raw: unknown): Minigame | null {
+  if (!raw || typeof raw !== "object") return null;
+  const m = raw as Minigame;
+  if (m.type === "memory" || m.type === "hangman" || m.type === "sort" || m.type === "match") {
+    return m;
+  }
+  return null;
+}
+
+/** Marca un minijuego de sección como completado. */
+export async function completeSectionMinigame(
+  sectionId: string,
+  courseId: string
+): Promise<void> {
+  await fetch(`${API_URL}/api/sections/${sectionId}/minigame/complete`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId, activityId: "default" }),
+  });
+}
 
 /** Normaliza el quiz de sección (Json) a una lista de preguntas. */
 export function parseSectionQuiz(raw: unknown): SectionQuizQuestion[] {
