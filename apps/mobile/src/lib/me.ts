@@ -547,6 +547,70 @@ export async function getBlogPost(slug: string): Promise<BlogPost> {
   return (await res.json()) as BlogPost;
 }
 
+// ─── Juegos (Kahoot-style, lado jugador) ────────────────────────────────────
+export type GameParticipant = {
+  id: string;
+  nickname: string;
+  score: number;
+  userId: string;
+};
+
+export type GameQuestion = {
+  id: string;
+  question: string;
+  options: string[];
+  order: number;
+  timeLimitSec?: number;
+};
+
+export type GameState = {
+  game: {
+    id: string;
+    status: string; // waiting | active | finished
+    currentQuestion: number;
+    title?: string;
+    code?: string;
+    questions: GameQuestion[];
+  };
+  currentQ: GameQuestion | null;
+  participants: GameParticipant[];
+  myAnswer: { selectedOption?: number } | null;
+  myParticipantId: string | null;
+  myNickname: string | null;
+};
+
+/** Une al usuario a un juego con código + nickname. Devuelve el gameId. */
+export async function joinGame(code: string, nickname: string): Promise<string> {
+  const res = await fetch(`${API_URL}/api/games/join`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ code: code.toUpperCase().trim(), nickname: nickname.trim() }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+  return data.gameId as string;
+}
+
+/** Estado actual del juego para el jugador. */
+export async function getGame(gameId: string): Promise<GameState> {
+  const res = await fetch(`${API_URL}/api/games/${gameId}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as GameState;
+}
+
+/** Envía la respuesta del jugador a la pregunta actual. */
+export async function answerGame(
+  gameId: string,
+  questionId: string,
+  selectedOption: number
+): Promise<void> {
+  await fetch(`${API_URL}/api/games/${gameId}/answer`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ questionId, selectedOption }),
+  });
+}
+
 // ─── Materiales de empresa ──────────────────────────────────────────────────
 export type OrgMaterial = {
   id: string;

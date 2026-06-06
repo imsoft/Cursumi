@@ -21,6 +21,7 @@ import { NotesView } from "@/components/notes-view";
 import { BlogView } from "@/components/blog-view";
 import { BecomeInstructorView } from "@/components/become-instructor-view";
 import { OrgMaterialsView } from "@/components/org-materials-view";
+import { GamesView } from "@/components/games-view";
 import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, uploadAvatar, type MyProfile } from "@/lib/me";
@@ -34,7 +35,8 @@ type ProfileMenu =
   | "notes"
   | "blog"
   | "becomeInstructor"
-  | "orgMaterials";
+  | "orgMaterials"
+  | "games";
 
 const PURPLE = "#6d28d9";
 
@@ -205,6 +207,9 @@ export default function ProfileScreen() {
   if (menu === "orgMaterials") {
     return <OrgMaterialsView onBack={() => setMenu(null)} />;
   }
+  if (menu === "games") {
+    return <GamesView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -305,6 +310,8 @@ export default function ProfileScreen() {
           <MenuRow label="Notificaciones" onPress={() => setMenu("notifications")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Mis notas" onPress={() => setMenu("notes")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Juegos" onPress={() => setMenu("games")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Lista de deseos" onPress={() => setMenu("wishlist")} />
           <View style={styles.menuDivider} />
