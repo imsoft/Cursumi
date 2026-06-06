@@ -842,6 +842,74 @@ export async function submitQuoteRequest(data: {
 }
 
 // ─── Admin ────────────────────────────────────────────────────────────────────
+export type AdminStats = {
+  totalUsers: number;
+  totalCourses: number;
+  publishedCourses: number;
+  draftCourses: number;
+  totalEnrollments: number;
+  estimatedRevenue: number;
+};
+export async function getAdminStats(): Promise<AdminStats> {
+  const res = await fetch(`${API_URL}/api/admin/stats`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as AdminStats;
+}
+
+export type AdminAnalytics = {
+  revenueByMonth: { month: string; amount: number }[];
+  usersByMonth: { month: string; users: number }[];
+};
+export async function getAdminAnalytics(): Promise<AdminAnalytics> {
+  const res = await fetch(`${API_URL}/api/admin/analytics`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const d = await res.json();
+  return {
+    revenueByMonth: Array.isArray(d.revenueByMonth) ? d.revenueByMonth : [],
+    usersByMonth: Array.isArray(d.usersByMonth) ? d.usersByMonth : [],
+  };
+}
+
+export type AdminFinances = {
+  totalRevenue?: number;
+  totalPlatformFee?: number;
+  totalInstructorPayouts?: number;
+  thisMonthRevenue?: number;
+};
+export async function getAdminFinances(): Promise<AdminFinances> {
+  const res = await fetch(`${API_URL}/api/admin/finances`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as AdminFinances;
+}
+
+export type AdminReview = {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  approved: boolean;
+  user?: { name?: string | null };
+  course?: { title?: string | null };
+};
+export async function getAdminReviews(approved = false): Promise<AdminReview[]> {
+  const res = await fetch(`${API_URL}/api/admin/reviews?approved=${approved}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const d: unknown = await res.json();
+  const list = Array.isArray(d) ? d : (d as { reviews?: unknown }).reviews;
+  return (Array.isArray(list) ? list : []) as AdminReview[];
+}
+export async function setReviewApproved(id: string, approved: boolean): Promise<void> {
+  await fetch(`${API_URL}/api/admin/reviews/${id}`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ approved }),
+  });
+}
+export async function deleteReview(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/admin/reviews/${id}`, { method: "DELETE", headers: authHeaders() });
+}
+
 export type AdminApplication = {
   id: string;
   status: string;
