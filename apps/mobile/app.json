@@ -36,6 +36,12 @@
             "imageWidth": 120
           }
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Cursumi necesita acceso a tus fotos para actualizar tu foto de perfil."
+        }
       ]
     ],
     "experiments": {
