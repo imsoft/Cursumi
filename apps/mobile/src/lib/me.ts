@@ -372,6 +372,54 @@ export async function getReferral(): Promise<Referral> {
   return (await res.json()) as Referral;
 }
 
+export type Note = {
+  id: string;
+  content: string;
+  createdAt: string;
+  courseId?: string;
+  lessonId?: string | null;
+  course?: { id: string; title: string } | null;
+  lesson?: { id: string; title: string } | null;
+};
+
+/** Notas del usuario (opcionalmente filtradas por curso/lección). */
+export async function getNotes(filter?: {
+  courseId?: string;
+  lessonId?: string;
+}): Promise<Note[]> {
+  const qs = new URLSearchParams();
+  if (filter?.courseId) qs.set("courseId", filter.courseId);
+  if (filter?.lessonId) qs.set("lessonId", filter.lessonId);
+  const suffix = qs.toString() ? `?${qs.toString()}` : "";
+  const res = await fetch(`${API_URL}/api/notes${suffix}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as Note[];
+}
+
+/** Crea una nota (en un curso y, opcionalmente, una lección). */
+export async function createNote(
+  courseId: string,
+  content: string,
+  lessonId?: string
+): Promise<Note> {
+  const res = await fetch(`${API_URL}/api/notes`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId, lessonId, content }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as Note;
+}
+
+/** Elimina una nota. */
+export async function deleteNote(noteId: string): Promise<void> {
+  await fetch(`${API_URL}/api/notes/${noteId}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;

@@ -14,6 +14,7 @@ import { WebView } from "react-native-webview";
 import { ThemedText } from "@/components/themed-text";
 import { QuizView } from "@/components/quiz-view";
 import { AssignmentView } from "@/components/assignment-view";
+import { NotesSection } from "@/components/notes-section";
 import { completeLesson, getLesson, type Lesson } from "@/lib/me";
 
 const PURPLE = "#6d28d9";
@@ -205,6 +206,9 @@ export function LessonView({
               </TouchableOpacity>
             </>
           )}
+
+          {/* Notas del usuario para esta lección */}
+          <NotesSection courseId={lesson.courseId} lessonId={lesson.id} />
         </ScrollView>
       )}
     </SafeAreaView>
