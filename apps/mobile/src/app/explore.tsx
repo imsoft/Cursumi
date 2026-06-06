@@ -17,10 +17,17 @@ import { NotificationsView } from "@/components/notifications-view";
 import { WishlistView } from "@/components/wishlist-view";
 import { SettingsView } from "@/components/settings-view";
 import { ReferralView } from "@/components/referral-view";
+import { NotesView } from "@/components/notes-view";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, type MyProfile } from "@/lib/me";
 
-type ProfileMenu = "certificates" | "notifications" | "wishlist" | "settings" | "referral";
+type ProfileMenu =
+  | "certificates"
+  | "notifications"
+  | "wishlist"
+  | "settings"
+  | "referral"
+  | "notes";
 
 const PURPLE = "#6d28d9";
 
@@ -148,6 +155,9 @@ export default function ProfileScreen() {
   if (menu === "referral") {
     return <ReferralView onBack={() => setMenu(null)} />;
   }
+  if (menu === "notes") {
+    return <NotesView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -234,6 +244,8 @@ export default function ProfileScreen() {
           <MenuRow label="Certificados" onPress={() => setMenu("certificates")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Notificaciones" onPress={() => setMenu("notifications")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Mis notas" onPress={() => setMenu("notes")} />
           <View style={styles.menuDivider} />
           <MenuRow label="Lista de deseos" onPress={() => setMenu("wishlist")} />
           <View style={styles.menuDivider} />
