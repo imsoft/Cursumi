@@ -12,8 +12,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { CertificatesView } from "@/components/certificates-view";
+import { NotificationsView } from "@/components/notifications-view";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, type MyProfile } from "@/lib/me";
+
+type ProfileMenu = "certificates" | "notifications";
 
 const PURPLE = "#6d28d9";
 
@@ -61,6 +65,7 @@ export default function ProfileScreen() {
   const [saving, setSaving] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [menu, setMenu] = useState<ProfileMenu | null>(null);
 
   // Borrador de edición
   const [fullName, setFullName] = useState("");
@@ -124,6 +129,13 @@ export default function ProfileScreen() {
 
   const name = profile?.fullName ?? session?.user?.name ?? "Usuario";
   const email = profile?.email ?? session?.user?.email ?? "";
+
+  if (menu === "certificates") {
+    return <CertificatesView onBack={() => setMenu(null)} />;
+  }
+  if (menu === "notifications") {
+    return <NotificationsView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -205,6 +217,13 @@ export default function ProfileScreen() {
           </>
         )}
 
+        {/* Menú: accesos a sub-pantallas */}
+        <ThemedView style={styles.menuCard}>
+          <MenuRow label="Certificados" onPress={() => setMenu("certificates")} />
+          <View style={styles.menuDivider} />
+          <MenuRow label="Notificaciones" onPress={() => setMenu("notifications")} />
+        </ThemedView>
+
         <TouchableOpacity style={styles.signOut} onPress={handleSignOut} disabled={signingOut}>
           {signingOut ? (
             <ActivityIndicator color="#dc2626" />
@@ -223,6 +242,15 @@ function Detail({ label, value }: { label: string; value: string }) {
       <ThemedText style={styles.detailLabel}>{label}</ThemedText>
       <ThemedText style={styles.detailValue}>{value || "—"}</ThemedText>
     </View>
+  );
+}
+
+function MenuRow({ label, onPress }: { label: string; onPress: () => void }) {
+  return (
+    <TouchableOpacity style={styles.menuRow} onPress={onPress} activeOpacity={0.6}>
+      <ThemedText style={styles.menuLabel}>{label}</ThemedText>
+      <ThemedText style={styles.menuChevron}>›</ThemedText>
+    </TouchableOpacity>
   );
 }
 
@@ -291,6 +319,22 @@ const styles = StyleSheet.create({
   buttonText: { color: "#fff", fontWeight: "700" },
   buttonGhost: { backgroundColor: "transparent", borderWidth: 1, borderColor: "rgba(127,127,127,0.4)" },
   buttonGhostText: { fontWeight: "600" },
+  menuCard: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(127,127,127,0.2)",
+    overflow: "hidden",
+  },
+  menuRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  menuLabel: { fontSize: 15, fontWeight: "500" },
+  menuChevron: { fontSize: 22, opacity: 0.4 },
+  menuDivider: { height: 1, backgroundColor: "rgba(127,127,127,0.15)", marginLeft: 16 },
   signOut: {
     paddingVertical: 14,
     alignItems: "center",
