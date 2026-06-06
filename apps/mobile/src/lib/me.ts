@@ -941,6 +941,81 @@ export async function updateQuoteRequest(
   });
 }
 
+// ─── Crear curso (instructor) ────────────────────────────────────────────────
+export async function getCategories(): Promise<{ name: string; slug: string }[]> {
+  const res = await fetch(`${API_URL}/api/categories`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as { name: string; slug: string }[];
+}
+
+export type NewLesson = {
+  id: string;
+  title: string;
+  type: "video" | "text";
+  order: number;
+  content?: string;
+  videoUrl?: string;
+};
+export type NewSection = { id: string; title: string; order: number; lessons: NewLesson[] };
+export type NewCoursePayload = {
+  title: string;
+  description: string;
+  category: string;
+  level: string;
+  modality: "virtual" | "presencial" | "live";
+  price: number;
+  imageUrl?: string;
+  sections: NewSection[];
+  isDraft: boolean;
+};
+
+/** Crea un curso (borrador por defecto). Devuelve el curso creado. */
+export async function createInstructorCourse(payload: NewCoursePayload): Promise<{ id: string }> {
+  const res = await fetch(`${API_URL}/api/instructor/courses`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+  return data as { id: string };
+}
+
+/** Pide a Mux una URL de subida directa para un video. */
+export async function requestMuxUpload(
+  lessonTitle: string
+): Promise<{ uploadId: string; uploadUrl: string }> {
+  const res = await fetch(`${API_URL}/api/mux/upload-url`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ lessonTitle }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as { uploadId: string; uploadUrl: string };
+}
+
+/** Sube el archivo de video a la URL de Mux (PUT directo). */
+export async function uploadVideoToMux(uploadUrl: string, uri: string): Promise<void> {
+  const file = await fetch(uri);
+  const blob = await file.blob();
+  const res = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": "video/mp4" },
+    body: blob,
+  });
+  if (!res.ok && res.status !== 200) throw new Error(`Subida falló (HTTP ${res.status})`);
+}
+
+/** Consulta el playback de Mux (puede tardar; reintentar). */
+export async function getMuxPlayback(
+  uploadId: string
+): Promise<{ playbackId?: string; playbackUrl?: string }> {
+  const res = await fetch(`${API_URL}/api/mux/playback/${uploadId}`, { headers: authHeaders() });
+  if (!res.ok) return {};
+  return (await res.json()) as { playbackId?: string; playbackUrl?: string };
+}
+
 // ─── Juegos (lado anfitrión / instructor) ───────────────────────────────────
 export type HostGame = {
   id: string;
