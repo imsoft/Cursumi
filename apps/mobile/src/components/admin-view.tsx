@@ -25,10 +25,23 @@ import {
   setReviewApproved,
   setUserRole,
   updateQuoteRequest,
+  getCoupons,
+  createCoupon,
+  setCouponActive,
+  deleteCoupon,
+  getAdminCategories,
+  createCategory,
+  deleteCategory,
+  getKpis,
+  createKpi,
+  deleteKpi,
   type AdminApplication,
   type AdminReview,
   type AdminUser,
   type QuoteRequest,
+  type AdminCoupon,
+  type AdminCategory,
+  type AdminKpi,
 } from "@/lib/me";
 import { formatPriceMXN } from "@cursumi/shared";
 
@@ -41,6 +54,9 @@ type Section =
   | "reviews"
   | "finances"
   | "analytics"
+  | "coupons"
+  | "categories"
+  | "kpis"
   | "business";
 
 const SECTIONS: { id: Section; label: string }[] = [
@@ -50,6 +66,9 @@ const SECTIONS: { id: Section; label: string }[] = [
   { id: "reviews", label: "Moderar reseñas" },
   { id: "finances", label: "Finanzas" },
   { id: "analytics", label: "Analíticas" },
+  { id: "coupons", label: "Cupones" },
+  { id: "categories", label: "Categorías" },
+  { id: "kpis", label: "KPIs" },
   { id: "business", label: "Empresas" },
 ];
 
@@ -60,6 +79,9 @@ const SECTION_TITLE: Record<Section, string> = {
   reviews: "Moderar reseñas",
   finances: "Finanzas",
   analytics: "Analíticas",
+  coupons: "Cupones",
+  categories: "Categorías",
+  kpis: "KPIs",
   business: "Empresas",
 };
 
@@ -83,6 +105,9 @@ export function AdminView({ onBack }: { onBack: () => void }) {
         {section === "reviews" && <ReviewsSection />}
         {section === "finances" && <FinancesSection />}
         {section === "analytics" && <AnalyticsSection />}
+        {section === "coupons" && <CouponsSection />}
+        {section === "categories" && <CategoriesSection />}
+        {section === "kpis" && <KpisSection />}
         {section === "business" && <BusinessSection />}
       </SafeAreaView>
     );
@@ -475,6 +500,207 @@ function BusinessSection() {
         </ThemedView>
       )}
     />
+  );
+}
+
+// ── Cupones ──
+function CouponsSection() {
+  const [items, setItems] = useState<AdminCoupon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [code, setCode] = useState("");
+  const [pct, setPct] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const load = useCallback(async () => {
+    try {
+      setItems(await getCoupons());
+    } catch {
+      /* */
+    }
+  }, []);
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+  async function add() {
+    const p = parseInt(pct, 10);
+    if (!code.trim() || !Number.isFinite(p)) return setError("Código y % requeridos.");
+    setError(null);
+    setBusy(true);
+    try {
+      await createCoupon({ code: code.trim().toUpperCase(), discountPct: Math.min(100, Math.max(1, p)) });
+      setCode("");
+      setPct("");
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+    } finally {
+      setBusy(false);
+    }
+  }
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ThemedView style={styles.card}>
+        <ThemedText style={styles.bold}>Nuevo cupón</ThemedText>
+        <TextInput style={styles.input} value={code} onChangeText={setCode} placeholder="CÓDIGO" placeholderTextColor="#9ca3af" autoCapitalize="characters" />
+        <TextInput style={styles.input} value={pct} onChangeText={setPct} placeholder="% de descuento" placeholderTextColor="#9ca3af" keyboardType="number-pad" />
+        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+        <TouchableOpacity style={styles.btn} onPress={add} disabled={busy}>
+          {busy ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.btnText}>Crear cupón</ThemedText>}
+        </TouchableOpacity>
+      </ThemedView>
+      {items.map((c) => (
+        <ThemedView key={c.id} style={styles.card}>
+          <View style={styles.cardTop}>
+            <ThemedText style={styles.name}>{c.code} · {c.discountPct}%</ThemedText>
+            <ThemedText style={styles.statusTag}>{c.active ? "Activo" : "Inactivo"}</ThemedText>
+          </View>
+          <ThemedText style={styles.sub}>
+            Usos: {c.usedCount ?? 0}{c.maxUses ? ` / ${c.maxUses}` : ""}
+          </ThemedText>
+          <View style={styles.actions}>
+            <TouchableOpacity
+              style={[styles.btn, styles.ghost]}
+              onPress={async () => { await setCouponActive(c.id, !c.active); load(); }}
+            >
+              <ThemedText style={styles.ghostText}>{c.active ? "Desactivar" : "Activar"}</ThemedText>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.btn, styles.btnDanger]} onPress={async () => { await deleteCoupon(c.id); load(); }}>
+              <ThemedText style={styles.btnText}>Eliminar</ThemedText>
+            </TouchableOpacity>
+          </View>
+        </ThemedView>
+      ))}
+    </ScrollView>
+  );
+}
+
+// ── Categorías ──
+function CategoriesSection() {
+  const [items, setItems] = useState<AdminCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const load = useCallback(async () => {
+    try {
+      setItems(await getAdminCategories());
+    } catch {
+      /* */
+    }
+  }, []);
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+  async function add() {
+    if (name.trim().length < 2) return setError("Nombre muy corto.");
+    setError(null);
+    setBusy(true);
+    try {
+      await createCategory(name.trim());
+      setName("");
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+    } finally {
+      setBusy(false);
+    }
+  }
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ThemedView style={styles.card}>
+        <ThemedText style={styles.bold}>Nueva categoría</ThemedText>
+        <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Nombre" placeholderTextColor="#9ca3af" />
+        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+        <TouchableOpacity style={styles.btn} onPress={add} disabled={busy}>
+          {busy ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.btnText}>Crear</ThemedText>}
+        </TouchableOpacity>
+      </ThemedView>
+      {items.map((c) => (
+        <ThemedView key={c.id} style={styles.card}>
+          <View style={styles.cardTop}>
+            <ThemedText style={styles.name}>{c.name}</ThemedText>
+            <TouchableOpacity onPress={async () => { await deleteCategory(c.id); load(); }} hitSlop={8}>
+              <ThemedText style={{ color: "#dc2626", fontWeight: "600" }}>Eliminar</ThemedText>
+            </TouchableOpacity>
+          </View>
+          <ThemedText style={styles.sub}>{c.slug} · {c._count?.courses ?? 0} cursos</ThemedText>
+        </ThemedView>
+      ))}
+    </ScrollView>
+  );
+}
+
+// ── KPIs ──
+function KpisSection() {
+  const [items, setItems] = useState<AdminKpi[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("");
+  const [target, setTarget] = useState("");
+  const [unit, setUnit] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const load = useCallback(async () => {
+    try {
+      setItems(await getKpis());
+    } catch {
+      /* */
+    }
+  }, []);
+  useEffect(() => {
+    load().finally(() => setLoading(false));
+  }, [load]);
+  async function add() {
+    const t = parseFloat(target);
+    if (!name.trim() || !Number.isFinite(t) || t <= 0) return setError("Nombre y objetivo (>0) requeridos.");
+    setError(null);
+    setBusy(true);
+    try {
+      await createKpi({ name: name.trim(), targetValue: t, unit: unit.trim() || undefined });
+      setName("");
+      setTarget("");
+      setUnit("");
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error");
+    } finally {
+      setBusy(false);
+    }
+  }
+  if (loading) return <ActivityIndicator style={styles.loader} color={PURPLE} />;
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ThemedView style={styles.card}>
+        <ThemedText style={styles.bold}>Nuevo KPI</ThemedText>
+        <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Nombre" placeholderTextColor="#9ca3af" />
+        <TextInput style={styles.input} value={target} onChangeText={setTarget} placeholder="Valor objetivo" placeholderTextColor="#9ca3af" keyboardType="number-pad" />
+        <TextInput style={styles.input} value={unit} onChangeText={setUnit} placeholder="Unidad (opcional)" placeholderTextColor="#9ca3af" />
+        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+        <TouchableOpacity style={styles.btn} onPress={add} disabled={busy}>
+          {busy ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.btnText}>Crear KPI</ThemedText>}
+        </TouchableOpacity>
+      </ThemedView>
+      {items.map((k) => {
+        const pct = k.targetValue > 0 ? Math.min(100, Math.round((k.currentValue / k.targetValue) * 100)) : 0;
+        return (
+          <ThemedView key={k.id} style={styles.card}>
+            <View style={styles.cardTop}>
+              <ThemedText style={styles.name}>{k.name}</ThemedText>
+              <TouchableOpacity onPress={async () => { await deleteKpi(k.id); load(); }} hitSlop={8}>
+                <ThemedText style={{ color: "#dc2626", fontWeight: "600" }}>Eliminar</ThemedText>
+              </TouchableOpacity>
+            </View>
+            <ThemedText style={styles.sub}>
+              {k.currentValue} / {k.targetValue} {k.unit ?? ""} ({pct}%)
+            </ThemedText>
+            <View style={styles.barTrack}>
+              <View style={[styles.barFill, { width: `${pct}%` }]} />
+            </View>
+          </ThemedView>
+        );
+      })}
+    </ScrollView>
   );
 }
 

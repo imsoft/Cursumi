@@ -910,6 +910,116 @@ export async function deleteReview(id: string): Promise<void> {
   await fetch(`${API_URL}/api/admin/reviews/${id}`, { method: "DELETE", headers: authHeaders() });
 }
 
+// ── Cupones ──
+export type AdminCoupon = {
+  id: string;
+  code: string;
+  description?: string | null;
+  discountPct: number;
+  maxUses?: number | null;
+  usedCount?: number;
+  active: boolean;
+  expiresAt?: string | null;
+};
+export async function getCoupons(): Promise<AdminCoupon[]> {
+  const res = await fetch(`${API_URL}/api/admin/coupons`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const d: unknown = await res.json();
+  const list = Array.isArray(d) ? d : (d as { coupons?: unknown }).coupons;
+  return (Array.isArray(list) ? list : []) as AdminCoupon[];
+}
+export async function createCoupon(data: {
+  code: string;
+  discountPct: number;
+  maxUses?: number | null;
+}): Promise<void> {
+  const res = await fetch(`${API_URL}/api/admin/coupons`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const b = await res.json().catch(() => ({}));
+    throw new Error(b.error ?? `HTTP ${res.status}`);
+  }
+}
+export async function setCouponActive(id: string, active: boolean): Promise<void> {
+  await fetch(`${API_URL}/api/admin/coupons/${id}`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ active }),
+  });
+}
+export async function deleteCoupon(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/admin/coupons/${id}`, { method: "DELETE", headers: authHeaders() });
+}
+
+// ── Categorías ──
+export type AdminCategory = { id: string; name: string; slug: string; _count?: { courses: number } };
+export async function getAdminCategories(): Promise<AdminCategory[]> {
+  const res = await fetch(`${API_URL}/api/admin/categories`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const d: unknown = await res.json();
+  const list = Array.isArray(d) ? d : (d as { categories?: unknown }).categories;
+  return (Array.isArray(list) ? list : []) as AdminCategory[];
+}
+export async function createCategory(name: string): Promise<void> {
+  const slug = name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  const res = await fetch(`${API_URL}/api/admin/categories`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ name, slug }),
+  });
+  if (!res.ok) {
+    const b = await res.json().catch(() => ({}));
+    throw new Error(b.error ?? `HTTP ${res.status}`);
+  }
+}
+export async function deleteCategory(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/admin/categories/${id}`, { method: "DELETE", headers: authHeaders() });
+}
+
+// ── KPIs ──
+export type AdminKpi = {
+  id: string;
+  name: string;
+  unit?: string;
+  targetValue: number;
+  currentValue: number;
+  category?: string;
+};
+export async function getKpis(): Promise<AdminKpi[]> {
+  const res = await fetch(`${API_URL}/api/admin/kpis`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const d: unknown = await res.json();
+  const list = Array.isArray(d) ? d : (d as { kpis?: unknown }).kpis;
+  return (Array.isArray(list) ? list : []) as AdminKpi[];
+}
+export async function createKpi(data: {
+  name: string;
+  targetValue: number;
+  currentValue?: number;
+  unit?: string;
+}): Promise<void> {
+  const res = await fetch(`${API_URL}/api/admin/kpis`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const b = await res.json().catch(() => ({}));
+    throw new Error(b.error ?? `HTTP ${res.status}`);
+  }
+}
+export async function deleteKpi(id: string): Promise<void> {
+  await fetch(`${API_URL}/api/admin/kpis/${id}`, { method: "DELETE", headers: authHeaders() });
+}
+
 export type AdminApplication = {
   id: string;
   status: string;
