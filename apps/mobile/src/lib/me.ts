@@ -69,17 +69,59 @@ export async function getMyCourseDetail(courseId: string): Promise<CourseDetail>
   return (await res.json()) as CourseDetail;
 }
 
+export type SectionQuizQuestion = {
+  question: string;
+  options: string[];
+  correct: number;
+};
+
 export type Lesson = {
   id: string;
   courseId: string;
+  sectionId?: string;
   title: string;
   description?: string | null;
   type: string;
   duration?: string | null;
   videoUrl?: string | null;
   content?: string | null;
+  sectionQuiz?: unknown; // Json: array u objeto { questions: [...] }
   completed: boolean;
 };
+
+/** Normaliza el quiz de sección (Json) a una lista de preguntas. */
+export function parseSectionQuiz(raw: unknown): SectionQuizQuestion[] {
+  const list = Array.isArray(raw)
+    ? raw
+    : (raw as { questions?: unknown })?.questions;
+  if (!Array.isArray(list)) return [];
+  return list
+    .map((q: Record<string, unknown>) => ({
+      question: String(q.question ?? ""),
+      options: Array.isArray(q.options) ? (q.options as string[]) : [],
+      correct: typeof q.correct === "number" ? q.correct : 0,
+    }))
+    .filter((q) => q.options.length > 0);
+}
+
+/** Envía el quiz de una sección. answers = { [índice]: opción elegida }. */
+export async function submitSectionQuiz(
+  sectionId: string,
+  courseId: string,
+  answers: Record<string, number>
+): Promise<{ score: number; passed: boolean }> {
+  const res = await fetch(`${API_URL}/api/sections/${sectionId}/quiz/submit`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId, activityId: "default", answers }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+  const data = await res.json();
+  return { score: data.score ?? 0, passed: Boolean(data.passed) };
+}
 
 /** Contenido de una lección (verifica inscripción en el servidor). */
 export async function getLesson(lessonId: string): Promise<Lesson> {
