@@ -23,6 +23,7 @@ import { BecomeInstructorView } from "@/components/become-instructor-view";
 import { OrgMaterialsView } from "@/components/org-materials-view";
 import { GamesView } from "@/components/games-view";
 import { InstructorView } from "@/components/instructor-view";
+import { AdminView } from "@/components/admin-view";
 import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
 import { getMyProfile, updateMyProfile, uploadAvatar, type MyProfile } from "@/lib/me";
@@ -38,7 +39,8 @@ type ProfileMenu =
   | "becomeInstructor"
   | "orgMaterials"
   | "games"
-  | "instructor";
+  | "instructor"
+  | "admin";
 
 const PURPLE = "#6d28d9";
 
@@ -215,6 +217,9 @@ export default function ProfileScreen() {
   if (menu === "instructor") {
     return <InstructorView onBack={() => setMenu(null)} />;
   }
+  if (menu === "admin") {
+    return <AdminView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -313,6 +318,12 @@ export default function ProfileScreen() {
           {(profile?.role === "instructor" || profile?.role === "admin") && (
             <>
               <MenuRow label="Panel de instructor" onPress={() => setMenu("instructor")} />
+              <View style={styles.menuDivider} />
+            </>
+          )}
+          {profile?.role === "admin" && (
+            <>
+              <MenuRow label="Administración" onPress={() => setMenu("admin")} />
               <View style={styles.menuDivider} />
             </>
           )}
