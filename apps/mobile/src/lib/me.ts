@@ -553,9 +553,52 @@ export type MyProfile = {
   website: string;
   linkedinUrl: string;
   instagramUrl: string;
+  role: string;
   coursesCompleted: number;
   coursesInProgress: number;
 };
+
+// ─── Instructor ───────────────────────────────────────────────────────────────
+export type InstructorEarnings = {
+  total: number;
+  thisMonth?: number;
+  courses?: number;
+  monthly?: { month: string; amount: number }[];
+};
+
+export type InstructorAnalytics = {
+  totalCourses: number;
+  publishedCourses: number;
+  totalStudents: number;
+  avgProgress: number;
+  earnings?: number;
+};
+
+export type InstructorConversation = {
+  id: string;
+  student?: { name?: string | null };
+  course?: { title?: string | null };
+  messages?: { body: string; createdAt: string; read: boolean; senderId: string }[];
+};
+
+export async function getInstructorEarnings(): Promise<InstructorEarnings> {
+  const res = await fetch(`${API_URL}/api/instructor/earnings`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as InstructorEarnings;
+}
+
+export async function getInstructorAnalytics(): Promise<InstructorAnalytics> {
+  const res = await fetch(`${API_URL}/api/instructor/analytics`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as InstructorAnalytics;
+}
+
+export async function getInstructorConversations(): Promise<InstructorConversation[]> {
+  const res = await fetch(`${API_URL}/api/instructor/conversations`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  return (Array.isArray(data) ? data : []) as InstructorConversation[];
+}
 
 /** Perfil del usuario + estadísticas de cursos. */
 export async function getMyProfile(): Promise<MyProfile> {

@@ -30,7 +30,7 @@ export async function GET() {
       prisma.user.findUnique({
         where: { id: session.user.id },
         select: {
-          name: true, email: true, createdAt: true, image: true,
+          name: true, email: true, createdAt: true, image: true, role: true,
           phone: true, state: true, city: true, bio: true, website: true, linkedinUrl: true, instagramUrl: true,
         },
       }),
@@ -55,6 +55,7 @@ export async function GET() {
       website: user?.website || "",
       linkedinUrl: user?.linkedinUrl || "",
       instagramUrl: user?.instagramUrl || "",
+      role: user?.role || "student",
       coursesCompleted,
       coursesInProgress,
     });
