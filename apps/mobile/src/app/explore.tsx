@@ -20,8 +20,10 @@ import { ReferralView } from "@/components/referral-view";
 import { NotesView } from "@/components/notes-view";
 import { BlogView } from "@/components/blog-view";
 import { BecomeInstructorView } from "@/components/become-instructor-view";
+import { OrgMaterialsView } from "@/components/org-materials-view";
+import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
-import { getMyProfile, updateMyProfile, type MyProfile } from "@/lib/me";
+import { getMyProfile, updateMyProfile, uploadAvatar, type MyProfile } from "@/lib/me";
 
 type ProfileMenu =
   | "certificates"
@@ -31,7 +33,8 @@ type ProfileMenu =
   | "referral"
   | "notes"
   | "blog"
-  | "becomeInstructor";
+  | "becomeInstructor"
+  | "orgMaterials";
 
 const PURPLE = "#6d28d9";
 
@@ -80,6 +83,7 @@ export default function ProfileScreen() {
   const [signingOut, setSigningOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [menu, setMenu] = useState<ProfileMenu | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   // Borrador de edición
   const [fullName, setFullName] = useState("");
@@ -141,6 +145,27 @@ export default function ProfileScreen() {
     }
   }
 
+  async function pickAvatar() {
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!perm.granted) return;
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+    if (result.canceled || !result.assets[0]?.uri) return;
+    setUploadingAvatar(true);
+    try {
+      await uploadAvatar(result.assets[0].uri);
+      await load();
+    } catch {
+      setError("No se pudo actualizar la foto.");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }
+
   async function handleSignOut() {
     setSigningOut(true);
     try {
@@ -177,6 +202,9 @@ export default function ProfileScreen() {
   if (menu === "becomeInstructor") {
     return <BecomeInstructorView onBack={() => setMenu(null)} />;
   }
+  if (menu === "orgMaterials") {
+    return <OrgMaterialsView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -187,13 +215,22 @@ export default function ProfileScreen() {
 
         {/* Cabecera: avatar + nombre */}
         <View style={styles.header}>
-          {profile?.avatar ? (
-            <Image source={{ uri: profile.avatar }} style={styles.avatar} />
-          ) : (
-            <View style={styles.avatarFallback}>
-              <ThemedText style={styles.avatarInitials}>{initials(name)}</ThemedText>
+          <TouchableOpacity onPress={pickAvatar} activeOpacity={0.8}>
+            {profile?.avatar ? (
+              <Image source={{ uri: profile.avatar }} style={styles.avatar} />
+            ) : (
+              <View style={styles.avatarFallback}>
+                <ThemedText style={styles.avatarInitials}>{initials(name)}</ThemedText>
+              </View>
+            )}
+            <View style={styles.avatarEdit}>
+              {uploadingAvatar ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <ThemedText style={styles.avatarEditText}>✎</ThemedText>
+              )}
             </View>
-          )}
+          </TouchableOpacity>
           <View style={styles.headerText}>
             <ThemedText type="subtitle">{name}</ThemedText>
             <ThemedText style={styles.muted}>{email}</ThemedText>
@@ -277,6 +314,8 @@ export default function ProfileScreen() {
           <View style={styles.menuDivider} />
           <MenuRow label="Conviértete en instructor" onPress={() => setMenu("becomeInstructor")} />
           <View style={styles.menuDivider} />
+          <MenuRow label="Materiales de empresa" onPress={() => setMenu("orgMaterials")} />
+          <View style={styles.menuDivider} />
           <MenuRow label="Configuración" onPress={() => setMenu("settings")} />
         </ThemedView>
 
@@ -325,6 +364,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   avatarInitials: { color: "#fff", fontSize: 22, fontWeight: "700" },
+  avatarEdit: {
+    position: "absolute",
+    right: -2,
+    bottom: -2,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: PURPLE,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  avatarEditText: { color: "#fff", fontSize: 12 },
   headerText: { flex: 1, gap: 2 },
   muted: { opacity: 0.7 },
   error: { color: "#dc2626" },

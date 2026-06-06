@@ -547,6 +547,50 @@ export async function getBlogPost(slug: string): Promise<BlogPost> {
   return (await res.json()) as BlogPost;
 }
 
+// ─── Materiales de empresa ──────────────────────────────────────────────────
+export type OrgMaterial = {
+  id: string;
+  name: string;
+  description?: string | null;
+  fileUrl: string;
+  fileType: string;
+  createdAt: string;
+};
+
+/** Materiales internos de la organización del usuario. */
+export async function getOrgMaterials(): Promise<{
+  orgName: string | null;
+  materials: OrgMaterial[];
+}> {
+  const res = await fetch(`${API_URL}/api/me/org-materials`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return {
+    orgName: data.orgName ?? null,
+    materials: Array.isArray(data.materials) ? data.materials : [],
+  };
+}
+
+// ─── Avatar ─────────────────────────────────────────────────────────────────
+/** Sube una imagen de perfil (multipart). `uri` es la ruta local del selector. */
+export async function uploadAvatar(uri: string): Promise<void> {
+  const form = new FormData();
+  const name = uri.split("/").pop() || "avatar.jpg";
+  const ext = name.split(".").pop()?.toLowerCase() || "jpg";
+  const type = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
+  // React Native: el archivo se adjunta como { uri, name, type }.
+  form.append("file", { uri, name, type } as unknown as Blob);
+  const res = await fetch(`${API_URL}/api/me/avatar`, {
+    method: "POST",
+    headers: authHeaders(), // sin Content-Type: lo fija FormData con el boundary
+    body: form,
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
 // ─── Volverse instructor ────────────────────────────────────────────────────
 /** Envía la solicitud para volverse instructor. */
 export async function applyInstructor(data: {
