@@ -15,6 +15,7 @@ import { ThemedText } from "@/components/themed-text";
 import { QuizView } from "@/components/quiz-view";
 import { AssignmentView } from "@/components/assignment-view";
 import { SectionQuizView } from "@/components/section-quiz-view";
+import { SectionMinigameView } from "@/components/section-minigame-view";
 import { NotesSection } from "@/components/notes-section";
 import { completeLesson, getLesson, type Lesson } from "@/lib/me";
 
@@ -159,6 +160,8 @@ export function LessonView({
             <QuizView lesson={lesson} onCompleted={onCompleted} />
           ) : lesson.type === "section_quiz" ? (
             <SectionQuizView lesson={lesson} onCompleted={onCompleted} />
+          ) : lesson.type === "section_minigame" ? (
+            <SectionMinigameView lesson={lesson} onCompleted={onCompleted} />
           ) : lesson.type === "assignment" ? (
             <>
               {/* Enunciado de la tarea (si viene en content como texto/HTML) */}
