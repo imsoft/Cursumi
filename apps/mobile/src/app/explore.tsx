@@ -28,6 +28,7 @@ import { InstructorAccountView } from "@/components/instructor-account-view";
 import { HostGamesView } from "@/components/host-games-view";
 import { CourseCreatorView } from "@/components/course-creator-view";
 import { WhiteboardView } from "@/components/whiteboard-view";
+import { TemplatesView } from "@/components/templates-view";
 import { BusinessView } from "@/components/business-view";
 import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
@@ -50,7 +51,8 @@ type ProfileMenu =
   | "instructorAccount"
   | "hostGames"
   | "createCourse"
-  | "whiteboard";
+  | "whiteboard"
+  | "templates";
 
 const PURPLE = "#6d28d9";
 
@@ -245,6 +247,9 @@ export default function ProfileScreen() {
   if (menu === "whiteboard") {
     return <WhiteboardView onBack={() => setMenu(null)} />;
   }
+  if (menu === "templates") {
+    return <TemplatesView onBack={() => setMenu(null)} />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -351,6 +356,8 @@ export default function ProfileScreen() {
               <MenuRow label="Crear curso" onPress={() => setMenu("createCourse")} />
               <View style={styles.menuDivider} />
               <MenuRow label="Pizarrón" onPress={() => setMenu("whiteboard")} />
+              <View style={styles.menuDivider} />
+              <MenuRow label="Plantillas" onPress={() => setMenu("templates")} />
               <View style={styles.menuDivider} />
             </>
           )}
