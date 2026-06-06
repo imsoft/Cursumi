@@ -760,6 +760,106 @@ export async function answerGame(
   });
 }
 
+// ─── Admin ────────────────────────────────────────────────────────────────────
+export type AdminApplication = {
+  id: string;
+  status: string;
+  headline?: string | null;
+  bio?: string | null;
+  reason?: string | null;
+  createdAt: string;
+  user?: { id: string; name?: string | null; email?: string | null };
+};
+
+export async function getInstructorApplications(): Promise<AdminApplication[]> {
+  const res = await fetch(`${API_URL}/api/admin/instructor-applications?status=pending`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data.applications) ? data.applications : [];
+}
+
+export async function reviewApplication(
+  id: string,
+  action: "approve" | "reject",
+  rejectionReason?: string
+): Promise<void> {
+  const res = await fetch(`${API_URL}/api/admin/instructor-applications/${id}`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(action === "approve" ? { action } : { action, rejectionReason }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
+export type AdminUser = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  role: string;
+  emailVerified?: boolean;
+};
+
+export async function getAdminUsers(): Promise<AdminUser[]> {
+  const res = await fetch(`${API_URL}/api/admin/users`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data: unknown = await res.json();
+  const list = Array.isArray(data) ? data : (data as { users?: unknown }).users;
+  return (Array.isArray(list) ? list : []) as AdminUser[];
+}
+
+export async function setUserRole(
+  userId: string,
+  role: "student" | "instructor" | "admin"
+): Promise<void> {
+  const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ role }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
+export type QuoteRequest = {
+  id: string;
+  companyName: string;
+  contactName: string;
+  contactEmail: string;
+  contactPhone?: string | null;
+  companySize?: string | null;
+  interests?: string | null;
+  message?: string | null;
+  status: string;
+  createdAt: string;
+};
+
+export async function getQuoteRequests(): Promise<QuoteRequest[]> {
+  const res = await fetch(`${API_URL}/api/admin/business/quote-requests`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return Array.isArray(data.requests) ? data.requests : [];
+}
+
+export async function updateQuoteRequest(
+  id: string,
+  status: "new" | "contacted" | "converted" | "closed"
+): Promise<void> {
+  await fetch(`${API_URL}/api/admin/business/quote-requests`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ id, status }),
+  });
+}
+
 // ─── Materiales de empresa ──────────────────────────────────────────────────
 export type OrgMaterial = {
   id: string;
