@@ -314,6 +314,64 @@ export async function submitExam(
   return (await res.json()) as ExamResult;
 }
 
+export type Review = {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+  user: { name?: string | null };
+};
+
+/** Reseñas de un curso + promedio. */
+export async function getReviews(
+  courseId: string
+): Promise<{ reviews: Review[]; average: number; total: number }> {
+  const res = await fetch(`${API_URL}/api/courses/${courseId}/reviews`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return {
+    reviews: Array.isArray(data.reviews) ? data.reviews : [],
+    average: data.average ?? 0,
+    total: data.total ?? 0,
+  };
+}
+
+/** Crea/actualiza la reseña del usuario para un curso (requiere inscripción). */
+export async function postReview(
+  courseId: string,
+  rating: number,
+  comment?: string
+): Promise<void> {
+  const res = await fetch(`${API_URL}/api/courses/${courseId}/reviews`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ rating, comment }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error ?? `HTTP ${res.status}`);
+  }
+}
+
+export type Referral = {
+  referralCode: string | null;
+  referralLink: string;
+  totalReferrals: number;
+  pendingReferrals: number;
+  earnedReferrals: number;
+  totalEarnedCents: number;
+  totalPaidCents: number;
+};
+
+/** Datos del programa de referidos del usuario (código, link, stats). */
+export async function getReferral(): Promise<Referral> {
+  const res = await fetch(`${API_URL}/api/me/referral`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()) as Referral;
+}
+
 export type MyProfile = {
   fullName: string;
   email: string;
