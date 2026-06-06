@@ -760,6 +760,27 @@ export async function answerGame(
   });
 }
 
+// ─── Empresas (solicitud pública de cotización) ─────────────────────────────
+export async function submitQuoteRequest(data: {
+  companyName: string;
+  contactName: string;
+  contactEmail: string;
+  contactPhone?: string | null;
+  companySize?: string | null;
+  interests?: string | null;
+  message?: string | null;
+}): Promise<void> {
+  const res = await fetch(`${API_URL}/api/business/quote-requests`, {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+}
+
 // ─── Admin ────────────────────────────────────────────────────────────────────
 export type AdminApplication = {
   id: string;
