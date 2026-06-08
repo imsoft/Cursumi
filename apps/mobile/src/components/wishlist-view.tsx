@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -74,6 +75,9 @@ export function WishlistView({ onBack }: { onBack: () => void }) {
           }
           renderItem={({ item }) => (
             <ThemedView style={styles.card}>
+              {item.imageUrl ? (
+                <Image source={{ uri: item.imageUrl }} style={styles.thumb} resizeMode="cover" />
+              ) : null}
               <View style={styles.cardBody}>
                 <ThemedText type="subtitle" numberOfLines={2}>
                   {item.title}
@@ -116,6 +120,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(127,127,127,0.2)",
     gap: 12,
   },
+  thumb: { width: 56, height: 56, borderRadius: 10, backgroundColor: "rgba(127,127,127,0.1)" },
   cardBody: { flex: 1, gap: 4 },
   price: { color: PURPLE, fontWeight: "600" },
   removeBtn: {
