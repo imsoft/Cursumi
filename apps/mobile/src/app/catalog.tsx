@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
@@ -99,22 +100,27 @@ export default function CatalogScreen() {
               }
             >
               <ThemedView style={styles.card}>
-                <View style={styles.cardHeader}>
-                  <ThemedText type="subtitle" numberOfLines={2} style={styles.cardTitle}>
-                    {item.title}
-                  </ThemedText>
-                  <TouchableOpacity
-                    onPress={() => toggleSaved(item.id)}
-                    hitSlop={10}
-                    style={styles.heart}
-                  >
-                    <ThemedText style={[styles.heartIcon, saved.has(item.id) && styles.heartActive]}>
-                      {saved.has(item.id) ? "♥" : "♡"}
+                {item.imageUrl ? (
+                  <Image source={{ uri: item.imageUrl }} style={styles.thumb} resizeMode="cover" />
+                ) : null}
+                <View style={styles.cardBody}>
+                  <View style={styles.cardHeader}>
+                    <ThemedText type="subtitle" numberOfLines={2} style={styles.cardTitle}>
+                      {item.title}
                     </ThemedText>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => toggleSaved(item.id)}
+                      hitSlop={10}
+                      style={styles.heart}
+                    >
+                      <ThemedText style={[styles.heartIcon, saved.has(item.id) && styles.heartActive]}>
+                        {saved.has(item.id) ? "♥" : "♡"}
+                      </ThemedText>
+                    </TouchableOpacity>
+                  </View>
+                  <ThemedText style={styles.price}>{formatPriceMXN(item.price)}</ThemedText>
+                  <ThemedText style={styles.cta}>Ver e inscribirme →</ThemedText>
                 </View>
-                <ThemedText style={styles.price}>{formatPriceMXN(item.price)}</ThemedText>
-                <ThemedText style={styles.cta}>Ver e inscribirme →</ThemedText>
               </ThemedView>
             </TouchableOpacity>
           )}
@@ -131,12 +137,13 @@ const styles = StyleSheet.create({
   list: { padding: 16, gap: 12, flexGrow: 1 },
   empty: { textAlign: "center", opacity: 0.7, paddingVertical: 60, paddingHorizontal: 24 },
   card: {
-    padding: 16,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(127,127,127,0.2)",
-    gap: 6,
+    overflow: "hidden",
   },
+  thumb: { width: "100%", height: 150, backgroundColor: "rgba(127,127,127,0.1)" },
+  cardBody: { padding: 16, gap: 6 },
   price: { color: PURPLE, fontWeight: "600" },
   cta: { fontSize: 13, opacity: 0.7 },
   cardHeader: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
