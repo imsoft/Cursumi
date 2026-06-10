@@ -32,6 +32,7 @@ import { TemplatesView } from "@/components/templates-view";
 import { BusinessView } from "@/components/business-view";
 import * as ImagePicker from "expo-image-picker";
 import { signOut, useSession } from "@/lib/auth";
+import { removePushToken } from "@/lib/push";
 import { getMyProfile, updateMyProfile, uploadAvatar, type MyProfile } from "@/lib/me";
 
 type ProfileMenu =
@@ -187,6 +188,7 @@ export default function ProfileScreen() {
   async function handleSignOut() {
     setSigningOut(true);
     try {
+      await removePushToken(); // desregistra el push antes de invalidar la sesión
       await signOut();
     } finally {
       setSigningOut(false);
