@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, BrandGradient } from "@/constants/theme";
 import {
   ActivityIndicator,
   Image,
@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -256,12 +257,16 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title" style={styles.heading}>
+      {/* Cabecera de marca: título + avatar + nombre (fija, como catalog/index) */}
+      <LinearGradient
+        colors={BrandGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.profileBanner}
+      >
+        <ThemedText type="title" style={styles.bannerTitle}>
           Perfil
         </ThemedText>
-
-        {/* Cabecera: avatar + nombre */}
         <View style={styles.header}>
           <TouchableOpacity onPress={pickAvatar} activeOpacity={0.8}>
             {profile?.avatar ? (
@@ -280,11 +285,13 @@ export default function ProfileScreen() {
             </View>
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <ThemedText type="subtitle">{name}</ThemedText>
-            <ThemedText style={styles.muted}>{email}</ThemedText>
+            <ThemedText type="subtitle" style={styles.bannerName}>{name}</ThemedText>
+            <ThemedText style={styles.bannerEmail}>{email}</ThemedText>
           </View>
         </View>
+      </LinearGradient>
 
+      <ScrollView contentContainerStyle={styles.scroll}>
         {loading && <ActivityIndicator style={styles.loader} color={PURPLE} />}
 
         {!loading && profile && (
@@ -426,7 +433,17 @@ function MenuRow({ label, onPress }: { label: string; onPress: () => void }) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: { padding: 16, gap: 16 },
-  heading: { paddingTop: 4 },
+  profileBanner: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    gap: 16,
+  },
+  bannerTitle: { color: Brand.onBrand, fontWeight: "800" },
+  bannerName: { color: Brand.onBrand },
+  bannerEmail: { color: Brand.onBrand, opacity: 0.85 },
   header: { flexDirection: "row", alignItems: "center", gap: 14 },
   avatar: { width: 64, height: 64, borderRadius: 32, backgroundColor: "rgba(127,127,127,0.1)" },
   avatarFallback: {

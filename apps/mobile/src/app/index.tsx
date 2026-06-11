@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, BrandGradient } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -66,9 +67,19 @@ export default function MyCoursesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <ThemedText type="title" style={styles.heading}>
-        Mis cursos
-      </ThemedText>
+      <LinearGradient
+        colors={BrandGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
+        <ThemedText type="title" style={styles.headerTitle}>
+          Mis cursos
+        </ThemedText>
+        <ThemedText style={styles.headerSubtitle}>
+          Continúa donde lo dejaste
+        </ThemedText>
+      </LinearGradient>
 
       {loading ? (
         <ActivityIndicator style={styles.loader} color={PURPLE} />
@@ -121,7 +132,16 @@ export default function MyCoursesScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  heading: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    gap: 4,
+  },
+  headerTitle: { color: Brand.onBrand, fontWeight: "800" },
+  headerSubtitle: { color: Brand.onBrand, opacity: 0.85, fontSize: 14 },
   loader: { marginTop: 40 },
   list: { padding: 16, gap: 12, flexGrow: 1 },
   card: {
