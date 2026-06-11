@@ -119,7 +119,7 @@ export default function CatalogScreen() {
                     </TouchableOpacity>
                   </View>
                   <ThemedText style={styles.price}>{formatPriceMXN(item.price)}</ThemedText>
-                  <ThemedText style={styles.cta}>Ver e inscribirme →</ThemedText>
+                  <ThemedText style={styles.cta}>Ver detalles →</ThemedText>
                 </View>
               </ThemedView>
             </TouchableOpacity>
