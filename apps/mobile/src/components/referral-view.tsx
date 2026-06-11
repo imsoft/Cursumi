@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   Share,
@@ -12,7 +13,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getReferral, type Referral } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function ReferralView({ onBack }: { onBack: () => void }) {
   const [data, setData] = useState<Referral | null>(null);

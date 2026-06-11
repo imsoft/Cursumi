@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -15,7 +16,7 @@ import { ThemedView } from "@/components/themed-view";
 import { CourseDetail } from "@/components/course-detail";
 import { getMyCourses, type StudentCourse } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 function categoryLabel(category: StudentCourse["category"]): string | null {
   if (!category) return null;

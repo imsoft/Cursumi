@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { createNote, deleteNote, getNotes, type Note } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 /** Notas del usuario para una lección concreta (listar + agregar + borrar). */
 export function NotesSection({

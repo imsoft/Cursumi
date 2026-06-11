@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { PanResponder, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
 import { ThemedText } from "@/components/themed-text";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 const COLORS = ["#111827", "#dc2626", "#2563eb", "#16a34a", "#f59e0b", PURPLE];
 const ERASER = "#ffffff";
 

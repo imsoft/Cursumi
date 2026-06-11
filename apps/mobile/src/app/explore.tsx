@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   Image,
@@ -55,7 +56,7 @@ type ProfileMenu =
   | "whiteboard"
   | "templates";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 function initials(name: string): string {
   return (

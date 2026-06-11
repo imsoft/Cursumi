@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -9,7 +10,7 @@ import {
   type Lesson,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function AssignmentView({
   lesson,

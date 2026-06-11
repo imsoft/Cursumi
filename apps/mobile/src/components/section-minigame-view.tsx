@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { completeSectionMinigame, parseMinigame, type Lesson, type Minigame } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
-const GREEN = "#16a34a";
+const PURPLE = Brand.primary;
+const GREEN = Brand.success;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];

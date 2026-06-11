@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -20,7 +21,7 @@ import {
   type InstructorProfile,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function InstructorAccountView({ onBack }: { onBack: () => void }) {
   const [profile, setProfile] = useState<InstructorProfile | null>(null);

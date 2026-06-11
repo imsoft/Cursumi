@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -17,7 +18,7 @@ import { ReflectionsSection } from "@/components/reflections-section";
 import { ChatView } from "@/components/chat-view";
 import { getMyCourseDetail, type CourseDetail as Detail } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 const typeLabels: Record<string, string> = {
   video: "Video",

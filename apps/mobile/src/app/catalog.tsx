@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Brand, BrandGradient } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -9,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 import * as WebBrowser from "expo-web-browser";
 
 import { ThemedText } from "@/components/themed-text";
@@ -17,7 +19,7 @@ import { getCourses, API_URL, type CourseSummary } from "@/lib/api";
 import { getWishlist, toggleWishlist } from "@/lib/me";
 import { formatPriceMXN } from "@cursumi/shared";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export default function CatalogScreen() {
   const [courses, setCourses] = useState<CourseSummary[]>([]);
@@ -73,9 +75,19 @@ export default function CatalogScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <ThemedText type="title" style={styles.heading}>
-        Explorar
-      </ThemedText>
+      <LinearGradient
+        colors={BrandGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
+        <ThemedText type="title" style={styles.headerTitle}>
+          Explorar
+        </ThemedText>
+        <ThemedText style={styles.headerSubtitle}>
+          Descubre cursos de instructores expertos
+        </ThemedText>
+      </LinearGradient>
 
       {loading ? (
         <ActivityIndicator style={styles.loader} color={PURPLE} />
@@ -132,7 +144,16 @@ export default function CatalogScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  heading: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    gap: 4,
+  },
+  headerTitle: { color: Brand.onBrand, fontWeight: "800" },
+  headerSubtitle: { color: Brand.onBrand, opacity: 0.85, fontSize: 14 },
   loader: { marginTop: 40 },
   list: { padding: 16, gap: 12, flexGrow: 1 },
   empty: { textAlign: "center", opacity: 0.7, paddingVertical: 60, paddingHorizontal: 24 },

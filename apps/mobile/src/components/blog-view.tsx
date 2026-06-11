@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -15,7 +16,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getBlogPost, getBlogPosts, type BlogPost, type BlogPostSummary } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 function contentToHtml(content: string): string {
   const isHtml = content.includes("<");

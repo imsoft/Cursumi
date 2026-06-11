@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -19,7 +20,7 @@ import { SectionMinigameView } from "@/components/section-minigame-view";
 import { NotesSection } from "@/components/notes-section";
 import { completeLesson, getLesson, type Lesson } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 function muxPlaybackId(url: string): string | null {
   const m = url.match(/stream\.mux\.com\/([^/.]+)/);

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,7 +14,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { answerGame, getGame, joinGame, type GameState } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 const OPTION_COLORS = ["#ef4444", "#3b82f6", "#f59e0b", "#22c55e"];
 
 export function GamesView({ onBack }: { onBack: () => void }) {

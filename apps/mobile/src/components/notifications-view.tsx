@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -17,7 +18,7 @@ import {
   type Notification,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 function timeAgo(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();

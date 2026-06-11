@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   Image,
@@ -17,8 +18,8 @@ import { TurnstileWebView } from "@/components/turnstile-webview";
 import { GoogleIcon } from "@/components/google-icon";
 import { signIn, signUp } from "@/lib/auth";
 
-const PURPLE = "#6d28d9";
-const BRAND = "#4f00f6";
+const PURPLE = Brand.primary;
+const BRAND = Brand.vivid;
 
 type Mode = "login" | "register";
 

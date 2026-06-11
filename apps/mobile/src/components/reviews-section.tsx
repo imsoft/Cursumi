@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getReviews, postReview, type Review } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
-const STAR = "#f59e0b";
+const PURPLE = Brand.primary;
+const STAR = Brand.warning;
 
 function Stars({ value, size = 16 }: { value: number; size?: number }) {
   return (

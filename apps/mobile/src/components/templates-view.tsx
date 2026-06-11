@@ -1,4 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Brand } from "@/constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as WebBrowser from "expo-web-browser";
 
@@ -6,7 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { API_URL } from "@/lib/api";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 // Mismas plantillas que la web (public/templates/).
 const TEMPLATES = [
