@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -59,14 +60,8 @@ export function SettingsView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader title="Configuración" onBack={onBack} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title">Configuración</ThemedText>
-
         <ThemedView style={styles.card}>
           <ThemedText type="subtitle">Cambiar contraseña</ThemedText>
 

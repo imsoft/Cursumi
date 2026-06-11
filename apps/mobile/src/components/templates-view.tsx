@@ -1,4 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as WebBrowser from "expo-web-browser";
@@ -28,14 +29,7 @@ const TEMPLATES = [
 export function TemplatesView({ onBack }: { onBack: () => void }) {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
-      <ThemedText type="title" style={styles.heading}>
-        Plantillas
-      </ThemedText>
+      <ScreenHeader title="Plantillas" onBack={onBack} />
       <View style={styles.list}>
         {TEMPLATES.map((t) => (
           <ThemedView key={t.id} style={styles.card}>

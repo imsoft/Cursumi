@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -52,14 +53,7 @@ export function InstructorView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
-      <ThemedText type="title" style={styles.heading}>
-        Instructor
-      </ThemedText>
+      <ScreenHeader title="Instructor" onBack={onBack} />
 
       <View style={styles.tabs}>
         {(["earnings", "analytics", "courses", "messages"] as Tab[]).map((t) => (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -168,14 +169,8 @@ export function CourseCreatorView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader title="Crear curso" onBack={onBack} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title">Crear curso</ThemedText>
-
         <Field label="Título" value={title} onChangeText={setTitle} />
         <Field label="Descripción" value={description} onChangeText={setDescription} multiline />
 

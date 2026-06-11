@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -116,14 +117,7 @@ export function AdminView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
-      <ThemedText type="title" style={styles.heading}>
-        Administración
-      </ThemedText>
+      <ScreenHeader title="Administración" onBack={onBack} />
       <ThemedView style={styles.menuCard}>
         {SECTIONS.map((s, i) => (
           <View key={s.id}>

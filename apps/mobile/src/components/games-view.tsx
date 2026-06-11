@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -78,13 +79,8 @@ export function GamesView({ onBack }: { onBack: () => void }) {
   if (!gameId) {
     return (
       <SafeAreaView style={styles.container} edges={["top"]}>
-        <View style={styles.topbar}>
-          <TouchableOpacity onPress={onBack} hitSlop={12}>
-            <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-          </TouchableOpacity>
-        </View>
+        <ScreenHeader title="Unirse a un juego" onBack={onBack} />
         <ScrollView contentContainerStyle={styles.joinScroll}>
-          <ThemedText type="title">Unirse a un juego</ThemedText>
           <ThemedText style={styles.muted}>
             Ingresa el código que te compartió tu instructor.
           </ThemedText>

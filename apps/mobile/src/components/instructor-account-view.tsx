@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -92,17 +93,11 @@ export function InstructorAccountView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader title="Perfil de instructor" onBack={onBack} />
       {loading ? (
         <ActivityIndicator style={styles.loader} color={PURPLE} />
       ) : (
         <ScrollView contentContainerStyle={styles.scroll}>
-          <ThemedText type="title">Perfil de instructor</ThemedText>
-
           {/* Cobros con Stripe */}
           <ThemedView style={styles.card}>
             <ThemedText type="subtitle">Cobros (Stripe)</ThemedText>
