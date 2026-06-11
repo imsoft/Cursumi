@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -152,13 +152,18 @@ const styles = StyleSheet.create({
   error: { padding: 16, color: "#dc2626" },
   list: { padding: 16, gap: 12, flexGrow: 1 },
   empty: { textAlign: "center", opacity: 0.7, paddingVertical: 60, paddingHorizontal: 24 },
-  card: {
+  card: { ...CardShadow,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(127,127,127,0.2)",
-    overflow: "hidden",
   },
-  thumb: { width: "100%", height: 150, backgroundColor: "rgba(127,127,127,0.1)" },
+  thumb: {
+    width: "100%",
+    height: 150,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    backgroundColor: "rgba(127,127,127,0.1)",
+  },
   cardBody: { padding: 14, gap: 4 },
   excerpt: { opacity: 0.7, fontSize: 14 },
   readerScroll: { padding: 16, gap: 12 },

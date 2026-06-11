@@ -56,6 +56,19 @@ export const Brand = {
 /** Gradiente de marca (morado profundo → vívido → magenta) para cabeceras/CTAs. */
 export const BrandGradient = [Brand.deep, Brand.vivid, Brand.accent] as const;
 
+/**
+ * Sombra/elevación estándar de tarjetas — acerca el look a las cards de la web
+ * (sombra suave con tinte de marca). Spread en el estilo: `card: { ...CardShadow, ... }`.
+ * iOS usa shadow*; Android usa elevation.
+ */
+export const CardShadow = {
+  shadowColor: Brand.deep,
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.1,
+  shadowRadius: 12,
+  elevation: 3,
+} as const;
+
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */

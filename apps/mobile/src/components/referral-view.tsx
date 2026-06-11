@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   Share,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   loader: { marginTop: 40 },
   error: { padding: 16, color: "#dc2626" },
   body: { padding: 16, gap: 16 },
-  card: {
+  card: { ...CardShadow,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(127,127,127,0.2)",
