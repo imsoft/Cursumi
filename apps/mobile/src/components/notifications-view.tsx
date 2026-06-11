@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -73,19 +74,17 @@ export function NotificationsView({
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-        {hasUnread && (
-          <TouchableOpacity onPress={handleMarkAll} hitSlop={12}>
-            <ThemedText style={styles.markAll}>Marcar todas</ThemedText>
-          </TouchableOpacity>
-        )}
-      </View>
-      <ThemedText type="title" style={styles.heading}>
-        Notificaciones
-      </ThemedText>
+      <ScreenHeader
+        title="Notificaciones"
+        onBack={onBack}
+        right={
+          hasUnread ? (
+            <TouchableOpacity onPress={handleMarkAll} hitSlop={12}>
+              <ThemedText style={styles.markAll}>Marcar todas</ThemedText>
+            </TouchableOpacity>
+          ) : undefined
+        }
+      />
 
       {loading ? (
         <ActivityIndicator style={styles.loader} color={PURPLE} />
@@ -131,7 +130,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   back: { color: PURPLE, fontSize: 16, fontWeight: "600" },
-  markAll: { color: PURPLE, fontSize: 14, fontWeight: "600" },
+  markAll: { color: Brand.onBrand, fontSize: 14, fontWeight: "600" },
   heading: { paddingHorizontal: 16, paddingBottom: 8 },
   loader: { marginTop: 40 },
   list: { padding: 16, gap: 10, flexGrow: 1 },

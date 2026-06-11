@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -64,18 +65,12 @@ export function BusinessView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title="Cursumi Business"
+        subtitle="Capacitación para tu equipo, con precio a la medida."
+        onBack={onBack}
+      />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedView style={styles.hero}>
-          <ThemedText style={styles.heroTitle}>Cursumi Business</ThemedText>
-          <ThemedText style={styles.heroSub}>
-            Capacitación para tu equipo, con precio a la medida.
-          </ThemedText>
-        </ThemedView>
 
         <View style={styles.benefits}>
           {BENEFITS.map((b) => (

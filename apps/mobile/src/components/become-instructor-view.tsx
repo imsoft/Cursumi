@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ScreenHeader } from "@/components/screen-header";
 import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -47,13 +48,8 @@ export function BecomeInstructorView({ onBack }: { onBack: () => void }) {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.topbar}>
-        <TouchableOpacity onPress={onBack} hitSlop={12}>
-          <ThemedText style={styles.back}>‹ Atrás</ThemedText>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader title="Conviértete en instructor" onBack={onBack} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title">Conviértete en instructor</ThemedText>
         <ThemedText style={styles.muted}>
           Comparte tu experiencia y cuéntanos por qué quieres enseñar en Cursumi.
         </ThemedText>
