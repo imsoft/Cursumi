@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   benefitRow: { flexDirection: "row", gap: 10, alignItems: "flex-start" },
   check: { color: "#16a34a", fontWeight: "800" },
   benefitText: { flex: 1, opacity: 0.85 },
-  card: {
+  card: { ...CardShadow,
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,

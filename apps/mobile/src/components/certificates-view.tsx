@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   loader: { marginTop: 40 },
   list: { padding: 16, gap: 12, flexGrow: 1 },
   empty: { textAlign: "center", opacity: 0.7, paddingVertical: 60, paddingHorizontal: 24 },
-  card: {
+  card: { ...CardShadow,
     padding: 18,
     borderRadius: 16,
     borderWidth: 1,

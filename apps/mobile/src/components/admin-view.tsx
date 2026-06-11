@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
   menuLabel: { fontSize: 15, fontWeight: "500" },
   chevron: { fontSize: 22, opacity: 0.4 },
   menuDivider: { height: 1, backgroundColor: "rgba(127,127,127,0.15)", marginLeft: 16 },
-  card: { borderRadius: 14, borderWidth: 1, borderColor: "rgba(127,127,127,0.2)", padding: 14, gap: 6 },
+  card: { ...CardShadow, borderRadius: 14, borderWidth: 1, borderColor: "rgba(127,127,127,0.2)", padding: 14, gap: 6 },
   cardTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   name: { fontWeight: "700", fontSize: 15 },
   sub: { opacity: 0.7, fontSize: 13 },

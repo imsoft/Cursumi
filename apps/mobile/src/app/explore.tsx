@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Brand, BrandGradient } from "@/constants/theme";
+import { Brand, BrandGradient, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   Image,
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
   },
   statNumber: { fontSize: 26, fontWeight: "800", color: PURPLE },
   statLabel: { fontSize: 13, opacity: 0.7 },
-  card: {
+  card: { ...CardShadow,
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,

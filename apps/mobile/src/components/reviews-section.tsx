@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   avgRow: { flexDirection: "row", alignItems: "center", gap: 6 },
   muted: { opacity: 0.7, fontSize: 13 },
-  card: {
+  card: { ...CardShadow,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(127,127,127,0.2)",

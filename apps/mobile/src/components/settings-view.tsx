@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   topbar: { paddingHorizontal: 16, paddingVertical: 8 },
   back: { color: PURPLE, fontSize: 16, fontWeight: "600" },
   scroll: { padding: 16, gap: 16 },
-  card: {
+  card: { ...CardShadow,
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,

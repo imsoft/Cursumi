@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Brand } from "@/constants/theme";
+import { Brand, CardShadow} from "@/constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as WebBrowser from "expo-web-browser";
 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   back: { color: PURPLE, fontSize: 16, fontWeight: "600" },
   heading: { paddingHorizontal: 16, paddingBottom: 8 },
   list: { padding: 16, gap: 12 },
-  card: {
+  card: { ...CardShadow,
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
