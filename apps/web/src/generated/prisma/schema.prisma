@@ -53,6 +53,7 @@ model User {
   learningReflections       LearningReflection[]
   wishlistItems             WishlistItem[]
   pushSubscriptions         PushSubscription[]
+  expoPushTokens            ExpoPushToken[]
 
   /// Código único para compartir — generado al crear la cuenta
   referralCode        String?    @unique
@@ -1078,6 +1079,18 @@ model PushSubscription {
   endpoint  String   @unique
   /// { p256dh: string; auth: string }
   keys      Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Token de Expo Push para notificaciones en la app móvil (ExponentPushToken[...]).
+model ExpoPushToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

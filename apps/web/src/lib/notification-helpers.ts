@@ -6,6 +6,7 @@
  */
 import { prisma } from "./prisma";
 import { sendPushToUser } from "./web-push";
+import { sendExpoPushToUser } from "./expo-push";
 
 export interface CreateNotificationInput {
   userId: string;
@@ -27,11 +28,13 @@ export async function createNotification(input: CreateNotificationInput) {
   });
 
   // Enviar push en background — nunca await
-  sendPushToUser(input.userId, {
+  const payload = {
     title: input.title,
     body: input.body,
     url: input.link,
-  }).catch(() => {}); // silencioso
+  };
+  sendPushToUser(input.userId, payload).catch(() => {}); // web (navegador)
+  sendExpoPushToUser(input.userId, payload).catch(() => {}); // móvil (Expo)
 
   return notification;
 }
