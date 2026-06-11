@@ -9,7 +9,7 @@ export async function GET(_req: Request, { params }: Params) {
     const { slug } = await params;
 
     const post = await prisma.blogPost.findFirst({
-      where: { slug, published: true },
+      where: { slug, published: true, publishedAt: { lte: new Date() } },
       select: {
         id: true,
         title: true,

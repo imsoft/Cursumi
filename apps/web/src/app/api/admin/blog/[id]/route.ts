@@ -11,6 +11,8 @@ const updateSchema = z.object({
   coverImageUrl: z.string().url().optional().nullable().or(z.literal("")),
   tags: z.array(z.string()).optional(),
   published: z.boolean().optional(),
+  // Fecha/hora de publicación (ISO) — permite programar o reprogramar.
+  publishedAt: z.string().datetime().optional().nullable(),
 });
 
 type Params = { params: Promise<{ id: string }> };
@@ -35,18 +37,26 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       }
     }
 
-    const publishedAt =
-      body.published === true && !existing.publishedAt
-        ? new Date()
-        : body.published === false
-        ? null
-        : existing.publishedAt;
+    // Resolver publishedAt:
+    //  - published=false → draft (null)
+    //  - fecha explícita → programar/reprogramar (vacía = ahora)
+    //  - publicar sin fecha y sin fecha previa → ahora
+    //  - en otro caso, conservar la existente
+    let publishedAt = existing.publishedAt;
+    if (body.published === false) {
+      publishedAt = null;
+    } else if (body.publishedAt !== undefined) {
+      publishedAt = body.publishedAt ? new Date(body.publishedAt) : new Date();
+    } else if (body.published === true && !existing.publishedAt) {
+      publishedAt = new Date();
+    }
 
+    const { publishedAt: _publishedAtInput, ...rest } = body;
     const post = await prisma.blogPost.update({
       where: { id },
       data: {
-        ...body,
-        coverImageUrl: body.coverImageUrl === "" ? null : body.coverImageUrl,
+        ...rest,
+        coverImageUrl: rest.coverImageUrl === "" ? null : rest.coverImageUrl,
         publishedAt,
       },
     });

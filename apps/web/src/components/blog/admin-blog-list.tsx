@@ -118,9 +118,24 @@ export function AdminBlogList() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="truncate font-medium">{post.title}</h3>
-                  <Badge variant={post.published ? "default" : "outline"} className="shrink-0">
-                    {post.published ? "Publicado" : "Borrador"}
-                  </Badge>
+                  {(() => {
+                    const scheduled =
+                      post.published &&
+                      !!post.publishedAt &&
+                      new Date(post.publishedAt).getTime() > Date.now();
+                    return (
+                      <Badge
+                        variant={post.published && !scheduled ? "default" : "outline"}
+                        className={
+                          scheduled
+                            ? "shrink-0 border-amber-500 text-amber-600"
+                            : "shrink-0"
+                        }
+                      >
+                        {scheduled ? "Programado" : post.published ? "Publicado" : "Borrador"}
+                      </Badge>
+                    );
+                  })()}
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   /blog/{post.slug} ·{" "}

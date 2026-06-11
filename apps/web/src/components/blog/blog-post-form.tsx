@@ -28,9 +28,20 @@ const schema = z.object({
   coverImageUrl: z.string().optional().or(z.literal("")),
   tags: z.array(z.string()).default([]),
   published: z.boolean().default(false),
+  // Fecha/hora local de publicación en formato datetime-local ("YYYY-MM-DDTHH:mm").
+  // Vacío = publicar de inmediato; futura = programar.
+  publishedAt: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
+
+/** ISO (UTC) → valor para <input type="datetime-local"> en hora local. */
+function isoToLocalInput(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 interface BlogPostFormProps {
   initialValues?: Partial<FormValues>;
@@ -77,6 +88,10 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
       tags: [],
       published: false,
       ...initialValues,
+      // initialValues.publishedAt llega como ISO; el input lo necesita en hora local.
+      publishedAt: initialValues?.publishedAt
+        ? isoToLocalInput(initialValues.publishedAt)
+        : "",
     },
   });
 
@@ -111,7 +126,15 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, coverImageUrl: values.coverImageUrl || null }),
+        body: JSON.stringify({
+          ...values,
+          coverImageUrl: values.coverImageUrl || null,
+          // datetime-local (hora local) → ISO. Vacío = sin fecha explícita
+          // (crear: publica ahora; editar: conserva la fecha actual).
+          publishedAt: values.publishedAt
+            ? new Date(values.publishedAt).toISOString()
+            : undefined,
+        }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -225,6 +248,24 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
                   ? "El artículo será visible en el blog público."
                   : "Guardado como borrador — no visible públicamente."}
               </p>
+
+              {form.watch("published") && (
+                <div className="space-y-1.5 border-t pt-4">
+                  <Label htmlFor="publishedAt">Programar publicación (opcional)</Label>
+                  <Input id="publishedAt" type="datetime-local" {...form.register("publishedAt")} />
+                  {(() => {
+                    const v = form.watch("publishedAt");
+                    const future = !!v && new Date(v).getTime() > Date.now();
+                    return (
+                      <p className="text-xs text-muted-foreground">
+                        {future
+                          ? `Se publicará automáticamente el ${new Date(v).toLocaleString("es-MX", { dateStyle: "long", timeStyle: "short" })}.`
+                          : "Déjalo vacío para publicar de inmediato; elige una fecha futura para programarlo."}
+                      </p>
+                    );
+                  })()}
+                </div>
+              )}
             </CardContent>
           </Card>
 

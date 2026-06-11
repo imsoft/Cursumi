@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
 
     const where = {
       published: true,
+      // Solo posts cuya fecha de publicación ya llegó (los programados quedan ocultos).
+      publishedAt: { lte: new Date() },
       ...(tag ? { tags: { has: tag } } : {}),
     };
 
