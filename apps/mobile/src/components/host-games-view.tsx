@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -24,7 +25,7 @@ import {
   type NewGameQuestion,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 type Screen = { name: "list" } | { name: "create" } | { name: "control"; gameId: string };
 
 export function HostGamesView({ onBack }: { onBack: () => void }) {

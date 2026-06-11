@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,7 +14,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { submitQuoteRequest } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 const SIZES = ["1-10", "11-50", "51-200", "201-500", "500+"];
 
 const BENEFITS = [

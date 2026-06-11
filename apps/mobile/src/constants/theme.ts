@@ -26,6 +26,36 @@ export const Colors = {
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
+/**
+ * Paleta de MARCA Cursumi — fuente única de verdad para los colores de marca y
+ * semánticos. Alineada con los tokens de la web (`--primary` oklch(0.541 0.281 293)
+ * ≈ #6d28d9 y los morados de marca #4f00f6 / #a400e3 / #1f1147).
+ *
+ * Úsala en vez de hardcodear hexadecimales: `import { Brand } from "@/constants/theme"`.
+ */
+export const Brand = {
+  /** Morado principal (= web --primary). Acento por defecto. */
+  primary: '#6d28d9',
+  /** Morado profundo de marca (cabeceras, fondos de marca). */
+  deep: '#1f1147',
+  /** Acento vívido (splash, gradientes, CTAs destacados). */
+  vivid: '#4f00f6',
+  /** Magenta de marca (extremo del gradiente). */
+  accent: '#a400e3',
+  /** Texto/icono sobre superficies de marca. */
+  onBrand: '#ffffff',
+
+  // Semánticos (familia Tailwind, igual que la web)
+  success: '#16a34a',
+  danger: '#dc2626',
+  warning: '#f59e0b',
+  /** Texto atenuado / placeholders. */
+  muted: '#9ca3af',
+} as const;
+
+/** Gradiente de marca (morado profundo → vívido → magenta) para cabeceras/CTAs. */
+export const BrandGradient = [Brand.deep, Brand.vivid, Brand.accent] as const;
+
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */

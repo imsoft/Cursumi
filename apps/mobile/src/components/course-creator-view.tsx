@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -22,7 +23,7 @@ import {
   type NewSection,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
 const MODALITIES: { v: "virtual" | "presencial" | "live"; l: string }[] = [
   { v: "virtual", l: "Virtual" },

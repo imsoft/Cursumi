@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -13,7 +14,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getOrgMaterials, type OrgMaterial } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function OrgMaterialsView({ onBack }: { onBack: () => void }) {
   const [materials, setMaterials] = useState<OrgMaterial[]>([]);

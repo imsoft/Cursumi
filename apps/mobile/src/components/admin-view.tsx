@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -45,7 +46,7 @@ import {
 } from "@/lib/me";
 import { formatPriceMXN } from "@cursumi/shared";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 type Section =
   | "stats"

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -15,7 +16,7 @@ import { getCourses, type CourseSummary } from "@/lib/api";
 import { getWishlist, toggleWishlist } from "@/lib/me";
 import { formatPriceMXN } from "@cursumi/shared";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function WishlistView({ onBack }: { onBack: () => void }) {
   const [courses, setCourses] = useState<CourseSummary[]>([]);

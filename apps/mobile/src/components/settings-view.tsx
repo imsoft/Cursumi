@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,7 +14,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { authClient } from "@/lib/auth";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function SettingsView({ onBack }: { onBack: () => void }) {
   const [current, setCurrent] = useState("");

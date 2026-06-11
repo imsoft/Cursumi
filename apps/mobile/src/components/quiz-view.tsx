@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -10,9 +11,9 @@ import {
   type Lesson,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
-const GREEN = "#16a34a";
-const RED = "#dc2626";
+const PURPLE = Brand.primary;
+const GREEN = Brand.success;
+const RED = Brand.danger;
 
 function mmss(total: number): string {
   const m = Math.floor(total / 60);

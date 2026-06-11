@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Brand } from "@/constants/theme";
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { getReflections, postReflection, type Reflection } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function ReflectionsSection({ courseId }: { courseId: string }) {
   const [items, setItems] = useState<Reflection[]>([]);

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
   FlatList,
@@ -21,7 +22,7 @@ import {
   type ChatMessage,
 } from "@/lib/me";
 
-const PURPLE = "#6d28d9";
+const PURPLE = Brand.primary;
 
 export function ChatView({ courseId, onBack }: { courseId: string; onBack: () => void }) {
   const { data: session } = useSession();
