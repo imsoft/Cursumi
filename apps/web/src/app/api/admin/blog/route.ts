@@ -11,6 +11,8 @@ const createSchema = z.object({
   coverImageUrl: z.string().url().optional().or(z.literal("")),
   tags: z.array(z.string()).default([]),
   published: z.boolean().default(false),
+  // Fecha/hora de publicación (ISO). Si es futura y published=true → programado.
+  publishedAt: z.string().datetime().optional(),
 });
 
 export async function GET() {
@@ -53,11 +55,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ya existe un post con ese slug" }, { status: 409 });
     }
 
+    const { publishedAt: publishedAtInput, ...rest } = body;
+    // published=true sin fecha → ahora; con fecha futura → programado; draft → null.
+    const publishedAt = rest.published
+      ? publishedAtInput
+        ? new Date(publishedAtInput)
+        : new Date()
+      : null;
+
     const post = await prisma.blogPost.create({
       data: {
-        ...body,
-        coverImageUrl: body.coverImageUrl || null,
-        publishedAt: body.published ? new Date() : null,
+        ...rest,
+        coverImageUrl: rest.coverImageUrl || null,
+        publishedAt,
         authorId: session.user.id,
       },
     });

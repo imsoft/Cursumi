@@ -14,7 +14,7 @@ const siteUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").repla
 
 async function getPost(slug: string) {
   return prisma.blogPost.findFirst({
-    where: { slug, published: true },
+    where: { slug, published: true, publishedAt: { lte: new Date() } },
     select: {
       id: true,
       title: true,
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export async function generateStaticParams() {
   try {
     const posts = await prisma.blogPost.findMany({
-      where: { published: true },
+      where: { published: true, publishedAt: { lte: new Date() } },
       select: { slug: true },
     });
     return posts.map((p) => ({ slug: p.slug }));

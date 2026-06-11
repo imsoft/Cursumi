@@ -22,6 +22,7 @@ export default async function EditBlogPostPage({ params }: Params) {
       coverImageUrl: true,
       tags: true,
       published: true,
+      publishedAt: true,
     },
   });
 
@@ -41,6 +42,7 @@ export default async function EditBlogPostPage({ params }: Params) {
           coverImageUrl: post.coverImageUrl ?? "",
           tags: post.tags,
           published: post.published,
+          publishedAt: post.publishedAt?.toISOString() ?? "",
         }}
       />
     </div>
