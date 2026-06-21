@@ -63,6 +63,7 @@ export default function PrivacyPage() {
               <li><strong>Neon / Vercel:</strong> infraestructura de base de datos y hosting.</li>
               <li><strong>Cloudinary:</strong> almacenamiento de imágenes y videos.</li>
               <li><strong>Resend:</strong> envío de correos electrónicos transaccionales.</li>
+              <li><strong>Google (Gemini):</strong> funciones de inteligencia artificial, como recomendaciones de cursos y asistencia sobre el contenido. Consulta los detalles en nuestra <a href="/ai" className="text-primary underline underline-offset-4">Política de uso de IA</a>.</li>
             </ul>
             <p className="mt-3">
               No vendemos, alquilamos ni compartimos tus datos con terceros con fines comerciales
