@@ -18,7 +18,7 @@
     },
     {
       "path": "/api/cron/publish-blog",
-      "schedule": "* * * * *"
+      "schedule": "0 14 * * *"
     }
   ]
 }
