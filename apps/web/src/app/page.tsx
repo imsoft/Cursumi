@@ -13,13 +13,13 @@ import { Testimonials } from "@/components/testimonials";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata = {
-  title: "Formación presencial y online para crecer con expertos",
+  title: "Cursos en video y en vivo para crecer con expertos",
   description:
-    "Descubre cursos virtuales y presenciales con instructores verificados. Aprende habilidades prácticas con Cursumi.",
+    "Descubre cursos en video a tu ritmo y cursos por evento (presenciales o por videollamada) con instructores verificados. Aprende habilidades prácticas con Cursumi.",
   alternates: { canonical: baseUrl },
   openGraph: {
-    title: "Cursumi | Cursos virtuales y presenciales",
-    description: "Aprende con instructores expertos en cursos online y presenciales.",
+    title: "Cursumi | Cursos en video y en vivo",
+    description: "Aprende con instructores expertos: cursos en video a tu ritmo o eventos en vivo.",
     url: `${baseUrl}/`,
     type: "website",
     images: [
@@ -27,7 +27,7 @@ export const metadata = {
         url: `${baseUrl}/api/og`,
         width: 1200,
         height: 630,
-        alt: "Cursumi - Formación presencial y online",
+        alt: "Cursumi - Aprende a tu ritmo o en vivo",
       },
     ],
   },

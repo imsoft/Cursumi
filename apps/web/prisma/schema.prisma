@@ -127,9 +127,16 @@ enum Role {
 }
 
 enum Modality {
+  /// Curso en video (on-demand): el alumno lo toma a su ritmo
   virtual
+  /// Curso por evento: sesiones con fecha; cada sesión es presencial o por videollamada
+  evento
+}
+
+/// Formato de una sesión de un curso por evento
+enum SessionFormat {
   presencial
-  live
+  online
 }
 
 enum CourseType {
@@ -404,10 +411,12 @@ model LessonProgress {
 model CourseSession {
   id          String   @id @default(cuid())
   courseId    String
+  /// presencial: sede física · online: videollamada
+  format      SessionFormat @default(presencial)
   city        String
   state       String?
-  location    String   // dirección/sede (presencial) o texto corto (en vivo)
-  /// Meet, Zoom, Teams, etc. — principalmente para modalidad live
+  location    String   // dirección/sede (presencial) o etiqueta corta (online)
+  /// Meet, Zoom, Teams, etc. — obligatorio cuando format = online
   meetingUrl  String?
   date        DateTime
   startTime   String   // "09:00"

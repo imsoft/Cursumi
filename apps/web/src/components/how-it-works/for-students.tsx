@@ -25,7 +25,7 @@ const studentSteps = [
     step: "04",
     title: "Aprender y certificarte",
     description:
-      "Clases online o presenciales, comunidad activa y certificado digital al terminar.",
+      "Clases en video o en vivo, comunidad activa y certificado digital al terminar.",
   },
 ];
 

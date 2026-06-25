@@ -16,7 +16,7 @@ export const HowItWorksHero = () => {
           </span>
         </h1>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Cursumi conecta estudiantes con cursos virtuales y presenciales.
+          Cursumi conecta estudiantes con cursos en video y eventos en vivo.
           Instructores con herramientas para crear, publicar y gestionar. Elige
           tu camino:
         </p>

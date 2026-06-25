@@ -3,9 +3,9 @@ import { ShieldCheck, Users, Globe, Columns } from "lucide-react";
 
 const benefits = [
   {
-    title: "Cursos virtuales y presenciales en un mismo lugar",
+    title: "Cursos en video y por evento en un mismo lugar",
     description:
-      "Activa sesiones en vivo, contenido grabado o clases presenciales con controles claros de capacidad.",
+      "Sube contenido en video o crea eventos con sesiones presenciales o por videollamada, con controles claros de capacidad.",
     icon: Globe,
   },
   {

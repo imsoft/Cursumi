@@ -50,7 +50,7 @@ const createCourseSchema = z.object({
   description: z.string().min(1).max(5000),
   category: z.string().min(1),
   level: z.string().min(1),
-  modality: z.enum(["virtual", "presencial", "live"]),
+  modality: z.enum(["virtual", "evento"]),
   state: z.string().max(80).optional(),
   city: z.string().max(100).optional(),
   location: z.string().max(200).optional(),

@@ -20,9 +20,9 @@ interface PublicCourseDetailCTAProps {
   price: number;
   enrollAction: EnrollAction;
   returnUrl: string;
-  /** Presencial gratis con código de acceso */
+  /** Curso por evento gratis con código de acceso */
   requiresJoinCode?: boolean;
-  /** Sesiones presenciales disponibles (solo para cursos presenciales) */
+  /** Sesiones disponibles (solo para cursos por evento) */
   sessions?: PickableSession[];
 }
 

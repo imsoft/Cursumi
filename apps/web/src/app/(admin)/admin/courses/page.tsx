@@ -14,7 +14,7 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import Link from "next/link";
 
 type CourseStatus = "published" | "draft" | "archived" | "pending";
-type Modality = "virtual" | "presencial" | "live";
+type Modality = "virtual" | "evento";
 
 interface AdminCourse {
   id: string;
@@ -40,9 +40,8 @@ const statusOptions = [
 
 const modalityOptions = [
   { value: "all", label: "Todas" },
-  { value: "virtual", label: "Virtual" },
-  { value: "live", label: "En vivo" },
-  { value: "presencial", label: "Presencial" },
+  { value: "virtual", label: "En video" },
+  { value: "evento", label: "Por evento" },
 ];
 
 const getStatusBadge = (status: CourseStatus) => {
@@ -269,7 +268,7 @@ export default function AdminCoursesPage() {
                       </div>
                     </div>
                     <div className="flex gap-2 shrink-0">
-                      {course.modality === "presencial" && (
+                      {course.modality === "evento" && (
                         <Link href={`/admin/courses/${course.id}/planning`}>
                           <Button variant="outline" size="sm">
                             <FileText className="mr-1.5 h-3.5 w-3.5" />

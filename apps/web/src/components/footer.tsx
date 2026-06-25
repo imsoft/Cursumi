@@ -18,6 +18,11 @@ const footerNav = [
 const legalNav = [
   { label: "Privacidad", href: "/privacy" },
   { label: "Términos de uso", href: "/terms" },
+  { label: "Cookies", href: "/cookies" },
+  { label: "Reembolsos", href: "/refunds" },
+  { label: "Para instructores", href: "/instructor-terms" },
+  { label: "Propiedad intelectual", href: "/copyright" },
+  { label: "Uso de IA", href: "/ai" },
 ];
 
 export const Footer = () => {
@@ -52,7 +57,7 @@ export const Footer = () => {
             />
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Cursos presenciales y virtuales con instructores validados y soporte
+            Cursos en video y eventos en vivo con instructores validados y soporte
             completo para conectar talento con oportunidades reales.
           </p>
           {/* Social icons row */}

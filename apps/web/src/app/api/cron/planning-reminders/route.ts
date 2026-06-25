@@ -15,9 +15,9 @@ export async function GET(req: NextRequest) {
   const availableTypes = PLANNING_DOCUMENTS.filter((d) => d.available).map((d) => d.type);
   const total = availableTypes.length;
 
-  // Cursos presenciales que tengan al menos 1 documento de planeación guardado
+  // Cursos por evento que tengan al menos 1 documento de planeación guardado
   const coursesWithDocs = await prisma.coursePlanningDocument.findMany({
-    where: { course: { modality: "presencial" } },
+    where: { course: { modality: "evento" } },
     select: { courseId: true, status: true },
   });
 

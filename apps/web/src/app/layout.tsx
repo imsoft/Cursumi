@@ -40,7 +40,7 @@ const websiteJsonLd = {
   "@type": "WebSite",
   name: "Cursumi",
   url: siteUrl,
-  description: "Plataforma de cursos virtuales y presenciales con instructores expertos.",
+  description: "Plataforma de cursos en video y eventos en vivo con instructores expertos.",
   publisher: { "@type": "Organization", name: "Cursumi", url: siteUrl },
   potentialAction: {
     "@type": "SearchAction",
@@ -56,11 +56,11 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Cursumi · Formación presencial y online",
+    default: "Cursumi · Aprende a tu ritmo o en vivo",
     template: "%s · Cursumi",
   },
   description:
-    "Cursumi conecta estudiantes e instructores en cursos virtuales y presenciales que generan resultados reales.",
+    "Cursumi conecta estudiantes e instructores en cursos en video y eventos en vivo que generan resultados reales.",
   applicationName: "Cursumi",
   keywords: [
     "cursos",
@@ -83,15 +83,15 @@ export const metadata: Metadata = {
     locale: "es_MX",
     url: siteUrl,
     siteName: "Cursumi",
-    title: "Cursumi · Formación presencial y online",
+    title: "Cursumi · Aprende a tu ritmo o en vivo",
     description:
-      "Plataforma de cursos virtuales y presenciales con instructores expertos y experiencias de aprendizaje completas.",
+      "Plataforma de cursos en video y eventos en vivo con instructores expertos y experiencias de aprendizaje completas.",
     images: [
       {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: "Cursumi - Formación presencial y online",
+        alt: "Cursumi - Aprende a tu ritmo o en vivo",
       },
     ],
   },
@@ -99,9 +99,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@cursumi",
     creator: "@cursumi",
-    title: "Cursumi · Formación presencial y online",
+    title: "Cursumi · Aprende a tu ritmo o en vivo",
     description:
-      "Cursos virtuales y presenciales con instructores expertos. Aprende, practica y consigue resultados reales.",
+      "Cursos en video y en vivo con instructores expertos. Aprende, practica y consigue resultados reales.",
     images: [ogImage],
   },
   icons: {

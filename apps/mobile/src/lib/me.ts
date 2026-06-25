@@ -1141,7 +1141,12 @@ export type NewCoursePayload = {
   description: string;
   category: string;
   level: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
+  /** Derivado de la modalidad: virtual → ondemand · evento → fechado */
+  courseType: "ondemand" | "fechado";
+  /** Fecha de inicio (ISO) o "" si no aplica */
+  startDate: string;
+  duration: string;
   price: number;
   imageUrl?: string;
   sections: NewSection[];

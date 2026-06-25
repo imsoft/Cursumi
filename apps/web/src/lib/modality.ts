@@ -1,7 +1,7 @@
 export const MODALITY_CONFIG = {
   virtual: {
-    label: "Curso virtual (vídeo)",
-    shortLabel: "Virtual",
+    label: "Curso en video",
+    shortLabel: "Video",
     color: {
       bg: "bg-blue-500/10",
       text: "text-blue-600 dark:text-blue-400",
@@ -13,9 +13,9 @@ export const MODALITY_CONFIG = {
     },
     description: "Contenido bajo demanda: vídeos, textos y actividades que el alumno ve a su ritmo.",
   },
-  live: {
-    label: "Clase en vivo (enlace)",
-    shortLabel: "En vivo",
+  evento: {
+    label: "Curso por evento",
+    shortLabel: "Evento",
     color: {
       bg: "bg-violet-500/10",
       text: "text-violet-600 dark:text-violet-400",
@@ -25,22 +25,35 @@ export const MODALITY_CONFIG = {
       ring: "ring-violet-500/30",
       leftBorder: "border-l-violet-500",
     },
-    description: "Sesiones en fecha y hora con enlace de Meet, Zoom u otra videollamada.",
-  },
-  presencial: {
-    label: "Curso presencial",
-    shortLabel: "Presencial",
-    color: {
-      bg: "bg-emerald-500/10",
-      text: "text-emerald-600 dark:text-emerald-400",
-      border: "border-emerald-500/20",
-      badgeBg: "bg-emerald-500",
-      accent: "from-emerald-500/8 to-emerald-600/8",
-      ring: "ring-emerald-500/30",
-      leftBorder: "border-l-emerald-500",
-    },
-    description: "Los estudiantes asisten físicamente a sede y horario definidos.",
+    description: "Sesiones con fecha y hora. Cada sesión puede ser presencial o por videollamada.",
   },
 } as const;
 
 export type Modality = keyof typeof MODALITY_CONFIG;
+
+/**
+ * Normaliza valores de modalidad (incluye legacy presencial/live) a las dos
+ * modalidades vigentes. Cualquier cosa que no sea "virtual" se considera evento.
+ */
+export function normalizeModality(modality: string): Modality {
+  return modality === "virtual" ? "virtual" : "evento";
+}
+
+/** Configuración del formato de una sesión de un curso por evento. */
+export const SESSION_FORMAT_CONFIG = {
+  presencial: {
+    label: "Presencial",
+    description: "Los estudiantes asisten físicamente a una sede.",
+  },
+  online: {
+    label: "Videollamada",
+    description: "Sesión en línea con enlace de Meet, Zoom u otra videollamada.",
+  },
+} as const;
+
+export type SessionFormat = keyof typeof SESSION_FORMAT_CONFIG;
+
+/** Normaliza el formato de sesión (legacy live -> online). */
+export function normalizeSessionFormat(format: string): SessionFormat {
+  return format === "online" || format === "live" ? "online" : "presencial";
+}

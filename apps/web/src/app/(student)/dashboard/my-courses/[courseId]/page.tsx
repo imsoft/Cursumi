@@ -225,18 +225,10 @@ export default async function MyCourseDetailPage({
               <Users className="h-4 w-4 shrink-0 text-muted-foreground" />
               <span>Inscritos en la plataforma: {course._count.enrollments}</span>
             </div>
-            {course.modality === "presencial" && (course.city || course.state || course.location) && (
+            {course.modality === "evento" && (
               <div className="flex items-start gap-2 text-sm text-foreground sm:col-span-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-                <span>
-                  {[formatMexicoLocation(course.city, course.state), course.location].filter(Boolean).join(" · ")}
-                </span>
-              </div>
-            )}
-            {course.modality === "live" && (
-              <div className="flex items-start gap-2 text-sm text-foreground sm:col-span-2">
-                <Video className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
-                <span>Clases en vivo por videollamada (enlace en tu sesión inscrita)</span>
+                <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
+                <span>Curso por evento: cada sesión es presencial o por videollamada.</span>
               </div>
             )}
           </div>
@@ -244,7 +236,7 @@ export default async function MyCourseDetailPage({
           {enrolledSession && (
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-4">
               <p className="text-sm font-semibold text-foreground">
-                {course.modality === "live" ? "Tu sesión en vivo" : "Tu sesión presencial"}
+                {enrolledSession.format === "online" ? "Tu sesión por videollamada" : "Tu sesión presencial"}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
                 {formatMexicoLocation(enrolledSession.city, enrolledSession.state)} — {enrolledSession.location}
@@ -257,7 +249,7 @@ export default async function MyCourseDetailPage({
                     rel="noopener noreferrer"
                     className="text-sm font-medium text-primary underline underline-offset-2"
                   >
-                    {course.modality === "presencial" ? "Unirse en línea (opción híbrida)" : "Abrir enlace de la reunión"}
+                    {enrolledSession.format === "presencial" ? "Unirse en línea (opción híbrida)" : "Abrir enlace de la reunión"}
                   </a>
                 </p>
               )}
@@ -274,7 +266,7 @@ export default async function MyCourseDetailPage({
             </div>
           )}
 
-          {course.modality === "presencial" && enrolledSession && (
+          {enrolledSession?.format === "presencial" && (
             <AnonymousQuestionsPanel sessionId={enrolledSession.id} />
           )}
 
@@ -293,7 +285,7 @@ export default async function MyCourseDetailPage({
             </div>
           )}
 
-          {(course.modality === "presencial" || course.modality === "live") &&
+          {course.modality === "evento" &&
             course.courseSessions &&
             course.courseSessions.length > 0 &&
             !enrolledSession && (

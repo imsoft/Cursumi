@@ -33,7 +33,7 @@ export default function HowItWorksPage() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "¿Necesito algo especial para tomar cursos virtuales?",
+        name: "¿Necesito algo especial para tomar cursos en video?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "Solo necesitas una conexión estable y un dispositivo con navegador actualizado. Algunas clases pueden requerir aplicaciones específicas.",
@@ -49,10 +49,10 @@ export default function HowItWorksPage() {
       },
       {
         "@type": "Question",
-        name: "¿Cómo creo un curso presencial?",
+        name: "¿Cómo creo un curso por evento?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Configura programa, logística, precios y fechas desde tu panel de instructor.",
+          text: "Eliges \"Curso por evento\" y agregas sesiones con fecha y hora; cada sesión puede ser presencial o por videollamada.",
         },
       },
       {

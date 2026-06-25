@@ -10,8 +10,8 @@ export async function getCourseSessionOrThrow(sessionId: string) {
     },
   });
   if (!cs) throw new ApiError(404, "Sesión no encontrada");
-  if (cs.course.modality !== "presencial") {
-    throw new ApiError(400, "Las preguntas anónimas solo aplican a cursos presenciales");
+  if (cs.format !== "presencial") {
+    throw new ApiError(400, "Las preguntas anónimas solo aplican a sesiones presenciales");
   }
   return cs;
 }

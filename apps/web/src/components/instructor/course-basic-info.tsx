@@ -10,41 +10,20 @@ import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Upload, Loader2, MapPin } from "lucide-react";
+import { ArrowRight, Upload, Loader2 } from "lucide-react";
 import { useRef, useMemo, useEffect, useState, useCallback } from "react";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import type { CourseFormData } from "./course-types";
-import { ModalityBadge } from "@/components/ui/modality-badge";
-import { MODALITY_CONFIG } from "@/lib/modality";
-import { MexicoStateCityFields } from "@/components/location/mexico-state-city-fields";
-import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
-const createBasicInfoSchema = (modality: "virtual" | "presencial" | "live") => {
-  const baseSchema = {
+const createBasicInfoSchema = (_modality: "virtual" | "evento") => {
+  // La sede ya no es a nivel curso: cada sesión del evento define su lugar o enlace.
+  return z.object({
     title: z.string().min(3, "El título debe tener al menos 3 caracteres"),
     description: z.string().min(10, "La descripción debe tener al menos 10 caracteres"),
     category: z.string().min(1, "Selecciona una categoría"),
     level: z.string().min(1, "Selecciona un nivel"),
-    modality: z.enum(["virtual", "presencial", "live"]),
+    modality: z.enum(["virtual", "evento"]),
     imageUrl: z.string().optional(),
-  };
-
-  if (modality === "presencial") {
-    return z.object({
-      ...baseSchema,
-      state: z.string().min(1, "Selecciona un estado"),
-      city: z.string().min(1, "Selecciona una ciudad o municipio"),
-      location: z.string().min(1, "La dirección es obligatoria para cursos presenciales"),
-      mapsUrl: z.preprocess(
-        (v) => (typeof v === "string" && v.trim() && !v.match(/^https?:\/\//i) ? `https://${v.trim()}` : v),
-        z.union([z.string().url("Ingresa una URL válida de Google Maps"), z.literal("")]).optional(),
-      ),
-    });
-  }
-
-  // virtual y en vivo: sin sede obligatoria (en vivo define enlace por sesión)
-  return z.object({
-    ...baseSchema,
     state: z.string().optional(),
     city: z.string().optional(),
     location: z.string().optional(),
@@ -106,13 +85,6 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
       imageUrl: data.imageUrl,
     },
   });
-
-  useEffect(() => {
-    if (modality === "presencial" && !(data.state ?? "").trim() && (data.city ?? "").trim()) {
-      const inferred = findStateForMunicipality(data.city!);
-      if (inferred) form.setValue("state", inferred);
-    }
-  }, [modality, data.state, data.city, form]);
 
   const imageUrl = form.watch("imageUrl");
   const hasImage = useMemo(() => Boolean(imageUrl), [imageUrl]);
@@ -214,57 +186,13 @@ export const CourseBasicInfo = ({ data, onUpdate, onNext }: CourseBasicInfoProps
 
         <Separator />
 
-        {modality === "live" && (
+        {modality === "evento" && (
           <div className="rounded-lg border border-violet-500/25 bg-violet-500/5 p-4">
-            <h3 className="text-sm font-semibold text-foreground">Clases en vivo</h3>
+            <h3 className="text-sm font-semibold text-foreground">Curso por evento</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              En el paso de precio y sesiones podrás agregar cada fecha y el enlace de Meet, Zoom, Teams u otra herramienta.
+              En el paso de precio y sesiones agregarás cada fecha. Por sesión podrás elegir si es
+              presencial (con sede y dirección) o por videollamada (con enlace de Meet, Zoom, etc.).
             </p>
-          </div>
-        )}
-
-        {modality === "presencial" && (
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">Ubicación del curso</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Indica dónde se realizará el curso presencial
-              </p>
-            </div>
-            <MexicoStateCityFields
-              state={form.watch("state") ?? ""}
-              city={form.watch("city") ?? ""}
-              onStateChange={(v) => form.setValue("state", v, { shouldValidate: true })}
-              onCityChange={(v) => form.setValue("city", v, { shouldValidate: true })}
-              stateError={form.formState.errors.state?.message}
-              cityError={form.formState.errors.city?.message}
-            />
-            <div>
-              <Input
-                label="Dirección / Lugar *"
-                {...form.register("location")}
-              />
-              {form.formState.errors.location && (
-                <p className="mt-1 text-xs text-destructive">
-                  {form.formState.errors.location.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Input
-                label="Enlace de Google Maps (opcional)"
-                {...form.register("mapsUrl")}
-              />
-              <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="h-3 w-3" />
-                Pega el enlace de Google Maps del lugar para que los alumnos puedan llegar fácilmente
-              </p>
-              {form.formState.errors.mapsUrl && (
-                <p className="mt-1 text-xs text-destructive">
-                  {(form.formState.errors.mapsUrl as { message?: string }).message}
-                </p>
-              )}
-            </div>
           </div>
         )}
 

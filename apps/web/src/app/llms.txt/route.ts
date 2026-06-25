@@ -32,9 +32,7 @@ export async function GET() {
           .map((c) => {
             const slug = c.slug || c.id;
             const instructor = c.instructor.name ? ` · Instructor: ${c.instructor.name}` : "";
-            const modality =
-              c.modality === "virtual" ? "Online" :
-              c.modality === "presencial" ? "Presencial" : "En vivo";
+            const modality = c.modality === "virtual" ? "En video" : "Por evento";
             const price = c.price === 0 ? "Gratis" : `$${c.price} MXN`;
             const desc = c.description
               ? ` ${c.description.replace(/<[^>]+>/g, "").slice(0, 120).trim()}…`
@@ -49,7 +47,7 @@ export async function GET() {
 
   const body = `# Cursumi
 
-> Plataforma de cursos virtuales y presenciales con instructores expertos en México. Conecta estudiantes e instructores para experiencias de aprendizaje reales.
+> Plataforma de cursos en video y eventos en vivo con instructores expertos en México. Conecta estudiantes e instructores para experiencias de aprendizaje reales.
 
 ## Páginas principales
 

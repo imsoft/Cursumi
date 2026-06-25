@@ -46,9 +46,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const image = course.imageUrl || ogFallback;
   const ogImageUrl = `${baseUrl}/api/og/course/${course.id}`;
 
-  const modalityLabel =
-    course.modality === "virtual" ? "online" :
-    course.modality === "presencial" ? "presencial" : "en vivo";
+  const modalityLabel = course.modality === "virtual" ? "en video" : "por evento";
 
   return {
     title: `${course.title} | Cursumi`,
@@ -161,10 +159,7 @@ export default async function PublicCourseDetailPage({
     educationalLevel: course.level,
     inLanguage: "es-MX",
     timeRequired: course.duration,
-    courseMode:
-      course.modality === "virtual" ? "online" :
-      course.modality === "live"    ? "online" :
-      "onsite",
+    courseMode: course.modality === "virtual" ? "online" : "blended",
     courseCode: course.id,
     ...(course.imageUrl && { image: course.imageUrl }),
     offers: {
@@ -233,12 +228,14 @@ export default async function PublicCourseDetailPage({
             <div className="flex items-center gap-2 text-sm text-foreground">
               {course.modality === "virtual" ? (
                 <Monitor className="h-4 w-4" />
-              ) : course.modality === "live" ? (
-                <Video className="h-4 w-4 text-violet-500" />
               ) : (
-                <MapPin className="h-4 w-4" />
+                <Calendar className="h-4 w-4 text-violet-500" />
               )}
-              <span>{formatMexicoLocation(course.city, course.state) || "Online"}</span>
+              <span>
+                {course.modality === "virtual"
+                  ? "Curso en video"
+                  : "Curso por evento (presencial o videollamada)"}
+              </span>
             </div>
             {course.startDate && (
               <div className="flex items-center gap-2 text-sm text-foreground">
@@ -273,13 +270,12 @@ export default async function PublicCourseDetailPage({
               returnUrl={returnUrl}
               requiresJoinCode={course.requiresJoinCode}
               sessions={
-                (course.modality === "presencial" || course.modality === "live") &&
-                course.courseSessions?.length
+                course.modality === "evento" && course.courseSessions?.length
                   ? course.courseSessions.map((s) => ({
                       id: s.id,
                       city: s.city,
                       location:
-                        course.modality === "live"
+                        s.format === "online"
                           ? "Videollamada (enlace tras inscribirte)"
                           : "Sede confirmada al inscribirte",
                       date: s.date.toISOString(),
@@ -287,7 +283,7 @@ export default async function PublicCourseDetailPage({
                       endTime: s.endTime,
                       isFull: s._count.enrollments >= s.maxStudents,
                       requiresJoinCode: s.requiresJoinCode,
-                      meetingUrl: course.modality === "presencial" ? s.meetingUrl : undefined,
+                      meetingUrl: s.format === "presencial" ? s.meetingUrl : undefined,
                     }))
                   : undefined
               }

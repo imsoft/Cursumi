@@ -13,9 +13,8 @@ const statusOptions = [
 
 const modalityOptions = [
   { value: "all", label: "Todas" },
-  { value: "virtual", label: "Virtual" },
-  { value: "live", label: "En vivo" },
-  { value: "presencial", label: "Presencial" },
+  { value: "virtual", label: "En video" },
+  { value: "evento", label: "Por evento" },
 ];
 
 interface MyCoursesFiltersProps {

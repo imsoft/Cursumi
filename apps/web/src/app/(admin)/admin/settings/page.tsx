@@ -134,7 +134,7 @@ export default function AdminSettingsPage() {
               <Label htmlFor="platform-description">Descripción</Label>
               <Textarea
                 id="platform-description"
-                defaultValue="Plataforma de cursos virtuales y presenciales"
+                defaultValue="Plataforma de cursos en video y eventos en vivo"
                 rows={3}
               />
             </div>

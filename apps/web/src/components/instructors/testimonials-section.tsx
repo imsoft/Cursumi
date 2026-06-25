@@ -11,7 +11,7 @@ const testimonials = [
     name: "Luis Herrera",
     area: "Programación web",
     quote:
-      "Me encanta cómo puedo gestionar estudiantes online y presenciales desde un solo panel y entregar certificados.",
+      "Me encanta cómo puedo gestionar estudiantes de cursos en video y en vivo desde un solo panel y entregar certificados.",
   },
   {
     name: "Verónica Díaz",

@@ -172,7 +172,7 @@ export async function sendWelcomeEmail({ to, name }: SendWelcomeEmailParams) {
           <td style="padding:8px 12px 8px 0;vertical-align:top;font-size:22px;width:36px;">📚</td>
           <td style="padding:8px 0;vertical-align:top;">
             <strong style="font-size:14px;color:#111827;">Explora el catálogo</strong>
-            <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">Cursos virtuales, presenciales y en vivo.</p>
+            <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">Cursos en video y eventos en vivo.</p>
           </td>
         </tr>
         <tr>

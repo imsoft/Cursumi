@@ -9,11 +9,11 @@ const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").repla
 
 export const metadata: Metadata = {
   title: "Cursos disponibles | Cursumi",
-  description: "Explora cursos virtuales y presenciales de programación, marketing, diseño y más.",
+  description: "Explora cursos en video y eventos en vivo de programación, marketing, diseño y más.",
   alternates: { canonical: `${baseUrl}/courses` },
   openGraph: {
     title: "Cursos disponibles | Cursumi",
-    description: "Explora cursos virtuales y presenciales de programación, marketing, diseño y más.",
+    description: "Explora cursos en video y eventos en vivo de programación, marketing, diseño y más.",
     images: [
       {
         url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",

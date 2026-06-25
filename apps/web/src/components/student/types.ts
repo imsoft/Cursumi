@@ -1,7 +1,7 @@
 export type StudentCourse = {
   id: string;
   title: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
   progress: number;
   nextSession?: string;
   instructorName: string;
@@ -23,7 +23,7 @@ export type UpcomingClass = {
   courseId: string;
   courseTitle: string;
   dateTime: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
   instructorName: string;
   city?: string;
   imageUrl?: string;
@@ -40,7 +40,7 @@ export type Certificate = {
   type: "accreditation" | "participation";
   score?: number;
   category: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
   hours?: number;
   imageUrl?: string;
   instructorSignatureUrl?: string | null;
@@ -54,6 +54,6 @@ export type Recommendation = {
   slug?: string;
   title: string;
   category: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
   imageUrl?: string;
 };

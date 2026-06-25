@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     where: {
       learningReflectionEmailSentAt: null,
       course: {
-        modality: { in: ["presencial", "live"] },
+        modality: "evento",
         status: "published",
       },
       session: {

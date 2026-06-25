@@ -19,7 +19,7 @@ export default async function CoursePlanningIndexPage({
   }
 
   const modality = course.modality as CourseModality;
-  if (modality !== "presencial" && modality !== "virtual") {
+  if (modality !== "evento" && modality !== "virtual") {
     return (
       <div className="space-y-6">
         <Button variant="ghost" size="sm" asChild>
@@ -28,7 +28,7 @@ export default async function CoursePlanningIndexPage({
           </Link>
         </Button>
         <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground">
-          La planeación didáctica está disponible para cursos presenciales y virtuales.
+          La planeación didáctica está disponible para cursos en video y por evento.
         </div>
       </div>
     );
@@ -43,7 +43,7 @@ export default async function CoursePlanningIndexPage({
   const isExpedientComplete = completed >= available.length;
   const nextPending = available.find((d) => statuses[d.type] !== "completed");
 
-  const sectionLabel = modality === "presencial"
+  const sectionLabel = modality === "evento"
     ? "Documentos de certificación (CONOCER / STPS)"
     : "Documentos de producción del curso";
 

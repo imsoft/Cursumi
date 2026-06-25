@@ -54,7 +54,7 @@ export function GET() {
               margin: 0,
             }}
           >
-            Formación presencial y online
+            Aprende a tu ritmo o en vivo
           </h1>
           <p
             style={{

@@ -51,7 +51,7 @@ export const CTASection = () => {
               Lanza tu próximo curso con Cursumi
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">
-              Publica tu curso presencial u online y deja que nuestro equipo te
+              Publica tu curso en video o por evento y deja que nuestro equipo te
               acompañe en la promoción, logística y certificación.
             </p>
           </motion.div>

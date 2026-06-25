@@ -7,7 +7,7 @@ const faqItems = [
   {
     question: "¿Puedo ofrecer cursos presenciales en mi ciudad?",
     answer:
-      "Claro. Puedes especificar la ciudad, cupo, lugar y logística; nosotros ayudamos con la visibilidad.",
+      "Claro. Crea un \"Curso por evento\" y marca cada sesión como presencial: especificas ciudad, cupo, lugar y logística. También puedes mezclar sesiones por videollamada en el mismo curso.",
   },
   {
     question: "¿Qué tipo de cursos están permitidos?",
