@@ -85,7 +85,7 @@ const faqs = [
   },
   {
     q: "¿Puedo publicar cursos presenciales y en vivo?",
-    a: "Sí. Cursumi soporta cursos virtuales, presenciales y sesiones en vivo. Configuras fechas, ubicación y capacidad desde tu panel.",
+    a: "Sí. Cursumi tiene dos tipos de curso: en video (a tu ritmo) y por evento. En un curso por evento cada sesión puede ser presencial o por videollamada; configuras fechas, ubicación y capacidad desde tu panel.",
   },
 ];
 

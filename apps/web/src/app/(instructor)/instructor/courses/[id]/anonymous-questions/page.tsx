@@ -45,7 +45,7 @@ export default async function InstructorAnonymousQuestionsPage({
 
   if (!course) notFound();
 
-  if (course.modality !== "presencial") {
+  if (course.modality !== "evento") {
     return (
       <div className="space-y-4">
         <Button variant="ghost" size="sm" asChild>

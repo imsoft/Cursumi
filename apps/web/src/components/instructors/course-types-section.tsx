@@ -2,22 +2,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const courseTypes = [
   {
-    title: "Cursos virtuales en vivo o grabados",
+    title: "Cursos en video",
     description:
-      "Sincroniza sesiones en vivo, sube módulos grabados y aprovecha la comunidad virtual.",
-    badge: "Virtual",
+      "Sube módulos grabados, textos y actividades; tus alumnos avanzan a su ritmo con certificado al terminar.",
+    badge: "A tu ritmo",
   },
   {
-    title: "Cursos presenciales por ciudad",
+    title: "Cursos por evento",
     description:
-      "Gestiona cupos, lugares y logística con controles sincronizados con tu calendario.",
-    badge: "Presencial",
-  },
-  {
-    title: "Talleres y bootcamps intensivos",
-    description:
-      "Sesiones inmersivas con mentorías y actividades prácticas para resultados veloces.",
-    badge: "Intensivo",
+      "Crea sesiones con fecha y hora; cada una puede ser presencial en sede o por videollamada. Gestiona cupos y logística.",
+    badge: "En vivo",
   },
 ];
 
@@ -32,7 +26,7 @@ export const InstructorsCourseTypes = () => {
           Diseña la modalidad que mejor se adapte a tu contenido
         </h2>
       </div>
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         {courseTypes.map((type) => (
           <Card key={type.title}>
             <CardHeader>

@@ -16,7 +16,7 @@ const benefits = [
   },
   {
     icon: Shield,
-    text: "Soporte completo en la logística de cursos presenciales",
+    text: "Soporte completo en la logística de cursos por evento",
   },
 ];
 

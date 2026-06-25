@@ -52,11 +52,7 @@ export const CoursePreview = ({
             {/* Course Info */}
             <Card
               className={`border border-border bg-card/90 border-t-4 ${
-                courseData.modality === "presencial"
-                  ? "border-t-emerald-500"
-                  : courseData.modality === "live"
-                    ? "border-t-violet-500"
-                    : "border-t-blue-500"
+                courseData.modality === "virtual" ? "border-t-blue-500" : "border-t-violet-500"
               }`}
             >
               <CardHeader>
@@ -79,7 +75,7 @@ export const CoursePreview = ({
                   <Badge>{courseData.category}</Badge>
                   <Badge variant="outline">{courseData.level}</Badge>
                 </div>
-                {(courseData.modality === "presencial" || courseData.modality === "live") && courseData.city && (
+                {courseData.modality === "evento" && courseData.city && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4 text-emerald-600" />
                     <span>

@@ -1,17 +1,17 @@
-import { Monitor, MapPin, Video } from "lucide-react";
-import { MODALITY_CONFIG, type Modality } from "@/lib/modality";
+import { Monitor, MapPin, Video, Calendar } from "lucide-react";
+import {
+  MODALITY_CONFIG,
+  normalizeModality,
+  SESSION_FORMAT_CONFIG,
+  normalizeSessionFormat,
+  type Modality,
+  type SessionFormat,
+} from "@/lib/modality";
 import { cn } from "@/lib/utils";
-
-function modalityKey(modality: string): Modality {
-  if (modality === "presencial") return "presencial";
-  if (modality === "live") return "live";
-  return "virtual";
-}
 
 function ModalityIcon({ modalityKey: k, className }: { modalityKey: Modality; className?: string }) {
   if (k === "virtual") return <Monitor className={className} />;
-  if (k === "live") return <Video className={className} />;
-  return <MapPin className={className} />;
+  return <Calendar className={className} />;
 }
 
 interface ModalityBadgeProps {
@@ -21,7 +21,7 @@ interface ModalityBadgeProps {
 }
 
 export function ModalityBadge({ modality, size = "sm", className }: ModalityBadgeProps) {
-  const key = modalityKey(modality);
+  const key = normalizeModality(modality);
   const config = MODALITY_CONFIG[key];
 
   return (
@@ -44,7 +44,7 @@ export function ModalityBadge({ modality, size = "sm", className }: ModalityBadg
 }
 
 export function ModalityOverlayBadge({ modality }: { modality: Modality | string }) {
-  const key = modalityKey(modality);
+  const key = normalizeModality(modality);
   const config = MODALITY_CONFIG[key];
 
   return (
@@ -56,6 +56,40 @@ export function ModalityOverlayBadge({ modality }: { modality: Modality | string
     >
       <ModalityIcon modalityKey={key} className="h-3 w-3" />
       {config.shortLabel}
+    </span>
+  );
+}
+
+/** Badge del formato de una sesión concreta: presencial o videollamada. */
+export function SessionFormatBadge({
+  format,
+  size = "sm",
+  className,
+}: {
+  format: SessionFormat | string;
+  size?: "sm" | "md";
+  className?: string;
+}) {
+  const key = normalizeSessionFormat(format);
+  const config = SESSION_FORMAT_CONFIG[key];
+  const Icon = key === "online" ? Video : MapPin;
+  const tone =
+    key === "online"
+      ? "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20"
+      : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border font-medium",
+        tone,
+        size === "sm" && "px-2 py-0.5 text-xs",
+        size === "md" && "px-3 py-1 text-sm",
+        className,
+      )}
+    >
+      <Icon className={size === "sm" ? "h-3 w-3" : "h-4 w-4"} />
+      {config.label}
     </span>
   );
 }

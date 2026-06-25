@@ -57,7 +57,7 @@ export const Footer = () => {
             />
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Cursos presenciales y virtuales con instructores validados y soporte
+            Cursos en video y eventos en vivo con instructores validados y soporte
             completo para conectar talento con oportunidades reales.
           </p>
           {/* Social icons row */}

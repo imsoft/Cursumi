@@ -2,7 +2,7 @@ import { Plus } from "lucide-react";
 
 const faqItems = [
   {
-    question: "¿Necesito algo especial para tomar cursos virtuales?",
+    question: "¿Necesito algo especial para tomar cursos en video?",
     answer:
       "Solo necesitas una conexión estable y un dispositivo con navegador actualizado. Algunas clases pueden requerir aplicaciones específicas que te notificaremos con anticipación.",
   },
@@ -12,9 +12,9 @@ const faqItems = [
       "Sí, ofrecemos métodos de pago locales en México y América Latina. Puedes ver las opciones disponibles durante el checkout.",
   },
   {
-    question: "¿Cómo creo un curso presencial?",
+    question: "¿Cómo creo un curso por evento?",
     answer:
-      "Define tu programa, logística, precios y fechas desde tu panel de instructor. Te apoyamos con plantillas y herramientas para publicar rápidamente.",
+      "Desde tu panel eliges \"Curso por evento\" y agregas sesiones con fecha y hora. Cada sesión puede ser presencial (con sede) o por videollamada. También puedes crear cursos en video para que el alumno aprenda a su ritmo.",
   },
   {
     question: "¿Puedo impartir cursos si soy independiente?",

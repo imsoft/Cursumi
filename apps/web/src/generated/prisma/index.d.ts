@@ -276,11 +276,18 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const Modality: {
   virtual: 'virtual',
-  presencial: 'presencial',
-  live: 'live'
+  evento: 'evento'
 };
 
 export type Modality = (typeof Modality)[keyof typeof Modality]
+
+
+export const SessionFormat: {
+  presencial: 'presencial',
+  online: 'online'
+};
+
+export type SessionFormat = (typeof SessionFormat)[keyof typeof SessionFormat]
 
 
 export const CourseType: {
@@ -421,6 +428,10 @@ export const Role: typeof $Enums.Role
 export type Modality = $Enums.Modality
 
 export const Modality: typeof $Enums.Modality
+
+export type SessionFormat = $Enums.SessionFormat
+
+export const SessionFormat: typeof $Enums.SessionFormat
 
 export type CourseType = $Enums.CourseType
 
@@ -21595,6 +21606,7 @@ export namespace Prisma {
   export type CourseSessionMinAggregateOutputType = {
     id: string | null
     courseId: string | null
+    format: $Enums.SessionFormat | null
     city: string | null
     state: string | null
     location: string | null
@@ -21611,6 +21623,7 @@ export namespace Prisma {
   export type CourseSessionMaxAggregateOutputType = {
     id: string | null
     courseId: string | null
+    format: $Enums.SessionFormat | null
     city: string | null
     state: string | null
     location: string | null
@@ -21627,6 +21640,7 @@ export namespace Prisma {
   export type CourseSessionCountAggregateOutputType = {
     id: number
     courseId: number
+    format: number
     city: number
     state: number
     location: number
@@ -21653,6 +21667,7 @@ export namespace Prisma {
   export type CourseSessionMinAggregateInputType = {
     id?: true
     courseId?: true
+    format?: true
     city?: true
     state?: true
     location?: true
@@ -21669,6 +21684,7 @@ export namespace Prisma {
   export type CourseSessionMaxAggregateInputType = {
     id?: true
     courseId?: true
+    format?: true
     city?: true
     state?: true
     location?: true
@@ -21685,6 +21701,7 @@ export namespace Prisma {
   export type CourseSessionCountAggregateInputType = {
     id?: true
     courseId?: true
+    format?: true
     city?: true
     state?: true
     location?: true
@@ -21788,6 +21805,7 @@ export namespace Prisma {
   export type CourseSessionGroupByOutputType = {
     id: string
     courseId: string
+    format: $Enums.SessionFormat
     city: string
     state: string | null
     location: string
@@ -21823,6 +21841,7 @@ export namespace Prisma {
   export type CourseSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     courseId?: boolean
+    format?: boolean
     city?: boolean
     state?: boolean
     location?: boolean
@@ -21843,6 +21862,7 @@ export namespace Prisma {
   export type CourseSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     courseId?: boolean
+    format?: boolean
     city?: boolean
     state?: boolean
     location?: boolean
@@ -21860,6 +21880,7 @@ export namespace Prisma {
   export type CourseSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     courseId?: boolean
+    format?: boolean
     city?: boolean
     state?: boolean
     location?: boolean
@@ -21877,6 +21898,7 @@ export namespace Prisma {
   export type CourseSessionSelectScalar = {
     id?: boolean
     courseId?: boolean
+    format?: boolean
     city?: boolean
     state?: boolean
     location?: boolean
@@ -21890,7 +21912,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
+  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "format" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
   export type CourseSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     enrollments?: boolean | CourseSession$enrollmentsArgs<ExtArgs>
@@ -21914,11 +21936,15 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       courseId: string
+      /**
+       * presencial: sede física · online: videollamada
+       */
+      format: $Enums.SessionFormat
       city: string
       state: string | null
       location: string
       /**
-       * Meet, Zoom, Teams, etc. — principalmente para modalidad live
+       * Meet, Zoom, Teams, etc. — obligatorio cuando format = online
        */
       meetingUrl: string | null
       date: Date
@@ -22359,6 +22385,7 @@ export namespace Prisma {
   interface CourseSessionFieldRefs {
     readonly id: FieldRef<"CourseSession", 'String'>
     readonly courseId: FieldRef<"CourseSession", 'String'>
+    readonly format: FieldRef<"CourseSession", 'SessionFormat'>
     readonly city: FieldRef<"CourseSession", 'String'>
     readonly state: FieldRef<"CourseSession", 'String'>
     readonly location: FieldRef<"CourseSession", 'String'>
@@ -63902,6 +63929,7 @@ export namespace Prisma {
   export const CourseSessionScalarFieldEnum: {
     id: 'id',
     courseId: 'courseId',
+    format: 'format',
     city: 'city',
     state: 'state',
     location: 'location',
@@ -64614,6 +64642,20 @@ export namespace Prisma {
    * Reference to a field of type 'LessonType[]'
    */
   export type ListEnumLessonTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LessonType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SessionFormat'
+   */
+  export type EnumSessionFormatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionFormat'>
+    
+
+
+  /**
+   * Reference to a field of type 'SessionFormat[]'
+   */
+  export type ListEnumSessionFormatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionFormat[]'>
     
 
 
@@ -65952,6 +65994,7 @@ export namespace Prisma {
     NOT?: CourseSessionWhereInput | CourseSessionWhereInput[]
     id?: StringFilter<"CourseSession"> | string
     courseId?: StringFilter<"CourseSession"> | string
+    format?: EnumSessionFormatFilter<"CourseSession"> | $Enums.SessionFormat
     city?: StringFilter<"CourseSession"> | string
     state?: StringNullableFilter<"CourseSession"> | string | null
     location?: StringFilter<"CourseSession"> | string
@@ -65971,6 +66014,7 @@ export namespace Prisma {
   export type CourseSessionOrderByWithRelationInput = {
     id?: SortOrder
     courseId?: SortOrder
+    format?: SortOrder
     city?: SortOrder
     state?: SortOrderInput | SortOrder
     location?: SortOrder
@@ -65993,6 +66037,7 @@ export namespace Prisma {
     OR?: CourseSessionWhereInput[]
     NOT?: CourseSessionWhereInput | CourseSessionWhereInput[]
     courseId?: StringFilter<"CourseSession"> | string
+    format?: EnumSessionFormatFilter<"CourseSession"> | $Enums.SessionFormat
     city?: StringFilter<"CourseSession"> | string
     state?: StringNullableFilter<"CourseSession"> | string | null
     location?: StringFilter<"CourseSession"> | string
@@ -66012,6 +66057,7 @@ export namespace Prisma {
   export type CourseSessionOrderByWithAggregationInput = {
     id?: SortOrder
     courseId?: SortOrder
+    format?: SortOrder
     city?: SortOrder
     state?: SortOrderInput | SortOrder
     location?: SortOrder
@@ -66036,6 +66082,7 @@ export namespace Prisma {
     NOT?: CourseSessionScalarWhereWithAggregatesInput | CourseSessionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CourseSession"> | string
     courseId?: StringWithAggregatesFilter<"CourseSession"> | string
+    format?: EnumSessionFormatWithAggregatesFilter<"CourseSession"> | $Enums.SessionFormat
     city?: StringWithAggregatesFilter<"CourseSession"> | string
     state?: StringNullableWithAggregatesFilter<"CourseSession"> | string | null
     location?: StringWithAggregatesFilter<"CourseSession"> | string
@@ -70035,6 +70082,7 @@ export namespace Prisma {
 
   export type CourseSessionCreateInput = {
     id?: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -70054,6 +70102,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedCreateInput = {
     id?: string
     courseId: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -70071,6 +70120,7 @@ export namespace Prisma {
 
   export type CourseSessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -70090,6 +70140,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -70108,6 +70159,7 @@ export namespace Prisma {
   export type CourseSessionCreateManyInput = {
     id?: string
     courseId: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -70123,6 +70175,7 @@ export namespace Prisma {
 
   export type CourseSessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -70139,6 +70192,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -74164,9 +74218,17 @@ export namespace Prisma {
     score?: SortOrder
   }
 
+  export type EnumSessionFormatFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionFormat | EnumSessionFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionFormatFilter<$PrismaModel> | $Enums.SessionFormat
+  }
+
   export type CourseSessionCountOrderByAggregateInput = {
     id?: SortOrder
     courseId?: SortOrder
+    format?: SortOrder
     city?: SortOrder
     state?: SortOrder
     location?: SortOrder
@@ -74187,6 +74249,7 @@ export namespace Prisma {
   export type CourseSessionMaxOrderByAggregateInput = {
     id?: SortOrder
     courseId?: SortOrder
+    format?: SortOrder
     city?: SortOrder
     state?: SortOrder
     location?: SortOrder
@@ -74203,6 +74266,7 @@ export namespace Prisma {
   export type CourseSessionMinOrderByAggregateInput = {
     id?: SortOrder
     courseId?: SortOrder
+    format?: SortOrder
     city?: SortOrder
     state?: SortOrder
     location?: SortOrder
@@ -74218,6 +74282,16 @@ export namespace Prisma {
 
   export type CourseSessionSumOrderByAggregateInput = {
     maxStudents?: SortOrder
+  }
+
+  export type EnumSessionFormatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionFormat | EnumSessionFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionFormatWithAggregatesFilter<$PrismaModel> | $Enums.SessionFormat
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSessionFormatFilter<$PrismaModel>
+    _max?: NestedEnumSessionFormatFilter<$PrismaModel>
   }
 
   export type EnumSessionAnonymousQuestionStatusFilter<$PrismaModel = never> = {
@@ -78115,6 +78189,10 @@ export namespace Prisma {
     connect?: SessionAnonymousQuestionWhereUniqueInput | SessionAnonymousQuestionWhereUniqueInput[]
   }
 
+  export type EnumSessionFormatFieldUpdateOperationsInput = {
+    set?: $Enums.SessionFormat
+  }
+
   export type CourseUpdateOneRequiredWithoutCourseSessionsNestedInput = {
     create?: XOR<CourseCreateWithoutCourseSessionsInput, CourseUncheckedCreateWithoutCourseSessionsInput>
     connectOrCreate?: CourseCreateOrConnectWithoutCourseSessionsInput
@@ -80452,6 +80530,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLessonTypeFilter<$PrismaModel>
     _max?: NestedEnumLessonTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSessionFormatFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionFormat | EnumSessionFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionFormatFilter<$PrismaModel> | $Enums.SessionFormat
+  }
+
+  export type NestedEnumSessionFormatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SessionFormat | EnumSessionFormatFieldRefInput<$PrismaModel>
+    in?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SessionFormat[] | ListEnumSessionFormatFieldRefInput<$PrismaModel>
+    not?: NestedEnumSessionFormatWithAggregatesFilter<$PrismaModel> | $Enums.SessionFormat
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSessionFormatFilter<$PrismaModel>
+    _max?: NestedEnumSessionFormatFilter<$PrismaModel>
   }
 
   export type NestedEnumSessionAnonymousQuestionStatusFilter<$PrismaModel = never> = {
@@ -83636,6 +83731,7 @@ export namespace Prisma {
 
   export type CourseSessionCreateWithoutCourseInput = {
     id?: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -83653,6 +83749,7 @@ export namespace Prisma {
 
   export type CourseSessionUncheckedCreateWithoutCourseInput = {
     id?: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -84256,6 +84353,7 @@ export namespace Prisma {
     NOT?: CourseSessionScalarWhereInput | CourseSessionScalarWhereInput[]
     id?: StringFilter<"CourseSession"> | string
     courseId?: StringFilter<"CourseSession"> | string
+    format?: EnumSessionFormatFilter<"CourseSession"> | $Enums.SessionFormat
     city?: StringFilter<"CourseSession"> | string
     state?: StringNullableFilter<"CourseSession"> | string | null
     location?: StringFilter<"CourseSession"> | string
@@ -85748,6 +85846,7 @@ export namespace Prisma {
 
   export type CourseSessionCreateWithoutAnonymousQuestionsInput = {
     id?: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -85766,6 +85865,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedCreateWithoutAnonymousQuestionsInput = {
     id?: string
     courseId: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -85986,6 +86086,7 @@ export namespace Prisma {
 
   export type CourseSessionUpdateWithoutAnonymousQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -86004,6 +86105,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedUpdateWithoutAnonymousQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -86408,6 +86510,7 @@ export namespace Prisma {
 
   export type CourseSessionCreateWithoutEnrollmentsInput = {
     id?: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -86426,6 +86529,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedCreateWithoutEnrollmentsInput = {
     id?: string
     courseId: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -86885,6 +86989,7 @@ export namespace Prisma {
 
   export type CourseSessionUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -86903,6 +87008,7 @@ export namespace Prisma {
   export type CourseSessionUncheckedUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -96858,6 +96964,7 @@ export namespace Prisma {
 
   export type CourseSessionCreateManyCourseInput = {
     id?: string
+    format?: $Enums.SessionFormat
     city: string
     state?: string | null
     location: string
@@ -97032,6 +97139,7 @@ export namespace Prisma {
 
   export type CourseSessionUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -97049,6 +97157,7 @@ export namespace Prisma {
 
   export type CourseSessionUncheckedUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string
@@ -97066,6 +97175,7 @@ export namespace Prisma {
 
   export type CourseSessionUncheckedUpdateManyWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    format?: EnumSessionFormatFieldUpdateOperationsInput | $Enums.SessionFormat
     city?: StringFieldUpdateOperationsInput | string
     state?: NullableStringFieldUpdateOperationsInput | string | null
     location?: StringFieldUpdateOperationsInput | string

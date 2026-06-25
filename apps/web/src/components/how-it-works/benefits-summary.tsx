@@ -1,7 +1,7 @@
 import { CheckCircle2, BookOpen, TrendingUp } from "lucide-react";
 
 const studentBenefits = [
-  "Acceso a cursos virtuales y presenciales",
+  "Acceso a cursos en video y eventos en vivo",
   "Filtros por modalidad, categoría y ciudad",
   "Certificados digitales y físicos",
   "Soporte continuo de instructores expertos",

@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { BookOpen, Award, Users } from "lucide-react";
 
 const highlights = [
-  { icon: BookOpen, text: "Cursos virtuales, presenciales y en vivo" },
+  { icon: BookOpen, text: "Cursos en video y eventos en vivo" },
   { icon: Award, text: "Certificados digitales al completar" },
   { icon: Users, text: "Instructores validados y comunidad activa" },
 ];

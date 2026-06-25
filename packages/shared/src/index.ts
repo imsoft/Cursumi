@@ -8,7 +8,10 @@
 
 // ── Tipos de dominio ─────────────────────────────────────────────────────────
 
-export type CourseModality = "presencial" | "virtual" | "live";
+/** Tipo de curso: `virtual` = en video (on-demand) · `evento` = sesiones presenciales o por videollamada. */
+export type CourseModality = "virtual" | "evento";
+/** Formato de una sesión de un curso por evento. */
+export type SessionFormat = "presencial" | "online";
 export type CourseStatus = "draft" | "published" | "archived";
 export type CourseType = "fechado" | "ondemand";
 export type UserRole = "student" | "instructor" | "admin";

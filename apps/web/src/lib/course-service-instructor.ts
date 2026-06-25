@@ -3,7 +3,7 @@
  * CRUD de cursos, secciones, lecciones, sesiones y vista de progreso.
  */
 import { Prisma } from "@/generated/prisma";
-import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus } from "@/generated/prisma";
+import type { CourseStatus, CourseType, Modality, LessonType, EnrollmentStatus, SessionFormat } from "@/generated/prisma";
 import type { CourseFormData, CourseSection, CourseSessionData } from "@/components/instructor/course-types";
 import { hashJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
@@ -159,6 +159,7 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       courseSessions: data.courseSessions?.length
         ? {
             create: await Promise.all(data.courseSessions.map(async (s) => ({
+              format: (s.format ?? "presencial") as SessionFormat,
               city: s.city,
               state: s.state,
               location: s.location,
@@ -653,6 +654,7 @@ export async function upsertCourseSessions(courseId: string, sessions: CourseSes
     }
 
     const data = {
+      format: (s.format ?? "presencial") as SessionFormat,
       city: s.city,
       state: s.state,
       location: s.location,

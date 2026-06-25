@@ -26,10 +26,9 @@ import {
 
 const PURPLE = Brand.primary;
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
-const MODALITIES: { v: "virtual" | "presencial" | "live"; l: string }[] = [
-  { v: "virtual", l: "Virtual" },
-  { v: "presencial", l: "Presencial" },
-  { v: "live", l: "En vivo" },
+const MODALITIES: { v: "virtual" | "evento"; l: string }[] = [
+  { v: "virtual", l: "En video" },
+  { v: "evento", l: "Por evento" },
 ];
 
 let idc = 0;
@@ -40,7 +39,8 @@ export function CourseCreatorView({ onBack }: { onBack: () => void }) {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [level, setLevel] = useState("Principiante");
-  const [modality, setModality] = useState<"virtual" | "presencial" | "live">("virtual");
+  const [modality, setModality] = useState<"virtual" | "evento">("virtual");
+  const [duration, setDuration] = useState("");
   const [price, setPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [sections, setSections] = useState<NewSection[]>([]);
@@ -117,8 +117,8 @@ export function CourseCreatorView({ onBack }: { onBack: () => void }) {
   async function submit() {
     setError(null);
     const p = parseInt(price, 10);
-    if (!title.trim() || !description.trim() || !category || !Number.isFinite(p)) {
-      setError("Completa título, descripción, categoría y precio.");
+    if (!title.trim() || !description.trim() || !category || !duration.trim() || !Number.isFinite(p)) {
+      setError("Completa título, descripción, categoría, duración y precio.");
       return;
     }
     setSaving(true);
@@ -129,6 +129,10 @@ export function CourseCreatorView({ onBack }: { onBack: () => void }) {
         category,
         level,
         modality,
+        // courseType se deriva del tipo de curso (no es una elección separada)
+        courseType: modality === "virtual" ? "ondemand" : "fechado",
+        startDate: "",
+        duration: duration.trim(),
         price: Math.max(0, p),
         imageUrl: imageUrl.trim() || undefined,
         sections: sections
@@ -189,13 +193,19 @@ export function CourseCreatorView({ onBack }: { onBack: () => void }) {
           ))}
         </View>
 
-        <ThemedText style={styles.label}>Modalidad</ThemedText>
+        <ThemedText style={styles.label}>Tipo de curso</ThemedText>
         <View style={styles.chips}>
           {MODALITIES.map((m) => (
             <Chip key={m.v} label={m.l} on={modality === m.v} onPress={() => setModality(m.v)} />
           ))}
         </View>
+        {modality === "evento" && (
+          <ThemedText style={styles.hint}>
+            Las sesiones (fechas, presencial o videollamada) se configuran desde la web.
+          </ThemedText>
+        )}
 
+        <Field label="Duración estimada" value={duration} onChangeText={setDuration} hint="Ej: 6 horas · 4 semanas" />
         <Field label="Precio (MXN, en centavos)" value={price} onChangeText={setPrice} keyboard="number-pad" hint="Ej: 49900 = $499.00" />
         <Field label="URL de imagen de portada (opcional)" value={imageUrl} onChangeText={setImageUrl} />
 

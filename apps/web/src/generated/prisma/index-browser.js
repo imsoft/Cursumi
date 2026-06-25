@@ -293,6 +293,7 @@ exports.Prisma.LessonProgressScalarFieldEnum = {
 exports.Prisma.CourseSessionScalarFieldEnum = {
   id: 'id',
   courseId: 'courseId',
+  format: 'format',
   city: 'city',
   state: 'state',
   location: 'location',
@@ -726,8 +727,7 @@ exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
 
 exports.Modality = exports.$Enums.Modality = {
   virtual: 'virtual',
-  presencial: 'presencial',
-  live: 'live'
+  evento: 'evento'
 };
 
 exports.CourseType = exports.$Enums.CourseType = {
@@ -754,6 +754,11 @@ exports.LessonType = exports.$Enums.LessonType = {
   assignment: 'assignment',
   section_quiz: 'section_quiz',
   section_minigame: 'section_minigame'
+};
+
+exports.SessionFormat = exports.$Enums.SessionFormat = {
+  presencial: 'presencial',
+  online: 'online'
 };
 
 exports.SessionAnonymousQuestionStatus = exports.$Enums.SessionAnonymousQuestionStatus = {

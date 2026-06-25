@@ -119,12 +119,11 @@ export default function CertificatePreviewPage() {
                 className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 value={cert.modality}
                 onChange={(e) =>
-                  update({ modality: e.target.value as "virtual" | "presencial" | "live" })
+                  update({ modality: e.target.value as "virtual" | "evento" })
                 }
               >
-                <option value="virtual">Virtual</option>
-                <option value="live">En vivo</option>
-                <option value="presencial">Presencial</option>
+                <option value="virtual">Curso en video</option>
+                <option value="evento">Curso por evento</option>
               </select>
             </div>
             <div>

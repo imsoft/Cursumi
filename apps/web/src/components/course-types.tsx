@@ -1,14 +1,14 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { Video, Globe, Zap } from "lucide-react";
+import { Video, Calendar } from "lucide-react";
 
 const modalityCards = [
   {
-    title: "Cursos virtuales",
+    title: "Cursos en video",
     description:
-      "Sesiones en vivo y contenido grabado para aprender a tu ritmo, con soporte continuo de instructores.",
-    badge: "Online",
+      "Contenido grabado y actividades para aprender a tu ritmo, cuando quieras, con certificado al terminar.",
+    badge: "A tu ritmo",
     icon: Video,
     accent: "from-blue-500/8 to-blue-600/8",
     iconBg: "bg-blue-500/10",
@@ -17,28 +17,16 @@ const modalityCards = [
     badgeText: "text-blue-600 dark:text-blue-400",
   },
   {
-    title: "Cursos presenciales",
+    title: "Cursos por evento",
     description:
-      "Experiencias en aula con instructores certificados en ciudades clave de LatAm.",
-    badge: "Presencial",
-    icon: Globe,
-    accent: "from-emerald-500/8 to-emerald-600/8",
-    iconBg: "bg-emerald-500/10",
-    iconColor: "text-emerald-600 dark:text-emerald-400",
-    badgeBorder: "border-emerald-500/25",
-    badgeText: "text-emerald-600 dark:text-emerald-400",
-  },
-  {
-    title: "Talleres intensivos",
-    description:
-      "Bootcamps y talleres prácticos de corta duración para dominar lo esencial rápido.",
-    badge: "Inmersivo",
-    icon: Zap,
-    accent: "from-orange-500/8 to-yellow-500/8",
-    iconBg: "bg-orange-500/10",
-    iconColor: "text-orange-500",
-    badgeBorder: "border-orange-500/25",
-    badgeText: "text-orange-500",
+      "Sesiones con fecha y hora. Cada sesión puede ser presencial en sede o por videollamada (Meet, Zoom…).",
+    badge: "En vivo",
+    icon: Calendar,
+    accent: "from-violet-500/8 to-violet-600/8",
+    iconBg: "bg-violet-500/10",
+    iconColor: "text-violet-600 dark:text-violet-400",
+    badgeBorder: "border-violet-500/25",
+    badgeText: "text-violet-600 dark:text-violet-400",
   },
 ];
 
@@ -78,14 +66,14 @@ export const CourseTypes = () => {
             Aprende como tú quieras
           </h2>
           <p className="mx-auto mt-2 max-w-2xl text-base text-muted-foreground">
-            Tres modalidades de aprendizaje diseñadas para adaptarse a tu ritmo,
+            Dos tipos de curso diseñados para adaptarse a tu ritmo,
             ubicación y objetivos.
           </p>
         </motion.div>
 
         {/* Cards */}
         <motion.div
-          className="mt-10 grid gap-6 md:grid-cols-3"
+          className="mt-10 grid gap-6 md:grid-cols-2"
           variants={container}
           initial="hidden"
           whileInView="show"

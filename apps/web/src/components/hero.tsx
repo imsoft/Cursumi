@@ -78,7 +78,7 @@ export const Hero = ({ stats }: HeroProps) => {
       <motion.div variants={itemVariants} className="mb-4">
         <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/6 px-4 py-1.5 text-sm font-medium text-primary">
           <Sparkles className="h-4 w-4" />
-          Plataforma de formación presencial y online
+          Aprende a tu ritmo o en vivo
         </span>
       </motion.div>
 
@@ -97,7 +97,7 @@ export const Hero = ({ stats }: HeroProps) => {
         variants={itemVariants}
         className="mb-8 max-w-2xl text-lg text-muted-foreground"
       >
-        Instructores verificados. Cursos virtuales y presenciales.
+        Instructores verificados. Cursos en video y eventos en vivo.
         Certificados que los empleadores reconocen.
       </motion.p>
 

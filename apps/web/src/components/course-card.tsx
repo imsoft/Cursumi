@@ -6,7 +6,7 @@ import { stripHtml } from "@/lib/utils";
 
 export interface CourseCardProps {
   title: string;
-  mode: "Virtual" | "Presencial" | "En vivo";
+  mode: "virtual" | "evento";
   location: string;
   description: string;
   href: string;
@@ -39,7 +39,7 @@ export const CourseCard = ({
         />
         {/* Mode badge overlay */}
         <span className="absolute top-3 left-3">
-          <ModalityOverlayBadge modality={mode.toLowerCase()} />
+          <ModalityOverlayBadge modality={mode} />
         </span>
       </div>
 

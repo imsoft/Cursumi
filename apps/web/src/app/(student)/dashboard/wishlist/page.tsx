@@ -65,11 +65,7 @@ export default async function WishlistPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map(({ course }) => {
             const borderClass =
-              course.modality === "presencial"
-                ? "border-l-emerald-500"
-                : course.modality === "live"
-                  ? "border-l-violet-500"
-                  : "border-l-blue-500";
+              course.modality === "virtual" ? "border-l-blue-500" : "border-l-violet-500";
             const city = formatMexicoLocation(course.city, course.state) || "Online";
             const imageUrl = course.imageUrl || FALLBACK_IMAGE;
             const href = `/dashboard/explore/${course.slug || course.id}`;

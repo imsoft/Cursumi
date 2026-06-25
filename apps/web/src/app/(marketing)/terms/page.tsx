@@ -30,7 +30,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold mb-3">2. Descripción del servicio</h2>
             <p>
               Cursumi es una plataforma de educación en línea que conecta a instructores con
-              estudiantes mediante cursos virtuales y presenciales. Actuamos como intermediario entre
+              estudiantes mediante cursos en video y cursos por evento (presenciales o por videollamada). Actuamos como intermediario entre
               instructores independientes y estudiantes; el contenido de los cursos es responsabilidad
               exclusiva de cada instructor.
             </p>
@@ -61,7 +61,7 @@ export default function TermsPage() {
             <p>
               Puedes solicitar un reembolso dentro de los primeros 7 días naturales después de la
               compra, siempre que no hayas completado más del 30% del curso. Las solicitudes se
-              atienden en un plazo de 5 a 10 días hábiles. Los cursos presenciales tienen políticas
+              atienden en un plazo de 5 a 10 días hábiles. Los cursos por evento tienen políticas
               de cancelación específicas indicadas en la página del curso.
             </p>
           </section>

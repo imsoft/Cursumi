@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Monitor, MapPin, ArrowRight, Users, Globe, Calendar, Video } from "lucide-react";
+import { Monitor, ArrowRight, Users, Globe, Calendar, Video, MapPin } from "lucide-react";
 import { MODALITY_CONFIG } from "@/lib/modality";
 
 const options = [
   {
     modality: "virtual" as const,
-    title: "Curso virtual (vídeo)",
+    title: "Curso en video",
     description:
       "Contenido bajo demanda: subes vídeos, textos y actividades; el alumno avanza a su ritmo en la plataforma.",
     icon: Monitor,
@@ -20,31 +20,17 @@ const options = [
     ],
   },
   {
-    modality: "live" as const,
-    title: "Clases en vivo (enlace)",
+    modality: "evento" as const,
+    title: "Curso por evento",
     description:
-      "Sesiones en fecha y hora concretas. Compartes el enlace de Meet, Zoom u otra videollamada por sesión.",
-    icon: Video,
-    href: "/instructor/courses/new/live",
-    config: MODALITY_CONFIG.live,
+      "Sesiones con fecha y hora. Cada sesión puede ser presencial (en sede) o por videollamada (Meet, Zoom…).",
+    icon: Calendar,
+    href: "/instructor/courses/new/evento",
+    config: MODALITY_CONFIG.evento,
     features: [
-      { icon: Video, text: "Enlace de reunión por sesión" },
       { icon: Calendar, text: "Fechas y cupos por sesión" },
-      { icon: Users, text: "Los alumnos se inscriben a cada cohorte" },
-    ],
-  },
-  {
-    modality: "presencial" as const,
-    title: "Curso presencial",
-    description:
-      "Taller o curso en sede física: defines lugar, fechas y aforo; los alumnos asisten en persona.",
-    icon: MapPin,
-    href: "/instructor/courses/new/presencial",
-    config: MODALITY_CONFIG.presencial,
-    features: [
-      { icon: MapPin, text: "Ciudad y dirección del evento" },
-      { icon: Calendar, text: "Sesiones con fecha y hora" },
-      { icon: Users, text: "Capacidad por sesión" },
+      { icon: MapPin, text: "Presencial o videollamada por sesión" },
+      { icon: Users, text: "Los alumnos se inscriben a cada sesión" },
     ],
   },
 ];
@@ -55,11 +41,11 @@ export default function SelectCourseTypePage() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-foreground">¿Qué tipo de curso quieres crear?</h1>
         <p className="mt-3 text-muted-foreground">
-          Tres modalidades distintas: vídeo a tu ritmo, en vivo por enlace o presencial en sede
+          Dos tipos: en video para aprender a tu ritmo, o por evento con sesiones en vivo
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
         {options.map((opt) => {
           const Icon = opt.icon;
           return (

@@ -183,6 +183,7 @@ export async function getPublishedCourse(slugOrId: string) {
         orderBy: { date: "asc" },
         select: {
           id: true,
+          format: true,
           city: true,
           location: true,
           meetingUrl: true,
@@ -202,7 +203,7 @@ export async function getPublishedCourse(slugOrId: string) {
     // @ts-ignore
     delete course.finalExam;
     const requiresJoinCode =
-      (course.modality === "presencial" || course.modality === "live") &&
+      course.modality === "evento" &&
       course.price === 0 &&
       !!course.joinCodeHash;
     // @ts-expect-error no exponer hash
@@ -210,7 +211,7 @@ export async function getPublishedCourse(slugOrId: string) {
     const sessions = course.courseSessions.map(({ joinCodeHash, ...s }) => ({
       ...s,
       requiresJoinCode:
-        (course.modality === "presencial" || course.modality === "live") &&
+        course.modality === "evento" &&
         course.price === 0 &&
         !!joinCodeHash,
     }));

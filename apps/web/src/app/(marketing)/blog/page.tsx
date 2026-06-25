@@ -11,7 +11,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Blog | Cursumi",
   description:
-    "Artículos, guías y recursos de educación online, formación presencial y aprendizaje profesional.",
+    "Artículos, guías y recursos de educación en video, eventos en vivo y aprendizaje profesional.",
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "Blog de Cursumi",

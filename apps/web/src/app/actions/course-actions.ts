@@ -195,7 +195,7 @@ export async function enrollInCourse(courseId: string, sessionId?: string, joinC
     select: { joinCodeHash: true, modality: true, price: true },
   });
 
-  // Para cursos presenciales/live con sesiones, validar la sesión Y su código específico
+  // Para cursos por evento con sesiones, validar la sesión Y su código específico
   let sessionJoinCodeHash: string | null = null;
   if (sessionId) {
     const courseSession = await prisma.courseSession.findFirst({

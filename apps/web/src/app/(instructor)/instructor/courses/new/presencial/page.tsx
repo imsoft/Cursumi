@@ -1,11 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { CreateCourseWizard } from "@/components/instructor/create-course-wizard";
-
+// Las modalidades presencial y en vivo se fusionaron en "Curso por evento".
 export default function CreatePresencialCoursePage() {
-  return (
-    <div className="space-y-6">
-      <CreateCourseWizard modality="presencial" />
-    </div>
-  );
+  redirect("/instructor/courses/new/evento");
 }

@@ -5,9 +5,8 @@ import { Combobox, ComboboxOption } from "@/components/ui/combobox";
 
 const modalityOptions: ComboboxOption[] = [
   { value: "all", label: "Todas las modalidades" },
-  { value: "virtual", label: "Virtual" },
-  { value: "live", label: "En vivo" },
-  { value: "presencial", label: "Presencial" },
+  { value: "virtual", label: "En video" },
+  { value: "evento", label: "Por evento" },
 ];
 
 const categoryOptions: ComboboxOption[] = [

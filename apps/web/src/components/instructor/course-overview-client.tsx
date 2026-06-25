@@ -339,27 +339,25 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-sm font-medium text-foreground">Modalidad</label>
-                  <select
-                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    value={editData.modality}
-                    onChange={(e) => setEditData((d) => ({ ...d, modality: e.target.value }))}
-                  >
-                    <option value="virtual">Virtual (vídeo a demanda)</option>
-                    <option value="live">En vivo (Meet, Zoom…)</option>
-                    <option value="presencial">Presencial</option>
-                  </select>
-                </div>
-                <div>
                   <label className="text-sm font-medium text-foreground">Tipo de curso</label>
                   <select
                     className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    value={editData.courseType}
-                    onChange={(e) => setEditData((d) => ({ ...d, courseType: e.target.value }))}
+                    value={editData.modality}
+                    onChange={(e) =>
+                      setEditData((d) => ({
+                        ...d,
+                        modality: e.target.value,
+                        // El tipo (ondemand/fechado) se deriva del tipo de curso
+                        courseType: e.target.value === "virtual" ? "ondemand" : "fechado",
+                      }))
+                    }
                   >
-                    <option value="ondemand">A tu ritmo (on demand)</option>
-                    <option value="fechado">Con fechas definidas</option>
+                    <option value="virtual">Curso en video (a tu ritmo)</option>
+                    <option value="evento">Curso por evento (con fechas)</option>
                   </select>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Video: el alumno avanza cuando quiera. Evento: sesiones presenciales o por videollamada.
+                  </p>
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -691,25 +689,21 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
         )}
       </div>
 
-      {/* Sesiones presenciales o en vivo */}
-      {(course.modality === "presencial" || course.modality === "live") && (
+      {/* Sesiones del curso por evento */}
+      {course.modality !== "virtual" && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
-              {course.modality === "live" ? "Sesiones en vivo" : "Sesiones presenciales"}
-            </CardTitle>
+            <CardTitle className="text-base">Sesiones del evento</CardTitle>
             <p className="text-sm text-muted-foreground">
-              {course.modality === "live"
-                ? "Fecha, hora, cupo y enlace de videollamada por sesión."
-                : "Configura los lugares, fechas y horarios donde se impartirá este curso."}
+              Fecha, hora y cupo por sesión. Marca cada sesión como presencial (con sede) o por videollamada (con enlace).
             </p>
           </CardHeader>
           <CardContent>
             <CourseSessionsManager
-              variant={course.modality === "live" ? "live" : "presencial"}
               isFree={course.price === 0}
               sessions={(course.courseSessions ?? []).map((s) => ({
                 id: s.id,
+                format: (s.format === "online" ? "online" : "presencial") as "presencial" | "online",
                 state: s.state ?? findStateForMunicipality(s.city) ?? "",
                 city: s.city,
                 location: s.location,
@@ -763,8 +757,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
         </CardContent>
       </Card>
 
-      {/* Planeación didáctica — solo cursos presenciales */}
-      {course.modality === "presencial" && (
+      {/* Planeación didáctica — cursos por evento (certificación CONOCER/STPS) */}
+      {course.modality === "evento" && (
         <Card>
           <CardContent className="flex items-center justify-between p-5">
             <div className="flex items-center gap-3">

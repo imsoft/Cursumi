@@ -1,9 +1,13 @@
+export type SessionFormat = "presencial" | "online";
+
 export type CourseSessionData = {
   id?: string;        // presente al editar sesión existente
+  /** presencial: sede física · online: videollamada */
+  format: SessionFormat;
   state?: string;
   city: string;
-  location: string;   // dirección/sede o texto corto en vivo
-  /** Meet, Zoom, Teams… — obligatorio en modalidad live al publicar sesiones */
+  location: string;   // dirección/sede (presencial) o etiqueta corta (online)
+  /** Meet, Zoom, Teams… — obligatorio cuando format = "online" */
   meetingUrl?: string;
   date: string;       // ISO date string
   startTime: string;  // "HH:mm"
@@ -23,7 +27,7 @@ export type CourseFormData = {
   description: string;
   category: string;
   level: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
   /** Entidad federativa (México) */
   state?: string;
   city?: string;
@@ -35,7 +39,7 @@ export type CourseFormData = {
   price: number;
   maxStudents?: number;
   imageUrl?: string;
-  /** Solo presencial + precio 0: nuevo código (se guarda como hash). Vacío = no cambiar (al editar). */
+  /** Solo evento + precio 0: nuevo código (se guarda como hash). Vacío = no cambiar (al editar). */
   freeJoinCode?: string;
   /** Quitar protección por código al guardar */
   clearFreeJoinCode?: boolean;
@@ -43,7 +47,7 @@ export type CourseFormData = {
   hasJoinCode?: boolean;
   sections: CourseSection[];
   finalExam?: CourseFinalExam;
-  courseSessions?: CourseSessionData[]; // solo para cursos presenciales
+  courseSessions?: CourseSessionData[]; // solo para cursos por evento
 };
 
 export type CourseFinalExam = {

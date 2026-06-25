@@ -62,7 +62,7 @@ export type FeaturedCourseItem = {
   slug: string | null;
   title: string;
   description: string;
-  modality: "virtual" | "presencial" | "live";
+  modality: "virtual" | "evento";
   city: string | null;
   imageUrl: string | null;
 };

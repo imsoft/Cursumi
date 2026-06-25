@@ -14,11 +14,11 @@ const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").repla
 
 export const metadata: Metadata = {
   title: "Para instructores | Publica y monetiza cursos en Cursumi",
-  description: "Crea cursos virtuales o presenciales, gestiona estudiantes y cobra con Cursumi.",
+  description: "Crea cursos en video o por evento, gestiona estudiantes y cobra con Cursumi.",
   alternates: { canonical: `${baseUrl}/instructors` },
   openGraph: {
     title: "Para instructores | Cursumi",
-    description: "Publica cursos virtuales o presenciales y cobra con Cursumi.",
+    description: "Publica cursos en video o por evento y cobra con Cursumi.",
     images: [
       {
         url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
@@ -48,7 +48,7 @@ export default function InstructorsPage() {
         name: "¿Puedo ofrecer cursos presenciales en mi ciudad?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Sí, especifica ciudad, cupo, lugar y logística desde tu panel.",
+          text: "Sí. Crea un curso por evento y marca cada sesión como presencial: especificas ciudad, cupo, lugar y logística desde tu panel.",
         },
       },
       {

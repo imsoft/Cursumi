@@ -14,7 +14,7 @@ import { CheckCircle2, Save, Loader2 } from "lucide-react";
 import type { CourseFormData } from "@/components/instructor/course-types";
 import { createCourseDraft, publishCourse } from "@/app/actions/course-actions";
 import { ModalityBadge } from "@/components/ui/modality-badge";
-import { MODALITY_CONFIG } from "@/lib/modality";
+import { MODALITY_CONFIG, normalizeModality } from "@/lib/modality";
 import type { Modality } from "@/lib/modality";
 
 const AUTO_SAVE_INTERVAL_MS = 30_000;
@@ -29,15 +29,9 @@ const steps = [
 
 type SaveStatus = "idle" | "saving" | "saved";
 
-function wizardModalityKey(m: Modality | string): Modality {
-  if (m === "presencial") return "presencial";
-  if (m === "live") return "live";
-  return "virtual";
-}
-
 export const CreateCourseWizard = ({ initialData, modality }: { initialData?: CourseFormData; modality?: Modality }) => {
   const resolvedModality = modality || initialData?.modality || "virtual";
-  const modalityConfig = MODALITY_CONFIG[wizardModalityKey(resolvedModality)];
+  const modalityConfig = MODALITY_CONFIG[normalizeModality(resolvedModality)];
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState("info");
   const [isPending, startTransition] = useTransition();

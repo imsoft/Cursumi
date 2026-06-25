@@ -41,9 +41,9 @@ export default function RefundsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold mb-3">3. Cursos presenciales</h2>
+            <h2 className="text-xl font-semibold mb-3">3. Cursos por evento</h2>
             <p>
-              Los cursos presenciales o con cupo limitado pueden tener políticas de cancelación
+              Los cursos por evento (sesiones presenciales o por videollamada) o con cupo limitado pueden tener políticas de cancelación
               específicas indicadas en la página del curso. Por lo general, las cancelaciones
               realizadas con anticipación suficiente al inicio del curso son reembolsables; las
               solicitudes posteriores al inicio pueden no serlo.

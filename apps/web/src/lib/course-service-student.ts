@@ -125,6 +125,7 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
       session: {
         select: {
           id: true,
+          format: true,
           city: true,
           state: true,
           location: true,

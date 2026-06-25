@@ -9,7 +9,7 @@ export const CoursesPageHeader = () => {
           Explora nuestros cursos
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Cursos virtuales y presenciales creados por expertos en programación,
+          Cursos en video y eventos en vivo creados por expertos en programación,
           marketing, diseño y más. Instructores verificados, certificación
           incluida.
         </p>

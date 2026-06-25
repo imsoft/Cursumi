@@ -47,12 +47,12 @@ export default async function CourseDetailPage({
 
   const statusLabel = statusLabelMap[course.status] || statusLabelMap.draft;
 
-  // La planeación didáctica aplica a cursos presenciales y virtuales.
-  const hasPlanning = course.modality === "presencial" || course.modality === "virtual";
+  // La planeación didáctica aplica a todos los cursos (video y evento).
+  const hasPlanning = course.modality === "evento" || course.modality === "virtual";
   const planning = hasPlanning
     ? (
         await getCoursesPlanningProgress([
-          { id: course.id, modality: course.modality as "presencial" | "virtual" },
+          { id: course.id, modality: course.modality as "evento" | "virtual" },
         ]).catch(() => ({}) as Record<string, { completed: number; total: number }>)
       )[course.id]
     : undefined;
@@ -172,16 +172,16 @@ export default async function CourseDetailPage({
                 <>
                   <Separator />
                   <div>
-                    <p className="text-sm font-medium text-foreground">
-                      {course.modality === "live" ? "Sesiones en vivo" : "Sesiones presenciales"}
-                    </p>
+                    <p className="text-sm font-medium text-foreground">Sesiones del evento</p>
                     <ul className="mt-3 space-y-3">
                       {course.courseSessions.map((s) => (
                         <li
                           key={s.id}
                           className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm"
                         >
-                          <span className="font-medium text-foreground">{formatMexicoLocation(s.city, s.state)}</span>
+                          <span className="font-medium text-foreground">
+                            {s.format === "online" ? "🎥 Videollamada" : formatMexicoLocation(s.city, s.state)}
+                          </span>
                           <span className="text-muted-foreground"> — {s.location}</span>
                           {s.meetingUrl && (
                             <div className="mt-1 truncate text-xs text-primary">
@@ -236,7 +236,7 @@ export default async function CourseDetailPage({
                   Planeación didáctica
                 </CardTitle>
                 <p className="text-sm text-muted-foreground font-normal mt-1">
-                  Documentos del curso ({course.modality === "presencial" ? "certificación" : "producción"})
+                  Documentos del curso ({course.modality === "evento" ? "certificación" : "producción"})
                 </p>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -306,7 +306,7 @@ export default async function CourseDetailPage({
                   Analytics
                 </Link>
               </Button>
-              {course.modality === "presencial" && (
+              {course.modality === "evento" && (
                 <Button variant="outline" className="w-full justify-start" asChild>
                   <Link href={`/instructor/courses/${course.id}/anonymous-questions`}>
                     <MessageCircleQuestion className="mr-2 h-4 w-4" />

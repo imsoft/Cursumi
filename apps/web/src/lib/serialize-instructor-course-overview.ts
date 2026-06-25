@@ -75,6 +75,7 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
     })),
     courseSessions: (course.courseSessions ?? []).map((s) => ({
       id: s.id,
+      format: s.format as string,
       city: s.city,
       state: s.state,
       location: s.location,
