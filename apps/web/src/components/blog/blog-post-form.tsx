@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ImagePlus, Loader2, Trash2, X } from "lucide-react";
@@ -60,12 +59,22 @@ function slugify(text: string) {
     .trim();
 }
 
+/** Estado inicial de publicación a partir de los valores del post. */
+function initialPubMode(v?: Partial<FormValues>): "draft" | "now" | "schedule" {
+  if (!v?.published) return "draft";
+  if (v.publishedAt && new Date(v.publishedAt).getTime() > Date.now()) return "schedule";
+  return "now";
+}
+
 export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps) {
   const router = useRouter();
   const [tagInput, setTagInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pubMode, setPubMode] = useState<"draft" | "now" | "schedule">(
+    () => initialPubMode(initialValues),
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { upload, uploading } = useImageUpload({
@@ -118,6 +127,20 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
   };
 
   const onSubmit = async (values: FormValues) => {
+    // Derivar published/publishedAt desde el modo de publicación elegido.
+    let published = false;
+    let publishedAtIso: string | undefined;
+    if (pubMode === "now") {
+      published = true;
+    } else if (pubMode === "schedule") {
+      if (!values.publishedAt) {
+        setError("Elige la fecha y hora de publicación para programar el artículo.");
+        return;
+      }
+      published = true;
+      publishedAtIso = new Date(values.publishedAt).toISOString();
+    }
+
     setSaving(true);
     setError(null);
     try {
@@ -128,12 +151,11 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...values,
+          published,
           coverImageUrl: values.coverImageUrl || null,
-          // datetime-local (hora local) → ISO. Vacío = sin fecha explícita
-          // (crear: publica ahora; editar: conserva la fecha actual).
-          publishedAt: values.publishedAt
-            ? new Date(values.publishedAt).toISOString()
-            : undefined,
+          // datetime-local (hora local) → ISO. Solo se envía al programar;
+          // en "ahora"/"borrador" queda undefined (la API usa la fecha actual).
+          publishedAt: publishedAtIso,
         }),
       });
       if (!res.ok) {
@@ -229,38 +251,65 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
               <CardTitle className="text-base">Publicación</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="published">Publicar</Label>
-                <Controller
-                  control={form.control}
-                  name="published"
-                  render={({ field }) => (
-                    <Switch
-                      id="published"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  )}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {form.watch("published")
-                  ? "El artículo será visible en el blog público."
-                  : "Guardado como borrador — no visible públicamente."}
-              </p>
+              {(() => {
+                const options: { key: "draft" | "now" | "schedule"; label: string }[] = [
+                  { key: "draft", label: "Borrador" },
+                  { key: "now", label: "Publicar ahora" },
+                  { key: "schedule", label: "Programar" },
+                ];
+                return (
+                  <div className="grid grid-cols-3 gap-1 rounded-lg border border-border bg-muted/30 p-1">
+                    {options.map((opt) => {
+                      const active = pubMode === opt.key;
+                      return (
+                        <button
+                          key={opt.key}
+                          type="button"
+                          onClick={() => setPubMode(opt.key)}
+                          className={`rounded-md px-2 py-1.5 text-xs font-medium transition ${
+                            active
+                              ? "bg-background text-foreground shadow-sm"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
 
-              {form.watch("published") && (
+              {pubMode === "draft" && (
+                <p className="text-xs text-muted-foreground">
+                  Guardado como borrador — no visible públicamente.
+                </p>
+              )}
+              {pubMode === "now" && (
+                <p className="text-xs text-muted-foreground">
+                  El artículo será visible en el blog público en cuanto lo guardes.
+                </p>
+              )}
+
+              {pubMode === "schedule" && (
                 <div className="space-y-1.5 border-t pt-4">
-                  <Label htmlFor="publishedAt">Programar publicación (opcional)</Label>
+                  <Label htmlFor="publishedAt">Fecha y hora de publicación</Label>
                   <Input id="publishedAt" type="datetime-local" {...form.register("publishedAt")} />
                   {(() => {
                     const v = form.watch("publishedAt");
                     const future = !!v && new Date(v).getTime() > Date.now();
+                    if (!v) {
+                      return (
+                        <p className="text-xs text-muted-foreground">
+                          Elige la fecha y hora en que el artículo se publicará automáticamente.
+                        </p>
+                      );
+                    }
                     return (
-                      <p className="text-xs text-muted-foreground">
+                      <p className={`text-xs ${future ? "text-muted-foreground" : "text-amber-600 dark:text-amber-400"}`}>
                         {future
                           ? `Se publicará automáticamente el ${new Date(v).toLocaleString("es-MX", { dateStyle: "long", timeStyle: "short" })}.`
-                          : "Déjalo vacío para publicar de inmediato; elige una fecha futura para programarlo."}
+                          : "La fecha ya pasó: se publicará de inmediato al guardar. Elige una fecha futura para programarlo."}
                       </p>
                     );
                   })()}
