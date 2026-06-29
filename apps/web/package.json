@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "NEXT_USE_TURBOPACK=0 next build",
+    "build": "pnpm db:migrate:deploy && NEXT_USE_TURBOPACK=0 next build",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
+    "db:migrate:deploy": "if [ \"$VERCEL_ENV\" = \"production\" ]; then prisma migrate deploy; else echo \"⏭  Skipping prisma migrate deploy (VERCEL_ENV=${VERCEL_ENV:-local}; solo se aplica en producción)\"; fi",
     "db:migrate:diff": "prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
