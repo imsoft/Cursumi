@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 
 /**
  * Sanitiza HTML generado por el editor Lexical (o cualquier contenido de
@@ -6,11 +6,10 @@ import DOMPurify from "isomorphic-dompurify";
  *
  * Aunque el contenido lo escriben instructores, son usuarios semi-confiables
  * (cualquiera puede registrarse como instructor y enviar HTML directo a la API),
- * así que tratamos su contenido como NO confiable. Esto previene XSS almacenado:
- * scripts inyectados se ejecutarían porque la CSP permite `script-src
- * 'unsafe-inline'`.
+ * así que tratamos su contenido como NO confiable. Esto previene XSS almacenado.
  *
- * Allowlist alineada con lo que produce el editor Lexical:
+ * Usamos `sanitize-html` (JS puro, sin jsdom) porque corre igual en server (SSR)
+ * y cliente. La allowlist está alineada con lo que produce el editor Lexical:
  * párrafos, encabezados, listas, negrita/cursiva/subrayado/tachado, citas y
  * enlaces. Se eliminan `<script>`, manejadores `on*`, `javascript:` URIs, etc.
  */
@@ -19,8 +18,6 @@ const ALLOWED_TAGS = [
   "h1", "h2", "h3", "h4", "h5", "h6",
   "ul", "ol", "li", "blockquote", "code", "pre", "a",
 ];
-
-const ALLOWED_ATTR = ["href", "target", "rel", "class", "dir"];
 
 /**
  * Serializa un objeto para un `<script type="application/ld+json">` de forma
@@ -34,12 +31,17 @@ export function jsonLdScript(data: unknown): string {
 
 export function sanitizeHtml(html: string | null | undefined): string {
   if (!html) return "";
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
+  return sanitizeHtmlLib(html, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: {
+      a: ["href", "target", "rel"],
+      "*": ["class", "dir"],
+    },
     // Solo esquemas seguros en href (bloquea javascript:, data:, etc.)
-    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
-    // Fuerza rel seguro y evita reverse tabnabbing cuando hay target="_blank"
-    ADD_ATTR: ["target"],
+    allowedSchemes: ["http", "https", "mailto", "tel"],
+    // Evita reverse tabnabbing cuando hay target="_blank"
+    transformTags: {
+      a: sanitizeHtmlLib.simpleTransform("a", { rel: "noopener noreferrer" }, true),
+    },
   });
 }
