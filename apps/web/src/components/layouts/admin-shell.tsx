@@ -29,6 +29,7 @@ import {
   Sparkles,
   Newspaper,
   Building2,
+  ShieldCheck,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -49,6 +50,7 @@ const adminNavItems = [
   { title: "Plantillas", href: "/admin/templates", icon: FileDown },
   { title: "Constancia", href: "/admin/certificate-preview", icon: Award },
   { title: "AI Lab", href: "/admin/ai-lab", icon: Sparkles },
+  { title: "Auditoría", href: "/admin/audit-logs", icon: ShieldCheck },
   { title: "Configuración", href: "/admin/settings", icon: Settings },
 ];
 

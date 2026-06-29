@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { authorizeCloudinaryUploader } from "@/lib/authorize-cloudinary-uploader";
 import { prisma } from "@/lib/prisma";
+import { validateAttachmentUpload } from "@/lib/upload-validation";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 
@@ -25,14 +26,10 @@ export async function POST(req: NextRequest) {
     if (!file) {
       return NextResponse.json({ error: "No se recibió ningún archivo" }, { status: 400 });
     }
-    if (file.size === 0) {
-      return NextResponse.json({ error: "El archivo está vacío" }, { status: 400 });
-    }
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json(
-        { error: `El archivo es demasiado grande (máx. ${MAX_BYTES / (1024 * 1024)} MB)` },
-        { status: 413 },
-      );
+    // Allowlist por magic bytes: imágenes, PDF o documentos (bloquea HTML/SVG/ejecutables).
+    const invalid = await validateAttachmentUpload(file, MAX_BYTES);
+    if (invalid) {
+      return NextResponse.json({ error: invalid.message }, { status: invalid.status });
     }
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;

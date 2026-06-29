@@ -6,6 +6,7 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { jsonLdScript } from "@/lib/sanitize"
+import { headers } from "next/headers"
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const ogImage = `${siteUrl}/api/og`;
@@ -149,16 +150,21 @@ export const metadata: Metadata = {
     : {}),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Nonce de la CSP estricta (lo fija src/middleware.ts). Lo aplicamos a nuestro
+  // script inline para que se ejecute sin necesidad de 'unsafe-inline'.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html lang="es-419" suppressHydrationWarning>
       <body className="antialiased">
         {/* Recarga única si falla un chunk tras un deploy (antes de hidratar React). */}
         <script
+          nonce={nonce}
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `(function(){var f="cursumi-chunk-reload-done";function c(r){if(r==null)return false;var s=typeof r==="string"?r:String((r&&r.message)||(r&&r.name)||r);return s.indexOf("ChunkLoadError")!==-1||s.indexOf("Loading chunk")!==-1||s.indexOf("Failed to load chunk")!==-1||s.indexOf("Failed to fetch dynamically imported module")!==-1;}function g(){if(sessionStorage.getItem(f))return;sessionStorage.setItem(f,"1");location.reload();}addEventListener("unhandledrejection",function(e){if(c(e.reason))g();});addEventListener("error",function(e){if(c(e.error)||c(e.message))g();});setTimeout(function(){sessionStorage.removeItem(f);},12e4);})();`,
@@ -171,7 +177,7 @@ export default function RootLayout({
         >
           Saltar al contenido principal
         </a>
-        <ThemeProvider>
+        <ThemeProvider nonce={nonce}>
           <LayoutShell>{children}</LayoutShell>
         <script
           type="application/ld+json"

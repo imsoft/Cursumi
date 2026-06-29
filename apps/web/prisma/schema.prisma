@@ -1130,3 +1130,24 @@ model BlogPost {
   @@index([slug])
   @@index([authorId])
 }
+
+// ─────────────────────────────────────────
+// AUDITORÍA — registro inmutable de acciones sensibles (admin)
+// ─────────────────────────────────────────
+// Sin FK a User a propósito: los logs deben sobrevivir aunque se elimine la
+// cuenta del actor. Guardamos actorId + actorEmail denormalizados.
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String // id del usuario que ejecutó la acción
+  actorEmail String? // denormalizado para resiliencia
+  action     String // ej. "user.role_change", "course.disable"
+  targetType String? // ej. "user", "course", "coupon"
+  targetId   String? // id del recurso afectado
+  metadata   Json? // contexto adicional (antes/después, motivo)
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+}

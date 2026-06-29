@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 import { createNotification } from "@/lib/notification-helpers";
+import { recordAuditLog } from "@/lib/audit-log";
 
 export async function PATCH(
   req: NextRequest,
@@ -47,6 +48,16 @@ export async function PATCH(
         link: `/instructor/courses/${courseId}`,
       });
     }
+
+    await recordAuditLog({
+      actorId: session.user.id,
+      actorEmail: session.user.email,
+      action: action === "disable" ? "course.disable" : "course.enable",
+      targetType: "course",
+      targetId: courseId,
+      metadata: { title: course.title, instructorId: course.instructorId, ...(reason ? { reason } : {}) },
+      req,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (error) {

@@ -684,6 +684,18 @@ exports.Prisma.BlogPostScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  actorId: 'actorId',
+  actorEmail: 'actorEmail',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  metadata: 'metadata',
+  ip: 'ip',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -866,7 +878,8 @@ exports.Prisma.ModelName = {
   Referral: 'Referral',
   PushSubscription: 'PushSubscription',
   ExpoPushToken: 'ExpoPushToken',
-  BlogPost: 'BlogPost'
+  BlogPost: 'BlogPost',
+  AuditLog: 'AuditLog'
 };
 
 /**

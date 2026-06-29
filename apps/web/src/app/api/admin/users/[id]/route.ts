@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 import { sendVerificationEmail } from "@/lib/email";
+import { recordAuditLog } from "@/lib/audit-log";
 import { randomBytes } from "crypto";
 
 const patchSchema = z.discriminatedUnion("action", [
@@ -85,6 +86,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       where: { id },
       data: { role },
       select: { id: true, name: true, email: true, role: true },
+    });
+
+    await recordAuditLog({
+      actorId: session.user.id,
+      actorEmail: session.user.email,
+      action: "user.role_change",
+      targetType: "user",
+      targetId: id,
+      metadata: { from: target?.role ?? null, to: role, targetEmail: user.email },
+      req,
     });
 
     return NextResponse.json(user);

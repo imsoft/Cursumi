@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 import { prisma } from "@/lib/prisma";
+import { validateImageUpload } from "@/lib/upload-validation";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
@@ -24,14 +25,13 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File | null;
     const courseId = formData.get("courseId") as string | null;
 
-    if (!file || file.size === 0) {
+    if (!file) {
       return NextResponse.json({ error: "Selecciona una imagen" }, { status: 400 });
     }
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "El archivo debe ser una imagen" }, { status: 400 });
-    }
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: "La imagen es demasiado grande (máx. 10 MB)" }, { status: 413 });
+    // Validación real por magic bytes (no confiar en file.type del cliente).
+    const invalid = await validateImageUpload(file, MAX_BYTES);
+    if (invalid) {
+      return NextResponse.json({ error: invalid.message }, { status: invalid.status });
     }
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;

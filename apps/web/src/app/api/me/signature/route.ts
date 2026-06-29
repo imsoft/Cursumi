@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { validateImageUpload } from "@/lib/upload-validation";
 
 export async function GET() {
   try {
@@ -23,14 +24,12 @@ export async function POST(req: NextRequest) {
     const session = await requireSession();
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    if (!file || file.size === 0) {
+    if (!file) {
       return NextResponse.json({ error: "Selecciona una imagen" }, { status: 400 });
     }
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "El archivo debe ser una imagen" }, { status: 400 });
-    }
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: "La imagen es demasiado grande (máx. 4 MB)" }, { status: 413 });
+    const invalid = await validateImageUpload(file, MAX_BYTES);
+    if (invalid) {
+      return NextResponse.json({ error: invalid.message }, { status: invalid.status });
     }
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSession, requireRole } from "@/lib/api-helpers";
 import { prisma } from "@/lib/prisma";
+import { recordAuditLog } from "@/lib/audit-log";
 
 const bodySchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("approve") }),
@@ -87,6 +88,18 @@ export async function PATCH(
       });
     });
   }
+
+  await recordAuditLog({
+    actorId: session.user.id,
+    actorEmail: session.user.email,
+    action: `instructor_application.${body.data.action}`,
+    targetType: "instructor_application",
+    targetId: id,
+    metadata: {
+      applicantId: application.userId,
+      ...(body.data.action === "reject" ? { reason: body.data.rejectionReason } : {}),
+    },
+  });
 
   return NextResponse.json({ success: true });
 }

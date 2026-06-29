@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
+import { recordAuditLog } from "@/lib/audit-log";
 
 const patchSchema = z.object({
   approved: z.boolean(),
@@ -41,6 +42,14 @@ export async function DELETE(
 
     const { id } = await params;
     await prisma.review.delete({ where: { id } });
+
+    await recordAuditLog({
+      actorId: session.user.id,
+      actorEmail: session.user.email,
+      action: "review.delete",
+      targetType: "review",
+      targetId: id,
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
