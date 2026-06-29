@@ -18,13 +18,19 @@ export type UserRole = "student" | "instructor" | "admin";
 
 // ── Helpers puros ────────────────────────────────────────────────────────────
 
-/** Formatea un precio en pesos mexicanos. 0 = "Gratis". */
+/**
+ * Formatea un precio en pesos mexicanos. 0 = "Gratis".
+ * Incluye el sufijo "MXN" explícito porque el público es de toda Latinoamérica
+ * y el símbolo "$" por sí solo es ambiguo (pesos COL/ARG/CLP, dólares, etc.).
+ * Ej.: `$1,234 MXN`.
+ */
 export function formatPriceMXN(price: number, showDecimals = false): string {
   if (price === 0) return "Gratis";
-  return new Intl.NumberFormat("es-MX", {
+  const formatted = new Intl.NumberFormat("es-MX", {
     style: "currency",
     currency: "MXN",
     minimumFractionDigits: showDecimals ? 2 : 0,
     maximumFractionDigits: showDecimals ? 2 : 0,
   }).format(price);
+  return `${formatted} MXN`;
 }

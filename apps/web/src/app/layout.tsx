@@ -9,12 +9,26 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const ogImage = `${siteUrl}/api/og`;
 
+// Países de Latinoamérica que servimos (ISO 3166-1 alpha-2) — usados en
+// structured data para reforzar el targeting geográfico.
+const LATAM_COUNTRIES = [
+  "MX", "CO", "AR", "CL", "PE", "VE", "EC", "GT", "BO", "DO",
+  "HN", "PY", "SV", "NI", "CR", "PA", "UY", "PR",
+];
+
+// Locales LatAm para Open Graph (locale principal es_MX + alternativos).
+const LATAM_OG_LOCALES = [
+  "es_AR", "es_BO", "es_CL", "es_CO", "es_CR", "es_DO", "es_EC", "es_GT",
+  "es_HN", "es_NI", "es_PA", "es_PE", "es_PR", "es_PY", "es_SV", "es_UY", "es_VE",
+];
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Cursumi",
   url: siteUrl,
   logo: `${siteUrl}/logos/cursumi.svg`,
+  areaServed: LATAM_COUNTRIES.map((code) => ({ "@type": "Country", name: code })),
   sameAs: [
     "https://www.facebook.com/cursumi/",
     "https://www.instagram.com/cursumi/",
@@ -29,8 +43,8 @@ const organizationJsonLd = {
       "@type": "ContactPoint",
       email: "contacto@cursumi.com",
       contactType: "customer support",
-      areaServed: "MX",
-      availableLanguage: ["es", "en"],
+      areaServed: LATAM_COUNTRIES,
+      availableLanguage: ["es"],
     },
   ],
 };
@@ -41,6 +55,7 @@ const websiteJsonLd = {
   name: "Cursumi",
   url: siteUrl,
   description: "Plataforma de cursos en video y eventos en vivo con instructores expertos.",
+  inLanguage: "es-419",
   publisher: { "@type": "Organization", name: "Cursumi", url: siteUrl },
   potentialAction: {
     "@type": "SearchAction",
@@ -63,13 +78,16 @@ export const metadata: Metadata = {
     "Cursumi conecta estudiantes e instructores en cursos en video y eventos en vivo que generan resultados reales.",
   applicationName: "Cursumi",
   keywords: [
-    "cursos",
-    "educación",
-    "formación online",
-    "formación presencial",
+    "cursos en línea",
+    "cursos en video",
+    "capacitación en línea",
+    "educación en línea",
+    "aprender en línea",
     "instructores",
     "aprendizaje",
     "plataforma educativa",
+    "cursos Latinoamérica",
+    "cursos en español",
   ],
   authors: [{ name: "Cursumi" }],
   creator: "Cursumi",
@@ -81,6 +99,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_MX",
+    alternateLocale: LATAM_OG_LOCALES,
     url: siteUrl,
     siteName: "Cursumi",
     title: "Cursumi · Aprende a tu ritmo o en vivo",
@@ -122,6 +141,11 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  // Verificación de Google Search Console: define GOOGLE_SITE_VERIFICATION en el
+  // entorno (Vercel) con el código que da Search Console para validar la propiedad.
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 export default function RootLayout({
@@ -130,7 +154,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es-419" suppressHydrationWarning>
       <body className="antialiased">
         {/* Recarga única si falla un chunk tras un deploy (antes de hidratar React). */}
         <script

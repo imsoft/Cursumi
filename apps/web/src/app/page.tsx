@@ -16,7 +16,15 @@ export const metadata = {
   title: "Cursos en video y en vivo para crecer con expertos",
   description:
     "Descubre cursos en video a tu ritmo y cursos por evento (presenciales o por videollamada) con instructores verificados. Aprende habilidades prácticas con Cursumi.",
-  alternates: { canonical: baseUrl },
+  alternates: {
+    canonical: baseUrl,
+    // Público de toda Latinoamérica: una sola versión en español.
+    // Declaramos es-419 (español LatAm) y x-default apuntando a la misma URL.
+    languages: {
+      "es-419": baseUrl,
+      "x-default": baseUrl,
+    },
+  },
   openGraph: {
     title: "Cursumi | Cursos en video y en vivo",
     description: "Aprende con instructores expertos: cursos en video a tu ritmo o eventos en vivo.",
