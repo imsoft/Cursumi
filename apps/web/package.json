@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "db:migrate:deploy": "if [ \"$VERCEL_ENV\" = \"production\" ]; then prisma migrate deploy; else echo \"⏭  Skipping prisma migrate deploy (VERCEL_ENV=${VERCEL_ENV:-local}; solo se aplica en producción)\"; fi",
+    "db:migrate:deploy": "if [ \"$VERCEL_ENV\" = \"production\" ]; then PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK=true prisma migrate deploy; else echo \"⏭  Skipping prisma migrate deploy (VERCEL_ENV=${VERCEL_ENV:-local}; solo se aplica en producción)\"; fi",
     "db:migrate:diff": "prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
