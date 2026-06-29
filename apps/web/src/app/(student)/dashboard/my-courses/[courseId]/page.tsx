@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getMyCourseDetail } from "@/app/actions/course-actions";
+import { displayDuration } from "@/lib/duration";
 import { prisma } from "@/lib/prisma";
 import { getCachedSession } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -212,7 +213,7 @@ export default async function MyCourseDetailPage({
             {course.duration && (
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <Clock className="h-4 w-4 shrink-0 text-muted-foreground" />
-                <span>Duración: {course.duration}</span>
+                <span>Duración: {displayDuration(course.duration)}</span>
               </div>
             )}
             {course.startDate && (

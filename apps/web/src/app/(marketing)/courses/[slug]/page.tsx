@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { displayDuration } from "@/lib/duration";
 
 // Regenerar cada 5 minutos — el detalle del curso (reviews, precio) puede cambiar
 export const revalidate = 300;
@@ -245,7 +246,7 @@ export default async function PublicCourseDetailPage({
             )}
 
             {course.duration && (
-              <div className="text-sm text-foreground">Duración: {course.duration}</div>
+              <div className="text-sm text-foreground">Duración: {displayDuration(course.duration)}</div>
             )}
             {totalDurationFormatted && (
               <div className="flex items-center gap-2 text-sm text-foreground">

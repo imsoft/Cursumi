@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { formatPriceMXN } from "@/lib/utils";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
 import { CourseSessionsManager } from "./course-sessions-manager";
+import { DurationInput } from "./duration-input";
 
 const createPricingSchema = (modality: "virtual" | "evento") => {
   const baseSchema = {
@@ -182,16 +183,18 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
 
         {/* Duración — siempre visible */}
         <div>
-          <Input
-            label="Duración estimada *"
-            {...form.register("duration")}
+          <Controller
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <DurationInput
+                label="Duración estimada *"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                error={form.formState.errors.duration?.message}
+              />
+            )}
           />
-
-          {form.formState.errors.duration && (
-            <p className="mt-1 text-xs text-destructive">
-              {form.formState.errors.duration.message}
-            </p>
-          )}
         </div>
 
         {usesSessions && (

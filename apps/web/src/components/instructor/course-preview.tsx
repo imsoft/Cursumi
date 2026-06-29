@@ -3,6 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { formatPriceMXN } from "@/lib/utils";
+import { displayDuration } from "@/lib/duration";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -109,7 +110,7 @@ export const CoursePreview = ({
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Duración:</span>
-                    <span className="font-medium">{courseData.duration || "No definida"}</span>
+                    <span className="font-medium">{displayDuration(courseData.duration) || "No definida"}</span>
                   </div>
                   {courseData.maxStudents && (
                     <div className="flex justify-between text-sm">

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { DurationInput } from "./duration-input";
 
 type Chapter = {
   id: string;
@@ -84,12 +85,10 @@ export const CourseChaptersSection = () => {
             />
           </div>
           <div>
-            <Input
+            <DurationInput
               label="Duración estimada *"
               value={formData.duration}
-              onChange={(event) =>
-                setFormData((prev) => ({ ...prev, duration: event.target.value }))
-              }
+              onChange={(value) => setFormData((prev) => ({ ...prev, duration: value }))}
             />
           </div>
           <div>

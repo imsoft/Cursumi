@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { displayDuration } from "@/lib/duration";
 import { getPublishedCourseDetail, enrollInCourse } from "@/app/actions/course-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -130,7 +131,7 @@ export default async function ExploreCourseDetail({
             )}
 
             {course.duration && (
-              <div className="text-sm text-foreground">Duración: {course.duration}</div>
+              <div className="text-sm text-foreground">Duración: {displayDuration(course.duration)}</div>
             )}
           </div>
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { displayDuration } from "@/lib/duration";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Edit, Users, MessageSquare, MapPin, Calendar, Clock, DollarSign, MessageCircleQuestion, Star, BarChart3, ClipboardList, ArrowRight, CheckCircle2 } from "lucide-react";
@@ -122,7 +123,7 @@ export default async function CourseDetailPage({
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Duración</p>
-                  <p className="text-foreground">{course.duration ?? "—"}</p>
+                  <p className="text-foreground">{displayDuration(course.duration) || "—"}</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <DollarSign className="mt-0.5 h-4 w-4 text-muted-foreground" />

@@ -14,6 +14,7 @@ import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import { DatePickerField } from "@/components/ui/date-picker";
+import { DurationInput } from "./duration-input";
 
 const createCourseSchema = z
   .object({
@@ -290,16 +291,12 @@ export const CreateCourseForm = () => {
                 )}
               </div>
               <div>
-                <Input
+                <DurationInput
                   label="Duración estimada *"
-                  {...form.register("duration")}
+                  value={form.watch("duration") ?? ""}
+                  onChange={(v) => form.setValue("duration", v, { shouldValidate: true })}
+                  error={form.formState.errors.duration?.message}
                 />
-
-                {form.formState.errors.duration && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {form.formState.errors.duration.message}
-                  </p>
-                )}
               </div>
             </div>
           </section>
