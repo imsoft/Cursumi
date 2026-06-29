@@ -1,6 +1,7 @@
 "use client";
 
 import { createAuthClient } from "better-auth/react";
+import { twoFactorClient } from "better-auth/client/plugins";
 
 function getAuthBaseURL(): string {
   if (typeof window !== "undefined") {
@@ -11,9 +12,22 @@ function getAuthBaseURL(): string {
 
 export const authClient = createAuthClient({
   baseURL: getAuthBaseURL(),
+  plugins: [
+    twoFactorClient({
+      // Cuando el login requiere segundo factor, Better Auth invoca esto.
+      onTwoFactorRedirect() {
+        if (typeof window !== "undefined") {
+          const returnUrl = new URLSearchParams(window.location.search).get("returnUrl");
+          window.location.href = returnUrl
+            ? `/two-factor?returnUrl=${encodeURIComponent(returnUrl)}`
+            : "/two-factor";
+        }
+      },
+    }),
+  ],
 });
 
-export const { signIn, signUp, signOut, useSession } = authClient;
+export const { signIn, signUp, signOut, useSession, twoFactor } = authClient;
 
 // Better Auth expone forgetPassword y resetPassword como métodos del cliente
 export const forgetPassword = {

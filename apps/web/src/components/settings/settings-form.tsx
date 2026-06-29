@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Button } from "@/components/ui/button";
 import { Save, Lock } from "lucide-react";
+import { TwoFactorSettings } from "./two-factor-settings";
 
 const nameSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -188,6 +189,8 @@ export function SettingsForm() {
           </form>
         </CardContent>
       </Card>
+
+      <TwoFactorSettings />
     </div>
   );
 }

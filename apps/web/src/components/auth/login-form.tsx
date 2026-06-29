@@ -92,9 +92,18 @@ export const LoginForm = ({ returnUrl, googleAuthEnabled = false }: LoginFormPro
         return;
       }
 
-      // Si el login fue exitoso, redirigir (returnUrl si es ruta segura)
+      const isSafe = returnUrl?.startsWith("/") && !returnUrl.startsWith("//") && !returnUrl.startsWith("/\\");
+
+      // Si el usuario tiene 2FA activado, la contraseña NO completa el login:
+      // hay que pasar por el challenge del segundo factor.
+      if ((result.data as { twoFactorRedirect?: boolean } | null)?.twoFactorRedirect) {
+        const qs = isSafe ? `?returnUrl=${encodeURIComponent(returnUrl!)}` : "";
+        router.push(`/two-factor${qs}`);
+        return;
+      }
+
+      // Login completo: redirigir (returnUrl si es ruta segura)
       if (result.data) {
-        const isSafe = returnUrl?.startsWith("/") && !returnUrl.startsWith("//") && !returnUrl.startsWith("/\\");
         const target = isSafe ? returnUrl! : "/dashboard";
         router.push(target);
       }

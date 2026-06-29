@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { twoFactor } from "better-auth/plugins/two-factor";
 import { expo } from "@better-auth/expo";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prisma } from "./prisma";
@@ -79,6 +80,11 @@ export const auth = betterAuth({
   },
   plugins: [
     expo(), // Soporte para la app móvil (Expo): auth por token + deep links.
+    // 2FA por TOTP + códigos de respaldo. El login exige el segundo factor
+    // cuando el usuario lo tiene activado (twoFactorEnabled).
+    twoFactor({
+      issuer: "Cursumi",
+    }),
     nextCookies(), // Debe ser el último plugin
   ],
   /**

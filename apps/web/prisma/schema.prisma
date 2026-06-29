@@ -66,6 +66,10 @@ model User {
   /// Entrada de referido de este usuario (solo existe si fue referido por alguien)
   referralEntry       Referral?  @relation("ReferredUser")
   blogPosts           BlogPost[] @relation("BlogAuthor")
+
+  /// 2FA (better-auth twoFactor plugin)
+  twoFactorEnabled Boolean?   @default(false)
+  twoFactor        TwoFactor?
 }
 
 model Account {
@@ -114,6 +118,18 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@index([identifier, value])
+}
+
+// 2FA — almacena el secreto TOTP y los códigos de respaldo (better-auth twoFactor)
+model TwoFactor {
+  id          String  @id @default(cuid())
+  secret      String
+  backupCodes String
+  userId      String  @unique
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified    Boolean @default(true)
+
+  @@index([secret])
 }
 
 // ─────────────────────────────────────────

@@ -34,6 +34,11 @@ export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
  */
 export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
 /**
+ * Model TwoFactor
+ * 
+ */
+export type TwoFactor = $Result.DefaultSelection<Prisma.$TwoFactorPayload>
+/**
  * Model InstructorApplication
  * 
  */
@@ -654,6 +659,16 @@ export class PrismaClient<
     * ```
     */
   get verification(): Prisma.VerificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.twoFactor`: Exposes CRUD operations for the **TwoFactor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TwoFactors
+    * const twoFactors = await prisma.twoFactor.findMany()
+    * ```
+    */
+  get twoFactor(): Prisma.TwoFactorDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.instructorApplication`: Exposes CRUD operations for the **InstructorApplication** model.
@@ -1552,6 +1567,7 @@ export namespace Prisma {
     Account: 'Account',
     Session: 'Session',
     Verification: 'Verification',
+    TwoFactor: 'TwoFactor',
     InstructorApplication: 'InstructorApplication',
     InstructorProfile: 'InstructorProfile',
     Category: 'Category',
@@ -1613,7 +1629,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "businessQuoteRequest" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "expoPushToken" | "blogPost" | "auditLog"
+      modelProps: "user" | "account" | "session" | "verification" | "twoFactor" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "businessQuoteRequest" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "expoPushToken" | "blogPost" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1910,6 +1926,80 @@ export namespace Prisma {
           count: {
             args: Prisma.VerificationCountArgs<ExtArgs>
             result: $Utils.Optional<VerificationCountAggregateOutputType> | number
+          }
+        }
+      }
+      TwoFactor: {
+        payload: Prisma.$TwoFactorPayload<ExtArgs>
+        fields: Prisma.TwoFactorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TwoFactorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TwoFactorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>
+          }
+          findFirst: {
+            args: Prisma.TwoFactorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TwoFactorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>
+          }
+          findMany: {
+            args: Prisma.TwoFactorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>[]
+          }
+          create: {
+            args: Prisma.TwoFactorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>
+          }
+          createMany: {
+            args: Prisma.TwoFactorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TwoFactorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>[]
+          }
+          delete: {
+            args: Prisma.TwoFactorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>
+          }
+          update: {
+            args: Prisma.TwoFactorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>
+          }
+          deleteMany: {
+            args: Prisma.TwoFactorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TwoFactorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TwoFactorUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>[]
+          }
+          upsert: {
+            args: Prisma.TwoFactorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TwoFactorPayload>
+          }
+          aggregate: {
+            args: Prisma.TwoFactorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTwoFactor>
+          }
+          groupBy: {
+            args: Prisma.TwoFactorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TwoFactorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TwoFactorCountArgs<ExtArgs>
+            result: $Utils.Optional<TwoFactorCountAggregateOutputType> | number
           }
         }
       }
@@ -5429,6 +5519,7 @@ export namespace Prisma {
     account?: AccountOmit
     session?: SessionOmit
     verification?: VerificationOmit
+    twoFactor?: TwoFactorOmit
     instructorApplication?: InstructorApplicationOmit
     instructorProfile?: InstructorProfileOmit
     category?: CategoryOmit
@@ -6498,6 +6589,7 @@ export namespace Prisma {
     updatedAt: Date | null
     referralCode: string | null
     referredById: string | null
+    twoFactorEnabled: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -6519,6 +6611,7 @@ export namespace Prisma {
     updatedAt: Date | null
     referralCode: string | null
     referredById: string | null
+    twoFactorEnabled: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -6540,6 +6633,7 @@ export namespace Prisma {
     updatedAt: number
     referralCode: number
     referredById: number
+    twoFactorEnabled: number
     _all: number
   }
 
@@ -6563,6 +6657,7 @@ export namespace Prisma {
     updatedAt?: true
     referralCode?: true
     referredById?: true
+    twoFactorEnabled?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -6584,6 +6679,7 @@ export namespace Prisma {
     updatedAt?: true
     referralCode?: true
     referredById?: true
+    twoFactorEnabled?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -6605,6 +6701,7 @@ export namespace Prisma {
     updatedAt?: true
     referralCode?: true
     referredById?: true
+    twoFactorEnabled?: true
     _all?: true
   }
 
@@ -6699,6 +6796,7 @@ export namespace Prisma {
     updatedAt: Date
     referralCode: string | null
     referredById: string | null
+    twoFactorEnabled: boolean | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -6737,6 +6835,7 @@ export namespace Prisma {
     updatedAt?: boolean
     referralCode?: boolean
     referredById?: boolean
+    twoFactorEnabled?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     instructorProfile?: boolean | User$instructorProfileArgs<ExtArgs>
@@ -6764,6 +6863,7 @@ export namespace Prisma {
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
     referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
     blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
+    twoFactor?: boolean | User$twoFactorArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6786,6 +6886,7 @@ export namespace Prisma {
     updatedAt?: boolean
     referralCode?: boolean
     referredById?: boolean
+    twoFactorEnabled?: boolean
     referredBy?: boolean | User$referredByArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6808,6 +6909,7 @@ export namespace Prisma {
     updatedAt?: boolean
     referralCode?: boolean
     referredById?: boolean
+    twoFactorEnabled?: boolean
     referredBy?: boolean | User$referredByArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6830,9 +6932,10 @@ export namespace Prisma {
     updatedAt?: boolean
     referralCode?: boolean
     referredById?: boolean
+    twoFactorEnabled?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phone" | "city" | "state" | "bio" | "website" | "linkedinUrl" | "instagramUrl" | "signatureUrl" | "role" | "createdAt" | "updatedAt" | "referralCode" | "referredById", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phone" | "city" | "state" | "bio" | "website" | "linkedinUrl" | "instagramUrl" | "signatureUrl" | "role" | "createdAt" | "updatedAt" | "referralCode" | "referredById" | "twoFactorEnabled", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -6861,6 +6964,7 @@ export namespace Prisma {
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
     referralEntry?: boolean | User$referralEntryArgs<ExtArgs>
     blogPosts?: boolean | User$blogPostsArgs<ExtArgs>
+    twoFactor?: boolean | User$twoFactorArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6906,6 +7010,7 @@ export namespace Prisma {
        */
       referralEntry: Prisma.$ReferralPayload<ExtArgs> | null
       blogPosts: Prisma.$BlogPostPayload<ExtArgs>[]
+      twoFactor: Prisma.$TwoFactorPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6935,6 +7040,10 @@ export namespace Prisma {
        * Usuario que refirió a este usuario (null si llegó sin referido)
        */
       referredById: string | null
+      /**
+       * 2FA (better-auth twoFactor plugin)
+       */
+      twoFactorEnabled: boolean | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -7356,6 +7465,7 @@ export namespace Prisma {
     referralCommissions<T extends User$referralCommissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralCommissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     referralEntry<T extends User$referralEntryArgs<ExtArgs> = {}>(args?: Subset<T, User$referralEntryArgs<ExtArgs>>): Prisma__ReferralClient<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     blogPosts<T extends User$blogPostsArgs<ExtArgs> = {}>(args?: Subset<T, User$blogPostsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BlogPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    twoFactor<T extends User$twoFactorArgs<ExtArgs> = {}>(args?: Subset<T, User$twoFactorArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7403,6 +7513,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly referralCode: FieldRef<"User", 'String'>
     readonly referredById: FieldRef<"User", 'String'>
+    readonly twoFactorEnabled: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -8429,6 +8540,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BlogPostScalarFieldEnum | BlogPostScalarFieldEnum[]
+  }
+
+  /**
+   * User.twoFactor
+   */
+  export type User$twoFactorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    where?: TwoFactorWhereInput
   }
 
   /**
@@ -11729,6 +11859,1069 @@ export namespace Prisma {
      * Omit specific fields from the Verification
      */
     omit?: VerificationOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TwoFactor
+   */
+
+  export type AggregateTwoFactor = {
+    _count: TwoFactorCountAggregateOutputType | null
+    _min: TwoFactorMinAggregateOutputType | null
+    _max: TwoFactorMaxAggregateOutputType | null
+  }
+
+  export type TwoFactorMinAggregateOutputType = {
+    id: string | null
+    secret: string | null
+    backupCodes: string | null
+    userId: string | null
+    verified: boolean | null
+  }
+
+  export type TwoFactorMaxAggregateOutputType = {
+    id: string | null
+    secret: string | null
+    backupCodes: string | null
+    userId: string | null
+    verified: boolean | null
+  }
+
+  export type TwoFactorCountAggregateOutputType = {
+    id: number
+    secret: number
+    backupCodes: number
+    userId: number
+    verified: number
+    _all: number
+  }
+
+
+  export type TwoFactorMinAggregateInputType = {
+    id?: true
+    secret?: true
+    backupCodes?: true
+    userId?: true
+    verified?: true
+  }
+
+  export type TwoFactorMaxAggregateInputType = {
+    id?: true
+    secret?: true
+    backupCodes?: true
+    userId?: true
+    verified?: true
+  }
+
+  export type TwoFactorCountAggregateInputType = {
+    id?: true
+    secret?: true
+    backupCodes?: true
+    userId?: true
+    verified?: true
+    _all?: true
+  }
+
+  export type TwoFactorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TwoFactor to aggregate.
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TwoFactors to fetch.
+     */
+    orderBy?: TwoFactorOrderByWithRelationInput | TwoFactorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TwoFactorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TwoFactors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TwoFactors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TwoFactors
+    **/
+    _count?: true | TwoFactorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TwoFactorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TwoFactorMaxAggregateInputType
+  }
+
+  export type GetTwoFactorAggregateType<T extends TwoFactorAggregateArgs> = {
+        [P in keyof T & keyof AggregateTwoFactor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTwoFactor[P]>
+      : GetScalarType<T[P], AggregateTwoFactor[P]>
+  }
+
+
+
+
+  export type TwoFactorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TwoFactorWhereInput
+    orderBy?: TwoFactorOrderByWithAggregationInput | TwoFactorOrderByWithAggregationInput[]
+    by: TwoFactorScalarFieldEnum[] | TwoFactorScalarFieldEnum
+    having?: TwoFactorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TwoFactorCountAggregateInputType | true
+    _min?: TwoFactorMinAggregateInputType
+    _max?: TwoFactorMaxAggregateInputType
+  }
+
+  export type TwoFactorGroupByOutputType = {
+    id: string
+    secret: string
+    backupCodes: string
+    userId: string
+    verified: boolean
+    _count: TwoFactorCountAggregateOutputType | null
+    _min: TwoFactorMinAggregateOutputType | null
+    _max: TwoFactorMaxAggregateOutputType | null
+  }
+
+  type GetTwoFactorGroupByPayload<T extends TwoFactorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TwoFactorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TwoFactorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TwoFactorGroupByOutputType[P]>
+            : GetScalarType<T[P], TwoFactorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TwoFactorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    secret?: boolean
+    backupCodes?: boolean
+    userId?: boolean
+    verified?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["twoFactor"]>
+
+  export type TwoFactorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    secret?: boolean
+    backupCodes?: boolean
+    userId?: boolean
+    verified?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["twoFactor"]>
+
+  export type TwoFactorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    secret?: boolean
+    backupCodes?: boolean
+    userId?: boolean
+    verified?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["twoFactor"]>
+
+  export type TwoFactorSelectScalar = {
+    id?: boolean
+    secret?: boolean
+    backupCodes?: boolean
+    userId?: boolean
+    verified?: boolean
+  }
+
+  export type TwoFactorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret" | "backupCodes" | "userId" | "verified", ExtArgs["result"]["twoFactor"]>
+  export type TwoFactorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TwoFactorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TwoFactorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $TwoFactorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TwoFactor"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      secret: string
+      backupCodes: string
+      userId: string
+      verified: boolean
+    }, ExtArgs["result"]["twoFactor"]>
+    composites: {}
+  }
+
+  type TwoFactorGetPayload<S extends boolean | null | undefined | TwoFactorDefaultArgs> = $Result.GetResult<Prisma.$TwoFactorPayload, S>
+
+  type TwoFactorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TwoFactorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TwoFactorCountAggregateInputType | true
+    }
+
+  export interface TwoFactorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TwoFactor'], meta: { name: 'TwoFactor' } }
+    /**
+     * Find zero or one TwoFactor that matches the filter.
+     * @param {TwoFactorFindUniqueArgs} args - Arguments to find a TwoFactor
+     * @example
+     * // Get one TwoFactor
+     * const twoFactor = await prisma.twoFactor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TwoFactorFindUniqueArgs>(args: SelectSubset<T, TwoFactorFindUniqueArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TwoFactor that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TwoFactorFindUniqueOrThrowArgs} args - Arguments to find a TwoFactor
+     * @example
+     * // Get one TwoFactor
+     * const twoFactor = await prisma.twoFactor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TwoFactorFindUniqueOrThrowArgs>(args: SelectSubset<T, TwoFactorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TwoFactor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorFindFirstArgs} args - Arguments to find a TwoFactor
+     * @example
+     * // Get one TwoFactor
+     * const twoFactor = await prisma.twoFactor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TwoFactorFindFirstArgs>(args?: SelectSubset<T, TwoFactorFindFirstArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TwoFactor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorFindFirstOrThrowArgs} args - Arguments to find a TwoFactor
+     * @example
+     * // Get one TwoFactor
+     * const twoFactor = await prisma.twoFactor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TwoFactorFindFirstOrThrowArgs>(args?: SelectSubset<T, TwoFactorFindFirstOrThrowArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TwoFactors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TwoFactors
+     * const twoFactors = await prisma.twoFactor.findMany()
+     * 
+     * // Get first 10 TwoFactors
+     * const twoFactors = await prisma.twoFactor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const twoFactorWithIdOnly = await prisma.twoFactor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TwoFactorFindManyArgs>(args?: SelectSubset<T, TwoFactorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TwoFactor.
+     * @param {TwoFactorCreateArgs} args - Arguments to create a TwoFactor.
+     * @example
+     * // Create one TwoFactor
+     * const TwoFactor = await prisma.twoFactor.create({
+     *   data: {
+     *     // ... data to create a TwoFactor
+     *   }
+     * })
+     * 
+     */
+    create<T extends TwoFactorCreateArgs>(args: SelectSubset<T, TwoFactorCreateArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TwoFactors.
+     * @param {TwoFactorCreateManyArgs} args - Arguments to create many TwoFactors.
+     * @example
+     * // Create many TwoFactors
+     * const twoFactor = await prisma.twoFactor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TwoFactorCreateManyArgs>(args?: SelectSubset<T, TwoFactorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TwoFactors and returns the data saved in the database.
+     * @param {TwoFactorCreateManyAndReturnArgs} args - Arguments to create many TwoFactors.
+     * @example
+     * // Create many TwoFactors
+     * const twoFactor = await prisma.twoFactor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TwoFactors and only return the `id`
+     * const twoFactorWithIdOnly = await prisma.twoFactor.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TwoFactorCreateManyAndReturnArgs>(args?: SelectSubset<T, TwoFactorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TwoFactor.
+     * @param {TwoFactorDeleteArgs} args - Arguments to delete one TwoFactor.
+     * @example
+     * // Delete one TwoFactor
+     * const TwoFactor = await prisma.twoFactor.delete({
+     *   where: {
+     *     // ... filter to delete one TwoFactor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TwoFactorDeleteArgs>(args: SelectSubset<T, TwoFactorDeleteArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TwoFactor.
+     * @param {TwoFactorUpdateArgs} args - Arguments to update one TwoFactor.
+     * @example
+     * // Update one TwoFactor
+     * const twoFactor = await prisma.twoFactor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TwoFactorUpdateArgs>(args: SelectSubset<T, TwoFactorUpdateArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TwoFactors.
+     * @param {TwoFactorDeleteManyArgs} args - Arguments to filter TwoFactors to delete.
+     * @example
+     * // Delete a few TwoFactors
+     * const { count } = await prisma.twoFactor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TwoFactorDeleteManyArgs>(args?: SelectSubset<T, TwoFactorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TwoFactors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TwoFactors
+     * const twoFactor = await prisma.twoFactor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TwoFactorUpdateManyArgs>(args: SelectSubset<T, TwoFactorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TwoFactors and returns the data updated in the database.
+     * @param {TwoFactorUpdateManyAndReturnArgs} args - Arguments to update many TwoFactors.
+     * @example
+     * // Update many TwoFactors
+     * const twoFactor = await prisma.twoFactor.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TwoFactors and only return the `id`
+     * const twoFactorWithIdOnly = await prisma.twoFactor.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TwoFactorUpdateManyAndReturnArgs>(args: SelectSubset<T, TwoFactorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TwoFactor.
+     * @param {TwoFactorUpsertArgs} args - Arguments to update or create a TwoFactor.
+     * @example
+     * // Update or create a TwoFactor
+     * const twoFactor = await prisma.twoFactor.upsert({
+     *   create: {
+     *     // ... data to create a TwoFactor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TwoFactor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TwoFactorUpsertArgs>(args: SelectSubset<T, TwoFactorUpsertArgs<ExtArgs>>): Prisma__TwoFactorClient<$Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TwoFactors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorCountArgs} args - Arguments to filter TwoFactors to count.
+     * @example
+     * // Count the number of TwoFactors
+     * const count = await prisma.twoFactor.count({
+     *   where: {
+     *     // ... the filter for the TwoFactors we want to count
+     *   }
+     * })
+    **/
+    count<T extends TwoFactorCountArgs>(
+      args?: Subset<T, TwoFactorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TwoFactorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TwoFactor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TwoFactorAggregateArgs>(args: Subset<T, TwoFactorAggregateArgs>): Prisma.PrismaPromise<GetTwoFactorAggregateType<T>>
+
+    /**
+     * Group by TwoFactor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TwoFactorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TwoFactorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TwoFactorGroupByArgs['orderBy'] }
+        : { orderBy?: TwoFactorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TwoFactorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTwoFactorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TwoFactor model
+   */
+  readonly fields: TwoFactorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TwoFactor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TwoFactorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TwoFactor model
+   */
+  interface TwoFactorFieldRefs {
+    readonly id: FieldRef<"TwoFactor", 'String'>
+    readonly secret: FieldRef<"TwoFactor", 'String'>
+    readonly backupCodes: FieldRef<"TwoFactor", 'String'>
+    readonly userId: FieldRef<"TwoFactor", 'String'>
+    readonly verified: FieldRef<"TwoFactor", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TwoFactor findUnique
+   */
+  export type TwoFactorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * Filter, which TwoFactor to fetch.
+     */
+    where: TwoFactorWhereUniqueInput
+  }
+
+  /**
+   * TwoFactor findUniqueOrThrow
+   */
+  export type TwoFactorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * Filter, which TwoFactor to fetch.
+     */
+    where: TwoFactorWhereUniqueInput
+  }
+
+  /**
+   * TwoFactor findFirst
+   */
+  export type TwoFactorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * Filter, which TwoFactor to fetch.
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TwoFactors to fetch.
+     */
+    orderBy?: TwoFactorOrderByWithRelationInput | TwoFactorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TwoFactors.
+     */
+    cursor?: TwoFactorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TwoFactors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TwoFactors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TwoFactors.
+     */
+    distinct?: TwoFactorScalarFieldEnum | TwoFactorScalarFieldEnum[]
+  }
+
+  /**
+   * TwoFactor findFirstOrThrow
+   */
+  export type TwoFactorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * Filter, which TwoFactor to fetch.
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TwoFactors to fetch.
+     */
+    orderBy?: TwoFactorOrderByWithRelationInput | TwoFactorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TwoFactors.
+     */
+    cursor?: TwoFactorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TwoFactors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TwoFactors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TwoFactors.
+     */
+    distinct?: TwoFactorScalarFieldEnum | TwoFactorScalarFieldEnum[]
+  }
+
+  /**
+   * TwoFactor findMany
+   */
+  export type TwoFactorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * Filter, which TwoFactors to fetch.
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TwoFactors to fetch.
+     */
+    orderBy?: TwoFactorOrderByWithRelationInput | TwoFactorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TwoFactors.
+     */
+    cursor?: TwoFactorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TwoFactors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TwoFactors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TwoFactors.
+     */
+    distinct?: TwoFactorScalarFieldEnum | TwoFactorScalarFieldEnum[]
+  }
+
+  /**
+   * TwoFactor create
+   */
+  export type TwoFactorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TwoFactor.
+     */
+    data: XOR<TwoFactorCreateInput, TwoFactorUncheckedCreateInput>
+  }
+
+  /**
+   * TwoFactor createMany
+   */
+  export type TwoFactorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TwoFactors.
+     */
+    data: TwoFactorCreateManyInput | TwoFactorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TwoFactor createManyAndReturn
+   */
+  export type TwoFactorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * The data used to create many TwoFactors.
+     */
+    data: TwoFactorCreateManyInput | TwoFactorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TwoFactor update
+   */
+  export type TwoFactorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TwoFactor.
+     */
+    data: XOR<TwoFactorUpdateInput, TwoFactorUncheckedUpdateInput>
+    /**
+     * Choose, which TwoFactor to update.
+     */
+    where: TwoFactorWhereUniqueInput
+  }
+
+  /**
+   * TwoFactor updateMany
+   */
+  export type TwoFactorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TwoFactors.
+     */
+    data: XOR<TwoFactorUpdateManyMutationInput, TwoFactorUncheckedUpdateManyInput>
+    /**
+     * Filter which TwoFactors to update
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * Limit how many TwoFactors to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TwoFactor updateManyAndReturn
+   */
+  export type TwoFactorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * The data used to update TwoFactors.
+     */
+    data: XOR<TwoFactorUpdateManyMutationInput, TwoFactorUncheckedUpdateManyInput>
+    /**
+     * Filter which TwoFactors to update
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * Limit how many TwoFactors to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TwoFactor upsert
+   */
+  export type TwoFactorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TwoFactor to update in case it exists.
+     */
+    where: TwoFactorWhereUniqueInput
+    /**
+     * In case the TwoFactor found by the `where` argument doesn't exist, create a new TwoFactor with this data.
+     */
+    create: XOR<TwoFactorCreateInput, TwoFactorUncheckedCreateInput>
+    /**
+     * In case the TwoFactor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TwoFactorUpdateInput, TwoFactorUncheckedUpdateInput>
+  }
+
+  /**
+   * TwoFactor delete
+   */
+  export type TwoFactorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
+    /**
+     * Filter which TwoFactor to delete.
+     */
+    where: TwoFactorWhereUniqueInput
+  }
+
+  /**
+   * TwoFactor deleteMany
+   */
+  export type TwoFactorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TwoFactors to delete
+     */
+    where?: TwoFactorWhereInput
+    /**
+     * Limit how many TwoFactors to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TwoFactor without action
+   */
+  export type TwoFactorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TwoFactor
+     */
+    select?: TwoFactorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TwoFactor
+     */
+    omit?: TwoFactorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TwoFactorInclude<ExtArgs> | null
   }
 
 
@@ -64877,7 +66070,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     referralCode: 'referralCode',
-    referredById: 'referredById'
+    referredById: 'referredById',
+    twoFactorEnabled: 'twoFactorEnabled'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -64926,6 +66120,17 @@ export namespace Prisma {
   };
 
   export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+  export const TwoFactorScalarFieldEnum: {
+    id: 'id',
+    secret: 'secret',
+    backupCodes: 'backupCodes',
+    userId: 'userId',
+    verified: 'verified'
+  };
+
+  export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
 
 
   export const InstructorApplicationScalarFieldEnum: {
@@ -65978,6 +67183,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     referralCode?: StringNullableFilter<"User"> | string | null
     referredById?: StringNullableFilter<"User"> | string | null
+    twoFactorEnabled?: BoolNullableFilter<"User"> | boolean | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     instructorProfile?: XOR<InstructorProfileNullableScalarRelationFilter, InstructorProfileWhereInput> | null
@@ -66005,6 +67211,7 @@ export namespace Prisma {
     referralCommissions?: ReferralListRelationFilter
     referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
     blogPosts?: BlogPostListRelationFilter
+    twoFactor?: XOR<TwoFactorNullableScalarRelationFilter, TwoFactorWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -66026,6 +67233,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referralCode?: SortOrderInput | SortOrder
     referredById?: SortOrderInput | SortOrder
+    twoFactorEnabled?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     instructorProfile?: InstructorProfileOrderByWithRelationInput
@@ -66053,6 +67261,7 @@ export namespace Prisma {
     referralCommissions?: ReferralOrderByRelationAggregateInput
     referralEntry?: ReferralOrderByWithRelationInput
     blogPosts?: BlogPostOrderByRelationAggregateInput
+    twoFactor?: TwoFactorOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -66077,6 +67286,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     referredById?: StringNullableFilter<"User"> | string | null
+    twoFactorEnabled?: BoolNullableFilter<"User"> | boolean | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     instructorProfile?: XOR<InstructorProfileNullableScalarRelationFilter, InstructorProfileWhereInput> | null
@@ -66104,6 +67314,7 @@ export namespace Prisma {
     referralCommissions?: ReferralListRelationFilter
     referralEntry?: XOR<ReferralNullableScalarRelationFilter, ReferralWhereInput> | null
     blogPosts?: BlogPostListRelationFilter
+    twoFactor?: XOR<TwoFactorNullableScalarRelationFilter, TwoFactorWhereInput> | null
   }, "id" | "email" | "referralCode">
 
   export type UserOrderByWithAggregationInput = {
@@ -66125,6 +67336,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referralCode?: SortOrderInput | SortOrder
     referredById?: SortOrderInput | SortOrder
+    twoFactorEnabled?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -66152,6 +67364,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     referralCode?: StringNullableWithAggregatesFilter<"User"> | string | null
     referredById?: StringNullableWithAggregatesFilter<"User"> | string | null
+    twoFactorEnabled?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
   }
 
   export type AccountWhereInput = {
@@ -66375,6 +67588,61 @@ export namespace Prisma {
     expiresAt?: DateTimeWithAggregatesFilter<"Verification"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"Verification"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Verification"> | Date | string
+  }
+
+  export type TwoFactorWhereInput = {
+    AND?: TwoFactorWhereInput | TwoFactorWhereInput[]
+    OR?: TwoFactorWhereInput[]
+    NOT?: TwoFactorWhereInput | TwoFactorWhereInput[]
+    id?: StringFilter<"TwoFactor"> | string
+    secret?: StringFilter<"TwoFactor"> | string
+    backupCodes?: StringFilter<"TwoFactor"> | string
+    userId?: StringFilter<"TwoFactor"> | string
+    verified?: BoolFilter<"TwoFactor"> | boolean
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type TwoFactorOrderByWithRelationInput = {
+    id?: SortOrder
+    secret?: SortOrder
+    backupCodes?: SortOrder
+    userId?: SortOrder
+    verified?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type TwoFactorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: TwoFactorWhereInput | TwoFactorWhereInput[]
+    OR?: TwoFactorWhereInput[]
+    NOT?: TwoFactorWhereInput | TwoFactorWhereInput[]
+    secret?: StringFilter<"TwoFactor"> | string
+    backupCodes?: StringFilter<"TwoFactor"> | string
+    verified?: BoolFilter<"TwoFactor"> | boolean
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type TwoFactorOrderByWithAggregationInput = {
+    id?: SortOrder
+    secret?: SortOrder
+    backupCodes?: SortOrder
+    userId?: SortOrder
+    verified?: SortOrder
+    _count?: TwoFactorCountOrderByAggregateInput
+    _max?: TwoFactorMaxOrderByAggregateInput
+    _min?: TwoFactorMinOrderByAggregateInput
+  }
+
+  export type TwoFactorScalarWhereWithAggregatesInput = {
+    AND?: TwoFactorScalarWhereWithAggregatesInput | TwoFactorScalarWhereWithAggregatesInput[]
+    OR?: TwoFactorScalarWhereWithAggregatesInput[]
+    NOT?: TwoFactorScalarWhereWithAggregatesInput | TwoFactorScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TwoFactor"> | string
+    secret?: StringWithAggregatesFilter<"TwoFactor"> | string
+    backupCodes?: StringWithAggregatesFilter<"TwoFactor"> | string
+    userId?: StringWithAggregatesFilter<"TwoFactor"> | string
+    verified?: BoolWithAggregatesFilter<"TwoFactor"> | boolean
   }
 
   export type InstructorApplicationWhereInput = {
@@ -69958,6 +71226,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -69985,6 +71254,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -70006,6 +71276,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -70032,6 +71303,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -70052,6 +71324,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -70079,6 +71352,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -70100,6 +71374,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -70126,6 +71401,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -70147,6 +71423,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -70167,6 +71444,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -70188,6 +71466,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type AccountCreateInput = {
@@ -70438,6 +71717,61 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TwoFactorCreateInput = {
+    id?: string
+    secret: string
+    backupCodes: string
+    verified?: boolean
+    user: UserCreateNestedOneWithoutTwoFactorInput
+  }
+
+  export type TwoFactorUncheckedCreateInput = {
+    id?: string
+    secret: string
+    backupCodes: string
+    userId: string
+    verified?: boolean
+  }
+
+  export type TwoFactorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    secret?: StringFieldUpdateOperationsInput | string
+    backupCodes?: StringFieldUpdateOperationsInput | string
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutTwoFactorNestedInput
+  }
+
+  export type TwoFactorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    secret?: StringFieldUpdateOperationsInput | string
+    backupCodes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    verified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TwoFactorCreateManyInput = {
+    id?: string
+    secret: string
+    backupCodes: string
+    userId: string
+    verified?: boolean
+  }
+
+  export type TwoFactorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    secret?: StringFieldUpdateOperationsInput | string
+    backupCodes?: StringFieldUpdateOperationsInput | string
+    verified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TwoFactorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    secret?: StringFieldUpdateOperationsInput | string
+    backupCodes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    verified?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type InstructorApplicationCreateInput = {
@@ -74247,6 +75581,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
     some?: AccountWhereInput
@@ -74399,6 +75738,11 @@ export namespace Prisma {
     none?: BlogPostWhereInput
   }
 
+  export type TwoFactorNullableScalarRelationFilter = {
+    is?: TwoFactorWhereInput | null
+    isNot?: TwoFactorWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -74511,6 +75855,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referralCode?: SortOrder
     referredById?: SortOrder
+    twoFactorEnabled?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -74532,6 +75877,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referralCode?: SortOrder
     referredById?: SortOrder
+    twoFactorEnabled?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -74553,6 +75899,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referralCode?: SortOrder
     referredById?: SortOrder
+    twoFactorEnabled?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -74621,6 +75968,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -74764,6 +76119,30 @@ export namespace Prisma {
     expiresAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type TwoFactorCountOrderByAggregateInput = {
+    id?: SortOrder
+    secret?: SortOrder
+    backupCodes?: SortOrder
+    userId?: SortOrder
+    verified?: SortOrder
+  }
+
+  export type TwoFactorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    secret?: SortOrder
+    backupCodes?: SortOrder
+    userId?: SortOrder
+    verified?: SortOrder
+  }
+
+  export type TwoFactorMinOrderByAggregateInput = {
+    id?: SortOrder
+    secret?: SortOrder
+    backupCodes?: SortOrder
+    userId?: SortOrder
+    verified?: SortOrder
   }
 
   export type EnumApplicationStatusFilter<$PrismaModel = never> = {
@@ -77504,6 +78883,12 @@ export namespace Prisma {
     connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
   }
 
+  export type TwoFactorCreateNestedOneWithoutUserInput = {
+    create?: XOR<TwoFactorCreateWithoutUserInput, TwoFactorUncheckedCreateWithoutUserInput>
+    connectOrCreate?: TwoFactorCreateOrConnectWithoutUserInput
+    connect?: TwoFactorWhereUniqueInput
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -77683,6 +79068,12 @@ export namespace Prisma {
     connect?: BlogPostWhereUniqueInput | BlogPostWhereUniqueInput[]
   }
 
+  export type TwoFactorUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<TwoFactorCreateWithoutUserInput, TwoFactorUncheckedCreateWithoutUserInput>
+    connectOrCreate?: TwoFactorCreateOrConnectWithoutUserInput
+    connect?: TwoFactorWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -77701,6 +79092,10 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -78065,6 +79460,16 @@ export namespace Prisma {
     deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
   }
 
+  export type TwoFactorUpdateOneWithoutUserNestedInput = {
+    create?: XOR<TwoFactorCreateWithoutUserInput, TwoFactorUncheckedCreateWithoutUserInput>
+    connectOrCreate?: TwoFactorCreateOrConnectWithoutUserInput
+    upsert?: TwoFactorUpsertWithoutUserInput
+    disconnect?: TwoFactorWhereInput | boolean
+    delete?: TwoFactorWhereInput | boolean
+    connect?: TwoFactorWhereUniqueInput
+    update?: XOR<XOR<TwoFactorUpdateToOneWithWhereWithoutUserInput, TwoFactorUpdateWithoutUserInput>, TwoFactorUncheckedUpdateWithoutUserInput>
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -78417,6 +79822,16 @@ export namespace Prisma {
     deleteMany?: BlogPostScalarWhereInput | BlogPostScalarWhereInput[]
   }
 
+  export type TwoFactorUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<TwoFactorCreateWithoutUserInput, TwoFactorUncheckedCreateWithoutUserInput>
+    connectOrCreate?: TwoFactorCreateOrConnectWithoutUserInput
+    upsert?: TwoFactorUpsertWithoutUserInput
+    disconnect?: TwoFactorWhereInput | boolean
+    delete?: TwoFactorWhereInput | boolean
+    connect?: TwoFactorWhereUniqueInput
+    update?: XOR<XOR<TwoFactorUpdateToOneWithWhereWithoutUserInput, TwoFactorUpdateWithoutUserInput>, TwoFactorUncheckedUpdateWithoutUserInput>
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -78447,6 +79862,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutSessionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>, UserUncheckedUpdateWithoutSessionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutTwoFactorInput = {
+    create?: XOR<UserCreateWithoutTwoFactorInput, UserUncheckedCreateWithoutTwoFactorInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTwoFactorInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutTwoFactorNestedInput = {
+    create?: XOR<UserCreateWithoutTwoFactorInput, UserUncheckedCreateWithoutTwoFactorInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTwoFactorInput
+    upsert?: UserUpsertWithoutTwoFactorInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTwoFactorInput, UserUpdateWithoutTwoFactorInput>, UserUncheckedUpdateWithoutTwoFactorInput>
   }
 
   export type UserCreateNestedOneWithoutInstructorApplicationInput = {
@@ -81561,6 +82990,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -81647,6 +83081,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -82824,6 +84266,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -82850,6 +84293,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -82871,6 +84315,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -82896,6 +84341,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -82921,6 +84367,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -82947,6 +84394,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredByInput = {
@@ -82967,6 +84415,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -82993,6 +84442,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredByInput = {
@@ -83096,6 +84546,25 @@ export namespace Prisma {
   export type BlogPostCreateManyAuthorInputEnvelope = {
     data: BlogPostCreateManyAuthorInput | BlogPostCreateManyAuthorInput[]
     skipDuplicates?: boolean
+  }
+
+  export type TwoFactorCreateWithoutUserInput = {
+    id?: string
+    secret: string
+    backupCodes: string
+    verified?: boolean
+  }
+
+  export type TwoFactorUncheckedCreateWithoutUserInput = {
+    id?: string
+    secret: string
+    backupCodes: string
+    verified?: boolean
+  }
+
+  export type TwoFactorCreateOrConnectWithoutUserInput = {
+    where: TwoFactorWhereUniqueInput
+    create: XOR<TwoFactorCreateWithoutUserInput, TwoFactorUncheckedCreateWithoutUserInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -83802,6 +85271,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -83828,6 +85298,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -83849,6 +85320,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -83874,6 +85346,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
@@ -83914,6 +85387,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     referralCode?: StringNullableFilter<"User"> | string | null
     referredById?: StringNullableFilter<"User"> | string | null
+    twoFactorEnabled?: BoolNullableFilter<"User"> | boolean | null
   }
 
   export type ReferralUpsertWithWhereUniqueWithoutReferrerInput = {
@@ -84011,6 +85485,31 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BlogPost"> | Date | string
   }
 
+  export type TwoFactorUpsertWithoutUserInput = {
+    update: XOR<TwoFactorUpdateWithoutUserInput, TwoFactorUncheckedUpdateWithoutUserInput>
+    create: XOR<TwoFactorCreateWithoutUserInput, TwoFactorUncheckedCreateWithoutUserInput>
+    where?: TwoFactorWhereInput
+  }
+
+  export type TwoFactorUpdateToOneWithWhereWithoutUserInput = {
+    where?: TwoFactorWhereInput
+    data: XOR<TwoFactorUpdateWithoutUserInput, TwoFactorUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TwoFactorUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    secret?: StringFieldUpdateOperationsInput | string
+    backupCodes?: StringFieldUpdateOperationsInput | string
+    verified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TwoFactorUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    secret?: StringFieldUpdateOperationsInput | string
+    backupCodes?: StringFieldUpdateOperationsInput | string
+    verified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -84029,6 +85528,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
@@ -84055,6 +85555,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -84076,6 +85577,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
@@ -84101,6 +85603,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -84137,6 +85640,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
@@ -84163,6 +85667,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -84184,6 +85689,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
@@ -84209,6 +85715,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -84229,6 +85736,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
@@ -84255,6 +85763,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -84276,6 +85785,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
     instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
@@ -84301,6 +85811,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -84337,7 +85848,217 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    referredBy?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
+    instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
+    instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    studentConversations?: ConversationUncheckedUpdateManyWithoutStudentNestedInput
+    instructorConversations?: ConversationUncheckedUpdateManyWithoutInstructorNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    hostedGames?: QuizGameUncheckedUpdateManyWithoutHostNestedInput
+    gameParticipations?: QuizGameParticipantUncheckedUpdateManyWithoutUserNestedInput
+    orgMemberships?: OrgMemberUncheckedUpdateManyWithoutUserNestedInput
+    courseNotes?: CourseNoteUncheckedUpdateManyWithoutUserNestedInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
+    learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
+    referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutTwoFactorInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    twoFactorEnabled?: boolean | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    referredBy?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutTwoFactorInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    phone?: string | null
+    city?: string | null
+    state?: string | null
+    bio?: string | null
+    website?: string | null
+    linkedinUrl?: string | null
+    instagramUrl?: string | null
+    signatureUrl?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referralCode?: string | null
+    referredById?: string | null
+    twoFactorEnabled?: boolean | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
+    instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
+    instructorCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    studentConversations?: ConversationUncheckedCreateNestedManyWithoutStudentInput
+    instructorConversations?: ConversationUncheckedCreateNestedManyWithoutInstructorInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    hostedGames?: QuizGameUncheckedCreateNestedManyWithoutHostInput
+    gameParticipations?: QuizGameParticipantUncheckedCreateNestedManyWithoutUserInput
+    orgMemberships?: OrgMemberUncheckedCreateNestedManyWithoutUserInput
+    courseNotes?: CourseNoteUncheckedCreateNestedManyWithoutUserInput
+    sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
+    learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
+    referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutTwoFactorInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTwoFactorInput, UserUncheckedCreateWithoutTwoFactorInput>
+  }
+
+  export type UserUpsertWithoutTwoFactorInput = {
+    update: XOR<UserUpdateWithoutTwoFactorInput, UserUncheckedUpdateWithoutTwoFactorInput>
+    create: XOR<UserCreateWithoutTwoFactorInput, UserUncheckedCreateWithoutTwoFactorInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTwoFactorInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTwoFactorInput, UserUncheckedUpdateWithoutTwoFactorInput>
+  }
+
+  export type UserUpdateWithoutTwoFactorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
     instructorCourses?: CourseUpdateManyWithoutInstructorNestedInput
@@ -84365,7 +86086,7 @@ export namespace Prisma {
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutSessionsInput = {
+  export type UserUncheckedUpdateWithoutTwoFactorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
@@ -84384,7 +86105,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
     instructorCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -84429,6 +86152,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -84455,6 +86179,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorApplicationInput = {
@@ -84476,6 +86201,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -84501,6 +86227,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorApplicationInput = {
@@ -84537,6 +86264,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -84563,6 +86291,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorApplicationInput = {
@@ -84584,6 +86313,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -84609,6 +86339,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInstructorProfileInput = {
@@ -84629,6 +86360,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorApplication?: InstructorApplicationCreateNestedOneWithoutUserInput
@@ -84655,6 +86387,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorProfileInput = {
@@ -84676,6 +86409,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorApplication?: InstructorApplicationUncheckedCreateNestedOneWithoutUserInput
@@ -84701,6 +86435,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorProfileInput = {
@@ -84737,6 +86472,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUpdateOneWithoutUserNestedInput
@@ -84763,6 +86499,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorProfileInput = {
@@ -84784,6 +86521,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorApplication?: InstructorApplicationUncheckedUpdateOneWithoutUserNestedInput
@@ -84809,6 +86547,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutCategoryRefInput = {
@@ -84941,6 +86680,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -84967,6 +86707,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorCoursesInput = {
@@ -84988,6 +86729,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -85013,6 +86755,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorCoursesInput = {
@@ -85546,6 +87289,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -85572,6 +87316,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorCoursesInput = {
@@ -85593,6 +87338,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -85618,6 +87364,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -87338,6 +89085,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -87364,6 +89112,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionAnonymousQuestionsInput = {
@@ -87385,6 +89134,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -87410,6 +89160,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionAnonymousQuestionsInput = {
@@ -87590,6 +89341,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -87616,6 +89368,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionAnonymousQuestionsInput = {
@@ -87637,6 +89390,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -87662,6 +89416,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutEnrollmentsInput = {
@@ -87773,6 +89528,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -87799,6 +89555,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -87820,6 +89577,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -87845,6 +89603,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -88246,6 +90005,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -88272,6 +90032,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -88293,6 +90054,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -88318,6 +90080,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseSessionUpsertWithoutEnrollmentsInput = {
@@ -88744,6 +90507,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -88770,6 +90534,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLearningReflectionsInput = {
@@ -88791,6 +90556,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -88816,6 +90582,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLearningReflectionsInput = {
@@ -88998,6 +90765,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -89024,6 +90792,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLearningReflectionsInput = {
@@ -89045,6 +90814,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -89070,6 +90840,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type EnrollmentCreateWithoutSectionQuizSubmissionsInput = {
@@ -89565,6 +91336,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -89591,6 +91363,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -89612,6 +91385,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -89637,6 +91411,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -89813,6 +91588,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -89839,6 +91615,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -89860,6 +91637,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -89885,6 +91663,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -90045,6 +91824,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -90071,6 +91851,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -90092,6 +91873,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -90117,6 +91899,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -90318,6 +92101,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -90344,6 +92128,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -90365,6 +92150,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -90390,6 +92176,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutTransactionsInput = {
@@ -90629,6 +92416,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -90655,6 +92443,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -90676,6 +92465,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -90701,6 +92491,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -90834,6 +92625,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -90860,6 +92652,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -90881,6 +92674,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -90906,6 +92700,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -90926,6 +92721,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -90952,6 +92748,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -90973,6 +92770,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -90998,6 +92796,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -91034,6 +92833,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -91060,6 +92860,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -91081,6 +92882,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91106,6 +92908,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutConversationsInput = {
@@ -91217,6 +93020,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -91243,6 +93047,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentConversationsInput = {
@@ -91264,6 +93069,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91289,6 +93095,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentConversationsInput = {
@@ -91314,6 +93121,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -91340,6 +93148,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInstructorConversationsInput = {
@@ -91361,6 +93170,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91386,6 +93196,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInstructorConversationsInput = {
@@ -91545,6 +93356,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -91571,6 +93383,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentConversationsInput = {
@@ -91592,6 +93405,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91617,6 +93431,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutInstructorConversationsInput = {
@@ -91648,6 +93463,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -91674,6 +93490,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorConversationsInput = {
@@ -91695,6 +93512,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91720,6 +93538,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
@@ -91779,6 +93598,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -91805,6 +93625,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -91826,6 +93647,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91851,6 +93673,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -91916,6 +93739,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -91942,6 +93766,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -91963,6 +93788,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91988,6 +93814,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutHostedGamesInput = {
@@ -92008,6 +93835,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -92034,6 +93862,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedGamesInput = {
@@ -92055,6 +93884,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -92080,6 +93910,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedGamesInput = {
@@ -92206,6 +94037,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -92232,6 +94064,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedGamesInput = {
@@ -92253,6 +94086,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -92278,6 +94112,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type QuizGameQuestionUpsertWithWhereUniqueWithoutGameInput = {
@@ -92525,6 +94360,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -92551,6 +94387,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGameParticipationsInput = {
@@ -92572,6 +94409,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -92597,6 +94435,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGameParticipationsInput = {
@@ -92702,6 +94541,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -92728,6 +94568,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGameParticipationsInput = {
@@ -92749,6 +94590,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -92774,6 +94616,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type QuizGameAnswerUpsertWithWhereUniqueWithoutParticipantInput = {
@@ -93443,6 +95286,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -93469,6 +95313,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrgMembershipsInput = {
@@ -93490,6 +95335,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -93515,6 +95361,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrgMembershipsInput = {
@@ -93618,6 +95465,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -93644,6 +95492,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrgMembershipsInput = {
@@ -93665,6 +95514,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -93690,6 +95540,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type TeamMemberUpsertWithWhereUniqueWithoutMemberInput = {
@@ -95096,6 +96947,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -95122,6 +96974,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourseNotesInput = {
@@ -95143,6 +96996,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -95168,6 +97022,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourseNotesInput = {
@@ -95338,6 +97193,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -95364,6 +97220,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourseNotesInput = {
@@ -95385,6 +97242,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -95410,6 +97268,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutNotesInput = {
@@ -95576,6 +97435,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -95602,6 +97462,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistItemsInput = {
@@ -95623,6 +97484,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -95648,6 +97510,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistItemsInput = {
@@ -95775,6 +97638,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -95801,6 +97665,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistItemsInput = {
@@ -95822,6 +97687,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -95847,6 +97713,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutWishlistItemsInput = {
@@ -95964,6 +97831,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -95990,6 +97858,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralCommissionsInput = {
@@ -96011,6 +97880,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -96036,6 +97906,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralCommissionsInput = {
@@ -96061,6 +97932,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -96087,6 +97959,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralEntryInput = {
@@ -96108,6 +97981,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -96133,6 +98007,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralEntryInput = {
@@ -96208,6 +98083,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -96234,6 +98110,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralCommissionsInput = {
@@ -96255,6 +98132,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -96280,6 +98158,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReferralEntryInput = {
@@ -96311,6 +98190,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -96337,6 +98217,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralEntryInput = {
@@ -96358,6 +98239,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -96383,6 +98265,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type TransactionUpsertWithoutReferralInput = {
@@ -96448,6 +98331,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -96474,6 +98358,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
@@ -96495,6 +98380,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -96520,6 +98406,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
@@ -96556,6 +98443,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -96582,6 +98470,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
@@ -96603,6 +98492,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -96628,6 +98518,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutExpoPushTokensInput = {
@@ -96648,6 +98539,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -96674,6 +98566,7 @@ export namespace Prisma {
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutExpoPushTokensInput = {
@@ -96695,6 +98588,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -96720,6 +98614,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutExpoPushTokensInput = {
@@ -96756,6 +98651,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -96782,6 +98678,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpoPushTokensInput = {
@@ -96803,6 +98700,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -96828,6 +98726,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBlogPostsInput = {
@@ -96848,6 +98747,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileCreateNestedOneWithoutUserInput
@@ -96874,6 +98774,7 @@ export namespace Prisma {
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
+    twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBlogPostsInput = {
@@ -96895,6 +98796,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referralCode?: string | null
     referredById?: string | null
+    twoFactorEnabled?: boolean | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     instructorProfile?: InstructorProfileUncheckedCreateNestedOneWithoutUserInput
@@ -96920,6 +98822,7 @@ export namespace Prisma {
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
+    twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBlogPostsInput = {
@@ -96956,6 +98859,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -96982,6 +98886,7 @@ export namespace Prisma {
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBlogPostsInput = {
@@ -97003,6 +98908,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -97028,6 +98934,7 @@ export namespace Prisma {
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -97257,6 +99164,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referralCode?: string | null
+    twoFactorEnabled?: boolean | null
   }
 
   export type ReferralCreateManyReferrerInput = {
@@ -97988,6 +99896,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUpdateOneWithoutUserNestedInput
@@ -98014,6 +99923,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredByInput = {
@@ -98034,6 +99944,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     instructorProfile?: InstructorProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -98060,6 +99971,7 @@ export namespace Prisma {
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
+    twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferredByInput = {
@@ -98080,6 +99992,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ReferralUpdateWithoutReferrerInput = {

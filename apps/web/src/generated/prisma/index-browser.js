@@ -138,7 +138,8 @@ exports.Prisma.UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   referralCode: 'referralCode',
-  referredById: 'referredById'
+  referredById: 'referredById',
+  twoFactorEnabled: 'twoFactorEnabled'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -175,6 +176,14 @@ exports.Prisma.VerificationScalarFieldEnum = {
   expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TwoFactorScalarFieldEnum = {
+  id: 'id',
+  secret: 'secret',
+  backupCodes: 'backupCodes',
+  userId: 'userId',
+  verified: 'verified'
 };
 
 exports.Prisma.InstructorApplicationScalarFieldEnum = {
@@ -834,6 +843,7 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
+  TwoFactor: 'TwoFactor',
   InstructorApplication: 'InstructorApplication',
   InstructorProfile: 'InstructorProfile',
   Category: 'Category',
