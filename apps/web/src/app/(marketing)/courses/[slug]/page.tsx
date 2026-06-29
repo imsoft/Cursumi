@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { jsonLdScript } from "@/lib/sanitize";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { displayDuration } from "@/lib/duration";
@@ -195,12 +196,12 @@ export default async function PublicCourseDetailPage({
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(courseSchema) }}
       />
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbSchema) }}
       />
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Link href="/courses" className="underline">

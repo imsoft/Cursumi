@@ -1,9 +1,12 @@
 "use client";
 
+import { sanitizeHtml } from "@/lib/sanitize";
+
 /**
  * Renders HTML content from the RichTextEditor (or plain text fallback).
- * Uses dangerouslySetInnerHTML — safe because content is authored by instructors,
- * not user-generated from untrusted sources.
+ * El HTML se sanitiza con DOMPurify antes de inyectarlo: el contenido lo escriben
+ * instructores (usuarios semi-confiables), así que se trata como NO confiable
+ * para prevenir XSS almacenado. Ver `@/lib/sanitize`.
  */
 
 interface RichTextRendererProps {
@@ -17,12 +20,12 @@ export { stripHtml } from "@/lib/utils";
 export function RichTextRenderer({ content, className = "" }: RichTextRendererProps) {
   if (!content) return null;
 
-  // If content contains HTML tags, render as HTML
+  // If content contains HTML tags, render as sanitized HTML
   if (content.includes("<")) {
     return (
       <div
         className={`rich-text-content ${className}`}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
       />
     );
   }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { jsonLdScript } from "@/lib/sanitize";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { displayDuration } from "@/lib/duration";
@@ -77,7 +78,7 @@ export default async function ExploreCourseDetail({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             "@context": "https://schema.org",
             "@type": "Course",
             name: course.title,

@@ -1,4 +1,5 @@
 import { listPublicCourses } from "@/app/actions/course-actions";
+import { jsonLdScript } from "@/lib/sanitize";
 import { CoursesPageClient } from "@/components/courses/courses-page-client";
 import type { Metadata } from "next";
 
@@ -67,12 +68,12 @@ export default async function CoursesPage() {
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(itemList) }}
       />
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbList) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbList) }}
       />
     </>
   );

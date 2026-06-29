@@ -2,6 +2,7 @@
 export const revalidate = 86400;
 
 import Link from "next/link";
+import { jsonLdScript } from "@/lib/sanitize";
 import type { Metadata } from "next";
 import { Check, X, ArrowRight, BookOpen, Users, Award, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -105,7 +106,7 @@ export default function PricingPage() {
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }}
       />
 
       {/* Hero */}

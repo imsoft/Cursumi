@@ -1,0 +1,30 @@
+# Dependabot: escaneo automático de dependencias vulnerables y actualizaciones.
+# Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates
+version: 2
+updates:
+  # Dependencias npm/pnpm del monorepo (raíz cubre el workspace completo).
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    labels:
+      - "dependencies"
+    # Agrupa actualizaciones menores/patch para reducir ruido de PRs.
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    # Las actualizaciones MAJOR se abren individualmente (revisar breaking changes).
+
+  # GitHub Actions usadas en los workflows de CI.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "ci"

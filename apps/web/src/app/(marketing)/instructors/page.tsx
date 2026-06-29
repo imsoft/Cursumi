@@ -2,6 +2,7 @@
 export const revalidate = 3600;
 
 import { InstructorsHero } from "@/components/instructors/instructors-hero";
+import { jsonLdScript } from "@/lib/sanitize";
 import { InstructorsBenefits } from "@/components/instructors/benefits-section";
 import { InstructorsCourseTypes } from "@/components/instructors/course-types-section";
 import { InstructorsSteps } from "@/components/instructors/steps-section";
@@ -83,7 +84,7 @@ export default function InstructorsPage() {
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }}
       />
       <main className="space-y-4 pb-16">
         <InstructorsHero />

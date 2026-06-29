@@ -1,4 +1,5 @@
 import { HowItWorksHero } from "@/components/how-it-works/hero";
+import { jsonLdScript } from "@/lib/sanitize";
 import { HowItWorksStudents } from "@/components/how-it-works/for-students";
 import { HowItWorksInstructors } from "@/components/how-it-works/for-instructors";
 import { HowItWorksBenefits } from "@/components/how-it-works/benefits-summary";
@@ -79,7 +80,7 @@ export default function HowItWorksPage() {
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }}
       />
       <main>
         <HowItWorksHero />

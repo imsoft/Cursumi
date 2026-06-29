@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { createNotification } from "@/lib/notification-helpers";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 
 const sendSchema = z.object({ body: z.string().min(1).max(2000) });
 
@@ -44,6 +45,15 @@ export async function POST(
 ) {
   try {
     const session = await requireSession();
+
+    // Anti-spam: máx 30 mensajes/min por usuario (genera notificaciones a terceros).
+    const rl = await checkRateLimitAsync({
+      key: `messages:${session.user.id}`,
+      limit: 30,
+      windowSecs: 60,
+    });
+    if (rl) return rl;
+
     const { id } = await params;
     const { body } = sendSchema.parse(await req.json());
 
