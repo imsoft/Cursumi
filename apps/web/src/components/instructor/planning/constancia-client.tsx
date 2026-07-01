@@ -25,6 +25,7 @@ export function ConstanciaClient({ courseId, initialData, initialStatus, prefill
       seedFromCourse={() => hydrateConstancia(null, prefill)}
       renderForm={(value, onChange) => <ConstanciaForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ConstanciaDocument data={value} />}
+      hideBrandFooter
       pdfFilename={(value) => buildPlanningFilename(CONSTANCIA_TYPE, value.courseName)}
     />
   );

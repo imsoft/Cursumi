@@ -116,6 +116,9 @@ export function ConstanciaDocument({ data }: { data: ConstanciaData }) {
         <div style={{ marginTop: 14, fontSize: 10, color: MUTED, lineHeight: 1.5 }}>
           {data.folio ? <div>Folio: {data.folio}</div> : null}
           {data.standard ? <div>{data.standard}</div> : null}
+          <div style={{ marginTop: 4, fontWeight: 700, color: PURPLE }}>
+            cursumi.com<span style={{ margin: "0 6px", color: MUTED }}>·</span>@cursumi
+          </div>
         </div>
       </div>
     </div>
