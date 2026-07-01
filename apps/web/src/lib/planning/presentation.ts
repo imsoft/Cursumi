@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const PRESENTATION_TYPE = "presentation" as const;
 
 export type SlideKind = "cover" | "section" | "content" | "closing";
@@ -36,20 +38,34 @@ export function emptySlide(kind: SlideKind): Slide {
   }
 }
 
-export function createEmptyPresentation(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-}): PresentationData {
+export function createEmptyPresentation(prefill?: Partial<PlanningPrefill>): PresentationData {
   const courseName = prefill?.courseName ?? "";
-  return {
-    courseName,
-    presenter: prefill?.instructorName ?? "",
-    slides: [
-      // La portada arranca con el nombre real del curso; el resto en blanco.
-      { id: crypto.randomUUID(), kind: "cover", heading: courseName, sub: "", bullets: [] },
-      { id: crypto.randomUUID(), kind: "content", heading: "", sub: "", bullets: [""] },
-    ],
-  };
+  const presenter = prefill?.instructorName ?? "";
+
+  // Portada + una diapositiva de sección y de contenido (con las lecciones) por cada sección del curso
+  const structuredSlides: Slide[] = (prefill?.units ?? []).flatMap((u) => [
+    { id: crypto.randomUUID(), kind: "section" as SlideKind, heading: u.title, sub: "", bullets: [] },
+    {
+      id: crypto.randomUUID(),
+      kind: "content" as SlideKind,
+      heading: u.title,
+      sub: "",
+      bullets: u.lessons.length ? u.lessons.map((l) => l.title) : [""],
+    },
+  ]);
+
+  const slides: Slide[] = structuredSlides.length
+    ? [
+        { id: crypto.randomUUID(), kind: "cover", heading: courseName, sub: presenter, bullets: [] },
+        ...structuredSlides,
+        { id: crypto.randomUUID(), kind: "closing", heading: "", sub: "", bullets: [] },
+      ]
+    : [
+        { id: crypto.randomUUID(), kind: "cover", heading: courseName, sub: presenter, bullets: [] },
+        { id: crypto.randomUUID(), kind: "content", heading: "", sub: "", bullets: [""] },
+      ];
+
+  return { courseName, presenter, slides };
 }
 
 const VALID_KINDS: SlideKind[] = ["cover", "section", "content", "closing"];

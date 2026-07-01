@@ -12943,6 +12943,9 @@ export namespace Prisma {
     bio: string | null
     reason: string | null
     rejectionReason: string | null
+    legalName: string | null
+    rfc: string | null
+    fiscalAddress: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12955,6 +12958,9 @@ export namespace Prisma {
     bio: string | null
     reason: string | null
     rejectionReason: string | null
+    legalName: string | null
+    rfc: string | null
+    fiscalAddress: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12967,6 +12973,9 @@ export namespace Prisma {
     bio: number
     reason: number
     rejectionReason: number
+    legalName: number
+    rfc: number
+    fiscalAddress: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12981,6 +12990,9 @@ export namespace Prisma {
     bio?: true
     reason?: true
     rejectionReason?: true
+    legalName?: true
+    rfc?: true
+    fiscalAddress?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12993,6 +13005,9 @@ export namespace Prisma {
     bio?: true
     reason?: true
     rejectionReason?: true
+    legalName?: true
+    rfc?: true
+    fiscalAddress?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13005,6 +13020,9 @@ export namespace Prisma {
     bio?: true
     reason?: true
     rejectionReason?: true
+    legalName?: true
+    rfc?: true
+    fiscalAddress?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13090,6 +13108,9 @@ export namespace Prisma {
     bio: string | null
     reason: string
     rejectionReason: string | null
+    legalName: string | null
+    rfc: string | null
+    fiscalAddress: string | null
     createdAt: Date
     updatedAt: Date
     _count: InstructorApplicationCountAggregateOutputType | null
@@ -13119,6 +13140,9 @@ export namespace Prisma {
     bio?: boolean
     reason?: boolean
     rejectionReason?: boolean
+    legalName?: boolean
+    rfc?: boolean
+    fiscalAddress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13132,6 +13156,9 @@ export namespace Prisma {
     bio?: boolean
     reason?: boolean
     rejectionReason?: boolean
+    legalName?: boolean
+    rfc?: boolean
+    fiscalAddress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13145,6 +13172,9 @@ export namespace Prisma {
     bio?: boolean
     reason?: boolean
     rejectionReason?: boolean
+    legalName?: boolean
+    rfc?: boolean
+    fiscalAddress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13158,11 +13188,14 @@ export namespace Prisma {
     bio?: boolean
     reason?: boolean
     rejectionReason?: boolean
+    legalName?: boolean
+    rfc?: boolean
+    fiscalAddress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InstructorApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "headline" | "bio" | "reason" | "rejectionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorApplication"]>
+  export type InstructorApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "headline" | "bio" | "reason" | "rejectionReason" | "legalName" | "rfc" | "fiscalAddress" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorApplication"]>
   export type InstructorApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -13186,6 +13219,12 @@ export namespace Prisma {
       bio: string | null
       reason: string
       rejectionReason: string | null
+      /**
+       * Datos fiscales/identidad para facturación (México)
+       */
+      legalName: string | null
+      rfc: string | null
+      fiscalAddress: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["instructorApplication"]>
@@ -13619,6 +13658,9 @@ export namespace Prisma {
     readonly bio: FieldRef<"InstructorApplication", 'String'>
     readonly reason: FieldRef<"InstructorApplication", 'String'>
     readonly rejectionReason: FieldRef<"InstructorApplication", 'String'>
+    readonly legalName: FieldRef<"InstructorApplication", 'String'>
+    readonly rfc: FieldRef<"InstructorApplication", 'String'>
+    readonly fiscalAddress: FieldRef<"InstructorApplication", 'String'>
     readonly createdAt: FieldRef<"InstructorApplication", 'DateTime'>
     readonly updatedAt: FieldRef<"InstructorApplication", 'DateTime'>
   }
@@ -16403,6 +16445,7 @@ export namespace Prisma {
     startDate: Date | null
     duration: string | null
     price: number | null
+    isFree: boolean | null
     maxStudents: number | null
     imageUrl: string | null
     status: $Enums.CourseStatus | null
@@ -16431,6 +16474,7 @@ export namespace Prisma {
     startDate: Date | null
     duration: string | null
     price: number | null
+    isFree: boolean | null
     maxStudents: number | null
     imageUrl: string | null
     status: $Enums.CourseStatus | null
@@ -16459,6 +16503,7 @@ export namespace Prisma {
     startDate: number
     duration: number
     price: number
+    isFree: number
     maxStudents: number
     imageUrl: number
     status: number
@@ -16500,6 +16545,7 @@ export namespace Prisma {
     startDate?: true
     duration?: true
     price?: true
+    isFree?: true
     maxStudents?: true
     imageUrl?: true
     status?: true
@@ -16528,6 +16574,7 @@ export namespace Prisma {
     startDate?: true
     duration?: true
     price?: true
+    isFree?: true
     maxStudents?: true
     imageUrl?: true
     status?: true
@@ -16556,6 +16603,7 @@ export namespace Prisma {
     startDate?: true
     duration?: true
     price?: true
+    isFree?: true
     maxStudents?: true
     imageUrl?: true
     status?: true
@@ -16672,6 +16720,7 @@ export namespace Prisma {
     startDate: Date | null
     duration: string | null
     price: number
+    isFree: boolean
     maxStudents: number | null
     imageUrl: string | null
     status: $Enums.CourseStatus
@@ -16720,6 +16769,7 @@ export namespace Prisma {
     startDate?: boolean
     duration?: boolean
     price?: boolean
+    isFree?: boolean
     maxStudents?: boolean
     imageUrl?: boolean
     status?: boolean
@@ -16767,6 +16817,7 @@ export namespace Prisma {
     startDate?: boolean
     duration?: boolean
     price?: boolean
+    isFree?: boolean
     maxStudents?: boolean
     imageUrl?: boolean
     status?: boolean
@@ -16798,6 +16849,7 @@ export namespace Prisma {
     startDate?: boolean
     duration?: boolean
     price?: boolean
+    isFree?: boolean
     maxStudents?: boolean
     imageUrl?: boolean
     status?: boolean
@@ -16829,6 +16881,7 @@ export namespace Prisma {
     startDate?: boolean
     duration?: boolean
     price?: boolean
+    isFree?: boolean
     maxStudents?: boolean
     imageUrl?: boolean
     status?: boolean
@@ -16840,7 +16893,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "state" | "location" | "mapsUrl" | "courseType" | "startDate" | "duration" | "price" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "state" | "location" | "mapsUrl" | "courseType" | "startDate" | "duration" | "price" | "isFree" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     categoryRef?: boolean | Course$categoryRefArgs<ExtArgs>
@@ -16909,6 +16962,10 @@ export namespace Prisma {
       startDate: Date | null
       duration: string | null
       price: number
+      /**
+       * true = curso gratuito explícito (permite publicar con price 0 sin ambigüedad)
+       */
+      isFree: boolean
       maxStudents: number | null
       imageUrl: string | null
       status: $Enums.CourseStatus
@@ -17378,6 +17435,7 @@ export namespace Prisma {
     readonly startDate: FieldRef<"Course", 'DateTime'>
     readonly duration: FieldRef<"Course", 'String'>
     readonly price: FieldRef<"Course", 'Int'>
+    readonly isFree: FieldRef<"Course", 'Boolean'>
     readonly maxStudents: FieldRef<"Course", 'Int'>
     readonly imageUrl: FieldRef<"Course", 'String'>
     readonly status: FieldRef<"Course", 'CourseStatus'>
@@ -66141,6 +66199,9 @@ export namespace Prisma {
     bio: 'bio',
     reason: 'reason',
     rejectionReason: 'rejectionReason',
+    legalName: 'legalName',
+    rfc: 'rfc',
+    fiscalAddress: 'fiscalAddress',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -66197,6 +66258,7 @@ export namespace Prisma {
     startDate: 'startDate',
     duration: 'duration',
     price: 'price',
+    isFree: 'isFree',
     maxStudents: 'maxStudents',
     imageUrl: 'imageUrl',
     status: 'status',
@@ -67656,6 +67718,9 @@ export namespace Prisma {
     bio?: StringNullableFilter<"InstructorApplication"> | string | null
     reason?: StringFilter<"InstructorApplication"> | string
     rejectionReason?: StringNullableFilter<"InstructorApplication"> | string | null
+    legalName?: StringNullableFilter<"InstructorApplication"> | string | null
+    rfc?: StringNullableFilter<"InstructorApplication"> | string | null
+    fiscalAddress?: StringNullableFilter<"InstructorApplication"> | string | null
     createdAt?: DateTimeFilter<"InstructorApplication"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorApplication"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -67669,6 +67734,9 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    legalName?: SortOrderInput | SortOrder
+    rfc?: SortOrderInput | SortOrder
+    fiscalAddress?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -67685,6 +67753,9 @@ export namespace Prisma {
     bio?: StringNullableFilter<"InstructorApplication"> | string | null
     reason?: StringFilter<"InstructorApplication"> | string
     rejectionReason?: StringNullableFilter<"InstructorApplication"> | string | null
+    legalName?: StringNullableFilter<"InstructorApplication"> | string | null
+    rfc?: StringNullableFilter<"InstructorApplication"> | string | null
+    fiscalAddress?: StringNullableFilter<"InstructorApplication"> | string | null
     createdAt?: DateTimeFilter<"InstructorApplication"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorApplication"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -67698,6 +67769,9 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    legalName?: SortOrderInput | SortOrder
+    rfc?: SortOrderInput | SortOrder
+    fiscalAddress?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InstructorApplicationCountOrderByAggregateInput
@@ -67716,6 +67790,9 @@ export namespace Prisma {
     bio?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
     reason?: StringWithAggregatesFilter<"InstructorApplication"> | string
     rejectionReason?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    legalName?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    rfc?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    fiscalAddress?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"InstructorApplication"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"InstructorApplication"> | Date | string
   }
@@ -67900,6 +67977,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"Course"> | Date | string | null
     duration?: StringNullableFilter<"Course"> | string | null
     price?: IntFilter<"Course"> | number
+    isFree?: BoolFilter<"Course"> | boolean
     maxStudents?: IntNullableFilter<"Course"> | number | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
@@ -67946,6 +68024,7 @@ export namespace Prisma {
     startDate?: SortOrderInput | SortOrder
     duration?: SortOrderInput | SortOrder
     price?: SortOrder
+    isFree?: SortOrder
     maxStudents?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -67995,6 +68074,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"Course"> | Date | string | null
     duration?: StringNullableFilter<"Course"> | string | null
     price?: IntFilter<"Course"> | number
+    isFree?: BoolFilter<"Course"> | boolean
     maxStudents?: IntNullableFilter<"Course"> | number | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
@@ -68041,6 +68121,7 @@ export namespace Prisma {
     startDate?: SortOrderInput | SortOrder
     duration?: SortOrderInput | SortOrder
     price?: SortOrder
+    isFree?: SortOrder
     maxStudents?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -68078,6 +68159,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
     duration?: StringNullableWithAggregatesFilter<"Course"> | string | null
     price?: IntWithAggregatesFilter<"Course"> | number
+    isFree?: BoolWithAggregatesFilter<"Course"> | boolean
     maxStudents?: IntNullableWithAggregatesFilter<"Course"> | number | null
     imageUrl?: StringNullableWithAggregatesFilter<"Course"> | string | null
     status?: EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
@@ -71781,6 +71863,9 @@ export namespace Prisma {
     bio?: string | null
     reason: string
     rejectionReason?: string | null
+    legalName?: string | null
+    rfc?: string | null
+    fiscalAddress?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutInstructorApplicationInput
@@ -71794,6 +71879,9 @@ export namespace Prisma {
     bio?: string | null
     reason: string
     rejectionReason?: string | null
+    legalName?: string | null
+    rfc?: string | null
+    fiscalAddress?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -71805,6 +71893,9 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    legalName?: NullableStringFieldUpdateOperationsInput | string | null
+    rfc?: NullableStringFieldUpdateOperationsInput | string | null
+    fiscalAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutInstructorApplicationNestedInput
@@ -71818,6 +71909,9 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    legalName?: NullableStringFieldUpdateOperationsInput | string | null
+    rfc?: NullableStringFieldUpdateOperationsInput | string | null
+    fiscalAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71830,6 +71924,9 @@ export namespace Prisma {
     bio?: string | null
     reason: string
     rejectionReason?: string | null
+    legalName?: string | null
+    rfc?: string | null
+    fiscalAddress?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -71841,6 +71938,9 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    legalName?: NullableStringFieldUpdateOperationsInput | string | null
+    rfc?: NullableStringFieldUpdateOperationsInput | string | null
+    fiscalAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71853,6 +71953,9 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    legalName?: NullableStringFieldUpdateOperationsInput | string | null
+    rfc?: NullableStringFieldUpdateOperationsInput | string | null
+    fiscalAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -72051,6 +72154,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -72097,6 +72201,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -72139,6 +72244,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -72185,6 +72291,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -72229,6 +72336,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -72256,6 +72364,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -72285,6 +72394,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -76160,6 +76270,9 @@ export namespace Prisma {
     bio?: SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrder
+    legalName?: SortOrder
+    rfc?: SortOrder
+    fiscalAddress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -76172,6 +76285,9 @@ export namespace Prisma {
     bio?: SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrder
+    legalName?: SortOrder
+    rfc?: SortOrder
+    fiscalAddress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -76184,6 +76300,9 @@ export namespace Prisma {
     bio?: SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrder
+    legalName?: SortOrder
+    rfc?: SortOrder
+    fiscalAddress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -76477,6 +76596,7 @@ export namespace Prisma {
     startDate?: SortOrder
     duration?: SortOrder
     price?: SortOrder
+    isFree?: SortOrder
     maxStudents?: SortOrder
     imageUrl?: SortOrder
     status?: SortOrder
@@ -76511,6 +76631,7 @@ export namespace Prisma {
     startDate?: SortOrder
     duration?: SortOrder
     price?: SortOrder
+    isFree?: SortOrder
     maxStudents?: SortOrder
     imageUrl?: SortOrder
     status?: SortOrder
@@ -76539,6 +76660,7 @@ export namespace Prisma {
     startDate?: SortOrder
     duration?: SortOrder
     price?: SortOrder
+    isFree?: SortOrder
     maxStudents?: SortOrder
     imageUrl?: SortOrder
     status?: SortOrder
@@ -83620,6 +83742,9 @@ export namespace Prisma {
     bio?: string | null
     reason: string
     rejectionReason?: string | null
+    legalName?: string | null
+    rfc?: string | null
+    fiscalAddress?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -83631,6 +83756,9 @@ export namespace Prisma {
     bio?: string | null
     reason: string
     rejectionReason?: string | null
+    legalName?: string | null
+    rfc?: string | null
+    fiscalAddress?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -83656,6 +83784,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -83700,6 +83829,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -84695,6 +84825,9 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    legalName?: NullableStringFieldUpdateOperationsInput | string | null
+    rfc?: NullableStringFieldUpdateOperationsInput | string | null
+    fiscalAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -84706,6 +84839,9 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    legalName?: NullableStringFieldUpdateOperationsInput | string | null
+    rfc?: NullableStringFieldUpdateOperationsInput | string | null
+    fiscalAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -84747,6 +84883,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"Course"> | Date | string | null
     duration?: StringNullableFilter<"Course"> | string | null
     price?: IntFilter<"Course"> | number
+    isFree?: BoolFilter<"Course"> | boolean
     maxStudents?: IntNullableFilter<"Course"> | number | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
@@ -86566,6 +86703,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -86610,6 +86748,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -87732,6 +87871,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -87777,6 +87917,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -87834,6 +87975,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -87879,6 +88021,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -87920,6 +88063,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -87965,6 +88109,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -88098,6 +88243,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -88143,6 +88289,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -88649,6 +88796,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -88694,6 +88842,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -88833,6 +88982,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -88878,6 +89028,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -88992,6 +89143,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -89037,6 +89189,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -89242,6 +89395,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -89287,6 +89441,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -89435,6 +89590,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -89480,6 +89636,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -89906,6 +90063,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -89951,6 +90109,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -90414,6 +90573,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -90459,6 +90619,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -90666,6 +90827,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -90711,6 +90873,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -91435,6 +91598,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -91480,6 +91644,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -91693,6 +91858,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -91738,6 +91904,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -91923,6 +92090,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -91968,6 +92136,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -92206,6 +92375,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -92251,6 +92421,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -92323,6 +92494,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -92368,6 +92540,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -92526,6 +92699,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -92571,6 +92745,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -92927,6 +93102,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -92972,6 +93148,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -93257,6 +93434,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -93302,6 +93480,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -96067,6 +96246,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -96112,6 +96292,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -96216,6 +96397,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -96261,6 +96443,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -96327,6 +96510,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -96372,6 +96556,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -96460,6 +96645,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -96505,6 +96691,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -96757,6 +96944,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -96802,6 +96990,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -96859,6 +97048,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -96904,6 +97094,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -97046,6 +97237,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -97091,6 +97283,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -97298,6 +97491,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -97343,6 +97537,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -97534,6 +97729,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -97579,6 +97775,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -97743,6 +97940,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -97788,6 +97986,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -98979,6 +99178,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -99282,6 +99482,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -99326,6 +99527,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -99369,6 +99571,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -100084,6 +100287,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     duration?: string | null
     price: number
+    isFree?: boolean
     maxStudents?: number | null
     imageUrl?: string | null
     status?: $Enums.CourseStatus
@@ -100111,6 +100315,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -100155,6 +100360,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
@@ -100198,6 +100404,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     price?: IntFieldUpdateOperationsInput | number
+    isFree?: BoolFieldUpdateOperationsInput | boolean
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus

@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const MULTIMEDIA_MATERIAL_TYPE = "multimedia-material" as const;
 
 export type MultimediaVideo = {
@@ -22,15 +24,18 @@ export function emptyVideo(): MultimediaVideo {
   };
 }
 
-export function createEmptyMultimediaMaterial(prefill?: {
-  courseName?: string;
-}): MultimediaMaterialData {
+export function createEmptyMultimediaMaterial(prefill?: Partial<PlanningPrefill>): MultimediaMaterialData {
+  // Una entrada por lección del curso (el instructor ajusta la miniatura/URL)
+  const videos: MultimediaVideo[] = (prefill?.units ?? [])
+    .flatMap((u) => u.lessons.map((l) => l.title))
+    .map((title) => ({ id: crypto.randomUUID(), title, imageUrl: "" }));
+
   return {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
     presentation: "",
-    videos: [emptyVideo()],
+    videos: videos.length > 0 ? videos : [emptyVideo()],
   };
 }
 

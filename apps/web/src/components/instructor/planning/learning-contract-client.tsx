@@ -9,12 +9,13 @@ import {
   LEARNING_CONTRACT_TYPE,
 } from "@/lib/planning/learning-contract";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string; instructorName?: string; duration?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function LearningContractClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function LearningContractClient({ courseId, initialData, initialStatus, p
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateLearningContract(raw, prefill)}
+      seedFromCourse={() => hydrateLearningContract(null, prefill)}
       renderForm={(value, onChange) => <LearningContractForm value={value} onChange={onChange} />}
       renderDocument={(value) => <LearningContractDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(LEARNING_CONTRACT_TYPE, value.courseName)}

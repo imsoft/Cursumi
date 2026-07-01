@@ -51,6 +51,7 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
     startDate: "",
     duration: "",
     price: 0,
+    isFree: false,
     maxStudents: undefined,
     imageUrl: "",
     sections: [],
@@ -151,9 +152,26 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
   };
 
   const handlePublish = () => {
+    setStatusMessage(null);
     startTransition(async () => {
-      await publishCourse(courseData);
-      router.push(courseData.id ? `/instructor/courses/${courseData.id}` : "/instructor/courses");
+      // Asegura que el curso exista como borrador para tener id (y poder hacer la planeación)
+      let id = courseData.id;
+      if (!id) {
+        const draft = await createCourseDraft(courseData);
+        id = draft && typeof draft === "object" && "id" in draft ? draft.id : undefined;
+        if (id) setCourseData((prev) => ({ ...prev, id }));
+      }
+      try {
+        await publishCourse({ ...courseData, id });
+        router.push(id ? `/instructor/courses/${id}` : "/instructor/courses");
+      } catch (e) {
+        // Publicación bloqueada (p. ej. planeación didáctica incompleta):
+        // el curso queda como borrador y llevamos al instructor a completarlo.
+        setStatusMessage(
+          e instanceof Error ? e.message : "No se pudo publicar el curso. Revisa los requisitos.",
+        );
+        if (id) router.push(`/instructor/courses/${id}`);
+      }
     });
   };
 

@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const ANSWER_SHEET_TYPE = "hoja-respuestas" as const;
 
 export type AnswerQuestion = {
@@ -38,26 +40,39 @@ export function emptyAnswerTopic(): AnswerTopic {
   };
 }
 
-export function createEmptyAnswerSheet(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-  duration?: string;
-}): AnswerSheetData {
+export function createEmptyAnswerSheet(prefill?: Partial<PlanningPrefill>): AnswerSheetData {
+  // Clave de respuestas del examen final del curso (enunciado + opciones + índice correcto)
+  const seededTopics: AnswerTopic[] = prefill?.questions?.length
+    ? [
+        {
+          id: crypto.randomUUID(),
+          title: prefill.courseName ? `Examen — ${prefill.courseName}` : "Examen final",
+          instructions: "",
+          questions: prefill.questions.map((q) => ({
+            id: crypto.randomUUID(),
+            statement: q.statement,
+            options: q.options.length > 0 ? q.options : ["", "", ""],
+            correctIndex: q.correctIndex,
+          })),
+        },
+      ]
+    : [emptyAnswerTopic()];
+
   return {
     courseName: prefill?.courseName ?? "",
     instructorName: prefill?.instructorName ?? "",
-    location: "",
-    date: "",
-    schedule: "",
+    location: prefill?.location ?? "",
+    date: prefill?.startDate ?? "",
+    schedule: prefill?.schedule ?? "",
     duration: prefill?.duration ?? "",
     documentTitle: "Hoja de Respuestas",
-    topics: [emptyAnswerTopic()],
+    topics: seededTopics,
   };
 }
 
 export function hydrateAnswerSheet(
   raw: unknown,
-  prefill?: { courseName?: string; instructorName?: string; duration?: string },
+  prefill?: Partial<PlanningPrefill>,
 ): AnswerSheetData {
   const base = createEmptyAnswerSheet(prefill);
   if (!raw || typeof raw !== "object") return base;

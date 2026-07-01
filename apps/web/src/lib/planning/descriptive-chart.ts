@@ -1,3 +1,6 @@
+import type { PlanningPrefill } from "./prefill";
+import { parseDurationToMinutes } from "@/lib/utils";
+
 export const DESCRIPTIVE_CHART_TYPE = "carta-descriptiva" as const;
 
 export type GeneralObjective = {
@@ -93,24 +96,35 @@ export function emptyEvaluationCriteria(aspect = "", moment = ""): EvaluationCri
   };
 }
 
-export function createEmptyDescriptiveChart(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-  duration?: string;
-}): DescriptiveChartData {
+export function createEmptyDescriptiveChart(prefill?: Partial<PlanningPrefill>): DescriptiveChartData {
+  // Actividades de desarrollo derivadas de las lecciones del curso
+  const developmentRows: ActivityRow[] = (prefill?.units ?? [])
+    .flatMap((unit) =>
+      unit.lessons.map((lesson) => ({
+        id: crypto.randomUUID(),
+        stageTopic: unit.title,
+        activities: lesson.title,
+        durationMin: parseDurationToMinutes(lesson.durationLabel) || null,
+        techniques: "",
+        materials: "",
+      })),
+    );
+
+  const topics = (prefill?.units ?? []).map((u) => u.title).filter(Boolean).join(", ");
+
   return {
     courseName: prefill?.courseName ?? "",
     instructorName: prefill?.instructorName ?? "",
-    location: "",
+    location: prefill?.location ?? "",
     duration: prefill?.duration ?? "",
-    dates: "",
-    participantCount: "",
+    dates: prefill?.dates ?? "",
+    participantCount: prefill?.participantCount ?? "",
     psychographicProfile: "",
     knowledgeProfile: "",
     skillsProfile: "",
-    purpose: "",
+    purpose: prefill?.description ?? "",
     generalObjective: { subject: "", action: "", condition: "" },
-    cognitiveObjective: emptySpecificObjective(),
+    cognitiveObjective: { ...emptySpecificObjective(), topics },
     psychomotorObjective: emptySpecificObjective(),
     affectiveObjective: emptySpecificObjective(),
     facilitiesRequirement: "",
@@ -128,7 +142,7 @@ export function createEmptyDescriptiveChart(prefill?: {
       materials: "",
     },
     opening: [emptyActivityRow()],
-    development: [emptyActivityRow()],
+    development: developmentRows.length > 0 ? developmentRows : [emptyActivityRow()],
     closing: [emptyActivityRow()],
   };
 }

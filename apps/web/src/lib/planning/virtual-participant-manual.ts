@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const VIRTUAL_PARTICIPANT_MANUAL_TYPE = "virtual-participant-manual" as const;
 
 export type VirtualManualSectionLevel = 1 | 2;
@@ -21,14 +23,23 @@ export function emptyVirtualManualSection(level: VirtualManualSectionLevel = 1):
   return { id: crypto.randomUUID(), level, title: "", body: "" };
 }
 
-export function createEmptyVirtualParticipantManual(prefill?: {
-  courseName?: string;
-}): VirtualParticipantManualData {
+export function createEmptyVirtualParticipantManual(prefill?: Partial<PlanningPrefill>): VirtualParticipantManualData {
+  // Índice a partir de la estructura del curso: sección (nivel 1) → lecciones (nivel 2)
+  const sections: VirtualManualSection[] = (prefill?.units ?? []).flatMap((u) => [
+    { id: crypto.randomUUID(), level: 1 as VirtualManualSectionLevel, title: u.title, body: "" },
+    ...u.lessons.map((l) => ({
+      id: crypto.randomUUID(),
+      level: 2 as VirtualManualSectionLevel,
+      title: l.title,
+      body: "",
+    })),
+  ]);
+
   return {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
-    sections: [emptyVirtualManualSection()],
+    sections: sections.length > 0 ? sections : [emptyVirtualManualSection()],
     bibliography: [""],
   };
 }

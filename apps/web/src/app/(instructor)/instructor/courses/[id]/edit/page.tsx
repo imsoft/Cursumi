@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CourseOverviewClient } from "@/components/instructor/course-overview-client";
 import { getCourseDetailForEditPage } from "@/lib/get-instructor-course-for-edit";
 import { serializeInstructorCourseForOverview } from "@/lib/serialize-instructor-course-overview";
+import { getPlanningExpedientStatus } from "@/lib/planning/completion";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -34,5 +35,15 @@ export default async function EditCoursePage({ params }: Props) {
   // Objeto plano serializable (sin Date/BigInt) — el spread ...course rompía tras router.refresh()
   const serializedCourse = serializeInstructorCourseForOverview(course);
 
-  return <CourseOverviewClient course={serializedCourse} />;
+  const isPlanningModality = course.modality === "evento" || course.modality === "virtual";
+  const planning = isPlanningModality
+    ? await getPlanningExpedientStatus(course.id, course.modality as "evento" | "virtual").catch(() => ({
+        total: 0,
+        completed: 0,
+        isComplete: true,
+        missing: [],
+      }))
+    : { total: 0, completed: 0, isComplete: true, missing: [] };
+
+  return <CourseOverviewClient course={serializedCourse} planning={planning} />;
 }

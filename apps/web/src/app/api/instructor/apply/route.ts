@@ -3,10 +3,20 @@ import { z } from "zod";
 import { getCachedSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
+// RFC (México): 3-4 letras + 6 dígitos (fecha) + 3 de homoclave
+const rfcRegex = /^[A-ZÑ&]{3,4}\d{6}[A-Z\d]{3}$/;
+
 const bodySchema = z.object({
   headline: z.string().min(1).max(120),
   bio: z.string().min(10).max(1000),
   reason: z.string().min(20).max(2000),
+  legalName: z.string().min(3, "Ingresa tu nombre legal completo").max(160),
+  rfc: z
+    .string()
+    .trim()
+    .transform((v) => v.toUpperCase())
+    .refine((v) => rfcRegex.test(v), "RFC inválido (12-13 caracteres)"),
+  fiscalAddress: z.string().min(5, "Ingresa tu domicilio fiscal").max(300),
 });
 
 // GET — devuelve la solicitud del usuario actual
@@ -22,6 +32,9 @@ export async function GET() {
       headline: true,
       bio: true,
       reason: true,
+      legalName: true,
+      rfc: true,
+      fiscalAddress: true,
       rejectionReason: true,
       createdAt: true,
       updatedAt: true,
@@ -68,6 +81,9 @@ export async function POST(req: Request) {
         headline: body.data.headline,
         bio: body.data.bio,
         reason: body.data.reason,
+        legalName: body.data.legalName,
+        rfc: body.data.rfc,
+        fiscalAddress: body.data.fiscalAddress,
         rejectionReason: null,
       },
     });
@@ -78,6 +94,9 @@ export async function POST(req: Request) {
         headline: body.data.headline,
         bio: body.data.bio,
         reason: body.data.reason,
+        legalName: body.data.legalName,
+        rfc: body.data.rfc,
+        fiscalAddress: body.data.fiscalAddress,
       },
     });
   }

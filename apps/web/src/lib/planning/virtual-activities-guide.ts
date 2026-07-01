@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const VIRTUAL_ACTIVITIES_GUIDE_TYPE = "virtual-activities-guide" as const;
 
 export type VirtualActivity = {
@@ -53,12 +55,31 @@ export function emptyVirtualUnit(): VirtualLearningUnit {
   };
 }
 
-export function createEmptyVirtualActivitiesGuide(prefill?: {
-  courseName?: string;
-}): VirtualActivitiesGuideData {
+export function createEmptyVirtualActivitiesGuide(prefill?: Partial<PlanningPrefill>): VirtualActivitiesGuideData {
+  // Cada sección → unidad; cada lección → actividad
+  const units: VirtualLearningUnit[] = (prefill?.units ?? []).map((u) => ({
+    id: crypto.randomUUID(),
+    name: u.title,
+    specificObjective: "",
+    activityPeriod: "",
+    generalWeight: "",
+    criteria: { knowledge: false, skills: false, attitudes: false },
+    activities: u.lessons.length
+      ? u.lessons.map((l) => ({
+          id: crypto.randomUUID(),
+          title: l.title,
+          instructions: "",
+          materials: "",
+          participation: "",
+          deliveryMethod: "",
+          weight: "",
+        }))
+      : [emptyVirtualActivity()],
+  }));
+
   return {
     courseName: prefill?.courseName ?? "",
-    units: [emptyVirtualUnit()],
+    units: units.length > 0 ? units : [emptyVirtualUnit()],
   };
 }
 

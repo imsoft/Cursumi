@@ -42,15 +42,31 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     // Validate publish requirements when changing to published
     if (status === "published") {
       const { validateCourseForPublish } = await import("@/lib/course-completion");
-      const sectionsCount = await prisma.courseSection.count({ where: { courseId: id } });
       const validation = validateCourseForPublish({
         title: course.title ?? "",
         imageUrl: course.imageUrl,
-        sectionsCount,
+        modality: course.modality,
+        isFree: course.isFree,
+        price: course.price,
+        sections: course.sections,
+        sessionsCount: course.courseSessions?.length ?? 0,
       });
       if (!validation.canPublish) {
         return NextResponse.json(
           { error: "El curso no cumple los requisitos para publicarse", details: validation.errors },
+          { status: 422 },
+        );
+      }
+
+      // La planeación didáctica debe estar completa al 100% para publicar
+      const { getPlanningExpedientStatus } = await import("@/lib/planning/completion");
+      const planning = await getPlanningExpedientStatus(id, (course.modality ?? "virtual") as "virtual" | "evento");
+      if (!planning.isComplete) {
+        return NextResponse.json(
+          {
+            error: `Completa la planeación didáctica antes de publicar (${planning.completed}/${planning.total}).`,
+            details: planning.missing.map((m) => `Falta: ${m}`),
+          },
           { status: 422 },
         );
       }

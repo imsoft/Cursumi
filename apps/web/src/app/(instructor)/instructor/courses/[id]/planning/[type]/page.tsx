@@ -125,7 +125,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
+          prefill={prefill}
         />
       )}
       {type === COURSE_INFO_TYPE && (
@@ -133,7 +133,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
+          prefill={prefill}
         />
       )}
       {type === VIRTUAL_ACTIVITIES_GUIDE_TYPE && (
@@ -141,7 +141,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName }}
+          prefill={prefill}
         />
       )}
       {type === ACTIVITY_CALENDAR_TYPE && (
@@ -149,7 +149,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName }}
+          prefill={prefill}
         />
       )}
       {type === VIRTUAL_PARTICIPANT_MANUAL_TYPE && (
@@ -157,7 +157,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName }}
+          prefill={prefill}
         />
       )}
       {type === MULTIMEDIA_MATERIAL_TYPE && (
@@ -165,7 +165,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName }}
+          prefill={prefill}
         />
       )}
       {type === VIRTUAL_EVALUATION_TYPE && (
@@ -173,7 +173,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName }}
+          prefill={prefill}
         />
       )}
       {type === COURSE_REVIEW_REPORT_TYPE && (
@@ -189,7 +189,7 @@ export default async function PlanningDocumentPage({
           courseId={id}
           initialData={doc?.data ?? null}
           initialStatus={doc?.status}
-          prefill={{ courseName: prefill?.courseName, instructorName: prefill?.instructorName }}
+          prefill={prefill}
         />
       )}
     </div>

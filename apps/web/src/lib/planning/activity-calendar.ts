@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const ACTIVITY_CALENDAR_TYPE = "activity-calendar" as const;
 
 export type CalendarActivity = {
@@ -33,13 +35,21 @@ export function emptyCalendarUnit(): CalendarUnit {
   };
 }
 
-export function createEmptyActivityCalendar(prefill?: {
-  courseName?: string;
-}): ActivityCalendarData {
+export function createEmptyActivityCalendar(prefill?: Partial<PlanningPrefill>): ActivityCalendarData {
+  // Cada sección → unidad; cada lección → actividad
+  const units: CalendarUnit[] = (prefill?.units ?? []).map((u) => ({
+    id: crypto.randomUUID(),
+    name: u.title,
+    scheduledDate: "",
+    activities: u.lessons.length
+      ? u.lessons.map((l) => ({ id: crypto.randomUUID(), name: l.title, weight: "", duration: l.durationLabel }))
+      : [emptyCalendarActivity()],
+  }));
+
   return {
     courseName: prefill?.courseName ?? "",
     generalWeight: "",
-    units: [emptyCalendarUnit()],
+    units: units.length > 0 ? units : [emptyCalendarUnit()],
   };
 }
 

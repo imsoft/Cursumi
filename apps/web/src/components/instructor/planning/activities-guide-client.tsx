@@ -9,12 +9,13 @@ import {
   ACTIVITIES_GUIDE_TYPE,
 } from "@/lib/planning/activities-guide";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function ActivitiesGuideClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function ActivitiesGuideClient({ courseId, initialData, initialStatus, pr
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateActivitiesGuide(raw, prefill)}
+      seedFromCourse={() => hydrateActivitiesGuide(null, prefill)}
       renderForm={(value, onChange) => <ActivitiesGuideForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ActivitiesGuideDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(ACTIVITIES_GUIDE_TYPE, value.courseName)}

@@ -9,12 +9,13 @@ import {
   VIRTUAL_EVALUATION_TYPE,
 } from "@/lib/planning/virtual-evaluation";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function VirtualEvaluationClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function VirtualEvaluationClient({ courseId, initialData, initialStatus, 
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateVirtualEvaluation(raw, prefill)}
+      seedFromCourse={() => hydrateVirtualEvaluation(null, prefill)}
       renderForm={(value, onChange) => <VirtualEvaluationForm value={value} onChange={onChange} />}
       renderDocument={(value) => <VirtualEvaluationDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(VIRTUAL_EVALUATION_TYPE, value.courseName)}

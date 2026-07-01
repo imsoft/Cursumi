@@ -227,11 +227,18 @@ export function getCourseCompletion(courseData: CourseFormData): CourseCompletio
   const hasCategory = Boolean(courseData.category?.trim());
   const hasLevel = Boolean(courseData.level?.trim());
   const hasPrice = typeof courseData.price === "number" && courseData.price > 0;
+  const pricingDecided = courseData.isFree === true || hasPrice;
   const hasVideoLesson = allLessons.some(
     (l) => l.type === "video" && Boolean(l.videoUrl?.trim()),
   );
 
-  // ── Required (3 items → 60% weight total → 20% each) ──────────────────────
+  const isEvent = courseData.modality === "evento";
+  const sessionsCount = courseData.courseSessions?.length ?? 0;
+  const hasReadyLesson = allLessons.some((l) => getLessonCompletion(l).canPublish);
+  // El contenido mínimo depende de la modalidad: sesiones (evento) o lecciones completas (virtual)
+  const hasContent = isEvent ? sessionsCount > 0 : hasSections && hasReadyLesson;
+
+  // ── Required ──────────────────────────────────────────────────────────────
   const required: CompletionItem[] = [
     {
       key: "title",
@@ -246,10 +253,18 @@ export function getCourseCompletion(courseData: CourseFormData): CourseCompletio
       message: "Agrega una miniatura para poder publicar el curso",
     },
     {
-      key: "sections",
-      label: "Al menos una sección",
-      fulfilled: hasSections,
-      message: "Crea al menos una sección con lecciones",
+      key: "content",
+      label: isEvent ? "Al menos una sesión" : "Contenido con una lección lista",
+      fulfilled: hasContent,
+      message: isEvent
+        ? "Agrega al menos una sesión programada"
+        : "Crea una sección con al menos una lección con su contenido completo",
+    },
+    {
+      key: "pricing",
+      label: "Precio o gratuito",
+      fulfilled: pricingDecided,
+      message: "Define un precio para el curso o márcalo como gratuito",
     },
   ];
 
@@ -272,12 +287,6 @@ export function getCourseCompletion(courseData: CourseFormData): CourseCompletio
       label: "Nivel",
       fulfilled: hasLevel,
       message: "Define el nivel del curso",
-    },
-    {
-      key: "price",
-      label: "Precio definido",
-      fulfilled: hasPrice,
-      message: "Define el precio del curso (o márcalo como gratuito)",
     },
     {
       key: "video_lesson",
@@ -330,14 +339,57 @@ export function getCourseCompletion(courseData: CourseFormData): CourseCompletio
 
 // ─── Publish validation (para server actions y API routes) ───────────────────
 
+/** Forma mínima de una lección para validar completitud (compatible con DB y con CourseFormData). */
+export type PublishLessonInput = {
+  type: string;
+  title?: string | null;
+  videoUrl?: string | null;
+  content?: string | null;
+};
+
+export type PublishSectionInput = {
+  lessons?: PublishLessonInput[] | null;
+};
+
+/**
+ * ¿Esta lección tiene el contenido mínimo según su tipo?
+ * Se usa tanto con datos de DB (content = JSON string para quiz/assignment)
+ * como con datos del formulario.
+ */
+export function isPublishLessonReady(lesson: PublishLessonInput): boolean {
+  const hasTitle = Boolean(lesson.title?.trim());
+  switch (lesson.type) {
+    case "video":
+      return hasTitle && Boolean(lesson.videoUrl?.trim());
+    case "text":
+    case "quiz":
+      return hasTitle && Boolean(lesson.content?.trim());
+    case "assignment":
+      return hasTitle;
+    default:
+      return hasTitle;
+  }
+}
+
 /**
  * Valida si un curso puede publicarse.
  * Recibe datos mínimos para funcionar tanto con CourseFormData como con datos de DB.
+ *
+ * Reglas:
+ *  - Título y miniatura obligatorios (siempre).
+ *  - Precio: debe estar marcado como gratuito o tener un precio > 0.
+ *  - Contenido:
+ *      · evento  → al menos una sesión programada.
+ *      · virtual → al menos una lección con su contenido completo (no basta una sección vacía).
  */
 export function validateCourseForPublish(data: {
   title: string;
   imageUrl?: string | null;
-  sectionsCount: number;
+  modality?: string | null;
+  isFree?: boolean | null;
+  price?: number | null;
+  sections?: PublishSectionInput[] | null;
+  sessionsCount?: number;
 }): { canPublish: boolean; errors: string[] } {
   const errors: string[] = [];
 
@@ -347,8 +399,29 @@ export function validateCourseForPublish(data: {
   if (!data.imageUrl?.trim()) {
     errors.push("El curso debe tener una miniatura para publicarse");
   }
-  if (data.sectionsCount === 0) {
-    errors.push("El curso debe tener al menos una sección para publicarse");
+
+  // Precio: decisión explícita (gratuito o precio > 0)
+  const isFree = data.isFree === true;
+  const hasPrice = typeof data.price === "number" && data.price > 0;
+  if (!isFree && !hasPrice) {
+    errors.push("Define un precio para el curso o márcalo como gratuito");
+  }
+
+  // Contenido según modalidad
+  if (data.modality === "evento") {
+    if ((data.sessionsCount ?? 0) === 0) {
+      errors.push("El curso por evento debe tener al menos una sesión programada");
+    }
+  } else {
+    const sections = data.sections ?? [];
+    const allLessons = sections.flatMap((s) => s.lessons ?? []);
+    if (sections.length === 0) {
+      errors.push("El curso debe tener al menos una sección para publicarse");
+    } else if (allLessons.length === 0) {
+      errors.push("Agrega al menos una lección con contenido para publicar el curso");
+    } else if (!allLessons.some(isPublishLessonReady)) {
+      errors.push("Al menos una lección debe tener su contenido completo (video, texto o preguntas)");
+    }
   }
 
   return { canPublish: errors.length === 0, errors };

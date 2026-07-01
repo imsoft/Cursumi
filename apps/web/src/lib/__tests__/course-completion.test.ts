@@ -155,21 +155,37 @@ describe("getLessonCompletion — assignment", () => {
 // ─── validateCourseForPublish ─────────────────────────────────────────────────
 
 describe("validateCourseForPublish", () => {
-  it("aprueba curso con todos los requeridos", () => {
+  const readySections = [
+    { lessons: [{ type: "video", title: "Clase 1", videoUrl: "https://mux.com/v1" }] },
+  ];
+
+  it("aprueba curso con todos los requeridos (con precio)", () => {
     const { canPublish, errors } = validateCourseForPublish({
       title: "Curso completo",
       imageUrl: "https://cloud.com/img.jpg",
-      sectionsCount: 2,
+      price: 500,
+      sections: readySections,
     });
     expect(canPublish).toBe(true);
     expect(errors).toHaveLength(0);
+  });
+
+  it("aprueba curso gratuito explícito", () => {
+    const { canPublish } = validateCourseForPublish({
+      title: "Curso",
+      imageUrl: "https://cloud.com/img.jpg",
+      isFree: true,
+      sections: readySections,
+    });
+    expect(canPublish).toBe(true);
   });
 
   it("rechaza sin título", () => {
     const { canPublish, errors } = validateCourseForPublish({
       title: "",
       imageUrl: "https://cloud.com/img.jpg",
-      sectionsCount: 1,
+      price: 100,
+      sections: readySections,
     });
     expect(canPublish).toBe(false);
     expect(errors.some((e) => /título/.test(e))).toBe(true);
@@ -179,7 +195,8 @@ describe("validateCourseForPublish", () => {
     const { canPublish, errors } = validateCourseForPublish({
       title: "Curso",
       imageUrl: null,
-      sectionsCount: 1,
+      price: 100,
+      sections: readySections,
     });
     expect(canPublish).toBe(false);
     expect(errors.some((e) => /miniatura/.test(e))).toBe(true);
@@ -189,14 +206,48 @@ describe("validateCourseForPublish", () => {
     const { canPublish, errors } = validateCourseForPublish({
       title: "Curso",
       imageUrl: "https://x.com/i.jpg",
-      sectionsCount: 0,
+      price: 100,
+      sections: [],
     });
     expect(canPublish).toBe(false);
     expect(errors.some((e) => /sección/.test(e))).toBe(true);
   });
 
+  it("rechaza sección con lección incompleta (video sin url)", () => {
+    const { canPublish, errors } = validateCourseForPublish({
+      title: "Curso",
+      imageUrl: "https://x.com/i.jpg",
+      price: 100,
+      sections: [{ lessons: [{ type: "video", title: "Clase", videoUrl: "" }] }],
+    });
+    expect(canPublish).toBe(false);
+    expect(errors.some((e) => /contenido|lección/.test(e))).toBe(true);
+  });
+
+  it("rechaza sin decisión de precio (ni precio ni gratuito)", () => {
+    const { canPublish, errors } = validateCourseForPublish({
+      title: "Curso",
+      imageUrl: "https://x.com/i.jpg",
+      sections: readySections,
+    });
+    expect(canPublish).toBe(false);
+    expect(errors.some((e) => /precio|gratuito/.test(e))).toBe(true);
+  });
+
+  it("evento requiere al menos una sesión", () => {
+    const { canPublish, errors } = validateCourseForPublish({
+      title: "Curso",
+      imageUrl: "https://x.com/i.jpg",
+      price: 100,
+      modality: "evento",
+      sessionsCount: 0,
+    });
+    expect(canPublish).toBe(false);
+    expect(errors.some((e) => /sesión/.test(e))).toBe(true);
+  });
+
   it("acumula múltiples errores", () => {
-    const { errors } = validateCourseForPublish({ title: "", imageUrl: null, sectionsCount: 0 });
+    const { errors } = validateCourseForPublish({ title: "", imageUrl: null, sections: [] });
     expect(errors.length).toBeGreaterThanOrEqual(3);
   });
 });

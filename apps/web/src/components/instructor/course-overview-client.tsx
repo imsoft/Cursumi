@@ -34,6 +34,8 @@ type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "s
 interface CourseOverviewClientProps {
   /** Curso serializado desde el servidor (sin objetos `Date`) */
   course: SerializedInstructorCourseOverview;
+  /** Estado del expediente de planeación didáctica (requisito para publicar) */
+  planning: { total: number; completed: number; isComplete: boolean };
 }
 
 const LESSON_TYPE_OPTIONS: { value: LessonType; label: string; icon: React.ReactNode }[] = [
@@ -67,7 +69,7 @@ function lessonTypeLabel(type: LessonType) {
   }[type];
 }
 
-export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
+export function CourseOverviewClient({ course, planning }: CourseOverviewClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
@@ -88,6 +90,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     modality: course.modality,
     courseType: course.courseType,
     price: course.price,
+    isFree: course.isFree,
     imageUrl: course.imageUrl || "",
     freeJoinCode: "",
     clearFreeJoinCode: false,
@@ -122,6 +125,7 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
     modality: course.modality,
     courseType: course.courseType,
     price: course.price,
+    isFree: course.isFree,
     imageUrl: course.imageUrl || "",
     freeJoinCode: "",
     clearFreeJoinCode: false,
@@ -139,7 +143,8 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
           level: editData.level,
           modality: editData.modality,
           courseType: editData.courseType,
-          price: editData.price,
+          price: editData.isFree ? 0 : editData.price,
+          isFree: editData.isFree,
           imageUrl: editData.imageUrl || null,
           freeJoinCode: editData.freeJoinCode || undefined,
           clearFreeJoinCode: editData.clearFreeJoinCode,
@@ -363,15 +368,28 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium text-foreground">Precio</label>
-                  <Input
-                    className="mt-1"
-                    type="number"
-                    min={0}
-                    value={editData.price}
-                    onChange={(e) => setEditData((d) => ({ ...d, price: Number(e.target.value) }))}
-                  />
+                  <label className="mt-1 flex cursor-pointer items-center gap-2 text-sm text-foreground">
+                    <input
+                      type="checkbox"
+                      className="rounded border-input"
+                      checked={editData.isFree}
+                      onChange={(e) =>
+                        setEditData((d) => ({ ...d, isFree: e.target.checked, price: e.target.checked ? 0 : d.price }))
+                      }
+                    />
+                    Curso gratuito
+                  </label>
+                  {!editData.isFree && (
+                    <Input
+                      className="mt-2"
+                      type="number"
+                      min={0}
+                      value={editData.price}
+                      onChange={(e) => setEditData((d) => ({ ...d, price: Number(e.target.value) }))}
+                    />
+                  )}
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Precio en pesos mexicanos (MXN)
+                    Precio en pesos mexicanos (MXN). Marca “Curso gratuito” o define un precio para poder publicar.
                   </p>
                 </div>
                 <div>
@@ -757,23 +775,29 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
         </CardContent>
       </Card>
 
-      {/* Planeación didáctica — cursos por evento (certificación CONOCER/STPS) */}
-      {course.modality === "evento" && (
-        <Card>
-          <CardContent className="flex items-center justify-between p-5">
+      {/* Planeación didáctica — requisito para publicar (video y evento) */}
+      {(course.modality === "evento" || course.modality === "virtual") && (
+        <Card className={planning.isComplete ? undefined : "border-amber-300 dark:border-amber-800"}>
+          <CardContent className="flex items-center justify-between gap-3 p-5">
             <div className="flex items-center gap-3">
               <FileText className="h-5 w-5 text-primary" />
               <div>
                 <p className="font-semibold text-foreground">Planeación didáctica</p>
                 <p className="text-sm text-muted-foreground">
-                  Carta descriptiva y documentos de certificación (PDF)
+                  {planning.isComplete ? (
+                    <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> Expediente completo ({planning.completed}/{planning.total})
+                    </span>
+                  ) : (
+                    <>Requerido para publicar — {planning.completed}/{planning.total} documentos completados</>
+                  )}
                 </p>
               </div>
             </div>
             <Button variant="outline" size="sm" asChild>
               <Link href={`/instructor/courses/${course.id}/planning`}>
                 <ExternalLink className="mr-2 h-4 w-4" />
-                Abrir planeación
+                {planning.isComplete ? "Abrir planeación" : "Completar planeación"}
               </Link>
             </Button>
           </CardContent>
@@ -795,9 +819,21 @@ export function CourseOverviewClient({ course }: CourseOverviewClientProps) {
               ¡Curso publicado correctamente!
             </div>
           )}
+          {!isPublished && !planning.isComplete && (
+            <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+              <span>
+                Completa la planeación didáctica ({planning.completed}/{planning.total}) para poder publicar el curso.
+              </span>
+            </div>
+          )}
           <div className="flex flex-wrap gap-3">
             {!isPublished && (
-              <Button onClick={handlePublish} disabled={isPending} className="gap-2">
+              <Button
+                onClick={handlePublish}
+                disabled={isPending || !planning.isComplete}
+                className="gap-2"
+              >
                 <Globe className="h-4 w-4" />
                 Publicar curso
               </Button>

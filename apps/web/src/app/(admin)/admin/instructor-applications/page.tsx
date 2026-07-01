@@ -26,6 +26,9 @@ interface Application {
   headline: string | null;
   bio: string | null;
   reason: string;
+  legalName: string | null;
+  rfc: string | null;
+  fiscalAddress: string | null;
   rejectionReason: string | null;
   createdAt: string;
   user: { id: string; name: string | null; email: string; image: string | null };
@@ -191,6 +194,25 @@ export default function InstructorApplicationsPage() {
                         <p className="font-medium text-muted-foreground mb-1">¿Por qué quiere ser instructor?</p>
                         <p className="text-foreground whitespace-pre-wrap">{app.reason}</p>
                       </div>
+                      {(app.legalName || app.rfc || app.fiscalAddress) && (
+                        <div className="rounded-lg border border-border bg-muted/30 p-3">
+                          <p className="font-medium text-muted-foreground mb-2">Datos fiscales</p>
+                          <dl className="grid gap-1.5 sm:grid-cols-2">
+                            <div>
+                              <dt className="text-xs text-muted-foreground">Nombre legal</dt>
+                              <dd className="text-foreground">{app.legalName ?? "—"}</dd>
+                            </div>
+                            <div>
+                              <dt className="text-xs text-muted-foreground">RFC</dt>
+                              <dd className="text-foreground font-mono">{app.rfc ?? "—"}</dd>
+                            </div>
+                            <div className="sm:col-span-2">
+                              <dt className="text-xs text-muted-foreground">Domicilio fiscal</dt>
+                              <dd className="text-foreground">{app.fiscalAddress ?? "—"}</dd>
+                            </div>
+                          </dl>
+                        </div>
+                      )}
                       {app.rejectionReason && (
                         <div className="rounded-lg bg-red-50 p-3 dark:bg-red-900/20">
                           <p className="font-medium text-red-700 dark:text-red-300 mb-1">Motivo de rechazo</p>

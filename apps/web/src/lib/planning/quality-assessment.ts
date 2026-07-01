@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const QUALITY_ASSESSMENT_TYPE = "evaluacion-calidad" as const;
 
 export const DEFAULT_QUALITY_SCALE = ["Muy Malo", "Malo", "Regular", "Muy Bueno", "Excelente"];
@@ -38,17 +40,13 @@ export function emptyQualitySection(): QualitySection {
   return { id: crypto.randomUUID(), title: "", questions: [emptyQualityQuestion()] };
 }
 
-export function createEmptyQualityAssessment(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-  duration?: string;
-}): QualityAssessmentData {
+export function createEmptyQualityAssessment(prefill?: Partial<PlanningPrefill>): QualityAssessmentData {
   return {
     courseName: prefill?.courseName ?? "",
     instructorName: prefill?.instructorName ?? "",
-    location: "",
-    date: "",
-    schedule: "",
+    location: prefill?.location ?? "",
+    date: prefill?.startDate ?? "",
+    schedule: prefill?.schedule ?? "",
     duration: prefill?.duration ?? "",
     questionnaireTitle: "Cuestionario de calidad",
     instructions: "",
@@ -59,7 +57,7 @@ export function createEmptyQualityAssessment(prefill?: {
 
 export function hydrateQualityAssessment(
   raw: unknown,
-  prefill?: { courseName?: string; instructorName?: string; duration?: string },
+  prefill?: Partial<PlanningPrefill>,
 ): QualityAssessmentData {
   const base = createEmptyQualityAssessment(prefill);
   if (!raw || typeof raw !== "object") return base;

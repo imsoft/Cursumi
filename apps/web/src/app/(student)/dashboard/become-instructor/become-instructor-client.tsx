@@ -21,9 +21,14 @@ interface Application {
   headline: string | null;
   bio: string | null;
   reason: string | null;
+  legalName: string | null;
+  rfc: string | null;
+  fiscalAddress: string | null;
   rejectionReason: string | null;
   createdAt: Date | string;
 }
+
+const RFC_REGEX = /^[A-ZÑ&]{3,4}\d{6}[A-Z\d]{3}$/;
 
 interface BecomeInstructorClientProps {
   application: Application | null;
@@ -39,6 +44,11 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
   const [headline, setHeadline] = useState(initialApplication?.headline ?? "");
   const [bio, setBio] = useState(initialApplication?.bio ?? "");
   const [reason, setReason] = useState(initialApplication?.reason ?? "");
+  const [legalName, setLegalName] = useState(initialApplication?.legalName ?? "");
+  const [rfc, setRfc] = useState(initialApplication?.rfc ?? "");
+  const [fiscalAddress, setFiscalAddress] = useState(initialApplication?.fiscalAddress ?? "");
+
+  const rfcValid = RFC_REGEX.test(rfc.trim().toUpperCase());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +58,14 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
       const res = await fetch("/api/instructor/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ headline, bio, reason }),
+        body: JSON.stringify({
+          headline,
+          bio,
+          reason,
+          legalName,
+          rfc: rfc.trim().toUpperCase(),
+          fiscalAddress,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -193,6 +210,53 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
               <p className="text-xs text-muted-foreground text-right">{reason.length}/2000</p>
             </div>
 
+            {/* Datos fiscales / identidad — requeridos para facturación (México) */}
+            <div className="space-y-4 rounded-lg border border-border bg-muted/20 p-4">
+              <div>
+                <p className="text-sm font-semibold text-foreground">Datos fiscales</p>
+                <p className="text-xs text-muted-foreground">
+                  Necesarios para verificar tu identidad y emitir facturas de tus ventas. No se muestran a los alumnos.
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <Input
+                  label="Nombre legal completo *"
+                  value={legalName}
+                  onChange={(e) => setLegalName(e.target.value)}
+                  maxLength={160}
+                  required
+                />
+                <p className="text-xs text-muted-foreground">Como aparece en tu identificación oficial o constancia fiscal.</p>
+              </div>
+
+              <div className="space-y-1">
+                <Input
+                  label="RFC *"
+                  value={rfc}
+                  onChange={(e) => setRfc(e.target.value.toUpperCase())}
+                  maxLength={13}
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  {rfc.trim() && !rfcValid
+                    ? "RFC inválido: 12 caracteres (persona moral) o 13 (persona física)."
+                    : "12 o 13 caracteres, con homoclave."}
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <Input
+                  label="Domicilio fiscal *"
+                  value={fiscalAddress}
+                  onChange={(e) => setFiscalAddress(e.target.value)}
+                  maxLength={300}
+                  required
+                />
+                <p className="text-xs text-muted-foreground">Calle, número, colonia, ciudad, estado y código postal.</p>
+              </div>
+            </div>
+
             {error && (
               <div className="flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 <AlertCircle className="h-4 w-4 shrink-0" />
@@ -202,7 +266,15 @@ export function BecomeInstructorClient({ application: initialApplication }: Beco
 
             <Button
               type="submit"
-              disabled={submitting || !headline.trim() || bio.length < 10 || reason.length < 20}
+              disabled={
+                submitting ||
+                !headline.trim() ||
+                bio.length < 10 ||
+                reason.length < 20 ||
+                legalName.trim().length < 3 ||
+                !rfcValid ||
+                fiscalAddress.trim().length < 5
+              }
               className="w-full"
             >
               {submitting ? "Enviando..." : "Enviar solicitud"}

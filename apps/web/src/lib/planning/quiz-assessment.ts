@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const DIAGNOSTIC_ASSESSMENT_TYPE = "evaluacion-diagnostica" as const;
 export const FORMATIVE_ASSESSMENT_TYPE = "evaluacion-formativa" as const;
 export const SUMMATIVE_ASSESSMENT_TYPE = "evaluacion-sumativa" as const;
@@ -44,27 +46,39 @@ export function emptyQuestion(): QuizQuestion {
 
 export function createEmptyQuizAssessment(
   defaultQuestionnaireTitle: string,
-  prefill?: { courseName?: string; instructorName?: string; duration?: string },
+  prefill?: Partial<PlanningPrefill>,
+  /** Sembrar las preguntas del examen del curso (solo tiene sentido en la sumativa) */
+  seedQuestions = false,
 ): QuizAssessmentData {
+  const seeded =
+    seedQuestions && prefill?.questions?.length
+      ? prefill.questions.map((q) => ({
+          id: crypto.randomUUID(),
+          statement: q.statement,
+          options: q.options.length > 0 ? q.options : ["", "", ""],
+        }))
+      : null;
+
   return {
     courseName: prefill?.courseName ?? "",
     instructorName: prefill?.instructorName ?? "",
-    location: "",
-    date: "",
-    schedule: "",
+    location: prefill?.location ?? "",
+    date: prefill?.startDate ?? "",
+    schedule: prefill?.schedule ?? "",
     duration: prefill?.duration ?? "",
     questionnaireTitle: defaultQuestionnaireTitle,
     instructions: "",
-    questions: [emptyQuestion()],
+    questions: seeded ?? [emptyQuestion()],
   };
 }
 
 export function hydrateQuizAssessment(
   raw: unknown,
   defaultQuestionnaireTitle: string,
-  prefill?: { courseName?: string; instructorName?: string; duration?: string },
+  prefill?: Partial<PlanningPrefill>,
+  seedQuestions = false,
 ): QuizAssessmentData {
-  const base = createEmptyQuizAssessment(defaultQuestionnaireTitle, prefill);
+  const base = createEmptyQuizAssessment(defaultQuestionnaireTitle, prefill, seedQuestions);
   if (!raw || typeof raw !== "object") return base;
   const data = raw as Partial<QuizAssessmentData>;
 

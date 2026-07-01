@@ -1,3 +1,6 @@
+import type { PlanningPrefill } from "./prefill";
+import { parseDurationToMinutes } from "@/lib/utils";
+
 export const COURSE_INFO_TYPE = "course-info-document" as const;
 
 export type CourseTopic = {
@@ -46,15 +49,23 @@ export function emptyEvaluationItem(text = ""): EvaluationItem {
   return { id: crypto.randomUUID(), text };
 }
 
-export function createEmptyCourseInfoDocument(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-}): CourseInfoDocumentData {
+export function createEmptyCourseInfoDocument(prefill?: Partial<PlanningPrefill>): CourseInfoDocumentData {
+  // Cada sección → tema, con horas estimadas de la suma de duraciones de sus lecciones
+  const topics: CourseTopic[] = (prefill?.units ?? []).map((u) => {
+    const minutes = u.lessons.reduce((sum, l) => sum + parseDurationToMinutes(l.durationLabel), 0);
+    return {
+      id: crypto.randomUUID(),
+      title: u.title,
+      objective: "",
+      hours: minutes > 0 ? Math.round((minutes / 60) * 10) / 10 : 0,
+    };
+  });
+
   return {
     courseName: prefill?.courseName ?? "",
     generalObjective: "",
-    topics: [emptyTopic()],
-    introduction: "",
+    topics: topics.length > 0 ? topics : [emptyTopic()],
+    introduction: prefill?.description ?? "",
     methodology: "",
     visualGuide: "",
     targetAudience: "",
