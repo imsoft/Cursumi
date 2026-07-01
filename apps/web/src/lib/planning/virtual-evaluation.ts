@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const VIRTUAL_EVALUATION_TYPE = "virtual-evaluation" as const;
 
 export const DEFAULT_QUALITY_SCALE = ["Muy Malo", "Malo", "Regular", "Muy Bueno", "Excelente"];
@@ -78,15 +80,32 @@ export function emptyQualitySection(): QualitySection {
   return { id: crypto.randomUUID(), title: "", questions: [emptyQualityQuestion()] };
 }
 
-export function createEmptyVirtualEvaluation(prefill?: {
-  courseName?: string;
-}): VirtualEvaluationData {
+export function createEmptyVirtualEvaluation(prefill?: Partial<PlanningPrefill>): VirtualEvaluationData {
+  // Evaluación de conocimientos sembrada con las preguntas del examen del curso
+  const knowledgeEvaluations: KnowledgeEvaluation[] = prefill?.questions?.length
+    ? [
+        {
+          id: crypto.randomUUID(),
+          title: prefill.courseName ? `Evaluación — ${prefill.courseName}` : "Evaluación de conocimientos",
+          instructions: "",
+          questions: prefill.questions.map((q) => ({
+            id: crypto.randomUUID(),
+            statement: q.statement,
+            options:
+              q.options.length > 0
+                ? q.options.map((text, i) => emptyEvaluationOption(text, i === q.correctIndex))
+                : [emptyEvaluationOption("", true), emptyEvaluationOption(), emptyEvaluationOption()],
+          })),
+        },
+      ]
+    : [emptyKnowledgeEvaluation()];
+
   return {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
     presentation: "",
-    knowledgeEvaluations: [emptyKnowledgeEvaluation()],
+    knowledgeEvaluations,
     qualityInstructions: "",
     qualityScale: [...DEFAULT_QUALITY_SCALE],
     qualitySections: [emptyQualitySection()],

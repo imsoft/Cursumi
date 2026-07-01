@@ -25,6 +25,7 @@ export function CourseReviewReportClient({ courseId, initialData, initialStatus,
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateCourseReviewReport(raw, prefill)}
+      seedFromCourse={() => hydrateCourseReviewReport(null, prefill)}
       renderForm={(value, onChange) => <CourseReviewReportForm value={value} onChange={onChange} />}
       renderDocument={(value) => <CourseReviewReportDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(COURSE_REVIEW_REPORT_TYPE, value.courseName)}

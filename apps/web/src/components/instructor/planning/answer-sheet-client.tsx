@@ -9,12 +9,13 @@ import {
   ANSWER_SHEET_TYPE,
 } from "@/lib/planning/answer-sheet";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string; instructorName?: string; duration?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function AnswerSheetClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function AnswerSheetClient({ courseId, initialData, initialStatus, prefil
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateAnswerSheet(raw, prefill)}
+      seedFromCourse={() => hydrateAnswerSheet(null, prefill)}
       renderForm={(value, onChange) => <AnswerSheetForm value={value} onChange={onChange} />}
       renderDocument={(value) => <AnswerSheetDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(ANSWER_SHEET_TYPE, value.courseName)}

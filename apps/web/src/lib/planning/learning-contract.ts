@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const LEARNING_CONTRACT_TYPE = "contrato-aprendizaje" as const;
 
 export type CommitmentRow = {
@@ -20,18 +22,14 @@ export function emptyCommitment(description = ""): CommitmentRow {
   return { id: crypto.randomUUID(), description };
 }
 
-export function createEmptyLearningContract(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-  duration?: string;
-}): LearningContractData {
+export function createEmptyLearningContract(prefill?: Partial<PlanningPrefill>): LearningContractData {
   return {
     courseName: prefill?.courseName ?? "",
     instructorName: prefill?.instructorName ?? "",
-    location: "",
+    location: prefill?.location ?? "",
     duration: prefill?.duration ?? "",
-    schedule: "",
-    date: "",
+    schedule: prefill?.schedule ?? "",
+    date: prefill?.startDate ?? "",
     facilitatorCommitments: [emptyCommitment()],
     participantCommitments: [emptyCommitment()],
   };

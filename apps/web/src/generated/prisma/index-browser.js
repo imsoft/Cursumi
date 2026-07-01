@@ -194,6 +194,9 @@ exports.Prisma.InstructorApplicationScalarFieldEnum = {
   bio: 'bio',
   reason: 'reason',
   rejectionReason: 'rejectionReason',
+  legalName: 'legalName',
+  rfc: 'rfc',
+  fiscalAddress: 'fiscalAddress',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -241,6 +244,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   startDate: 'startDate',
   duration: 'duration',
   price: 'price',
+  isFree: 'isFree',
   maxStudents: 'maxStudents',
   imageUrl: 'imageUrl',
   status: 'status',

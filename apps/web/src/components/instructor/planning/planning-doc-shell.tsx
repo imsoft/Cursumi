@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2, Save, CheckCircle2 } from "lucide-react";
+import { Download, Loader2, Save, CheckCircle2, DownloadCloud } from "lucide-react";
 import { savePlanningDocument } from "@/app/actions/planning-actions";
 import { generateElementPdf } from "@/lib/planning/generate-pdf";
+import { deepFillEmpty } from "@/lib/planning/prefill";
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 
@@ -20,6 +21,8 @@ type Props<T> = {
   renderDocument: (value: T) => ReactNode;
   pdfFilename: (value: T) => string;
   pdfOrientation?: "portrait" | "landscape";
+  /** Genera un documento sembrado con los datos actuales del curso (para "Traer datos del curso"). */
+  seedFromCourse?: () => T;
   /** Override de exportación (p. ej. presentaciones a PDF 16:9). Recibe el contenedor del documento. */
   exportPdf?: (el: HTMLElement, filename: string) => Promise<void>;
 };
@@ -39,12 +42,14 @@ export function PlanningDocShell<T>({
   pdfFilename,
   pdfOrientation = "portrait",
   exportPdf,
+  seedFromCourse,
 }: Props<T>) {
   const [data, setData] = useState<T>(() => hydrate(initialData));
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [completed, setCompleted] = useState(initialStatus === "completed");
   const [downloading, setDownloading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [confirmingImport, setConfirmingImport] = useState(false);
 
   const docRef = useRef<HTMLDivElement>(null);
   const dataRef = useRef(data);
@@ -82,6 +87,16 @@ export function PlanningDocShell<T>({
   }, []);
 
   const handleManualSave = () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    persist(completed ? "completed" : "draft");
+  };
+
+  const handleImportFromCourse = () => {
+    if (!seedFromCourse) return;
+    const merged = deepFillEmpty(dataRef.current, seedFromCourse());
+    setData(merged);
+    dataRef.current = merged;
+    setConfirmingImport(false);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     persist(completed ? "completed" : "draft");
   };
@@ -128,6 +143,17 @@ export function PlanningDocShell<T>({
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {seedFromCourse && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              onClick={() => setConfirmingImport(true)}
+            >
+              <DownloadCloud className="h-4 w-4" /> Traer datos del curso
+            </Button>
+          )}
           <Button type="button" variant="outline" size="sm" className="gap-2" onClick={handleManualSave} disabled={saveState === "saving"}>
             <Save className="h-4 w-4" /> Guardar
           </Button>
@@ -143,6 +169,22 @@ export function PlanningDocShell<T>({
 
       {pdfError && (
         <div className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive">{pdfError}</div>
+      )}
+
+      {confirmingImport && (
+        <div className="flex flex-col gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300 sm:flex-row sm:items-center sm:justify-between">
+          <span>
+            Se completarán solo los campos <strong>vacíos</strong> con la información actual del curso. No se sobrescribe lo que ya escribiste.
+          </span>
+          <div className="flex shrink-0 gap-2">
+            <Button type="button" size="sm" onClick={handleImportFromCourse}>
+              Rellenar campos vacíos
+            </Button>
+            <Button type="button" size="sm" variant="outline" onClick={() => setConfirmingImport(false)}>
+              Cancelar
+            </Button>
+          </div>
+        </div>
       )}
 
       {renderForm(data, handleChange)}

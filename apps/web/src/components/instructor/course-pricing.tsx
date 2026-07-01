@@ -18,21 +18,18 @@ import { CourseSessionsManager } from "./course-sessions-manager";
 import { DurationInput } from "./duration-input";
 
 const createPricingSchema = (modality: "virtual" | "evento") => {
-  const baseSchema = {
+  const schema = z.object({
     price: z.coerce.number().min(0, "El precio no puede ser negativo"),
     duration: z.string().min(1, "Ingresa la duración"),
-  };
+    isFree: z.boolean().default(false),
+    courseType:
+      modality === "virtual" ? z.string().default("ondemand") : z.literal("fechado"),
+  });
 
-  if (modality === "virtual") {
-    return z.object({
-      ...baseSchema,
-      courseType: z.string().default("ondemand"),
-    });
-  }
-  // evento: sesiones fechadas
-  return z.object({
-    ...baseSchema,
-    courseType: z.literal("fechado"),
+  // Debe ser gratuito explícito o tener precio > 0
+  return schema.refine((d) => d.isFree || d.price > 0, {
+    message: "Define un precio mayor a 0 o marca el curso como gratuito",
+    path: ["price"],
   });
 };
 
@@ -70,16 +67,30 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
     defaultValues: {
       price: data.price,
       duration: data.duration,
+      isFree: data.isFree ?? false,
       courseType: usesSessions ? "fechado" : (data.courseType || "ondemand"),
     } as PricingFormData,
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const watchedPrice = form.watch("price");
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const isFree = form.watch("isFree");
+
+  const handleToggleFree = (checked: boolean) => {
+    form.setValue("isFree", checked, { shouldValidate: true });
+    if (checked) {
+      form.setValue("price", 0, { shouldValidate: true });
+      onUpdate({ isFree: true, price: 0 });
+    } else {
+      onUpdate({ isFree: false });
+    }
+  };
 
   const handleSubmit = form.handleSubmit((values) => {
     onUpdate({
       ...values,
+      price: values.isFree ? 0 : values.price,
       freeJoinCode: data.freeJoinCode,
       clearFreeJoinCode: data.clearFreeJoinCode,
     });
@@ -120,7 +131,23 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
         {/* Precio */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-foreground">Precio</h3>
-          <div>
+
+          <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground">
+            <input
+              type="checkbox"
+              className="mt-1 rounded border-input"
+              checked={!!isFree}
+              onChange={(e) => handleToggleFree(e.target.checked)}
+            />
+            <span>
+              <span className="font-medium">Este curso es gratuito</span>
+              <span className="block text-xs text-muted-foreground">
+                Los alumnos podrán inscribirse sin pago. Debes elegir gratuito o definir un precio para publicar.
+              </span>
+            </span>
+          </label>
+
+          <div className={isFree ? "hidden" : undefined}>
             <Input
               label="Precio del curso *"
               type="number"
@@ -148,35 +175,36 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
                 </span>
               </div>
             )}
-            {usesSessions && watchedPrice === 0 && (
-              <div className="mt-4 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
-                <p className="text-sm font-medium text-foreground">Inscripción gratuita</p>
-                <p className="text-xs text-muted-foreground">
-                  Opcional: define un código para que solo quienes lo conozcan puedan inscribirse (por ejemplo lo compartes en clase).
-                </p>
-                <PasswordInput
-                  label="Código de inscripción"
-                  autoComplete="new-password"
-                  value={data.freeJoinCode ?? ""}
-                  onChange={(e) =>
-                    onUpdate({ freeJoinCode: e.target.value, clearFreeJoinCode: false })
-                  }
-                  placeholder={data.hasJoinCode ? "Nuevo código o vacío para no cambiar" : "Ej. TALLER2025"}
-                />
-                {data.hasJoinCode && (
-                  <label className="flex cursor-pointer items-start gap-2 text-sm text-foreground">
-                    <input
-                      type="checkbox"
-                      className="mt-1 rounded border-input"
-                      checked={!!data.clearFreeJoinCode}
-                      onChange={(e) => onUpdate({ clearFreeJoinCode: e.target.checked })}
-                    />
-                    <span>Quitar el código (cualquiera podrá inscribirse sin código)</span>
-                  </label>
-                )}
-              </div>
-            )}
           </div>
+
+          {usesSessions && (isFree || watchedPrice === 0) && (
+            <div className="mt-4 space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+              <p className="text-sm font-medium text-foreground">Inscripción gratuita</p>
+              <p className="text-xs text-muted-foreground">
+                Opcional: define un código para que solo quienes lo conozcan puedan inscribirse (por ejemplo lo compartes en clase).
+              </p>
+              <PasswordInput
+                label="Código de inscripción"
+                autoComplete="new-password"
+                value={data.freeJoinCode ?? ""}
+                onChange={(e) =>
+                  onUpdate({ freeJoinCode: e.target.value, clearFreeJoinCode: false })
+                }
+                placeholder={data.hasJoinCode ? "Nuevo código o vacío para no cambiar" : "Ej. TALLER2025"}
+              />
+              {data.hasJoinCode && (
+                <label className="flex cursor-pointer items-start gap-2 text-sm text-foreground">
+                  <input
+                    type="checkbox"
+                    className="mt-1 rounded border-input"
+                    checked={!!data.clearFreeJoinCode}
+                    onChange={(e) => onUpdate({ clearFreeJoinCode: e.target.checked })}
+                  />
+                  <span>Quitar el código (cualquiera podrá inscribirse sin código)</span>
+                </label>
+              )}
+            </div>
+          )}
         </div>
 
         <Separator />

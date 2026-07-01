@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const ATTENDANCE_LIST_TYPE = "lista-asistencia" as const;
 
 export type AttendanceRow = {
@@ -21,18 +23,14 @@ export function emptyRow(): AttendanceRow {
   return { id: crypto.randomUUID(), name: "" };
 }
 
-export function createEmptyAttendanceList(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-  duration?: string;
-}): AttendanceListData {
+export function createEmptyAttendanceList(prefill?: Partial<PlanningPrefill>): AttendanceListData {
   return {
     courseName: prefill?.courseName ?? "",
     instructorName: prefill?.instructorName ?? "",
-    location: "",
+    location: prefill?.location ?? "",
     duration: prefill?.duration ?? "",
-    schedule: "",
-    date: "",
+    schedule: prefill?.schedule ?? "",
+    date: prefill?.startDate ?? "",
     participants: Array.from({ length: DEFAULT_ROWS }, emptyRow),
   };
 }

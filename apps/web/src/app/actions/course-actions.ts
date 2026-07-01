@@ -83,21 +83,33 @@ export async function publishCourse(data: CourseFormData) {
 
   // Validate before publishing
   const { validateCourseForPublish } = await import("@/lib/course-completion");
-  const sectionsCount = data.sections?.length ?? 0;
   const validation = validateCourseForPublish({
     title: data.title ?? "",
     imageUrl: data.imageUrl,
-    sectionsCount,
+    modality: data.modality,
+    isFree: data.isFree,
+    price: data.price,
+    sections: data.sections,
+    sessionsCount: data.courseSessions?.length ?? 0,
   });
   if (!validation.canPublish) {
     throw new Error(validation.errors.join(" · "));
   }
 
-  if (data.id) {
-    await updateCourse(data.id, session.user.id, { ...data, id: data.id, status: "published" });
-    return { id: data.id };
+  // La planeación didáctica debe estar completa al 100% para publicar
+  if (!data.id) {
+    throw new Error("Guarda el curso como borrador y completa la planeación didáctica antes de publicarlo.");
   }
-  return createCourse(session.user.id, { ...data, status: "published" });
+  const { getPlanningExpedientStatus } = await import("@/lib/planning/completion");
+  const planning = await getPlanningExpedientStatus(data.id, (data.modality ?? "virtual") as "virtual" | "evento");
+  if (!planning.isComplete) {
+    throw new Error(
+      `Completa la planeación didáctica antes de publicar (${planning.completed}/${planning.total}). Falta: ${planning.missing.join(", ")}`,
+    );
+  }
+
+  await updateCourse(data.id, session.user.id, { ...data, id: data.id, status: "published" });
+  return { id: data.id };
 }
 
 export async function getCourseDetailForUser(courseId: string) {
@@ -480,9 +492,24 @@ export async function publishCourseById(courseId: string): Promise<{ success: bo
   const validation = validateCourseForPublish({
     title: course.title ?? "",
     imageUrl: course.imageUrl,
-    sectionsCount: course.sections?.length ?? 0,
+    modality: course.modality,
+    isFree: course.isFree,
+    price: course.price,
+    sections: course.sections,
+    sessionsCount: course.courseSessions?.length ?? 0,
   });
   if (!validation.canPublish) return { success: false, error: validation.errors.join(" · ") };
+
+  // La planeación didáctica debe estar completa al 100% para publicar
+  const { getPlanningExpedientStatus } = await import("@/lib/planning/completion");
+  const planning = await getPlanningExpedientStatus(courseId, (course.modality ?? "virtual") as "virtual" | "evento");
+  if (!planning.isComplete) {
+    return {
+      success: false,
+      error: `Completa la planeación didáctica antes de publicar (${planning.completed}/${planning.total}). Falta: ${planning.missing.join(", ")}`,
+    };
+  }
+
   await prisma.course.update({ where: { id: courseId }, data: { status: "published" } });
   revalidatePath(`/instructor/courses/${courseId}/edit`);
   return { success: true };

@@ -131,6 +131,8 @@ export default function AdminCoursesPage() {
   const [error, setError] = useState<string | null>(null);
   const [disablingCourse, setDisablingCourse] = useState<AdminCourse | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  /** Curso que el server rechazó publicar por planeación incompleta pero un admin puede forzar */
+  const [forcePublish, setForcePublish] = useState<AdminCourse | null>(null);
 
   const load = async () => {
     try {
@@ -183,23 +185,50 @@ export default function AdminCoursesPage() {
     setDisablingCourse(null);
   };
 
-  const handleEnable = async (course: AdminCourse) => {
+  const handleEnable = async (course: AdminCourse, force = false) => {
     setTogglingId(course.id);
-    await fetch(`/api/admin/courses/${course.id}/disable`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "enable" }),
-    });
-    setCourses((prev) =>
-      prev.map((c) => c.id === course.id ? { ...c, status: "published" } : c)
-    );
-    setTogglingId(null);
+    setError(null);
+    if (force) setForcePublish(null);
+    try {
+      const res = await fetch(`/api/admin/courses/${course.id}/disable`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "enable", ...(force ? { force: true } : {}) }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error ?? "No se pudo publicar el curso.");
+        // El servidor indica que un admin puede forzar la publicación (curso legacy)
+        if (data.canForce) setForcePublish(course);
+        return;
+      }
+      setCourses((prev) =>
+        prev.map((c) => c.id === course.id ? { ...c, status: "published" } : c)
+      );
+    } finally {
+      setTogglingId(null);
+    }
   };
 
   return (
     <div className="space-y-6">
       <PageHeader title="Cursos" description="Revisa y administra todos los cursos" />
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      {error && (
+        <div className="flex flex-col gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive sm:flex-row sm:items-center sm:justify-between">
+          <span>{error}</span>
+          {forcePublish && (
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={togglingId === forcePublish.id}
+              onClick={() => handleEnable(forcePublish, true)}
+              className="shrink-0"
+            >
+              Publicar de todos modos
+            </Button>
+          )}
+        </div>
+      )}
 
       <Card className="border border-border bg-card/90">
         <CardContent className="p-4">

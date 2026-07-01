@@ -51,6 +51,7 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
     location: course.location,
     mapsUrl: course.mapsUrl,
     price: course.price,
+    isFree: course.isFree,
     imageUrl: course.imageUrl,
     status: course.status,
     /** Presencial gratis con código configurado (el hash no se expone) */

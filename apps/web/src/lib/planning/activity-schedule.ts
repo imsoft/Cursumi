@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const ACTIVITY_SCHEDULE_TYPE = "cronograma-actividades" as const;
 
 export type ScheduleActivity = {
@@ -99,20 +101,29 @@ export function emptyActivity(planStart = 0): ScheduleActivity {
   return { id: crypto.randomUUID(), name: "", planStart, planDuration: 0, realStart: 0, realDuration: 0 };
 }
 
-export function createEmptyActivitySchedule(prefill?: {
-  courseName?: string;
-  instructorName?: string;
-}): ActivityScheduleData {
+export function createEmptyActivitySchedule(prefill?: Partial<PlanningPrefill>): ActivityScheduleData {
   const today = new Date().toISOString().slice(0, 10);
+  // Una actividad por lección del curso (secuencial en el Gantt)
+  const lessonActivities: ScheduleActivity[] = (prefill?.units ?? [])
+    .flatMap((u) => u.lessons.map((l) => l.title))
+    .map((name, index) => ({
+      id: crypto.randomUUID(),
+      name,
+      planStart: index + 1,
+      planDuration: 1,
+      realStart: 0,
+      realDuration: 0,
+    }));
+
   return {
     courseName: prefill?.courseName ?? "",
-    creationDate: today,
-    objective: "",
-    totalPeriods: 0,
+    creationDate: prefill?.startDate || today,
+    objective: prefill?.description ?? "",
+    totalPeriods: lessonActivities.length,
     highlightedPeriod: 0,
     elaboratedBy: prefill?.instructorName ?? "",
     approvedBy: prefill?.instructorName ?? "",
-    activities: [emptyActivity()],
+    activities: lessonActivities.length > 0 ? lessonActivities : [emptyActivity()],
   };
 }
 

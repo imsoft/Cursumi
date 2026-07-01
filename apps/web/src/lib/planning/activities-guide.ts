@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const ACTIVITIES_GUIDE_TYPE = "guia-actividades" as const;
 
 export type UnitActivity = {
@@ -55,14 +57,35 @@ export function emptyUnit(): LearningUnit {
   };
 }
 
-export function createEmptyActivitiesGuide(prefill?: { courseName?: string }): ActivitiesGuideData {
+export function createEmptyActivitiesGuide(prefill?: Partial<PlanningPrefill>): ActivitiesGuideData {
+  // Cada sección → unidad de aprendizaje; cada lección → actividad
+  const units: LearningUnit[] = (prefill?.units ?? []).map((u) => ({
+    id: crypto.randomUUID(),
+    name: u.title,
+    objective: "",
+    period: "",
+    generalWeight: "",
+    criteria: { knowledge: false, skills: false, attitudes: false },
+    activities: u.lessons.length
+      ? u.lessons.map((l) => ({
+          id: crypto.randomUUID(),
+          title: l.title,
+          instructions: "",
+          materials: "",
+          participation: "",
+          midTerm: "",
+          weight: "",
+        }))
+      : [emptyActivity()],
+  }));
+
   return {
     courseName: prefill?.courseName ?? "",
-    units: [emptyUnit()],
+    units: units.length > 0 ? units : [emptyUnit()],
   };
 }
 
-export function hydrateActivitiesGuide(raw: unknown, prefill?: { courseName?: string }): ActivitiesGuideData {
+export function hydrateActivitiesGuide(raw: unknown, prefill?: Partial<PlanningPrefill>): ActivitiesGuideData {
   const base = createEmptyActivitiesGuide(prefill);
   if (!raw || typeof raw !== "object") return base;
   const data = raw as Partial<ActivitiesGuideData>;

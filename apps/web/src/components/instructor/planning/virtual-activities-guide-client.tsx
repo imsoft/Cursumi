@@ -9,12 +9,13 @@ import {
   VIRTUAL_ACTIVITIES_GUIDE_TYPE,
 } from "@/lib/planning/virtual-activities-guide";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function VirtualActivitiesGuideClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function VirtualActivitiesGuideClient({ courseId, initialData, initialSta
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateVirtualActivitiesGuide(raw, prefill)}
+      seedFromCourse={() => hydrateVirtualActivitiesGuide(null, prefill)}
       renderForm={(value, onChange) => <VirtualActivitiesGuideForm value={value} onChange={onChange} />}
       renderDocument={(value) => <VirtualActivitiesGuideDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(VIRTUAL_ACTIVITIES_GUIDE_TYPE, value.courseName)}

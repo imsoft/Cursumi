@@ -9,12 +9,13 @@ import {
   COURSE_INFO_TYPE,
 } from "@/lib/planning/course-info-document";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string; instructorName?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function CourseInfoDocumentClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function CourseInfoDocumentClient({ courseId, initialData, initialStatus,
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateCourseInfoDocument(raw, prefill)}
+      seedFromCourse={() => hydrateCourseInfoDocument(null, prefill)}
       renderForm={(value, onChange) => <CourseInfoDocumentForm value={value} onChange={onChange} />}
       renderDocument={(value) => <CourseInfoDocumentDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(COURSE_INFO_TYPE, value.courseName)}

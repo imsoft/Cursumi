@@ -149,7 +149,8 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       courseType: data.courseType as CourseType,
       startDate: data.startDate ? new Date(data.startDate) : null,
       duration: data.duration,
-      price: data.price,
+      price: data.isFree ? 0 : data.price,
+      isFree: data.isFree ?? false,
       maxStudents: data.maxStudents,
       imageUrl: data.imageUrl,
       joinCodeHash,
@@ -218,7 +219,8 @@ export async function updateCourse(courseId: string, instructorId: string, data:
     : undefined;
 
   const nextModality = data.modality ?? existing.modality;
-  const nextPrice = data.price !== undefined ? data.price : existing.price;
+  const nextIsFree = data.isFree !== undefined ? data.isFree : existing.isFree;
+  const nextPrice = nextIsFree ? 0 : data.price !== undefined ? data.price : existing.price;
   let joinCodeHash: string | null | undefined = undefined;
   if (nextModality === "virtual" || nextPrice > 0) {
     joinCodeHash = null;
@@ -244,7 +246,8 @@ export async function updateCourse(courseId: string, instructorId: string, data:
       courseType: data.courseType as CourseType,
       startDate: data.startDate ? new Date(data.startDate) : null,
       duration: data.duration,
-      price: data.price,
+      price: nextPrice,
+      isFree: nextIsFree,
       maxStudents: data.maxStudents,
       imageUrl: data.imageUrl,
       status: data.status ?? existing.status,
@@ -457,7 +460,7 @@ export async function updateCourseInfo(
     title?: string; description?: string; category?: string; level?: string;
     modality?: string; city?: string | null; state?: string | null; location?: string | null;
     courseType?: string; startDate?: string | null; duration?: string | null;
-    price?: number; maxStudents?: number | null; imageUrl?: string | null;
+    price?: number; isFree?: boolean; maxStudents?: number | null; imageUrl?: string | null;
     freeJoinCode?: string;
     clearFreeJoinCode?: boolean;
   }
@@ -474,7 +477,13 @@ export async function updateCourseInfo(
       : undefined;
 
   const nextModality = (data.modality ?? course.modality) as Modality;
-  const nextPrice = data.price !== undefined ? data.price : course.price;
+  const nextIsFree =
+    data.isFree !== undefined
+      ? data.isFree
+      : data.price !== undefined && data.price > 0
+        ? false
+        : course.isFree;
+  const nextPrice = nextIsFree ? 0 : data.price !== undefined ? data.price : course.price;
   let joinCodeHash: string | null | undefined = undefined;
   if (nextModality === "virtual" || nextPrice > 0) {
     joinCodeHash = null;
@@ -499,7 +508,7 @@ export async function updateCourseInfo(
       ...(data.courseType !== undefined && { courseType: data.courseType as CourseType }),
       ...(data.startDate !== undefined && { startDate: data.startDate ? new Date(data.startDate) : null }),
       ...(data.duration !== undefined && { duration: data.duration }),
-      ...(data.price !== undefined && { price: data.price }),
+      ...((data.price !== undefined || data.isFree !== undefined) && { price: nextPrice, isFree: nextIsFree }),
       ...(data.maxStudents !== undefined && { maxStudents: data.maxStudents }),
       ...(data.imageUrl !== undefined && { imageUrl: data.imageUrl }),
       ...(joinCodeHash !== undefined ? { joinCodeHash } : {}),

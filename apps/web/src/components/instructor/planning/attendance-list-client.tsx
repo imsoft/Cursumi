@@ -9,12 +9,13 @@ import {
   ATTENDANCE_LIST_TYPE,
 } from "@/lib/planning/attendance-list";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string; instructorName?: string; duration?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function AttendanceListClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function AttendanceListClient({ courseId, initialData, initialStatus, pre
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateAttendanceList(raw, prefill)}
+      seedFromCourse={() => hydrateAttendanceList(null, prefill)}
       renderForm={(value, onChange) => <AttendanceListForm value={value} onChange={onChange} />}
       renderDocument={(value) => <AttendanceListDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(ATTENDANCE_LIST_TYPE, value.courseName)}

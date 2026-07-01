@@ -9,12 +9,13 @@ import {
   VIRTUAL_PARTICIPANT_MANUAL_TYPE,
 } from "@/lib/planning/virtual-participant-manual";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function VirtualParticipantManualClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function VirtualParticipantManualClient({ courseId, initialData, initialS
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateVirtualParticipantManual(raw, prefill)}
+      seedFromCourse={() => hydrateVirtualParticipantManual(null, prefill)}
       renderForm={(value, onChange) => <VirtualParticipantManualForm value={value} onChange={onChange} />}
       renderDocument={(value) => <VirtualParticipantManualDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(VIRTUAL_PARTICIPANT_MANUAL_TYPE, value.courseName)}

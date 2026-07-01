@@ -1,3 +1,5 @@
+import type { PlanningPrefill } from "./prefill";
+
 export const PARTICIPANT_MANUAL_TYPE = "manual-participante" as const;
 
 export type SectionLevel = 1 | 2;
@@ -21,17 +23,23 @@ export function emptyManualSection(level: SectionLevel = 1): ManualSection {
   return { id: crypto.randomUUID(), level, title: "", body: "" };
 }
 
-export function createEmptyParticipantManual(prefill?: { courseName?: string }): ParticipantManualData {
+export function createEmptyParticipantManual(prefill?: Partial<PlanningPrefill>): ParticipantManualData {
+  // Índice del manual a partir de la estructura del curso: sección (nivel 1) → lecciones (nivel 2)
+  const sections: ManualSection[] = (prefill?.units ?? []).flatMap((u) => [
+    { id: crypto.randomUUID(), level: 1 as SectionLevel, title: u.title, body: "" },
+    ...u.lessons.map((l) => ({ id: crypto.randomUUID(), level: 2 as SectionLevel, title: l.title, body: "" })),
+  ]);
+
   return {
     courseName: prefill?.courseName ?? "",
     referenceStandard: "",
     showTableOfContents: true,
-    sections: [emptyManualSection()],
+    sections: sections.length > 0 ? sections : [emptyManualSection()],
     bibliography: [""],
   };
 }
 
-export function hydrateParticipantManual(raw: unknown, prefill?: { courseName?: string }): ParticipantManualData {
+export function hydrateParticipantManual(raw: unknown, prefill?: Partial<PlanningPrefill>): ParticipantManualData {
   const base = createEmptyParticipantManual(prefill);
   if (!raw || typeof raw !== "object") return base;
   const data = raw as Partial<ParticipantManualData>;

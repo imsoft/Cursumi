@@ -242,6 +242,10 @@ model InstructorApplication {
   bio             String?           @db.Text
   reason          String            @db.Text
   rejectionReason String?           @db.Text
+  /// Datos fiscales/identidad para facturación (México)
+  legalName       String?
+  rfc             String?
+  fiscalAddress   String?           @db.Text
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
@@ -304,6 +308,8 @@ model Course {
   startDate   DateTime?
   duration    String?
   price       Int
+  /// true = curso gratuito explícito (permite publicar con price 0 sin ambigüedad)
+  isFree      Boolean      @default(false)
   maxStudents Int?
   imageUrl    String?
   status      CourseStatus      @default(draft)

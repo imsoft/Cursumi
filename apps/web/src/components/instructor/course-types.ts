@@ -37,6 +37,8 @@ export type CourseFormData = {
   startDate: string;
   duration: string;
   price: number;
+  /** true = curso gratuito explícito (permite publicar con price 0) */
+  isFree?: boolean;
   maxStudents?: number;
   imageUrl?: string;
   /** Solo evento + precio 0: nuevo código (se guarda como hash). Vacío = no cambiar (al editar). */

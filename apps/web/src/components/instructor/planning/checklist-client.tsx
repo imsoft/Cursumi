@@ -25,6 +25,7 @@ export function ChecklistClient({ courseId, initialData, initialStatus, prefill 
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateChecklist(raw, prefill)}
+      seedFromCourse={() => hydrateChecklist(null, prefill)}
       renderForm={(value, onChange) => <ChecklistForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ChecklistDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(CHECKLIST_TYPE, value.courseName)}

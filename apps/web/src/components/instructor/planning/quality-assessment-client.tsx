@@ -9,12 +9,13 @@ import {
   QUALITY_ASSESSMENT_TYPE,
 } from "@/lib/planning/quality-assessment";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string; instructorName?: string; duration?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function QualityAssessmentClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function QualityAssessmentClient({ courseId, initialData, initialStatus, 
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateQualityAssessment(raw, prefill)}
+      seedFromCourse={() => hydrateQualityAssessment(null, prefill)}
       renderForm={(value, onChange) => <QualityAssessmentForm value={value} onChange={onChange} />}
       renderDocument={(value) => <QualityAssessmentDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(QUALITY_ASSESSMENT_TYPE, value.courseName)}

@@ -9,12 +9,13 @@ import {
   ACTIVITY_SCHEDULE_TYPE,
 } from "@/lib/planning/activity-schedule";
 import { buildPlanningFilename } from "@/lib/planning/registry";
+import type { PlanningPrefill } from "@/lib/planning/prefill";
 
 type Props = {
   courseId: string;
   initialData: unknown;
   initialStatus?: string;
-  prefill?: { courseName?: string; instructorName?: string };
+  prefill?: Partial<PlanningPrefill>;
 };
 
 export function ActivityScheduleClient({ courseId, initialData, initialStatus, prefill }: Props) {
@@ -25,6 +26,7 @@ export function ActivityScheduleClient({ courseId, initialData, initialStatus, p
       initialData={initialData}
       initialStatus={initialStatus}
       hydrate={(raw) => hydrateActivitySchedule(raw, prefill)}
+      seedFromCourse={() => hydrateActivitySchedule(null, prefill)}
       renderForm={(value, onChange) => <ActivityScheduleForm value={value} onChange={onChange} />}
       renderDocument={(value) => <ActivityScheduleDocument data={value} />}
       pdfFilename={(value) => buildPlanningFilename(ACTIVITY_SCHEDULE_TYPE, value.courseName)}

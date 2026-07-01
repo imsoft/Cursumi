@@ -6,6 +6,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getUserRole } from "@/lib/user-service";
 import { getPlanningTotal, type CourseModality } from "@/lib/planning/registry";
+import { stripHtml, extractPrefillQuestions, type PlanningPrefill } from "@/lib/planning/prefill";
+import { displayDuration } from "@/lib/duration";
+import { formatDateShortMX } from "@/lib/date-format";
 
 async function requireSession() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -21,23 +24,89 @@ async function verifyCourseOwner(courseId: string, userId: string) {
   if (!course) throw new Error("No autorizado");
 }
 
-export type PlanningPrefill = {
-  courseName: string;
-  instructorName: string;
-  duration: string;
-};
-
 export async function getPlanningPrefill(courseId: string): Promise<PlanningPrefill> {
   const session = await requireSession();
   await verifyCourseOwner(courseId, session.user.id);
   const course = await prisma.course.findUnique({
     where: { id: courseId },
-    select: { title: true, duration: true, instructor: { select: { name: true } } },
+    select: {
+      title: true,
+      duration: true,
+      description: true,
+      location: true,
+      city: true,
+      state: true,
+      maxStudents: true,
+      level: true,
+      category: true,
+      modality: true,
+      startDate: true,
+      finalExam: true,
+      instructor: { select: { name: true } },
+      sections: {
+        orderBy: { order: "asc" },
+        select: {
+          title: true,
+          quiz: true,
+          lessons: { orderBy: { order: "asc" }, select: { title: true, duration: true } },
+        },
+      },
+      courseSessions: {
+        orderBy: { date: "asc" },
+        select: { date: true, startTime: true, endTime: true, location: true, city: true, state: true, maxStudents: true },
+      },
+    },
   });
+
+  const sessions = course?.courseSessions ?? [];
+  const firstSession = sessions[0];
+
+  const location =
+    course?.location?.trim() ||
+    firstSession?.location?.trim() ||
+    [course?.city, course?.state].filter(Boolean).join(", ");
+
+  const dates = sessions.length
+    ? sessions.map((s) => formatDateShortMX(s.date)).join(", ")
+    : course?.startDate
+      ? formatDateShortMX(course.startDate)
+      : "";
+
+  const schedule =
+    firstSession?.startTime && firstSession?.endTime
+      ? `${firstSession.startTime}–${firstSession.endTime}`
+      : "";
+
+  const startDate = (course?.startDate ?? firstSession?.date)?.toISOString().slice(0, 10) ?? "";
+
+  const participantCount =
+    course?.maxStudents != null
+      ? String(course.maxStudents)
+      : firstSession?.maxStudents != null
+        ? String(firstSession.maxStudents)
+        : "";
+
   return {
     courseName: course?.title ?? "",
     instructorName: course?.instructor?.name ?? "",
-    duration: course?.duration ?? "",
+    duration: course?.duration ? displayDuration(course.duration) : "",
+    description: stripHtml(course?.description),
+    location,
+    dates,
+    schedule,
+    startDate,
+    participantCount,
+    level: course?.level ?? "",
+    category: course?.category ?? "",
+    modality: (course?.modality as string) ?? "",
+    units: (course?.sections ?? []).map((s) => ({
+      title: s.title,
+      lessons: (s.lessons ?? []).map((l) => ({ title: l.title, durationLabel: l.duration ?? "" })),
+    })),
+    questions: extractPrefillQuestions(
+      course?.finalExam ?? null,
+      (course?.sections ?? []).map((s) => s.quiz),
+    ),
   };
 }
 
