@@ -6,6 +6,7 @@ import { Download, Loader2, Save, CheckCircle2, DownloadCloud } from "lucide-rea
 import { savePlanningDocument } from "@/app/actions/planning-actions";
 import { generateElementPdf } from "@/lib/planning/generate-pdf";
 import { deepFillEmpty } from "@/lib/planning/prefill";
+import { PlanningBrandFooter } from "./planning-brand-footer";
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 
@@ -25,6 +26,8 @@ type Props<T> = {
   seedFromCourse?: () => T;
   /** Override de exportación (p. ej. presentaciones a PDF 16:9). Recibe el contenedor del documento. */
   exportPdf?: (el: HTMLElement, filename: string) => Promise<void>;
+  /** El documento ya incluye su propio branding (p. ej. constancia de página fija) — no añadir el pie. */
+  hideBrandFooter?: boolean;
 };
 
 /**
@@ -43,6 +46,7 @@ export function PlanningDocShell<T>({
   pdfOrientation = "portrait",
   exportPdf,
   seedFromCourse,
+  hideBrandFooter,
 }: Props<T>) {
   const [data, setData] = useState<T>(() => hydrate(initialData));
   const [saveState, setSaveState] = useState<SaveState>("idle");
@@ -191,7 +195,10 @@ export function PlanningDocShell<T>({
 
       {/* Documento oculto para captura del PDF (fuera de pantalla, pero renderizado) */}
       <div aria-hidden className="pointer-events-none fixed left-[-10000px] top-0">
-        <div ref={docRef}>{renderDocument(data)}</div>
+        <div ref={docRef}>
+          {renderDocument(data)}
+          {!hideBrandFooter && <PlanningBrandFooter />}
+        </div>
       </div>
     </div>
   );

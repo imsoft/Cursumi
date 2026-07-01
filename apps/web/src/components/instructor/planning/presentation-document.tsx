@@ -36,6 +36,9 @@ function CoverSlide({ slide, presenter }: { slide: Slide; presenter: string }) {
         <div style={{ height: 6, width: 120, background: GRADIENT, borderRadius: 4, margin: "28px 0" }} />
         {slide.sub && <p style={{ fontSize: 30, color: MUTED, margin: 0 }}>{slide.sub}</p>}
         {presenter && <p style={{ fontSize: 24, color: PURPLE, fontWeight: 600, margin: "40px 0 0" }}>{presenter}</p>}
+        <p style={{ fontSize: 22, color: MUTED, fontWeight: 600, margin: "24px 0 0" }}>
+          cursumi.com<span style={{ margin: "0 8px", color: PURPLE }}>·</span>@cursumi
+        </p>
       </div>
       <div style={{ height: 12, background: GRADIENT }} />
       <div style={{ position: "absolute", left: 0, top: 12, bottom: 12, width: 6, background: GRADIENT, opacity: 0.35 }} />
@@ -100,7 +103,9 @@ function ContentSlide({ slide }: { slide: Slide }) {
       </div>
       {/* Pie */}
       <div style={{ padding: "0 80px 36px", display: "flex", justifyContent: "flex-end" }}>
-        <span style={{ fontSize: 18, color: MUTED, fontWeight: 600 }}>Cursumi</span>
+        <span style={{ fontSize: 18, color: MUTED, fontWeight: 600 }}>
+          cursumi.com<span style={{ margin: "0 8px", color: PURPLE }}>·</span>@cursumi
+        </span>
       </div>
     </div>
   );
@@ -115,6 +120,9 @@ function ClosingSlide({ slide }: { slide: Slide }) {
         {slide.heading || "¡Gracias!"}
       </h2>
       {slide.sub && <p style={{ fontSize: 32, color: WHITE, opacity: 0.9, margin: "28px 0 0", lineHeight: 1.4 }}>{slide.sub}</p>}
+      <p style={{ fontSize: 26, color: WHITE, opacity: 0.9, fontWeight: 600, margin: "44px 0 0" }}>
+        cursumi.com&nbsp;&nbsp;·&nbsp;&nbsp;@cursumi
+      </p>
     </div>
   );
 }
