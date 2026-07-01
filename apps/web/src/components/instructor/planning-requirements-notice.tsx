@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { ClipboardList, ChevronDown, ChevronUp, CheckCircle2, Circle } from "lucide-react";
+import { ClipboardList, ChevronDown, ChevronUp, CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import { getPlanningDocsByModality, type CourseModality } from "@/lib/planning/registry";
 import type { Modality } from "@/lib/modality";
 import { normalizeModality } from "@/lib/modality";
@@ -12,7 +13,14 @@ import { normalizeModality } from "@/lib/modality";
  * lista los documentos de planeación didáctica que el instructor deberá completar
  * (requisito para publicar). No bloquea; solo informa por adelantado.
  */
-export function PlanningRequirementsNotice({ modality }: { modality: Modality }) {
+export function PlanningRequirementsNotice({
+  modality,
+  courseId,
+}: {
+  modality: Modality;
+  /** Si el curso ya está guardado, cada documento enlaza a su formulario */
+  courseId?: string;
+}) {
   const [open, setOpen] = useState(true);
 
   const normalized = normalizeModality(modality);
@@ -53,20 +61,46 @@ export function PlanningRequirementsNotice({ modality }: { modality: Modality })
 
         {open && (
           <div className="mt-4 space-y-2 border-t border-border pt-4">
-            <ol className="space-y-1.5">
-              {available.map((doc, index) => (
-                <li key={doc.type} className="flex items-start gap-2.5 text-sm">
+            {!courseId && (
+              <p className="text-xs text-muted-foreground">
+                Guarda el curso como borrador para empezar a llenarlos.
+              </p>
+            )}
+            <ol className="space-y-1">
+              {available.map((doc, index) => {
+                const num = (
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-semibold text-primary">
                     {index + 1}
                   </span>
-                  <div>
+                );
+                const body = (
+                  <div className="min-w-0">
                     <span className="font-medium text-foreground">{doc.title}</span>
                     {doc.description && (
                       <span className="text-muted-foreground"> — {doc.description}</span>
                     )}
                   </div>
-                </li>
-              ))}
+                );
+                return (
+                  <li key={doc.type}>
+                    {courseId ? (
+                      <Link
+                        href={`/instructor/courses/${courseId}/planning/${doc.type}`}
+                        className="group flex items-start gap-2.5 rounded-lg px-2 py-1.5 text-sm transition hover:bg-primary/10"
+                      >
+                        {num}
+                        {body}
+                        <ArrowRight className="ml-auto mt-0.5 h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition group-hover:opacity-100" />
+                      </Link>
+                    ) : (
+                      <div className="flex items-start gap-2.5 px-2 py-1.5 text-sm">
+                        {num}
+                        {body}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ol>
 
             {upcoming.length > 0 && (

@@ -18,7 +18,13 @@ function parrafos(body: string) {
     .filter(Boolean);
 }
 
-export function ParticipantManualDocument({ data }: { data: ParticipantManualData }) {
+export function ParticipantManualDocument({
+  data,
+  documentTitle = "Manual del participante",
+}: {
+  data: ParticipantManualData;
+  documentTitle?: string;
+}) {
   const sections = data.sections.filter((s) => s.title.trim() || s.body.trim());
   const bibliography = data.bibliography.filter((b) => b.trim());
   const toc = sections.filter((s) => s.title.trim());
@@ -27,7 +33,7 @@ export function ParticipantManualDocument({ data }: { data: ParticipantManualDat
     <div style={{ width: 794, background: "#ffffff", fontFamily: "Helvetica, Arial, sans-serif" }}>
       {/* Portada */}
       <PlanningCoverV2
-        documentTitle="Manual del participante"
+        documentTitle={documentTitle}
         courseName={data.courseName}
         meta={[{ label: "Estándar de referencia", value: data.referenceStandard }]}
       />

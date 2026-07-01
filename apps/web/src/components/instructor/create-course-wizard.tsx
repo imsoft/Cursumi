@@ -198,7 +198,7 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
       </div>
 
       {/* Documentos de planeación que deberá completar (informativo) */}
-      <PlanningRequirementsNotice modality={resolvedModality} />
+      <PlanningRequirementsNotice modality={resolvedModality} courseId={courseData.id} />
 
       {/* Progress Steps */}
       <Card className="border border-border bg-card/90">

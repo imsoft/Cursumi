@@ -14,6 +14,9 @@ import { QUALITY_ASSESSMENT_TYPE } from "@/lib/planning/quality-assessment";
 import { ANSWER_SHEET_TYPE } from "@/lib/planning/answer-sheet";
 import { ACTIVITIES_GUIDE_TYPE } from "@/lib/planning/activities-guide";
 import { PARTICIPANT_MANUAL_TYPE } from "@/lib/planning/participant-manual";
+import { MANUAL_INSTRUCTOR_TYPE } from "@/lib/planning/instructor-manual";
+import { CONSTANCIA_TYPE } from "@/lib/planning/constancia";
+import { INFORME_FINAL_TYPE } from "@/lib/planning/informe-final";
 import { DescriptiveChartClient } from "@/components/instructor/planning/descriptive-chart-client";
 import { ChecklistClient } from "@/components/instructor/planning/checklist-client";
 import { AttendanceListClient } from "@/components/instructor/planning/attendance-list-client";
@@ -23,6 +26,9 @@ import { QualityAssessmentClient } from "@/components/instructor/planning/qualit
 import { AnswerSheetClient } from "@/components/instructor/planning/answer-sheet-client";
 import { ActivitiesGuideClient } from "@/components/instructor/planning/activities-guide-client";
 import { ParticipantManualClient } from "@/components/instructor/planning/participant-manual-client";
+import { InstructorManualClient } from "@/components/instructor/planning/instructor-manual-client";
+import { ConstanciaClient } from "@/components/instructor/planning/constancia-client";
+import { InformeFinalClient } from "@/components/instructor/planning/informe-final-client";
 // ── Virtual ───────────────────────────────────────────────────────────────────
 import { ACTIVITY_SCHEDULE_TYPE } from "@/lib/planning/activity-schedule";
 import { ActivityScheduleClient } from "@/components/instructor/planning/activity-schedule-client";
@@ -117,6 +123,15 @@ export default async function PlanningDocumentPage({
       )}
       {type === PARTICIPANT_MANUAL_TYPE && (
         <ParticipantManualClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === MANUAL_INSTRUCTOR_TYPE && (
+        <InstructorManualClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === CONSTANCIA_TYPE && (
+        <ConstanciaClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
+      )}
+      {type === INFORME_FINAL_TYPE && (
+        <InformeFinalClient courseId={id} initialData={doc?.data ?? null} initialStatus={doc?.status} prefill={prefill} />
       )}
 
       {/* ── Virtual ── */}
