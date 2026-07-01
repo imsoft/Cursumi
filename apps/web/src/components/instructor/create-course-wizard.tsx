@@ -16,6 +16,7 @@ import { createCourseDraft, publishCourse } from "@/app/actions/course-actions";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG, normalizeModality } from "@/lib/modality";
 import type { Modality } from "@/lib/modality";
+import { PlanningRequirementsNotice } from "@/components/instructor/planning-requirements-notice";
 
 const AUTO_SAVE_INTERVAL_MS = 30_000;
 
@@ -195,6 +196,9 @@ export const CreateCourseWizard = ({ initialData, modality }: { initialData?: Co
         </div>
         <ModalityBadge modality={resolvedModality} size="md" />
       </div>
+
+      {/* Documentos de planeación que deberá completar (informativo) */}
+      <PlanningRequirementsNotice modality={resolvedModality} />
 
       {/* Progress Steps */}
       <Card className="border border-border bg-card/90">
