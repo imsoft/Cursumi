@@ -13,6 +13,31 @@ const LOGO_SRC = "/icons/icon-512.png";
 
 let cachedLogo: string | null | undefined;
 
+type RNWebView = { postMessage: (msg: string) => void };
+
+/**
+ * Entrega el PDF ya generado. En un navegador normal dispara la descarga
+ * (`pdf.save`). Dentro del WebView de la app móvil (Cursumi para iOS/Android)
+ * no existe la descarga del navegador, así que enviamos el PDF en base64 al
+ * código nativo por `postMessage`; la app lo guarda y abre la hoja de compartir.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function deliverPdf(pdf: any, filename: string): void {
+  const rn = (typeof window !== "undefined"
+    ? (window as unknown as { ReactNativeWebView?: RNWebView }).ReactNativeWebView
+    : undefined);
+
+  if (rn) {
+    // "data:application/pdf;filename=…;base64,XXXX" → nos quedamos con XXXX.
+    const dataUri: string = pdf.output("datauristring");
+    const base64 = dataUri.slice(dataUri.indexOf(",") + 1);
+    rn.postMessage(JSON.stringify({ type: "planning-pdf", filename, base64 }));
+    return;
+  }
+
+  pdf.save(filename);
+}
+
 async function loadLogoDataUrl(): Promise<string | null> {
   if (cachedLogo !== undefined) return cachedLogo;
   try {
@@ -121,7 +146,7 @@ export async function generateElementPdf(
     heightLeft -= pageH;
   }
 
-  pdf.save(filename);
+  deliverPdf(pdf, filename);
 }
 
 /**
@@ -156,7 +181,7 @@ export async function generateSlidesPdf(container: HTMLElement, filename: string
     pdf.addImage(imgData, "PNG", 0, 0, PAGE_W, PAGE_H);
   }
 
-  pdf.save(filename);
+  deliverPdf(pdf, filename);
 }
 
 export function sanitizeFilename(s: string): string {
