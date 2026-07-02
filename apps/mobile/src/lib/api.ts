@@ -4,7 +4,7 @@ import type { CourseModality } from "@cursumi/shared";
  * Base de la API. En dev puedes apuntar a tu local con EXPO_PUBLIC_API_URL
  * (las variables EXPO_PUBLIC_* se inyectan en el bundle). Por defecto usa producción.
  */
-export const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "https://cursumi.vercel.app";
+export const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "https://www.cursumi.com";
 
 /**
  * Site key de Cloudflare Turnstile (CAPTCHA). Es un valor PÚBLICO (también viaja

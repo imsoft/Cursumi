@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { ScreenHeader } from "@/components/screen-header";
+import { PlanningWebView } from "@/components/planning-webview";
 import { Brand } from "@/constants/theme";
 import {
   ActivityIndicator,
@@ -46,6 +47,16 @@ const STATUS_LABEL: Record<string, string> = {
 export function InstructorView({ onBack }: { onBack: () => void }) {
   const [tab, setTab] = useState<Tab>("earnings");
   const [openConv, setOpenConv] = useState<InstructorConversation | null>(null);
+  const [planningCourseId, setPlanningCourseId] = useState<string | null>(null);
+
+  if (planningCourseId) {
+    return (
+      <PlanningWebView
+        courseId={planningCourseId}
+        onBack={() => setPlanningCourseId(null)}
+      />
+    );
+  }
 
   if (openConv) {
     return <Thread conversation={openConv} onBack={() => setOpenConv(null)} />;
@@ -77,7 +88,7 @@ export function InstructorView({ onBack }: { onBack: () => void }) {
 
       {tab === "earnings" && <EarningsTab />}
       {tab === "analytics" && <AnalyticsTab />}
-      {tab === "courses" && <CoursesTab />}
+      {tab === "courses" && <CoursesTab onOpenPlanning={setPlanningCourseId} />}
       {tab === "messages" && <MessagesTab onOpen={setOpenConv} />}
     </SafeAreaView>
   );
@@ -139,7 +150,7 @@ function AnalyticsTab() {
   );
 }
 
-function CoursesTab() {
+function CoursesTab({ onOpenPlanning }: { onOpenPlanning: (courseId: string) => void }) {
   const [courses, setCourses] = useState<InstructorCourse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -230,6 +241,16 @@ function CoursesTab() {
               </>
             )}
           </View>
+          {(item.modality === "evento" || item.modality === "virtual") && (
+            <TouchableOpacity
+              style={styles.planningBtn}
+              onPress={() => onOpenPlanning(item.id)}
+            >
+              <ThemedText style={styles.planningBtnText}>
+                Planeación didáctica
+              </ThemedText>
+            </TouchableOpacity>
+          )}
         </ThemedView>
       )}
     />
@@ -465,6 +486,15 @@ const styles = StyleSheet.create({
   actText: { color: "#fff", fontWeight: "700", fontSize: 13 },
   actGhost: { backgroundColor: "transparent", borderWidth: 1, borderColor: "rgba(127,127,127,0.4)" },
   actGhostText: { fontWeight: "600", fontSize: 13 },
+  planningBtn: {
+    marginTop: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: PURPLE,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  planningBtnText: { color: PURPLE, fontWeight: "700", fontSize: 13 },
   // thread
   threadName: { fontWeight: "700", fontSize: 15 },
   threadList: { padding: 16, gap: 8, flexGrow: 1 },
