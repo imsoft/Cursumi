@@ -9,7 +9,7 @@ deep-link en un **build real** (no Expo Go) y confirmar la config de Google fuer
    ([`auth-screen.tsx`](../src/components/auth-screen.tsx)).
 2. El cliente `@better-auth/expo` abre el navegador (`expo-web-browser`).
 3. Google autentica y redirige al callback **de la web**:
-   `https://cursumi.vercel.app/api/auth/callback/google`.
+   `https://www.cursumi.com/api/auth/callback/google`.
 4. `better-auth` (plugin `expo()`) redirige de vuelta a la app por el scheme `mobile://`
    con el token de sesión.
 5. El token se guarda en `SecureStore`; `useSession()` re-renderiza y muestra la app
@@ -35,7 +35,7 @@ no engancha. **Solo se valida en dev-client o build standalone.** No es un bug d
 1. **Google Cloud Console** → OAuth client → *Authorized redirect URIs* debe incluir
    el callback **web** (el móvil reusa el mismo):
    ```
-   https://cursumi.vercel.app/api/auth/callback/google
+   https://www.cursumi.com/api/auth/callback/google
    ```
    Si el login con Google en la web funciona, esto ya está listo.
 2. **Env del servidor de producción**: `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`.
