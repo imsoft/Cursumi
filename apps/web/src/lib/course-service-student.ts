@@ -41,13 +41,64 @@ export async function listStudentCourses(studentId: string): Promise<StudentCour
           lesson: { select: { title: true } },
         },
       },
+      _count: { select: { lessonProgress: true } },
     },
     orderBy: { createdAt: "desc" },
   });
 
+  // Detectar enrollments marcados como "completed" que ya no lo están
+  // (instructor agregó contenido nuevo). Contar lecciones totales solo para esos cursos.
+  const completedEnrollments = enrollments.filter((e) => e.status === "completed");
+  const staleIds: { id: string; courseId: string }[] = [];
+
+  if (completedEnrollments.length > 0) {
+    const courseIds = [...new Set(completedEnrollments.map((e) => e.course.id))];
+    // Conteo de lecciones totales por curso (Course → Section → Lesson)
+    const lessonCounts = await prisma.lesson.groupBy({
+      by: ["sectionId"],
+      where: { section: { courseId: { in: courseIds } } },
+      _count: true,
+    });
+    // Necesitamos mapear sectionId → courseId
+    const sections = await prisma.courseSection.findMany({
+      where: { courseId: { in: courseIds } },
+      select: { id: true, courseId: true },
+    });
+    const sectionCourseMap = new Map(sections.map((s) => [s.id, s.courseId]));
+    const totalLessonsByCourse = new Map<string, number>();
+    for (const lc of lessonCounts) {
+      const cId = sectionCourseMap.get(lc.sectionId);
+      if (cId) {
+        totalLessonsByCourse.set(cId, (totalLessonsByCourse.get(cId) ?? 0) + lc._count);
+      }
+    }
+
+    for (const e of completedEnrollments) {
+      const totalLessons = totalLessonsByCourse.get(e.course.id) ?? 0;
+      if (e._count.lessonProgress < totalLessons) {
+        staleIds.push({ id: e.id, courseId: e.course.id });
+      }
+    }
+
+    if (staleIds.length > 0) {
+      const { recalculateEnrollmentProgress } = await import("@/lib/enrollment-progress");
+      // Recalcular cada enrollment stale fire-and-forget (rápido, es solo conteo)
+      void Promise.allSettled(
+        staleIds.map((s) => recalculateEnrollmentProgress(s.id, s.courseId))
+      );
+    }
+  }
+
   return enrollments.map((enrollment) => {
     const { course } = enrollment;
     const lastProgress = enrollment.lessonProgress[0];
+
+    // Si detectamos que este enrollment es stale, mostrar como in-progress ahora
+    const isStale = staleIds.some((s) => s.id === enrollment.id);
+    const effectiveStatus = isStale
+      ? "in-progress"
+      : enrollment.status === "completed" ? "completed" : "in-progress";
+
     return {
       id: course.id,
       title: course.title,
@@ -56,7 +107,7 @@ export async function listStudentCourses(studentId: string): Promise<StudentCour
       nextSession: formatDateLabel(course.startDate) ?? undefined,
       instructorName: course.instructor?.name || "Instructor",
       category: course.category,
-      status: enrollment.status === "completed" ? "completed" : "in-progress",
+      status: effectiveStatus,
       startDate: formatDateLabel(course.startDate) ?? undefined,
       imageUrl:
         course.imageUrl ||

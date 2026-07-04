@@ -141,6 +141,15 @@ export async function recalculateEnrollmentProgress(
     }
 
     void sendLearningReflectionInviteIfNeeded(enrollmentId);
+  } else {
+    // El curso ya no está completo (el instructor agregó contenido nuevo):
+    // revertir el status para que la tarjeta no muestre "COMPLETADO".
+    if (enrollment.status === "completed") {
+      await prisma.enrollment.update({
+        where: { id: enrollmentId },
+        data: { status: "active" },
+      });
+    }
   }
 
   return progress;

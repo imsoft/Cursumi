@@ -34,6 +34,7 @@ import type { CourseStudent, StudentCourseDetail } from "@/lib/course-service";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { verifyJoinCode, shouldUseFreeJoinCode } from "@/lib/join-code";
+import { recalculateAllEnrollments } from "@/lib/course-service-helpers";
 
 async function requireSession() {
   const session = await auth.api.getSession({
@@ -296,6 +297,8 @@ export async function removeSection(courseId: string, sectionId: string) {
   const section = await prisma.courseSection.findFirst({ where: { id: sectionId, courseId } });
   if (!section) throw new Error("Sección no encontrada");
   await deleteSection(sectionId);
+  // Recalcular progreso: eliminar sección cambia el total de lecciones
+  void recalculateAllEnrollments(courseId).catch(() => {});
   revalidatePath(`/instructor/courses/${courseId}/edit`);
 }
 
@@ -341,6 +344,8 @@ export async function addLesson(courseId: string, sectionId: string, title: stri
   if (!section) throw new Error("Sección no encontrada");
   const count = await prisma.lesson.count({ where: { sectionId } });
   const lesson = await createLesson(sectionId, { title, type: type as any, order: count + 1 });
+  // Recalcular progreso: nueva lección cambia el total y puede revertir "completed"
+  void recalculateAllEnrollments(courseId).catch(() => {});
   revalidatePath(`/instructor/courses/${courseId}/edit`);
   return { id: lesson.id };
 }
@@ -351,6 +356,8 @@ export async function removeLesson(courseId: string, lessonId: string) {
   const lesson = await getLessonById(lessonId);
   if (!lesson || lesson.section.courseId !== courseId) throw new Error("Lección no encontrada");
   await deleteLessonById(lessonId);
+  // Recalcular progreso: eliminar lección cambia el total
+  void recalculateAllEnrollments(courseId).catch(() => {});
   revalidatePath(`/instructor/courses/${courseId}/edit`);
 }
 

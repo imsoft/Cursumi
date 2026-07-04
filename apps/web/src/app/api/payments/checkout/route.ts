@@ -97,6 +97,56 @@ export async function POST(req: NextRequest) {
       : originalPrice;
 
     const amountCents = discountedPrice;
+
+    // ── Fast-path: cupón 100% → precio $0, no necesitamos Stripe ──────────────
+    // Stripe no dispara `checkout.session.completed` cuando unit_amount = 0,
+    // por lo que el webhook nunca enrollaría al estudiante. En este caso
+    // inscribimos directamente igual que en cursos gratuitos.
+    if (amountCents === 0) {
+      const platformFeePercent = await getPlatformFeePercent();
+      const { platformFee, instructorAmount } = calculateSplit(0, platformFeePercent);
+
+      const transaction = await prisma.transaction.create({
+        data: {
+          userId: session.user.id,
+          courseId,
+          amount: 0,
+          currency: "MXN",
+          status: "completed",
+          stripeSessionId: null,
+          platformFee,
+          instructorAmount,
+          couponCode: appliedCoupon?.code ?? null,
+        },
+      });
+
+      const enrollment = await prisma.enrollment.upsert({
+        where: { courseId_studentId: { courseId, studentId: session.user.id } },
+        update: { ...(sessionId ? { sessionId } : {}) },
+        create: { courseId, studentId: session.user.id, sessionId: sessionId ?? null, status: "active" },
+      });
+
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: { enrollmentId: enrollment.id },
+      });
+
+      // Incrementar cupón de forma atómica
+      if (appliedCoupon?.code) {
+        await prisma.$executeRaw`
+          UPDATE "Coupon"
+          SET "usedCount" = "usedCount" + 1
+          WHERE code = ${appliedCoupon.code}
+            AND active = true
+            AND ("maxUses" IS NULL OR "usedCount" < "maxUses")
+        `;
+      }
+
+      const successUrl = `${baseUrl}/dashboard/my-courses/${courseId}?enrolled=true`;
+      return NextResponse.json({ url: successUrl, discountPct: appliedCoupon?.discountPct ?? 0 });
+    }
+    // ──────────────────────────────────────────────────────────────────────────
+
     const platformFeePercent = await getPlatformFeePercent();
     const { platformFee, instructorAmount } = calculateSplit(amountCents, platformFeePercent);
 
