@@ -343,23 +343,29 @@ export function CourseSessionsManager({
                   <PasswordInput
                     autoComplete="new-password"
                     value={session.joinCode ?? ""}
-                    onChange={(e) => handleUpdate(i, { joinCode: e.target.value, clearJoinCode: false })}
-                    placeholder={session.hasJoinCode ? "Vacío = no cambiar el código actual" : "Ej. SESION1-2025"}
+                    onChange={(e) =>
+                      handleUpdate(i, {
+                        joinCode: e.target.value,
+                        // Si había código y el campo queda vacío, se elimina al guardar
+                        clearJoinCode: e.target.value.trim() === "" && !!session.hasJoinCode,
+                      })
+                    }
                   />
-                  {session.hasJoinCode && (
-                    <label className="flex cursor-pointer items-start gap-2 text-xs text-foreground">
-                      <input
-                        type="checkbox"
-                        className="mt-0.5 rounded border-input"
-                        checked={!!session.clearJoinCode}
-                        onChange={(e) => handleUpdate(i, { clearJoinCode: e.target.checked })}
-                      />
-                      <span>Quitar el código (cualquiera podrá inscribirse a esta sesión sin código)</span>
-                    </label>
+                  {session.hasJoinCode ? (
+                    session.savedJoinCode ? (
+                      <p className="text-xs text-muted-foreground">
+                        Este es el código actual — usa el ojo para verlo. Cámbialo para actualizarlo o borra el campo para quitarlo (sin código, cualquiera podrá inscribirse).
+                      </p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">
+                        Hay un código configurado, pero por seguridad no se puede mostrar. Escribe uno nuevo para reemplazarlo{session.clearJoinCode ? " — se quitará al guardar." : " o borra el campo y guarda para quitarlo."}
+                      </p>
+                    )
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      Ej. SESION1-2025. Si defines un código, solo quienes lo ingresen podrán inscribirse a esta sesión específica.
+                    </p>
                   )}
-                  <p className="text-xs text-muted-foreground">
-                    Si defines un código, solo quienes lo ingresen podrán inscribirse a esta sesión específica.
-                  </p>
                 </div>
               )}
             </CardContent>
@@ -427,10 +433,9 @@ export function CourseSessionsManager({
                   autoComplete="new-password"
                   value={draft.joinCode ?? ""}
                   onChange={(e) => setDraft((d) => ({ ...d, joinCode: e.target.value }))}
-                  placeholder="Ej. SESION1-2025"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Si defines un código, solo quienes lo ingresen podrán inscribirse a esta sesión.
+                  Ej. SESION1-2025. Si defines un código, solo quienes lo ingresen podrán inscribirse a esta sesión.
                 </p>
               </div>
             )}

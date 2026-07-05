@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight,
   ArrowLeft,
+  ArrowUp,
+  ArrowDown,
   Plus,
   ChevronRight,
   GripVertical,
@@ -127,6 +129,17 @@ export const CourseSectionsManager = ({
     setEditingLessonId(null);
   };
 
+  const moveLesson = (sectionId: string, index: number, direction: "up" | "down") => {
+    onUpdate(sections.map((s) => {
+      if (s.id !== sectionId) return s;
+      const sorted = s.lessons.slice().sort((a, b) => a.order - b.order);
+      const newIndex = direction === "up" ? index - 1 : index + 1;
+      if (newIndex < 0 || newIndex >= sorted.length) return s;
+      [sorted[index], sorted[newIndex]] = [sorted[newIndex], sorted[index]];
+      return { ...s, lessons: sorted.map((l, i) => ({ ...l, order: i + 1 })) };
+    }));
+  };
+
   const deleteLesson = (sectionId: string, lessonId: string) => {
     onUpdate(sections.map((s) =>
       s.id === sectionId ? { ...s, lessons: s.lessons.filter((l) => l.id !== lessonId) } : s
@@ -201,12 +214,31 @@ export const CourseSectionsManager = ({
             {activeSection.lessons
               .slice()
               .sort((a, b) => a.order - b.order)
-              .map((lesson, idx) => {
+              .map((lesson, idx, sortedLessons) => {
                 const Icon = LESSON_ICONS[lesson.type] ?? FileText;
                 return (
                   <Card key={lesson.id} className="border border-border bg-card">
                     <CardContent className="flex items-center gap-3 p-4">
-                      <GripVertical className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <div className="flex shrink-0 flex-col justify-center">
+                        <button
+                          type="button"
+                          disabled={idx === 0}
+                          onClick={() => moveLesson(activeSection.id, idx, "up")}
+                          className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+                          title="Mover arriba"
+                        >
+                          <ArrowUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={idx === sortedLessons.length - 1}
+                          onClick={() => moveLesson(activeSection.id, idx, "down")}
+                          className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+                          title="Mover abajo"
+                        >
+                          <ArrowDown className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                       <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-foreground truncate">

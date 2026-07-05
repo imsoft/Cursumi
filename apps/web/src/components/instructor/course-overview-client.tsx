@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useCallback } from "react";
+import { useState, useTransition, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -21,9 +21,10 @@ import { useImageUpload } from "@/hooks/use-image-upload";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
-  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions, reorderSections,
+  addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions, reorderSections, reorderLessons,
 } from "@/app/actions/course-actions";
 import { CourseSessionsManager } from "@/components/instructor/course-sessions-manager";
+import type { CourseSessionData } from "@/components/instructor/course-types";
 import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
 import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 
@@ -103,6 +104,53 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
   const [editSectionTitle, setEditSectionTitle] = useState("");
 
+  // Sesiones: se editan en estado local y se guardan con el botón "Guardar sesiones".
+  // Guardar en cada keystroke provocaba que los inputs controlados perdieran caracteres.
+  const initialSessions = useMemo<CourseSessionData[]>(
+    () =>
+      (course.courseSessions ?? []).map((s) => ({
+        id: s.id,
+        format: (s.format === "online" ? "online" : "presencial") as "presencial" | "online",
+        state: s.state ?? findStateForMunicipality(s.city) ?? "",
+        city: s.city,
+        location: s.location,
+        meetingUrl: s.meetingUrl ?? undefined,
+        date: typeof s.date === "string" ? s.date : new Date(s.date).toISOString(),
+        startTime: s.startTime,
+        endTime: s.endTime,
+        maxStudents: s.maxStudents,
+        joinCode: s.joinCode ?? "",
+        savedJoinCode: s.joinCode ?? undefined,
+        hasJoinCode: s.hasJoinCode,
+      })),
+    [course.courseSessions],
+  );
+  const [sessionsDraft, setSessionsDraft] = useState<CourseSessionData[]>(initialSessions);
+  const [sessionsDirty, setSessionsDirty] = useState(false);
+  const [sessionsSaved, setSessionsSaved] = useState(false);
+
+  // Tras un refresh del servidor (nuevas ids, códigos guardados), re-sincroniza el borrador si no hay ediciones pendientes
+  const [syncedSessions, setSyncedSessions] = useState(initialSessions);
+  if (syncedSessions !== initialSessions) {
+    setSyncedSessions(initialSessions);
+    if (!sessionsDirty) setSessionsDraft(initialSessions);
+  }
+
+  const handleSaveSessions = () => {
+    setActionError(null);
+    startTransition(async () => {
+      try {
+        await saveCourseSessions(course.id, sessionsDraft);
+        setSessionsDirty(false);
+        setSessionsSaved(true);
+        setTimeout(() => setSessionsSaved(false), 3000);
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al guardar sesiones");
+      }
+    });
+  };
+
   const handleCoverSuccess = useCallback(
     (url: string) => {
       setEditData((d) => ({ ...d, imageUrl: url }));
@@ -179,6 +227,22 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
         router.refresh();
       } catch (err) {
         setActionError(err instanceof Error ? err.message : "Error al reordenar");
+      }
+    });
+  };
+
+  const handleMoveLesson = (sectionId: string, lessonIds: string[], index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= lessonIds.length) return;
+    const ids = [...lessonIds];
+    [ids[index], ids[newIndex]] = [ids[newIndex], ids[index]];
+    setActionError(null);
+    startTransition(async () => {
+      try {
+        await reorderLessons(course.id, sectionId, ids);
+        router.refresh();
+      } catch (err) {
+        setActionError(err instanceof Error ? err.message : "Error al reordenar lecciones");
       }
     });
   };
@@ -620,6 +684,26 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                           key={lesson.id}
                           className="flex items-center gap-3 rounded-lg border border-border bg-background px-4 py-3 group"
                         >
+                          <div className="flex shrink-0 flex-col justify-center">
+                            <button
+                              type="button"
+                              disabled={li === 0 || isPending}
+                              onClick={() => handleMoveLesson(section.id, section.lessons.map((l) => l.id), li, "up")}
+                              className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+                              title="Mover arriba"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={li === section.lessons.length - 1 || isPending}
+                              onClick={() => handleMoveLesson(section.id, section.lessons.map((l) => l.id), li, "down")}
+                              className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+                              title="Mover abajo"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
                           {lessonIcon(lesson.type)}
                           <span className="flex-1 text-sm font-medium text-foreground">
                             {li + 1}. {lesson.title}
@@ -716,37 +800,32 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
               Fecha, hora y cupo por sesión. Marca cada sesión como presencial (con sede) o por videollamada (con enlace).
             </p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <CourseSessionsManager
               isFree={course.price === 0}
-              sessions={(course.courseSessions ?? []).map((s) => ({
-                id: s.id,
-                format: (s.format === "online" ? "online" : "presencial") as "presencial" | "online",
-                state: s.state ?? findStateForMunicipality(s.city) ?? "",
-                city: s.city,
-                location: s.location,
-                meetingUrl: s.meetingUrl ?? undefined,
-                date: typeof s.date === "string" ? s.date : new Date(s.date).toISOString(),
-                startTime: s.startTime,
-                endTime: s.endTime,
-                maxStudents: s.maxStudents,
-                hasJoinCode: !!(s as { joinCodeHash?: string | null }).joinCodeHash,
-              }))}
+              sessions={sessionsDraft}
               enrollmentCounts={Object.fromEntries(
                 (course.courseSessions ?? []).map((s) => [s.id, s._count.enrollments])
               )}
               onChange={(sessions) => {
-                setActionError(null);
-                startTransition(async () => {
-                  try {
-                    await saveCourseSessions(course.id, sessions);
-                    router.refresh();
-                  } catch (err) {
-                    setActionError(err instanceof Error ? err.message : "Error al guardar sesiones");
-                  }
-                });
+                setSessionsDraft(sessions);
+                setSessionsDirty(true);
               }}
             />
+            <div className="flex flex-wrap items-center gap-3">
+              <Button size="sm" onClick={handleSaveSessions} disabled={!sessionsDirty || isPending}>
+                {isPending ? "Guardando..." : "Guardar sesiones"}
+              </Button>
+              {sessionsDirty && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">Tienes cambios sin guardar en las sesiones.</p>
+              )}
+              {sessionsSaved && !sessionsDirty && (
+                <p className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Sesiones guardadas.
+                </p>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}

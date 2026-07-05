@@ -22958,6 +22958,7 @@ export namespace Prisma {
     endTime: string | null
     maxStudents: number | null
     joinCodeHash: string | null
+    joinCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22975,6 +22976,7 @@ export namespace Prisma {
     endTime: string | null
     maxStudents: number | null
     joinCodeHash: string | null
+    joinCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22992,6 +22994,7 @@ export namespace Prisma {
     endTime: number
     maxStudents: number
     joinCodeHash: number
+    joinCode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -23019,6 +23022,7 @@ export namespace Prisma {
     endTime?: true
     maxStudents?: true
     joinCodeHash?: true
+    joinCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23036,6 +23040,7 @@ export namespace Prisma {
     endTime?: true
     maxStudents?: true
     joinCodeHash?: true
+    joinCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23053,6 +23058,7 @@ export namespace Prisma {
     endTime?: true
     maxStudents?: true
     joinCodeHash?: true
+    joinCode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -23157,6 +23163,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash: string | null
+    joinCode: string | null
     createdAt: Date
     updatedAt: Date
     _count: CourseSessionCountAggregateOutputType | null
@@ -23193,6 +23200,7 @@ export namespace Prisma {
     endTime?: boolean
     maxStudents?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -23214,6 +23222,7 @@ export namespace Prisma {
     endTime?: boolean
     maxStudents?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -23232,6 +23241,7 @@ export namespace Prisma {
     endTime?: boolean
     maxStudents?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -23250,11 +23260,12 @@ export namespace Prisma {
     endTime?: boolean
     maxStudents?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "format" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
+  export type CourseSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "format" | "city" | "state" | "location" | "meetingUrl" | "date" | "startTime" | "endTime" | "maxStudents" | "joinCodeHash" | "joinCode" | "createdAt" | "updatedAt", ExtArgs["result"]["courseSession"]>
   export type CourseSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     enrollments?: boolean | CourseSession$enrollmentsArgs<ExtArgs>
@@ -23297,6 +23308,10 @@ export namespace Prisma {
        * Hash del código de acceso específico de esta sesión (bcrypt/scrypt)
        */
       joinCodeHash: string | null
+      /**
+       * Código en claro para que el instructor pueda verlo/copiarlo (la validación usa el hash)
+       */
+      joinCode: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["courseSession"]>
@@ -23737,6 +23752,7 @@ export namespace Prisma {
     readonly endTime: FieldRef<"CourseSession", 'String'>
     readonly maxStudents: FieldRef<"CourseSession", 'Int'>
     readonly joinCodeHash: FieldRef<"CourseSession", 'String'>
+    readonly joinCode: FieldRef<"CourseSession", 'String'>
     readonly createdAt: FieldRef<"CourseSession", 'DateTime'>
     readonly updatedAt: FieldRef<"CourseSession", 'DateTime'>
   }
@@ -66345,6 +66361,7 @@ export namespace Prisma {
     endTime: 'endTime',
     maxStudents: 'maxStudents',
     joinCodeHash: 'joinCodeHash',
+    joinCode: 'joinCode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -68508,6 +68525,7 @@ export namespace Prisma {
     endTime?: StringFilter<"CourseSession"> | string
     maxStudents?: IntFilter<"CourseSession"> | number
     joinCodeHash?: StringNullableFilter<"CourseSession"> | string | null
+    joinCode?: StringNullableFilter<"CourseSession"> | string | null
     createdAt?: DateTimeFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
@@ -68528,6 +68546,7 @@ export namespace Prisma {
     endTime?: SortOrder
     maxStudents?: SortOrder
     joinCodeHash?: SortOrderInput | SortOrder
+    joinCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     course?: CourseOrderByWithRelationInput
@@ -68551,6 +68570,7 @@ export namespace Prisma {
     endTime?: StringFilter<"CourseSession"> | string
     maxStudents?: IntFilter<"CourseSession"> | number
     joinCodeHash?: StringNullableFilter<"CourseSession"> | string | null
+    joinCode?: StringNullableFilter<"CourseSession"> | string | null
     createdAt?: DateTimeFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
@@ -68571,6 +68591,7 @@ export namespace Prisma {
     endTime?: SortOrder
     maxStudents?: SortOrder
     joinCodeHash?: SortOrderInput | SortOrder
+    joinCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CourseSessionCountOrderByAggregateInput
@@ -68596,6 +68617,7 @@ export namespace Prisma {
     endTime?: StringWithAggregatesFilter<"CourseSession"> | string
     maxStudents?: IntWithAggregatesFilter<"CourseSession"> | number
     joinCodeHash?: StringNullableWithAggregatesFilter<"CourseSession"> | string | null
+    joinCode?: StringNullableWithAggregatesFilter<"CourseSession"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CourseSession"> | Date | string
   }
@@ -72762,6 +72784,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
@@ -72782,6 +72805,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -72800,6 +72824,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
@@ -72820,6 +72845,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -72839,6 +72865,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -72855,6 +72882,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -72872,6 +72900,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -77049,6 +77078,7 @@ export namespace Prisma {
     endTime?: SortOrder
     maxStudents?: SortOrder
     joinCodeHash?: SortOrder
+    joinCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -77070,6 +77100,7 @@ export namespace Prisma {
     endTime?: SortOrder
     maxStudents?: SortOrder
     joinCodeHash?: SortOrder
+    joinCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -77087,6 +77118,7 @@ export namespace Prisma {
     endTime?: SortOrder
     maxStudents?: SortOrder
     joinCodeHash?: SortOrder
+    joinCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -86967,6 +86999,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
@@ -86985,6 +87018,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -87593,6 +87627,7 @@ export namespace Prisma {
     endTime?: StringFilter<"CourseSession"> | string
     maxStudents?: IntFilter<"CourseSession"> | number
     joinCodeHash?: StringNullableFilter<"CourseSession"> | string | null
+    joinCode?: StringNullableFilter<"CourseSession"> | string | null
     createdAt?: DateTimeFilter<"CourseSession"> | Date | string
     updatedAt?: DateTimeFilter<"CourseSession"> | Date | string
   }
@@ -89098,6 +89133,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
@@ -89117,6 +89153,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -89344,6 +89381,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
@@ -89363,6 +89401,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -89780,6 +89819,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutCourseSessionsInput
@@ -89799,6 +89839,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     anonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutSessionInput
@@ -90265,6 +90306,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutCourseSessionsNestedInput
@@ -90284,6 +90326,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     anonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutSessionNestedInput
@@ -100438,6 +100481,7 @@ export namespace Prisma {
     endTime: string
     maxStudents: number
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -100613,6 +100657,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
@@ -100631,6 +100676,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -100649,6 +100695,7 @@ export namespace Prisma {
     endTime?: StringFieldUpdateOperationsInput | string
     maxStudents?: IntFieldUpdateOperationsInput | number
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

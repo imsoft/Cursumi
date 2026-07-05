@@ -85,6 +85,9 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
       startTime: s.startTime,
       endTime: s.endTime,
       maxStudents: s.maxStudents,
+      /** Código de acceso en claro (solo lo ve el instructor dueño; puede ser null en códigos antiguos) */
+      joinCode: s.joinCode,
+      hasJoinCode: !!s.joinCodeHash,
       _count: { enrollments: s._count.enrollments },
     })),
     _count: { enrollments: course._count.enrollments },

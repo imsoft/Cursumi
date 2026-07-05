@@ -13,8 +13,10 @@ export type CourseSessionData = {
   startTime: string;  // "HH:mm"
   endTime: string;    // "HH:mm"
   maxStudents: number;
-  /** Código de acceso en texto plano — solo durante edición, NUNCA persistido en estado */
+  /** Código de acceso en texto plano — valor en edición (prellenado con el código actual si se conoce) */
   joinCode?: string;
+  /** Código actualmente guardado en BD en claro, si se conoce (para mostrarlo al instructor) */
+  savedJoinCode?: string;
   /** Si ya existe un hash guardado en BD (nunca exponemos el hash en cliente) */
   hasJoinCode?: boolean;
   /** Si true, se borrará el código existente al guardar */

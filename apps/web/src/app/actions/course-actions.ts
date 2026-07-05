@@ -337,6 +337,31 @@ export async function reorderSections(
   revalidatePath(`/instructor/courses/${courseId}/edit`);
 }
 
+export async function reorderLessons(
+  courseId: string,
+  sectionId: string,
+  lessonIds: string[],
+) {
+  const session = await requireSession();
+  await verifyCourseOwner(courseId, session.user.id);
+  const section = await prisma.courseSection.findFirst({
+    where: { id: sectionId, courseId },
+    select: { id: true },
+  });
+  if (!section) throw new Error("Sección no encontrada");
+
+  await Promise.all(
+    lessonIds.map((id, index) =>
+      prisma.lesson.updateMany({
+        where: { id, sectionId },
+        data: { order: index + 1 },
+      }),
+    ),
+  );
+
+  revalidatePath(`/instructor/courses/${courseId}/edit`);
+}
+
 export async function addLesson(courseId: string, sectionId: string, title: string, type: CourseLesson["type"]) {
   const session = await requireSession();
   await verifyCourseOwner(courseId, session.user.id);

@@ -316,6 +316,7 @@ exports.Prisma.CourseSessionScalarFieldEnum = {
   endTime: 'endTime',
   maxStudents: 'maxStudents',
   joinCodeHash: 'joinCodeHash',
+  joinCode: 'joinCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

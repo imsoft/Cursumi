@@ -654,12 +654,15 @@ export async function upsertCourseSessions(courseId: string, sessions: CourseSes
   await prisma.courseSession.deleteMany({ where: { courseId, id: { notIn: payloadIds } } });
 
   for (const s of sessions) {
-    // Compute joinCodeHash for this session
+    // Compute joinCodeHash for this session (se guarda también en claro para que el instructor pueda verlo)
     let sessionJoinCodeHash: string | null | undefined = undefined;
+    let sessionJoinCode: string | null | undefined = undefined;
     if (s.clearJoinCode) {
       sessionJoinCodeHash = null;
+      sessionJoinCode = null;
     } else if (s.joinCode?.trim()) {
-      sessionJoinCodeHash = await hashJoinCode(s.joinCode.trim());
+      sessionJoinCode = s.joinCode.trim();
+      sessionJoinCodeHash = await hashJoinCode(sessionJoinCode);
     }
 
     const data = {
@@ -673,6 +676,7 @@ export async function upsertCourseSessions(courseId: string, sessions: CourseSes
       endTime: s.endTime,
       maxStudents: s.maxStudents,
       ...(sessionJoinCodeHash !== undefined ? { joinCodeHash: sessionJoinCodeHash } : {}),
+      ...(sessionJoinCode !== undefined ? { joinCode: sessionJoinCode } : {}),
     };
     if (s.id) {
       await prisma.courseSession.update({ where: { id: s.id }, data });
