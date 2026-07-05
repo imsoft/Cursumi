@@ -159,18 +159,22 @@ export async function createCourse(instructorId: string, data: CreateCourseInput
       finalExam: data.finalExam ? (data.finalExam as object) : undefined,
       courseSessions: data.courseSessions?.length
         ? {
-            create: await Promise.all(data.courseSessions.map(async (s) => ({
-              format: (s.format ?? "presencial") as SessionFormat,
-              city: s.city,
-              state: s.state,
-              location: s.location,
-              meetingUrl: s.meetingUrl?.trim() || null,
-              date: new Date(s.date),
-              startTime: s.startTime,
-              endTime: s.endTime,
-              maxStudents: s.maxStudents,
-              joinCodeHash: s.joinCode?.trim() ? await hashJoinCode(s.joinCode.trim()) : null,
-            }))),
+            create: await Promise.all(data.courseSessions.map(async (s) => {
+              const sessionJoinCode = s.joinCode?.trim() || null;
+              return {
+                format: (s.format ?? "presencial") as SessionFormat,
+                city: s.city,
+                state: s.state,
+                location: s.location,
+                meetingUrl: s.meetingUrl?.trim() || null,
+                date: new Date(s.date),
+                startTime: s.startTime,
+                endTime: s.endTime,
+                maxStudents: s.maxStudents,
+                joinCodeHash: sessionJoinCode ? await hashJoinCode(sessionJoinCode) : null,
+                joinCode: sessionJoinCode,
+              };
+            })),
           }
         : undefined,
       sections: data.sections
@@ -651,6 +655,16 @@ export async function getCourseStudentsProgress(courseId: string): Promise<Cours
 
 export async function upsertCourseSessions(courseId: string, sessions: CourseSessionData[]) {
   const payloadIds = sessions.filter((s) => s.id).map((s) => s.id!);
+  // Nunca borrar una sesión con inscritos: al eliminarla, sus enrollments quedarían con sessionId null
+  const withEnrollments = await prisma.courseSession.findFirst({
+    where: { courseId, id: { notIn: payloadIds }, enrollments: { some: {} } },
+    select: { date: true, city: true },
+  });
+  if (withEnrollments) {
+    throw new Error(
+      `No puedes eliminar la sesión del ${withEnrollments.date.toLocaleDateString("es-MX", { timeZone: "UTC" })} porque tiene estudiantes inscritos.`,
+    );
+  }
   await prisma.courseSession.deleteMany({ where: { courseId, id: { notIn: payloadIds } } });
 
   for (const s of sessions) {
