@@ -159,6 +159,8 @@ export async function getPublishedCourseIdsForSitemap(): Promise<
 export async function getPublishedCourse(slugOrId: string) {
   const course = await prisma.course.findFirst({
     where: { status: "published", OR: [{ id: slugOrId }, { slug: slugOrId }] },
+    // Solo el hash (para calcular requiresJoinCode); el código en claro sigue omitido
+    omit: { joinCodeHash: false },
     include: {
       instructor: { select: { name: true } },
       _count: { select: { enrollments: true } },
@@ -192,7 +194,7 @@ export async function getPublishedCourse(slugOrId: string) {
           endTime: true,
           maxStudents: true,
           joinCodeHash: true,
-          _count: { select: { enrollments: true } },
+          _count: { select: { enrollments: { where: { status: { not: "cancelled" } } } } },
         },
       },
     },

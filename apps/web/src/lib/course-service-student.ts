@@ -165,7 +165,7 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
           },
           courseSessions: {
             orderBy: { date: "asc" },
-            include: { _count: { select: { enrollments: true } } },
+            include: { _count: { select: { enrollments: { where: { status: { not: "cancelled" } } } } } },
           },
           _count: { select: { enrollments: true } },
         },
@@ -185,7 +185,7 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
           startTime: true,
           endTime: true,
           maxStudents: true,
-          _count: { select: { enrollments: true } },
+          _count: { select: { enrollments: { where: { status: { not: "cancelled" } } } } },
         },
       },
     },

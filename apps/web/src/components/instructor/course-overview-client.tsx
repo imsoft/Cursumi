@@ -17,6 +17,8 @@ import {
   Gamepad2,
   ClipboardCheck,
 } from "lucide-react";
+import { KeyRound } from "lucide-react";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
@@ -93,7 +95,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
     price: course.price,
     isFree: course.isFree,
     imageUrl: course.imageUrl || "",
-    freeJoinCode: "",
+    freeJoinCode: course.joinCode ?? "",
     clearFreeJoinCode: false,
   });
   const [editSaving, setEditSaving] = useState(false);
@@ -175,7 +177,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
     price: course.price,
     isFree: course.isFree,
     imageUrl: course.imageUrl || "",
-    freeJoinCode: "",
+    freeJoinCode: course.joinCode ?? "",
     clearFreeJoinCode: false,
   });
 
@@ -455,6 +457,41 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                   <p className="mt-1 text-xs text-muted-foreground">
                     Precio en pesos mexicanos (MXN). Marca “Curso gratuito” o define un precio para poder publicar.
                   </p>
+                  {editData.modality === "evento" && (editData.isFree || editData.price === 0) && (
+                    <div className="mt-3 rounded-lg border border-border bg-muted/20 p-3 space-y-2">
+                      <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                        <KeyRound className="h-3.5 w-3.5 text-primary" />
+                        Código de acceso del curso (opcional)
+                      </div>
+                      <PasswordInput
+                        autoComplete="new-password"
+                        value={editData.freeJoinCode}
+                        onChange={(e) =>
+                          setEditData((d) => ({
+                            ...d,
+                            freeJoinCode: e.target.value,
+                            // Si había código y el campo queda vacío, se elimina al guardar
+                            clearFreeJoinCode: e.target.value.trim() === "" && course.hasJoinCode,
+                          }))
+                        }
+                      />
+                      {course.hasJoinCode ? (
+                        course.joinCode ? (
+                          <p className="text-xs text-muted-foreground">
+                            Este es el código actual — usa el ojo para verlo. Cámbialo para actualizarlo o borra el campo para quitarlo.
+                          </p>
+                        ) : (
+                          <p className="text-xs text-muted-foreground">
+                            Hay un código configurado, pero por seguridad no se puede mostrar. Escribe uno nuevo para reemplazarlo o borra el campo y guarda para quitarlo.
+                          </p>
+                        )
+                      ) : (
+                        <p className="text-xs text-muted-foreground">
+                          Aplica a las sesiones que no tengan código propio. Solo quienes lo ingresen podrán inscribirse.
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground">Miniatura del curso</label>

@@ -1,10 +1,6 @@
 import { PrismaClient } from '../generated/prisma/client'
 import { PrismaNeon } from '@prisma/adapter-neon'
 
-const globalForPrisma = global as unknown as {
-  prisma: PrismaClient
-}
-
 const connectionString = process.env.DATABASE_URL
 
 if (!connectionString) {
@@ -14,14 +10,25 @@ if (!connectionString) {
 // Crear el adapter de Neon
 const adapter = new PrismaNeon({ connectionString })
 
-// Crear instancia de Prisma Client con el adapter
-const prisma = globalForPrisma.prisma || new PrismaClient({
-  adapter,
-})
+// SECURITY: los códigos de acceso (hash y texto en claro) se omiten por defecto
+// en TODAS las lecturas; solo las rutas del instructor los re-incluyen explícitamente.
+const createPrismaClient = () =>
+  new PrismaClient({
+    adapter,
+    omit: {
+      course: { joinCode: true, joinCodeHash: true },
+      courseSession: { joinCode: true, joinCodeHash: true },
+    },
+  })
+
+const globalForPrisma = global as unknown as {
+  prisma: ReturnType<typeof createPrismaClient>
+}
+
+const prisma = globalForPrisma.prisma || createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma
 }
 
 export { prisma }
-

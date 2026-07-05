@@ -213,7 +213,10 @@ export async function enrollInCourse(courseId: string, sessionId?: string, joinC
   if (sessionId) {
     const courseSession = await prisma.courseSession.findFirst({
       where: { id: sessionId, courseId },
-      include: { _count: { select: { enrollments: true } } },
+      // El hash se omite globalmente; aquí se necesita para validar el código
+      omit: { joinCodeHash: false },
+      // Las inscripciones canceladas no ocupan lugar
+      include: { _count: { select: { enrollments: { where: { status: { not: "cancelled" } } } } } },
     });
     if (!courseSession) throw new Error("Sesión no encontrada");
     if (courseSession._count.enrollments >= courseSession.maxStudents) {

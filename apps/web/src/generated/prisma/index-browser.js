@@ -252,6 +252,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   nextSession: 'nextSession',
   finalExam: 'finalExam',
   joinCodeHash: 'joinCodeHash',
+  joinCode: 'joinCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

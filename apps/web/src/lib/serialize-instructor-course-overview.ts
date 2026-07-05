@@ -56,6 +56,8 @@ export function serializeInstructorCourseForOverview(course: CourseFromDb) {
     status: course.status,
     /** Presencial gratis con código configurado (el hash no se expone) */
     hasJoinCode: !!course.joinCodeHash,
+    /** Código del curso en claro (solo lo ve el instructor dueño; null en códigos previos a la migración) */
+    joinCode: course.joinCode,
     finalExam: toPlainJson(course.finalExam),
     sections: course.sections.map((s) => ({
       id: s.id,

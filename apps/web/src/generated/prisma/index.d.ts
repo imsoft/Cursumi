@@ -16452,6 +16452,7 @@ export namespace Prisma {
     visibility: $Enums.CourseVisibility | null
     nextSession: Date | null
     joinCodeHash: string | null
+    joinCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16481,6 +16482,7 @@ export namespace Prisma {
     visibility: $Enums.CourseVisibility | null
     nextSession: Date | null
     joinCodeHash: string | null
+    joinCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16511,6 +16513,7 @@ export namespace Prisma {
     nextSession: number
     finalExam: number
     joinCodeHash: number
+    joinCode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -16552,6 +16555,7 @@ export namespace Prisma {
     visibility?: true
     nextSession?: true
     joinCodeHash?: true
+    joinCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16581,6 +16585,7 @@ export namespace Prisma {
     visibility?: true
     nextSession?: true
     joinCodeHash?: true
+    joinCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16611,6 +16616,7 @@ export namespace Prisma {
     nextSession?: true
     finalExam?: true
     joinCodeHash?: true
+    joinCode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -16728,6 +16734,7 @@ export namespace Prisma {
     nextSession: Date | null
     finalExam: JsonValue | null
     joinCodeHash: string | null
+    joinCode: string | null
     createdAt: Date
     updatedAt: Date
     _count: CourseCountAggregateOutputType | null
@@ -16777,6 +16784,7 @@ export namespace Prisma {
     nextSession?: boolean
     finalExam?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -16825,6 +16833,7 @@ export namespace Prisma {
     nextSession?: boolean
     finalExam?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -16857,6 +16866,7 @@ export namespace Prisma {
     nextSession?: boolean
     finalExam?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
@@ -16889,11 +16899,12 @@ export namespace Prisma {
     nextSession?: boolean
     finalExam?: boolean
     joinCodeHash?: boolean
+    joinCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "state" | "location" | "mapsUrl" | "courseType" | "startDate" | "duration" | "price" | "isFree" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "instructorId" | "title" | "description" | "category" | "categoryId" | "level" | "modality" | "city" | "state" | "location" | "mapsUrl" | "courseType" | "startDate" | "duration" | "price" | "isFree" | "maxStudents" | "imageUrl" | "status" | "visibility" | "nextSession" | "finalExam" | "joinCodeHash" | "joinCode" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     categoryRef?: boolean | Course$categoryRefArgs<ExtArgs>
@@ -16976,6 +16987,10 @@ export namespace Prisma {
        * Hash (scrypt) del código de inscripción para cursos presenciales gratuitos; null = abierto
        */
       joinCodeHash: string | null
+      /**
+       * Código en claro para que el instructor pueda verlo/copiarlo (la validación usa el hash)
+       */
+      joinCode: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["course"]>
@@ -17443,6 +17458,7 @@ export namespace Prisma {
     readonly nextSession: FieldRef<"Course", 'DateTime'>
     readonly finalExam: FieldRef<"Course", 'Json'>
     readonly joinCodeHash: FieldRef<"Course", 'String'>
+    readonly joinCode: FieldRef<"Course", 'String'>
     readonly createdAt: FieldRef<"Course", 'DateTime'>
     readonly updatedAt: FieldRef<"Course", 'DateTime'>
   }
@@ -66282,6 +66298,7 @@ export namespace Prisma {
     nextSession: 'nextSession',
     finalExam: 'finalExam',
     joinCodeHash: 'joinCodeHash',
+    joinCode: 'joinCode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -68002,6 +68019,7 @@ export namespace Prisma {
     nextSession?: DateTimeNullableFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableFilter<"Course">
     joinCodeHash?: StringNullableFilter<"Course"> | string | null
+    joinCode?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -68049,6 +68067,7 @@ export namespace Prisma {
     nextSession?: SortOrderInput | SortOrder
     finalExam?: SortOrderInput | SortOrder
     joinCodeHash?: SortOrderInput | SortOrder
+    joinCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     instructor?: UserOrderByWithRelationInput
@@ -68099,6 +68118,7 @@ export namespace Prisma {
     nextSession?: DateTimeNullableFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableFilter<"Course">
     joinCodeHash?: StringNullableFilter<"Course"> | string | null
+    joinCode?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -68146,6 +68166,7 @@ export namespace Prisma {
     nextSession?: SortOrderInput | SortOrder
     finalExam?: SortOrderInput | SortOrder
     joinCodeHash?: SortOrderInput | SortOrder
+    joinCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CourseCountOrderByAggregateInput
@@ -68184,6 +68205,7 @@ export namespace Prisma {
     nextSession?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableWithAggregatesFilter<"Course">
     joinCodeHash?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    joinCode?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
   }
@@ -72184,6 +72206,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -72231,6 +72254,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -72274,6 +72298,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -72321,6 +72346,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -72366,6 +72392,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -72394,6 +72421,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -72424,6 +72452,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -76633,6 +76662,7 @@ export namespace Prisma {
     nextSession?: SortOrder
     finalExam?: SortOrder
     joinCodeHash?: SortOrder
+    joinCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -76667,6 +76697,7 @@ export namespace Prisma {
     visibility?: SortOrder
     nextSession?: SortOrder
     joinCodeHash?: SortOrder
+    joinCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -76696,6 +76727,7 @@ export namespace Prisma {
     visibility?: SortOrder
     nextSession?: SortOrder
     joinCodeHash?: SortOrder
+    joinCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -83824,6 +83856,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryRef?: CategoryCreateNestedOneWithoutCoursesInput
@@ -83869,6 +83902,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -84923,6 +84957,7 @@ export namespace Prisma {
     nextSession?: DateTimeNullableFilter<"Course"> | Date | string | null
     finalExam?: JsonNullableFilter<"Course">
     joinCodeHash?: StringNullableFilter<"Course"> | string | null
+    joinCode?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
   }
@@ -86743,6 +86778,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -86788,6 +86824,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -87914,6 +87951,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -87960,6 +87998,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -88018,6 +88057,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -88064,6 +88104,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -88106,6 +88147,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -88152,6 +88194,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     courseSessions?: CourseSessionUncheckedCreateNestedManyWithoutCourseInput
@@ -88286,6 +88329,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -88332,6 +88376,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseSessions?: CourseSessionUncheckedUpdateManyWithoutCourseNestedInput
@@ -88839,6 +88884,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -88885,6 +88931,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -89025,6 +89072,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -89071,6 +89119,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -89188,6 +89237,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -89234,6 +89284,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -89442,6 +89493,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -89488,6 +89540,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -89637,6 +89690,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -89683,6 +89737,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -90112,6 +90167,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -90158,6 +90214,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -90624,6 +90681,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -90670,6 +90728,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -90878,6 +90937,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -90924,6 +90984,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -91649,6 +91710,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -91695,6 +91757,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -91909,6 +91972,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -91955,6 +92019,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -92141,6 +92206,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -92187,6 +92253,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -92426,6 +92493,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -92472,6 +92540,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -92545,6 +92614,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -92591,6 +92661,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -92750,6 +92821,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -92796,6 +92868,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -93153,6 +93226,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -93199,6 +93273,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -93485,6 +93560,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -93531,6 +93607,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -96297,6 +96374,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -96343,6 +96421,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -96448,6 +96527,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -96494,6 +96574,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -96561,6 +96642,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -96607,6 +96689,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -96696,6 +96779,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -96742,6 +96826,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -96995,6 +97080,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -97041,6 +97127,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -97099,6 +97186,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -97145,6 +97233,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -97288,6 +97377,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -97334,6 +97424,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -97542,6 +97633,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -97588,6 +97680,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -97780,6 +97873,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor: UserCreateNestedOneWithoutInstructorCoursesInput
@@ -97826,6 +97920,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sections?: CourseSectionUncheckedCreateNestedManyWithoutCourseInput
@@ -97991,6 +98086,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -98037,6 +98133,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -99229,6 +99326,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -99533,6 +99631,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryRef?: CategoryUpdateOneWithoutCoursesNestedInput
@@ -99578,6 +99677,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -99622,6 +99722,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -100338,6 +100439,7 @@ export namespace Prisma {
     nextSession?: Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: string | null
+    joinCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -100366,6 +100468,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: UserUpdateOneRequiredWithoutInstructorCoursesNestedInput
@@ -100411,6 +100514,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sections?: CourseSectionUncheckedUpdateManyWithoutCourseNestedInput
@@ -100455,6 +100559,7 @@ export namespace Prisma {
     nextSession?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     finalExam?: NullableJsonNullValueInput | InputJsonValue
     joinCodeHash?: NullableStringFieldUpdateOperationsInput | string | null
+    joinCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

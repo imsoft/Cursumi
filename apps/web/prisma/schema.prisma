@@ -318,6 +318,8 @@ model Course {
   finalExam   Json?        // CourseFinalExam serializado
   /// Hash (scrypt) del código de inscripción para cursos presenciales gratuitos; null = abierto
   joinCodeHash String?
+  /// Código en claro para que el instructor pueda verlo/copiarlo (la validación usa el hash)
+  joinCode     String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
