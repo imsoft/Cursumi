@@ -805,6 +805,7 @@ export function LessonViewerClient({
           currentSectionId={currentSectionId}
           sectionGatesAllPassed={sectionGatesAllPassed}
           onLessonClick={() => setSidebarOpen(false)}
+          hasFinalExam={hasFinalExam}
         />
       </aside>
 

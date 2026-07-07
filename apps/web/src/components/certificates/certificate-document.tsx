@@ -24,7 +24,7 @@ const MODALITY_LABEL: Record<Certificate["modality"], string> = {
 
 export function CertificateDocument({ certificate }: { certificate: Certificate }) {
   const isAccreditation = certificate.type === "accreditation";
-  const sigH = Math.min(certificate.signatureHeight ?? 80, 100);
+  const sigH = Math.min(certificate.signatureHeight ?? 120, 160);
 
   const meta = [
     certificate.category,
@@ -144,7 +144,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
                 alt={`Firma de ${certificate.instructorName}`}
                 data-signature
                 crossOrigin="anonymous"
-                style={{ maxHeight: sigH, maxWidth: 260, width: "auto", objectFit: "contain", display: "block" }}
+                style={{ maxHeight: sigH, maxWidth: 320, width: "auto", objectFit: "contain", display: "block" }}
               />
             </div>
           ) : (

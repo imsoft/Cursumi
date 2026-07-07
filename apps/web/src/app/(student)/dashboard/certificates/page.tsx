@@ -10,20 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Certificate } from "@/components/student/types";
 import { Award } from "lucide-react";
 
-const categoryOptions = [
-  { value: "all", label: "Todas" },
-  { value: "Programación", label: "Programación" },
-  { value: "Marketing", label: "Marketing" },
-  { value: "Diseño", label: "Diseño" },
-  { value: "Negocios", label: "Negocios" },
-];
-
-const modalityOptions = [
-  { value: "all", label: "Todas" },
-  { value: "virtual", label: "En video" },
-  { value: "evento", label: "Por evento" },
-];
-
 export default function CertificatesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -51,25 +37,47 @@ export default function CertificatesPage() {
     load();
   }, []);
 
+  const categoryOptions = useMemo(() => {
+    const uniqueCategories = Array.from(new Set(certificates.map((c) => c.category).filter(Boolean)));
+    return [
+      { value: "all", label: "Todas" },
+      ...uniqueCategories.map((cat) => ({ value: cat, label: cat })),
+    ];
+  }, [certificates]);
+
+  const modalityOptions = useMemo(() => {
+    const uniqueModalities = Array.from(new Set(certificates.map((c) => c.modality).filter(Boolean)));
+    return [
+      { value: "all", label: "Todas" },
+      ...uniqueModalities.map((mod) => ({
+        value: mod,
+        label: mod === "virtual" ? "En video" : mod === "evento" ? "Por evento" : mod,
+      })),
+    ];
+  }, [certificates]);
+
   const filteredCertificates = useMemo(() => {
     return certificates
       .filter((cert) => {
         const searchLower = searchTerm.trim().toLowerCase();
+        const courseTitle = cert.courseTitle || "";
+        const instructorName = cert.instructorName || "";
+        const category = cert.category || "";
         return (
-          cert.courseTitle.toLowerCase().includes(searchLower) ||
-          cert.instructorName.toLowerCase().includes(searchLower) ||
-          cert.category.toLowerCase().includes(searchLower)
+          courseTitle.toLowerCase().includes(searchLower) ||
+          instructorName.toLowerCase().includes(searchLower) ||
+          category.toLowerCase().includes(searchLower)
         );
       })
       .filter((cert) => {
-        if (categoryFilter === "all") return true;
+        if (categoryFilter === "all" || !categoryFilter) return true;
         return cert.category === categoryFilter;
       })
       .filter((cert) => {
-        if (modalityFilter === "all") return true;
+        if (modalityFilter === "all" || !modalityFilter) return true;
         return cert.modality === modalityFilter;
       });
-  }, [searchTerm, categoryFilter, modalityFilter]);
+  }, [certificates, searchTerm, categoryFilter, modalityFilter]);
 
   const handleClearFilters = () => {
     setSearchTerm("");

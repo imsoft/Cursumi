@@ -826,6 +826,30 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
             })}
           </div>
         )}
+
+        {/* Examen final del curso integrado en la estructura de contenidos */}
+        <Card className="border border-dashed border-primary/30 bg-primary/5/30 mt-3">
+          <CardContent className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <ClipboardList className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-semibold text-foreground">Examen final del curso</p>
+                <p className="text-xs text-muted-foreground">
+                  {course.finalExam ? "Configurado — evaluará al finalizar el curso" : "Sin configurar — opcional"}
+                </p>
+              </div>
+              {!!course.finalExam && (
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+              )}
+            </div>
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/instructor/courses/${course.id}/exam`}>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                {course.finalExam ? "Editar examen" : "Configurar examen"}
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Sesiones del curso por evento */}
@@ -867,29 +891,6 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
         </Card>
       )}
 
-      {/* Final Exam */}
-      <Card>
-        <CardContent className="flex items-center justify-between p-5">
-          <div className="flex items-center gap-3">
-            <ClipboardList className="h-5 w-5 text-primary" />
-            <div>
-              <p className="font-semibold text-foreground">Examen final</p>
-              <p className="text-sm text-muted-foreground">
-                {course.finalExam ? "Configurado" : "Sin configurar — opcional"}
-              </p>
-            </div>
-            {!!course.finalExam && (
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
-            )}
-          </div>
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/instructor/courses/${course.id}/exam`}>
-              <ExternalLink className="mr-2 h-4 w-4" />
-              {course.finalExam ? "Editar examen" : "Configurar examen"}
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
 
       {/* Planeación didáctica — requisito para publicar (video y evento) */}
       {(course.modality === "evento" || course.modality === "virtual") && (

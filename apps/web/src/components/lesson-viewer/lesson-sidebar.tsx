@@ -43,6 +43,7 @@ interface LessonSidebarProps {
   currentSectionId: string;
   sectionGatesAllPassed: boolean;
   onLessonClick: () => void;
+  hasFinalExam?: boolean;
 }
 
 const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
@@ -62,6 +63,7 @@ export const LessonSidebar = memo(function LessonSidebar({
   currentSectionId,
   sectionGatesAllPassed,
   onLessonClick,
+  hasFinalExam = false,
 }: LessonSidebarProps) {
   const totalLessons = sections.reduce((acc, s) => acc + s.lessons.length, 0);
   const completedCount = sections.reduce(
@@ -187,6 +189,22 @@ export const LessonSidebar = memo(function LessonSidebar({
             </div>
           );
         })}
+        {hasFinalExam && (
+          <div className="mt-4 border-t border-border pt-4 px-2 mb-4">
+            <Link
+              href={`/dashboard/my-courses/${courseId}/exam`}
+              onClick={onLessonClick}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors border ${
+                currentLessonId === "exam"
+                  ? "bg-primary/10 border-primary text-primary"
+                  : "border-primary/20 bg-primary/5 text-foreground hover:bg-primary/10"
+              }`}
+            >
+              <ClipboardCheck className="h-4 w-4 shrink-0 text-primary" />
+              <span className="flex-1 truncate">Examen final</span>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
