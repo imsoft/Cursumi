@@ -295,6 +295,10 @@ function getTrustedOrigins(): string[] {
   }
   // Deep-link scheme de la app móvil (Expo, app.json: "mobile") para @better-auth/expo.
   origins.add("mobile://");
+  // Expo Go en desarrollo usa el scheme exp:// (p. ej. exp://192.168.x.x:8081).
+  // Sin esto, cualquier POST auth desde Expo Go con cookie falla con INVALID_ORIGIN.
+  // Riesgo bajo: los navegadores no pueden falsificar un header Origin con scheme exp://.
+  origins.add("exp://*");
   return [...origins];
 }
 

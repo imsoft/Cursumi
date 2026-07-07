@@ -56,7 +56,7 @@ export function TurnstileWebView({ onToken, onError }: Props) {
     <View style={styles.container}>
       <WebView
         originWhitelist={["*"]}
-        source={{ html, baseUrl: "https://cursumi.vercel.app" }}
+        source={{ html, baseUrl: "https://www.cursumi.com" }}
         style={styles.webview}
         scrollEnabled={false}
         javaScriptEnabled
