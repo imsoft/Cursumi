@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Certificate } from "@/components/student/types";
 import { ArrowLeft, Download, Share2, Award, Check, Loader2 } from "lucide-react";
-import { CertificateView } from "@/components/certificates/certificate-view";
+import {
+  CertificateDocument,
+  CERT_DOC_WIDTH,
+  CERT_DOC_HEIGHT,
+} from "@/components/certificates/certificate-document";
+import { ScaledDocument } from "@/components/ui/scaled-document";
 import { downloadCertificateAsPdf } from "@/lib/download-certificate";
 
 interface CertificatePageProps {
@@ -107,7 +112,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
       }
     };
     load();
-  }, [id, isNew, fireConfetti]);
+  }, [id, isNew, autoDownload, fireConfetti]);
 
   const handleDownload = async () => {
     if (!certificate) return;
@@ -247,7 +252,21 @@ export default function CertificatePage({ params }: CertificatePageProps) {
         </div>
       )}
 
-      <CertificateView certificate={certificate} />
+      {/* Vista previa escalada — idéntica al PDF */}
+      <ScaledDocument
+        width={CERT_DOC_WIDTH}
+        height={CERT_DOC_HEIGHT}
+        className="rounded-lg border border-border shadow-lg overflow-hidden"
+      >
+        <CertificateDocument certificate={certificate} />
+      </ScaledDocument>
+
+      {/* Copia oculta sin escalar — es la que se captura para el PDF */}
+      <div aria-hidden className="pointer-events-none fixed left-[-10000px] top-0">
+        <div data-certificate-doc>
+          <CertificateDocument certificate={certificate} />
+        </div>
+      </div>
 
       {/* Información adicional */}
       <Card className="border border-border bg-card/90 print:hidden">

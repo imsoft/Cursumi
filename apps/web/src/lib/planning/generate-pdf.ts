@@ -87,9 +87,12 @@ export async function generateElementPdf(
 
   const imgW = pageW;
   const imgH = (canvas.height * imgW) / canvas.width;
-  const imgData = canvas.toDataURL("image/png");
+  // JPEG: los documentos tienen fondo blanco (sin transparencia) y el PNG
+  // producía PDFs de ~10 MB; con JPEG de alta calidad bajan a <1 MB.
+  const imgData = canvas.toDataURL("image/jpeg", 0.92);
 
-  const totalPages = Math.max(1, Math.ceil(imgH / pageH));
+  // Misma tolerancia de 1 mm que el bucle de páginas (residuos por redondeo)
+  const totalPages = Math.max(1, Math.ceil((imgH - 1) / pageH));
 
   /** Pie de marca: franja blanca + línea + logo + "Cursumi" + número de página. */
   const drawFooter = (pageNum: number) => {
@@ -133,15 +136,17 @@ export async function generateElementPdf(
   let position = 0;
   let pageNum = 1;
 
-  pdf.addImage(imgData, "PNG", 0, position, imgW, imgH);
+  pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
   drawFooter(pageNum);
   heightLeft -= pageH;
 
-  while (heightLeft > 0) {
+  // Tolerancia de 1 mm: los residuos por redondeo de píxeles no deben
+  // producir una página extra en blanco (p. ej. documentos de proporción A4 exacta).
+  while (heightLeft > 1) {
     position -= pageH;
     pdf.addPage();
     pageNum += 1;
-    pdf.addImage(imgData, "PNG", 0, position, imgW, imgH);
+    pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
     drawFooter(pageNum);
     heightLeft -= pageH;
   }

@@ -5,7 +5,12 @@ import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { CertificateView } from "@/components/certificates/certificate-view";
+import {
+  CertificateDocument,
+  CERT_DOC_WIDTH,
+  CERT_DOC_HEIGHT,
+} from "@/components/certificates/certificate-document";
+import { ScaledDocument } from "@/components/ui/scaled-document";
 import { PartyPopper, Download, Loader2 } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 import { downloadCertificateAsPdf } from "@/lib/download-certificate";
@@ -203,8 +208,21 @@ export default function CertificatePreviewPage() {
         </CardContent>
       </Card>
 
-      {/* Certificate */}
-      <CertificateView certificate={cert} />
+      {/* Vista previa escalada — idéntica al PDF */}
+      <ScaledDocument
+        width={CERT_DOC_WIDTH}
+        height={CERT_DOC_HEIGHT}
+        className="rounded-lg border border-border shadow-lg overflow-hidden"
+      >
+        <CertificateDocument certificate={cert} />
+      </ScaledDocument>
+
+      {/* Copia oculta sin escalar — es la que se captura para el PDF */}
+      <div aria-hidden className="pointer-events-none fixed left-[-10000px] top-0">
+        <div data-certificate-doc>
+          <CertificateDocument certificate={cert} />
+        </div>
+      </div>
     </div>
   );
 }
