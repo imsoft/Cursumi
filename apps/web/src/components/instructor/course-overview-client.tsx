@@ -46,7 +46,6 @@ const LESSON_TYPE_OPTIONS: { value: LessonType; label: string; icon: React.React
   { value: "text", label: "Texto", icon: <FileText className="h-4 w-4" /> },
   { value: "quiz", label: "Quiz", icon: <FileQuestion className="h-4 w-4" /> },
   { value: "assignment", label: "Tarea", icon: <BookOpen className="h-4 w-4" /> },
-  { value: "section_quiz", label: "Test", icon: <ClipboardCheck className="h-4 w-4" /> },
   { value: "section_minigame", label: "Minijuego", icon: <Gamepad2 className="h-4 w-4" /> },
 ];
 
