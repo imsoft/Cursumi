@@ -115,23 +115,6 @@ export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSid
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            {footerAction || (
-              <SidebarMenuButton size="lg" asChild tooltip="Cerrar sesión">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-2 text-sm font-semibold text-muted-foreground transition hover:text-primary group-data-[collapsible=icon]:justify-center"
-                  type="button"
-                  onClick={handleSignOut}
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span className="group-data-[collapsible=icon]:hidden">Cerrar sesión</span>
-                </Button>
-              </SidebarMenuButton>
-            )}
-          </SidebarMenuItem>
-        </SidebarMenu>
         <div className="flex justify-center gap-3 pb-1 group-data-[collapsible=icon]:hidden">
           <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
             Privacidad

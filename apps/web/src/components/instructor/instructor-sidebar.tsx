@@ -68,16 +68,7 @@ export const InstructorSidebar = ({ open, onClose }: SidebarProps) => {
             );
           })}
         </nav>
-        <div className="mt-auto border-t border-border pt-4">
-          <button
-            className="flex w-full items-center gap-2 text-sm font-semibold text-muted-foreground transition hover:text-primary hover:bg-primary/5 rounded-xl px-3 py-2"
-            type="button"
-            onClick={handleSignOut}
-          >
-            <LogOut className="h-4 w-4" />
-            Cerrar sesión
-          </button>
-        </div>
+
       </aside>
     </>
   );
