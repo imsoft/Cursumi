@@ -538,6 +538,44 @@ export async function sendPlanningReminderEmail({
   }
 }
 
+interface SendExamRetryEmailParams {
+  to: string;
+  name: string;
+  courseTitle: string;
+  examUrl: string;
+}
+
+export async function sendExamRetryEmail({
+  to,
+  name,
+  courseTitle,
+  examUrl,
+}: SendExamRetryEmailParams) {
+  if (!process.env.RESEND_API_KEY) return;
+  const body = `
+    <p style="font-size:16px;margin-bottom:20px;">Hola ${name},</p>
+    <p style="font-size:16px;margin-bottom:20px;">
+      Ha transcurrido el tiempo de espera de 4 horas y ya puedes volver a intentar el examen final del curso <strong>${courseTitle}</strong>.
+    </p>
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${examUrl}" style="display:inline-block;background:${EMAIL_BRAND_ACCENT};color:white;padding:14px 28px;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">
+        Volver a intentar examen
+      </a>
+    </div>
+    <p style="font-size:14px;color:#6b7280;">Te deseamos mucho éxito en este nuevo intento. ¡Tú puedes!</p>`;
+
+  try {
+    await resend.emails.send({
+      from: FROM(),
+      to: [to],
+      subject: `Ya puedes volver a intentar el examen de "${courseTitle}" - Cursumi`,
+      html: emailWrapper("Reintento de examen disponible", body),
+    });
+  } catch (err) {
+    console.error("Error al enviar email de reintento de examen:", err);
+  }
+}
+
 export async function sendContactEmail({ name, email, subject, reason, message }: SendContactEmailParams) {
   if (!process.env.RESEND_API_KEY) throw new Error("Email no configurado");
   const body = `

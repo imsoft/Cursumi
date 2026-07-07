@@ -29,7 +29,25 @@ export async function POST(
     }
 
     if (enrollment.examSubmission) {
-      return NextResponse.json({ error: "Ya enviaste el examen" }, { status: 409 });
+      if (enrollment.examSubmission.passed) {
+        return NextResponse.json({ error: "Ya aprobaste este examen" }, { status: 400 });
+      }
+
+      const submittedAt = new Date(enrollment.examSubmission.submittedAt);
+      const diffMs = Date.now() - submittedAt.getTime();
+      const diffHours = diffMs / (1000 * 60 * 60);
+
+      if (diffHours < 4) {
+        const remainingMs = 4 * 60 * 60 * 1000 - diffMs;
+        const remainingHours = Math.floor(remainingMs / (1000 * 60 * 60));
+        const remainingMinutes = Math.ceil((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        let message = "Debes esperar ";
+        if (remainingHours > 0) {
+          message += `${remainingHours} ${remainingHours === 1 ? "hora" : "horas"} y `;
+        }
+        message += `${remainingMinutes} ${remainingMinutes === 1 ? "minuto" : "minutos"} para volver a realizar el examen.`;
+        return NextResponse.json({ error: message }, { status: 429 });
+      }
     }
 
     // Fetch exam definition to compute score server-side (never trust client)
@@ -68,14 +86,27 @@ export async function POST(
     const score = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 100;
     const passed = score >= finalExam.passingScore;
 
-    const submission = await prisma.examSubmission.create({
-      data: {
-        enrollmentId: enrollment.id,
-        answers: body.answers,
-        score,
-        passed,
-      },
-    });
+    let submission;
+    if (enrollment.examSubmission) {
+      submission = await prisma.examSubmission.update({
+        where: { enrollmentId: enrollment.id },
+        data: {
+          answers: body.answers,
+          score,
+          passed,
+          submittedAt: new Date(),
+        },
+      });
+    } else {
+      submission = await prisma.examSubmission.create({
+        data: {
+          enrollmentId: enrollment.id,
+          answers: body.answers,
+          score,
+          passed,
+        },
+      });
+    }
 
     // Recalcular progreso (genera certificado + notificación + marca completado si llega a 100%)
     await recalculateEnrollmentProgress(enrollment.id, courseId);
@@ -100,6 +131,7 @@ export async function POST(
       passed: submission.passed,
       evaluations,
       certificate: certificate ? { id: certificate.id, number: certificate.number } : null,
+      submittedAt: submission.submittedAt.toISOString(),
     });
   } catch (error) {
     return handleApiError(error);

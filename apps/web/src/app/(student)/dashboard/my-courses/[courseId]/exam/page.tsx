@@ -40,6 +40,7 @@ export default async function ExamPage({
               score: enrollment.examSubmission.score,
               passed: enrollment.examSubmission.passed,
               answers: enrollment.examSubmission.answers as Record<string, number>,
+              submittedAt: enrollment.examSubmission.submittedAt.toISOString(),
               evaluations: finalExam.questions.reduce<Record<string, boolean>>((acc, q) => {
                 const userAns = (enrollment.examSubmission!.answers as Record<string, number>)[q.id];
                 acc[q.id] = userAns !== undefined && userAns === q.correctAnswer;

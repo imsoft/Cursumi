@@ -108,11 +108,11 @@ export async function recalculateEnrollmentProgress(
       where: { enrollmentId },
     });
 
+    const certType =
+      hasFinalExam && examSubmission?.passed ? "accreditation" : "participation";
+
     if (!existingCert) {
       const certNumber = `CUR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-      // Acreditación solo si presentó examen y aprobó; si no hay examen o no lo presentó / no aprobó → participación.
-      const certType =
-        hasFinalExam && examSubmission?.passed ? "accreditation" : "participation";
       const certificate = await prisma.certificate.create({
         data: {
           enrollmentId,
@@ -137,6 +137,24 @@ export async function recalculateEnrollmentProgress(
         });
       } catch {
         /* el certificado ya existe; la notificación no debe bloquear */
+      }
+    } else if (existingCert.type === "participation" && certType === "accreditation") {
+      // Upgrade certificate type to accreditation
+      const certificate = await prisma.certificate.update({
+        where: { id: existingCert.id },
+        data: { type: "accreditation" },
+      });
+
+      try {
+        await createNotification({
+          userId: enrollment.studentId,
+          type: "certificate",
+          title: "Certificado de acreditación",
+          body: `¡Felicidades! Has aprobado el examen y obtenido tu certificado de acreditación para el curso "${course?.title || ""}".`,
+          link: `/dashboard/certificates/${certificate.id}`,
+        });
+      } catch {
+        /* la notificación no debe bloquear */
       }
     }
 
