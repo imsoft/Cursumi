@@ -53,41 +53,70 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ya estás inscrito en este curso" }, { status: 409 });
     }
 
-    // Si ya hay una sesión de pago pendiente, reutilizarla en lugar de crear otra
-    const pendingTransaction = await prisma.transaction.findFirst({
-      where: { userId: session.user.id, courseId, status: "pending" },
-      select: { stripeSessionId: true },
-      orderBy: { createdAt: "desc" },
-    });
-    if (pendingTransaction?.stripeSessionId) {
-      try {
-        const existingSession = await stripe.checkout.sessions.retrieve(
-          pendingTransaction.stripeSessionId
-        );
-        if (existingSession.status === "open" && existingSession.url) {
-          return NextResponse.json({ url: existingSession.url });
-        }
-      } catch {
-        // La sesión ya no existe en Stripe, continuar creando una nueva
-      }
-    }
-
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-    // Validar cupón si se envió
+    // Validar cupón si se envió. Los errores son explícitos: si el cupón ya no
+    // aplica, NUNCA seguimos en silencio cobrando el precio completo.
     let appliedCoupon: { code: string; discountPct: number } | null = null;
     if (couponCode) {
       const coupon = await prisma.coupon.findUnique({
         where: { code: couponCode.toUpperCase().trim() },
       });
-      if (
-        coupon &&
-        coupon.active &&
-        (!coupon.expiresAt || coupon.expiresAt > new Date()) &&
-        (coupon.maxUses === null || coupon.usedCount < coupon.maxUses) &&
-        (!coupon.courseId || coupon.courseId === courseId)
-      ) {
-        appliedCoupon = { code: coupon.code, discountPct: coupon.discountPct };
+      if (!coupon || !coupon.active) {
+        return NextResponse.json({ error: "Cupón inválido o inactivo" }, { status: 422 });
+      }
+      if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+        return NextResponse.json({ error: "El cupón ha expirado" }, { status: 422 });
+      }
+      if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
+        return NextResponse.json({ error: "El cupón ya alcanzó su límite de usos" }, { status: 422 });
+      }
+      if (coupon.courseId && coupon.courseId !== courseId) {
+        return NextResponse.json({ error: "Este cupón no es válido para este curso" }, { status: 422 });
+      }
+      // Un solo uso exitoso por usuario
+      const alreadyUsed = await prisma.transaction.findFirst({
+        where: { userId: session.user.id, couponCode: coupon.code, status: "completed" },
+        select: { id: true },
+      });
+      if (alreadyUsed) {
+        return NextResponse.json({ error: "Ya usaste este cupón anteriormente" }, { status: 422 });
+      }
+      appliedCoupon = { code: coupon.code, discountPct: coupon.discountPct };
+    }
+
+    // Si ya hay una sesión de pago pendiente CON EL MISMO CUPÓN, reutilizarla.
+    // Si el cupón cambió, la sesión vieja cobraría el precio equivocado:
+    // se expira y se crea una nueva.
+    const pendingTransaction = await prisma.transaction.findFirst({
+      where: { userId: session.user.id, courseId, status: "pending" },
+      select: { id: true, stripeSessionId: true, couponCode: true },
+      orderBy: { createdAt: "desc" },
+    });
+    if (pendingTransaction?.stripeSessionId) {
+      const sameCoupon =
+        (pendingTransaction.couponCode ?? null) === (appliedCoupon?.code ?? null);
+      if (sameCoupon) {
+        try {
+          const existingSession = await stripe.checkout.sessions.retrieve(
+            pendingTransaction.stripeSessionId
+          );
+          if (existingSession.status === "open" && existingSession.url) {
+            return NextResponse.json({ url: existingSession.url });
+          }
+        } catch {
+          // La sesión ya no existe en Stripe, continuar creando una nueva
+        }
+      } else {
+        try {
+          await stripe.checkout.sessions.expire(pendingTransaction.stripeSessionId);
+        } catch {
+          // Ya estaba expirada/completada en Stripe — continuar
+        }
+        await prisma.transaction.update({
+          where: { id: pendingTransaction.id },
+          data: { status: "failed" },
+        });
       }
     }
 
@@ -98,11 +127,15 @@ export async function POST(req: NextRequest) {
 
     const amountCents = discountedPrice;
 
-    // ── Fast-path: cupón 100% → precio $0, no necesitamos Stripe ──────────────
+    // Stripe no procesa cargos menores a $10 MXN. Si el descuento deja el precio
+    // debajo del mínimo, inscribimos gratis (el instructor ya regaló ≥90%).
+    const MIN_STRIPE_AMOUNT_CENTS = 1000;
+
+    // ── Fast-path: cupón 100% (o bajo el mínimo de Stripe) → sin Stripe ──────
     // Stripe no dispara `checkout.session.completed` cuando unit_amount = 0,
     // por lo que el webhook nunca enrollaría al estudiante. En este caso
     // inscribimos directamente igual que en cursos gratuitos.
-    if (amountCents === 0) {
+    if (amountCents === 0 || (appliedCoupon && amountCents < MIN_STRIPE_AMOUNT_CENTS)) {
       const platformFeePercent = await getPlatformFeePercent();
       const { platformFee, instructorAmount } = calculateSplit(0, platformFeePercent);
 

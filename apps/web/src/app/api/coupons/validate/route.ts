@@ -41,6 +41,14 @@ export async function POST(req: NextRequest) {
     if (coupon.courseId && coupon.courseId !== courseId) {
       return NextResponse.json({ error: "Este cupón no es válido para este curso" }, { status: 422 });
     }
+    // Un solo uso exitoso por usuario
+    const alreadyUsed = await prisma.transaction.findFirst({
+      where: { userId: session.user.id, couponCode: coupon.code, status: "completed" },
+      select: { id: true },
+    });
+    if (alreadyUsed) {
+      return NextResponse.json({ error: "Ya usaste este cupón anteriormente" }, { status: 409 });
+    }
 
     return NextResponse.json({
       code: coupon.code,
