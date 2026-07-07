@@ -59,6 +59,12 @@ export async function generateElementPdf(
   el: HTMLElement,
   filename: string,
   orientation: "portrait" | "landscape" = "portrait",
+  opts?: {
+    /** Multiplicador de captura (default 2 ≈ 192 DPI en A4; 3 ≈ 288 DPI para documentos que se imprimen) */
+    scale?: number;
+    /** Calidad JPEG 0–1 (default 0.92) */
+    quality?: number;
+  },
 ): Promise<void> {
   const [html2canvasMod, jsPDFMod, logo] = await Promise.all([
     // html2canvas-pro: soporta colores oklch/lab/color() de Tailwind v4
@@ -75,7 +81,7 @@ export async function generateElementPdf(
   if (!JsPDF) throw new Error("No se pudo cargar jsPDF");
 
   const canvas = await html2canvas(el, {
-    scale: 2,
+    scale: opts?.scale ?? 2,
     useCORS: true,
     logging: false,
     backgroundColor: "#ffffff",
@@ -89,7 +95,7 @@ export async function generateElementPdf(
   const imgH = (canvas.height * imgW) / canvas.width;
   // JPEG: los documentos tienen fondo blanco (sin transparencia) y el PNG
   // producía PDFs de ~10 MB; con JPEG de alta calidad bajan a <1 MB.
-  const imgData = canvas.toDataURL("image/jpeg", 0.92);
+  const imgData = canvas.toDataURL("image/jpeg", opts?.quality ?? 0.92);
 
   // Misma tolerancia de 1 mm que el bucle de páginas (residuos por redondeo)
   const totalPages = Math.max(1, Math.ceil((imgH - 1) / pageH));

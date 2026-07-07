@@ -20,5 +20,7 @@ export async function downloadCertificateAsPdf(info: {
     certEl,
     `Constancia-${sanitizeFilename(info.studentName)}-${info.certificateNumber}.pdf`,
     "landscape",
+    // La constancia se imprime/comparte: captura a 3× (~288 DPI) y JPEG alta calidad
+    { scale: 3, quality: 0.95 },
   );
 }
