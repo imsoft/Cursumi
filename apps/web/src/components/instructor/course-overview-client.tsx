@@ -29,6 +29,7 @@ import { CourseSessionsManager } from "@/components/instructor/course-sessions-m
 import type { CourseSessionData } from "@/components/instructor/course-types";
 import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
 import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
+import { formatPriceMXN } from "@/lib/utils";
 
 type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
@@ -562,7 +563,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                   <ModalityBadge modality={course.modality} />
                   <span>{course.category}</span>
                   <span>·</span>
-                  <span>${(course.price / 100).toLocaleString()}</span>
+                  <span>{course.isFree ? "Gratis" : formatPriceMXN(course.price)}</span>
                   <span>·</span>
                   <span>{course._count.enrollments} estudiantes</span>
                 </div>
