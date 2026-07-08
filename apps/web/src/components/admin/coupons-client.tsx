@@ -307,7 +307,8 @@ export function CouponsClient({
                               </td>
                               <td className="px-3 py-2">
                                 <span className="text-foreground font-medium">
-                                  {formatPriceMXN(u.amount)}
+                                  {/* transaction.amount se almacena en centavos */}
+                                  {formatPriceMXN(u.amount / 100)}
                                 </span>
                                 {u.discountPct > 0 && (
                                   <span className="ml-1 text-xs text-green-600 dark:text-green-400">

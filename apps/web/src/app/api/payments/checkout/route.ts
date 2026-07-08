@@ -121,11 +121,14 @@ export async function POST(req: NextRequest) {
     }
 
     const originalPrice = course.price;
-    const discountedPrice = appliedCoupon
+    // `Course.price` está en PESOS enteros (MXN). Stripe cobra en CENTAVOS y
+    // los campos almacenados (transaction.amount, platformFee, instructorAmount)
+    // se guardan en centavos — así lo esperan finanzas, referidos y admin (÷100).
+    const discountedPriceMxn = appliedCoupon
       ? Math.round(originalPrice * (1 - appliedCoupon.discountPct / 100))
       : originalPrice;
 
-    const amountCents = discountedPrice;
+    const amountCents = discountedPriceMxn * 100;
 
     // Stripe no procesa cargos menores a $10 MXN. Si el descuento deja el precio
     // debajo del mínimo, inscribimos gratis (el instructor ya regaló ≥90%).
