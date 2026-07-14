@@ -1,5 +1,6 @@
-"use client";
-
+// Sin "use client": componente compartido sin hooks. Como Server Component
+// puede recibir `icon` (función) desde páginas de servidor sin romper la
+// serialización RSC; importado desde componentes cliente sigue funcionando.
 import { Button } from "@/components/ui/button";
 import {
   Empty,

@@ -305,7 +305,8 @@ export default function AdminCoursesPage() {
                           </Button>
                         </Link>
                       )}
-                      {course.slug && (
+                      {/* La página pública solo existe para cursos publicados; en draft/archivado da 404 */}
+                      {course.slug && course.status === "published" && (
                         <Link href={`/courses/${course.slug}`} target="_blank">
                           <Button variant="outline" size="sm">
                             <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
