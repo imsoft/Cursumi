@@ -32,12 +32,13 @@ export async function uploadAttachmentDirect(
     cloudName?: string;
     apiKey?: string;
     folder?: string;
+    allowedFormats?: string;
   };
   if (!sigRes.ok) {
     throw new Error(sigData.error || "No se pudo autorizar la subida");
   }
-  const { timestamp, signature, cloudName, apiKey, folder: signedFolder } = sigData;
-  if (timestamp == null || !signature || !cloudName || !apiKey || !signedFolder) {
+  const { timestamp, signature, cloudName, apiKey, folder: signedFolder, allowedFormats } = sigData;
+  if (timestamp == null || !signature || !cloudName || !apiKey || !signedFolder || !allowedFormats) {
     throw new Error("Respuesta de firma incompleta");
   }
 
@@ -47,6 +48,8 @@ export async function uploadAttachmentDirect(
   form.append("timestamp", String(timestamp));
   form.append("signature", signature);
   form.append("folder", signedFolder);
+  // Forma parte de la firma: Cloudinary rechaza formatos fuera de la allowlist
+  form.append("allowed_formats", allowedFormats);
 
   const uploadRes = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,

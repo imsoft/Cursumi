@@ -24,8 +24,14 @@ describe("shouldUseFreeJoinCode", () => {
     expect(shouldUseFreeJoinCode("live", 500)).toBe(false);
   });
 
-  it("retorna false para modality desconocida", () => {
-    expect(shouldUseFreeJoinCode("unknown", 0)).toBe(false);
+  it("retorna true para evento gratuito (modalidad canónica actual)", () => {
+    expect(shouldUseFreeJoinCode("evento", 0)).toBe(true);
+  });
+
+  // La implementación trata cualquier modality ≠ "virtual" como evento/presencial
+  // a propósito (compatibilidad con valores legacy); solo virtual queda exento.
+  it("trata una modality desconocida como no-virtual (usa código si es gratuito)", () => {
+    expect(shouldUseFreeJoinCode("unknown", 0)).toBe(true);
   });
 });
 

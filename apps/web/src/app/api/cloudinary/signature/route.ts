@@ -19,6 +19,14 @@ import { resolveOrgAdmin } from "@/lib/org-service";
 const BASE_FOLDERS = ["attachments", "materials", "course-covers"] as const;
 type BaseFolder = (typeof BASE_FOLDERS)[number];
 
+/**
+ * SECURITY: formatos permitidos en la subida directa (espejo de la allowlist
+ * de `upload-validation.ts`). Al incluirse en la firma, Cloudinary RECHAZA
+ * cualquier otro formato (html, svg, js, exe…) aunque el cliente altere la
+ * petición — la subida directa ya no puede saltarse la validación del server.
+ */
+const ALLOWED_FORMATS = "jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx,ppt,pptx,zip";
+
 function requireEnv(name: string) {
   const value = process.env[name];
   if (!value) throw new Error(`${name} no está configurada`);
@@ -80,12 +88,21 @@ export async function POST(req: NextRequest) {
     const folder = await resolveFolder(session.user.id, baseFolder, body.courseId);
 
     const timestamp = Math.round(Date.now() / 1000);
-    const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
+    // Los parámetros firmados van en orden alfabético; el cliente debe enviar
+    // exactamente estos valores o Cloudinary rechaza la subida.
+    const paramsToSign = `allowed_formats=${ALLOWED_FORMATS}&folder=${folder}&timestamp=${timestamp}`;
     const signature = createHash("sha1")
       .update(paramsToSign + apiSecret)
       .digest("hex");
 
-    return NextResponse.json({ timestamp, signature, cloudName, apiKey, folder });
+    return NextResponse.json({
+      timestamp,
+      signature,
+      cloudName,
+      apiKey,
+      folder,
+      allowedFormats: ALLOWED_FORMATS,
+    });
   } catch (error) {
     return handleApiError(error);
   }
