@@ -3,6 +3,12 @@
 import { useState, useTransition, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  DndContext, closestCenter, PointerSensor, KeyboardSensor,
+  useSensor, useSensors, type DragEndEvent,
+} from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +19,7 @@ import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
   BookOpen, ChevronDown, ChevronUp, ClipboardList, Globe, Lock,
   CheckCircle2, AlertCircle, ExternalLink, Pencil, X, Upload, Loader2,
-  ArrowUp, ArrowDown, Check,
+  GripVertical, Check,
   Gamepad2,
   ClipboardCheck,
 } from "lucide-react";
@@ -22,6 +28,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
+import { SortableItem } from "@/components/instructor/sortable-item";
 import {
   addSection, removeSection, addLesson, removeLesson, publishCourseById, updateCourseBasicInfo, deleteCourseById, editSection, saveCourseSessions, reorderSections, reorderLessons,
 } from "@/app/actions/course-actions";
@@ -105,6 +112,21 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
   const [editSectionTitle, setEditSectionTitle] = useState("");
+
+  // Estructura de secciones/lecciones: se edita en local para que el drag and
+  // drop se sienta instantáneo; se resincroniza (durante el render, no en un
+  // efecto) cuando el servidor devuelve datos nuevos tras agregar/eliminar.
+  const [sections, setSections] = useState(course.sections);
+  const [syncedCourseSections, setSyncedCourseSections] = useState(course.sections);
+  if (syncedCourseSections !== course.sections) {
+    setSyncedCourseSections(course.sections);
+    setSections(course.sections);
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   // Sesiones: se editan en estado local y se guardan con el botón "Guardar sesiones".
   // Guardar en cada keystroke provocaba que los inputs controlados perdieran caracteres.
@@ -217,34 +239,54 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
     setExpandedSections(next);
   };
 
-  const handleMoveSection = (index: number, direction: "up" | "down") => {
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    if (newIndex < 0 || newIndex >= course.sections.length) return;
-    const ids = course.sections.map((s) => s.id);
-    [ids[index], ids[newIndex]] = [ids[newIndex], ids[index]];
+  /**
+   * Reordena secciones. Vive en un DndContext propio (solo envuelve las
+   * cabeceras de sección) para que la detección de colisiones de dnd-kit
+   * nunca considere una lección como posible destino del drop.
+   */
+  const handleSectionDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = sections.findIndex((s) => s.id === active.id);
+    const newIndex = sections.findIndex((s) => s.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+    const reordered = arrayMove(sections, oldIndex, newIndex);
+    setSections(reordered);
     setActionError(null);
     startTransition(async () => {
       try {
-        await reorderSections(course.id, ids);
-        router.refresh();
+        await reorderSections(course.id, reordered.map((s) => s.id));
       } catch (err) {
-        setActionError(err instanceof Error ? err.message : "Error al reordenar");
+        setActionError(err instanceof Error ? err.message : "Error al reordenar secciones");
+        setSections(course.sections);
       }
     });
   };
 
-  const handleMoveLesson = (sectionId: string, lessonIds: string[], index: number, direction: "up" | "down") => {
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    if (newIndex < 0 || newIndex >= lessonIds.length) return;
-    const ids = [...lessonIds];
-    [ids[index], ids[newIndex]] = [ids[newIndex], ids[index]];
+  /**
+   * Reordena lecciones dentro de UNA sección. Cada sección abierta monta su
+   * propio DndContext (ver más abajo) para que el drop nunca se confunda con
+   * otra sección ni con lecciones de otra lista.
+   */
+  const handleLessonDragEnd = (sectionId: string, event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const sectionIdx = sections.findIndex((s) => s.id === sectionId);
+    if (sectionIdx === -1) return;
+    const section = sections[sectionIdx];
+    const oldIndex = section.lessons.findIndex((l) => l.id === active.id);
+    const newIndex = section.lessons.findIndex((l) => l.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+    const reorderedLessons = arrayMove(section.lessons, oldIndex, newIndex);
+    const nextSections = sections.map((s, i) => (i === sectionIdx ? { ...s, lessons: reorderedLessons } : s));
+    setSections(nextSections);
     setActionError(null);
     startTransition(async () => {
       try {
-        await reorderLessons(course.id, sectionId, ids);
-        router.refresh();
+        await reorderLessons(course.id, sectionId, reorderedLessons.map((l) => l.id));
       } catch (err) {
         setActionError(err instanceof Error ? err.message : "Error al reordenar lecciones");
+        setSections(course.sections);
       }
     });
   };
@@ -336,7 +378,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
   };
 
   const isPublished = course.status === "published";
-  const totalLessons = course.sections.reduce((acc, s) => acc + s.lessons.length, 0);
+  const totalLessons = sections.reduce((acc, s) => acc + s.lessons.length, 0);
 
   return (
     <div className="space-y-6">
@@ -592,7 +634,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
           <div>
             <h2 className="text-lg font-semibold text-foreground">Contenido del curso</h2>
             <p className="text-sm text-muted-foreground">
-              {course.sections.length} secciones · {totalLessons} lecciones
+              {sections.length} secciones · {totalLessons} lecciones
             </p>
           </div>
         </div>
@@ -628,41 +670,40 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
         )}
 
         {/* Sections list */}
-        {course.sections.length === 0 ? (
+        {sections.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border py-8 text-center text-sm text-muted-foreground">
             Agrega tu primera sección para empezar a estructurar el curso.
           </p>
         ) : (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleSectionDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
+          <SortableContext items={sections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
           <div className="space-y-3">
-            {course.sections.map((section, si) => {
+            {sections.map((section, si) => {
               const isOpen = expandedSections.has(section.id);
               const isAddingLesson = addLessonState?.sectionId === section.id;
               return (
-                <Card key={section.id}>
+                <SortableItem key={section.id} id={section.id} disabled={isPending}>
+                  {({ attributes, listeners, isDragging }) => (
+                <Card className={isDragging ? "shadow-lg ring-2 ring-primary/40" : undefined}>
                   {/* Section header */}
                   <CardHeader className="px-6 py-3">
                     <div className="flex items-center gap-2">
-                      {/* Move up/down */}
-                      <div className="flex shrink-0 flex-col justify-center">
-                        <button
-                          type="button"
-                          disabled={si === 0 || isPending}
-                          onClick={() => handleMoveSection(si, "up")}
-                          className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
-                          title="Mover arriba"
-                        >
-                          <ArrowUp className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          disabled={si === course.sections.length - 1 || isPending}
-                          onClick={() => handleMoveSection(si, "down")}
-                          className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
-                          title="Mover abajo"
-                        >
-                          <ArrowDown className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
+                      {/* Drag handle */}
+                      <button
+                        type="button"
+                        {...attributes}
+                        {...listeners}
+                        disabled={isPending}
+                        className="shrink-0 cursor-grab touch-none p-1 text-muted-foreground hover:text-foreground active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-30"
+                        title="Arrastra para reordenar"
+                      >
+                        <GripVertical className="h-4 w-4" />
+                      </button>
 
                       {editingSectionId === section.id ? (
                         <div className="flex flex-1 items-center gap-2">
@@ -715,32 +756,30 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
 
                   {isOpen && (
                     <CardContent className="pt-3 space-y-2">
-                      {/* Lessons */}
-                      {section.lessons.map((lesson, li) => (
+                      {/* Lessons — DndContext propio: el drop nunca se confunde con otra sección */}
+                      <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={(e) => handleLessonDragEnd(section.id, e)}
+                        modifiers={[restrictToVerticalAxis]}
+                      >
+                      <SortableContext items={section.lessons.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+                        {section.lessons.map((lesson, li) => (
+                          <SortableItem key={lesson.id} id={lesson.id} disabled={isPending}>
+                            {({ attributes: lAttrs, listeners: lListeners, isDragging: lDragging }) => (
                         <div
-                          key={lesson.id}
-                          className="flex items-center gap-3 rounded-lg border border-border bg-background px-4 py-3 group"
+                          className={`flex items-center gap-3 rounded-lg border border-border bg-background px-4 py-3 group ${lDragging ? "shadow-lg ring-2 ring-primary/40" : ""}`}
                         >
-                          <div className="flex shrink-0 flex-col justify-center">
-                            <button
-                              type="button"
-                              disabled={li === 0 || isPending}
-                              onClick={() => handleMoveLesson(section.id, section.lessons.map((l) => l.id), li, "up")}
-                              className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
-                              title="Mover arriba"
-                            >
-                              <ArrowUp className="h-3.5 w-3.5" />
-                            </button>
-                            <button
-                              type="button"
-                              disabled={li === section.lessons.length - 1 || isPending}
-                              onClick={() => handleMoveLesson(section.id, section.lessons.map((l) => l.id), li, "down")}
-                              className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
-                              title="Mover abajo"
-                            >
-                              <ArrowDown className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
+                          <button
+                            type="button"
+                            {...lAttrs}
+                            {...lListeners}
+                            disabled={isPending}
+                            className="shrink-0 cursor-grab touch-none p-1 text-muted-foreground hover:text-foreground active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-30"
+                            title="Arrastra para reordenar"
+                          >
+                            <GripVertical className="h-4 w-4" />
+                          </button>
                           {lessonIcon(lesson.type)}
                           <span className="flex-1 text-sm font-medium text-foreground">
                             {li + 1}. {lesson.title}
@@ -763,7 +802,11 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                             message={`Se eliminará la lección "${lesson.title}". Esta acción no se puede deshacer.`}
                           />
                         </div>
-                      ))}
+                            )}
+                          </SortableItem>
+                        ))}
+                      </SortableContext>
+                      </DndContext>
 
                       {/* Add lesson inline form */}
                       {isAddingLesson ? (
@@ -822,9 +865,13 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                     </CardContent>
                   )}
                 </Card>
+                  )}
+                </SortableItem>
               );
             })}
           </div>
+          </SortableContext>
+          </DndContext>
         )}
 
         {/* Examen final del curso integrado en la estructura de contenidos */}
