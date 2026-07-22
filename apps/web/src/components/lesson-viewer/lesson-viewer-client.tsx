@@ -36,6 +36,7 @@ import type { SectionActivity } from "@/components/instructor/course-types";
 import { LessonSidebar } from "./lesson-sidebar";
 import { CourseNotesSheet } from "./course-notes-sheet";
 import { SectionGatesPanel } from "./section-gates-panel";
+import { getMuxPlaybackId, getYouTubeId } from "@/lib/video-url";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
@@ -109,18 +110,6 @@ const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
   section_quiz: <ClipboardCheck className="h-4 w-4 shrink-0" />,
   section_minigame: <Gamepad2 className="h-4 w-4 shrink-0" />,
 };
-
-function getMuxPlaybackId(url: string): string | null {
-  const match = url.match(/stream\.mux\.com\/([^/.]+)/);
-  return match ? match[1] : null;
-}
-
-function getYouTubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
-  );
-  return match ? match[1] : null;
-}
 
 export function LessonViewerClient({
   lesson,

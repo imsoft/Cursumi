@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -9,13 +10,17 @@ import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Combobox } from "@/components/ui/combobox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
   ArrowLeft, Save, Video, FileQuestion, BookOpen,
   Plus, Trash2, CheckCircle2, Circle, Upload,
-  FileText, Image as ImageIcon, File, Link as LinkIcon, X, Pencil, Check,
+  FileText, Image as ImageIcon, File, Link as LinkIcon, X, Pencil, Check, RefreshCw,
 } from "lucide-react";
 import type { CourseLesson, QuizQuestion, EvaluationCriterion, CourseFile, CourseResource, SectionMinigame } from "./course-types";
 import { SectionActivityEditor } from "./section-activity-editor";
+import { getMuxPlaybackId, getYouTubeId } from "@/lib/video-url";
+
+const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 // API routes en lugar de server actions (más robustos, evitan "Failed to fetch")
 async function createMuxUploadUrlViaApi(params: { courseId?: string; lessonId?: string; lessonTitle?: string }) {
   const res = await fetch("/api/mux/upload-url", {
@@ -78,6 +83,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isDetectingDuration, setIsDetectingDuration] = useState(false);
   const [, setUploadId] = useState<string | null>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const [newResourceTitle, setNewResourceTitle] = useState("");
   const [newResourceUrl, setNewResourceUrl] = useState("");
   // Quiz config
@@ -391,6 +397,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
               <label className="block text-sm font-medium text-foreground">Video de la lección *</label>
               <div className="relative">
                 <input
+                  ref={videoInputRef}
                   type="file" accept="video/*" className="hidden" id="video-upload"
                   onChange={async (e) => {
                     const file = e.target.files?.[0];
@@ -421,6 +428,8 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                       setUploadProgress(0);
                     } finally {
                       setUploadingVideo(false);
+                      // Permite volver a seleccionar el mismo archivo (p. ej. tras reemplazar)
+                      e.target.value = "";
                     }
                   }}
                 />
@@ -471,30 +480,62 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                   </div>
                 )}
 
-                {/* Video subido con éxito */}
-                {!uploadingVideo && videoUrl && (
-                  <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 p-3">
-                    <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
-                    <span className="text-sm text-foreground flex-1 truncate">
-                      {videoUrl.includes("stream.mux.com") ? "Video subido correctamente ✓" : videoUrl}
-                    </span>
-                    {isDetectingDuration && (
-                      <span className="text-xs text-muted-foreground shrink-0">Detectando duración…</span>
-                    )}
-                    {duration && !isDetectingDuration && (
-                      <span className="text-xs font-medium text-muted-foreground shrink-0 border border-border rounded-full px-2 py-0.5">
-                        {duration}
-                      </span>
-                    )}
-                    <button
-                      type="button"
-                      className="ml-1 rounded p-1 hover:bg-muted/40"
-                      onClick={() => { setVideoUrl(""); setDuration(""); setUploadStep("idle"); setUploadProgress(0); }}
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                )}
+                {/* Video subido con éxito: previsualización + reemplazar/eliminar */}
+                {!uploadingVideo && videoUrl && (() => {
+                  const muxId = getMuxPlaybackId(videoUrl);
+                  const ytId = getYouTubeId(videoUrl);
+                  return (
+                    <div className="space-y-3">
+                      <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
+                        {muxId ? (
+                          <MuxPlayer playbackId={muxId} streamType="on-demand" className="h-full w-full" />
+                        ) : ytId ? (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${ytId}`}
+                            className="h-full w-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        ) : (
+                          <video src={videoUrl} controls className="h-full w-full" />
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex items-center gap-1.5 rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-1.5">
+                          <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                          <span className="text-xs font-medium text-foreground">Video listo</span>
+                        </div>
+                        {isDetectingDuration && (
+                          <span className="text-xs text-muted-foreground">Detectando duración…</span>
+                        )}
+                        {duration && !isDetectingDuration && (
+                          <span className="text-xs font-medium text-muted-foreground border border-border rounded-full px-2 py-0.5">
+                            {duration}
+                          </span>
+                        )}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => videoInputRef.current?.click()}
+                        >
+                          <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
+                          Reemplazar video
+                        </Button>
+                        <ConfirmDeleteButton
+                          title="¿Eliminar el video de esta lección?"
+                          message="Se quitará el video actual. La lección se quedará sin contenido hasta que subas uno nuevo — recuerda guardar los cambios."
+                          onConfirm={() => {
+                            setVideoUrl("");
+                            setDuration("");
+                            setUploadStep("idle");
+                            setUploadProgress(0);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {videoError && <p className="mt-2 text-xs text-destructive">{videoError}</p>}
               </div>
