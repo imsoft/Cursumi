@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { Combobox } from "@/components/ui/combobox";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -300,21 +301,25 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
                       onChange={(e) => updateQuestion(q.id, { question: e.target.value })}
                     />
                     <div className="flex items-center gap-2 shrink-0">
-                      <select
-                        className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      <Combobox
+                        options={[
+                          { value: "multiple-choice", label: "Opción múltiple" },
+                          { value: "true-false", label: "Verdadero / Falso" },
+                          { value: "short-answer", label: "Respuesta corta" },
+                        ]}
                         value={q.type}
-                        onChange={(e) =>
+                        onValueChange={(v) => {
+                          if (!v) return;
                           updateQuestion(q.id, {
-                            type: e.target.value as QuizQuestion["type"],
-                            options: e.target.value === "multiple-choice" ? ["", ""] : undefined,
+                            type: v as QuizQuestion["type"],
+                            options: v === "multiple-choice" ? ["", ""] : undefined,
                             correctAnswer: 0,
-                          })
-                        }
-                      >
-                        <option value="multiple-choice">Opción múltiple</option>
-                        <option value="true-false">Verdadero / Falso</option>
-                        <option value="short-answer">Respuesta corta</option>
-                      </select>
+                          });
+                        }}
+                        placeholder="Tipo"
+                        searchable={false}
+                        allowDeselect={false}
+                      />
                       <div className="flex items-center gap-1">
                         <label className="text-xs text-muted-foreground whitespace-nowrap">Pts:</label>
                         <Input
@@ -417,20 +422,23 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
                     <label className="mb-1 block text-xs font-medium text-muted-foreground">
                       Video de repaso si fallan esta pregunta (opcional)
                     </label>
-                    <select
-                      className="w-full max-w-md rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    <Combobox
+                      options={[
+                        { value: "", label: "Sin video de repaso" },
+                        ...lessons.map((l) => ({
+                          value: l.id,
+                          label: `${l.sectionTitle} — ${l.title}`,
+                        })),
+                      ]}
                       value={q.relatedLessonId ?? ""}
-                      onChange={(e) =>
-                        updateQuestion(q.id, { relatedLessonId: e.target.value || undefined })
+                      onValueChange={(v) =>
+                        updateQuestion(q.id, { relatedLessonId: v || undefined })
                       }
-                    >
-                      <option value="">Sin video de repaso</option>
-                      {lessons.map((l) => (
-                        <option key={l.id} value={l.id}>
-                          {l.sectionTitle} — {l.title}
-                        </option>
-                      ))}
-                    </select>
+                      placeholder="Sin video de repaso"
+                      searchable={lessons.length > 5}
+                      allowDeselect={false}
+                      className="w-full max-w-md"
+                    />
                   </div>
                 </CardContent>
               </Card>

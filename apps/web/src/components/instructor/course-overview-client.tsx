@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { Combobox } from "@/components/ui/combobox";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import {
   ArrowLeft, Plus, Trash2, Video, FileText, FileQuestion,
@@ -439,35 +440,44 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground">Nivel</label>
-                  <select
-                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  <Combobox
+                    options={[
+                      { value: "principiante", label: "Principiante" },
+                      { value: "intermedio", label: "Intermedio" },
+                      { value: "avanzado", label: "Avanzado" },
+                    ]}
                     value={editData.level}
-                    onChange={(e) => setEditData((d) => ({ ...d, level: e.target.value }))}
-                  >
-                    <option value="principiante">Principiante</option>
-                    <option value="intermedio">Intermedio</option>
-                    <option value="avanzado">Avanzado</option>
-                  </select>
+                    onValueChange={(v) => { if (v) setEditData((d) => ({ ...d, level: v })); }}
+                    placeholder="Nivel"
+                    searchable={false}
+                    allowDeselect={false}
+                    className="mt-1"
+                  />
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium text-foreground">Tipo de curso</label>
-                  <select
-                    className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  <Combobox
+                    options={[
+                      { value: "virtual", label: "Curso en video (a tu ritmo)" },
+                      { value: "evento", label: "Curso por evento (con fechas)" },
+                    ]}
                     value={editData.modality}
-                    onChange={(e) =>
+                    onValueChange={(v) => {
+                      if (!v) return;
                       setEditData((d) => ({
                         ...d,
-                        modality: e.target.value,
+                        modality: v,
                         // El tipo (ondemand/fechado) se deriva del tipo de curso
-                        courseType: e.target.value === "virtual" ? "ondemand" : "fechado",
-                      }))
-                    }
-                  >
-                    <option value="virtual">Curso en video (a tu ritmo)</option>
-                    <option value="evento">Curso por evento (con fechas)</option>
-                  </select>
+                        courseType: v === "virtual" ? "ondemand" : "fechado",
+                      }));
+                    }}
+                    placeholder="Tipo de curso"
+                    searchable={false}
+                    allowDeselect={false}
+                    className="mt-1"
+                  />
                   <p className="mt-1 text-xs text-muted-foreground">
                     Video: el alumno avanza cuando quiera. Evento: sesiones presenciales o por videollamada.
                   </p>

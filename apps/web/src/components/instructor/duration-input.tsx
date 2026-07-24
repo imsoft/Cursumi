@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { Select } from "@/components/ui/select";
+import { Combobox } from "@/components/ui/combobox";
 import { cn } from "@/lib/utils";
 import {
   DURATION_UNIT_OPTIONS,
@@ -56,12 +56,14 @@ export const DurationInput = ({ label, value, onChange, error, hint }: DurationI
             "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           )}
         />
-        <Select
+        <Combobox
           options={DURATION_UNIT_OPTIONS}
           value={unit}
-          onChange={(e) => emit({ unit: e.target.value as DurationUnit })}
+          onValueChange={(v) => emit({ unit: (v || unit) as DurationUnit })}
+          placeholder="Unidad"
+          searchable={false}
+          allowDeselect={false}
           className="w-36 shrink-0"
-          aria-label="Unidad de duración"
         />
       </div>
       {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}

@@ -5,6 +5,7 @@ import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Combobox } from "@/components/ui/combobox";
 import {
   CertificateDocument,
   CERT_DOC_WIDTH,
@@ -129,29 +130,37 @@ export default function CertificatePreviewPage() {
             </div>
             <div>
               <label className="text-sm font-medium text-foreground">Modalidad</label>
-              <select
-                className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              <Combobox
+                options={[
+                  { value: "virtual", label: "Curso en video" },
+                  { value: "evento", label: "Curso por evento" },
+                ]}
                 value={cert.modality}
-                onChange={(e) =>
-                  update({ modality: e.target.value as "virtual" | "evento" })
-                }
-              >
-                <option value="virtual">Curso en video</option>
-                <option value="evento">Curso por evento</option>
-              </select>
+                onValueChange={(v) => {
+                  if (v) update({ modality: v as "virtual" | "evento" });
+                }}
+                placeholder="Modalidad"
+                searchable={false}
+                allowDeselect={false}
+                className="mt-1"
+              />
             </div>
             <div>
               <label className="text-sm font-medium text-foreground">Tipo</label>
-              <select
-                className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              <Combobox
+                options={[
+                  { value: "accreditation", label: "Acreditacion" },
+                  { value: "participation", label: "Participacion" },
+                ]}
                 value={cert.type}
-                onChange={(e) =>
-                  update({ type: e.target.value as "accreditation" | "participation" })
-                }
-              >
-                <option value="accreditation">Acreditacion</option>
-                <option value="participation">Participacion</option>
-              </select>
+                onValueChange={(v) => {
+                  if (v) update({ type: v as "accreditation" | "participation" });
+                }}
+                placeholder="Tipo"
+                searchable={false}
+                allowDeselect={false}
+                className="mt-1"
+              />
             </div>
             <div>
               <label className="text-sm font-medium text-foreground">Calificación (pts)</label>

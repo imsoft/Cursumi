@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Combobox } from "@/components/ui/combobox";
 
 interface QuoteRequest {
   id: string;
@@ -220,14 +221,17 @@ export function BusinessAdminClient({
 
             <div className="flex w-full flex-col gap-1">
               <label className="text-sm font-medium text-foreground">Intervalo de cobro</label>
-              <select
+              <Combobox
+                options={[
+                  { value: "month", label: "Mensual" },
+                  { value: "year", label: "Anual" },
+                ]}
                 value={billingInterval}
-                onChange={(e) => setBillingInterval(e.target.value as "month" | "year")}
-                className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
-              >
-                <option value="month">Mensual</option>
-                <option value="year">Anual</option>
-              </select>
+                onValueChange={(v) => { if (v) setBillingInterval(v as "month" | "year"); }}
+                placeholder="Intervalo"
+                searchable={false}
+                allowDeselect={false}
+              />
             </div>
 
             <div className="sm:col-span-2 flex flex-col gap-2">

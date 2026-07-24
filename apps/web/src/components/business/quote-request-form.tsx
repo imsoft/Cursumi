@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Combobox } from "@/components/ui/combobox";
 
 const sizes = ["1-10", "11-50", "51-200", "201-500", "500+"];
 
@@ -83,18 +84,20 @@ export function QuoteRequestForm() {
 
           <div className="flex w-full flex-col gap-1">
             <label className="text-sm font-medium text-foreground">Tamaño de la empresa</label>
-            <select
+            <Combobox
+              options={[
+                { value: "", label: "Selecciona…" },
+                ...sizes.map((s) => ({
+                  value: s,
+                  label: `${s} empleados`,
+                })),
+              ]}
               value={companySize}
-              onChange={(e) => setCompanySize(e.target.value)}
-              className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
-            >
-              <option value="">Selecciona…</option>
-              {sizes.map((s) => (
-                <option key={s} value={s}>
-                  {s} empleados
-                </option>
-              ))}
-            </select>
+              onValueChange={setCompanySize}
+              placeholder="Selecciona…"
+              searchable={false}
+              allowDeselect={false}
+            />
           </div>
 
           <Input

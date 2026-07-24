@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Combobox } from "@/components/ui/combobox";
 import { Trash2 } from "lucide-react";
 
 export type QuestionType = "multiple" | "truefalse";
@@ -78,14 +79,17 @@ export function GameQuestionEditor({
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-base">Pregunta {index + 1}</CardTitle>
         <div className="flex items-center gap-2">
-          <select
+          <Combobox
+            options={[
+              { value: "multiple", label: "Opción múltiple" },
+              { value: "truefalse", label: "Verdadero / Falso" },
+            ]}
             value={q.type}
-            onChange={(e) => handleTypeChange(e.target.value as QuestionType)}
-            className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
-          >
-            <option value="multiple">Opción múltiple</option>
-            <option value="truefalse">Verdadero / Falso</option>
-          </select>
+            onValueChange={(v) => { if (v) handleTypeChange(v as QuestionType); }}
+            placeholder="Tipo"
+            searchable={false}
+            allowDeselect={false}
+          />
           <Button
             type="button"
             variant="ghost"
@@ -125,20 +129,23 @@ export function GameQuestionEditor({
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-medium">Respuesta correcta:</span>
-              <select
-                value={q.correct}
-                onChange={(e) => onChange({ correct: Number(e.target.value) })}
-                className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                <option value={0}>
-                  {OPTION_LABELS[0]}
-                  {q.options[0]?.trim() ? ` — ${q.options[0]}` : ""}
-                </option>
-                <option value={1}>
-                  {OPTION_LABELS[1]}
-                  {q.options[1]?.trim() ? ` — ${q.options[1]}` : ""}
-                </option>
-              </select>
+              <Combobox
+                options={[
+                  {
+                    value: "0",
+                    label: `${OPTION_LABELS[0]}${q.options[0]?.trim() ? ` — ${q.options[0]}` : ""}`,
+                  },
+                  {
+                    value: "1",
+                    label: `${OPTION_LABELS[1]}${q.options[1]?.trim() ? ` — ${q.options[1]}` : ""}`,
+                  },
+                ]}
+                value={String(q.correct)}
+                onValueChange={(v) => { if (v) onChange({ correct: Number(v) }); }}
+                placeholder="Correcta"
+                searchable={false}
+                allowDeselect={false}
+              />
             </div>
           </div>
         ) : (
@@ -162,44 +169,48 @@ export function GameQuestionEditor({
           {q.type === "multiple" && (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Respuesta correcta:</span>
-              <select
-                value={q.correct}
-                onChange={(e) => onChange({ correct: Number(e.target.value) })}
-                className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {OPTION_LABELS.map((label, i) => (
-                  <option key={i} value={i}>
-                    {label}
-                  </option>
-                ))}
-              </select>
+              <Combobox
+                options={OPTION_LABELS.map((label, i) => ({
+                  value: String(i),
+                  label,
+                }))}
+                value={String(q.correct)}
+                onValueChange={(v) => { if (v) onChange({ correct: Number(v) }); }}
+                placeholder="Correcta"
+                searchable={false}
+                allowDeselect={false}
+              />
             </div>
           )}
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Tiempo:</span>
-            <select
-              value={q.timeLimitSec}
-              onChange={(e) => onChange({ timeLimitSec: Number(e.target.value) })}
-              className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              {[10, 15, 20, 30].map((t) => (
-                <option key={t} value={t}>{t}s</option>
-              ))}
-            </select>
+              <Combobox
+                options={[10, 15, 20, 30].map((t) => ({
+                  value: String(t),
+                  label: `${t}s`,
+                }))}
+                value={String(q.timeLimitSec)}
+                onValueChange={(v) => { if (v) onChange({ timeLimitSec: Number(v) }); }}
+                placeholder="Tiempo"
+                searchable={false}
+                allowDeselect={false}
+              />
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Puntos:</span>
-            <select
-              value={q.points}
-              onChange={(e) => onChange({ points: Number(e.target.value) })}
-              className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              {[500, 1000].map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
+              <Combobox
+                options={[500, 1000].map((p) => ({
+                  value: String(p),
+                  label: String(p),
+                }))}
+                value={String(q.points)}
+                onValueChange={(v) => { if (v) onChange({ points: Number(v) }); }}
+                placeholder="Puntos"
+                searchable={false}
+                allowDeselect={false}
+              />
           </div>
         </div>
       </CardContent>

@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import { DatePickerField } from "@/components/ui/date-picker";
 import {
@@ -519,25 +520,31 @@ export default function AdminKpisPage() {
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Período</label>
-                  <select
-                    {...form.register("period")}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  >
-                    {PERIODS.map((p) => (
-                      <option key={p} value={p}>{PERIOD_LABELS[p]}</option>
-                    ))}
-                  </select>
+                  <Combobox
+                    options={PERIODS.map((p) => ({
+                      value: p,
+                      label: PERIOD_LABELS[p],
+                    }))}
+                    value={form.watch("period")}
+                    onValueChange={(v) => { if (v) form.setValue("period", v as (typeof PERIODS)[number], { shouldValidate: true }); }}
+                    placeholder="Período"
+                    searchable={false}
+                    allowDeselect={false}
+                  />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-foreground">Categoría</label>
-                  <select
-                    {...form.register("category")}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
-                    ))}
-                  </select>
+                  <Combobox
+                    options={CATEGORIES.map((c) => ({
+                      value: c,
+                      label: CATEGORY_LABELS[c],
+                    }))}
+                    value={form.watch("category")}
+                    onValueChange={(v) => { if (v) form.setValue("category", v as (typeof CATEGORIES)[number], { shouldValidate: true }); }}
+                    placeholder="Categoría"
+                    searchable={false}
+                    allowDeselect={false}
+                  />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -604,25 +611,31 @@ export default function AdminKpisPage() {
                         </div>
                         <div>
                           <label className="mb-1.5 block text-sm font-medium text-foreground">Período</label>
-                          <select
-                            {...editForm.register("period")}
-                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                          >
-                            {PERIODS.map((p) => (
-                              <option key={p} value={p}>{PERIOD_LABELS[p]}</option>
-                            ))}
-                          </select>
+                          <Combobox
+                            options={PERIODS.map((p) => ({
+                              value: p,
+                              label: PERIOD_LABELS[p],
+                            }))}
+                            value={editForm.watch("period")}
+                            onValueChange={(v) => { if (v) editForm.setValue("period", v as (typeof PERIODS)[number], { shouldValidate: true }); }}
+                            placeholder="Período"
+                            searchable={false}
+                            allowDeselect={false}
+                          />
                         </div>
                         <div>
                           <label className="mb-1.5 block text-sm font-medium text-foreground">Categoría</label>
-                          <select
-                            {...editForm.register("category")}
-                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                          >
-                            {CATEGORIES.map((c) => (
-                              <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
-                            ))}
-                          </select>
+                          <Combobox
+                            options={CATEGORIES.map((c) => ({
+                              value: c,
+                              label: CATEGORY_LABELS[c],
+                            }))}
+                            value={editForm.watch("category")}
+                            onValueChange={(v) => { if (v) editForm.setValue("category", v as (typeof CATEGORIES)[number], { shouldValidate: true }); }}
+                            placeholder="Categoría"
+                            searchable={false}
+                            allowDeselect={false}
+                          />
                         </div>
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">

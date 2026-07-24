@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import { Trash2, PlusCircle, ChevronUp, ChevronDown } from "lucide-react";
 import { SlideThumb } from "./presentation-document";
@@ -70,15 +71,17 @@ function SlideCard({
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
-              <select
+              <Combobox
+                options={KIND_ORDER.map((k) => ({
+                  value: k,
+                  label: SLIDE_KIND_LABEL[k],
+                }))}
                 value={slide.kind}
-                onChange={(e) => onUpdate({ kind: e.target.value as SlideKind })}
-                className="h-8 rounded border border-border bg-background px-2 text-xs font-medium text-foreground"
-              >
-                {KIND_ORDER.map((k) => (
-                  <option key={k} value={k}>{SLIDE_KIND_LABEL[k]}</option>
-                ))}
-              </select>
+                onValueChange={(v) => { if (v) onUpdate({ kind: v as SlideKind }); }}
+                placeholder="Tipo"
+                searchable={false}
+                allowDeselect={false}
+              />
             </div>
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onMove(-1)} disabled={index === 0}>

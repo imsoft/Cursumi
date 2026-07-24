@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Combobox } from "@/components/ui/combobox";
 import {
   Trash2, PlusCircle, ToggleLeft, ToggleRight, TicketPercent,
   ChevronDown, ChevronUp, User, BookOpen, Globe,
@@ -178,15 +179,20 @@ export function CouponsClient({
                 <label className="mb-1.5 block text-sm font-medium text-foreground">
                   Curso al que aplica
                 </label>
-                <select
-                  {...form.register("courseId")}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                >
-                  <option value="">Todos los cursos</option>
-                  {courses.map((c) => (
-                    <option key={c.id} value={c.id}>{c.title}</option>
-                  ))}
-                </select>
+                <Combobox
+                  options={[
+                    { value: "", label: "Todos los cursos" },
+                    ...courses.map((c) => ({
+                      value: c.id,
+                      label: c.title,
+                    })),
+                  ]}
+                  value={form.watch("courseId") ?? ""}
+                  onValueChange={(v) => form.setValue("courseId", v, { shouldValidate: true })}
+                  placeholder="Todos los cursos"
+                  searchable={courses.length > 5}
+                  allowDeselect={false}
+                />
               </div>
               <div className="flex items-end gap-2 sm:col-span-2">
                 <Button type="submit" disabled={form.formState.isSubmitting}>

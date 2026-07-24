@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Combobox } from "@/components/ui/combobox";
 import { Trash2, PlusCircle } from "lucide-react";
 import {
   type VirtualParticipantManualData,
@@ -92,14 +93,17 @@ export function VirtualParticipantManualForm({ value, onChange }: Props) {
                   <span className="text-xs text-muted-foreground">Sección {i + 1}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <select
-                    value={s.level}
-                    onChange={(e) => updateSection(s.id, { level: parseInt(e.target.value) as 1 | 2 })}
-                    className="h-7 rounded border border-border bg-background px-2 text-xs text-foreground"
-                  >
-                    <option value={1}>Nivel 1</option>
-                    <option value={2}>Nivel 2</option>
-                  </select>
+                  <Combobox
+                    options={[
+                      { value: "1", label: "Nivel 1" },
+                      { value: "2", label: "Nivel 2" },
+                    ]}
+                    value={String(s.level)}
+                    onValueChange={(v) => { if (v) updateSection(s.id, { level: parseInt(v) as 1 | 2 }); }}
+                    placeholder="Nivel"
+                    searchable={false}
+                    allowDeselect={false}
+                  />
                   <Button
                     variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive"
                     onClick={() => removeSection(s.id)}
