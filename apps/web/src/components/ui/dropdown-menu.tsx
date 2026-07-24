@@ -156,7 +156,7 @@ export const DropdownMenuContent = ({ children, align = "end", className }: Drop
         transformOrigin,
         zIndex: 9999,
       }}
-      className={`min-w-[180px] rounded-lg border border-border bg-card shadow-lg overflow-hidden ${className || ""}`}
+      className={`min-w-45 rounded-lg border border-border bg-card shadow-lg overflow-hidden ${className || ""}`}
     >
       <div className="py-1">{children}</div>
     </div>,

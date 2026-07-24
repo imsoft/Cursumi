@@ -84,7 +84,7 @@ export function QualityAssessmentForm({ value, onChange }: Props) {
         <Textarea
           label="Instrucciones"
           value={value.instructions}
-          className="min-h-[80px]"
+          className="min-h-20"
           onChange={(e) => set({ instructions: e.target.value })}
         />
       </Section>

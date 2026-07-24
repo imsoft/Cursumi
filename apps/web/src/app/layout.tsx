@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { LayoutShell } from "@/components/layout-shell";
+import { ThemeProvider } from "@/components/theme-provider";
+import { CookieConsent } from "@/components/cookie-consent";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { jsonLdScript } from "@/lib/sanitize";
+import { headers } from "next/headers";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
   display: "swap",
 });
-import { ThemeProvider } from "@/components/theme-provider";
-import { CookieConsent } from "@/components/cookie-consent";
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { jsonLdScript } from "@/lib/sanitize"
-import { headers } from "next/headers"
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const ogImage = `${siteUrl}/api/og`;

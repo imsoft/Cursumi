@@ -115,7 +115,7 @@ function SectionQuizEditor({
                 onChange={(e) => handleScoreChange(Number(e.target.value))}
                 className="flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer"
               />
-              <span className="text-lg font-bold text-primary min-w-[48px] text-right">
+              <span className="text-lg font-bold text-primary min-w-12 text-right">
                 {passingScore}%
               </span>
             </div>
@@ -146,7 +146,7 @@ function SectionQuizEditor({
                         placeholder="Enunciado de la pregunta..."
                         value={q.question}
                         rows={3}
-                        className="min-h-[72px] resize-y text-sm"
+                        className="min-h-18 resize-y text-sm"
                         onChange={(e) =>
                           replaceQuestion(qi, { ...q, question: e.target.value })
                         }

@@ -44,12 +44,12 @@ export function InformeFinalForm({ value, onChange }: Props) {
       </Section>
 
       <Section title="Desarrollo del curso">
-        <Textarea label="Objetivos" value={value.objectivesSummary} className="min-h-[80px]" onChange={(e) => set({ objectivesSummary: e.target.value })} />
-        <Textarea label="Desarrollo / metodología" value={value.developmentSummary} className="min-h-[80px]" onChange={(e) => set({ developmentSummary: e.target.value })} />
-        <Textarea label="Resultados" value={value.results} className="min-h-[80px]" onChange={(e) => set({ results: e.target.value })} />
-        <Textarea label="Observaciones" value={value.observations} className="min-h-[80px]" onChange={(e) => set({ observations: e.target.value })} />
-        <Textarea label="Recomendaciones" value={value.recommendations} className="min-h-[80px]" onChange={(e) => set({ recommendations: e.target.value })} />
-        <Textarea label="Conclusiones" value={value.conclusions} className="min-h-[80px]" onChange={(e) => set({ conclusions: e.target.value })} />
+        <Textarea label="Objetivos" value={value.objectivesSummary} className="min-h-20" onChange={(e) => set({ objectivesSummary: e.target.value })} />
+        <Textarea label="Desarrollo / metodología" value={value.developmentSummary} className="min-h-20" onChange={(e) => set({ developmentSummary: e.target.value })} />
+        <Textarea label="Resultados" value={value.results} className="min-h-20" onChange={(e) => set({ results: e.target.value })} />
+        <Textarea label="Observaciones" value={value.observations} className="min-h-20" onChange={(e) => set({ observations: e.target.value })} />
+        <Textarea label="Recomendaciones" value={value.recommendations} className="min-h-20" onChange={(e) => set({ recommendations: e.target.value })} />
+        <Textarea label="Conclusiones" value={value.conclusions} className="min-h-20" onChange={(e) => set({ conclusions: e.target.value })} />
       </Section>
 
       <Section title="Cierre">
