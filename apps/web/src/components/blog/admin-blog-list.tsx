@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Pencil, Trash2, Plus, Eye, EyeOff, FileText } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { PageHeader } from "@/components/shared/page-header";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 
 interface BlogPost {
   id: string;
@@ -46,15 +47,14 @@ export function AdminBlogList() {
 
   useEffect(() => { load(); }, []);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!confirm(`¿Eliminar "${title}"? Esta acción no se puede deshacer.`)) return;
+  const handleDelete = async (id: string) => {
     setDeleting(id);
     try {
       const res = await fetch(`/api/admin/blog/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
       setPosts((prev) => prev.filter((p) => p.id !== id));
     } catch {
-      alert("No se pudo eliminar el post.");
+      setError("No se pudo eliminar el post.");
     } finally {
       setDeleting(null);
     }
@@ -176,16 +176,11 @@ export function AdminBlogList() {
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  title="Eliminar"
+                <ConfirmDeleteButton
+                  message={`¿Eliminar "${post.title}"? Esta acción no se puede deshacer.`}
                   disabled={deleting === post.id}
-                  onClick={() => handleDelete(post.id, post.title)}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                  onConfirm={() => handleDelete(post.id)}
+                />
               </div>
             </CardContent>
           </Card>

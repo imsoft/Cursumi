@@ -15,8 +15,11 @@ export function UnenrollButton({ courseId, enrollmentId, studentName }: Unenroll
   const [loading, setLoading] = useState(false);
   const [removed, setRemoved] = useState(false);
 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const handleUnenroll = async () => {
     setLoading(true);
+    setErrorMsg(null);
     try {
       const res = await fetch(`/api/instructor/courses/${courseId}/students`, {
         method: "DELETE",
@@ -25,12 +28,12 @@ export function UnenrollButton({ courseId, enrollmentId, studentName }: Unenroll
       });
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || "Error al dar de baja");
+        setErrorMsg(data.error || "Error al dar de baja");
         return;
       }
       setRemoved(true);
     } catch {
-      alert("Error de conexión");
+      setErrorMsg("Error de conexión");
     } finally {
       setLoading(false);
       setConfirming(false);
@@ -68,14 +71,17 @@ export function UnenrollButton({ courseId, enrollmentId, studentName }: Unenroll
   }
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="text-destructive hover:text-destructive"
-      onClick={() => setConfirming(true)}
-    >
-      <UserMinus className="mr-1.5 h-3.5 w-3.5" />
-      Dar de baja
-    </Button>
+    <div className="flex flex-col items-end gap-1">
+      <Button
+        variant="ghost"
+        size="sm"
+        className="text-destructive hover:text-destructive"
+        onClick={() => setConfirming(true)}
+      >
+        <UserMinus className="mr-1.5 h-3.5 w-3.5" />
+        Dar de baja
+      </Button>
+      {errorMsg && <span className="text-xs text-destructive">{errorMsg}</span>}
+    </div>
   );
 }

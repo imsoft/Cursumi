@@ -167,7 +167,16 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               {loading ? (
-                <div className="text-muted-foreground">Cargando cursos...</div>
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="rounded-lg border border-border bg-card p-4 space-y-3">
+                      <div className="h-5 w-1/3 bg-muted animate-pulse rounded" />
+                      <div className="h-4 w-1/4 bg-muted animate-pulse rounded" />
+                      <Separator />
+                      <div className="h-4 w-full bg-muted/50 animate-pulse rounded" />
+                    </div>
+                  ))}
+                </div>
               ) : publishedCourses.length === 0 ? (
                 <div className="text-muted-foreground">No tienes cursos publicados aún.</div>
               ) : (
@@ -205,7 +214,11 @@ export default function AnalyticsPage() {
         <TabsContent value="students" className="space-y-4">
           {loading ? (
             <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">Cargando estudiantes...</CardContent>
+              <CardContent className="p-6 space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-12 w-full bg-muted/60 animate-pulse rounded-lg" />
+                ))}
+              </CardContent>
             </Card>
           ) : courseStudents.length === 0 ? (
             <Card>

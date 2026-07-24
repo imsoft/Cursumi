@@ -46,7 +46,7 @@
 :root {
   /* Tipografía UI: Helvetica Neue LT Pro (comercial; sin @font-face solo aplica si el usuario tiene la fuente instalada). */
   --font-geist-sans:
-    "Helvetica Neue LT Pro", "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui,
+    var(--font-plus-jakarta), "Helvetica Neue LT Pro", "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui,
     sans-serif;
   --font-geist-mono: ui-monospace, SFMono-Regular, SFMono, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --radius: 0.65rem;

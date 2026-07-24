@@ -6,6 +6,7 @@ import { BookOpen, Search, Clock, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/ui/combobox";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
 
 export type NoteExpanded = {
@@ -97,7 +98,6 @@ export function NotesClient({ initialNotes }: { initialNotes: NoteExpanded[] }) 
   }, [notes, searchQuery, selectedCourse, selectedInstructor]);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Deseas eliminar esta nota definitivamente?")) return;
     try {
       const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -212,15 +212,10 @@ export function NotesClient({ initialNotes }: { initialNotes: NoteExpanded[] }) 
                     </Button>
                   </Link>
                 )}
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                  onClick={() => handleDelete(note.id)}
-                  title="Eliminar nota"
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
+                <ConfirmDeleteButton
+                  message="¿Deseas eliminar esta nota definitivamente?"
+                  onConfirm={() => handleDelete(note.id)}
+                />
               </div>
             </div>
           ))}

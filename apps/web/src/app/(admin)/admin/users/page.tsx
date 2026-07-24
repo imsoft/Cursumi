@@ -267,7 +267,20 @@ export default function AdminUsersPage() {
 
       {loading ? (
         <Card className="border border-border bg-card/90">
-          <CardContent className="py-12 text-center text-muted-foreground">Cargando usuarios...</CardContent>
+          <CardContent className="p-6 space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center justify-between gap-4 py-2 border-b border-border/40 last:border-0">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-muted animate-pulse" />
+                  <div className="space-y-2">
+                    <div className="h-4 w-40 bg-muted animate-pulse rounded" />
+                    <div className="h-3 w-28 bg-muted animate-pulse rounded" />
+                  </div>
+                </div>
+                <div className="h-6 w-20 bg-muted animate-pulse rounded-full" />
+              </div>
+            ))}
+          </CardContent>
         </Card>
       ) : filteredUsers.length === 0 ? (
         <EmptyState

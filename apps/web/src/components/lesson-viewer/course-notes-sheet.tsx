@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Loader2, Plus, Trash2, Edit2, Check, X, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import {
   Sheet,
   SheetContent,
@@ -99,7 +100,6 @@ export function CourseNotesSheet({ courseId, lessonId }: CourseNotesSheetProps) 
   };
 
   const deleteNote = async (id: string) => {
-    if (!confirm("¿Seguro que deseas eliminar esta nota?")) return;
     try {
       const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete");
@@ -203,14 +203,10 @@ export function CourseNotesSheet({ courseId, lessonId }: CourseNotesSheetProps) 
                           >
                             <Edit2 className="h-3 w-3" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-6 w-6 text-muted-foreground hover:text-destructive"
-                            onClick={() => deleteNote(note.id)}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
+                          <ConfirmDeleteButton
+                            message="¿Seguro que deseas eliminar esta nota?"
+                            onConfirm={() => deleteNote(note.id)}
+                          />
                         </div>
                       </div>
                     </>

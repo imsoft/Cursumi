@@ -255,7 +255,20 @@ export default function AdminCoursesPage() {
 
       {loading ? (
         <Card className="border border-border bg-card/90">
-          <CardContent className="py-12 text-center text-muted-foreground">Cargando cursos...</CardContent>
+          <CardContent className="p-6 space-y-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="flex items-center justify-between gap-4 py-3 border-b border-border/40 last:border-0">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="h-14 w-24 rounded bg-muted animate-pulse shrink-0" />
+                  <div className="space-y-2 flex-1 max-w-md">
+                    <div className="h-4 w-3/4 bg-muted animate-pulse rounded" />
+                    <div className="h-3 w-1/2 bg-muted animate-pulse rounded" />
+                  </div>
+                </div>
+                <div className="h-6 w-20 bg-muted animate-pulse rounded-full" />
+              </div>
+            ))}
+          </CardContent>
         </Card>
       ) : filteredCourses.length === 0 ? (
         <EmptyState

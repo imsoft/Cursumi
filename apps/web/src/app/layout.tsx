@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { LayoutShell } from "@/components/layout-shell";
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+});
 import { ThemeProvider } from "@/components/theme-provider";
 import { CookieConsent } from "@/components/cookie-consent";
 import { Analytics } from "@vercel/analytics/next"
@@ -160,7 +167,7 @@ export default async function RootLayout({
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <html lang="es-419" suppressHydrationWarning>
+    <html lang="es-419" className={plusJakartaSans.variable} suppressHydrationWarning>
       <body className="antialiased">
         {/* Recarga única si falla un chunk tras un deploy (antes de hidratar React). */}
         <script

@@ -129,7 +129,18 @@ export default function InstructorApplicationsPage() {
       </div>
 
       {loading ? (
-        <div className="py-12 text-center text-sm text-muted-foreground">Cargando solicitudes...</div>
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="rounded-xl border border-border bg-card p-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="h-5 w-48 bg-muted animate-pulse rounded" />
+                <div className="h-6 w-24 bg-muted animate-pulse rounded-full" />
+              </div>
+              <div className="h-4 w-64 bg-muted animate-pulse rounded" />
+              <div className="h-12 w-full bg-muted/60 animate-pulse rounded-lg" />
+            </div>
+          ))}
+        </div>
       ) : applications.length === 0 ? (
         <EmptyState
           icon={GraduationCap}

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { UserPlus, Mail, Trash2, X } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
+import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 
 interface Member {
   id: string;
@@ -84,7 +85,6 @@ export default function EmployeesPage() {
   }
 
   async function removeMember(memberId: string) {
-    if (!confirm("¿Eliminar a este miembro de la organización?")) return;
     const res = await fetch(`/api/business/members/${memberId}`, { method: "DELETE" });
     if (res.ok) setMembers((prev) => prev.filter((m) => m.id !== memberId));
   }
@@ -204,9 +204,10 @@ export default function EmployeesPage() {
                     </span>
                     <Badge variant="outline">{roleLabels[m.orgRole] || m.orgRole}</Badge>
                     {m.orgRole !== "owner" && (
-                      <Button variant="ghost" size="sm" onClick={() => removeMember(m.id)}>
-                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                      </Button>
+                      <ConfirmDeleteButton
+                        message="¿Eliminar a este miembro de la organización?"
+                        onConfirm={() => removeMember(m.id)}
+                      />
                     )}
                   </div>
                 </div>
