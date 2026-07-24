@@ -71,7 +71,7 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
     return (
       <Card className="w-full max-w-md border border-border bg-card/90 shadow-2xl">
         <CardHeader className="flex flex-col gap-2 px-6 pt-6">
-          <CardTitle className="text-3xl font-bold text-foreground text-destructive">
+          <CardTitle className="text-3xl font-bold text-destructive">
             Token inválido
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -91,7 +91,7 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
     return (
       <Card className="w-full max-w-md border border-border bg-card/90 shadow-2xl">
         <CardHeader className="flex flex-col gap-2 px-6 pt-6">
-          <CardTitle className="text-3xl font-bold text-foreground text-green-600">
+          <CardTitle className="text-3xl font-bold text-green-600">
             ¡Contraseña restablecida!
           </CardTitle>
           <p className="text-sm text-muted-foreground">
