@@ -6,12 +6,14 @@ import { ExamInterface } from "@/components/student/exam-interface";
 import { ExamResults } from "@/components/student/exam-results";
 import { Button } from "@/components/ui/button";
 import { Award, Clock, RefreshCw } from "lucide-react";
-import type { CourseFinalExam } from "@/components/instructor/course-types";
+import type { CourseFinalExam, CourseLessonOption } from "@/components/instructor/course-types";
 
 interface ExamPageClientProps {
   courseId: string;
   courseTitle: string;
   exam: CourseFinalExam;
+  /** Lecciones del curso, para recomendar videos de repaso al fallar. */
+  lessons: CourseLessonOption[];
   existingSubmission: {
     score: number;
     passed: boolean;
@@ -25,6 +27,7 @@ export function ExamPageClient({
   courseId,
   courseTitle,
   exam,
+  lessons,
   existingSubmission,
 }: ExamPageClientProps) {
   const [activeSubmission, setActiveSubmission] = useState(existingSubmission);
@@ -95,7 +98,8 @@ export function ExamPageClient({
         </div>
         <ExamResults
           exam={exam}
-          userAnswers={activeSubmission.answers}
+          courseId={courseId}
+          lessons={lessons}
           evaluations={activeSubmission.evaluations}
           score={activeSubmission.score}
           passed={activeSubmission.passed}
@@ -148,7 +152,8 @@ export function ExamPageClient({
         </div>
         <ExamResults
           exam={exam}
-          userAnswers={result.answers}
+          courseId={courseId}
+          lessons={lessons}
           evaluations={result.evaluations}
           score={result.score}
           passed={result.passed}

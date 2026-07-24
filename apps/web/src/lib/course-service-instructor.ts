@@ -355,6 +355,24 @@ export async function updateCourse(courseId: string, instructorId: string, data:
   return getCourseDetail(courseId);
 }
 
+/**
+ * Lista plana de lecciones del curso (id, título y sección) para el selector de
+ * "video de repaso" de las preguntas del examen. Ordenadas por sección y lección.
+ */
+export async function getCourseLessonOptions(courseId: string) {
+  const sections = await prisma.courseSection.findMany({
+    where: { courseId },
+    orderBy: { order: "asc" },
+    select: {
+      title: true,
+      lessons: { orderBy: { order: "asc" }, select: { id: true, title: true } },
+    },
+  });
+  return sections.flatMap((s) =>
+    s.lessons.map((l) => ({ id: l.id, title: l.title, sectionTitle: s.title })),
+  );
+}
+
 export async function getCourseDetail(courseId: string) {
   return prisma.course.findUnique({
     where: { id: courseId },

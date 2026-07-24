@@ -1,15 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Trophy, AlertCircle, Circle } from "lucide-react";
-import type { CourseFinalExam } from "@/components/instructor/course-types";
-import { stripHtml } from "@/lib/utils";
+import { XCircle, Trophy, AlertCircle, PlayCircle, BookOpen } from "lucide-react";
+import type { CourseFinalExam, CourseLessonOption } from "@/components/instructor/course-types";
 
 interface ExamResultsProps {
   exam: CourseFinalExam;
-  userAnswers: Record<string, number>;
+  courseId: string;
+  lessons: CourseLessonOption[];
   evaluations: Record<string, boolean>;
   score: number;
   passed: boolean;
@@ -20,7 +20,8 @@ interface ExamResultsProps {
 
 export const ExamResults = ({
   exam,
-  userAnswers,
+  courseId,
+  lessons,
   evaluations,
   score,
   passed,
@@ -31,6 +32,19 @@ export const ExamResults = ({
   const canRetry = exam.attemptsAllowed ? attemptsUsed < exam.attemptsAllowed : true;
   const totalQuestions = exam.questions.length;
   const correctAnswers = Object.values(evaluations).filter(Boolean).length;
+
+  // Videos a repasar: lecciones ligadas a las preguntas que el alumno falló.
+  // No revelamos CUÁLES preguntas falló — solo qué temas conviene reforzar.
+  const lessonById = new Map(lessons.map((l) => [l.id, l]));
+  const reviewLessonIds = new Set<string>();
+  for (const q of exam.questions) {
+    if (evaluations[q.id] === false && q.relatedLessonId) {
+      reviewLessonIds.add(q.relatedLessonId);
+    }
+  }
+  const reviewLessons = [...reviewLessonIds]
+    .map((id) => lessonById.get(id))
+    .filter((l): l is CourseLessonOption => !!l);
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4">
@@ -83,12 +97,12 @@ export const ExamResults = ({
             </div>
           </div>
 
-          {!passed && canRetry && (
+          {!passed && canRetry && exam.attemptsAllowed && (
             <div className="rounded-lg border border-border bg-background p-4 mb-4">
               <div className="flex items-center gap-2 justify-center">
                 <AlertCircle className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  Te quedan {exam.attemptsAllowed! - attemptsUsed} intentos
+                  Te quedan {exam.attemptsAllowed - attemptsUsed} intentos
                 </span>
               </div>
             </div>
@@ -109,102 +123,62 @@ export const ExamResults = ({
         </CardContent>
       </Card>
 
-      {/* Desglose de respuestas */}
-      <Card className="border border-border bg-card">
-        <CardHeader>
-          <CardTitle>Revisión de respuestas</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {exam.questions.map((question, index) => {
-            const userAnswer = userAnswers[question.id];
-            const isCorrect = evaluations[question.id] === true;
-
-            return (
-              <Card
-                key={question.id}
-                className={`border-2 ${
-                  isCorrect
-                    ? "border-green-300 bg-green-50 dark:border-green-800 dark:bg-green-950/20"
-                    : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/20"
-                }`}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3 mb-3">
-                    {isCorrect ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-600 shrink-0 mt-0.5" />
-                    ) : (
-                      <XCircle className="h-6 w-6 text-red-600 shrink-0 mt-0.5" />
-                    )}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline">Pregunta {index + 1}</Badge>
-                        <Badge variant="outline">{question.points} puntos</Badge>
+      {/* Repaso de videos: solo cuando NO aprobó. En vez de decirle qué preguntas
+          falló, lo mandamos a reforzar los temas de esas preguntas. */}
+      {!passed && (
+        <Card className="border-l-4 border-l-primary bg-primary/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <BookOpen className="h-5 w-5 text-primary" />
+              Repasa antes de tu próximo intento
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {reviewLessons.length > 0 ? (
+              <>
+                <p className="text-sm text-muted-foreground">
+                  Estos son los temas de las preguntas en las que puedes mejorar. Vuelve a verlos
+                  con calma para llegar seguro a tu próximo intento.
+                </p>
+                <div className="space-y-2">
+                  {reviewLessons.map((lesson) => (
+                    <Link
+                      key={lesson.id}
+                      href={`/dashboard/my-courses/${courseId}/lessons/${lesson.id}`}
+                      className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:border-primary/50 hover:bg-primary/5"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                        <PlayCircle className="h-5 w-5 text-primary" />
                       </div>
-                      <p className="text-base font-semibold text-foreground">
-                        {stripHtml(question.question)}
-                      </p>
-                    </div>
-                  </div>
-
-                  {question.type === "multiple-choice" && question.options && (
-                    <div className="space-y-2 ml-9">
-                      {question.options.map((option, optIndex) => {
-                        const isUserAnswer = userAnswer === optIndex;
-                        
-                        // We do not expose which one was the correct answer to prevent
-                        // students from simply writing down the correct answers and
-                        // retrying to get an instant 100%. We just highlight what they submitted.
-
-                        return (
-                          <div
-                            key={optIndex}
-                            className={`flex items-center gap-3 rounded-lg border p-3 ${
-                              isUserAnswer && isCorrect
-                                ? "border-green-500 bg-green-100 dark:bg-green-950/30"
-                                : isUserAnswer && !isCorrect
-                                ? "border-red-500 bg-red-100 dark:bg-red-950/30"
-                                : "border-border bg-background"
-                            }`}
-                          >
-                            <div className="shrink-0">
-                              {isUserAnswer && isCorrect ? (
-                                <CheckCircle2 className="h-5 w-5 text-green-600" />
-                              ) : isUserAnswer && !isCorrect ? (
-                                <XCircle className="h-5 w-5 text-red-600" />
-                              ) : (
-                                <Circle className="h-5 w-5 text-muted-foreground" />
-                              )}
-                            </div>
-                            <span
-                              className={`text-sm ${
-                                isUserAnswer
-                                  ? "font-medium"
-                                  : "text-muted-foreground"
-                              }`}
-                            >
-                              {stripHtml(option)}
-                            </span>
-                            {isUserAnswer && isCorrect && (
-                              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] bg-primary/10 text-primary ml-auto">
-                                Correcta
-                              </span>
-                            )}
-                            {isUserAnswer && !isCorrect && (
-                              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border bg-background ml-auto border-red-500 text-red-600">
-                                Tu respuesta
-                              </span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
-        </CardContent>
-      </Card>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-foreground">{lesson.title}</p>
+                        <p className="truncate text-xs text-muted-foreground">{lesson.sectionTitle}</p>
+                      </div>
+                      <span className="shrink-0 text-xs font-medium text-primary">Ver video →</span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex items-start gap-3">
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p className="font-medium text-foreground">Repasa el contenido del curso</p>
+                  <p>
+                    Vuelve a ver las lecciones del curso, tómate tu tiempo para leer cada pregunta
+                    con cuidado y, si tienes dudas, consulta con tu instructor.
+                  </p>
+                  <Button variant="outline" size="sm" className="mt-2" asChild>
+                    <Link href={`/dashboard/my-courses/${courseId}`}>
+                      Ir al curso
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Resumen de estadísticas */}
       <Card className="border border-border bg-card/90">
@@ -215,15 +189,11 @@ export const ExamResults = ({
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Respuestas correctas</p>
-              <p className="text-2xl font-bold text-foreground">
-                {correctAnswers}
-              </p>
+              <p className="text-2xl font-bold text-foreground">{correctAnswers}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Respuestas incorrectas</p>
-              <p className="text-2xl font-bold text-foreground">
-                {totalQuestions - correctAnswers}
-              </p>
+              <p className="text-2xl font-bold text-foreground">{totalQuestions - correctAnswers}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Calificación obtenida</p>
@@ -232,28 +202,6 @@ export const ExamResults = ({
           </div>
         </CardContent>
       </Card>
-
-      {/* Mensaje de ayuda si no pasó */}
-      {!passed && (
-        <Card className="border-l-4 border-l-blue-600 bg-blue-50 dark:bg-blue-950/20">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
-              <div className="space-y-2">
-                <p className="font-semibold text-blue-900 dark:text-blue-100">
-                  Consejos para tu próximo intento:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-sm text-blue-800 dark:text-blue-200">
-                  <li>Revisa el material del curso nuevamente</li>
-                  <li>Presta atención a las respuestas correctas mostradas arriba</li>
-                  <li>Tómate tu tiempo para leer cada pregunta cuidadosamente</li>
-                  <li>Si tienes dudas, consulta con el instructor</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { getCachedSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { ExamPageClient } from "@/components/student/exam-page-client";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
-import { sanitizeExamForClient } from "@/lib/course-service";
+import { sanitizeExamForClient, getCourseLessonOptions } from "@/lib/course-service";
 
 export default async function ExamPage({
   params,
@@ -28,12 +28,15 @@ export default async function ExamPage({
   if (!finalExam) redirect(`/dashboard/my-courses/${courseId}`);
 
   const safeExam = sanitizeExamForClient(finalExam);
+  // Lecciones del curso: para recomendar "repasa estos videos" al fallar.
+  const lessons = await getCourseLessonOptions(courseId).catch(() => []);
 
   return (
     <ExamPageClient
       courseId={courseId}
       courseTitle={enrollment.course.title}
       exam={safeExam}
+      lessons={lessons}
       existingSubmission={
         enrollment.examSubmission
           ? {

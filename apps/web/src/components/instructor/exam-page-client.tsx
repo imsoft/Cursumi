@@ -11,13 +11,15 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft, Save, Plus, Minus, CheckCircle2,
 } from "lucide-react";
-import type { CourseFinalExam, QuizQuestion } from "./course-types";
+import type { CourseFinalExam, QuizQuestion, CourseLessonOption } from "./course-types";
 import { saveCourseExamContent } from "@/app/actions/course-actions";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 
 interface ExamPageClientProps {
   courseId: string;
   exam: CourseFinalExam | null;
+  /** Lecciones del curso para el selector de "video de repaso" por pregunta. */
+  lessons: CourseLessonOption[];
 }
 
 function newQuestion(): QuizQuestion {
@@ -31,7 +33,7 @@ function newQuestion(): QuizQuestion {
   };
 }
 
-export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
+export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -408,6 +410,28 @@ export function ExamPageClient({ courseId, exam }: ExamPageClientProps) {
                       />
                     </div>
                   )}
+
+                  {/* Video de repaso: si el alumno falla esta pregunta, se le
+                      recomienda volver a ver esta lección antes de reintentar. */}
+                  <div className="ml-8 border-t border-border/60 pt-3">
+                    <label className="mb-1 block text-xs font-medium text-muted-foreground">
+                      Video de repaso si fallan esta pregunta (opcional)
+                    </label>
+                    <select
+                      className="w-full max-w-md rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      value={q.relatedLessonId ?? ""}
+                      onChange={(e) =>
+                        updateQuestion(q.id, { relatedLessonId: e.target.value || undefined })
+                      }
+                    >
+                      <option value="">Sin video de repaso</option>
+                      {lessons.map((l) => (
+                        <option key={l.id} value={l.id}>
+                          {l.sectionTitle} — {l.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </CardContent>
               </Card>
             ))}

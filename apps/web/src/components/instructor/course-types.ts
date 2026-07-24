@@ -128,6 +128,13 @@ export type CourseSection = {
   minigame?: SectionMinigame;
 };
 
+/** Opción de lección para el selector "video de repaso" de una pregunta. */
+export type CourseLessonOption = {
+  id: string;
+  title: string;
+  sectionTitle: string;
+};
+
 export type QuizQuestion = {
   id: string;
   question: string;
@@ -136,6 +143,11 @@ export type QuizQuestion = {
   correctAnswer?: string | number; // Para multiple-choice y true-false (índice)
   correctAnswers?: number[]; // Para checkbox (múltiples índices correctos)
   points?: number;
+  /**
+   * Lección que repasa esta pregunta. Si el alumno la falla en el examen,
+   * se le recomienda volver a ver este video para reforzar antes de reintentar.
+   */
+  relatedLessonId?: string;
 };
 
 export type EvaluationCriterion = {
