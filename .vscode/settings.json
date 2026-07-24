@@ -1,0 +1,6 @@
+{
+  "//": "Tailwind v4 usa at-rules (@theme, @apply, @custom-variant, @import 'tailwindcss') que el validador CSS integrado de VS Code/Cursor no reconoce. Ignorar los 'unknown at rules' evita esos warnings sin afectar el resaltado ni el build.",
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore"
+}
