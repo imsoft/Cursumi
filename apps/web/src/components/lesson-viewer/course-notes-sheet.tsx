@@ -117,7 +117,7 @@ export function CourseNotesSheet({ courseId, lessonId }: CourseNotesSheetProps) 
           <span className="hidden sm:inline">Mis Apuntes</span>
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto z-[200]">
+      <SheetContent className="w-full sm:max-w-md overflow-y-auto z-200">
         <SheetHeader className="mb-6">
           <SheetTitle>Apuntes de la Lección</SheetTitle>
           <SheetDescription>

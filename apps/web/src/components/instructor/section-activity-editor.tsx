@@ -333,7 +333,7 @@ function MemoryMinigameEditor({
           value={instruction ?? ""}
           onChange={(e) => onInstructionChange(e.target.value)}
           rows={3}
-          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
+          className="min-h-20 resize-y text-foreground placeholder:text-muted-foreground"
         />
         <p className="text-xs text-muted-foreground">
           Opcional. Se muestra arriba del juego para orientar al estudiante.
@@ -429,7 +429,7 @@ function HangmanMinigameEditor({
           value={instruction ?? ""}
           onChange={(e) => onInstructionChange(e.target.value)}
           rows={3}
-          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
+          className="min-h-20 resize-y text-foreground placeholder:text-muted-foreground"
         />
         <p className="text-xs text-muted-foreground">
           Opcional. Se muestra arriba del juego.
@@ -534,7 +534,7 @@ function SortMinigameEditor({
           value={instruction ?? ""}
           onChange={(e) => onInstructionChange(e.target.value)}
           rows={3}
-          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
+          className="min-h-20 resize-y text-foreground placeholder:text-muted-foreground"
         />
       </div>
       <p className="text-xs text-muted-foreground">
@@ -632,7 +632,7 @@ function MatchMinigameEditor({
           value={instruction ?? ""}
           onChange={(e) => onInstructionChange(e.target.value)}
           rows={3}
-          className="min-h-[80px] resize-y text-foreground placeholder:text-muted-foreground"
+          className="min-h-20 resize-y text-foreground placeholder:text-muted-foreground"
         />
       </div>
       <p className="text-xs text-muted-foreground">

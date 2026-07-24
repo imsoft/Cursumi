@@ -94,7 +94,7 @@ export const CertificateCard = ({ certificate }: CertificateCardProps) => {
         </div>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col space-y-4 px-4 pb-4 pt-0">
-        <div className="flex min-h-[80px] flex-1 flex-col justify-start space-y-2 border-t border-border pt-3">
+        <div className="flex min-h-20 flex-1 flex-col justify-start space-y-2 border-t border-border pt-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Calendar className="h-3 w-3" />
             <span>Emitido: {certificate.issueDate}</span>

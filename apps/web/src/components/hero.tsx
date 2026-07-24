@@ -53,7 +53,7 @@ export const Hero = ({ stats }: HeroProps) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="relative flex min-h-[500px] flex-col items-center justify-center overflow-hidden px-4 py-16 text-center"
+      className="relative flex min-h-125 flex-col items-center justify-center overflow-hidden px-4 py-16 text-center"
     >
       {/* Floating background orbs */}
       <motion.div
