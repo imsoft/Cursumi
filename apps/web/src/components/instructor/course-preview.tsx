@@ -11,7 +11,6 @@ import { ArrowLeft, Save, Send, AlertCircle, MapPin } from "lucide-react";
 import type { CourseFormData } from "./course-types";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { ModalityBadge } from "@/components/ui/modality-badge";
-import { MODALITY_CONFIG } from "@/lib/modality";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { CourseStatusPanel } from "./course-status-panel";
 import { getCourseCompletion } from "@/lib/course-completion";

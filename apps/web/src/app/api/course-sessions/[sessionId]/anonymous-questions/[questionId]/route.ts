@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSession, handleApiError, ApiError } from "@/lib/api-helpers";
+import { requireSession, handleApiError } from "@/lib/api-helpers";
 import { getUserRole } from "@/lib/user-service";
 import {
   getCourseSessionOrThrow,

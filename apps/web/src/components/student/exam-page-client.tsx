@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ExamInterface } from "@/components/student/exam-interface";
 import { ExamResults } from "@/components/student/exam-results";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, XCircle, Award, Clock, RefreshCw } from "lucide-react";
+import { Award, Clock, RefreshCw } from "lucide-react";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
 
 interface ExamPageClientProps {

@@ -34,7 +34,7 @@ export default async function CourseAnalyticsPage({
         <p className="text-sm text-muted-foreground mt-1">{course.title}</p>
       </div>
 
-      <AnalyticsDashboard courseId={id} totalEnrolled={course._count.enrollments} />
+      <AnalyticsDashboard courseId={id} />
     </div>
   );
 }

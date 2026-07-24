@@ -6,13 +6,6 @@ import { sendVerificationEmail } from "@/lib/email";
 import { recordAuditLog } from "@/lib/audit-log";
 import { randomBytes } from "crypto";
 
-const patchSchema = z.discriminatedUnion("action", [
-  z.object({ action: z.literal("change-role"), role: z.enum(["student", "instructor", "admin"]) }),
-  z.object({ action: z.literal("verify-email") }),
-  z.object({ action: z.literal("resend-verification") }),
-  // Legacy (sin action) — mantiene compatibilidad con el código anterior
-]).or(z.object({ role: z.enum(["student", "instructor", "admin"]) }));
-
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await requireSession();

@@ -11,10 +11,8 @@ import { getSessionSafe } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Monitor, Users, Calendar, Clock, Video } from "lucide-react";
+import { Monitor, Users, Calendar, Clock, Video } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
-import { EnrollActionForm } from "@/components/student/enroll-action-form";
-import { CheckoutButton } from "@/components/student/checkout-button";
 import { ReviewSection } from "@/components/student/review-section";
 import { LearningReflectionsSection } from "@/components/courses/learning-reflections-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
@@ -25,7 +23,6 @@ import { formatDuration } from "@/lib/course-completion";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { parseDurationToMinutes } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
-import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 
 type Params = { params: Promise<{ slug: string }> };
 const ogFallback =

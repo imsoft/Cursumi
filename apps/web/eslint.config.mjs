@@ -15,6 +15,18 @@ const eslintConfig = defineConfig([
       // ── Reglas pre-existentes bajadas a warn ─────────────────────────────────
       // Se migrarán gradualmente; no deben bloquear el CI mientras tanto
 
+      // Variables/args/destructuring prefijados con "_" = intencionalmente sin usar
+      // (p. ej. `const { email: _email, ...payload } = values` omite un campo, o
+      // parámetros de firma de callback que el server recomputa). ignoreRestSiblings
+      // cubre el patrón de destructuring-omit aunque no lleve prefijo.
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+      }],
+
       // TypeScript
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-this-alias": "warn",

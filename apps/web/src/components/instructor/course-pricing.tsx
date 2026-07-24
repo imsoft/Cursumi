@@ -10,7 +10,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, TrendingUp } from "lucide-react";
-import type { CourseFormData, CourseSessionData } from "./course-types";
+import type { CourseFormData } from "./course-types";
 import { formatPriceMXN } from "@/lib/utils";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { MODALITY_CONFIG } from "@/lib/modality";
@@ -74,7 +74,6 @@ export const CoursePricing = ({ data, onUpdate, onNext, onPrevious }: CoursePric
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const watchedPrice = form.watch("price");
-  // eslint-disable-next-line react-hooks/incompatible-library
   const isFree = form.watch("isFree");
 
   const handleToggleFree = (checked: boolean) => {

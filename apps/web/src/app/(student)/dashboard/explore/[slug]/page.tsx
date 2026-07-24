@@ -7,14 +7,13 @@ import { getPublishedCourseDetail, enrollInCourse } from "@/app/actions/course-a
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Monitor, Users, Calendar, Video } from "lucide-react";
+import { Monitor, Calendar } from "lucide-react";
 import { ReviewSection } from "@/components/student/review-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatPriceMXN } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
-import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
 type Params = { params: Promise<{ slug: string }> };

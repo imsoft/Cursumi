@@ -16,8 +16,8 @@ function getStripeInstance(): Stripe {
 
 // Proxy so callers can `stripe.checkout.sessions.create(...)` etc.
 export const stripe = new Proxy({} as Stripe, {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(_target, prop: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (getStripeInstance() as any)[prop];
   },
 });

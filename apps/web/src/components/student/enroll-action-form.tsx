@@ -3,7 +3,6 @@
 import { useActionState, useEffect, useOptimistic } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { CheckCircle2, Loader2 } from "lucide-react";
 

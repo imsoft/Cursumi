@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, Trash2, Plus } from "lucide-react";
+import { ArrowLeft, Users, Trash2 } from "lucide-react";
 
 interface TeamMember {
   id: string;

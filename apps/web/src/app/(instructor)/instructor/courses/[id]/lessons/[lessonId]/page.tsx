@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getLessonForEdit } from "@/app/actions/course-actions";
 import { LessonPageClient } from "@/components/instructor/lesson-page-client";
 

@@ -15,9 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { LogOut, LucideIcon } from "lucide-react";
-import { signOut } from "@/lib/auth-client";
+import { LucideIcon } from "lucide-react";
 
 interface NavItem {
   title: string;
@@ -29,17 +27,10 @@ interface NavItem {
 interface AppSidebarProps {
   navItems: NavItem[];
   title?: string;
-  footerAction?: React.ReactNode;
 }
 
-export function AppSidebar({ navItems, title = "Cursumi", footerAction }: AppSidebarProps) {
+export function AppSidebar({ navItems, title = "Cursumi" }: AppSidebarProps) {
   const pathname = usePathname();
-
-  const handleSignOut = async () => {
-    await signOut();
-    // Navegación completa: evita refetch pesado de RSC (router.refresh) en el layout actual.
-    window.location.assign("/");
-  };
 
   return (
     <Sidebar collapsible="icon">

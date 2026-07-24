@@ -9,7 +9,7 @@ import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowLeft, Save, Plus, Minus, Trash2, CheckCircle2,
+  ArrowLeft, Save, Plus, Minus, CheckCircle2,
 } from "lucide-react";
 import type { CourseFinalExam, QuizQuestion } from "./course-types";
 import { saveCourseExamContent } from "@/app/actions/course-actions";

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shared/page-header";
-import { Download, FileDown } from "lucide-react";
+import { Download } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { TEMPLATES, getTemplateDownloadUrl } from "@/lib/templates";
 

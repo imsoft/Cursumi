@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Calendar, Clock, Users, Check, Video } from "lucide-react";
 
 export interface PickableSession {

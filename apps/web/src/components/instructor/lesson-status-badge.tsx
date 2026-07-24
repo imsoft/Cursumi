@@ -16,7 +16,7 @@ export function LessonStatusBadge({
   showPercentage = false,
   className,
 }: LessonStatusBadgeProps) {
-  const { canPublish, statusLabel, statusTone, percentage } = getLessonCompletion(lesson);
+  const { statusLabel, statusTone, percentage } = getLessonCompletion(lesson);
 
   const styles = {
     error: {

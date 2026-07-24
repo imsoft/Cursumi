@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { resetPassword } from "@/lib/auth-client";
 
@@ -29,7 +28,6 @@ interface ResetPasswordFormProps {
 }
 
 export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   

@@ -105,10 +105,8 @@ function LessonFunnelRow({
 
 export function AnalyticsDashboard({
   courseId,
-  totalEnrolled,
 }: {
   courseId: string;
-  totalEnrolled: number;
 }) {
   const [data, setData] = useState<CourseAnalytics | null>(null);
   const [loading, setLoading] = useState(true);

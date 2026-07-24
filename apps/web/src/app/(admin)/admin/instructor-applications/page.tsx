@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
@@ -104,8 +103,6 @@ export default function InstructorApplicationsPage() {
       setProcessing(null);
     }
   };
-
-  const pending = applications.filter((a) => a.status === "pending").length;
 
   return (
     <div className="space-y-6">

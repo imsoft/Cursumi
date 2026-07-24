@@ -18,12 +18,10 @@ import {
   HelpCircle,
   ClipboardList,
   CheckCircle,
-  MapPin,
   Clock,
   GraduationCap,
   Award,
   Lock,
-  Video,
   Gamepad2,
 } from "lucide-react";
 import type { LessonType } from "@/generated/prisma";

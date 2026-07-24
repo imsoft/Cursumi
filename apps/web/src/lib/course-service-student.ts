@@ -206,7 +206,7 @@ export function sanitizeExamForClient(exam: CourseFinalExam): CourseFinalExam {
   return {
     ...exam,
     questions: exam.questions.map((q) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // correctAnswer se descarta a propósito: no se envía la respuesta al cliente
       const { correctAnswer, ...safeQuestion } = q;
       return safeQuestion as CourseFinalExam["questions"][number];
     }),

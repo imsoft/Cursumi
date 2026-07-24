@@ -150,7 +150,7 @@ function UnitBlock({ unit }: { unit: VirtualLearningUnit }) {
           </tr>
         </thead>
         <tbody>
-          {unit.activities.map((a, i) => (
+          {unit.activities.map((a) => (
             <tr key={a.id}>
               <td style={dataCell(colWidths.title)}>{a.title}</td>
               <td style={dataCell(colWidths.instructions)}>{a.instructions}</td>

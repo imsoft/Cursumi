@@ -3,7 +3,7 @@ import { getCourseDetailForUser, getInstructorCourseReviews } from "@/app/action
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Star, MessageSquare } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { formatDateLongMX } from "@/lib/date-format";
 
