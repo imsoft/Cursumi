@@ -416,7 +416,7 @@ export function CourseSessionsManager({
             <div>
               <label className="text-xs font-medium text-muted-foreground">Capacidad máxima</label>
               <Input
-                className="mt-1 max-w-[200px]"
+                className="mt-1 max-w-50"
                 type="number"
                 min={1}
                 value={draft.maxStudents}

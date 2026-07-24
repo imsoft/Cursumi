@@ -189,7 +189,7 @@ export default function FinancesPage() {
                       <div key={item.month} className="space-y-2">
                         <div className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-3">
-                            <span className="font-medium text-foreground min-w-[100px] capitalize">
+                            <span className="font-medium text-foreground min-w-25 capitalize">
                               {item.month}
                             </span>
                             <Badge variant="outline">

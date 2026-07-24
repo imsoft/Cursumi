@@ -120,7 +120,7 @@ export default function EmployeesPage() {
         <Card>
           <CardContent className="pt-6">
             <form onSubmit={handleInvite} className="flex flex-wrap items-end gap-3">
-              <div className="flex-1 min-w-[250px]">
+              <div className="flex-1 min-w-62.5">
                 <Input
                   type="email"
                   label="Email del empleado"

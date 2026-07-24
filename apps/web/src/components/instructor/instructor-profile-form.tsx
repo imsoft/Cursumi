@@ -223,10 +223,10 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
             </div>
           </div>
           <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-end">
-            <Button type="button" variant="outline" className="w-full sm:w-auto sm:min-w-[120px]">
+            <Button type="button" variant="outline" className="w-full sm:w-auto sm:min-w-30">
               Cancelar
             </Button>
-            <Button type="submit" className="w-full sm:w-auto sm:min-w-[140px]" disabled={form.formState.isSubmitting}>
+            <Button type="submit" className="w-full sm:w-auto sm:min-w-35" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? "Guardando…" : "Guardar cambios"}
             </Button>
           </div>

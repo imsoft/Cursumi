@@ -34,7 +34,7 @@ export function Breadcrumbs({ items, showHome = true, className }: BreadcrumbsPr
               {isLast ? (
                 <span
                   aria-current="page"
-                  className="font-medium text-foreground truncate max-w-[200px] sm:max-w-[300px]"
+                  className="font-medium text-foreground truncate max-w-50 sm:max-w-75"
                 >
                   {Icon && <Icon className="mr-1 inline-block h-3.5 w-3.5" />}
                   {item.label}
