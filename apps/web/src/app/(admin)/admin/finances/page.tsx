@@ -202,7 +202,7 @@ export default function FinancesPage() {
                         </div>
                         <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
                           <div
-                            className="h-full bg-gradient-to-r from-green-500 to-green-600 transition-all"
+                            className="h-full bg-linear-to-r from-green-500 to-green-600 transition-all"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>

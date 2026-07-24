@@ -55,7 +55,7 @@ export const CertificateCard = ({ certificate }: CertificateCardProps) => {
   return (
     <Card className="group flex h-full flex-col border border-border bg-card/90 transition-shadow hover:shadow-lg">
       {certificate.imageUrl && (
-        <div className="relative h-48 w-full overflow-hidden rounded-t-2xl bg-gradient-to-br from-primary/20 to-secondary/20">
+        <div className="relative h-48 w-full overflow-hidden rounded-t-2xl bg-linear-to-br from-primary/20 to-secondary/20">
           <Image
             src={certificate.imageUrl}
             alt={certificate.courseTitle}

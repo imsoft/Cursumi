@@ -63,7 +63,7 @@ export default async function StudentBlogPage() {
                     className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="h-44 w-full bg-gradient-to-br from-primary/20 to-primary/5" />
+                  <div className="h-44 w-full bg-linear-to-br from-primary/20 to-primary/5" />
                 )}
                 <CardContent className="flex flex-col gap-3 p-4">
                   {post.tags.length > 0 && (

@@ -12,7 +12,7 @@ export function AuthPageShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       <main className="flex min-h-[calc(100svh-4rem)]">
         {/* Panel izquierdo — solo desktop */}
-        <div className="hidden lg:flex lg:w-[45%] xl:w-[40%] flex-col justify-between bg-gradient-to-br from-primary/90 to-primary p-12 text-primary-foreground">
+        <div className="hidden lg:flex lg:w-[45%] xl:w-[40%] flex-col justify-between bg-linear-to-br from-primary/90 to-primary p-12 text-primary-foreground">
           <div className="space-y-8">
             <div className="space-y-3">
               <p className="text-sm font-semibold uppercase tracking-widest opacity-75">
