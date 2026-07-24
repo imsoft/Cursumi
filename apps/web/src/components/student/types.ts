@@ -45,6 +45,8 @@ export type Certificate = {
   imageUrl?: string;
   instructorSignatureUrl?: string | null;
   adminSignatureUrl?: string | null;
+  /** Nombre de quien firma como segunda firma (dirección de la plataforma) */
+  adminName?: string | null;
   /** Altura de la firma en px (default 48 → 3rem) */
   signatureHeight?: number;
 };

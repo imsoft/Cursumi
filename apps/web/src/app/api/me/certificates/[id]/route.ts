@@ -34,7 +34,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         }),
         prisma.user.findFirst({
           where: { role: "admin", signatureUrl: { not: null } },
-          select: { signatureUrl: true },
+          select: { name: true, signatureUrl: true },
           orderBy: { createdAt: "asc" },
         }),
       ]);
@@ -55,6 +55,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         imageUrl: dbCert.course.imageUrl || null,
         instructorSignatureUrl: dbCert.course.instructor?.signatureUrl || null,
         adminSignatureUrl: adminUser?.signatureUrl || null,
+        adminName: adminUser?.name || null,
       });
     }
 
@@ -86,7 +87,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
     const adminUser = await prisma.user.findFirst({
       where: { role: "admin", signatureUrl: { not: null } },
-      select: { signatureUrl: true },
+      select: { name: true, signatureUrl: true },
       orderBy: { createdAt: "asc" },
     });
 
@@ -105,6 +106,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       imageUrl: enrollment.course.imageUrl || null,
       instructorSignatureUrl: enrollment.course.instructor?.signatureUrl || null,
       adminSignatureUrl: adminUser?.signatureUrl || null,
+      adminName: adminUser?.name || null,
     });
   } catch (error) {
     return handleApiError(error);

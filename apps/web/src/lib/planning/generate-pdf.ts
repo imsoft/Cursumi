@@ -6,9 +6,6 @@
  * un pie con el logo de Cursumi, el nombre de marca y el número de página.
  */
 
-const BRAND_PURPLE: [number, number, number] = [109, 40, 217]; // #6d28d9
-const BRAND_LINE: [number, number, number] = [221, 214, 254]; // #ddd6fe
-const FOOTER_MUTED: [number, number, number] = [120, 120, 120];
 const LOGO_SRC = "/icons/icon-512.png";
 
 let cachedLogo: string | null | undefined;
@@ -64,6 +61,14 @@ export async function generateElementPdf(
     scale?: number;
     /** Calidad JPEG 0–1 (default 0.92) */
     quality?: number;
+    /**
+     * Documento de una sola página con su propio diseño completo (p. ej. una
+     * constancia): captura `el` tal cual, SIN el paginador "inteligente" que
+     * reparte los hijos en páginas A4 (pensado para reportes largos que
+     * fluyen), y SIN el sello de logo/número de página que ese paginador
+     * agrega — el documento ya trae su propia marca y folio.
+     */
+    singlePage?: boolean;
   },
 ): Promise<void> {
   const [html2canvasMod, jsPDFMod, logo] = await Promise.all([
@@ -71,7 +76,7 @@ export async function generateElementPdf(
     // (html2canvas clásico lanza error al parsearlos).
     import("html2canvas-pro"),
     import("jspdf"),
-    loadLogoDataUrl(),
+    opts?.singlePage ? Promise.resolve(null) : loadLogoDataUrl(),
   ]);
 
   const html2canvas = html2canvasMod.default;
@@ -79,6 +84,24 @@ export async function generateElementPdf(
   const jsPDFMods = jsPDFMod as any;
   const JsPDF = jsPDFMods.jsPDF ?? jsPDFMods.default?.jsPDF ?? jsPDFMods.default;
   if (!JsPDF) throw new Error("No se pudo cargar jsPDF");
+
+  if (opts?.singlePage) {
+    const canvas = await html2canvas(el, {
+      scale: opts?.scale ?? 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: "#ffffff",
+    });
+    const pdf = new JsPDF({ orientation, unit: "mm", format: "a4" });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const imgData = canvas.toDataURL("image/jpeg", opts?.quality ?? 0.92);
+    // El elemento ya tiene exactamente la proporción A4 de `orientation`
+    // (p. ej. 1123×794 para landscape) — una sola página, sin recortes.
+    pdf.addImage(imgData, "JPEG", 0, 0, pageW, pageH);
+    deliverPdf(pdf, filename);
+    return;
+  }
 
   const docContainer = el.firstElementChild as HTMLElement;
   if (!docContainer) {

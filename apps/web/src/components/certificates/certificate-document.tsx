@@ -1,8 +1,8 @@
 /**
  * Constancia del estudiante — documento A4 horizontal de tamaño FIJO (1123×794 px).
- * Mismo lenguaje visual que la constancia de planeación didáctica (marco morado,
- * barras degradadas, logo). Solo colores fijos (hex) para no romper html2canvas;
- * NUNCA hereda el tema oscuro ni cambia con el viewport.
+ * Fondo con bloques diagonales (marca de agua tenue + franja inferior) y doble
+ * firma (instructor + dirección de la plataforma). Solo colores fijos (hex)
+ * para no romper html2canvas; NUNCA hereda el tema oscuro ni cambia con el viewport.
  */
 
 import type { Certificate } from "@/components/student/types";
@@ -13,6 +13,7 @@ const PURPLE_LIGHT = "#a400e3";
 const GRADIENT = `linear-gradient(135deg, ${PURPLE_DARK} 0%, ${PURPLE} 50%, ${PURPLE_LIGHT} 100%)`;
 const TEXT = "#1f1147";
 const MUTED = "#6b7280";
+const WASH = "#f1ecfc"; // lavanda muy claro para el triángulo superior
 
 export const CERT_DOC_WIDTH = 1123; // A4 horizontal @ 96dpi
 export const CERT_DOC_HEIGHT = 794;
@@ -22,9 +23,46 @@ const MODALITY_LABEL: Record<Certificate["modality"], string> = {
   evento: "Curso por evento",
 };
 
+/** Una firma con nombre y rol debajo, usada tanto para instructor como para dirección. */
+function SignatureBlock({
+  name,
+  role,
+  signatureUrl,
+  height,
+}: {
+  name: string;
+  role: string;
+  signatureUrl?: string | null;
+  height: number;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 240 }}>
+      {signatureUrl ? (
+        <div style={{ height, display: "flex", alignItems: "flex-end", justifyContent: "center", marginBottom: 6 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={signatureUrl}
+            alt={`Firma de ${name}`}
+            data-signature
+            crossOrigin="anonymous"
+            style={{ maxHeight: height, maxWidth: 220, width: "auto", objectFit: "contain", display: "block" }}
+          />
+        </div>
+      ) : (
+        <div style={{ height, marginBottom: 6 }} />
+      )}
+      <div style={{ borderTop: `1px solid ${TEXT}4D`, paddingTop: 8, width: "100%", textAlign: "center" }}>
+        <p style={{ fontSize: 15, fontWeight: 600, color: TEXT, margin: 0 }}>{name}</p>
+        <p style={{ fontSize: 12, color: MUTED, margin: "2px 0 0" }}>{role}</p>
+      </div>
+    </div>
+  );
+}
+
 export function CertificateDocument({ certificate }: { certificate: Certificate }) {
   const isAccreditation = certificate.type === "accreditation";
-  const sigH = Math.min(certificate.signatureHeight ?? 120, 160);
+  const sigH = Math.min(certificate.signatureHeight ?? 100, 130);
+  const hasAdminSignature = !!certificate.adminSignatureUrl;
 
   const meta = [
     certificate.category,
@@ -45,27 +83,56 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
         boxSizing: "border-box",
         position: "relative",
         overflow: "hidden",
-        padding: 28,
       }}
     >
-      {/* Marco decorativo */}
+      {/* ── Fondo decorativo: bloques diagonales ── */}
+      {/* Triángulo esquina superior izquierda: base morada + relleno lavanda
+          ligeramente más chico encima → deja un borde diagonal morado fino.
+          Usamos DOS rellenos sólidos con clip-path (nada de box-shadow inset:
+          html2canvas no lo soporta igual que un navegador y lo pinta sólido). */}
       <div
         style={{
           position: "absolute",
-          inset: 20,
-          border: `2px solid ${PURPLE}`,
-          borderRadius: 12,
+          top: 0,
+          left: 0,
+          width: 524,
+          height: 504,
+          background: PURPLE_LIGHT,
+          clipPath: "polygon(0 0, 100% 0, 0 100%)",
         }}
       />
-      <div style={{ position: "absolute", left: 20, right: 20, top: 20, height: 8, background: GRADIENT, borderTopLeftRadius: 12, borderTopRightRadius: 12 }} />
-      <div style={{ position: "absolute", left: 20, right: 20, bottom: 20, height: 8, background: GRADIENT, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }} />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: 516,
+          height: 496,
+          background: WASH,
+          clipPath: "polygon(0 0, 100% 0, 0 100%)",
+        }}
+      />
+      {/* Franja diagonal inferior con degradado de marca — puramente decorativa,
+          el contenido nunca la invade (ver padding-bottom más abajo) */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 64,
+          background: GRADIENT,
+          clipPath: "polygon(0 55%, 100% 0, 100% 100%, 0 100%)",
+        }}
+      />
 
+      {/* ── Contenido ── */}
       <div
         style={{
           position: "relative",
           height: "100%",
           boxSizing: "border-box",
-          padding: "44px 88px 40px",
+          padding: "50px 90px 92px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -73,11 +140,11 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/icons/icon-512.png" alt="Cursumi" width={60} height={60} style={{ display: "block", marginBottom: 14 }} />
+        <img src="/icons/icon-512.png" alt="Cursumi" width={56} height={56} style={{ display: "block", marginBottom: 12 }} />
 
         <h1
           style={{
-            fontSize: 34,
+            fontSize: 32,
             fontWeight: 900,
             color: PURPLE,
             margin: 0,
@@ -87,7 +154,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
         >
           {isAccreditation ? "Constancia de acreditación" : "Constancia de participación"}
         </h1>
-        <div style={{ height: 4, width: 90, background: GRADIENT, borderRadius: 3, margin: "12px 0 22px" }} />
+        <div style={{ height: 4, width: 90, background: GRADIENT, borderRadius: 3, margin: "12px 0 20px" }} />
 
         {/* Bloque central con margen auto arriba: reparte el espacio sobrante
             a partes iguales entre este bloque y el de la firma */}
@@ -134,32 +201,36 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
         <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>{meta}</p>
         </div>
 
-        {/* Firma — empujada hacia el fondo */}
-        <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          {certificate.instructorSignatureUrl ? (
-            <div style={{ height: sigH, display: "flex", alignItems: "flex-end", justifyContent: "center", marginBottom: 6 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={certificate.instructorSignatureUrl}
-                alt={`Firma de ${certificate.instructorName}`}
-                data-signature
-                crossOrigin="anonymous"
-                style={{ maxHeight: sigH, maxWidth: 320, width: "auto", objectFit: "contain", display: "block" }}
-              />
-            </div>
-          ) : (
-            <div style={{ height: sigH, marginBottom: 6 }} />
-          )}
-          <div style={{ borderTop: `1px solid ${TEXT}4D`, paddingTop: 8, minWidth: 280 }}>
-            <p style={{ fontSize: 15, fontWeight: 600, color: TEXT, margin: 0 }}>{certificate.instructorName}</p>
-            <p style={{ fontSize: 12, color: MUTED, margin: "2px 0 0" }}>Instructor</p>
-          </div>
-        </div>
-
-        {/* Pie: fecha + folio + marca */}
+        {/* Firmas — empujadas hacia el fondo; una o dos columnas según haya dirección */}
         <div
           style={{
-            marginTop: 18,
+            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-end",
+            gap: hasAdminSignature ? 72 : 0,
+          }}
+        >
+          <SignatureBlock
+            name={certificate.instructorName}
+            role="Instructor"
+            signatureUrl={certificate.instructorSignatureUrl}
+            height={sigH}
+          />
+          {hasAdminSignature && (
+            <SignatureBlock
+              name={certificate.adminName ?? "Cursumi"}
+              role="Dirección de Cursumi"
+              signatureUrl={certificate.adminSignatureUrl}
+              height={sigH}
+            />
+          )}
+        </div>
+
+        {/* Pie: fecha + marca + folio */}
+        <div
+          style={{
+            marginTop: 20,
             width: "100%",
             display: "flex",
             alignItems: "flex-end",

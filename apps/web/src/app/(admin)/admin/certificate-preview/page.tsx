@@ -15,6 +15,15 @@ import { PartyPopper, Download, Loader2 } from "lucide-react";
 import type { Certificate } from "@/components/student/types";
 import { downloadCertificateAsPdf } from "@/lib/download-certificate";
 
+// Firma de muestra (trazo SVG) — solo para previsualizar el layout de doble firma
+const SAMPLE_SIGNATURE_SVG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="260" height="100" viewBox="0 0 260 100">
+      <path d="M10 70 C 40 20, 60 90, 90 50 S 140 10, 170 55 S 220 85, 250 30" fill="none" stroke="#1f1147" stroke-width="4" stroke-linecap="round"/>
+    </svg>`
+  );
+
 const DEFAULTS: Certificate = {
   id: "preview",
   courseId: "preview",
@@ -176,6 +185,31 @@ export default function CertificatePreviewPage() {
                 value={cert.signatureHeight ?? 64}
                 onChange={(e) => update({ signatureHeight: Number(e.target.value) })}
               />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground">Nombre de dirección (2ª firma)</label>
+              <Input
+                className="mt-1"
+                value={cert.adminName ?? ""}
+                disabled={!cert.adminSignatureUrl}
+                onChange={(e) => update({ adminName: e.target.value })}
+              />
+            </div>
+            <div className="flex items-end pb-1">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+                <input
+                  type="checkbox"
+                  checked={!!cert.adminSignatureUrl}
+                  onChange={(e) =>
+                    update(
+                      e.target.checked
+                        ? { adminSignatureUrl: SAMPLE_SIGNATURE_SVG, adminName: cert.adminName || "Brandon García Ramos" }
+                        : { adminSignatureUrl: null }
+                    )
+                  }
+                />
+                Mostrar segunda firma (dirección de Cursumi)
+              </label>
             </div>
           </div>
 

@@ -20,7 +20,9 @@ export async function downloadCertificateAsPdf(info: {
     certEl,
     `Constancia-${sanitizeFilename(info.studentName)}-${info.certificateNumber}.pdf`,
     "landscape",
-    // La constancia se imprime/comparte: captura a 3× (~288 DPI) y JPEG alta calidad
-    { scale: 3, quality: 0.95 },
+    // La constancia se imprime/comparte: captura a 3× (~288 DPI) y JPEG alta calidad.
+    // singlePage: es un documento de una sola página con diseño propio — no debe
+    // pasar por el paginador de reportes largos ni llevar su sello de logo/folio.
+    { scale: 3, quality: 0.95, singlePage: true },
   );
 }
