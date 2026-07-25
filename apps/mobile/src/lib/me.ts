@@ -69,10 +69,31 @@ export async function getMyCourseDetail(courseId: string): Promise<CourseDetail>
   return (await res.json()) as CourseDetail;
 }
 
+/**
+ * Respuesta del alumno a una pregunta:
+ *  - number   → opción múltiple / verdadero-falso (índice)
+ *  - number[] → casillas (índices marcados)
+ *  - string[] → ordenar (textos en el orden elegido) / relacionar (texto derecho
+ *               elegido para cada elemento izquierdo, en el orden de options)
+ */
+export type QuizAnswer = number | number[] | string[];
+
+export type QuizQuestionType =
+  | "multiple-choice"
+  | "true-false"
+  | "checkbox"
+  | "ordering"
+  | "matching";
+
 export type SectionQuizQuestion = {
   question: string;
   options: string[];
   correct: number;
+  type?: QuizQuestionType;
+  /** casillas: índices correctos */
+  correctAnswers?: number[];
+  /** relacionar: matchRight[i] es la pareja de options[i] */
+  matchRight?: string[];
 };
 
 export type Lesson = {
@@ -130,15 +151,20 @@ export function parseSectionQuiz(raw: unknown): SectionQuizQuestion[] {
       question: String(q.question ?? ""),
       options: Array.isArray(q.options) ? (q.options as string[]) : [],
       correct: typeof q.correct === "number" ? q.correct : 0,
+      type: (q.type as QuizQuestionType) ?? "multiple-choice",
+      correctAnswers: Array.isArray(q.correctAnswers)
+        ? (q.correctAnswers as number[])
+        : undefined,
+      matchRight: Array.isArray(q.matchRight) ? (q.matchRight as string[]) : undefined,
     }))
     .filter((q) => q.options.length > 0);
 }
 
-/** Envía el quiz de una sección. answers = { [índice]: opción elegida }. */
+/** Envía el quiz de una sección. answers = { [índice]: respuesta }. */
 export async function submitSectionQuiz(
   sectionId: string,
   courseId: string,
-  answers: Record<string, number>
+  answers: Record<string, QuizAnswer>
 ): Promise<{ score: number; passed: boolean }> {
   const res = await fetch(`${API_URL}/api/sections/${sectionId}/quiz/submit`, {
     method: "POST",
@@ -166,7 +192,7 @@ export async function getLesson(lessonId: string): Promise<Lesson> {
 export async function completeLesson(
   lessonId: string,
   courseId: string,
-  extra?: { score?: number; answers?: Record<string, number | number[]> }
+  extra?: { score?: number; answers?: Record<string, QuizAnswer> }
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/lessons/${lessonId}/complete`, {
     method: "POST",
@@ -207,11 +233,43 @@ export async function submitAssignment(
 /** Pregunta de quiz (parseada de lesson.content). */
 export type QuizQuestion = {
   question: string;
+  /** ordenar: options en su orden CORRECTO. relacionar: columna izquierda. */
   options: string[];
   correctAnswer?: number;
   correctAnswers?: number[];
-  type?: "multiple-choice" | "true-false" | "checkbox";
+  /** relacionar: matchRight[i] es la pareja correcta de options[i]. */
+  matchRight?: string[];
+  type?: QuizQuestionType;
 };
+
+/** Califica en cliente una respuesta contra la definición de la pregunta (mismos
+ *  criterios que el servidor: opción, casillas, ordenar por texto, relacionar por texto). */
+export function gradeQuizAnswer(
+  q: { type?: QuizQuestionType; options: string[]; correctAnswer?: number; correctAnswers?: number[]; matchRight?: string[] },
+  answer: QuizAnswer | undefined
+): boolean {
+  if (answer === undefined) return false;
+  switch (q.type) {
+    case "checkbox": {
+      if (!Array.isArray(answer) || !q.correctAnswers) return false;
+      const sel = new Set(answer as number[]);
+      const exp = new Set(q.correctAnswers);
+      return sel.size === exp.size && [...exp].every((c) => sel.has(c));
+    }
+    case "ordering": {
+      if (!Array.isArray(answer)) return false;
+      const a = answer as string[];
+      return a.length === q.options.length && a.every((t, i) => t === q.options[i]);
+    }
+    case "matching": {
+      if (!Array.isArray(answer) || !q.matchRight) return false;
+      const a = answer as string[];
+      return a.length === q.options.length && a.every((t, i) => t === q.matchRight![i]);
+    }
+    default:
+      return typeof answer === "number" && answer === q.correctAnswer;
+  }
+}
 
 export type QuizConfig = {
   /** Límite de tiempo en minutos (0 = sin límite). */
@@ -251,6 +309,7 @@ export function parseQuizQuestions(content: string | null | undefined): QuizQues
       options: Array.isArray(q.options) ? (q.options as string[]) : [],
       correctAnswer: typeof q.correctAnswer === "number" ? q.correctAnswer : undefined,
       correctAnswers: Array.isArray(q.correctAnswers) ? (q.correctAnswers as number[]) : undefined,
+      matchRight: Array.isArray(q.matchRight) ? (q.matchRight as string[]) : undefined,
       type: (q.type as QuizQuestion["type"]) ?? "multiple-choice",
     }));
   } catch {
@@ -341,8 +400,11 @@ export async function toggleWishlist(courseId: string): Promise<boolean> {
 export type ExamQuestion = {
   id: string;
   question: string;
-  type?: string;
+  type?: QuizQuestionType | "short-answer";
+  /** ordenar: options ya vienen barajadas del servidor. relacionar: columna izquierda. */
   options?: string[];
+  /** relacionar: columna derecha (barajada por el servidor, sin revelar la pareja). */
+  matchRight?: string[];
   points?: number;
 };
 
@@ -369,10 +431,10 @@ export type ExamResult = {
   certificate: { id: string; number: string } | null;
 };
 
-/** Envía el examen final. answers = { [questionId]: índice de opción }. */
+/** Envía el examen final. answers = { [questionId]: respuesta }. */
 export async function submitExam(
   courseId: string,
-  answers: Record<string, number>
+  answers: Record<string, QuizAnswer>
 ): Promise<ExamResult> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/exam/submit`, {
     method: "POST",

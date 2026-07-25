@@ -4,11 +4,24 @@ import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-nat
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { parseSectionQuiz, submitSectionQuiz, type Lesson } from "@/lib/me";
+import { QuizAnswerInput } from "@/components/quiz-answer-input";
+import {
+  gradeQuizAnswer,
+  parseSectionQuiz,
+  submitSectionQuiz,
+  type Lesson,
+  type QuizAnswer,
+} from "@/lib/me";
 
 const PURPLE = Brand.primary;
 const GREEN = Brand.success;
 const RED = Brand.danger;
+
+function isAnswered(a: QuizAnswer | undefined): boolean {
+  if (a === undefined) return false;
+  if (Array.isArray(a)) return a.length > 0 && a.every((x) => x !== "" && x !== undefined);
+  return true;
+}
 
 export function SectionQuizView({
   lesson,
@@ -18,13 +31,16 @@ export function SectionQuizView({
   onCompleted?: (lessonId: string) => void;
 }) {
   const questions = useMemo(() => parseSectionQuiz(lesson.sectionQuiz), [lesson.sectionQuiz]);
-  const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [answers, setAnswers] = useState<Record<number, QuizAnswer>>({});
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState<{ score: number; passed: boolean } | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const allAnswered = questions.every((_, i) => answers[i] !== undefined);
+  // "ordenar" cuenta como respondida en cuanto se monta (el orden visible es la respuesta).
+  const allAnswered = questions.every(
+    (q, i) => q.type === "ordering" || isAnswered(answers[i]),
+  );
 
   async function submit() {
     if (!lesson.sectionId) {
@@ -35,7 +51,7 @@ export function SectionQuizView({
     setSaving(true);
     setError(null);
     try {
-      const payload: Record<string, number> = {};
+      const payload: Record<string, QuizAnswer> = {};
       questions.forEach((_, i) => {
         if (answers[i] !== undefined) payload[String(i)] = answers[i];
       });
@@ -71,34 +87,38 @@ export function SectionQuizView({
         </ThemedView>
       )}
 
-      {questions.map((q, qi) => (
-        <ThemedView key={qi} style={styles.questionCard}>
-          <ThemedText style={styles.questionText}>
-            {qi + 1}. {q.question}
-          </ThemedText>
-          {q.options.map((opt, oi) => {
-            const selected = answers[qi] === oi;
-            const showCorrect = submitted && q.correct === oi;
-            const showWrong = submitted && selected && q.correct !== oi;
-            return (
-              <TouchableOpacity
-                key={oi}
-                style={[
-                  styles.option,
-                  selected && styles.optionSelected,
-                  showCorrect && styles.optionCorrect,
-                  showWrong && styles.optionWrong,
-                ]}
-                activeOpacity={0.7}
-                onPress={() => !submitted && setAnswers((p) => ({ ...p, [qi]: oi }))}
-                disabled={submitted}
-              >
-                <ThemedText style={styles.optionText}>{opt}</ThemedText>
-              </TouchableOpacity>
-            );
-          })}
-        </ThemedView>
-      ))}
+      {questions.map((q, qi) => {
+        const graded = submitted
+          ? gradeQuizAnswer(
+              {
+                type: q.type,
+                options: q.options,
+                correctAnswer: q.correct,
+                correctAnswers: q.correctAnswers,
+                matchRight: q.matchRight,
+              },
+              answers[qi],
+            )
+          : null;
+        return (
+          <ThemedView key={qi} style={styles.questionCard}>
+            <ThemedText style={styles.questionText}>
+              {qi + 1}. {q.question}
+            </ThemedText>
+            <QuizAnswerInput
+              question={{ type: q.type, options: q.options, matchRight: q.matchRight }}
+              value={answers[qi]}
+              disabled={submitted}
+              onChange={(a) => setAnswers((p) => ({ ...p, [qi]: a }))}
+            />
+            {graded !== null && (
+              <ThemedText style={[styles.badge, { color: graded ? GREEN : RED }]}>
+                {graded ? "✓ Correcto" : "✗ Incorrecto"}
+              </ThemedText>
+            )}
+          </ThemedView>
+        );
+      })}
 
       {error && <ThemedText style={styles.error}>{error}</ThemedText>}
 
@@ -133,17 +153,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   questionText: { fontWeight: "600", fontSize: 16 },
-  option: {
-    borderWidth: 1,
-    borderColor: "rgba(127,127,127,0.3)",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  optionSelected: { borderColor: PURPLE, backgroundColor: "rgba(109,40,217,0.08)" },
-  optionCorrect: { borderColor: GREEN, backgroundColor: "rgba(22,163,74,0.1)" },
-  optionWrong: { borderColor: RED, backgroundColor: "rgba(220,38,38,0.08)" },
-  optionText: { fontSize: 15 },
+  badge: { fontWeight: "700", fontSize: 13, marginTop: 2 },
   error: { color: RED },
   button: { backgroundColor: PURPLE, borderRadius: 12, paddingVertical: 16, alignItems: "center" },
   buttonDisabled: { opacity: 0.5 },

@@ -186,12 +186,20 @@ function SectionQuizEditor({
                   : "Opción múltiple";
                 const editableOptions = qType === "multiple-choice" || qType === "checkbox";
                 const validOpts = q.options.filter((o) => o.trim());
-                const invalid = editableOptions
-                  ? validOpts.length < 2 ||
+                let invalid = false;
+                if (editableOptions) {
+                  invalid =
+                    validOpts.length < 2 ||
                     (qType === "multiple-choice"
                       ? q.correct < 0 || q.correct >= q.options.length
-                      : !q.correctAnswers || q.correctAnswers.length === 0)
-                  : false;
+                      : !q.correctAnswers || q.correctAnswers.length === 0);
+                } else if (qType === "ordering") {
+                  invalid = validOpts.length < 2;
+                } else if (qType === "matching") {
+                  invalid =
+                    q.options.filter((left, i) => left.trim() && (q.matchRight?.[i] ?? "").trim())
+                      .length < 2;
+                }
                 return (
                   <Card key={qi} className="border border-border bg-muted/10">
                     <CardContent className="space-y-3 p-3">
@@ -353,39 +361,154 @@ function SectionQuizEditor({
                         </div>
                       )}
 
-                      {/* Ordenar: lista en orden correcto (solo lectura) */}
+                      {/* Ordenar: elementos en su orden correcto (editable) */}
                       {qType === "ordering" && (
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">
-                            Orden correcto (se baraja al alumno)
+                            Elementos en su orden correcto (se barajan al alumno)
                           </Label>
-                          <ol className="list-decimal space-y-1 pl-5 text-sm text-foreground">
-                            {q.options.map((opt, oi) => (
-                              <li key={oi}>{opt}</li>
-                            ))}
-                          </ol>
-                          <p className="text-[11px] text-muted-foreground">
-                            Para reordenar, elimina la pregunta y vuelve a crearla.
-                          </p>
+                          {q.options.map((opt, oi) => (
+                            <div key={oi} className="flex items-center gap-2">
+                              <span className="w-5 shrink-0 text-right text-sm font-medium text-muted-foreground">
+                                {oi + 1}.
+                              </span>
+                              <div className="flex shrink-0 flex-col">
+                                <button
+                                  type="button"
+                                  disabled={oi === 0}
+                                  className="text-muted-foreground hover:text-primary disabled:opacity-30"
+                                  onClick={() => {
+                                    const next = [...q.options];
+                                    [next[oi - 1], next[oi]] = [next[oi], next[oi - 1]];
+                                    replaceQuestion(qi, { ...q, options: next });
+                                  }}
+                                >
+                                  <ChevronUp className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={oi === q.options.length - 1}
+                                  className="text-muted-foreground hover:text-primary disabled:opacity-30"
+                                  onClick={() => {
+                                    const next = [...q.options];
+                                    [next[oi + 1], next[oi]] = [next[oi], next[oi + 1]];
+                                    replaceQuestion(qi, { ...q, options: next });
+                                  }}
+                                >
+                                  <ChevronDown className="h-4 w-4" />
+                                </button>
+                              </div>
+                              <Input
+                                value={opt}
+                                placeholder={`Elemento ${oi + 1}`}
+                                className="text-sm"
+                                onChange={(e) => {
+                                  const next = [...q.options];
+                                  next[oi] = e.target.value;
+                                  replaceQuestion(qi, { ...q, options: next });
+                                }}
+                              />
+                              {q.options.length > 2 && (
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  className="shrink-0 px-2"
+                                  onClick={() =>
+                                    replaceQuestion(qi, {
+                                      ...q,
+                                      options: q.options.filter((_, j) => j !== oi),
+                                    })
+                                  }
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              )}
+                            </div>
+                          ))}
+                          {q.options.length < 8 && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="w-fit"
+                              onClick={() =>
+                                replaceQuestion(qi, { ...q, options: [...q.options, ""] })
+                              }
+                            >
+                              <Plus className="mr-1 h-3.5 w-3.5" />
+                              Añadir elemento
+                            </Button>
+                          )}
                         </div>
                       )}
 
-                      {/* Relacionar: parejas izquierda ↔ derecha (solo lectura) */}
+                      {/* Relacionar: parejas izquierda ↔ derecha (editable) */}
                       {qType === "matching" && (
-                        <div className="space-y-1">
-                          <Label className="text-xs text-muted-foreground">Parejas correctas</Label>
-                          <ul className="space-y-1 text-sm text-foreground">
-                            {q.options.map((left, oi) => (
-                              <li key={oi} className="flex items-center gap-2">
-                                <span className="font-medium">{left}</span>
-                                <span className="text-muted-foreground">↔</span>
-                                <span>{q.matchRight?.[oi] ?? ""}</span>
-                              </li>
-                            ))}
-                          </ul>
-                          <p className="text-[11px] text-muted-foreground">
-                            Para editar las parejas, elimina la pregunta y vuelve a crearla.
-                          </p>
+                        <div className="space-y-2">
+                          <Label className="text-xs text-muted-foreground">
+                            Parejas (columna izquierda ↔ su pareja correcta)
+                          </Label>
+                          {q.options.map((left, oi) => (
+                            <div key={oi} className="flex items-center gap-2">
+                              <Input
+                                value={left}
+                                placeholder={`Elemento ${oi + 1}`}
+                                className="flex-1 text-sm"
+                                onChange={(e) => {
+                                  const next = [...q.options];
+                                  next[oi] = e.target.value;
+                                  replaceQuestion(qi, { ...q, options: next });
+                                }}
+                              />
+                              <span className="text-muted-foreground">↔</span>
+                              <Input
+                                value={q.matchRight?.[oi] ?? ""}
+                                placeholder="Su pareja"
+                                className="flex-1 text-sm"
+                                onChange={(e) => {
+                                  const next = [...(q.matchRight ?? q.options.map(() => ""))];
+                                  next[oi] = e.target.value;
+                                  replaceQuestion(qi, { ...q, matchRight: next });
+                                }}
+                              />
+                              {q.options.length > 2 && (
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  className="shrink-0 px-2"
+                                  onClick={() =>
+                                    replaceQuestion(qi, {
+                                      ...q,
+                                      options: q.options.filter((_, j) => j !== oi),
+                                      matchRight: (q.matchRight ?? []).filter((_, j) => j !== oi),
+                                    })
+                                  }
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              )}
+                            </div>
+                          ))}
+                          {q.options.length < 8 && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="w-fit"
+                              onClick={() =>
+                                replaceQuestion(qi, {
+                                  ...q,
+                                  options: [...q.options, ""],
+                                  matchRight: [...(q.matchRight ?? q.options.map(() => "")), ""],
+                                })
+                              }
+                            >
+                              <Plus className="mr-1 h-3.5 w-3.5" />
+                              Añadir pareja
+                            </Button>
+                          )}
                         </div>
                       )}
 

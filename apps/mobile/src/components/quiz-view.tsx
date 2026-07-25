@@ -4,12 +4,21 @@ import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-nat
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { QuizAnswerInput } from "@/components/quiz-answer-input";
 import {
   completeLesson,
+  gradeQuizAnswer,
   parseQuizConfig,
   parseQuizQuestions,
   type Lesson,
+  type QuizAnswer,
 } from "@/lib/me";
+
+function isAnswered(a: QuizAnswer | undefined): boolean {
+  if (a === undefined) return false;
+  if (Array.isArray(a)) return a.length > 0 && a.every((x) => x !== "" && x !== undefined);
+  return true;
+}
 
 const PURPLE = Brand.primary;
 const GREEN = Brand.success;
@@ -30,8 +39,8 @@ export function QuizView({
 }) {
   const questions = useMemo(() => parseQuizQuestions(lesson.content), [lesson.content]);
   const config = useMemo(() => parseQuizConfig(lesson.content), [lesson.content]);
-  // answers[i] = índice (single) o lista de índices (checkbox)
-  const [answers, setAnswers] = useState<Record<number, number | number[]>>({});
+  // answers[i] = respuesta (índice / índices / textos ordenados / parejas)
+  const [answers, setAnswers] = useState<Record<number, QuizAnswer>>({});
   const [submitted, setSubmitted] = useState(false);
   const [scorePct, setScorePct] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -57,38 +66,11 @@ export function QuizView({
     return () => clearTimeout(t);
   }, [timeLeft, submitted]);
 
-  function selectSingle(qi: number, oi: number) {
-    if (submitted) return;
-    setAnswers((prev) => ({ ...prev, [qi]: oi }));
-  }
-
-  function toggleCheckbox(qi: number, oi: number) {
-    if (submitted) return;
-    setAnswers((prev) => {
-      const current = Array.isArray(prev[qi]) ? (prev[qi] as number[]) : [];
-      const next = current.includes(oi)
-        ? current.filter((x) => x !== oi)
-        : [...current, oi];
-      return { ...prev, [qi]: next };
-    });
-  }
-
-  function isSelected(qi: number, oi: number): boolean {
-    const a = answers[qi];
-    if (Array.isArray(a)) return a.includes(oi);
-    return a === oi;
-  }
-
   function computeScore(): number {
-    const correct = questions.reduce((acc, q, i) => {
-      if (q.type === "checkbox" && q.correctAnswers) {
-        const sel = new Set(Array.isArray(answers[i]) ? (answers[i] as number[]) : []);
-        const exp = new Set(q.correctAnswers);
-        const ok = sel.size === exp.size && [...sel].every((x) => exp.has(x));
-        return acc + (ok ? 1 : 0);
-      }
-      return acc + (answers[i] === q.correctAnswer ? 1 : 0);
-    }, 0);
+    const correct = questions.reduce(
+      (acc, q, i) => acc + (gradeQuizAnswer(q, answers[i]) ? 1 : 0),
+      0,
+    );
     return questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
   }
 
@@ -101,7 +83,7 @@ export function QuizView({
     setAttemptCount((n) => n + 1);
     setSaving(true);
     try {
-      const toSave: Record<string, number | number[]> = {};
+      const toSave: Record<string, QuizAnswer> = {};
       questions.forEach((_, i) => {
         if (answers[i] !== undefined) toSave[String(i)] = answers[i];
       });
@@ -113,7 +95,9 @@ export function QuizView({
       setSaving(false);
     }
   }
-  submitRef.current = submit;
+  useEffect(() => {
+    submitRef.current = submit;
+  });
 
   function retake() {
     setAnswers({});
@@ -122,16 +106,9 @@ export function QuizView({
     setTimeLeft(config.timeLimitMin > 0 ? config.timeLimitMin * 60 : null);
   }
 
-  function isCorrectOption(qi: number, oi: number): boolean {
-    const q = questions[qi];
-    if (q.type === "checkbox") return q.correctAnswers?.includes(oi) ?? false;
-    return q.correctAnswer === oi;
-  }
-
-  const allAnswered = questions.every((_, i) => {
-    const a = answers[i];
-    return Array.isArray(a) ? a.length > 0 : a !== undefined;
-  });
+  const allAnswered = questions.every(
+    (q, i) => q.type === "ordering" || isAnswered(answers[i]),
+  );
 
   if (questions.length === 0) {
     return <ThemedText style={styles.notice}>Este quiz no tiene preguntas.</ThemedText>;
@@ -168,41 +145,27 @@ export function QuizView({
         </ThemedView>
       )}
 
-      {questions.map((q, qi) => (
-        <ThemedView key={qi} style={styles.questionCard}>
-          <ThemedText style={styles.questionText}>
-            {qi + 1}. {q.question}
-          </ThemedText>
-          {q.type === "checkbox" && (
-            <ThemedText style={styles.hint}>Selecciona todas las que apliquen.</ThemedText>
-          )}
-          {q.options.map((opt, oi) => {
-            const selected = isSelected(qi, oi);
-            const showCorrect = submitted && isCorrectOption(qi, oi);
-            const showWrong = submitted && selected && !isCorrectOption(qi, oi);
-            return (
-              <TouchableOpacity
-                key={oi}
-                style={[
-                  styles.option,
-                  selected && styles.optionSelected,
-                  showCorrect && styles.optionCorrect,
-                  showWrong && styles.optionWrong,
-                ]}
-                activeOpacity={0.7}
-                onPress={() =>
-                  q.type === "checkbox" ? toggleCheckbox(qi, oi) : selectSingle(qi, oi)
-                }
-                disabled={submitted}
-              >
-                <ThemedText style={styles.optionText}>{opt}</ThemedText>
-                {showCorrect && <ThemedText style={styles.mark}>✓</ThemedText>}
-                {showWrong && <ThemedText style={[styles.mark, { color: RED }]}>✗</ThemedText>}
-              </TouchableOpacity>
-            );
-          })}
-        </ThemedView>
-      ))}
+      {questions.map((q, qi) => {
+        const graded = submitted ? gradeQuizAnswer(q, answers[qi]) : null;
+        return (
+          <ThemedView key={qi} style={styles.questionCard}>
+            <ThemedText style={styles.questionText}>
+              {qi + 1}. {q.question}
+            </ThemedText>
+            <QuizAnswerInput
+              question={{ type: q.type, options: q.options, matchRight: q.matchRight }}
+              value={answers[qi]}
+              disabled={submitted}
+              onChange={(a) => setAnswers((p) => ({ ...p, [qi]: a }))}
+            />
+            {graded !== null && (
+              <ThemedText style={[styles.badge, { color: graded ? GREEN : RED }]}>
+                {graded ? "✓ Correcto" : "✗ Incorrecto"}
+              </ThemedText>
+            )}
+          </ThemedView>
+        );
+      })}
 
       {!submitted ? (
         <TouchableOpacity
@@ -247,22 +210,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   questionText: { fontWeight: "600", fontSize: 16 },
-  hint: { fontSize: 12, opacity: 0.6 },
-  option: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderWidth: 1,
-    borderColor: "rgba(127,127,127,0.3)",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  optionSelected: { borderColor: PURPLE, backgroundColor: "rgba(109,40,217,0.08)" },
-  optionCorrect: { borderColor: GREEN, backgroundColor: "rgba(22,163,74,0.1)" },
-  optionWrong: { borderColor: RED, backgroundColor: "rgba(220,38,38,0.08)" },
-  optionText: { flex: 1 },
-  mark: { color: GREEN, fontWeight: "800", marginLeft: 8 },
+  badge: { fontWeight: "700", fontSize: 13, marginTop: 2 },
   button: {
     backgroundColor: PURPLE,
     borderRadius: 12,

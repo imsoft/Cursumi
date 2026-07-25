@@ -11,7 +11,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { getExam, submitExam, type Exam, type ExamResult } from "@/lib/me";
+import { QuizAnswerInput } from "@/components/quiz-answer-input";
+import { getExam, submitExam, type Exam, type ExamResult, type QuizAnswer } from "@/lib/me";
+
+function isAnswered(a: QuizAnswer | undefined): boolean {
+  if (a === undefined) return false;
+  if (Array.isArray(a)) return a.length > 0 && a.every((x) => x !== "" && x !== undefined);
+  return true;
+}
 
 const PURPLE = Brand.primary;
 const GREEN = Brand.success;
@@ -27,7 +34,7 @@ export function ExamView({ courseId, onBack }: { courseId: string; onBack: () =>
   const [exam, setExam] = useState<Exam | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [answers, setAnswers] = useState<Record<string, QuizAnswer>>({});
   const [result, setResult] = useState<ExamResult | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -77,11 +84,15 @@ export function ExamView({ courseId, onBack }: { courseId: string; onBack: () =>
       setSubmitting(false);
     }
   }
-  submitRef.current = submit;
+  useEffect(() => {
+    submitRef.current = submit;
+  });
 
   // Solo cuentan las preguntas con opciones (auto-calificables).
   const gradable = exam?.questions.filter((q) => (q.options?.length ?? 0) > 0) ?? [];
-  const allAnswered = gradable.every((q) => answers[q.id] !== undefined);
+  const allAnswered = gradable.every(
+    (q) => q.type === "ordering" || isAnswered(answers[q.id]),
+  );
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -129,20 +140,16 @@ export function ExamView({ courseId, onBack }: { courseId: string; onBack: () =>
                   {qi + 1}. {q.question}
                 </ThemedText>
                 {hasOptions ? (
-                  q.options!.map((opt, oi) => {
-                    const selected = answers[q.id] === oi;
-                    return (
-                      <TouchableOpacity
-                        key={oi}
-                        style={[styles.option, selected && styles.optionSelected]}
-                        activeOpacity={0.7}
-                        onPress={() => !result && setAnswers((p) => ({ ...p, [q.id]: oi }))}
-                        disabled={!!result}
-                      >
-                        <ThemedText>{opt}</ThemedText>
-                      </TouchableOpacity>
-                    );
-                  })
+                  <QuizAnswerInput
+                    question={{
+                      type: q.type as never,
+                      options: q.options ?? [],
+                      matchRight: q.matchRight,
+                    }}
+                    value={answers[q.id]}
+                    disabled={!!result}
+                    onChange={(a) => setAnswers((p) => ({ ...p, [q.id]: a }))}
+                  />
                 ) : (
                   <ThemedText style={styles.hint}>
                     Pregunta abierta — se evalúa manualmente.
@@ -199,14 +206,6 @@ const styles = StyleSheet.create({
   },
   questionText: { fontWeight: "600", fontSize: 16 },
   hint: { fontSize: 12, opacity: 0.6, fontStyle: "italic" },
-  option: {
-    borderWidth: 1,
-    borderColor: "rgba(127,127,127,0.3)",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  optionSelected: { borderColor: PURPLE, backgroundColor: "rgba(109,40,217,0.08)" },
   button: {
     backgroundColor: PURPLE,
     borderRadius: 12,
