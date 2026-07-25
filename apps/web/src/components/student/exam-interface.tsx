@@ -90,6 +90,9 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
   const [timeRemaining, setTimeRemaining] = useState<number | null>(exam.timeLimit ? exam.timeLimit * 60 : null);
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Evita renderizar el DndContext en SSR (dnd-kit genera IDs distintos → hidratación).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -222,15 +225,27 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
       return (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">Arrastra los elementos para colocarlos en el orden correcto.</p>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]}>
-            <SortableContext items={order} strategy={verticalListSortingStrategy}>
-              <div className="space-y-2">
-                {order.map((item, i) => (
-                  <SortableRow key={item} id={item} index={i} label={item} />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          {mounted ? (
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]}>
+              <SortableContext items={order} strategy={verticalListSortingStrategy}>
+                <div className="space-y-2">
+                  {order.map((item, i) => (
+                    <SortableRow key={item} id={item} index={i} label={item} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+          ) : (
+            <div className="space-y-2">
+              {order.map((item, i) => (
+                <div key={item} className="flex items-center gap-3 rounded-lg border-2 border-border bg-card p-3">
+                  <GripVertical className="h-5 w-5 shrink-0 text-muted-foreground" />
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">{i + 1}</span>
+                  <span className="text-base text-foreground">{stripHtml(item)}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       );
     }

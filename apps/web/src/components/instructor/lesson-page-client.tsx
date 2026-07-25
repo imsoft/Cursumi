@@ -100,10 +100,12 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
   });
   // New question form
   const [newQuestionTitle, setNewQuestionTitle] = useState("");
-  const [newQuestionType, setNewQuestionType] = useState<"multiple-choice" | "true-false" | "checkbox">("multiple-choice");
+  const [newQuestionType, setNewQuestionType] = useState<QuizQuestion["type"]>("multiple-choice");
   const [newQuestionOptions, setNewQuestionOptions] = useState<string[]>(["", ""]);
   const [newQuestionCorrectAnswer, setNewQuestionCorrectAnswer] = useState<number | null>(null);
   const [newQuestionCorrectAnswers, setNewQuestionCorrectAnswers] = useState<Set<number>>(new Set());
+  /** matching: columna derecha alineada con newQuestionOptions (izquierda). */
+  const [newQuestionMatchRight, setNewQuestionMatchRight] = useState<string[]>(["", ""]);
   const [newQuestionPoints, setNewQuestionPoints] = useState(10);
   const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
   const [newCriterionText, setNewCriterionText] = useState("");
@@ -249,16 +251,18 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
     setNewQuestionOptions(["", ""]);
     setNewQuestionCorrectAnswer(null);
     setNewQuestionCorrectAnswers(new Set());
+    setNewQuestionMatchRight(["", ""]);
     setNewQuestionPoints(10);
   };
 
   const startEditQuestion = (q: QuizQuestion) => {
     setEditingQuestionId(q.id);
     setNewQuestionTitle(q.question);
-    setNewQuestionType((q.type === "true-false" || q.type === "checkbox") ? q.type : "multiple-choice");
-    setNewQuestionOptions(q.options ? [...q.options] : ["", ""]);
+    setNewQuestionType(q.type);
+    setNewQuestionOptions(q.options ? [...q.options] : q.type === "ordering" ? ["", "", ""] : ["", ""]);
     setNewQuestionCorrectAnswer(typeof q.correctAnswer === "number" ? q.correctAnswer : null);
     setNewQuestionCorrectAnswers(new Set(q.correctAnswers ?? []));
+    setNewQuestionMatchRight(q.matchRight ? [...q.matchRight] : ["", ""]);
     setNewQuestionPoints(q.points ?? 10);
   };
 
@@ -279,6 +283,23 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
       newQuestion = {
         id: editingQuestionId ?? crypto.randomUUID(), question: newQuestionTitle.trim(), type: "checkbox",
         options: validOptions, correctAnswers: Array.from(newQuestionCorrectAnswers).sort(), points: newQuestionPoints,
+      };
+    } else if (newQuestionType === "ordering") {
+      const validOptions = newQuestionOptions.filter((o) => o.trim());
+      if (validOptions.length < 2) return;
+      newQuestion = {
+        id: editingQuestionId ?? crypto.randomUUID(), question: newQuestionTitle.trim(), type: "ordering",
+        options: validOptions, points: newQuestionPoints, // en ORDEN correcto; se baraja al alumno
+      };
+    } else if (newQuestionType === "matching") {
+      // Solo parejas con ambos lados llenos
+      const pairs = newQuestionOptions
+        .map((left, i) => ({ left: left.trim(), right: (newQuestionMatchRight[i] ?? "").trim() }))
+        .filter((p) => p.left && p.right);
+      if (pairs.length < 2) return;
+      newQuestion = {
+        id: editingQuestionId ?? crypto.randomUUID(), question: newQuestionTitle.trim(), type: "matching",
+        options: pairs.map((p) => p.left), matchRight: pairs.map((p) => p.right), points: newQuestionPoints,
       };
     } else {
       const validOptions = newQuestionOptions.filter((o) => o.trim());
@@ -619,7 +640,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                     {quizQuestions.map((question) => {
                       const isCorrect = (idx: number) =>
                         question.type === "checkbox" ? question.correctAnswers?.includes(idx) : question.correctAnswer === idx;
-                      const typeLabel = question.type === "true-false" ? "V / F" : question.type === "checkbox" ? "Casillas" : "Opción múltiple";
+                      const typeLabel = question.type === "true-false" ? "V / F" : question.type === "checkbox" ? "Casillas" : question.type === "ordering" ? "Ordenar" : question.type === "matching" ? "Relacionar" : "Opción múltiple";
                       return (
                         <div key={question.id} className={`rounded-lg border p-4 space-y-2 ${editingQuestionId === question.id ? "border-primary bg-primary/5" : "border-border bg-card"}`}>
                           <div className="flex items-start justify-between">
@@ -676,13 +697,17 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                           setNewQuestionType(v);
                           setNewQuestionCorrectAnswer(null);
                           setNewQuestionCorrectAnswers(new Set());
+                          setNewQuestionMatchRight(["", ""]);
                           if (v === "true-false") setNewQuestionOptions(["Verdadero", "Falso"]);
+                          else if (v === "ordering") setNewQuestionOptions(["", "", ""]);
                           else setNewQuestionOptions(["", ""]);
                         }}
                         options={[
                           { value: "multiple-choice", label: "Opción múltiple" },
-                          { value: "true-false", label: "Verdadero / Falso" },
                           { value: "checkbox", label: "Casillas (varias correctas)" },
+                          { value: "true-false", label: "Verdadero / Falso" },
+                          { value: "ordering", label: "Ordenar secuencia" },
+                          { value: "matching", label: "Relacionar columnas" },
                         ]}
                         searchable={false}
                         allowDeselect={false}
@@ -718,7 +743,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                         ))}
                       </div>
                     </div>
-                  ) : (
+                  ) : newQuestionType === "multiple-choice" || newQuestionType === "checkbox" ? (
                     <div>
                       <div className="mb-2 flex items-center justify-between">
                         <label className="text-sm font-medium text-foreground">Opciones de respuesta</label>
@@ -764,6 +789,53 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                         {newQuestionType === "checkbox" ? "Haz clic en las casillas para marcar las respuestas correctas" : "Haz clic en el círculo para marcar la respuesta correcta"}
                       </p>
                     </div>
+                  ) : newQuestionType === "ordering" ? (
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="text-sm font-medium text-foreground">Elementos (en orden correcto)</label>
+                        <Button type="button" variant="outline" size="sm" onClick={() => setNewQuestionOptions((prev) => [...prev, ""])} className="h-7 text-xs">
+                          <Plus className="mr-1 h-3 w-3" />Agregar elemento
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {newQuestionOptions.map((opt, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">{idx + 1}</span>
+                            <Input value={opt} placeholder={`Elemento ${idx + 1}`} onChange={(e) => { const u = [...newQuestionOptions]; u[idx] = e.target.value; setNewQuestionOptions(u); }} className="flex-1" />
+                            {newQuestionOptions.length > 2 && (
+                              <Button type="button" variant="ghost" size="sm" onClick={() => setNewQuestionOptions((prev) => prev.filter((_, i) => i !== idx))} className="h-8 w-8 p-0">
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">Escríbelos en el orden CORRECTO. Al alumno se le muestran barajados.</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="text-sm font-medium text-foreground">Parejas (izquierda ↔ derecha correcta)</label>
+                        <Button type="button" variant="outline" size="sm" onClick={() => { setNewQuestionOptions((prev) => [...prev, ""]); setNewQuestionMatchRight((prev) => [...prev, ""]); }} className="h-7 text-xs">
+                          <Plus className="mr-1 h-3 w-3" />Agregar pareja
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {newQuestionOptions.map((left, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <Input value={left} placeholder={`Izquierda ${idx + 1}`} onChange={(e) => { const u = [...newQuestionOptions]; u[idx] = e.target.value; setNewQuestionOptions(u); }} className="flex-1" />
+                            <span className="shrink-0 text-muted-foreground">↔</span>
+                            <Input value={newQuestionMatchRight[idx] ?? ""} placeholder="Su pareja" onChange={(e) => { const u = [...newQuestionMatchRight]; u[idx] = e.target.value; setNewQuestionMatchRight(u); }} className="flex-1" />
+                            {newQuestionOptions.length > 2 && (
+                              <Button type="button" variant="ghost" size="sm" onClick={() => { setNewQuestionOptions((prev) => prev.filter((_, i) => i !== idx)); setNewQuestionMatchRight((prev) => prev.filter((_, i) => i !== idx)); }} className="h-8 w-8 p-0">
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">Cada fila es una pareja correcta. La columna derecha se baraja al alumno.</p>
+                    </div>
                   )}
 
                   <Button
@@ -774,7 +846,9 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                       !newQuestionTitle.trim() ||
                       (newQuestionType === "true-false" && newQuestionCorrectAnswer === null) ||
                       (newQuestionType === "multiple-choice" && (newQuestionOptions.filter((o) => o.trim()).length < 1 || newQuestionCorrectAnswer === null)) ||
-                      (newQuestionType === "checkbox" && (newQuestionOptions.filter((o) => o.trim()).length < 1 || newQuestionCorrectAnswers.size === 0))
+                      (newQuestionType === "checkbox" && (newQuestionOptions.filter((o) => o.trim()).length < 1 || newQuestionCorrectAnswers.size === 0)) ||
+                      (newQuestionType === "ordering" && newQuestionOptions.filter((o) => o.trim()).length < 2) ||
+                      (newQuestionType === "matching" && newQuestionOptions.filter((o, i) => o.trim() && (newQuestionMatchRight[i] ?? "").trim()).length < 2)
                     }
                     className="w-full"
                   >

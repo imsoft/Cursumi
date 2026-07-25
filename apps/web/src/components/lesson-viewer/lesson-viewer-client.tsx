@@ -38,6 +38,10 @@ import { CourseNotesSheet } from "./course-notes-sheet";
 import { SectionGatesPanel } from "./section-gates-panel";
 import { getMuxPlaybackId, getYouTubeId } from "@/lib/video-url";
 
+import { QuizAnswerInput } from "@/components/student/quiz-answer-input";
+import { gradeQuestion, type ExamAnswer } from "@/lib/exam-grading";
+import type { QuizQuestion } from "@/components/instructor/course-types";
+
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
 type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
@@ -99,7 +103,7 @@ interface LessonViewerClientProps {
   currentSectionId: string;
   hasFinalExam?: boolean;
   savedQuizScore?: number | null;
-  savedQuizAnswers?: Record<string, number | number[]> | null;
+  savedQuizAnswers?: Record<string, number | number[] | string[]> | null;
 }
 
 const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
@@ -175,7 +179,16 @@ export function LessonViewerClient({
     if (!hasSavedQuiz || !savedQuizAnswers) return {};
     const restored: Record<number, Set<number>> = {};
     for (const [key, val] of Object.entries(savedQuizAnswers)) {
-      if (Array.isArray(val)) restored[Number(key)] = new Set(val);
+      if (Array.isArray(val) && val.every((v) => typeof v === "number")) restored[Number(key)] = new Set(val as number[]);
+    }
+    return restored;
+  });
+  // Respuestas de "ordenar" y "relacionar" (arreglos de texto).
+  const [quizComplexAnswers, setQuizComplexAnswers] = useState<Record<number, ExamAnswer>>(() => {
+    if (!hasSavedQuiz || !savedQuizAnswers) return {};
+    const restored: Record<number, ExamAnswer> = {};
+    for (const [key, val] of Object.entries(savedQuizAnswers)) {
+      if (Array.isArray(val) && val.every((v) => typeof v === "string")) restored[Number(key)] = val as string[];
     }
     return restored;
   });
@@ -270,7 +283,7 @@ export function LessonViewerClient({
       nextIsInDifferentSection ||
       (nextLesson === null && hasFinalExam));
 
-  const markComplete = useCallback(async (extra?: { score?: number; answers?: Record<string, number | number[]> }) => {
+  const markComplete = useCallback(async (extra?: { score?: number; answers?: Record<string, number | number[] | string[]> }) => {
     if (isCompleted || marking) return;
     setMarking(true);
     // Optimistic update: marcar inmediatamente, rollback solo si falla
@@ -311,8 +324,9 @@ export function LessonViewerClient({
     question: string;
     options: string[];
     correct: number;
-    type?: "multiple-choice" | "true-false" | "checkbox";
+    type?: QuizQuestion["type"];
     correctAnswers?: number[];
+    matchRight?: string[];
   };
   let quizQuestions: ParsedQuizQuestion[] = [];
   let quizInstructions = "";
@@ -328,6 +342,7 @@ export function LessonViewerClient({
           correct: typeof q.correctAnswer === "number" ? q.correctAnswer : 0,
           type: q.type || "multiple-choice",
           correctAnswers: q.correctAnswers,
+          matchRight: q.matchRight,
         }));
       } else if (Array.isArray(parsed)) {
         quizQuestions = parsed;
@@ -339,17 +354,28 @@ export function LessonViewerClient({
 
   const { timeLimit: quizTimeLimit, maxAttempts: quizMaxAttempts, passingRequired: quizPassingRequired, passingScore: quizPassingScorePercent } = quizConfig;
 
+  // Construye una QuizQuestion completa y obtiene la respuesta del alumno según
+  // el tipo, para calificar con la misma lógica del examen (gradeQuestion).
+  const buildQuizQuestion = (q: ParsedQuizQuestion): QuizQuestion => ({
+    id: "",
+    question: q.question,
+    type: q.type ?? "multiple-choice",
+    options: q.options,
+    correctAnswer: q.correct,
+    correctAnswers: q.correctAnswers,
+    matchRight: q.matchRight,
+  });
+  const answerAt = (q: ParsedQuizQuestion, i: number): ExamAnswer | undefined => {
+    const t = q.type ?? "multiple-choice";
+    if (t === "checkbox") return quizCheckboxAnswers[i] ? Array.from(quizCheckboxAnswers[i]) : undefined;
+    if (t === "ordering" || t === "matching") return quizComplexAnswers[i];
+    return quizAnswers[i];
+  };
+  const gradeAt = (q: ParsedQuizQuestion, i: number) => gradeQuestion(buildQuizQuestion(q), answerAt(q, i));
+
   const quizScore =
     quizSubmitted && quizQuestions.length > 0
-      ? quizQuestions.reduce((acc, q, i) => {
-          if (q.type === "checkbox" && q.correctAnswers) {
-            const selected = quizCheckboxAnswers[i] || new Set();
-            const correct = new Set(q.correctAnswers);
-            const match = correct.size === selected.size && [...correct].every((v) => selected.has(v));
-            return acc + (match ? 1 : 0);
-          }
-          return acc + (quizAnswers[i] === q.correct ? 1 : 0);
-        }, 0)
+      ? quizQuestions.reduce((acc, q, i) => acc + (gradeAt(q, i) ? 1 : 0), 0)
       : 0;
   const quizScorePercent = quizQuestions.length > 0 ? Math.round((quizScore / quizQuestions.length) * 100) : 0;
   const quizPassed = quizSubmitted && quizScorePercent >= (quizPassingRequired ? quizPassingScorePercent : 70);
@@ -359,23 +385,20 @@ export function LessonViewerClient({
     setQuizSubmitted(true);
     setQuizAttemptCount((c) => c + 1);
     // Compute pass inline since state hasn't updated yet
-    const score = quizQuestions.reduce((acc, q, i) => {
-      if (q.type === "checkbox" && q.correctAnswers) {
-        const selected = quizCheckboxAnswers[i] || new Set();
-        const correct = new Set(q.correctAnswers);
-        return acc + (correct.size === selected.size && [...correct].every((v) => selected.has(v)) ? 1 : 0);
-      }
-      return acc + (quizAnswers[i] === q.correct ? 1 : 0);
-    }, 0);
+    const score = quizQuestions.reduce((acc, q, i) => acc + (gradeAt(q, i) ? 1 : 0), 0);
     const pct = quizQuestions.length > 0 ? Math.round((score / quizQuestions.length) * 100) : 0;
     const passed = pct >= (quizPassingRequired ? quizPassingScorePercent : 70);
 
-    // Build answers map to save: index -> answer (number for radio, number[] for checkbox)
-    const answersToSave: Record<string, number | number[]> = {};
+    // Guardar respuestas: número (radio), número[] (checkbox) o texto[] (ordenar/relacionar)
+    const answersToSave: Record<string, number | number[] | string[]> = {};
     quizQuestions.forEach((q, i) => {
-      if (q.type === "checkbox") {
+      const t = q.type ?? "multiple-choice";
+      if (t === "checkbox") {
         const selected = quizCheckboxAnswers[i];
         if (selected) answersToSave[String(i)] = Array.from(selected);
+      } else if (t === "ordering" || t === "matching") {
+        const a = quizComplexAnswers[i];
+        if (Array.isArray(a)) answersToSave[String(i)] = a as string[];
       } else if (quizAnswers[i] !== undefined) {
         answersToSave[String(i)] = quizAnswers[i];
       }
@@ -544,7 +567,28 @@ export function LessonViewerClient({
           )}
           {quizQuestions.map((q, i) => {
             const isCheckbox = q.type === "checkbox";
+            const isComplex = q.type === "ordering" || q.type === "matching";
             const selectedCheckboxes = quizCheckboxAnswers[i] || new Set<number>();
+
+            // Ordenar / relacionar: usa el componente de respuesta compartido.
+            if (isComplex) {
+              return (
+                <div key={i} className="space-y-3">
+                  <p className="font-medium text-foreground">{i + 1}. {stripHtml(q.question)}</p>
+                  <QuizAnswerInput
+                    question={buildQuizQuestion(q)}
+                    value={quizComplexAnswers[i]}
+                    onChange={(v) => setQuizComplexAnswers((prev) => ({ ...prev, [i]: v }))}
+                    disabled={quizSubmitted}
+                  />
+                  {quizSubmitted && (
+                    <div className={`rounded-md px-3 py-2 text-sm font-medium ${gradeAt(q, i) ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400" : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"}`}>
+                      {gradeAt(q, i) ? "Correcto" : "Incorrecto"}
+                    </div>
+                  )}
+                </div>
+              );
+            }
 
             return (
               <div key={i} className="space-y-3">
@@ -619,7 +663,13 @@ export function LessonViewerClient({
               onClick={handleQuizSubmit}
               disabled={
                 quizQuestions.some((q, i) => {
-                  if (q.type === "checkbox") return !(quizCheckboxAnswers[i]?.size > 0);
+                  const t = q.type ?? "multiple-choice";
+                  if (t === "checkbox") return !(quizCheckboxAnswers[i]?.size > 0);
+                  if (t === "ordering") return !Array.isArray(quizComplexAnswers[i]); // arranca con orden inicial
+                  if (t === "matching") {
+                    const a = quizComplexAnswers[i] as string[] | undefined;
+                    return !a || a.length !== q.options.length || a.some((x) => !x);
+                  }
                   return quizAnswers[i] === undefined;
                 })
               }
