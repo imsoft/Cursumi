@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Combobox } from "@/components/ui/combobox";
 import {
   Plus, Trash2, ClipboardCheck, CheckCircle2, Circle, Gamepad2, ChevronUp, ChevronDown,
 } from "lucide-react";
@@ -33,8 +34,26 @@ function SectionQuizEditor({
   const [questions, setQuestions] = useState<SectionQuizQuestion[]>(quiz?.questions ?? []);
 
   const [newQuestion, setNewQuestion] = useState("");
+  const [newType, setNewType] = useState<NonNullable<SectionQuizQuestion["type"]>>("multiple-choice");
   const [newOptions, setNewOptions] = useState(["", "", "", ""]);
   const [newCorrect, setNewCorrect] = useState<number | null>(null);
+  const [newCorrectAnswers, setNewCorrectAnswers] = useState<Set<number>>(new Set());
+  /** matching: columna derecha alineada con newOptions (izquierda). */
+  const [newMatchRight, setNewMatchRight] = useState<string[]>(["", "", "", ""]);
+
+  const changeNewType = (t: NonNullable<SectionQuizQuestion["type"]>) => {
+    setNewType(t);
+    setNewCorrect(null);
+    setNewCorrectAnswers(new Set());
+    if (t === "true-false") {
+      setNewOptions(["Verdadero", "Falso"]);
+    } else if (t === "ordering") {
+      setNewOptions(["", "", ""]);
+    } else {
+      setNewOptions(["", "", "", ""]);
+      setNewMatchRight(["", "", "", ""]);
+    }
+  };
 
   const syncUp = (enabled: boolean, qs: SectionQuizQuestion[], score: number) => {
     if (!enabled) {
@@ -53,19 +72,52 @@ function SectionQuizEditor({
 
   const handleAddQuestion = () => {
     if (!newQuestion.trim()) return;
-    const validOptions = newOptions.filter((o) => o.trim());
-    if (validOptions.length < 2 || newCorrect === null) return;
+    let q: SectionQuizQuestion | null = null;
 
-    const q: SectionQuizQuestion = {
-      question: newQuestion.trim(),
-      options: validOptions,
-      correct: newCorrect,
-    };
+    if (newType === "true-false") {
+      if (newCorrect === null) return;
+      q = { question: newQuestion.trim(), type: "true-false", options: ["Verdadero", "Falso"], correct: newCorrect };
+    } else if (newType === "multiple-choice") {
+      const validOptions = newOptions.filter((o) => o.trim());
+      if (validOptions.length < 2 || newCorrect === null || !newOptions[newCorrect]?.trim()) return;
+      // Reindexa "correct" tras filtrar opciones vacías.
+      const correctIdx = newOptions.slice(0, newCorrect + 1).filter((o) => o.trim()).length - 1;
+      q = { question: newQuestion.trim(), type: "multiple-choice", options: validOptions, correct: correctIdx };
+    } else if (newType === "checkbox") {
+      const kept = newOptions.map((o, i) => ({ o, i })).filter((x) => x.o.trim());
+      if (kept.length < 2 || newCorrectAnswers.size === 0) return;
+      const correctAnswers = kept
+        .map((x, newIdx) => (newCorrectAnswers.has(x.i) ? newIdx : -1))
+        .filter((n) => n >= 0);
+      if (correctAnswers.length === 0) return;
+      q = {
+        question: newQuestion.trim(), type: "checkbox",
+        options: kept.map((x) => x.o.trim()), correct: correctAnswers[0], correctAnswers,
+      };
+    } else if (newType === "ordering") {
+      const validOptions = newOptions.filter((o) => o.trim());
+      if (validOptions.length < 2) return;
+      q = { question: newQuestion.trim(), type: "ordering", options: validOptions, correct: 0 };
+    } else if (newType === "matching") {
+      const pairs = newOptions
+        .map((left, i) => ({ left: left.trim(), right: (newMatchRight[i] ?? "").trim() }))
+        .filter((p) => p.left && p.right);
+      if (pairs.length < 2) return;
+      q = {
+        question: newQuestion.trim(), type: "matching",
+        options: pairs.map((p) => p.left), matchRight: pairs.map((p) => p.right), correct: 0,
+      };
+    }
+
+    if (!q) return;
     const updated = [...questions, q];
     setQuestions(updated);
     setNewQuestion("");
+    setNewType("multiple-choice");
     setNewOptions(["", "", "", ""]);
     setNewCorrect(null);
+    setNewCorrectAnswers(new Set());
+    setNewMatchRight(["", "", "", ""]);
     syncUp(true, updated, passingScore);
   };
 
@@ -125,13 +177,31 @@ function SectionQuizEditor({
             <div className="space-y-3">
               <p className="text-sm font-semibold text-foreground">Preguntas del test</p>
               {questions.map((q, qi) => {
+                const qType = q.type ?? "multiple-choice";
+                const typeLabel =
+                  qType === "true-false" ? "V / F"
+                  : qType === "checkbox" ? "Casillas"
+                  : qType === "ordering" ? "Ordenar"
+                  : qType === "matching" ? "Relacionar"
+                  : "Opción múltiple";
+                const editableOptions = qType === "multiple-choice" || qType === "checkbox";
                 const validOpts = q.options.filter((o) => o.trim());
-                const invalid = validOpts.length < 2 || q.correct < 0 || q.correct >= q.options.length;
+                const invalid = editableOptions
+                  ? validOpts.length < 2 ||
+                    (qType === "multiple-choice"
+                      ? q.correct < 0 || q.correct >= q.options.length
+                      : !q.correctAnswers || q.correctAnswers.length === 0)
+                  : false;
                 return (
                   <Card key={qi} className="border border-border bg-muted/10">
                     <CardContent className="space-y-3 p-3">
                       <div className="flex items-start justify-between gap-2">
-                        <Label className="text-sm font-medium">Pregunta {qi + 1}</Label>
+                        <div className="flex items-center gap-2">
+                          <Label className="text-sm font-medium">Pregunta {qi + 1}</Label>
+                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                            {typeLabel}
+                          </span>
+                        </div>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -151,71 +221,174 @@ function SectionQuizEditor({
                           replaceQuestion(qi, { ...q, question: e.target.value })
                         }
                       />
-                      <div className="space-y-2">
-                        <Label className="text-xs text-muted-foreground">
-                          Opciones (elige la correcta)
-                        </Label>
-                        {q.options.map((opt, oi) => (
-                          <div key={oi} className="flex items-center gap-2">
-                            <button
+
+                      {/* MC / Casillas: opciones editables con marcador de correcta(s) */}
+                      {editableOptions && (
+                        <div className="space-y-2">
+                          <Label className="text-xs text-muted-foreground">
+                            {qType === "checkbox"
+                              ? "Opciones (marca todas las correctas)"
+                              : "Opciones (elige la correcta)"}
+                          </Label>
+                          {q.options.map((opt, oi) => {
+                            const isCorrect =
+                              qType === "checkbox"
+                                ? (q.correctAnswers ?? []).includes(oi)
+                                : q.correct === oi;
+                            return (
+                              <div key={oi} className="flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (qType === "checkbox") {
+                                      const set = new Set(q.correctAnswers ?? []);
+                                      if (set.has(oi)) set.delete(oi);
+                                      else set.add(oi);
+                                      const correctAnswers = [...set].sort((a, b) => a - b);
+                                      replaceQuestion(qi, {
+                                        ...q,
+                                        correctAnswers,
+                                        correct: correctAnswers[0] ?? 0,
+                                      });
+                                    } else {
+                                      replaceQuestion(qi, { ...q, correct: oi });
+                                    }
+                                  }}
+                                  className="shrink-0"
+                                  title="Marcar como correcta"
+                                >
+                                  {isCorrect ? (
+                                    <CheckCircle2 className="h-5 w-5 text-primary" />
+                                  ) : (
+                                    <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                                  )}
+                                </button>
+                                <Input
+                                  value={opt}
+                                  placeholder={`Opción ${oi + 1}`}
+                                  className="text-sm"
+                                  onChange={(e) => {
+                                    const next = [...q.options];
+                                    next[oi] = e.target.value;
+                                    replaceQuestion(qi, { ...q, options: next });
+                                  }}
+                                />
+                                {q.options.length > 2 && (
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="shrink-0 px-2"
+                                    onClick={() => {
+                                      const next = q.options.filter((_, j) => j !== oi);
+                                      if (qType === "checkbox") {
+                                        const correctAnswers = (q.correctAnswers ?? [])
+                                          .filter((c) => c !== oi)
+                                          .map((c) => (c > oi ? c - 1 : c));
+                                        replaceQuestion(qi, {
+                                          ...q,
+                                          options: next,
+                                          correctAnswers,
+                                          correct: correctAnswers[0] ?? 0,
+                                        });
+                                      } else {
+                                        let correct = q.correct;
+                                        if (correct === oi) correct = 0;
+                                        else if (correct > oi) correct -= 1;
+                                        replaceQuestion(qi, { ...q, options: next, correct });
+                                      }
+                                    }}
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </Button>
+                                )}
+                              </div>
+                            );
+                          })}
+                          {q.options.length < 8 && (
+                            <Button
                               type="button"
-                              onClick={() => replaceQuestion(qi, { ...q, correct: oi })}
-                              className="shrink-0"
-                              title="Marcar como correcta"
+                              variant="outline"
+                              size="sm"
+                              className="w-fit"
+                              onClick={() =>
+                                replaceQuestion(qi, {
+                                  ...q,
+                                  options: [...q.options, ""],
+                                })
+                              }
+                            >
+                              <Plus className="mr-1 h-3.5 w-3.5" />
+                              Añadir opción
+                            </Button>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Verdadero/Falso: elegir cuál es la correcta */}
+                      {qType === "true-false" && (
+                        <div className="space-y-2">
+                          <Label className="text-xs text-muted-foreground">Respuesta correcta</Label>
+                          {["Verdadero", "Falso"].map((opt, oi) => (
+                            <button
+                              key={oi}
+                              type="button"
+                              onClick={() =>
+                                replaceQuestion(qi, {
+                                  ...q,
+                                  options: ["Verdadero", "Falso"],
+                                  correct: oi,
+                                })
+                              }
+                              className="flex w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-left text-sm"
                             >
                               {q.correct === oi ? (
                                 <CheckCircle2 className="h-5 w-5 text-primary" />
                               ) : (
-                                <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                                <Circle className="h-5 w-5 text-muted-foreground" />
                               )}
+                              {opt}
                             </button>
-                            <Input
-                              value={opt}
-                              placeholder={`Opción ${oi + 1}`}
-                              className="text-sm"
-                              onChange={(e) => {
-                                const next = [...q.options];
-                                next[oi] = e.target.value;
-                                replaceQuestion(qi, { ...q, options: next });
-                              }}
-                            />
-                            {q.options.length > 2 && (
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="shrink-0 px-2"
-                                onClick={() => {
-                                  const next = q.options.filter((_, j) => j !== oi);
-                                  let correct = q.correct;
-                                  if (correct === oi) correct = 0;
-                                  else if (correct > oi) correct -= 1;
-                                  replaceQuestion(qi, { ...q, options: next, correct });
-                                }}
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </Button>
-                            )}
-                          </div>
-                        ))}
-                        {q.options.length < 8 && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            className="w-fit"
-                            onClick={() =>
-                              replaceQuestion(qi, {
-                                ...q,
-                                options: [...q.options, ""],
-                              })
-                            }
-                          >
-                            <Plus className="mr-1 h-3.5 w-3.5" />
-                            Añadir opción
-                          </Button>
-                        )}
-                      </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Ordenar: lista en orden correcto (solo lectura) */}
+                      {qType === "ordering" && (
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">
+                            Orden correcto (se baraja al alumno)
+                          </Label>
+                          <ol className="list-decimal space-y-1 pl-5 text-sm text-foreground">
+                            {q.options.map((opt, oi) => (
+                              <li key={oi}>{opt}</li>
+                            ))}
+                          </ol>
+                          <p className="text-[11px] text-muted-foreground">
+                            Para reordenar, elimina la pregunta y vuelve a crearla.
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Relacionar: parejas izquierda ↔ derecha (solo lectura) */}
+                      {qType === "matching" && (
+                        <div className="space-y-1">
+                          <Label className="text-xs text-muted-foreground">Parejas correctas</Label>
+                          <ul className="space-y-1 text-sm text-foreground">
+                            {q.options.map((left, oi) => (
+                              <li key={oi} className="flex items-center gap-2">
+                                <span className="font-medium">{left}</span>
+                                <span className="text-muted-foreground">↔</span>
+                                <span>{q.matchRight?.[oi] ?? ""}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <p className="text-[11px] text-muted-foreground">
+                            Para editar las parejas, elimina la pregunta y vuelve a crearla.
+                          </p>
+                        </div>
+                      )}
+
                       {invalid && (
                         <p className="text-xs text-amber-600 dark:text-amber-400">
                           Necesitas al menos 2 opciones con texto y una respuesta correcta válida.
@@ -230,47 +403,261 @@ function SectionQuizEditor({
 
           <div className="space-y-3 rounded-lg border border-dashed border-border p-4">
             <p className="text-sm font-semibold text-foreground">Agregar pregunta</p>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Tipo de pregunta</Label>
+              <Combobox
+                value={newType}
+                onValueChange={(val) => changeNewType(val as NonNullable<SectionQuizQuestion["type"]>)}
+                options={[
+                  { value: "multiple-choice", label: "Opción múltiple" },
+                  { value: "checkbox", label: "Varias correctas (casillas)" },
+                  { value: "true-false", label: "Verdadero / Falso" },
+                  { value: "ordering", label: "Ordenar secuencia" },
+                  { value: "matching", label: "Relacionar columnas" },
+                ]}
+              />
+            </div>
+
             <Input
               placeholder="Escribe la pregunta..."
               value={newQuestion}
               onChange={(e) => setNewQuestion(e.target.value)}
             />
-            <div className="space-y-2">
-              <Label className="text-xs text-muted-foreground">
-                Opciones (haz clic en el círculo para marcar la correcta)
-              </Label>
-              {newOptions.map((opt, i) => (
-                <div key={i} className="flex items-center gap-2">
+
+            {/* Verdadero / Falso */}
+            {newType === "true-false" && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">Respuesta correcta</Label>
+                {["Verdadero", "Falso"].map((opt, i) => (
                   <button
+                    key={i}
                     type="button"
                     onClick={() => setNewCorrect(i)}
-                    className="shrink-0"
+                    className="flex w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-left text-sm"
                   >
                     {newCorrect === i ? (
                       <CheckCircle2 className="h-5 w-5 text-primary" />
                     ) : (
-                      <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                      <Circle className="h-5 w-5 text-muted-foreground" />
                     )}
+                    {opt}
                   </button>
-                  <Input
-                    value={opt}
-                    placeholder={`Opción ${i + 1}`}
-                    onChange={(e) => {
-                      const updated = [...newOptions];
-                      updated[i] = e.target.value;
-                      setNewOptions(updated);
+                ))}
+              </div>
+            )}
+
+            {/* Opción múltiple / Casillas */}
+            {(newType === "multiple-choice" || newType === "checkbox") && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">
+                  {newType === "checkbox"
+                    ? "Opciones (marca todas las correctas)"
+                    : "Opciones (marca la correcta)"}
+                </Label>
+                {newOptions.map((opt, i) => {
+                  const isCorrect =
+                    newType === "checkbox" ? newCorrectAnswers.has(i) : newCorrect === i;
+                  return (
+                    <div key={i} className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (newType === "checkbox") {
+                            const set = new Set(newCorrectAnswers);
+                            if (set.has(i)) set.delete(i);
+                            else set.add(i);
+                            setNewCorrectAnswers(set);
+                          } else {
+                            setNewCorrect(i);
+                          }
+                        }}
+                        className="shrink-0"
+                      >
+                        {isCorrect ? (
+                          <CheckCircle2 className="h-5 w-5 text-primary" />
+                        ) : (
+                          <Circle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                        )}
+                      </button>
+                      <Input
+                        value={opt}
+                        placeholder={`Opción ${i + 1}`}
+                        onChange={(e) => {
+                          const updated = [...newOptions];
+                          updated[i] = e.target.value;
+                          setNewOptions(updated);
+                        }}
+                      />
+                      {newOptions.length > 2 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="shrink-0 px-2"
+                          onClick={() => {
+                            setNewOptions(newOptions.filter((_, j) => j !== i));
+                            if (newType === "checkbox") {
+                              const set = new Set(
+                                [...newCorrectAnswers]
+                                  .filter((c) => c !== i)
+                                  .map((c) => (c > i ? c - 1 : c)),
+                              );
+                              setNewCorrectAnswers(set);
+                            } else if (newCorrect !== null) {
+                              if (newCorrect === i) setNewCorrect(null);
+                              else if (newCorrect > i) setNewCorrect(newCorrect - 1);
+                            }
+                          }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+                {newOptions.length < 8 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="w-fit"
+                    onClick={() => setNewOptions([...newOptions, ""])}
+                  >
+                    <Plus className="mr-1 h-3.5 w-3.5" />
+                    Añadir opción
+                  </Button>
+                )}
+              </div>
+            )}
+
+            {/* Ordenar secuencia: escribe los elementos en su orden correcto */}
+            {newType === "ordering" && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">
+                  Elementos en su orden correcto (se barajan al alumno)
+                </Label>
+                {newOptions.map((opt, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="w-5 shrink-0 text-right text-sm font-medium text-muted-foreground">
+                      {i + 1}.
+                    </span>
+                    <Input
+                      value={opt}
+                      placeholder={`Elemento ${i + 1}`}
+                      onChange={(e) => {
+                        const updated = [...newOptions];
+                        updated[i] = e.target.value;
+                        setNewOptions(updated);
+                      }}
+                    />
+                    {newOptions.length > 2 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="shrink-0 px-2"
+                        onClick={() => setNewOptions(newOptions.filter((_, j) => j !== i))}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                {newOptions.length < 8 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="w-fit"
+                    onClick={() => setNewOptions([...newOptions, ""])}
+                  >
+                    <Plus className="mr-1 h-3.5 w-3.5" />
+                    Añadir elemento
+                  </Button>
+                )}
+              </div>
+            )}
+
+            {/* Relacionar columnas: parejas izquierda ↔ derecha */}
+            {newType === "matching" && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">
+                  Parejas (columna izquierda ↔ su pareja correcta)
+                </Label>
+                {newOptions.map((left, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Input
+                      value={left}
+                      placeholder={`Elemento ${i + 1}`}
+                      className="flex-1"
+                      onChange={(e) => {
+                        const updated = [...newOptions];
+                        updated[i] = e.target.value;
+                        setNewOptions(updated);
+                      }}
+                    />
+                    <span className="text-muted-foreground">↔</span>
+                    <Input
+                      value={newMatchRight[i] ?? ""}
+                      placeholder="Su pareja"
+                      className="flex-1"
+                      onChange={(e) => {
+                        const updated = [...newMatchRight];
+                        updated[i] = e.target.value;
+                        setNewMatchRight(updated);
+                      }}
+                    />
+                    {newOptions.length > 2 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="shrink-0 px-2"
+                        onClick={() => {
+                          setNewOptions(newOptions.filter((_, j) => j !== i));
+                          setNewMatchRight(newMatchRight.filter((_, j) => j !== i));
+                        }}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                {newOptions.length < 8 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="w-fit"
+                    onClick={() => {
+                      setNewOptions([...newOptions, ""]);
+                      setNewMatchRight([...newMatchRight, ""]);
                     }}
-                  />
-                </div>
-              ))}
-            </div>
+                  >
+                    <Plus className="mr-1 h-3.5 w-3.5" />
+                    Añadir pareja
+                  </Button>
+                )}
+              </div>
+            )}
+
             <Button
               size="sm"
               onClick={handleAddQuestion}
               disabled={
                 !newQuestion.trim() ||
-                newOptions.filter((o) => o.trim()).length < 2 ||
-                newCorrect === null
+                (newType === "true-false" && newCorrect === null) ||
+                (newType === "multiple-choice" &&
+                  (newOptions.filter((o) => o.trim()).length < 2 ||
+                    newCorrect === null ||
+                    !newOptions[newCorrect]?.trim())) ||
+                (newType === "checkbox" &&
+                  (newOptions.filter((o) => o.trim()).length < 2 || newCorrectAnswers.size === 0)) ||
+                (newType === "ordering" && newOptions.filter((o) => o.trim()).length < 2) ||
+                (newType === "matching" &&
+                  newOptions.filter((left, i) => left.trim() && (newMatchRight[i] ?? "").trim())
+                    .length < 2)
               }
             >
               <Plus className="mr-1 h-4 w-4" />

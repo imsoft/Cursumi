@@ -19,14 +19,27 @@ import { HangmanGame } from "./minigames/hangman-game";
 import { SortGame } from "./minigames/sort-game";
 import { MatchGame } from "./minigames/match-game";
 import { fireGrandConfetti } from "@/lib/minigame-confetti";
+import { QuizAnswerInput } from "@/components/student/quiz-answer-input";
+import { gradeQuestion, sectionQuizToQuizQuestion, type ExamAnswer } from "@/lib/exam-grading";
+import type { SectionQuizQuestion } from "@/components/instructor/course-types";
 
 type QuizUi = {
   show: boolean;
-  answers: Record<number, number>;
+  answers: Record<number, ExamAnswer>;
   submitted: boolean;
   score: number;
   submitting: boolean;
 };
+
+/** ¿Está respondida la pregunta según su tipo? (para habilitar el envío) */
+function sectionAnswered(q: SectionQuizQuestion, a: ExamAnswer | undefined): boolean {
+  if (a === undefined) return false;
+  const t = q.type ?? "multiple-choice";
+  if (t === "checkbox") return Array.isArray(a) && a.length > 0;
+  if (t === "ordering") return Array.isArray(a) && a.length === q.options.length;
+  if (t === "matching") return Array.isArray(a) && a.length === q.options.length && (a as string[]).every((x) => !!x);
+  return typeof a === "number";
+}
 
 const defaultQuizUi: QuizUi = {
   show: false,
@@ -76,7 +89,7 @@ export function SectionGatesPanel({
     async (act: Extract<SectionActivity, { kind: "quiz" }>) => {
       const ui = { ...defaultQuizUi, ...quizUi[act.id] };
       const correct = act.questions.reduce(
-        (acc, q, i) => acc + (ui.answers[i] === q.correct ? 1 : 0),
+        (acc, q, i) => acc + (gradeQuestion(sectionQuizToQuizQuestion(q), ui.answers[i]) ? 1 : 0),
         0,
       );
       const score = act.questions.length
@@ -225,44 +238,22 @@ export function SectionGatesPanel({
                         <p className="font-medium text-foreground">
                           {i + 1}. {stripHtml(q.question)}
                         </p>
-                        <div className="space-y-2">
-                          {q.options.map((opt, j) => {
-                            const isSelected = ui.answers[i] === j;
-                            const isCorrect = ui.submitted && j === q.correct;
-                            const isWrong = ui.submitted && isSelected && j !== q.correct;
-                            return (
-                              <button
-                                key={j}
-                                type="button"
-                                onClick={() =>
-                                  !ui.submitted &&
-                                  setQuizUi((prev) => {
-                                    const cur = { ...defaultQuizUi, ...prev[act.id], show: true };
-                                    return {
-                                      ...prev,
-                                      [act.id]: {
-                                        ...cur,
-                                        answers: { ...cur.answers, [i]: j },
-                                      },
-                                    };
-                                  })
-                                }
-                                disabled={ui.submitted}
-                                className={`w-full rounded-md border px-4 py-2 text-left text-sm transition-colors ${
-                                  isCorrect
-                                    ? "border-green-500 bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                                    : isWrong
-                                    ? "border-red-500 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                                    : isSelected
-                                    ? "border-primary bg-primary/10 text-foreground"
-                                    : "border-border bg-background text-foreground hover:bg-muted"
-                                }`}
-                              >
-                                {stripHtml(opt)}
-                              </button>
-                            );
-                          })}
-                        </div>
+                        <QuizAnswerInput
+                          question={sectionQuizToQuizQuestion(q)}
+                          value={ui.answers[i]}
+                          disabled={ui.submitted}
+                          onChange={(v) =>
+                            setQuizUi((prev) => {
+                              const cur = { ...defaultQuizUi, ...prev[act.id], show: true };
+                              return { ...prev, [act.id]: { ...cur, answers: { ...cur.answers, [i]: v } } };
+                            })
+                          }
+                        />
+                        {ui.submitted && (
+                          <div className={`rounded-md px-3 py-2 text-sm font-medium ${gradeQuestion(sectionQuizToQuizQuestion(q), ui.answers[i]) ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400" : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400"}`}>
+                            {gradeQuestion(sectionQuizToQuizQuestion(q), ui.answers[i]) ? "Correcto" : "Incorrecto"}
+                          </div>
+                        )}
                       </div>
                     ))}
 
@@ -270,7 +261,7 @@ export function SectionGatesPanel({
                       <Button
                         onClick={() => submitSectionQuiz(act)}
                         disabled={
-                          Object.keys(ui.answers).length < act.questions.length || ui.submitting
+                          act.questions.some((q, i) => !sectionAnswered(q, ui.answers[i])) || ui.submitting
                         }
                       >
                         {ui.submitting ? "Enviando..." : "Enviar respuestas"}

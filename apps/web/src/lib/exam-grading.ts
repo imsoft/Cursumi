@@ -1,4 +1,17 @@
-import type { QuizQuestion } from "@/components/instructor/course-types";
+import type { QuizQuestion, SectionQuizQuestion } from "@/components/instructor/course-types";
+
+/** Convierte una pregunta de quiz de sección al tipo rico para reusar la calificación/render. */
+export function sectionQuizToQuizQuestion(sq: SectionQuizQuestion): QuizQuestion {
+  return {
+    id: "",
+    question: sq.question,
+    type: sq.type ?? "multiple-choice",
+    options: sq.options,
+    correctAnswer: sq.correct,
+    correctAnswers: sq.correctAnswers,
+    matchRight: sq.matchRight,
+  };
+}
 
 /**
  * Respuesta de un alumno a una pregunta del examen:

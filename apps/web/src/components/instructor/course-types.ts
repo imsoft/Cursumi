@@ -68,7 +68,12 @@ export type CourseFinalExam = {
 export type SectionQuizQuestion = {
   question: string;
   options: string[];
-  correct: number; // índice de la opción correcta
+  correct: number; // índice de la opción correcta (multiple-choice / true-false)
+  /** Tipo de pregunta. Si falta, es "multiple-choice" (compat. con datos previos). */
+  type?: "multiple-choice" | "true-false" | "checkbox" | "ordering" | "matching";
+  correctAnswers?: number[]; // checkbox
+  /** matching: columna derecha alineada — matchRight[i] es la pareja de options[i]. */
+  matchRight?: string[];
 };
 
 export type SectionQuiz = {

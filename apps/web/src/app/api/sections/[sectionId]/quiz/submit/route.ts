@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
 import { upsertLessonProgressForGateActivity } from "@/lib/gate-lesson-progress";
 import { normalizeSectionActivities } from "@/lib/section-activities";
+import { gradeQuestion, sectionQuizToQuizQuestion, type ExamAnswer } from "@/lib/exam-grading";
 
 export async function POST(
   req: Request,
@@ -55,11 +56,13 @@ export async function POST(
     if (!rawAnswers || typeof rawAnswers !== "object" || Array.isArray(rawAnswers)) {
       return NextResponse.json({ error: "Se requieren las respuestas del quiz" }, { status: 400 });
     }
-    const answers = rawAnswers as Record<string, unknown>;
+    const answers = rawAnswers as Record<string, ExamAnswer>;
     const questions = activity.questions;
 
+    // Califica en el servidor todos los tipos (opción múltiple, casillas,
+    // verdadero/falso, ordenar, relacionar) con la misma lógica del examen.
     const correct = questions.filter(
-      (q, i) => typeof answers[String(i)] === "number" && answers[String(i)] === q.correct
+      (q, i) => gradeQuestion(sectionQuizToQuizQuestion(q), answers[String(i)]),
     ).length;
 
     score = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
