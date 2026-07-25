@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { ExamPageClient } from "@/components/student/exam-page-client";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
 import { sanitizeExamForClient, getCourseLessonOptions } from "@/lib/course-service";
+import { gradeExam, type ExamAnswer } from "@/lib/exam-grading";
 
 export default async function ExamPage({
   params,
@@ -42,13 +43,13 @@ export default async function ExamPage({
           ? {
               score: enrollment.examSubmission.score,
               passed: enrollment.examSubmission.passed,
-              answers: enrollment.examSubmission.answers as Record<string, number>,
               submittedAt: enrollment.examSubmission.submittedAt.toISOString(),
-              evaluations: finalExam.questions.reduce<Record<string, boolean>>((acc, q) => {
-                const userAns = (enrollment.examSubmission!.answers as Record<string, number>)[q.id];
-                acc[q.id] = userAns !== undefined && userAns === q.correctAnswer;
-                return acc;
-              }, {}),
+              // Recalcular evaluations con la misma lógica que el envío (todos los tipos).
+              evaluations: gradeExam(
+                finalExam.questions,
+                enrollment.examSubmission.answers as Record<string, ExamAnswer>,
+                finalExam.passingScore,
+              ).evaluations,
             }
           : null
       }

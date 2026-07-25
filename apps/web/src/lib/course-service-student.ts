@@ -202,13 +202,34 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
 
 // ─── Examen ───────────────────────────────────────────────────────────────────
 
+/** Baraja una copia del arreglo (Fisher–Yates). No muta el original. */
+function shuffled<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export function sanitizeExamForClient(exam: CourseFinalExam): CourseFinalExam {
   return {
     ...exam,
     questions: exam.questions.map((q) => {
-      // correctAnswer se descarta a propósito: no se envía la respuesta al cliente
-      const { correctAnswer, ...safeQuestion } = q;
-      return safeQuestion as CourseFinalExam["questions"][number];
+      // Nunca enviamos la respuesta correcta al cliente (se califica en el servidor).
+      const { correctAnswer, correctAnswers, ...rest } = q;
+      const safe = rest as CourseFinalExam["questions"][number];
+
+      // ordering: options está en el orden CORRECTO → barajar para no revelarlo.
+      if (safe.type === "ordering" && Array.isArray(safe.options)) {
+        return { ...safe, options: shuffled(safe.options) };
+      }
+      // matching: matchRight está alineado con options (la pareja correcta) →
+      // barajar la columna derecha para que el alumno tenga que emparejar.
+      if (safe.type === "matching" && Array.isArray(safe.matchRight)) {
+        return { ...safe, matchRight: shuffled(safe.matchRight) };
+      }
+      return safe;
     }),
   };
 }

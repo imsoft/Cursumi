@@ -138,10 +138,17 @@ export type CourseLessonOption = {
 export type QuizQuestion = {
   id: string;
   question: string;
-  type: "multiple-choice" | "true-false" | "checkbox" | "short-answer";
-  options?: string[]; // Para multiple-choice y checkbox
-  correctAnswer?: string | number; // Para multiple-choice y true-false (índice)
-  correctAnswers?: number[]; // Para checkbox (múltiples índices correctos)
+  type: "multiple-choice" | "true-false" | "checkbox" | "ordering" | "matching" | "short-answer";
+  /**
+   * multiple-choice / checkbox: opciones. true-false: implícito.
+   * ordering: los elementos EN SU ORDEN CORRECTO (se barajan al mostrar).
+   * matching: la columna IZQUIERDA (cada options[i] empareja con matchRight[i]).
+   */
+  options?: string[];
+  correctAnswer?: string | number; // multiple-choice, true-false (índice)
+  correctAnswers?: number[]; // checkbox (varios índices correctos)
+  /** matching: columna DERECHA alineada — matchRight[i] es la pareja de options[i]. */
+  matchRight?: string[];
   points?: number;
   /**
    * Lección que repasa esta pregunta. Si el alumno la falla en el examen,

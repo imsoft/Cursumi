@@ -5,9 +5,11 @@ import { handleApiError, requireSession } from "@/lib/api-helpers";
 import type { CourseFinalExam } from "@/components/instructor/course-types";
 import { sendCertificateEmail } from "@/lib/email";
 import { recalculateEnrollmentProgress } from "@/lib/enrollment-progress";
+import { gradeExam, type ExamAnswer } from "@/lib/exam-grading";
 
+const answerValue = z.union([z.number(), z.array(z.number()), z.array(z.string())]);
 const bodySchema = z.object({
-  answers: z.record(z.string(), z.number()),
+  answers: z.record(z.string(), answerValue),
 });
 
 export async function POST(
@@ -61,30 +63,15 @@ export async function POST(
       return NextResponse.json({ error: "Este curso no tiene examen final configurado" }, { status: 400 });
     }
 
-    // Compute score server-side. Solo se cuentan preguntas con correctAnswer definido
-    // (multiple-choice y true-false). Las short-answer sin correctAnswer se omiten
-    // porque no pueden calificarse automáticamente.
-    // Si no hay preguntas auto-calificables, se otorga puntaje completo (100).
-    let totalPoints = 0;
-    let earnedPoints = 0;
-    const evaluations: Record<string, boolean> = {};
-
-    for (const question of finalExam.questions) {
-      if (question.correctAnswer === undefined) continue; // omitir no auto-calificables
-      const pts = Math.max(1, question.points ?? 1); // tratar points=0 como 1
-      totalPoints += pts;
-      const userAnswer = body.answers[question.id];
-      const isCorrect = userAnswer !== undefined && userAnswer === question.correctAnswer;
-      
-      evaluations[question.id] = isCorrect;
-      
-      if (isCorrect) {
-        earnedPoints += pts;
-      }
-    }
-    // Si todas las preguntas son manuales (totalPoints=0), pasan automáticamente
-    const score = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 100;
-    const passed = score >= finalExam.passingScore;
+    // Calificación server-side (nunca se confía en el cliente). Soporta todos los
+    // tipos: multiple-choice, true-false, checkbox, ordering y matching. Los tipos
+    // sin respuesta correcta (short-answer) se omiten. Si no hay preguntas
+    // auto-calificables, se aprueba automáticamente.
+    const { evaluations, score, passed } = gradeExam(
+      finalExam.questions,
+      body.answers as Record<string, ExamAnswer>,
+      finalExam.passingScore,
+    );
 
     let submission;
     if (enrollment.examSubmission) {

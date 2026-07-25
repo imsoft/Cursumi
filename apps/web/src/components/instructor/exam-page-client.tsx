@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Combobox } from "@/components/ui/combobox";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -110,6 +110,59 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
         else if (newCorrect > idx) newCorrect -= 1;
         return { ...q, options: newOptions, correctAnswer: newCorrect };
       })
+    );
+
+  /** Cambia el tipo de una pregunta e inicializa los campos que necesita. */
+  const changeType = (qId: string, type: QuizQuestion["type"]) => {
+    const clear: Partial<QuizQuestion> = {
+      type, options: undefined, correctAnswer: undefined, correctAnswers: undefined, matchRight: undefined,
+    };
+    const byType: Record<QuizQuestion["type"], Partial<QuizQuestion>> = {
+      "multiple-choice": { options: ["", ""], correctAnswer: 0 },
+      "true-false": { correctAnswer: 0 },
+      "checkbox": { options: ["", ""], correctAnswers: [] },
+      "ordering": { options: ["", "", ""] },
+      "matching": { options: ["", ""], matchRight: ["", ""] },
+      "short-answer": { correctAnswer: "" },
+    };
+    updateQuestion(qId, { ...clear, ...byType[type] });
+  };
+
+  // ── checkbox: alternar una opción como correcta ──
+  const toggleCheckboxCorrect = (qId: string, idx: number) =>
+    setQuestions((prev) =>
+      prev.map((q) => {
+        if (q.id !== qId) return q;
+        const set = new Set(q.correctAnswers ?? []);
+        if (set.has(idx)) set.delete(idx); else set.add(idx);
+        return { ...q, correctAnswers: [...set].sort((a, b) => a - b) };
+      })
+    );
+
+  // ── ordering: editar / agregar / quitar elementos (options en orden correcto) ──
+  const addOrderingItem = (qId: string) =>
+    setQuestions((prev) => prev.map((q) => (q.id === qId ? { ...q, options: [...(q.options ?? []), ""] } : q)));
+  const removeOrderingItem = (qId: string, idx: number) =>
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === qId && (q.options?.length ?? 0) > 2 ? { ...q, options: q.options!.filter((_, i) => i !== idx) } : q,
+      ),
+    );
+
+  // ── matching: editar / agregar / quitar parejas (options ↔ matchRight) ──
+  const updateMatchLeft = (qId: string, idx: number, v: string) =>
+    setQuestions((prev) => prev.map((q) => (q.id === qId ? { ...q, options: q.options?.map((o, i) => (i === idx ? v : o)) } : q)));
+  const updateMatchRight = (qId: string, idx: number, v: string) =>
+    setQuestions((prev) => prev.map((q) => (q.id === qId ? { ...q, matchRight: q.matchRight?.map((o, i) => (i === idx ? v : o)) } : q)));
+  const addMatchPair = (qId: string) =>
+    setQuestions((prev) => prev.map((q) => (q.id === qId ? { ...q, options: [...(q.options ?? []), ""], matchRight: [...(q.matchRight ?? []), ""] } : q)));
+  const removeMatchPair = (qId: string, idx: number) =>
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === qId && (q.options?.length ?? 0) > 2
+          ? { ...q, options: q.options!.filter((_, i) => i !== idx), matchRight: (q.matchRight ?? []).filter((_, i) => i !== idx) }
+          : q,
+      ),
     );
 
   return (
@@ -304,17 +357,16 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
                       <Combobox
                         options={[
                           { value: "multiple-choice", label: "Opción múltiple" },
+                          { value: "checkbox", label: "Varias correctas" },
                           { value: "true-false", label: "Verdadero / Falso" },
+                          { value: "ordering", label: "Ordenar secuencia" },
+                          { value: "matching", label: "Relacionar columnas" },
                           { value: "short-answer", label: "Respuesta corta" },
                         ]}
                         value={q.type}
                         onValueChange={(v) => {
                           if (!v) return;
-                          updateQuestion(q.id, {
-                            type: v as QuizQuestion["type"],
-                            options: v === "multiple-choice" ? ["", ""] : undefined,
-                            correctAnswer: 0,
-                          });
+                          changeType(q.id, v as QuizQuestion["type"]);
                         }}
                         placeholder="Tipo"
                         searchable={false}
@@ -413,6 +465,89 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
                         value={typeof q.correctAnswer === "string" ? q.correctAnswer : ""}
                         onChange={(e) => updateQuestion(q.id, { correctAnswer: e.target.value })}
                       />
+                    </div>
+                  )}
+
+                  {/* Varias correctas (checkbox): marca todas las opciones correctas */}
+                  {q.type === "checkbox" && (
+                    <div className="ml-8 space-y-2">
+                      {(q.options || []).map((opt, oi) => (
+                        <div key={oi} className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => toggleCheckboxCorrect(q.id, oi)}
+                            className={`shrink-0 h-5 w-5 rounded border-2 transition-colors ${
+                              q.correctAnswers?.includes(oi) ? "border-primary bg-primary" : "border-muted-foreground/40"
+                            }`}
+                            title="Marcar como correcta"
+                          />
+                          <Input placeholder={`Opción ${oi + 1}`} value={opt} onChange={(e) => updateOption(q.id, oi, e.target.value)} />
+                          {(q.options?.length ?? 0) > 2 && (
+                            <button type="button" onClick={() => removeOption(q.id, oi)} className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" title="Eliminar opción">
+                              <Minus className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-muted-foreground">Marca TODAS las opciones correctas (el alumno debe seleccionarlas todas).</p>
+                        {(q.options?.length ?? 0) < 6 && (
+                          <button type="button" onClick={() => addOption(q.id)} className="flex items-center gap-1 text-xs text-primary hover:underline">
+                            <Plus className="h-3 w-3" /> Agregar opción
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Ordenar secuencia: escribe los elementos EN SU ORDEN CORRECTO */}
+                  {q.type === "ordering" && (
+                    <div className="ml-8 space-y-2">
+                      {(q.options || []).map((opt, oi) => (
+                        <div key={oi} className="flex items-center gap-2">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">{oi + 1}</span>
+                          <Input placeholder={`Elemento ${oi + 1}`} value={opt} onChange={(e) => updateOption(q.id, oi, e.target.value)} />
+                          {(q.options?.length ?? 0) > 2 && (
+                            <button type="button" onClick={() => removeOrderingItem(q.id, oi)} className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" title="Eliminar elemento">
+                              <Minus className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-muted-foreground">Escríbelos en el orden CORRECTO. Al alumno se le muestran barajados.</p>
+                        {(q.options?.length ?? 0) < 8 && (
+                          <button type="button" onClick={() => addOrderingItem(q.id)} className="flex items-center gap-1 text-xs text-primary hover:underline">
+                            <Plus className="h-3 w-3" /> Agregar elemento
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Relacionar columnas: cada pareja izquierda ↔ derecha correcta */}
+                  {q.type === "matching" && (
+                    <div className="ml-8 space-y-2">
+                      {(q.options || []).map((left, oi) => (
+                        <div key={oi} className="flex items-center gap-2">
+                          <Input placeholder={`Izquierda ${oi + 1}`} value={left} onChange={(e) => updateMatchLeft(q.id, oi, e.target.value)} />
+                          <span className="shrink-0 text-muted-foreground">↔</span>
+                          <Input placeholder={`Su pareja correcta`} value={q.matchRight?.[oi] ?? ""} onChange={(e) => updateMatchRight(q.id, oi, e.target.value)} />
+                          {(q.options?.length ?? 0) > 2 && (
+                            <button type="button" onClick={() => removeMatchPair(q.id, oi)} className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" title="Eliminar pareja">
+                              <Minus className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-muted-foreground">Cada fila es una pareja correcta. La columna derecha se baraja al alumno.</p>
+                        {(q.options?.length ?? 0) < 8 && (
+                          <button type="button" onClick={() => addMatchPair(q.id)} className="flex items-center gap-1 text-xs text-primary hover:underline">
+                            <Plus className="h-3 w-3" /> Agregar pareja
+                          </button>
+                        )}
+                      </div>
                     </div>
                   )}
 

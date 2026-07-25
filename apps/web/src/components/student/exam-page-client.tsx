@@ -7,6 +7,7 @@ import { ExamResults } from "@/components/student/exam-results";
 import { Button } from "@/components/ui/button";
 import { Award, Clock, RefreshCw } from "lucide-react";
 import type { CourseFinalExam, CourseLessonOption } from "@/components/instructor/course-types";
+import type { ExamAnswer } from "@/lib/exam-grading";
 
 interface ExamPageClientProps {
   courseId: string;
@@ -17,7 +18,6 @@ interface ExamPageClientProps {
   existingSubmission: {
     score: number;
     passed: boolean;
-    answers: Record<string, number>;
     evaluations: Record<string, boolean>;
     submittedAt?: string;
   } | null;
@@ -34,7 +34,6 @@ export function ExamPageClient({
   const [result, setResult] = useState<{
     score: number;
     passed: boolean;
-    answers: Record<string, number>;
     evaluations: Record<string, boolean>;
     certificate: { id: string; number: string } | null;
     submittedAt?: string;
@@ -200,11 +199,7 @@ export function ExamPageClient({
     );
   }
 
-  const handleSubmit = async (
-    answers: Record<string, number>,
-    _clientScore: number,
-    _clientPassed: boolean
-  ) => {
+  const handleSubmit = async (answers: Record<string, ExamAnswer>) => {
     setSubmitError(null);
     try {
       const res = await fetch(`/api/courses/${courseId}/exam/submit`, {
@@ -214,7 +209,7 @@ export function ExamPageClient({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al enviar examen");
-      setResult({ ...data, answers });
+      setResult(data);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Error inesperado");
     }
