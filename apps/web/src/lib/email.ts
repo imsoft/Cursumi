@@ -1,6 +1,33 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+/**
+ * Cliente perezoso — mismo patrón que `lib/stripe.ts`.
+ *
+ * Instanciarlo al cargar el módulo (`new Resend(process.env.RESEND_API_KEY)`)
+ * lanzaba en el import si la variable faltaba o estaba vacía, y como este
+ * módulo lo importan rutas de toda la app, un env mal configurado tumbaba el
+ * sitio entero con 500 en vez de fallar solo el envío del correo. Las guardas
+ * `if (!process.env.RESEND_API_KEY) return` de más abajo ni siquiera llegaban
+ * a ejecutarse. Así el cliente solo se crea cuando de verdad se manda un
+ * correo, y si no hay clave falla únicamente ese envío.
+ */
+let _resend: Resend | null = null;
+
+function getResendInstance(): Resend {
+  if (!_resend) {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) throw new Error("RESEND_API_KEY no está configurada");
+    _resend = new Resend(key);
+  }
+  return _resend;
+}
+
+const resend = new Proxy({} as Resend, {
+  get(_target, prop: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (getResendInstance() as any)[prop];
+  },
+});
 
 const FROM = () => process.env.RESEND_FROM_EMAIL || "Cursumi <onboarding@resend.dev>";
 const LOGO_URL = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com"}/logos/cursumi.svg`;
