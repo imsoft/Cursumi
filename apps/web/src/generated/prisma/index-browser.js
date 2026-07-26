@@ -711,6 +711,38 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.GovernanceDocumentScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  title: 'title',
+  content: 'content',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GovernanceVersionScalarFieldEnum = {
+  id: 'id',
+  documentId: 'documentId',
+  version: 'version',
+  content: 'content',
+  publishedAt: 'publishedAt',
+  publishedBy: 'publishedBy',
+  changeNote: 'changeNote'
+};
+
+exports.Prisma.GovernanceAcceptanceScalarFieldEnum = {
+  id: 'id',
+  versionId: 'versionId',
+  userId: 'userId',
+  email: 'email',
+  role: 'role',
+  fullName: 'fullName',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  acceptedAt: 'acceptedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -844,6 +876,12 @@ exports.ReferralStatus = exports.$Enums.ReferralStatus = {
   paid: 'paid'
 };
 
+exports.GovernanceRole = exports.$Enums.GovernanceRole = {
+  owner: 'owner',
+  ceo: 'ceo',
+  cfo: 'cfo'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
@@ -895,7 +933,10 @@ exports.Prisma.ModelName = {
   PushSubscription: 'PushSubscription',
   ExpoPushToken: 'ExpoPushToken',
   BlogPost: 'BlogPost',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  GovernanceDocument: 'GovernanceDocument',
+  GovernanceVersion: 'GovernanceVersion',
+  GovernanceAcceptance: 'GovernanceAcceptance'
 };
 
 /**

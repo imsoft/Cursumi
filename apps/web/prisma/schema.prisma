@@ -1177,3 +1177,73 @@ model AuditLog {
   @@index([action])
   @@index([createdAt])
 }
+
+// ─────────────────────────────────────────
+// GOBERNANZA — documento de acuerdos entre socios (C-level)
+// ─────────────────────────────────────────
+// El documento vive en la cuenta principal (dueño), que redacta y publica.
+// Cada publicación congela una VERSIÓN inmutable; los firmantes aceptan una
+// versión concreta. Editar y volver a publicar invalida las firmas: todos
+// deben aceptar la nueva versión. Así nadie puede decir "yo acepté otra cosa".
+
+enum GovernanceRole {
+  owner
+  ceo
+  cfo
+}
+
+model GovernanceDocument {
+  id      String @id @default(cuid())
+  slug    String @unique // ej. "alineacion-socios"
+  title   String
+  /// Borrador vivo que edita el dueño (aún no obliga a nadie).
+  content Json
+  /// Número de la última versión publicada (0 = nunca publicada).
+  version Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  versions GovernanceVersion[]
+}
+
+/// Instantánea inmutable del documento en el momento de publicar.
+model GovernanceVersion {
+  id          String   @id @default(cuid())
+  documentId  String
+  version     Int
+  /// Copia congelada del contenido: es lo que realmente se firma.
+  content     Json
+  publishedAt DateTime @default(now())
+  publishedBy String // userId del dueño que publicó
+  /// Nota de cambios para que los firmantes sepan qué se movió.
+  changeNote  String?
+
+  document    GovernanceDocument     @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  acceptances GovernanceAcceptance[]
+
+  @@unique([documentId, version])
+  @@index([documentId])
+}
+
+/// Aceptación de una versión concreta. Sin FK a User a propósito (igual que
+/// AuditLog): la firma debe sobrevivir aunque se elimine la cuenta.
+model GovernanceAcceptance {
+  id        String         @id @default(cuid())
+  versionId String
+  userId    String
+  email     String // denormalizado para resiliencia
+  role      GovernanceRole
+  /// Nombre completo tecleado por la persona al aceptar (firma electrónica).
+  fullName  String
+  ip        String?
+  userAgent String?
+
+  acceptedAt DateTime @default(now())
+
+  version GovernanceVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@unique([versionId, userId])
+  @@index([versionId])
+  @@index([userId])
+}

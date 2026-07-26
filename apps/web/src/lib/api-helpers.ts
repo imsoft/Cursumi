@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { ZodError } from "zod";
 import { auth } from "@/lib/auth";
 import { getUserRole } from "@/lib/user-service";
 import type { Role } from "@/generated/prisma";
@@ -34,6 +35,19 @@ export async function requireRole(userId: string, roles: Role[]) {
 export function handleApiError(error: unknown) {
   if (error instanceof ApiError) {
     return NextResponse.json({ error: error.message }, { status: error.status });
+  }
+  // Datos mal formados = culpa del cliente (400), no error del servidor (500).
+  // Devolvemos el primer problema con su campo para que la UI pueda mostrarlo.
+  if (error instanceof ZodError) {
+    const first = error.issues[0];
+    const field = first?.path.join(".");
+    return NextResponse.json(
+      {
+        error: field ? `${field}: ${first.message}` : (first?.message ?? "Datos inválidos"),
+        issues: error.issues.map((i) => ({ path: i.path.join("."), message: i.message })),
+      },
+      { status: 400 },
+    );
   }
   console.error(error);
   return NextResponse.json({ error: "Error interno" }, { status: 500 });
