@@ -113,7 +113,7 @@ export default function AdminSettingsPage() {
         description="Configuración general de la plataforma"
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6">
         {/* Configuración General */}
         <Card className="border border-border bg-card/90">
           <CardHeader>
@@ -150,7 +150,7 @@ export default function AdminSettingsPage() {
         </Card>
 
         {/* Comisión plataforma (pagos) */}
-        <Card className="border border-border bg-card/90 lg:col-span-2">
+        <Card className="border border-border bg-card/90">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Percent className="h-5 w-5" />
@@ -276,7 +276,7 @@ export default function AdminSettingsPage() {
         />
 
         {/* Redes Sociales — ocupa ancho completo */}
-        <Card className="border border-border bg-card/90 lg:col-span-2">
+        <Card className="border border-border bg-card/90">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
