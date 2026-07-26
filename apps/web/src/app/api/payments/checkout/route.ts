@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { notifyEnrollment } from "@/lib/notification-helpers";
 import { stripe, calculateSplit } from "@/lib/stripe";
 import { getPlatformFeePercent } from "@/lib/platform-fee";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
@@ -177,6 +178,13 @@ export async function POST(req: NextRequest) {
             AND ("maxUses" IS NULL OR "usedCount" < "maxUses")
         `;
       }
+
+      // Mismo aviso que en el camino de pago: aquí no hay webhook que lo haga.
+      await notifyEnrollment({
+        studentId: session.user.id,
+        courseId,
+        free: true,
+      });
 
       const successUrl = `${baseUrl}/dashboard/my-courses/${courseId}?enrolled=true`;
       return NextResponse.json({ url: successUrl, discountPct: appliedCoupon?.discountPct ?? 0 });
