@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
-import { notifyEnrollment } from "@/lib/notification-helpers";
+import { notifyAdmins, notifyEnrollment } from "@/lib/notification-helpers";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -159,13 +159,41 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // Alta de empresa: ingreso recurrente nuevo, el admin debe enterarse.
+  if (event.type === "customer.subscription.created") {
+    const sub = event.data.object as Stripe.Subscription;
+    const orgId = (sub.metadata?.organizationId as string) || null;
+    const org = orgId
+      ? await prisma.organization.findUnique({ where: { id: orgId }, select: { name: true } })
+      : null;
+    await notifyAdmins({
+      type: "org_subscribed",
+      title: "Nueva empresa suscrita",
+      body: `${org?.name ?? "Una empresa"} activó su suscripción.`,
+      link: "/admin/business",
+    });
+  }
+
   if (event.type === "customer.subscription.deleted") {
     const sub = event.data.object as Stripe.Subscription;
     const stripeCustomerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
 
+    const canceled = await prisma.orgSubscription.findFirst({
+      where: { stripeCustomerId },
+      select: { organization: { select: { name: true } } },
+    });
+
     await prisma.orgSubscription.updateMany({
       where: { stripeCustomerId },
       data: { status: "canceled" },
+    });
+
+    // Baja de empresa: conviene dar seguimiento cuanto antes.
+    await notifyAdmins({
+      type: "org_canceled",
+      title: "Empresa canceló su suscripción",
+      body: `${canceled?.organization?.name ?? "Una empresa"} dio de baja su plan.`,
+      link: "/admin/business",
     });
   }
 

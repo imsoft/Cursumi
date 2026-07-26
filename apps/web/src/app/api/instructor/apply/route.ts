@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCachedSession } from "@/lib/session";
+import { notifyAdmins } from "@/lib/notification-helpers";
 import { prisma } from "@/lib/prisma";
 
 // RFC (México): 3-4 letras + 6 dígitos (fecha) + 3 de homoclave
@@ -100,6 +101,14 @@ export async function POST(req: Request) {
       },
     });
   }
+
+  // Requiere que un admin la revise, así que se le avisa.
+  await notifyAdmins({
+    type: "instructor_application",
+    title: "Nueva solicitud de instructor",
+    body: `${session.user.name || session.user.email} quiere impartir cursos. Revisa su solicitud.`,
+    link: "/admin/instructor-applications",
+  });
 
   return NextResponse.json({ application }, { status: 201 });
 }

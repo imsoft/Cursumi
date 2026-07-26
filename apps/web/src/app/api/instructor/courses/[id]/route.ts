@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getCourseDetail } from "@/lib/course-service";
+import { notifyAdmins } from "@/lib/notification-helpers";
 import { prisma } from "@/lib/prisma";
 import type { CourseStatus } from "@/generated/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
@@ -72,10 +73,23 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       }
     }
 
+    const wasPublished = course.status === "published";
     const updated = await prisma.course.update({
       where: { id },
       data: { status },
     });
+
+    // Los instructores publican sin aprobación previa: avisamos al admin para
+    // que pueda revisar el catálogo. Solo en la transición a publicado, no en
+    // cada guardado de un curso que ya estaba público.
+    if (status === "published" && !wasPublished) {
+      await notifyAdmins({
+        type: "course_published",
+        title: "Curso publicado",
+        body: `"${updated.title}" ya está visible en el catálogo.`,
+        link: "/admin/courses",
+      });
+    }
 
     revalidatePath("/instructor/courses");
     revalidatePath("/dashboard/my-courses");

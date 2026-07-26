@@ -40,6 +40,42 @@ export async function createNotification(input: CreateNotificationInput) {
 }
 
 /**
+ * Avisa a TODOS los administradores de la plataforma.
+ *
+ * Reservado para lo que pide acción del admin o es crítico para el negocio.
+ * Deliberadamente NO se usa para eventos de alta frecuencia (cada venta, cada
+ * pago rechazado): una bandeja ruidosa se acaba ignorando entera.
+ *
+ * Nunca lanza: un aviso al admin no debe tumbar la acción del usuario.
+ */
+export async function notifyAdmins(input: {
+  type: string;
+  title: string;
+  body: string;
+  link?: string;
+}) {
+  try {
+    const admins = await prisma.user.findMany({
+      where: { role: "admin" },
+      select: { id: true },
+    });
+    await Promise.all(
+      admins.map((a) =>
+        createNotification({
+          userId: a.id,
+          type: input.type,
+          title: input.title,
+          body: input.body,
+          link: input.link,
+        }),
+      ),
+    );
+  } catch (e) {
+    console.error("[notifyAdmins]", input.type, e);
+  }
+}
+
+/**
  * Todo lo que debe ocurrir cuando alguien queda inscrito en un curso:
  * avisar al alumno y al instructor, mandar el correo de bienvenida y registrar
  * la comisión de referido.

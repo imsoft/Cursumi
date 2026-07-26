@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { notifyAdmins } from "@/lib/notification-helpers";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { checkRateLimitAsync } from "@/lib/rate-limit";
 
@@ -76,6 +77,21 @@ export async function POST(
         comment: body.comment,
       },
     });
+
+    // Solo las reseñas malas: son las que pueden requerir intervención.
+    // Avisar de todas convertiría la bandeja en ruido.
+    if (body.rating <= 2) {
+      const course = await prisma.course.findUnique({
+        where: { id: courseId },
+        select: { title: true },
+      });
+      await notifyAdmins({
+        type: "low_review",
+        title: `Reseña de ${body.rating} estrella${body.rating === 1 ? "" : "s"}`,
+        body: `"${course?.title ?? "Un curso"}" recibió una calificación baja.`,
+        link: "/admin/reviews",
+      });
+    }
 
     return NextResponse.json(review);
   } catch (error) {
