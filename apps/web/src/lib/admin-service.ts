@@ -2,16 +2,37 @@ import { prisma } from "./prisma";
 
 export type AdminStats = {
   totalUsers: number;
+  students: number;
+  instructors: number;
   totalCourses: number;
   publishedCourses: number;
   draftCourses: number;
   totalEnrollments: number;
+  /** Cobrado de verdad: suma de transacciones completadas (en pesos). */
+  realRevenue: number;
+  /** Potencial teórico: precio de catálogo × inscripciones. No es dinero cobrado. */
   estimatedRevenue: number;
+  certificates: number;
+  averageRating: number | null;
+  /** Cosas que esperan una decisión del administrador. */
+  pendingApplications: number;
+  lowReviews: number;
+  activeOrganizations: number;
 };
 
 export async function getAdminStats(): Promise<AdminStats> {
-  const [users, courses, enrollments] = await Promise.all([
-    prisma.user.count(),
+  const [
+    usersByRole,
+    courses,
+    enrollments,
+    transactions,
+    certificates,
+    ratings,
+    pendingApplications,
+    lowReviews,
+    activeOrganizations,
+  ] = await Promise.all([
+    prisma.user.groupBy({ by: ["role"], _count: true }),
     prisma.course.findMany({
       select: {
         status: true,
@@ -20,7 +41,19 @@ export async function getAdminStats(): Promise<AdminStats> {
       },
     }),
     prisma.enrollment.count(),
+    prisma.transaction.aggregate({
+      where: { status: "completed" },
+      _sum: { amount: true },
+    }),
+    prisma.certificate.count(),
+    prisma.review.aggregate({ _avg: { rating: true } }),
+    prisma.instructorApplication.count({ where: { status: "pending" } }),
+    prisma.review.count({ where: { rating: { lte: 2 } } }),
+    prisma.orgSubscription.count({ where: { status: { in: ["active", "trialing"] } } }),
   ]);
+
+  const roleCount = (role: string) =>
+    usersByRole.find((r) => r.role === role)?._count ?? 0;
 
   const publishedCourses = courses.filter((c) => c.status === "published").length;
   const draftCourses = courses.filter((c) => c.status === "draft").length;
@@ -30,13 +63,97 @@ export async function getAdminStats(): Promise<AdminStats> {
   );
 
   return {
-    totalUsers: users,
+    totalUsers: usersByRole.reduce((sum, r) => sum + r._count, 0),
+    students: roleCount("student"),
+    instructors: roleCount("instructor"),
     totalCourses: courses.length,
     publishedCourses,
     draftCourses,
     totalEnrollments: enrollments,
+    // Las transacciones se guardan en CENTAVOS; el resto del panel muestra pesos.
+    realRevenue: Math.round((transactions._sum.amount ?? 0) / 100),
     estimatedRevenue,
+    certificates,
+    averageRating: ratings._avg.rating,
+    pendingApplications,
+    lowReviews,
+    activeOrganizations,
   };
+}
+
+export type AdminActivityItem = {
+  kind: "signup" | "enrollment" | "review" | "course";
+  text: string;
+  at: string;
+  link: string;
+};
+
+/** Últimos movimientos de la plataforma, mezclados y ordenados por fecha. */
+export async function getAdminActivity(limit = 8): Promise<AdminActivityItem[]> {
+  const [users, enrollments, reviews, courses] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: { name: true, email: true, role: true, createdAt: true },
+    }),
+    prisma.enrollment.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: {
+        createdAt: true,
+        student: { select: { name: true, email: true } },
+        course: { select: { id: true, title: true } },
+      },
+    }),
+    prisma.review.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: {
+        rating: true,
+        createdAt: true,
+        course: { select: { title: true } },
+      },
+    }),
+    prisma.course.findMany({
+      where: { status: "published" },
+      orderBy: { updatedAt: "desc" },
+      take: limit,
+      select: { id: true, title: true, updatedAt: true },
+    }),
+  ]);
+
+  const items: AdminActivityItem[] = [
+    ...users.map((u) => ({
+      kind: "signup" as const,
+      text: `${u.name || u.email} se registró como ${
+        u.role === "instructor" ? "instructor" : u.role === "admin" ? "administrador" : "alumno"
+      }`,
+      at: u.createdAt.toISOString(),
+      link: "/admin/users",
+    })),
+    ...enrollments.map((e) => ({
+      kind: "enrollment" as const,
+      text: `${e.student?.name || e.student?.email || "Alguien"} se inscribió en "${
+        e.course?.title ?? "un curso"
+      }"`,
+      at: e.createdAt.toISOString(),
+      link: e.course ? `/admin/courses` : "/admin/courses",
+    })),
+    ...reviews.map((r) => ({
+      kind: "review" as const,
+      text: `Reseña de ${r.rating}★ en "${r.course?.title ?? "un curso"}"`,
+      at: r.createdAt.toISOString(),
+      link: "/admin/reviews",
+    })),
+    ...courses.map((c) => ({
+      kind: "course" as const,
+      text: `"${c.title}" se actualizó en el catálogo`,
+      at: c.updatedAt.toISOString(),
+      link: "/admin/courses",
+    })),
+  ];
+
+  return items.sort((a, b) => b.at.localeCompare(a.at)).slice(0, limit);
 }
 
 export type AdminAnalytics = {
