@@ -41,7 +41,7 @@ export const GOVERNANCE_SIGNATORIES: Signatory[] = [
     mustSign: true,
   },
   {
-    email: "rahampery@gmail.com",
+    email: "rahamperys@gmail.com",
     role: "cfo",
     title: "CFO",
     mustSign: true,

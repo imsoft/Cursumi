@@ -16,14 +16,14 @@ describe("firmantes", () => {
     expect(GOVERNANCE_SIGNATORIES.map((s) => s.email).sort()).toEqual([
       "brangarciaramos@gmail.com",
       "cursumi.com@gmail.com",
-      "rahampery@gmail.com",
+      "rahamperys@gmail.com",
     ]);
   });
 
   it("la cuenta principal publica pero no firma; CEO y CFO sí firman", () => {
     expect(getSignatory("cursumi.com@gmail.com")?.mustSign).toBe(false);
     expect(getSignatory("brangarciaramos@gmail.com")?.mustSign).toBe(true);
-    expect(getSignatory("rahampery@gmail.com")?.mustSign).toBe(true);
+    expect(getSignatory("rahamperys@gmail.com")?.mustSign).toBe(true);
     expect(REQUIRED_SIGNATORIES.map((s) => s.role).sort()).toEqual(["ceo", "cfo"]);
   });
 
@@ -40,6 +40,12 @@ describe("firmantes", () => {
     // Un admin de la plataforma tampoco entra por ser admin.
     expect(getSignatory("admin@cursumi.com")).toBeNull();
     expect(isOwner("brangarciaramos@gmail.com")).toBe(false);
+  });
+
+  it("la cuenta duplicada del CFO (sin la 's') NO tiene acceso", () => {
+    // Existen dos cuentas a nombre de la misma persona; solo firma la correcta.
+    expect(getSignatory("rahampery@gmail.com")).toBeNull();
+    expect(getSignatory("rahamperys@gmail.com")?.role).toBe("cfo");
   });
 });
 
@@ -106,7 +112,7 @@ describe("estado de firmas", () => {
   it("con CEO y CFO queda en vigor", () => {
     const s = signatureStatus([
       accept("brangarciaramos@gmail.com", "ceo"),
-      accept("rahampery@gmail.com", "cfo"),
+      accept("rahamperys@gmail.com", "cfo"),
     ]);
     expect(s.inForce).toBe(true);
     expect(s.pending).toHaveLength(0);
