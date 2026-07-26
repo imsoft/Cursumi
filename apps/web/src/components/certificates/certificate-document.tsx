@@ -86,10 +86,10 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
       }}
     >
       {/* ── Fondo decorativo: bloques diagonales ── */}
-      {/* Triángulo esquina superior izquierda: base morada + relleno lavanda
-          ligeramente más chico encima → deja un borde diagonal morado fino.
-          Usamos DOS rellenos sólidos con clip-path (nada de box-shadow inset:
-          html2canvas no lo soporta igual que un navegador y lo pinta sólido). */}
+      {/* Triángulo esquina superior izquierda: un único relleno lavanda, sin
+          borde diagonal marcado, para que no compita con el contenido.
+          Relleno sólido con clip-path (nada de box-shadow inset: html2canvas
+          no lo soporta igual que un navegador y lo pinta sólido). */}
       <div
         style={{
           position: "absolute",
@@ -97,17 +97,6 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
           left: 0,
           width: 524,
           height: 504,
-          background: PURPLE_LIGHT,
-          clipPath: "polygon(0 0, 100% 0, 0 100%)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: 516,
-          height: 496,
           background: WASH,
           clipPath: "polygon(0 0, 100% 0, 0 100%)",
         }}
