@@ -22,7 +22,9 @@ export const LayoutShell = ({ children }: LayoutShellProps) => {
     (pathname?.startsWith("/instructor/") || pathname === "/instructor") ||
     pathname?.startsWith("/dashboard") ||
     pathname?.startsWith("/admin") ||
-    pathname?.startsWith("/business/dashboard");
+    pathname?.startsWith("/business/dashboard") ||
+    // Gobernanza se renderiza dentro del panel (sidebar propio), no es pública.
+    pathname?.startsWith("/gobernanza");
 
   return (
     <>

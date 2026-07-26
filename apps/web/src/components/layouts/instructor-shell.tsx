@@ -79,8 +79,9 @@ export function InstructorShell({
   showGovernance,
 }: InstructorShellProps) {
   const pathname = usePathname();
+  // Gobernanza va antes del último elemento para que Perfil cierre el menú.
   const navItems = showGovernance
-    ? [...instructorNavItems, { title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+    ? [...instructorNavItems.slice(0, -1), { title: "Gobernanza", href: "/gobernanza", icon: Scale }, ...instructorNavItems.slice(-1)]
     : instructorNavItems;
   const pageTitle = pageTitleProp ?? getPageTitle(pathname);
   const isWhiteboard = pathname?.startsWith("/instructor/whiteboard") ?? false;

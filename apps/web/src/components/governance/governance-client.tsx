@@ -215,7 +215,7 @@ export function GovernanceClient({
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <div className="mx-auto w-full max-w-4xl">
       {/* ── Encabezado ─────────────────────────────────────────────── */}
       <header className="mb-8">
         <div className="flex flex-wrap items-center gap-3">

@@ -72,8 +72,9 @@ export function AdminShell({
   children,
 }: AdminShellProps) {
   const pathname = usePathname();
+  // Gobernanza va antes del último elemento para que Configuración cierre el menú.
   const navItems = showGovernance
-    ? [...adminNavItems, { title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+    ? [...adminNavItems.slice(0, -1), { title: "Gobernanza", href: "/gobernanza", icon: Scale }, ...adminNavItems.slice(-1)]
     : adminNavItems;
   const isWhiteboard = pathname?.startsWith("/admin/whiteboard") ?? false;
   const headerTitle = isWhiteboard ? "Pizarrón virtual" : undefined;

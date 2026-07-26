@@ -111,7 +111,7 @@ export function StudentShell({
     ? { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }
     : { title: "Para empresas", href: "/dashboard/business", icon: Building2 };
   const finalNavItems = showGovernance
-    ? [...navItems, businessItem, { title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+    ? [...navItems, { title: "Gobernanza", href: "/gobernanza", icon: Scale }, businessItem]
     : [...navItems, businessItem];
 
   return (
