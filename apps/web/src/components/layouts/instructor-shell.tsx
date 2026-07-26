@@ -24,21 +24,45 @@ import {
   Scale,
 } from "lucide-react";
 
-const instructorNavItems = [
-  { title: "Dashboard", href: "/instructor", icon: LayoutDashboard },
-  // La planeación didáctica ahora vive dentro de cada curso (pestaña del workspace),
-  // por eso ya no es un item de nivel superior del sidebar.
-  { title: "Mis cursos", href: "/instructor/courses", icon: BookOpenCheck },
-  { title: "Crear curso", href: "/instructor/courses/new", icon: PlusCircle },
-  { title: "Pizarrón virtual", href: "/instructor/whiteboard", icon: PenLine },
-  { title: "Mis juegos", href: "/instructor/games", icon: Gamepad2 },
-  { title: "Ingresos", href: "/instructor/earnings", icon: DollarSign },
-  { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
-  { title: "Blog", href: "/instructor/blog", icon: Newspaper },
-  { title: "Plantillas", href: "/instructor/templates", icon: FileDown },
-  { title: "Para empresas", href: "/instructor/business", icon: Building2 },
-  { title: "Perfil", href: "/instructor/profile", icon: UserCircle },
+const instructorSections = [
+  {
+    label: "General",
+    items: [{ title: "Dashboard", href: "/instructor", icon: LayoutDashboard }],
+  },
+  {
+    label: "Mis cursos",
+    items: [
+      // La planeación didáctica vive dentro de cada curso (pestaña del workspace),
+      // por eso no es un item de nivel superior del sidebar.
+      { title: "Mis cursos", href: "/instructor/courses", icon: BookOpenCheck },
+      { title: "Crear curso", href: "/instructor/courses/new", icon: PlusCircle },
+      { title: "Plantillas", href: "/instructor/templates", icon: FileDown },
+    ],
+  },
+  {
+    label: "Enseñanza",
+    items: [
+      { title: "Pizarrón virtual", href: "/instructor/whiteboard", icon: PenLine },
+      { title: "Mis juegos", href: "/instructor/games", icon: Gamepad2 },
+      { title: "Blog", href: "/instructor/blog", icon: Newspaper },
+    ],
+  },
+  {
+    label: "Negocio",
+    items: [
+      { title: "Ingresos", href: "/instructor/earnings", icon: DollarSign },
+      { title: "Analíticas", href: "/instructor/analytics", icon: BarChart3 },
+      { title: "Para empresas", href: "/instructor/business", icon: Building2 },
+    ],
+  },
+  {
+    label: "Cuenta",
+    items: [{ title: "Perfil", href: "/instructor/profile", icon: UserCircle }],
+  },
 ];
+
+/** Lista plana — la usa getPageTitle para resolver el título de la página. */
+const instructorNavItems = instructorSections.flatMap((g) => g.items);
 
 const pathnameToTitle: Record<string, string> = {
   "/instructor": "Dashboard",
@@ -79,10 +103,18 @@ export function InstructorShell({
   showGovernance,
 }: InstructorShellProps) {
   const pathname = usePathname();
-  // Gobernanza va antes del último elemento para que Perfil cierre el menú.
-  const navItems = showGovernance
-    ? [...instructorNavItems.slice(0, -1), { title: "Gobernanza", href: "/gobernanza", icon: Scale }, ...instructorNavItems.slice(-1)]
-    : instructorNavItems;
+  // Gobernanza se suma a "Cuenta", antes de Perfil (que cierra el menú).
+  const sections = instructorSections.map((group) =>
+    showGovernance && group.label === "Cuenta"
+      ? {
+          ...group,
+          items: [
+            { title: "Gobernanza", href: "/gobernanza", icon: Scale },
+            ...group.items,
+          ],
+        }
+      : group,
+  );
   const pageTitle = pageTitleProp ?? getPageTitle(pathname);
   const isWhiteboard = pathname?.startsWith("/instructor/whiteboard") ?? false;
 
@@ -106,7 +138,7 @@ export function InstructorShell({
     <SidebarProvider
       className={cn(isWhiteboard && "h-svh max-h-svh overflow-hidden")}
     >
-      <AppSidebar navItems={navItems} title="Cursumi Instructor" />
+      <AppSidebar sections={sections} title="Cursumi Instructor" />
       <SidebarInset className={cn(isWhiteboard && "min-h-0 overflow-hidden")}>
         <DashboardHeader
           title={pageTitle}

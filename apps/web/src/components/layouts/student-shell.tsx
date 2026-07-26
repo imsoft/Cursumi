@@ -28,19 +28,40 @@ import {
   Scale,
 } from "lucide-react";
 
-const studentNavItems = [
-  { title: "Inicio", href: "/dashboard", icon: LayoutDashboard },
-  { title: "Mis cursos", href: "/dashboard/my-courses", icon: BookOpenCheck },
-  { title: "Guardados", href: "/dashboard/wishlist", icon: Heart },
-  { title: "Mis notas", href: "/dashboard/notes", icon: BookOpen },
-  { title: "Certificados", href: "/dashboard/certificates", icon: Award },
-  { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
-  { title: "Blog", href: "/dashboard/blog", icon: Newspaper },
-  { title: "Juegos", href: "/dashboard/games", icon: Gamepad2 },
-  { title: "Referidos", href: "/dashboard/referral", icon: Gift },
-  { title: "Cuenta", href: "/dashboard/account", icon: UserCircle },
-  { title: "Ser instructor", href: "/dashboard/become-instructor", icon: GraduationCap },
+const studentSections = [
+  {
+    label: "General",
+    items: [{ title: "Inicio", href: "/dashboard", icon: LayoutDashboard }],
+  },
+  {
+    label: "Mi aprendizaje",
+    items: [
+      { title: "Mis cursos", href: "/dashboard/my-courses", icon: BookOpenCheck },
+      { title: "Guardados", href: "/dashboard/wishlist", icon: Heart },
+      { title: "Mis notas", href: "/dashboard/notes", icon: BookOpen },
+      { title: "Certificados", href: "/dashboard/certificates", icon: Award },
+    ],
+  },
+  {
+    label: "Descubrir",
+    items: [
+      { title: "Explorar cursos", href: "/dashboard/explore", icon: Search },
+      { title: "Blog", href: "/dashboard/blog", icon: Newspaper },
+      { title: "Juegos", href: "/dashboard/games", icon: Gamepad2 },
+    ],
+  },
+  {
+    label: "Mi cuenta",
+    items: [
+      { title: "Referidos", href: "/dashboard/referral", icon: Gift },
+      { title: "Cuenta", href: "/dashboard/account", icon: UserCircle },
+      { title: "Ser instructor", href: "/dashboard/become-instructor", icon: GraduationCap },
+    ],
+  },
 ];
+
+/** Lista plana — la usa getPageTitle para resolver el título de la página. */
+const studentNavItems = studentSections.flatMap((g) => g.items);
 
 const pathnameToTitle: Record<string, string> = {
   "/dashboard/my-courses": "Mis cursos",
@@ -101,24 +122,42 @@ export function StudentShell({
   const isCertificatePrintPage =
     pathname != null && /^\/dashboard\/certificates\/[^/]+$/.test(pathname);
 
-  const navItems = hasOrg
-    ? [...studentNavItems.slice(0, 3), { title: "Materiales", href: "/dashboard/org-materials", icon: FileText }, ...studentNavItems.slice(3)]
-    : studentNavItems;
-
-  // Owner/admin de una empresa: acceso directo a su panel; el resto, enlace a la
-  // landing empresarial (descubrimiento).
+  // "Materiales" solo aplica a quien pertenece a una empresa; el acceso a
+  // empresa cambia según sea administrador de la organización o no.
   const businessItem = isOrgAdmin
     ? { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }
     : { title: "Para empresas", href: "/dashboard/business", icon: Building2 };
-  const finalNavItems = showGovernance
-    ? [...navItems, { title: "Gobernanza", href: "/gobernanza", icon: Scale }, businessItem]
-    : [...navItems, businessItem];
+
+  const sections = studentSections.map((group) => {
+    if (group.label === "Mi aprendizaje" && hasOrg) {
+      return {
+        ...group,
+        items: [
+          ...group.items,
+          { title: "Materiales", href: "/dashboard/org-materials", icon: FileText },
+        ],
+      };
+    }
+    if (group.label === "Mi cuenta") {
+      return {
+        ...group,
+        items: [
+          ...(showGovernance
+            ? [{ title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+            : []),
+          ...group.items,
+          businessItem,
+        ],
+      };
+    }
+    return group;
+  });
 
   return (
     <SidebarProvider
       className={cn(isCertificatePrintPage && "print-certificate-layout")}
     >
-      <AppSidebar navItems={finalNavItems} title="Cursumi" />
+      <AppSidebar sections={sections} title="Cursumi" />
       <SidebarInset>
         <DashboardHeader
           title={pageTitle}

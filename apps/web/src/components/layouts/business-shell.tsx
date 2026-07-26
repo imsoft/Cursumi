@@ -20,15 +20,33 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-const businessNavItems = [
-  { title: "Dashboard", href: "/business/dashboard", icon: LayoutDashboard },
-  { title: "Empleados", href: "/business/dashboard/employees", icon: Users },
-  { title: "Equipos", href: "/business/dashboard/teams", icon: UsersRound },
-  { title: "Cursos", href: "/business/dashboard/courses", icon: BookOpenCheck },
-  { title: "Materiales", href: "/business/dashboard/materials", icon: FileText },
-  { title: "Métricas", href: "/business/dashboard/metrics", icon: BarChart3 },
-  { title: "Suscripción", href: "/business/dashboard/subscription", icon: CreditCard },
-  { title: "Configuración", href: "/business/dashboard/settings", icon: Settings },
+const businessSections = [
+  {
+    label: "General",
+    items: [{ title: "Dashboard", href: "/business/dashboard", icon: LayoutDashboard }],
+  },
+  {
+    label: "Mi equipo",
+    items: [
+      { title: "Empleados", href: "/business/dashboard/employees", icon: Users },
+      { title: "Equipos", href: "/business/dashboard/teams", icon: UsersRound },
+    ],
+  },
+  {
+    label: "Formación",
+    items: [
+      { title: "Cursos", href: "/business/dashboard/courses", icon: BookOpenCheck },
+      { title: "Materiales", href: "/business/dashboard/materials", icon: FileText },
+      { title: "Métricas", href: "/business/dashboard/metrics", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Administración",
+    items: [
+      { title: "Suscripción", href: "/business/dashboard/subscription", icon: CreditCard },
+      { title: "Configuración", href: "/business/dashboard/settings", icon: Settings },
+    ],
+  },
 ];
 
 interface BusinessShellProps {
@@ -55,7 +73,7 @@ export function BusinessShell({
 
   return (
     <SidebarProvider>
-      <AppSidebar navItems={businessNavItems} title="Cursumi Business" />
+      <AppSidebar sections={businessSections} title="Cursumi Business" />
       <SidebarInset>
         <DashboardHeader
           profileHref="/business/dashboard/settings"

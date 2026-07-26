@@ -17,20 +17,38 @@ import {
 } from "@/components/ui/sidebar";
 import { LucideIcon } from "lucide-react";
 
-interface NavItem {
+export interface NavItem {
   title: string;
   href: string;
   icon: LucideIcon;
   badge?: string;
 }
 
+/** Bloque de enlaces con su propio encabezado (p. ej. "Contenido"). */
+export interface NavSection {
+  label: string;
+  items: NavItem[];
+}
+
 interface AppSidebarProps {
-  navItems: NavItem[];
+  /** Lista plana: se muestra bajo un único encabezado "Navegación". */
+  navItems?: NavItem[];
+  /** Enlaces agrupados por secciones. Tiene prioridad sobre `navItems`. */
+  sections?: NavSection[];
   title?: string;
 }
 
-export function AppSidebar({ navItems, title = "Cursumi" }: AppSidebarProps) {
+export function AppSidebar({ navItems, sections, title = "Cursumi" }: AppSidebarProps) {
   const pathname = usePathname();
+
+  // Una lista plana es solo una sección sin nombrar; así el resto del
+  // componente trabaja siempre con la misma forma.
+  const groups: NavSection[] =
+    sections && sections.length > 0
+      ? sections.filter((s) => s.items.length > 0)
+      : [{ label: "Navegación", items: navItems ?? [] }];
+
+  const firstHref = groups[0]?.items[0]?.href || "/";
 
   return (
     <Sidebar collapsible="icon">
@@ -38,7 +56,7 @@ export function AppSidebar({ navItems, title = "Cursumi" }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild tooltip={title}>
-              <Link href={navItems[0]?.href || "/"} className="flex items-center gap-2">
+              <Link href={firstHref} className="flex items-center gap-2">
                 <div className="hidden aspect-square size-8 items-center justify-center rounded-lg bg-transparent group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:size-8">
                   <Image
                     src="/logos/cursumi.svg"
@@ -63,47 +81,49 @@ export function AppSidebar({ navItems, title = "Cursumi" }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navegación</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                // Lógica mejorada para detectar ruta activa
-                let isActive = false;
-                
-                if (pathname === item.href) {
-                  // Coincidencia exacta
-                  isActive = true;
-                } else if (pathname?.startsWith(item.href + "/")) {
-                  // Es una subruta
-                  // Casos especiales: rutas raíz solo se activan en coincidencia exacta
-                  if (item.href === "/dashboard" || item.href === "/instructor") {
-                    isActive = false;
-                  } else {
+        {groups.map((group) => (
+          <SidebarGroup key={group.label}>
+            <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  // Lógica mejorada para detectar ruta activa
+                  let isActive = false;
+
+                  if (pathname === item.href) {
+                    // Coincidencia exacta
                     isActive = true;
+                  } else if (pathname?.startsWith(item.href + "/")) {
+                    // Es una subruta
+                    // Casos especiales: rutas raíz solo se activan en coincidencia exacta
+                    if (item.href === "/dashboard" || item.href === "/instructor") {
+                      isActive = false;
+                    } else {
+                      isActive = true;
+                    }
                   }
-                }
-                
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-                      <Link href={item.href}>
-                        <Icon />
-                        <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
-                        {item.badge && (
-                          <span className="ml-auto rounded-full bg-sidebar-primary px-2 py-0.5 text-xs font-semibold text-sidebar-primary-foreground group-data-[collapsible=icon]:hidden">
-                            {item.badge}
-                          </span>
-                        )}
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+
+                  return (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
+                        <Link href={item.href}>
+                          <Icon />
+                          <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
+                          {item.badge && (
+                            <span className="ml-auto rounded-full bg-sidebar-primary px-2 py-0.5 text-xs font-semibold text-sidebar-primary-foreground group-data-[collapsible=icon]:hidden">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <div className="flex justify-center gap-3 pb-1 group-data-[collapsible=icon]:hidden">

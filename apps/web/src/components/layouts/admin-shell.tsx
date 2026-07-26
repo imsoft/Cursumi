@@ -33,26 +33,56 @@ import {
   Scale,
 } from "lucide-react";
 
-const adminNavItems = [
-  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { title: "Pizarrón virtual", href: "/admin/whiteboard", icon: PenLine },
-  { title: "Blog", href: "/admin/blog", icon: Newspaper },
-  { title: "Usuarios", href: "/admin/users", icon: Users },
-  { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
-  { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },
-  { title: "Empresas", href: "/admin/business", icon: Building2 },
-  { title: "Categorías", href: "/admin/categories", icon: Tag },
-  { title: "Reseñas", href: "/admin/reviews", icon: MessageSquare },
-  { title: "Cupones", href: "/admin/coupons", icon: Ticket },
-  { title: "KPIs", href: "/admin/kpis", icon: Target },
-  { title: "Analíticas", href: "/admin/analytics", icon: BarChart3 },
-  { title: "Finanzas", href: "/admin/finances", icon: DollarSign },
-  { title: "Simulador", href: "/admin/simulator", icon: Calculator },
-  { title: "Plantillas", href: "/admin/templates", icon: FileDown },
-  { title: "Constancia", href: "/admin/certificate-preview", icon: Award },
-  { title: "AI Lab", href: "/admin/ai-lab", icon: Sparkles },
-  { title: "Auditoría", href: "/admin/audit-logs", icon: ShieldCheck },
-  { title: "Configuración", href: "/admin/settings", icon: Settings },
+const adminSections = [
+  {
+    label: "General",
+    items: [
+      { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Contenido",
+    items: [
+      { title: "Cursos", href: "/admin/courses", icon: BookOpenCheck },
+      { title: "Categorías", href: "/admin/categories", icon: Tag },
+      { title: "Blog", href: "/admin/blog", icon: Newspaper },
+      { title: "Plantillas", href: "/admin/templates", icon: FileDown },
+      { title: "Constancia", href: "/admin/certificate-preview", icon: Award },
+      { title: "Pizarrón virtual", href: "/admin/whiteboard", icon: PenLine },
+    ],
+  },
+  {
+    label: "Comunidad",
+    items: [
+      { title: "Usuarios", href: "/admin/users", icon: Users },
+      { title: "Solicitudes", href: "/admin/instructor-applications", icon: GraduationCap },
+      { title: "Empresas", href: "/admin/business", icon: Building2 },
+      { title: "Reseñas", href: "/admin/reviews", icon: MessageSquare },
+    ],
+  },
+  {
+    label: "Finanzas",
+    items: [
+      { title: "Finanzas", href: "/admin/finances", icon: DollarSign },
+      { title: "Cupones", href: "/admin/coupons", icon: Ticket },
+      { title: "Simulador", href: "/admin/simulator", icon: Calculator },
+    ],
+  },
+  {
+    label: "Análisis",
+    items: [
+      { title: "KPIs", href: "/admin/kpis", icon: Target },
+      { title: "Analíticas", href: "/admin/analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Sistema",
+    items: [
+      { title: "AI Lab", href: "/admin/ai-lab", icon: Sparkles },
+      { title: "Auditoría", href: "/admin/audit-logs", icon: ShieldCheck },
+      { title: "Configuración", href: "/admin/settings", icon: Settings },
+    ],
+  },
 ];
 
 interface AdminShellProps {
@@ -72,10 +102,19 @@ export function AdminShell({
   children,
 }: AdminShellProps) {
   const pathname = usePathname();
-  // Gobernanza va antes del último elemento para que Configuración cierre el menú.
-  const navItems = showGovernance
-    ? [...adminNavItems.slice(0, -1), { title: "Gobernanza", href: "/gobernanza", icon: Scale }, ...adminNavItems.slice(-1)]
-    : adminNavItems;
+  // Gobernanza se suma a "Sistema", antes de Configuración (que cierra el menú).
+  const sections = adminSections.map((group) =>
+    showGovernance && group.label === "Sistema"
+      ? {
+          ...group,
+          items: [
+            ...group.items.slice(0, -1),
+            { title: "Gobernanza", href: "/gobernanza", icon: Scale },
+            ...group.items.slice(-1),
+          ],
+        }
+      : group,
+  );
   const isWhiteboard = pathname?.startsWith("/admin/whiteboard") ?? false;
   const headerTitle = isWhiteboard ? "Pizarrón virtual" : undefined;
 
@@ -83,7 +122,7 @@ export function AdminShell({
     <SidebarProvider
       className={cn(isWhiteboard && "h-svh max-h-svh overflow-hidden")}
     >
-      <AppSidebar navItems={navItems} title="Cursumi Admin" />
+      <AppSidebar sections={sections} title="Cursumi Admin" />
       <SidebarInset className={cn(isWhiteboard && "min-h-0 overflow-hidden")}>
         <DashboardHeader
           title={headerTitle}
