@@ -70,6 +70,11 @@ export const auth = betterAuth({
           google: {
             clientId: googleClientId,
             clientSecret: googleClientSecret,
+            // Sin esto, Google omite el selector y entra con la sesión activa:
+            // quien tiene varias cuentas acaba dentro de la equivocada sin
+            // darse cuenta, y cerrar sesión en Cursumi no lo arregla (la sesión
+            // de Google sigue abierta). Cuesta un clic y evita esa confusión.
+            prompt: "select_account",
           },
         },
       }
