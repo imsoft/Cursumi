@@ -9,10 +9,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 type Created = { userId: string; type: string; title: string; body: string; link: string | null };
 const created: Created[] = [];
 
+const emails: { to: string; courseTitle: string }[] = [];
+const commissions: string[] = [];
+
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     course: {
       findUnique: vi.fn(async () => ({ instructorId: "instructor-1", title: "Curso de prueba" })),
+    },
+    user: {
+      findUnique: vi.fn(async () => ({ email: "alumno@ejemplo.com", name: "Ana Alumna" })),
     },
     notification: {
       create: vi.fn(async ({ data }: { data: Created }) => {
@@ -24,12 +30,27 @@ vi.mock("@/lib/prisma", () => ({
 }));
 vi.mock("@/lib/web-push", () => ({ sendPushToUser: vi.fn(async () => {}) }));
 vi.mock("@/lib/expo-push", () => ({ sendExpoPushToUser: vi.fn(async () => {}) }));
+vi.mock("@/lib/email", () => ({
+  sendEnrollmentEmail: vi.fn(async (p: { to: string; courseTitle: string }) => {
+    emails.push(p);
+  }),
+}));
+vi.mock("@/lib/referral", () => ({
+  processReferralCommission: vi.fn(async (id: string) => {
+    commissions.push(id);
+  }),
+}));
 
 const { notifyEnrollment } = await import("@/lib/notification-helpers");
+
+/** El correo se manda en segundo plano: damos un tick para que resuelva. */
+const flush = () => new Promise((r) => setTimeout(r, 10));
 
 describe("notifyEnrollment", () => {
   beforeEach(() => {
     created.length = 0;
+    emails.length = 0;
+    commissions.length = 0;
   });
 
   it("avisa al alumno y al instructor", async () => {
@@ -64,5 +85,30 @@ describe("notifyEnrollment", () => {
     await notifyEnrollment({ studentId: "instructor-1", courseId: "curso-1" });
     expect(created).toHaveLength(1);
     expect(created[0].title).toBe("Inscripción confirmada");
+  });
+
+  it("manda el correo de bienvenida también en inscripciones gratuitas", async () => {
+    await notifyEnrollment({ studentId: "alumno-1", courseId: "curso-1", free: true });
+    await flush();
+    expect(emails).toHaveLength(1);
+    expect(emails[0].to).toBe("alumno@ejemplo.com");
+    expect(emails[0].courseTitle).toBe("Curso de prueba");
+  });
+
+  it("acredita la comisión de referido cuando hay transacción", async () => {
+    await notifyEnrollment({
+      studentId: "alumno-1",
+      courseId: "curso-1",
+      free: true,
+      transactionId: "tx-1",
+    });
+    await flush();
+    expect(commissions).toEqual(["tx-1"]);
+  });
+
+  it("sin transacción no intenta acreditar comisión", async () => {
+    await notifyEnrollment({ studentId: "alumno-1", courseId: "curso-1" });
+    await flush();
+    expect(commissions).toHaveLength(0);
   });
 });

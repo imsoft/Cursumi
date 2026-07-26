@@ -179,11 +179,13 @@ export async function POST(req: NextRequest) {
         `;
       }
 
-      // Mismo aviso que en el camino de pago: aquí no hay webhook que lo haga.
+      // Mismos efectos que el camino de pago (avisos, correo y comisión de
+      // referido): aquí no hay webhook de Stripe que los dispare.
       await notifyEnrollment({
         studentId: session.user.id,
         courseId,
         free: true,
+        transactionId: transaction.id,
       });
 
       const successUrl = `${baseUrl}/dashboard/my-courses/${courseId}?enrolled=true`;

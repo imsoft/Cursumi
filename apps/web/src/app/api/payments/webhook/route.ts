@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
-import { sendEnrollmentEmail } from "@/lib/email";
 import { notifyEnrollment } from "@/lib/notification-helpers";
-import { processReferralCommission } from "@/lib/referral";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -78,32 +76,13 @@ export async function POST(req: NextRequest) {
         `;
       }
 
-      // Avisa al alumno y al instructor (mismo helper que el camino gratuito)
-      await notifyEnrollment({ studentId: userId, courseId });
-
-      // Procesar comisión de referido si aplica
-      processReferralCommission(transaction.id).catch(() => {});
-
-      // Email de bienvenida al curso
-      const course = await prisma.course.findUnique({
-        where: { id: courseId },
-        select: { instructorId: true, title: true },
+      // Avisos, correo de bienvenida y comisión de referido — mismo helper que
+      // usa el camino sin pago, para que ambos hagan exactamente lo mismo.
+      await notifyEnrollment({
+        studentId: userId,
+        courseId,
+        transactionId: transaction.id,
       });
-      if (course) {
-        const student = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { email: true, name: true },
-        });
-        if (student) {
-          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-          await sendEnrollmentEmail({
-            to: student.email,
-            name: student.name || "Estudiante",
-            courseTitle: course.title,
-            courseUrl: `${baseUrl}/dashboard/my-courses/${courseId}`,
-          });
-        }
-      }
     }
   }
 
