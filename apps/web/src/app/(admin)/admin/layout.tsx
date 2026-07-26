@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
 import { AdminShell } from "@/components/layouts/admin-shell";
 import { getUserBasicInfo } from "@/lib/user-service";
+import { getSignatory } from "@/lib/governance";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,12 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       .slice(0, 2) || "AD";
 
   return (
-    <AdminShell userName={userName} userInitials={userInitials} userImage={userImage}>
+    <AdminShell
+      userName={userName}
+      userInitials={userInitials}
+      userImage={userImage}
+      showGovernance={!!getSignatory(session.user.email)}
+    >
       {children}
     </AdminShell>
   );

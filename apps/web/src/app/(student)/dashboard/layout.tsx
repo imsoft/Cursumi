@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
 import { getUserBasicInfo } from "@/lib/user-service";
 import { StudentShell } from "@/components/layouts/student-shell";
+import { getSignatory } from "@/lib/governance";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -53,6 +54,7 @@ export default async function StudentLayout({ children }: StudentLayoutProps) {
 
   return (
     <StudentShell
+      showGovernance={!!getSignatory(session.user.email)}
       userName={userName}
       userInitials={userInitials}
       userImage={userImage}

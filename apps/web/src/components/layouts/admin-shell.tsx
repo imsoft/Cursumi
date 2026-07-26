@@ -30,6 +30,7 @@ import {
   Newspaper,
   Building2,
   ShieldCheck,
+  Scale,
 } from "lucide-react";
 
 const adminNavItems = [
@@ -58,11 +59,22 @@ interface AdminShellProps {
   userName: string;
   userInitials: string;
   userImage?: string | null;
+  /** Solo los firmantes del documento de acuerdos ven el enlace de Gobernanza. */
+  showGovernance?: boolean;
   children: ReactNode;
 }
 
-export function AdminShell({ userName, userInitials, userImage, children }: AdminShellProps) {
+export function AdminShell({
+  userName,
+  userInitials,
+  userImage,
+  showGovernance,
+  children,
+}: AdminShellProps) {
   const pathname = usePathname();
+  const navItems = showGovernance
+    ? [...adminNavItems, { title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+    : adminNavItems;
   const isWhiteboard = pathname?.startsWith("/admin/whiteboard") ?? false;
   const headerTitle = isWhiteboard ? "Pizarrón virtual" : undefined;
 
@@ -70,7 +82,7 @@ export function AdminShell({ userName, userInitials, userImage, children }: Admi
     <SidebarProvider
       className={cn(isWhiteboard && "h-svh max-h-svh overflow-hidden")}
     >
-      <AppSidebar navItems={adminNavItems} title="Cursumi Admin" />
+      <AppSidebar navItems={navItems} title="Cursumi Admin" />
       <SidebarInset className={cn(isWhiteboard && "min-h-0 overflow-hidden")}>
         <DashboardHeader
           title={headerTitle}

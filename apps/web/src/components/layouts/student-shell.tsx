@@ -25,6 +25,7 @@ import {
   Gift,
   Newspaper,
   Building2,
+  Scale,
 } from "lucide-react";
 
 const studentNavItems = [
@@ -80,6 +81,8 @@ interface StudentShellProps {
   pageTitle?: string;
   hasOrg?: boolean;
   isOrgAdmin?: boolean;
+  /** Solo los firmantes del documento de acuerdos ven el enlace de Gobernanza. */
+  showGovernance?: boolean;
 }
 
 export function StudentShell({
@@ -90,6 +93,7 @@ export function StudentShell({
   pageTitle: pageTitleProp,
   hasOrg,
   isOrgAdmin,
+  showGovernance,
 }: StudentShellProps) {
   const pathname = usePathname();
   const pageTitle = pageTitleProp ?? getPageTitle(pathname, userName);
@@ -106,7 +110,9 @@ export function StudentShell({
   const businessItem = isOrgAdmin
     ? { title: "Panel de empresa", href: "/business/dashboard", icon: Building2 }
     : { title: "Para empresas", href: "/dashboard/business", icon: Building2 };
-  const finalNavItems = [...navItems, businessItem];
+  const finalNavItems = showGovernance
+    ? [...navItems, businessItem, { title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+    : [...navItems, businessItem];
 
   return (
     <SidebarProvider

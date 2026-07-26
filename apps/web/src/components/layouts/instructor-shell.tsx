@@ -21,6 +21,7 @@ import {
   PenLine,
   Newspaper,
   Building2,
+  Scale,
 } from "lucide-react";
 
 const instructorNavItems = [
@@ -65,6 +66,8 @@ interface InstructorShellProps {
   userImage?: string | null;
   children: ReactNode;
   pageTitle?: string;
+  /** Solo los firmantes del documento de acuerdos ven el enlace de Gobernanza. */
+  showGovernance?: boolean;
 }
 
 export function InstructorShell({
@@ -73,8 +76,12 @@ export function InstructorShell({
   userImage,
   children,
   pageTitle: pageTitleProp,
+  showGovernance,
 }: InstructorShellProps) {
   const pathname = usePathname();
+  const navItems = showGovernance
+    ? [...instructorNavItems, { title: "Gobernanza", href: "/gobernanza", icon: Scale }]
+    : instructorNavItems;
   const pageTitle = pageTitleProp ?? getPageTitle(pathname);
   const isWhiteboard = pathname?.startsWith("/instructor/whiteboard") ?? false;
 
@@ -98,7 +105,7 @@ export function InstructorShell({
     <SidebarProvider
       className={cn(isWhiteboard && "h-svh max-h-svh overflow-hidden")}
     >
-      <AppSidebar navItems={instructorNavItems} title="Cursumi Instructor" />
+      <AppSidebar navItems={navItems} title="Cursumi Instructor" />
       <SidebarInset className={cn(isWhiteboard && "min-h-0 overflow-hidden")}>
         <DashboardHeader
           title={pageTitle}

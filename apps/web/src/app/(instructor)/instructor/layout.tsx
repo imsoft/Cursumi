@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { getSessionSafe } from "@/lib/session";
 import { InstructorShell } from "@/components/layouts/instructor-shell";
+import { getSignatory } from "@/lib/governance";
 import { getUserBasicInfo } from "@/lib/user-service";
 
 export const dynamic = "force-dynamic";
@@ -44,7 +45,12 @@ export default async function InstructorLayout({ children }: InstructorLayoutPro
       .slice(0, 2) || "IN";
 
   return (
-    <InstructorShell userName={userName} userInitials={userInitials} userImage={userImage}>
+    <InstructorShell
+      userName={userName}
+      userInitials={userInitials}
+      userImage={userImage}
+      showGovernance={!!getSignatory(session.user.email)}
+    >
       {children}
     </InstructorShell>
   );
