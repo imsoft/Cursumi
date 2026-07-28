@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { LucideIcon } from "lucide-react";
 
@@ -40,6 +41,12 @@ interface AppSidebarProps {
 
 export function AppSidebar({ navItems, sections, title = "Cursumi" }: AppSidebarProps) {
   const pathname = usePathname();
+  const { setOpenMobile, isMobile } = useSidebar();
+
+  /** Cierra el sidebar móvil (Sheet) al hacer click en un enlace. */
+  const closeMobileSidebar = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   // Una lista plana es solo una sección sin nombrar; así el resto del
   // componente trabaja siempre con la misma forma.
@@ -56,7 +63,7 @@ export function AppSidebar({ navItems, sections, title = "Cursumi" }: AppSidebar
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild tooltip={title}>
-              <Link href={firstHref} className="flex items-center gap-2">
+              <Link href={firstHref} className="flex items-center gap-2" onClick={closeMobileSidebar}>
                 <div className="hidden aspect-square size-8 items-center justify-center rounded-lg bg-transparent group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:size-8">
                   <Image
                     src="/logos/cursumi.svg"
@@ -107,7 +114,7 @@ export function AppSidebar({ navItems, sections, title = "Cursumi" }: AppSidebar
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-                        <Link href={item.href}>
+                        <Link href={item.href} onClick={closeMobileSidebar}>
                           <Icon />
                           <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
                           {item.badge && (
@@ -127,11 +134,11 @@ export function AppSidebar({ navItems, sections, title = "Cursumi" }: AppSidebar
       </SidebarContent>
       <SidebarFooter>
         <div className="flex justify-center gap-3 pb-1 group-data-[collapsible=icon]:hidden">
-          <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/privacy" onClick={closeMobileSidebar} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
             Privacidad
           </Link>
           <span className="text-xs text-muted-foreground">·</span>
-          <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/terms" onClick={closeMobileSidebar} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
             Términos
           </Link>
         </div>

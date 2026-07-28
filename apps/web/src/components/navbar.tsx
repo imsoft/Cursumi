@@ -106,12 +106,12 @@ export const Navbar = () => {
                 </Link>
               ) : (
                 <>
-                  <Link href="/login">
+                  <Link href="/login" onClick={() => setOpen(false)}>
                     <Button variant="outline" className="w-full" size="sm">
                       Iniciar sesión
                     </Button>
                   </Link>
-                  <Link href="/signup">
+                  <Link href="/signup" onClick={() => setOpen(false)}>
                     <Button className="w-full" size="sm">
                       Crear cuenta
                     </Button>

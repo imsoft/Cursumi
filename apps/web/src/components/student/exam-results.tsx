@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { XCircle, Trophy, AlertCircle, PlayCircle, BookOpen } from "lucide-react";
+import { XCircle, Trophy, AlertCircle, PlayCircle, BookOpen, PartyPopper } from "lucide-react";
+import { fireGrandConfetti } from "@/lib/minigame-confetti";
 import type { CourseFinalExam, CourseLessonOption } from "@/components/instructor/course-types";
 
 interface ExamResultsProps {
@@ -46,6 +49,15 @@ export const ExamResults = ({
     .map((id) => lessonById.get(id))
     .filter((l): l is CourseLessonOption => !!l);
 
+  // 🎉 Confeti al aprobar
+  useEffect(() => {
+    if (passed) {
+      // Pequeño delay para que el componente se monte primero
+      const timer = setTimeout(() => fireGrandConfetti(), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [passed]);
+
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4">
       {/* Resultado principal */}
@@ -56,29 +68,32 @@ export const ExamResults = ({
             : "border-red-500 bg-red-50 dark:border-red-800 dark:bg-red-950/20"
         }`}
       >
-        <CardContent className="p-8 text-center">
+        <CardContent className="p-6 sm:p-8 text-center">
           <div className="mb-4 flex justify-center">
             {passed ? (
-              <Trophy className="h-20 w-20 text-green-600 dark:text-green-400" />
+              <div className="relative">
+                <Trophy className="h-16 w-16 sm:h-20 sm:w-20 text-green-600 dark:text-green-400" />
+                <PartyPopper className="absolute -top-2 -right-3 h-6 w-6 text-yellow-500 animate-bounce" />
+              </div>
             ) : (
-              <XCircle className="h-20 w-20 text-red-600 dark:text-red-400" />
+              <XCircle className="h-16 w-16 sm:h-20 sm:w-20 text-red-600 dark:text-red-400" />
             )}
           </div>
 
-          <h2 className="text-3xl font-bold text-foreground mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
             {passed ? "¡Felicidades! Has aprobado" : "No has aprobado"}
           </h2>
 
-          <p className="text-lg text-muted-foreground mb-6">
+          <p className="text-base sm:text-lg text-muted-foreground mb-6">
             {passed
               ? "Has completado exitosamente el examen final"
               : `Necesitas ${exam.passingScore}% para aprobar`}
           </p>
 
-          <div className="flex justify-center gap-8 mb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-6">
             <div>
               <div
-                className={`text-5xl font-bold ${
+                className={`text-4xl sm:text-5xl font-bold ${
                   passed ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                 }`}
               >
@@ -87,13 +102,14 @@ export const ExamResults = ({
               <p className="text-sm text-muted-foreground mt-1">Tu calificación</p>
             </div>
 
-            <div className="border-l border-border" />
+            <div className="hidden sm:block border-l border-border self-stretch" />
+            <div className="sm:hidden w-16 border-t border-border" />
 
             <div>
-              <div className="text-5xl font-bold text-foreground">
+              <div className="text-4xl sm:text-5xl font-bold text-foreground">
                 {correctAnswers}/{totalQuestions}
               </div>
-              <p className="text-sm text-muted-foreground mt-1">Respuestas correctas</p>
+              <p className="text-sm text-muted-foreground mt-1">{correctAnswers === 1 ? "Respuesta correcta" : "Respuestas correctas"}</p>
             </div>
           </div>
 
@@ -102,13 +118,13 @@ export const ExamResults = ({
               <div className="flex items-center gap-2 justify-center">
                 <AlertCircle className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  Te quedan {exam.attemptsAllowed - attemptsUsed} intentos
+                  Te {(exam.attemptsAllowed - attemptsUsed) === 1 ? "queda" : "quedan"} {exam.attemptsAllowed - attemptsUsed} {(exam.attemptsAllowed - attemptsUsed) === 1 ? "intento" : "intentos"}
                 </span>
               </div>
             </div>
           )}
 
-          <div className="flex gap-2 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {!passed && canRetry && onRetry && (
               <Button onClick={onRetry} size="lg">
                 Reintentar examen

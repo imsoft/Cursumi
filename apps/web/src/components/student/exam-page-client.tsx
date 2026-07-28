@@ -122,14 +122,14 @@ export function ExamPageClient({
             </div>
           )}
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex flex-col sm:flex-row gap-3">
             {!activeSubmission.passed && !cooldownRemaining && (
-              <Button onClick={() => { setActiveSubmission(null); setResult(null); }}>
+              <Button onClick={() => { setActiveSubmission(null); setResult(null); }} className="w-full sm:w-auto">
                 <RefreshCw className="mr-2 h-4 w-4" />
                 Volver a intentar examen
               </Button>
             )}
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild className="w-full sm:w-auto">
               <Link href={`/dashboard/my-courses/${courseId}`}>Volver al curso</Link>
             </Button>
           </div>
@@ -175,9 +175,9 @@ export function ExamPageClient({
             </div>
           )}
 
-          <div className="mx-auto max-w-4xl flex gap-3 flex-wrap">
+          <div className="mx-auto max-w-4xl flex flex-col sm:flex-row gap-3">
             {result.certificate && (
-              <Button asChild>
+              <Button asChild className="w-full sm:w-auto">
                 <Link href={`/dashboard/certificates/${result.certificate.id}?new=1`}>
                   <Award className="mr-2 h-4 w-4" />
                   {result.passed ? "Ver certificado de acreditación" : "Ver reconocimiento de participación"}
@@ -185,12 +185,12 @@ export function ExamPageClient({
               </Button>
             )}
             {!result.passed && !cooldownRemaining && (
-              <Button onClick={() => { setActiveSubmission(null); setResult(null); }}>
+              <Button onClick={() => { setActiveSubmission(null); setResult(null); }} className="w-full sm:w-auto">
                 <RefreshCw className="mr-2 h-4 w-4" />
                 Volver a intentar examen
               </Button>
             )}
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild className="w-full sm:w-auto">
               <Link href={`/dashboard/my-courses/${courseId}`}>Volver al curso</Link>
             </Button>
           </div>
