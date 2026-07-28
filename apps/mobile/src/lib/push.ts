@@ -1,4 +1,4 @@
-import * as Notifications from "expo-notifications";
+import type * as NotificationsModule from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
@@ -18,15 +18,45 @@ import { API_URL } from "./api";
  * SDK 53+ el push remoto no funciona; hay que usar un development build.
  */
 
-// Cómo mostrar la notificación si llega con la app en primer plano.
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+/**
+ * `expo-notifications` se carga con require() y NO con un import estático.
+ *
+ * En Expo Go sobre Android, el módulo LANZA AL INICIALIZARSE (desde SDK 53 el
+ * push remoto se retiró de Expo Go). Con un import estático esa excepción se
+ * produce en la línea 1, antes de que corra ningún try/catch nuestro: el módulo
+ * quedaba sin cargar y con él caían `_layout.tsx` y `explore.tsx` —los dos lo
+ * importan—, que expo-router reportaba como "missing the required default
+ * export" antes de morir con "Cannot read property 'ErrorBoundary' of
+ * undefined". Con require() dentro de try/catch, el fallo se atrapa y la app
+ * arranca igual, solo que sin push.
+ *
+ * No detectamos el entorno con `Constants.executionEnvironment`: su valor
+ * "storeClient" no distingue Expo Go de un development build, y en el dev build
+ * el push sí funciona. Intentar cargarlo y ver qué pasa acierta en los tres
+ * entornos sin adivinar.
+ */
+let Notifications: typeof NotificationsModule | null = null;
+
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  Notifications = require("expo-notifications") as typeof NotificationsModule;
+
+  // Cómo mostrar la notificación si llega con la app en primer plano.
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+} catch {
+  Notifications = null;
+  console.warn(
+    "[push] Notificaciones no disponibles en este entorno. " +
+      "El push remoto en Android requiere un development build, no Expo Go.",
+  );
+}
 
 function authHeaders(): Record<string, string> {
   const cookie = authClient.getCookie();
@@ -42,6 +72,7 @@ function getProjectId(): string | undefined {
 
 /** Pide permiso y devuelve el ExponentPushToken, o null si no se puede obtener. */
 export async function getExpoPushToken(): Promise<string | null> {
+  if (!Notifications) return null; // Expo Go en Android: no hay push remoto
   if (!Device.isDevice) return null; // los simuladores no reciben push remoto
 
   if (Platform.OS === "android") {
@@ -94,6 +125,7 @@ export async function syncPushToken(): Promise<void> {
 
 /** Desregistra el token al cerrar sesión. */
 export async function removePushToken(): Promise<void> {
+  if (!Notifications) return;
   try {
     const projectId = getProjectId();
     if (!projectId || !Device.isDevice) return;
