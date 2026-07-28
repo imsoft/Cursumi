@@ -56,3 +56,6 @@ next-env.d.ts
 # — Ajustes de Claude en tu máquina (permisos, rutas absolutas; no subir):
 .claude/settings.json
 .claude/settings.local.json
+
+# Expo
+.expo/
