@@ -210,7 +210,7 @@ export const ExamInterface = ({ exam, onSubmit, onCancel, attemptsUsed = 0 }: Ex
       <div className="mx-auto max-w-3xl space-y-6 p-4">
         {/* Encabezado del examen */}
         <Card className="border-2 border-primary/30 bg-card overflow-hidden">
-          <div className="h-2 bg-gradient-to-r from-primary via-primary/70 to-primary/40" />
+          <div className="h-2 bg-linear-to-r from-primary via-primary/70 to-primary/40" />
           <CardHeader className="pb-2 pt-6">
             <CardTitle className="text-2xl sm:text-3xl">{exam.title}</CardTitle>
             {exam.description && (
