@@ -52,7 +52,11 @@ try {
   });
 } catch {
   Notifications = null;
-  console.warn(
+  // console.log y no console.warn: en Expo Go sobre Android esto NO es un
+  // fallo que se pueda arreglar programando, es una limitación conocida del
+  // entorno. Con warn, LogBox tapaba la pantalla con un overlay en cada
+  // arranque; con log queda el rastro en la terminal de Metro sin estorbar.
+  console.log(
     "[push] Notificaciones no disponibles en este entorno. " +
       "El push remoto en Android requiere un development build, no Expo Go.",
   );
