@@ -30,6 +30,7 @@ export function AuthScreen() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -201,14 +202,31 @@ export function AuthScreen() {
             placeholder="Correo electrónico"
             placeholderTextColor="#9ca3af"
           />
-          <TextInput
-            style={styles.input}
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Contraseña"
-            placeholderTextColor="#9ca3af"
-          />
+          <View style={styles.passwordRow}>
+            <TextInput
+              style={[styles.input, styles.passwordInput]}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Contraseña"
+              placeholderTextColor="#9ca3af"
+            />
+            <TouchableOpacity
+              style={styles.passwordToggle}
+              onPress={() => setShowPassword((v) => !v)}
+              activeOpacity={0.7}
+              // Área táctil ampliada: el texto solo mide unos 40px de ancho.
+              hitSlop={{ top: 12, bottom: 12, left: 8, right: 12 }}
+              accessibilityRole="button"
+              accessibilityLabel={
+                showPassword ? "Ocultar la contraseña" : "Mostrar la contraseña"
+              }
+            >
+              <ThemedText style={styles.passwordToggleText}>
+                {showPassword ? "Ocultar" : "Mostrar"}
+              </ThemedText>
+            </TouchableOpacity>
+          </View>
 
           {isRegister && (
             <>
@@ -298,6 +316,11 @@ const styles = StyleSheet.create({
     color: "#111827",
     backgroundColor: "#fff",
   },
+  passwordRow: { position: "relative", justifyContent: "center" },
+  // Espacio a la derecha para que el texto largo no quede debajo del botón.
+  passwordInput: { paddingRight: 88 },
+  passwordToggle: { position: "absolute", right: 14 },
+  passwordToggleText: { color: Brand.primary, fontSize: 14, fontWeight: "600" },
   termsRow: { flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 2 },
   checkbox: {
     width: 22,

@@ -22,7 +22,13 @@ export default function AppTabs() {
 
       <NativeTabs.Trigger name="catalog">
         <NativeTabs.Trigger.Label>Explorar</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="magnifyingglass" />
+        {/* Imagen y no `sf`: los SF Symbols son exclusivos de iOS, así que en
+            Android esta pestaña se quedaba sin icono. `src` funciona en ambas
+            plataformas, igual que en las otras dos pestañas. */}
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/search.png')}
+          renderingMode="template"
+        />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="explore">
