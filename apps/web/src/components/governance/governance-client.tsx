@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import type { GovernanceContent } from "@/lib/governance";
 import { contar } from "@/lib/plural";
+import { fechaHora as fmt } from "@/lib/fecha";
 
 type Signature = {
   email: string;
@@ -34,40 +35,6 @@ type HistoryEntry = {
   signatures: { fullName: string; email: string; acceptedAt: string }[];
 };
 
-const MESES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-];
-
-/**
- * Fecha y hora en horario de la Ciudad de México, armada pieza por pieza.
- *
- * Nada de `dateStyle`/`timeStyle`: el patrón que los une ("a las" vs ",")
- * depende de los datos ICU de cada entorno, así que Node y el navegador
- * generaban textos distintos y React fallaba al hidratar. Con partes numéricas
- * y los meses escritos aquí, el resultado es idéntico en ambos lados. La zona
- * va fija para que dos firmantes vean la misma hora en una misma firma.
- */
-function fmt(iso: string | null): string {
-  if (!iso) return "";
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Mexico_City",
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).formatToParts(new Date(iso));
-
-  const get = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === type)?.value ?? "";
-
-  const mes = MESES[Number(get("month")) - 1] ?? "";
-  // "24" a medianoche en algunos entornos → normalizamos a "00".
-  const hora = get("hour") === "24" ? "00" : get("hour");
-  return `${Number(get("day"))} de ${mes} de ${get("year")}, ${hora}:${get("minute")} h`;
-}
 
 export function GovernanceClient({
   title,

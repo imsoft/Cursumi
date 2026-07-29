@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ImagePlus, Loader2, Trash2, X } from "lucide-react";
 import { useImageUpload } from "@/hooks/use-image-upload";
+import { fechaHora } from "@/lib/fecha";
 
 const schema = z.object({
   title: z.string().min(3, "Mínimo 3 caracteres").max(200),
@@ -69,6 +70,9 @@ function initialPubMode(v?: Partial<FormValues>): "draft" | "now" | "schedule" {
 export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps) {
   const router = useRouter();
   const [tagInput, setTagInput] = useState("");
+  /** Momento actual, fijado al montar: comparar contra Date.now() en cada render
+   *  sería impuro y rompería la hidratación (servidor y cliente difieren). */
+  const [ahora, setAhora] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -107,6 +111,8 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
   const title = form.watch("title");
   const tags = form.watch("tags");
   const slugTouched = form.getFieldState("slug").isDirty;
+
+  useEffect(() => setAhora(Date.now()), []);
 
   useEffect(() => {
     if (!slugTouched && mode === "create" && title) {
@@ -297,18 +303,21 @@ export function BlogPostForm({ initialValues, postId, mode }: BlogPostFormProps)
                   <Input id="publishedAt" type="datetime-local" {...form.register("publishedAt")} />
                   {(() => {
                     const v = form.watch("publishedAt");
-                    const future = !!v && new Date(v).getTime() > Date.now();
-                    if (!v) {
+                    // `ahora` se fija al montar, no en cada render: leer Date.now()
+                    // aquí sería impuro y además daría textos distintos en el
+                    // servidor y en el navegador (fallo de hidratación).
+                    if (!v || ahora === null) {
                       return (
                         <p className="text-xs text-muted-foreground">
                           Elige la fecha y hora en que el artículo se publicará automáticamente.
                         </p>
                       );
                     }
+                    const future = new Date(v).getTime() > ahora;
                     return (
                       <p className={`text-xs ${future ? "text-muted-foreground" : "text-amber-600 dark:text-amber-400"}`}>
                         {future
-                          ? `Se publicará automáticamente el ${new Date(v).toLocaleString("es-MX", { dateStyle: "long", timeStyle: "short" })}.`
+                          ? `Se publicará automáticamente el ${fechaHora(v)}.`
                           : "La fecha ya pasó: se publicará de inmediato al guardar. Elige una fecha futura para programarlo."}
                       </p>
                     );

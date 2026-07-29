@@ -18,23 +18,8 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { contar } from "@/lib/plural";
+import { fechaCorta as fecha } from "@/lib/fecha";
 
-const MESES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-];
-
-/** Fecha fija en horario de CDMX — evita desajustes entre servidor y navegador. */
-function fecha(iso: string): string {
-  const p = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Mexico_City",
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  }).formatToParts(new Date(iso));
-  const g = (t: Intl.DateTimeFormatPartTypes) => p.find((x) => x.type === t)?.value ?? "";
-  return `${Number(g("day"))} de ${MESES[Number(g("month")) - 1] ?? ""}`;
-}
 
 const mxn = (n: number) => `$${n.toLocaleString("es-MX")} MXN`;
 
