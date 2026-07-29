@@ -47,6 +47,7 @@ import {
   parseSectionMinigameFromLessonContent,
   stringifySectionMinigamePayload,
 } from "@/lib/gate-lesson-content";
+import { contar } from "@/lib/plural";
 
 interface LessonPageClientProps {
   courseId: string;
@@ -659,7 +660,7 @@ export function LessonPageClient({ courseId, lesson }: LessonPageClientProps) {
                               )}
                               <div className="mt-2 flex items-center gap-2">
                                 <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] border border-border bg-background text-muted-foreground">{typeLabel}</span>
-                                {question.points && <span className="text-xs text-muted-foreground">{question.points} puntos</span>}
+                                {question.points && <span className="text-xs text-muted-foreground">{contar(question.points, "punto", "puntos")}</span>}
                               </div>
                             </div>
                             <div className="flex items-center gap-1 ml-2">

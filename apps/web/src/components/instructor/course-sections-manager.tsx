@@ -28,6 +28,7 @@ import { LessonEditor } from "./lesson-editor";
 import { LessonStatusBadge } from "./lesson-status-badge";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
+import { contar } from "@/lib/plural";
 
 interface CourseSectionsManagerProps {
   sections: CourseSection[];
@@ -193,7 +194,7 @@ export const CourseSectionsManager = ({
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-foreground">{activeSection.title}</h2>
-            <p className="text-sm text-muted-foreground">{activeSection.lessons.length} lecciones</p>
+            <p className="text-sm text-muted-foreground">{contar(activeSection.lessons.length, "lección", "lecciones")}</p>
           </div>
           <Button size="sm" onClick={() => addLesson(activeSection.id)}>
             <Plus className="mr-2 h-4 w-4" />

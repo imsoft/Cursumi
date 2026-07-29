@@ -8,6 +8,7 @@ import { CoursesFilters } from "@/components/instructor/courses-filters";
 import { CourseList } from "@/components/instructor/course-list";
 import { EmptyState } from "@/components/instructor/empty-state";
 import type { InstructorCourse } from "@/components/instructor/types";
+import { contar } from "@/lib/plural";
 
 interface InstructorCoursesClientProps {
   initialCourses: InstructorCourse[];
@@ -67,7 +68,7 @@ export function InstructorCoursesClient({ initialCourses }: InstructorCoursesCli
         <CourseList courses={filteredCourses} />
       )}
       <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>Mostrando {filteredCourses.length} de {initialCourses.length} cursos</p>
+        <p>Mostrando {filteredCourses.length} de {contar(initialCourses.length, "curso", "cursos")}</p>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" disabled>
             Anterior

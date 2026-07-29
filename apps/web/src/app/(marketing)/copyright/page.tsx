@@ -40,7 +40,9 @@ export default function CopyrightPage() {
             <h2 className="text-xl font-semibold mb-3">3. Aviso de infracción</h2>
             <p>
               Si consideras que algún contenido disponible en la Plataforma infringe tus derechos de
-              autor u otros derechos de propiedad intelectual, envíanos un aviso desde{" "}
+              autor u otros derechos de propiedad intelectual, envíanos un aviso a{" "}
+              <a href="mailto:legal@cursumi.com" className="text-primary underline underline-offset-4">legal@cursumi.com</a>{" "}
+              o desde{" "}
               <a href="/contact" className="text-primary underline underline-offset-4">
                 nuestra página de contacto
               </a>{" "}

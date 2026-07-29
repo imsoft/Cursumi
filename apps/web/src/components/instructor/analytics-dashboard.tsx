@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, TrendingDown, CheckCircle2, BarChart3, AlertTriangle } from "lucide-react";
 import type { CourseAnalytics, LessonFunnelItem } from "@/app/api/instructor/courses/[id]/analytics/route";
+import { contar } from "@/lib/plural";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -164,7 +165,7 @@ export function AnalyticsDashboard({
         <StatCard
           label="Completaron el curso"
           value={`${data.completionRate}%`}
-          sub={`${data.completed} de ${data.totalEnrolled} estudiantes`}
+          sub={`${data.completed} de ${contar(data.totalEnrolled, "estudiante", "estudiantes")}`}
           icon={CheckCircle2}
         />
         <StatCard
@@ -205,7 +206,7 @@ export function AnalyticsDashboard({
                 <div className="mb-1 flex items-center justify-between text-sm">
                   <span className="font-medium text-foreground">{sq.sectionTitle}</span>
                   <span className="text-muted-foreground">
-                    {sq.passRate}% ({sq.attempts} intentos)
+                    {sq.passRate}% ({contar(sq.attempts, "intento", "intentos")})
                   </span>
                 </div>
                 <ProgressBar
@@ -233,7 +234,7 @@ export function AnalyticsDashboard({
               {(() => {
                 const maxCount = Math.max(...data.weeklyEnrollments.map((w) => w.count), 1);
                 return data.weeklyEnrollments.map((w) => (
-                  <div key={w.week} className="flex-1 flex flex-col items-center gap-1" title={`${w.week}: ${w.count} inscripciones`}>
+                  <div key={w.week} className="flex-1 flex flex-col items-center gap-1" title={`${w.week}: ${contar(w.count, "inscripción", "inscripciones")}`}>
                     <div
                       className="w-full rounded-t bg-primary/80 min-h-[2px] transition-all"
                       style={{ height: `${Math.max(2, (w.count / maxCount) * 80)}px` }}

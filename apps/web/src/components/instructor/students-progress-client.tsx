@@ -14,6 +14,7 @@ import {
 import { EmptyState } from "@/components/shared/empty-state";
 import type { CourseProgressOverview, StudentProgressDetail } from "@/lib/course-service-instructor";
 import { UnenrollButton } from "@/components/instructor/unenroll-button";
+import { contar } from "@/lib/plural";
 
 interface StudentsProgressClientProps {
   courseId: string;
@@ -82,7 +83,7 @@ function StudentRow({
             <span className="text-sm font-medium text-foreground w-10 text-right">{student.progress}%</span>
           </div>
           <div className="text-xs text-muted-foreground whitespace-nowrap">
-            {completedLessons}/{totalLessons} lecciones
+            {completedLessons}/{contar(totalLessons, "lección", "lecciones")}
           </div>
           {student.examSubmission && (
             <Badge variant={student.examSubmission.passed ? "default" : "outline"}>

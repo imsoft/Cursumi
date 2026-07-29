@@ -16,6 +16,7 @@ import {
   Gamepad2,
   ClipboardCheck,
 } from "lucide-react";
+import { contar } from "@/lib/plural";
 
 type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
@@ -99,7 +100,7 @@ export const LessonSidebar = memo(function LessonSidebar({
         <p className="mt-2 text-xs font-medium text-muted-foreground">Progreso del curso</p>
         <Progress value={progress} className="mt-1 h-1.5" />
         <p className="mt-1 text-xs text-muted-foreground">
-          {completedCount}/{totalLessons} lecciones
+          {completedCount}/{contar(totalLessons, "lección", "lecciones")}
         </p>
       </div>
 

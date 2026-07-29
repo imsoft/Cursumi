@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Trophy, ChevronUp, ChevronDown } from "lucide-react";
 import { fireMiniConfetti } from "@/lib/minigame-confetti";
+import { contar } from "@/lib/plural";
 
 interface SortGameProps {
   instruction?: string;
@@ -85,7 +86,7 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
       <div className="flex flex-col items-center gap-3 py-6 text-center">
         <Trophy className="h-10 w-10 text-yellow-500" />
         <p className="text-sm text-muted-foreground">
-          Orden perfecto{attempts > 1 ? ` en ${attempts} intentos` : ""}.
+          Orden perfecto{attempts > 1 ? ` en ${contar(attempts, "intento", "intentos")}` : ""}.
         </p>
       </div>
     );
@@ -177,7 +178,7 @@ export function SortGame({ instruction, items, onComplete }: SortGameProps) {
               "¡Todo correcto!"
             ) : (
               <>
-                {correctCount} de {order.length} elementos en la posición correcta.{" "}
+                {correctCount} de {contar(order.length, "elemento", "elementos")} en la posición correcta.{" "}
                 {attempts < 3 ? "Sigue intentando." : "Revisa el orden e inténtalo de nuevo."}
               </>
             )}

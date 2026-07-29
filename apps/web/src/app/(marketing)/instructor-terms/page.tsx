@@ -108,7 +108,9 @@ export default function InstructorTermsPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">9. Contacto</h2>
             <p>
-              Para dudas sobre estos términos, escríbenos desde{" "}
+              Para dudas sobre estos términos, escríbenos a{" "}
+              <a href="mailto:legal@cursumi.com" className="text-primary underline underline-offset-4">legal@cursumi.com</a>{" "}
+              o desde{" "}
               <a href="/contact" className="text-primary underline underline-offset-4">
                 nuestra página de contacto
               </a>

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UpcomingClass } from "@/components/student/types";
+import { contar } from "@/lib/plural";
 
 interface StudentUpcomingClassesProps {
   classes: UpcomingClass[];
@@ -17,7 +18,7 @@ export const StudentUpcomingClasses = ({ classes }: StudentUpcomingClassesProps)
       <CardHeader className="flex flex-col gap-2 px-4 pt-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">Próximas sesiones</CardTitle>
-          <Badge variant="outline">{classes.length} sesiones</Badge>
+          <Badge variant="outline">{contar(classes.length, "sesión", "sesiones")}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">Mantén el ritmo de tu aprendizaje.</p>
       </CardHeader>

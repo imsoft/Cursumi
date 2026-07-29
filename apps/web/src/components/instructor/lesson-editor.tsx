@@ -29,6 +29,7 @@ import {
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { stripHtml } from "@/lib/utils";
 import { uploadAttachmentDirect } from "@/lib/upload-cloudinary-attachment";
+import { contar } from "@/lib/plural";
 // Usamos rutas API REST en lugar de server actions para evitar
 // el "Failed to fetch" que ocurre por timeouts/serialización de server actions
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
@@ -1019,7 +1020,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                                   </span>
                                   {question.points && (
                                     <span className="text-xs text-muted-foreground">
-                                      {question.points} puntos
+                                      {contar(question.points, "punto", "puntos")}
                                     </span>
                                   )}
                                 </div>
@@ -1246,7 +1247,7 @@ export const LessonEditor = ({ lesson, onSave, onCancel, courseId }: LessonEdito
                           <div className="mt-1 flex items-center gap-2">
                             {criterion.points && (
                               <span className="text-xs text-muted-foreground">
-                                {criterion.points} puntos
+                                {contar(criterion.points, "punto", "puntos")}
                               </span>
                             )}
                           </div>

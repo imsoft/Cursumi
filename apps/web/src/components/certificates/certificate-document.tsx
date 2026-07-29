@@ -6,6 +6,7 @@
  */
 
 import type { Certificate } from "@/components/student/types";
+import { contar } from "@/lib/plural";
 
 const PURPLE = "#6d28d9";
 const PURPLE_DARK = "#4300d0";
@@ -67,7 +68,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
   const meta = [
     certificate.category,
     MODALITY_LABEL[certificate.modality] ?? certificate.modality,
-    certificate.hours ? `${certificate.hours} horas` : null,
+    certificate.hours ? `${contar(certificate.hours, "hora", "horas")}` : null,
   ]
     .filter(Boolean)
     .join("  ·  ");

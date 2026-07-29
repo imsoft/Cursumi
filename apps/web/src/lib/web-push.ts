@@ -4,7 +4,7 @@
  * Requiere en .env:
  *   NEXT_PUBLIC_VAPID_PUBLIC_KEY=...
  *   VAPID_PRIVATE_KEY=...
- *   VAPID_CONTACT_EMAIL=contacto@cursumi.com
+ *   VAPID_CONTACT_EMAIL=hola@cursumi.com
  *
  * Para generar claves VAPID:
  *   node -e "const wp=require('web-push'); const k=wp.generateVAPIDKeys(); console.log(JSON.stringify(k))"
@@ -19,7 +19,7 @@ function getWebPush() {
   if (!_initialized) {
     const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
     const priv = process.env.VAPID_PRIVATE_KEY;
-    const email = process.env.VAPID_CONTACT_EMAIL || "contacto@cursumi.com";
+    const email = process.env.VAPID_CONTACT_EMAIL || "hola@cursumi.com";
 
     if (pub && priv) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports

@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { StudentCourse } from "@/components/student/types";
 import { CheckCircle2, Clock, PlayCircle, Calendar } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
+import { contar } from "@/lib/plural";
 
 interface StudentCourseCardProps {
   course: StudentCourse;
@@ -80,7 +81,7 @@ export const StudentCourseCard = ({ course }: StudentCourseCardProps) => {
           <Progress value={course.progress} className="h-2.5 rounded-full" />
           {course.completedSessions && course.totalSessions && (
             <p className="text-xs text-muted-foreground">
-              {course.completedSessions} de {course.totalSessions} sesiones completadas
+              {course.completedSessions} de {contar(course.totalSessions, "sesión", "sesiones")} completadas
             </p>
           )}
         </div>

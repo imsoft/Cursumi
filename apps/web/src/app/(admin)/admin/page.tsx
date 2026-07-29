@@ -17,6 +17,7 @@ import {
   Star,
   GraduationCap,
 } from "lucide-react";
+import { contar } from "@/lib/plural";
 
 const MESES = [
   "enero", "febrero", "marzo", "abril", "mayo", "junio",
@@ -83,7 +84,7 @@ export default async function AdminDashboardPage() {
     {
       title: "Usuarios",
       value: String(s.totalUsers),
-      description: `${s.students} alumnos · ${s.instructors} instructores`,
+      description: `${contar(s.students, "alumno", "alumnos")} · ${contar(s.instructors, "instructor", "instructores")}`,
       iconName: "Users",
       iconColor: "text-blue-600",
     },
@@ -97,7 +98,7 @@ export default async function AdminDashboardPage() {
     {
       title: "Inscripciones",
       value: String(s.totalEnrollments),
-      description: `${s.certificates} certificados emitidos`,
+      description: `${contar(s.certificates, "certificado", "certificados")} emitidos`,
       iconName: "TrendingUp",
       iconColor: "text-orange-600",
     },

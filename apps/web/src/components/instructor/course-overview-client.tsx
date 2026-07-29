@@ -38,6 +38,7 @@ import type { CourseSessionData } from "@/components/instructor/course-types";
 import type { SerializedInstructorCourseOverview } from "@/lib/serialize-instructor-course-overview";
 import { findStateForMunicipality } from "@/lib/mexico-location-helpers";
 import { formatPriceMXN } from "@/lib/utils";
+import { contar } from "@/lib/plural";
 
 type LessonType = "video" | "text" | "quiz" | "assignment" | "section_quiz" | "section_minigame";
 
@@ -617,7 +618,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                   <span>·</span>
                   <span>{course.isFree ? "Gratis" : formatPriceMXN(course.price)}</span>
                   <span>·</span>
-                  <span>{course._count.enrollments} estudiantes</span>
+                  <span>{contar(course._count.enrollments, "estudiante", "estudiantes")}</span>
                 </div>
                 {editSaved && (
                   <div className="flex items-center gap-2 mt-2 text-sm text-green-600 dark:text-green-400">
@@ -644,7 +645,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
           <div>
             <h2 className="text-lg font-semibold text-foreground">Contenido del curso</h2>
             <p className="text-sm text-muted-foreground">
-              {sections.length} secciones · {totalLessons} lecciones
+              {contar(sections.length, "sección", "secciones")} · {contar(totalLessons, "lección", "lecciones")}
             </p>
           </div>
         </div>
@@ -741,7 +742,7 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
                           <span className="font-semibold text-foreground">
                             {si + 1}. {section.title}
                           </span>
-                          <Badge variant="outline" className="ml-1">{section.lessons.length} lecciones</Badge>
+                          <Badge variant="outline" className="ml-1">{contar(section.lessons.length, "lección", "lecciones")}</Badge>
                         </button>
                       )}
 

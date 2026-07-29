@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus } from "lucide-react";
+import { contar } from "@/lib/plural";
 
 interface Category {
   id: string;
@@ -165,7 +166,7 @@ export default function AdminCategoriesPage() {
                   <div>
                     <p className="font-medium text-foreground">{cat.name}</p>
                     <p className="text-xs text-muted-foreground">
-                      slug: {cat.slug} · orden: {cat.order} · {cat._count.courses} cursos
+                      slug: {cat.slug} · orden: {cat.order} · {contar(cat._count.courses, "curso", "cursos")}
                     </p>
                   </div>
                   <Button

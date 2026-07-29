@@ -11,6 +11,7 @@ import { DollarSign, TrendingUp, Calendar, Download, CreditCard, Users, Percent 
 import { formatPriceMXN } from "@/lib/utils";
 import Link from "next/link";
 import type { AdminFinances } from "@/lib/admin-service";
+import { contar } from "@/lib/plural";
 
 const ICONS = [DollarSign, Calendar, Percent, CreditCard] as const;
 
@@ -193,7 +194,7 @@ export default function FinancesPage() {
                               {item.month}
                             </span>
                             <Badge variant="outline">
-                              {item.transactions} transacciones
+                              {contar(item.transactions, "transacción", "transacciones")}
                             </Badge>
                           </div>
                           <span className="font-semibold text-foreground">

@@ -129,7 +129,9 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">12. Contacto</h2>
             <p>
-              Para cualquier duda sobre estos Términos, puedes contactarnos en{" "}
+              Para cualquier duda sobre estos Términos, escríbenos a{" "}
+              <a href="mailto:legal@cursumi.com" className="text-primary underline underline-offset-4">legal@cursumi.com</a>{" "}
+              o desde{" "}
               <a href="/contact" className="text-primary underline underline-offset-4">
                 nuestra página de contacto
               </a>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Combobox } from "@/components/ui/combobox";
+import { contar } from "@/lib/plural";
 
 interface QuoteRequest {
   id: string;
@@ -352,7 +353,7 @@ export function BusinessAdminClient({
                   <div>
                     <p className="font-semibold">{o.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      {o.members} miembros · {o.courseAccess} cursos ·{" "}
+                      {contar(o.members, "miembro", "miembros")} · {contar(o.courseAccess, "curso", "cursos")} ·{" "}
                       {money(o.subscription?.amountCents ?? null, o.subscription?.billingInterval ?? null)}
                     </p>
                   </div>

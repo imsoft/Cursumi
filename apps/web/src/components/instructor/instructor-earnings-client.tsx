@@ -24,6 +24,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import type { InstructorEarnings } from "@/lib/instructor-service";
+import { contar } from "@/lib/plural";
 
 interface InstructorEarningsClientProps {
   earnings: InstructorEarnings;
@@ -307,7 +308,7 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
                         </div>
                         <div className="flex justify-between gap-3 text-muted-foreground">
                           <span>Inscripciones:</span>
-                          <span>{item.enrollments} alumnos</span>
+                          <span>{contar(item.enrollments, "alumno", "alumnos")}</span>
                         </div>
                       </div>
 
@@ -401,7 +402,7 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
                             <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
                               <span>Precio: {formatMXN(course.price)}</span>
                               <span>•</span>
-                              <span>{course.enrollmentsCount} estudiantes</span>
+                              <span>{contar(course.enrollmentsCount, "estudiante", "estudiantes")}</span>
                             </div>
                           </div>
                         </div>
@@ -545,7 +546,7 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
                   <div className="space-y-3">
                     <div className="flex justify-between items-center text-sm">
                       <label className="font-medium text-foreground">Meta de Alumnos por Mes</label>
-                      <span className="font-bold text-primary text-base">{calcStudents} alumnos</span>
+                      <span className="font-bold text-primary text-base">{contar(calcStudents, "alumno", "alumnos")}</span>
                     </div>
                     <input
                       type="range"

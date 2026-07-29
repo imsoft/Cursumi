@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, BookOpen, TrendingUp, Award } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { contar } from "@/lib/plural";
 
 type AnalyticsResponse = {
   totalCourses: number;
@@ -192,7 +193,7 @@ export default function AnalyticsPage() {
                           <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <Users className="h-3 w-3" />
-                              {course.studentsCount} estudiantes
+                              {contar(course.studentsCount, "estudiante", "estudiantes")}
                             </span>
                             <Badge variant="outline">{course.modality}</Badge>
                           </div>

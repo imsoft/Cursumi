@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { EllipsisVertical } from "lucide-react";
 import { InstructorCourse } from "@/components/instructor/types";
 import { ModalityBadge } from "@/components/ui/modality-badge";
+import { contar } from "@/lib/plural";
 
 interface CourseListItemProps {
   course: InstructorCourse;
@@ -35,7 +36,7 @@ export const CourseListItem = ({ course }: CourseListItemProps) => {
           <ModalityBadge modality={course.modality} />
           <Badge variant={statusLabel.variant}>{statusLabel.label}</Badge>
           <span>
-            {course.studentsCount} estudiantes
+            {contar(course.studentsCount, "estudiante", "estudiantes")}
           </span>
           {course.nextSession && <span>Próxima: {course.nextSession}</span>}
         </div>

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Certificate } from "@/components/student/types";
 import { Award, Calendar, Download, Share2, ExternalLink, Check } from "lucide-react";
+import { contar } from "@/lib/plural";
 
 interface CertificateCardProps {
   certificate: Certificate;
@@ -89,7 +90,7 @@ export const CertificateCard = ({ certificate }: CertificateCardProps) => {
             {certificate.category}
           </span>
           {certificate.hours && (
-            <span className="text-xs">{certificate.hours} horas</span>
+            <span className="text-xs">{contar(certificate.hours, "hora", "horas")}</span>
           )}
         </div>
       </CardHeader>

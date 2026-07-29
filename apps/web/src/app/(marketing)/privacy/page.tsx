@@ -118,7 +118,9 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">10. Contacto</h2>
             <p>
-              Para ejercer tus derechos ARCO o para cualquier duda sobre este Aviso, contáctanos en{" "}
+              Para ejercer tus derechos ARCO o para cualquier duda sobre este Aviso, escríbenos a{" "}
+              <a href="mailto:legal@cursumi.com" className="text-primary underline underline-offset-4">legal@cursumi.com</a>{" "}
+              o desde{" "}
               <a href="/contact" className="text-primary underline underline-offset-4">
                 nuestra página de contacto
               </a>

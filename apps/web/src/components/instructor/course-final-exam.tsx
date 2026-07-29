@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowRight, ArrowLeft, Plus, Trash2, CheckCircle2, Circle, FileQuestion, Clock, Target, AlertCircle, Pencil, X, Save } from "lucide-react";
 import type { CourseFinalExam, QuizQuestion, CourseFormData } from "./course-types";
 import { stripHtml } from "@/lib/utils";
+import { contar } from "@/lib/plural";
 
 interface CourseFinalExamProps {
   data: CourseFormData;
@@ -335,7 +336,7 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                     {questions.length} {questions.length === 1 ? "pregunta" : "preguntas"}
                   </Badge>
                   <Badge variant="outline">
-                    {totalPoints} puntos totales
+                    {contar(totalPoints, "punto", "puntos")} totales
                   </Badge>
                 </div>
               </div>
@@ -439,7 +440,7 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
                               )}
                               <div className="mt-2 flex items-center gap-2">
                                 <Badge variant="outline">
-                                  {question.points} puntos
+                                  {contar(question.points, "punto", "puntos")}
                                 </Badge>
                               </div>
                             </div>
@@ -560,9 +561,9 @@ export const CourseFinalExamComponent = ({ data, onUpdate, onNext, onPrevious }:
               <div className="flex-1">
                 <p className="font-semibold text-foreground">Examen configurado</p>
                 <div className="mt-2 text-sm text-muted-foreground space-y-1">
-                  <p>• {questions.length} preguntas ({totalPoints} puntos totales)</p>
+                  <p>• {contar(questions.length, "pregunta", "preguntas")} ({contar(totalPoints, "punto", "puntos")} totales)</p>
                   <p>• Calificación mínima: {passingScore}%</p>
-                  {hasTimeLimit && <p>• Tiempo límite: {timeLimit} minutos</p>}
+                  {hasTimeLimit && <p>• Tiempo límite: {contar(timeLimit, "minuto", "minutos")}</p>}
                   {hasAttemptsLimit && <p>• Intentos permitidos: {attemptsAllowed}</p>}
                 </div>
               </div>

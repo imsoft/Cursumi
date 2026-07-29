@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { BookOpenCheck, ExternalLink, Ban, ToggleRight, FileText } from "lucide-react";
 import { ModalityBadge } from "@/components/ui/modality-badge";
 import Link from "next/link";
+import { contar } from "@/lib/plural";
 
 type CourseStatus = "published" | "draft" | "archived" | "pending";
 type Modality = "virtual" | "evento";
@@ -304,7 +305,7 @@ export default function AdminCoursesPage() {
                         Por {course.instructorName} · {course.category}
                       </p>
                       <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                        <span>{course.studentsCount} estudiantes</span>
+                        <span>{contar(course.studentsCount, "estudiante", "estudiantes")}</span>
                         <span>{formatPriceMXN(course.price)}</span>
                         <span>Creado: {course.createdAt}</span>
                       </div>

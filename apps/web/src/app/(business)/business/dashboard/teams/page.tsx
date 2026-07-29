@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Users, BookOpenCheck, Trash2 } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
+import { contar } from "@/lib/plural";
 
 interface Team {
   id: string;
@@ -119,11 +120,11 @@ export default function TeamsPage() {
                 <div className="flex gap-4 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Users className="h-4 w-4" />
-                    {team._count.members} miembros
+                    {contar(team._count.members, "miembro", "miembros")}
                   </span>
                   <span className="flex items-center gap-1">
                     <BookOpenCheck className="h-4 w-4" />
-                    {team._count.courseAccess} cursos
+                    {contar(team._count.courseAccess, "curso", "cursos")}
                   </span>
                 </div>
                 <Button asChild variant="outline" size="sm">

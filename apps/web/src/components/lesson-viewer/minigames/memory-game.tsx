@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { fireMiniConfetti } from "@/lib/minigame-confetti";
 import { MinigameLevelCelebration } from "./minigame-level-celebration";
+import { contar } from "@/lib/plural";
 
 interface MemoryPair {
   term: string;
@@ -125,7 +126,7 @@ export function MemoryGame({ instruction, pairs, onComplete }: MemoryGameProps) 
     return (
       <div className="flex flex-col items-center gap-3 py-8 text-center">
         <p className="text-sm text-muted-foreground">
-          ¡Listo! Encontraste {pairs.length} pares en {moves} {moves === 1 ? "movimiento" : "movimientos"}.
+          ¡Listo! Encontraste {contar(pairs.length, "par", "pares")} en {moves} {moves === 1 ? "movimiento" : "movimientos"}.
         </p>
       </div>
     );
@@ -146,7 +147,7 @@ export function MemoryGame({ instruction, pairs, onComplete }: MemoryGameProps) 
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Encuentra los {pairs.length} pares correctos
+          Encuentra los {contar(pairs.length, "par", "pares")} correctos
         </p>
         <p className="text-sm font-medium text-foreground">
           Movimientos: <span className="text-primary">{moves}</span>
@@ -190,7 +191,7 @@ export function MemoryGame({ instruction, pairs, onComplete }: MemoryGameProps) 
       </div>
 
       <p className="text-center text-xs text-muted-foreground">
-        {matched.size / 2} / {pairs.length} pares encontrados
+        {matched.size / 2} / {contar(pairs.length, "par", "pares")} encontrados
       </p>
     </div>
   );

@@ -50,7 +50,7 @@ const organizationJsonLd = {
   contactPoint: [
     {
       "@type": "ContactPoint",
-      email: "contacto@cursumi.com",
+      email: "hola@cursumi.com",
       contactType: "customer support",
       areaServed: LATAM_COUNTRIES,
       availableLanguage: ["es"],

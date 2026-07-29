@@ -64,7 +64,9 @@ export default function RefundsPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">5. Cómo solicitar un reembolso</h2>
             <p>
-              Para iniciar una solicitud, escríbenos desde{" "}
+              Para iniciar una solicitud, escríbenos a{" "}
+              <a href="mailto:hola@cursumi.com" className="text-primary underline underline-offset-4">hola@cursumi.com</a>{" "}
+              o desde{" "}
               <a href="/contact" className="text-primary underline underline-offset-4">
                 nuestra página de contacto
               </a>{" "}

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Check, Users, HelpCircle, Play, Pencil, Trash2, Gamepad2 } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
+import { contar } from "@/lib/plural";
 
 type GameStatus = "waiting" | "active" | "finished";
 
@@ -124,7 +125,7 @@ export default function InstructorGamesPage() {
                   </span>
                   <span className="flex items-center gap-1">
                     <HelpCircle className="h-4 w-4" />
-                    {game._count.questions} preguntas
+                    {contar(game._count.questions, "pregunta", "preguntas")}
                   </span>
                 </div>
 

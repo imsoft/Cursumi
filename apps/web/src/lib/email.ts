@@ -493,10 +493,10 @@ export async function sendOrgInviteEmail({ to, orgName, inviterName, inviteLink 
 // CONTACTO
 // ─────────────────────────────────────────
 
-/** Destino de los mensajes del formulario `/contact` (Resend). `CONTACT_INBOX_EMAIL` en .env; por defecto contacto@cursumi.com. */
+/** Destino de los mensajes del formulario `/contact` (Resend). `CONTACT_INBOX_EMAIL` en .env; por defecto hola@cursumi.com. */
 function getContactInboxEmail(): string {
   const v = process.env.CONTACT_INBOX_EMAIL?.trim();
-  return v && v.length > 0 ? v : "contacto@cursumi.com";
+  return v && v.length > 0 ? v : "hola@cursumi.com";
 }
 
 interface SendContactEmailParams {

@@ -13,6 +13,7 @@ import { formatDateLongMX, formatDateShortMX } from "@/lib/date-format";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { Separator } from "@/components/ui/separator";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
+import { contar } from "@/lib/plural";
 
 export default async function CourseDetailPage({
   params,
@@ -135,7 +136,7 @@ export default async function CourseDetailPage({
                 {course.maxStudents != null && (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Cupo máximo</p>
-                    <p className="text-foreground">{course.maxStudents} estudiantes</p>
+                    <p className="text-foreground">{contar(course.maxStudents, "estudiante", "estudiantes")}</p>
                   </div>
                 )}
                 {(course.city || course.state || course.location) && (

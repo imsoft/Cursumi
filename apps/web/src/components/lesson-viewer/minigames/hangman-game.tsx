@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Trophy } from "lucide-react";
 import { fireMiniConfetti } from "@/lib/minigame-confetti";
 import { MinigameLevelCelebration } from "./minigame-level-celebration";
+import { contar } from "@/lib/plural";
 
 interface HangmanWord {
   word: string;
@@ -131,7 +132,7 @@ export function HangmanGame({ instruction, words, onComplete }: HangmanGameProps
       <div className="flex flex-col items-center gap-3 py-8 text-center">
         <Trophy className="h-12 w-12 text-yellow-500" />
         <p className="text-sm text-muted-foreground">
-          Adivinaste {wonCount} de {words.length} palabras.
+          Adivinaste {wonCount} de {contar(words.length, "palabra", "palabras")}.
         </p>
       </div>
     );

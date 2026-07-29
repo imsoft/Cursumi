@@ -41,6 +41,7 @@ import { getMuxPlaybackId, getYouTubeId } from "@/lib/video-url";
 import { QuizAnswerInput } from "@/components/student/quiz-answer-input";
 import { gradeQuestion, type ExamAnswer } from "@/lib/exam-grading";
 import type { QuizQuestion } from "@/components/instructor/course-types";
+import { contar } from "@/lib/plural";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), { ssr: false });
 
@@ -522,7 +523,7 @@ export function LessonViewerClient({
               <RichTextRenderer content={quizInstructions} className="text-sm text-muted-foreground" />
             )}
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p>{quizQuestions.length} preguntas</p>
+              <p>{contar(quizQuestions.length, "pregunta", "preguntas")}</p>
               <p>Tiempo límite: {quizTimeLimit} minuto{quizTimeLimit !== 1 ? "s" : ""}</p>
               {quizMaxAttempts > 0 && <p>Intentos permitidos: {quizMaxAttempts}</p>}
               {quizPassingRequired && <p>Puntaje mínimo para aprobar: {quizPassingScorePercent}%</p>}

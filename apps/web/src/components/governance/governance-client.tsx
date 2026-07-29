@@ -17,6 +17,7 @@ import {
   FileText,
 } from "lucide-react";
 import type { GovernanceContent } from "@/lib/governance";
+import { contar } from "@/lib/plural";
 
 type Signature = {
   email: string;
@@ -317,7 +318,7 @@ export function GovernanceClient({
               <div>
                 <h2 className="text-sm font-semibold text-foreground">Borrador</h2>
                 <p className="text-xs text-muted-foreground">
-                  {stats.answered} de {stats.total} preguntas con acuerdo escrito · último guardado{" "}
+                  {stats.answered} de {contar(stats.total, "pregunta", "preguntas")} con acuerdo escrito · último guardado{" "}
                   {fmt(savedAt ?? draftUpdatedAt)}
                 </p>
               </div>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, BookOpenCheck, Calendar } from "lucide-react";
+import { contar } from "@/lib/plural";
 
 interface OrgData {
   name: string;
@@ -84,7 +85,7 @@ function PendingQuote({
             {formatMoney(amountCents, billingInterval)}
           </p>
           <p className="text-sm text-muted-foreground">
-            {maxSeats} asientos · {courseAccess} cursos incluidos
+            {contar(maxSeats, "asiento", "asientos")} · {contar(courseAccess, "curso", "cursos")} incluidos
           </p>
         </div>
         <p className="text-sm text-muted-foreground">
@@ -199,7 +200,7 @@ export default function SubscriptionPage() {
           <Card>
             <CardContent className="py-6 text-center text-sm text-muted-foreground">
               Para cambiar tu plan o método de pago,{" "}
-              <a href="mailto:contacto@cursumi.com" className="text-primary underline">
+              <a href="mailto:hola@cursumi.com" className="text-primary underline">
                 contáctanos por correo
               </a>
             </CardContent>

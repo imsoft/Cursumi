@@ -14,6 +14,7 @@ import { ModalityBadge } from "@/components/ui/modality-badge";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { CourseStatusPanel } from "./course-status-panel";
 import { getCourseCompletion } from "@/lib/course-completion";
+import { contar } from "@/lib/plural";
 
 interface CoursePreviewProps {
   courseData: CourseFormData;
@@ -114,7 +115,7 @@ export const CoursePreview = ({
                   {courseData.maxStudents && (
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Capacidad máxima:</span>
-                      <span className="font-medium">{courseData.maxStudents} estudiantes</span>
+                      <span className="font-medium">{contar(courseData.maxStudents, "estudiante", "estudiantes")}</span>
                     </div>
                   )}
                 </div>
@@ -134,7 +135,7 @@ export const CoursePreview = ({
                     {courseData.sections?.length || 0} secciones
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {totalLessons} lecciones en total
+                    {contar(totalLessons, "lección", "lecciones")} en total
                   </p>
                 </div>
                 {courseData.sections && courseData.sections.length > 0 ? (
@@ -148,7 +149,7 @@ export const CoursePreview = ({
                           <span className="font-semibold text-foreground">
                             {sectionIndex + 1}. {section.title}
                           </span>
-                          <Badge variant="outline">{section.lessons.length} lecciones</Badge>
+                          <Badge variant="outline">{contar(section.lessons.length, "lección", "lecciones")}</Badge>
                         </div>
                         {section.description && (
                           <RichTextRenderer content={section.description} className="text-sm text-muted-foreground mb-3" />
