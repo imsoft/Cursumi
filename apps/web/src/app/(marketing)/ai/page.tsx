@@ -20,7 +20,7 @@ export default function AiPolicyPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">1. Uso de IA en la Plataforma</h2>
             <p>
-              Cursumi (en adelante, "la Plataforma") utiliza tecnologías de inteligencia artificial
+              Cursumi (en adelante, “la Plataforma”) utiliza tecnologías de inteligencia artificial
               generativa para mejorar la experiencia de aprendizaje. Esta política explica para qué
               usamos la IA, qué datos se procesan y cuáles son sus límites. Complementa nuestro{" "}
               <a href="/privacy" className="text-primary underline underline-offset-4">

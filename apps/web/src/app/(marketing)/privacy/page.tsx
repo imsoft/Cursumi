@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">1. Responsable del tratamiento</h2>
             <p>
-              Cursumi (en adelante, "nosotros" o "la Plataforma") es responsable del tratamiento de
+              Cursumi (en adelante, “nosotros” o “la Plataforma”) es responsable del tratamiento de
               tus datos personales, en cumplimiento con la Ley Federal de Protección de Datos
               Personales en Posesión de los Particulares (LFPDPPP) y su Reglamento.
             </p>

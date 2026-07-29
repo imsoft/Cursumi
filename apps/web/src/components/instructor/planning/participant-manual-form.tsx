@@ -71,13 +71,13 @@ export function ParticipantManualForm({ value, onChange }: Props) {
             onChange={(e) => set({ showTableOfContents: e.target.checked })}
             className="h-4 w-4 rounded border-border"
           />
-          Incluir página de "Contenido" (índice) al inicio
+          Incluir página de “Contenido” (índice) al inicio
         </label>
       </Section>
 
       <Section title="Secciones del manual">
         <p className="text-xs text-muted-foreground">
-          Usa "Sección" para títulos principales (Presentación, Introducción, Desarrollo…) y "Subsección" para apartados internos
+          Usa “Sección” para títulos principales (Presentación, Introducción, Desarrollo…) y “Subsección” para apartados internos
           (Bienvenida, Tema 1…). En el cuerpo, separa los párrafos con un salto de línea. El índice se genera automáticamente.
         </p>
         <div className="space-y-4">

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Pencil, Trash2, Plus, Eye, EyeOff, FileText } from "lucide-react";
+import { Pencil, Plus, Eye, EyeOff, FileText } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";

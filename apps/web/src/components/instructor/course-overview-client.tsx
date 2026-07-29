@@ -237,7 +237,8 @@ export function CourseOverviewClient({ course, planning }: CourseOverviewClientP
 
   const toggleSection = (id: string) => {
     const next = new Set(expandedSections);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
     setExpandedSections(next);
   };
 

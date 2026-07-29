@@ -108,11 +108,10 @@ export async function GET(
       if (!completionsByLesson.has(row.lessonId)) {
         completionsByLesson.set(row.lessonId, { scores: [], lesson: row.lesson });
       }
+      // Las lecciones sin calificación (video, texto) no aportan score; el
+      // conteo de completadas sale aparte, de lessonProgressRows.
       if (row.score != null) {
         completionsByLesson.get(row.lessonId)!.scores.push(row.score);
-      } else {
-        // Completado sin score (video, texto)
-        completionsByLesson.get(row.lessonId)!.scores; // solo contamos la presencia
       }
     }
 

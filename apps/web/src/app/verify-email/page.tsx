@@ -14,115 +14,89 @@ interface VerifyEmailPageProps {
   searchParams: Promise<{ token?: string }>;
 }
 
-export default async function VerifyEmailPage({
-  searchParams,
-}: VerifyEmailPageProps) {
-  const params = await searchParams;
-  const token = params.token;
+type Resultado = {
+  ok: boolean;
+  titulo: string;
+  mensaje: string;
+  boton: string;
+};
 
-  if (!token) {
-    return (
-      <div className="flex min-h-screen items-center justify-center px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Token de verificación no encontrado</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              El enlace de verificación no es válido o está incompleto.
-            </p>
-            <Button asChild className="w-full">
-              <Link href="/login">Ir al inicio de sesión</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
+/**
+ * Verifica el token y devuelve qué mostrar. El try/catch abarca solo la
+ * llamada a Better Auth: si envolviera también el JSX no serviría de nada,
+ * porque React construye el elemento aquí pero lo renderiza después, así que
+ * un fallo de renderizado escaparía del catch.
+ */
+async function verificar(token: string): Promise<Resultado> {
   try {
-    // Verificar el token usando Better Auth
-    // Better Auth maneja la verificación a través de su API
     const result = await auth.api.verifyEmail({
-      query: {
-        token,
-      },
+      query: { token },
       headers: await headers(),
     });
 
-    const hasError =
+    const conError =
       typeof result === "object" &&
       result !== null &&
       "error" in result &&
       typeof (result as { error?: unknown }).error === "object";
 
-    if (!result || hasError) {
-      const errorMessage =
-        hasError && typeof (result as { error?: { message?: string } }).error?.message === "string"
-          ? (result as { error?: { message?: string } }).error?.message
-          : null;
-
-      return (
-        <div className="flex min-h-screen items-center justify-center px-4">
-          <Card className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle className="text-destructive">
-                Error al verificar el correo
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                {errorMessage || "El token de verificación no es válido o ha expirado."}
-              </p>
-              <Button asChild className="w-full">
-                <Link href="/login">Ir al inicio de sesión</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      );
+    if (!result || conError) {
+      const detalle = (result as { error?: { message?: string } } | null)?.error?.message;
+      return {
+        ok: false,
+        titulo: "Error al verificar el correo",
+        mensaje:
+          typeof detalle === "string" && detalle
+            ? detalle
+            : "El enlace de verificación no es válido o ya expiró.",
+        boton: "Ir al inicio de sesión",
+      };
     }
 
-    // Si la verificación fue exitosa, redirigir al login
-    return (
-      <div className="flex min-h-screen items-center justify-center px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-green-600">
-              ¡Correo verificado exitosamente!
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Tu correo electrónico ha sido verificado correctamente. Ahora puedes iniciar sesión.
-            </p>
-            <Button asChild className="w-full">
-              <Link href="/login">Iniciar sesión</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return {
+      ok: true,
+      titulo: "¡Correo verificado!",
+      mensaje: "Tu correo quedó verificado correctamente. Ya puedes iniciar sesión.",
+      boton: "Iniciar sesión",
+    };
   } catch (error) {
-    console.error("Error al verificar email:", error);
-    return (
-      <div className="flex min-h-screen items-center justify-center px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-destructive">
-              Error al verificar el correo
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Ocurrió un error al verificar tu correo electrónico. Por favor, intenta de nuevo.
-            </p>
-            <Button asChild className="w-full">
-              <Link href="/login">Ir al inicio de sesión</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    console.error("[verify-email] No se pudo verificar el token:", error);
+    return {
+      ok: false,
+      titulo: "Error al verificar el correo",
+      mensaje: "Ocurrió un error al verificar tu correo. Vuelve a intentarlo.",
+      boton: "Ir al inicio de sesión",
+    };
   }
+}
+
+export default async function VerifyEmailPage({ searchParams }: VerifyEmailPageProps) {
+  const { token } = await searchParams;
+
+  const resultado: Resultado = token
+    ? await verificar(token)
+    : {
+        ok: false,
+        titulo: "Falta el token de verificación",
+        mensaje: "El enlace de verificación no es válido o está incompleto.",
+        boton: "Ir al inicio de sesión",
+      };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className={resultado.ok ? "text-green-600" : "text-destructive"}>
+            {resultado.titulo}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">{resultado.mensaje}</p>
+          <Button asChild className="w-full">
+            <Link href="/login">{resultado.boton}</Link>
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

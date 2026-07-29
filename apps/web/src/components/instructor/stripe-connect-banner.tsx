@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, AlertTriangle, ExternalLink, Loader2, Landmark, ShieldCheck, ArrowRight } from "lucide-react";
+import { AlertTriangle, ExternalLink, Loader2, Landmark, ShieldCheck, ArrowRight } from "lucide-react";
 
 interface ConnectStatus {
   connected: boolean;

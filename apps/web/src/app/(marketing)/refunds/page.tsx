@@ -21,7 +21,7 @@ export default function RefundsPage() {
             <h2 className="text-xl font-semibold mb-3">1. Alcance</h2>
             <p>
               Esta política describe las condiciones bajo las cuales puedes solicitar el reembolso de
-              una compra realizada en Cursumi (en adelante, "la Plataforma"). Aplica a cursos
+              una compra realizada en Cursumi (en adelante, “la Plataforma”). Aplica a cursos
               individuales adquiridos por estudiantes y complementa lo establecido en nuestros{" "}
               <a href="/terms" className="text-primary underline underline-offset-4">
                 Términos y condiciones

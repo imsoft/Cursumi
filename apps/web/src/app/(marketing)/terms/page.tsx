@@ -20,7 +20,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mb-3">1. Aceptación de los términos</h2>
             <p>
-              Al acceder o usar la plataforma Cursumi (en adelante, "la Plataforma"), aceptas estar
+              Al acceder o usar la plataforma Cursumi (en adelante, “la Plataforma”), aceptas estar
               sujeto a estos Términos y Condiciones. Si no estás de acuerdo con alguna parte de estos
               términos, no podrás acceder al servicio.
             </p>

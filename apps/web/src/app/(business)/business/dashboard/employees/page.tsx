@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { UserPlus, Mail, Trash2, X } from "lucide-react";
+import { UserPlus, Mail, X } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { ConfirmDeleteButton } from "@/components/ui/confirm-delete-button";
 

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -52,10 +52,20 @@ export const RegisterForm = ({ returnUrl, googleAuthEnabled = false, referralCod
     setTurnstileError(true);
   }, []);
 
-  if (typeof window !== "undefined") {
-    (window as unknown as Record<string, unknown>)["__turnstileCallback"] = onTurnstileSuccess;
-    (window as unknown as Record<string, unknown>)["__turnstileErrorCallback"] = onTurnstileError;
-  }
+  // Turnstile invoca las funciones por nombre (data-callback), así que tienen
+  // que colgar de window. Se publican al montar —y se retiran al desmontar—
+  // en vez de durante el render: escribir en un global mientras se renderiza
+  // hace impuro al componente, y sin la limpieza los nombres quedarían
+  // apuntando a un formulario que ya no está en pantalla.
+  useEffect(() => {
+    const g = window as unknown as Record<string, unknown>;
+    g["__turnstileCallback"] = onTurnstileSuccess;
+    g["__turnstileErrorCallback"] = onTurnstileError;
+    return () => {
+      delete g["__turnstileCallback"];
+      delete g["__turnstileErrorCallback"];
+    };
+  }, [onTurnstileSuccess, onTurnstileError]);
 
   const form = useForm<RegisterFormValues>({
     resolver: createZodResolver(registerSchema),

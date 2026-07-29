@@ -21,7 +21,7 @@ export default function InstructorTermsPage() {
             <h2 className="text-xl font-semibold mb-3">1. Relación con la Plataforma</h2>
             <p>
               Estos términos aplican a quienes publican contenido como instructores en Cursumi (en
-              adelante, "Instructor"). El Instructor actúa como creador independiente; nada en estos
+              adelante, “Instructor”). El Instructor actúa como creador independiente; nada en estos
               términos crea una relación laboral, de sociedad o de agencia con Cursumi. Estos términos
               complementan los{" "}
               <a href="/terms" className="text-primary underline underline-offset-4">
