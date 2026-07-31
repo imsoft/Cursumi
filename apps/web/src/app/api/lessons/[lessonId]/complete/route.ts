@@ -37,7 +37,20 @@ export async function POST(req: NextRequest, context: { params: Promise<{ lesson
       return NextResponse.json({ error: "Lección no encontrada en este curso" }, { status: 404 });
     }
 
-    const score = typeof body.score === "number" ? body.score : undefined;
+    // OJO: este `score` lo manda el cliente. A diferencia del examen final y de
+    // los cierres de sección —que sí se califican en el servidor—, el quiz de
+    // lección todavía se califica en el navegador, así que un alumno puede
+    // ponerse la nota que quiera. No abre la puerta al certificado (ese depende
+    // del examen y de los cierres, ambos calificados aquí), pero sí ensucia las
+    // calificaciones y las analíticas del instructor.
+    // Mientras se mueve la calificación al servidor, al menos lo acotamos a un
+    // rango con sentido para que no entren valores absurdos ni negativos.
+    const rawScore = typeof body.score === "number" && Number.isFinite(body.score)
+      ? body.score
+      : undefined;
+    const score = rawScore === undefined
+      ? undefined
+      : Math.min(100, Math.max(0, Math.round(rawScore)));
     const answers = body.answers != null ? body.answers : undefined;
 
     await prisma.lessonProgress.upsert({

@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendExamRetryEmail } from "@/lib/email";
+import { checkCronAuth } from "@/lib/cron-auth";
 
 // GET /api/cron/exam-retry-reminders
 // Ejecutado por Vercel Cron Jobs — notifica a estudiantes cuando expira el cooldown de 4 horas
 // para volver a tomar el examen de un curso en el que no aprobaron.
 // Protegido con CRON_SECRET.
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const noAutorizado = checkCronAuth(req);
+  if (noAutorizado) return noAutorizado;
 
   // Cooldown de 4 horas
   const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000);

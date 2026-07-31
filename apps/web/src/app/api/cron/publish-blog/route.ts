@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { checkCronAuth } from "@/lib/cron-auth";
 
 // GET /api/cron/publish-blog
 // Publica al instante los artículos programados: la visibilidad ya la controla
@@ -10,10 +11,8 @@ import { prisma } from "@/lib/prisma";
 // entrar en vigor, para que se publiquen a la hora exacta.
 // Protegido con CRON_SECRET (Vercel envía `Authorization: Bearer <CRON_SECRET>`).
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const noAutorizado = checkCronAuth(req);
+  if (noAutorizado) return noAutorizado;
 
   const now = new Date();
   // Posts que pasaron a "publicado" recientemente. Ventana amplia (15 min) para

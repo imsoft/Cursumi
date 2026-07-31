@@ -2,15 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendPlanningReminderEmail } from "@/lib/email";
 import { PLANNING_DOCUMENTS } from "@/lib/planning/registry";
+import { checkCronAuth } from "@/lib/cron-auth";
 
 // GET /api/cron/planning-reminders
 // Semanal (lunes 09:00) — envía recordatorio a instructores con expedientes incompletos.
 // Solo cursos presenciales con al menos un documento guardado pero sin completar el expediente.
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const noAutorizado = checkCronAuth(req);
+  if (noAutorizado) return noAutorizado;
 
   const availableTypes = PLANNING_DOCUMENTS.filter((d) => d.available).map((d) => d.type);
   const total = availableTypes.length;

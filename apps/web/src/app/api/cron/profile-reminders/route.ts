@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendProfileReminderEmail } from "@/lib/email";
+import { checkCronAuth } from "@/lib/cron-auth";
 
 // Los campos que evaluamos para completar el perfil
 const PROFILE_FIELDS: { key: string; label: string }[] = [
@@ -18,10 +19,8 @@ const PROFILE_FIELDS: { key: string; label: string }[] = [
 // Envía un correo a usuarios con perfil incompleto.
 // Protegido con CRON_SECRET.
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const noAutorizado = checkCronAuth(req);
+  if (noAutorizado) return noAutorizado;
 
   // Usuarios que se registraron hace más de 1 día (darles tiempo de completar al registrarse)
   const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);

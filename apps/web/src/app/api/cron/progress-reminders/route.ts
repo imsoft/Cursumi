@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendProgressReminderEmail } from "@/lib/email";
+import { checkCronAuth } from "@/lib/cron-auth";
 
 // GET /api/cron/progress-reminders
 // Llamado por Vercel Cron Jobs (vercel.json) — envía recordatorios a estudiantes
 // con cursos en progreso que no han tenido actividad en 7 días.
 // Protegido con CRON_SECRET para que solo Vercel pueda llamarlo.
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const noAutorizado = checkCronAuth(req);
+  if (noAutorizado) return noAutorizado;
 
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 

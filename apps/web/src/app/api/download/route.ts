@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 
 /**
  * Proxy de descarga para archivos en CDNs externos (Cloudinary, etc.).
@@ -7,8 +9,29 @@ import { NextRequest, NextResponse } from "next/server";
  * Content-Disposition correcto para forzar el nombre original.
  *
  * GET /api/download?url=<encoded_url>&name=<filename>
+ *
+ * Pide sesión: el único que lo usa es el visor de lecciones, que ya exige
+ * inscripción. Sin sesión esto era un proxy abierto que cualquiera podía usar
+ * para sacar tráfico (y contenido) a través de nuestro dominio.
  */
 export async function GET(req: NextRequest) {
+  try {
+    const session = await requireSession();
+
+    const limited = await checkRateLimitAsync({
+      key: `download:${session.user.id}`,
+      limit: 60,
+      windowSecs: 60,
+    });
+    if (limited) return limited;
+
+    return await servirDescarga(req);
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+async function servirDescarga(req: NextRequest) {
   const url = req.nextUrl.searchParams.get("url");
   const name = req.nextUrl.searchParams.get("name");
 
@@ -16,8 +39,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "url is required" }, { status: 400 });
   }
 
-  // Only allow downloading from trusted domains
-  const allowed = ["res.cloudinary.com", "cloudinary.com"];
+  // Solo dominios de confianza.
+  //
+  // El host tiene que coincidir EXACTO o ser un subdominio real (terminar en
+  // ".cloudinary.com"). Antes se usaba endsWith("cloudinary.com") a secas, que
+  // también acepta "evil-cloudinary.com" o "micloudinary.com": basta con
+  // registrar uno de esos dominios para que este endpoint sirva el contenido
+  // del atacante desde cursumi.com.
+  const allowed = ["cloudinary.com"];
   let parsedUrl: URL;
   try {
     parsedUrl = new URL(url);
@@ -25,7 +54,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
   }
 
-  if (!allowed.some((d) => parsedUrl.hostname.endsWith(d))) {
+  if (parsedUrl.protocol !== "https:") {
+    return NextResponse.json({ error: "Solo se permite https" }, { status: 400 });
+  }
+
+  const host = parsedUrl.hostname.toLowerCase();
+  const permitido = allowed.some((d) => host === d || host.endsWith(`.${d}`));
+  if (!permitido) {
     return NextResponse.json({ error: "Domain not allowed" }, { status: 403 });
   }
 
@@ -60,7 +95,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Tipo de archivo no permitido" }, { status: 415 });
   }
 
-  const filename = name || url.split("/").pop() || "download";
+  // El nombre va a una cabecera: fuera comillas y caracteres de control
+  // (evita partir la respuesta e inyectar cabeceras propias).
+  const filename =
+    (name || url.split("/").pop() || "download")
+      .replace(/[\u0000-\u001f\u007f"]/g, "")
+      .slice(0, 200) || "download";
 
   return new NextResponse(upstream.body, {
     headers: {

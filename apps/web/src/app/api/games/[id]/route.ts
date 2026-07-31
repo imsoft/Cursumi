@@ -43,9 +43,20 @@ export async function GET(
       });
     }
 
+    // La respuesta correcta solo sale del servidor cuando ya no sirve para hacer
+    // trampa: al anfitrión (que proyecta el resultado) y al participante que YA
+    // contestó esta pregunta, para poder mostrarle cuál era. Antes se mandaban
+    // todas las preguntas tal cual salen de la base, así que cualquier jugador
+    // podía leer `correct` en la pestaña de red y contestar perfecto.
+    const sinRespuesta = <T extends { correct: number }>({ correct: _c, ...q }: T) => q;
+    const yaContesto = !!myAnswer;
+
     return NextResponse.json({
-      game,
-      currentQ,
+      game: {
+        ...game,
+        questions: isHost ? game.questions : game.questions.map(sinRespuesta),
+      },
+      currentQ: currentQ && !isHost && !yaContesto ? sinRespuesta(currentQ) : currentQ,
       participants: game.participants,
       myAnswer,
       myParticipantId: participant?.id ?? null,

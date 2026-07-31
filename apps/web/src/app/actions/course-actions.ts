@@ -208,6 +208,18 @@ export async function enrollInCourse(courseId: string, sessionId?: string, joinC
     select: { joinCodeHash: true, modality: true, price: true },
   });
 
+  // Esta función SOLO inscribe gratis. El cobro va por Stripe, y quien paga se
+  // inscribe desde el webhook, que no pasa por aquí.
+  //
+  // La comprobación tiene que vivir en esta función, no solo en quien la llama:
+  // se invoca desde un server action de formulario, y el navegador conoce el id
+  // de ese action y manda el courseId en el FormData. Si la barrera estuviera
+  // únicamente en la ruta /api/courses/[courseId]/enroll, bastaría con llamar al
+  // action con el id de un curso de paga para llevárselo sin pagar.
+  if ((enrollmentRules?.price ?? course.price) > 0) {
+    throw new Error("Este curso requiere pago. Usa el flujo de checkout.");
+  }
+
   // Para cursos por evento con sesiones, validar la sesión Y su código específico
   let sessionJoinCodeHash: string | null = null;
   if (sessionId) {
