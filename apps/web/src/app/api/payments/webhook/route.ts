@@ -67,13 +67,22 @@ export async function POST(req: NextRequest) {
       // Operación atómica: solo incrementa si aún está bajo el límite,
       // evitando race conditions con múltiples webhooks simultáneos.
       if (transaction.couponCode) {
-        await prisma.$executeRaw`
+        const filas = await prisma.$executeRaw`
           UPDATE "Coupon"
           SET "usedCount" = "usedCount" + 1
           WHERE code = ${transaction.couponCode}
             AND active = true
             AND ("maxUses" IS NULL OR "usedCount" < "maxUses")
         `;
+        // 0 filas = el cupón se agotó entre que se creó la sesión de pago y que
+        // llegó este webhook. El cobro ya se hizo con descuento, así que no se
+        // revierte nada, pero queda registrado para poder revisarlo.
+        if (filas === 0) {
+          console.warn(
+            `[pagos] El cupón ${transaction.couponCode} se usó por encima de su límite ` +
+            `(transacción ${transaction.id}). Se respetó el descuento ya cobrado.`,
+          );
+        }
       }
 
       // Avisos, correo de bienvenida y comisión de referido — mismo helper que

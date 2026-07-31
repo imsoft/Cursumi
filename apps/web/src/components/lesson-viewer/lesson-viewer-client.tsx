@@ -39,7 +39,8 @@ import { SectionGatesPanel } from "./section-gates-panel";
 import { getMuxPlaybackId, getYouTubeId } from "@/lib/video-url";
 
 import { QuizAnswerInput } from "@/components/student/quiz-answer-input";
-import { gradeQuestion, type ExamAnswer } from "@/lib/exam-grading";
+// Ya no se califica aquí: la nota la calcula el servidor.
+import { type ExamAnswer } from "@/lib/exam-grading";
 import type { QuizQuestion } from "@/components/instructor/course-types";
 import { contar } from "@/lib/plural";
 
@@ -105,6 +106,10 @@ interface LessonViewerClientProps {
   hasFinalExam?: boolean;
   savedQuizScore?: number | null;
   savedQuizAnswers?: Record<string, number | number[] | string[]> | null;
+  /** Intento anterior ya calificado en el servidor, para pintar la revisión. */
+  savedQuizResult?: LessonQuizResult | null;
+  /** JWT de reproducción de Mux. null si el video es público o no es de Mux. */
+  muxPlaybackToken?: string | null;
 }
 
 const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
@@ -114,6 +119,23 @@ const lessonTypeIcon: Partial<Record<string, React.ReactNode>> = {
   assignment: <ClipboardList className="h-4 w-4 shrink-0" />,
   section_quiz: <ClipboardCheck className="h-4 w-4 shrink-0" />,
   section_minigame: <Gamepad2 className="h-4 w-4 shrink-0" />,
+};
+
+
+/** Respuesta de POST /api/lessons/[id]/complete. */
+type LessonQuizResult = {
+  score: number;
+  passed: boolean;
+  evaluations: Record<string, boolean>;
+  solutions: Record<string, number | number[] | string[]>;
+};
+
+type CompleteResponse = {
+  completed?: boolean;
+  progress?: number;
+  completedLessons?: number;
+  totalLessons?: number;
+  quiz?: LessonQuizResult;
 };
 
 export function LessonViewerClient({
@@ -131,6 +153,8 @@ export function LessonViewerClient({
   hasFinalExam = false,
   savedQuizScore = null,
   savedQuizAnswers = null,
+  savedQuizResult = null,
+  muxPlaybackToken = null,
 }: LessonViewerClientProps) {
   const router = useRouter();
   const [completedIds, setCompletedIds] = useState(new Set(initialCompleted));
@@ -193,6 +217,12 @@ export function LessonViewerClient({
     }
     return restored;
   });
+  /**
+   * Resultado del quiz tal como lo devuelve el servidor. Las respuestas
+   * correctas ya no vienen en `lesson.content` (se quitan antes de mandarlo),
+   * así que llegan aquí, una vez contestado, para poder pintar la revisión.
+   */
+  const [quizResult, setQuizResult] = useState<LessonQuizResult | null>(savedQuizResult);
   const [quizSubmitted, setQuizSubmitted] = useState(hasSavedQuiz);
   const [quizAttemptCount, setQuizAttemptCount] = useState(hasSavedQuiz ? 1 : 0);
   const [quizTimeLeft, setQuizTimeLeft] = useState<number | null>(null); // seconds
@@ -284,11 +314,17 @@ export function LessonViewerClient({
       nextIsInDifferentSection ||
       (nextLesson === null && hasFinalExam));
 
-  const markComplete = useCallback(async (extra?: { score?: number; answers?: Record<string, number | number[] | string[]> }) => {
-    if (isCompleted || marking) return;
+  const markComplete = useCallback(async (extra?: { answers?: Record<string, number | number[] | string[]> }): Promise<CompleteResponse | null> => {
+    if (isCompleted || marking) return null;
     setMarking(true);
     // Optimistic update: marcar inmediatamente, rollback solo si falla
     setCompletedIds((prev) => new Set([...prev, lesson.id]));
+    const rollback = () =>
+      setCompletedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(lesson.id);
+        return next;
+      });
     try {
       const res = await fetch(`/api/lessons/${lesson.id}/complete`, {
         method: "POST",
@@ -296,37 +332,35 @@ export function LessonViewerClient({
         body: JSON.stringify({ courseId, ...extra }),
       });
       if (!res.ok) {
-        // Rollback
-        setCompletedIds((prev) => {
-          const next = new Set(prev);
-          next.delete(lesson.id);
-          return next;
-        });
-      } else {
-        // ¿Era la última lección y no hay examen final? → modal de felicitaciones
-        if (nextLesson === null && !hasFinalExam) {
-          setShowCompletionModal(true);
-        }
+        rollback();
+        return null;
       }
+      const data = (await res.json()) as CompleteResponse;
+      // El servidor puede rechazar el completado: un quiz que exige aprobar y
+      // no se aprobó. La decisión es suya, no del navegador.
+      if (data.completed === false) {
+        rollback();
+        return data;
+      }
+      // ¿Era la última lección y no hay examen final? → modal de felicitaciones
+      if (nextLesson === null && !hasFinalExam) {
+        setShowCompletionModal(true);
+      }
+      return data;
     } catch {
-      // Rollback on network error
-      setCompletedIds((prev) => {
-        const next = new Set(prev);
-        next.delete(lesson.id);
-        return next;
-      });
+      rollback();
+      return null;
     } finally {
       setMarking(false);
     }
   }, [isCompleted, marking, lesson.id, courseId, nextLesson, hasFinalExam]);
 
-  // Parse quiz questions from content JSON (lección tipo quiz)
+  // Parse quiz questions from content JSON (lección tipo quiz).
+  // OJO: `content` llega saneado desde el servidor — sin respuestas correctas.
   type ParsedQuizQuestion = {
     question: string;
     options: string[];
-    correct: number;
     type?: QuizQuestion["type"];
-    correctAnswers?: number[];
     matchRight?: string[];
   };
   let quizQuestions: ParsedQuizQuestion[] = [];
@@ -340,9 +374,7 @@ export function LessonViewerClient({
         quizQuestions = parsed.questions.map((q: any) => ({
           question: q.question,
           options: q.options || (q.type === "true-false" ? ["Verdadero", "Falso"] : []),
-          correct: typeof q.correctAnswer === "number" ? q.correctAnswer : 0,
           type: q.type || "multiple-choice",
-          correctAnswers: q.correctAnswers,
           matchRight: q.matchRight,
         }));
       } else if (Array.isArray(parsed)) {
@@ -355,40 +387,31 @@ export function LessonViewerClient({
 
   const { timeLimit: quizTimeLimit, maxAttempts: quizMaxAttempts, passingRequired: quizPassingRequired, passingScore: quizPassingScorePercent } = quizConfig;
 
-  // Construye una QuizQuestion completa y obtiene la respuesta del alumno según
-  // el tipo, para calificar con la misma lógica del examen (gradeQuestion).
+  // La pregunta ya llega SIN respuesta correcta; esto solo alimenta a
+  // QuizAnswerInput (ordenar/relacionar), que necesita las opciones.
   const buildQuizQuestion = (q: ParsedQuizQuestion): QuizQuestion => ({
     id: "",
     question: q.question,
     type: q.type ?? "multiple-choice",
     options: q.options,
-    correctAnswer: q.correct,
-    correctAnswers: q.correctAnswers,
     matchRight: q.matchRight,
   });
-  const answerAt = (q: ParsedQuizQuestion, i: number): ExamAnswer | undefined => {
-    const t = q.type ?? "multiple-choice";
-    if (t === "checkbox") return quizCheckboxAnswers[i] ? Array.from(quizCheckboxAnswers[i]) : undefined;
-    if (t === "ordering" || t === "matching") return quizComplexAnswers[i];
-    return quizAnswers[i];
-  };
-  const gradeAt = (q: ParsedQuizQuestion, i: number) => gradeQuestion(buildQuizQuestion(q), answerAt(q, i));
 
-  const quizScore =
-    quizSubmitted && quizQuestions.length > 0
-      ? quizQuestions.reduce((acc, q, i) => acc + (gradeAt(q, i) ? 1 : 0), 0)
-      : 0;
-  const quizScorePercent = quizQuestions.length > 0 ? Math.round((quizScore / quizQuestions.length) * 100) : 0;
-  const quizPassed = quizSubmitted && quizScorePercent >= (quizPassingRequired ? quizPassingScorePercent : 70);
+  /** Acierto de la pregunta i, según lo que dictaminó el servidor. */
+  const gradeAt = (_q: ParsedQuizQuestion, i: number) =>
+    quizResult?.evaluations[String(i)] ?? false;
+
+  const quizScorePercent = quizResult?.score ?? 0;
+  const quizPassed = quizSubmitted && (quizResult?.passed ?? false);
+  /** Aciertos, contados de lo que dictaminó el servidor. */
+  const quizScore = quizResult
+    ? Object.values(quizResult.evaluations).filter(Boolean).length
+    : 0;
 
   const handleQuizSubmit = async () => {
     if (timerRef.current) clearInterval(timerRef.current);
     setQuizSubmitted(true);
     setQuizAttemptCount((c) => c + 1);
-    // Compute pass inline since state hasn't updated yet
-    const score = quizQuestions.reduce((acc, q, i) => acc + (gradeAt(q, i) ? 1 : 0), 0);
-    const pct = quizQuestions.length > 0 ? Math.round((score / quizQuestions.length) * 100) : 0;
-    const passed = pct >= (quizPassingRequired ? quizPassingScorePercent : 70);
 
     // Guardar respuestas: número (radio), número[] (checkbox) o texto[] (ordenar/relacionar)
     const answersToSave: Record<string, number | number[] | string[]> = {};
@@ -405,9 +428,10 @@ export function LessonViewerClient({
       }
     });
 
-    if (passed || !quizPassingRequired) {
-      await markComplete({ score: pct, answers: answersToSave });
-    }
+    // Solo se mandan las respuestas: la nota, si aprobó y cuáles eran las
+    // correctas las decide el servidor leyendo la lección de la base.
+    const res = await markComplete({ answers: answersToSave });
+    if (res?.quiz) setQuizResult(res.quiz);
   };
 
   const handleAssignmentSubmit = async () => {
@@ -445,6 +469,7 @@ export function LessonViewerClient({
             <div className="aspect-video w-full overflow-hidden bg-black">
               <MuxPlayer
                 playbackId={muxId}
+                {...(muxPlaybackToken ? { tokens: { playback: muxPlaybackToken } } : {})}
                 streamType="on-demand"
                 className="h-full w-full"
                 onEnded={() => markComplete()}
@@ -605,15 +630,19 @@ export function LessonViewerClient({
                     const isSelectedCheckbox = selectedCheckboxes.has(j);
                     const isSelected = isCheckbox ? isSelectedCheckbox : isSelectedRadio;
 
+                    // La solución la manda el servidor al calificar, no viene
+                    // en el contenido de la lección.
+                    const solucion = quizResult?.solutions[String(i)];
                     let isCorrect = false;
                     let isWrong = false;
-                    if (quizSubmitted) {
-                      if (isCheckbox && q.correctAnswers) {
-                        isCorrect = q.correctAnswers.includes(j);
-                        isWrong = isSelectedCheckbox && !q.correctAnswers.includes(j);
-                      } else {
-                        isCorrect = j === q.correct;
-                        isWrong = isSelectedRadio && j !== q.correct;
+                    if (quizSubmitted && solucion !== undefined) {
+                      if (isCheckbox && Array.isArray(solucion)) {
+                        const correctas = solucion as number[];
+                        isCorrect = correctas.includes(j);
+                        isWrong = isSelectedCheckbox && !correctas.includes(j);
+                      } else if (typeof solucion === "number") {
+                        isCorrect = j === solucion;
+                        isWrong = isSelectedRadio && j !== solucion;
                       }
                     }
 

@@ -11,6 +11,8 @@ import { normalizeSectionActivities } from "@/lib/section-activities";
 import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { prisma } from "./prisma";
 import { formatDateLabel } from "./course-service-helpers";
+import { sanitizeLessonQuizContent, parseLessonQuiz, gradeLessonQuiz } from "@/lib/lesson-quiz";
+import type { ExamAnswer } from "@/lib/exam-grading";
 
 // ─── Mis cursos ───────────────────────────────────────────────────────────────
 
@@ -195,6 +197,16 @@ export async function getStudentCourseDetail(courseId: string, studentId: string
     // SECURITY: no filtrar respuestas del examen al cliente del dashboard
     // @ts-ignore
     delete detail.course.finalExam;
+
+    // Lo mismo con los quizzes de lección: las secciones traen la lección
+    // completa, y su `content` incluye las respuestas correctas.
+    for (const seccion of detail.course.sections) {
+      for (const leccion of seccion.lessons) {
+        if (leccion.type === "quiz") {
+          leccion.content = sanitizeLessonQuizContent(leccion.content);
+        }
+      }
+    }
   }
 
   return detail;
@@ -376,8 +388,27 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     };
   });
 
+  // El quiz de lección guarda las respuestas correctas dentro de `content`.
+  // Se quitan antes de mandarlo al navegador: la calificación la hace el
+  // servidor en POST /api/lessons/[lessonId]/complete, que las lee de la base.
+  const lessonParaCliente =
+    lesson.type === "quiz"
+      ? { ...lesson, content: sanitizeLessonQuizContent(lesson.content) }
+      : lesson;
+
+  // Si ya había contestado, se recalifica aquí su intento guardado. Sin esto el
+  // navegador no tendría con qué pintar la revisión —las respuestas correctas
+  // ya no le llegan— y mostraría un 0 en lugar de su calificación.
+  const savedQuizResult =
+    lesson.type === "quiz" && savedQuizAnswers
+      ? gradeLessonQuiz(
+          parseLessonQuiz(lesson.content),
+          savedQuizAnswers as Record<string, ExamAnswer>,
+        )
+      : null;
+
   return {
-    lesson,
+    lesson: lessonParaCliente,
     enrollment,
     completedIds,
     prevLesson,
@@ -394,6 +425,7 @@ export async function getLessonForStudent(lessonId: string, studentId: string) {
     hasFinalExam,
     savedQuizScore,
     savedQuizAnswers,
+    savedQuizResult,
   };
 }
 

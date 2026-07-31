@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getCachedSession } from "@/lib/session";
 import { getLessonForStudent } from "@/lib/course-service";
 import { LessonViewerClient } from "@/components/lesson-viewer/lesson-viewer-client";
+import { createMuxPlaybackToken } from "@/lib/mux-token";
+import { getMuxPlaybackId } from "@/lib/video-url";
 
 export default async function LessonPage({
   params,
@@ -30,7 +32,15 @@ export default async function LessonPage({
     hasFinalExam,
     savedQuizScore,
     savedQuizAnswers,
+    savedQuizResult,
   } = data;
+
+  // Token de reproducción firmado. Se emite AQUÍ porque llegar a este punto ya
+  // significa que getLessonForStudent validó la inscripción. Vale null si el
+  // video no es de Mux o si todavía no hay llaves de firma configuradas, y en
+  // ese caso el reproductor se comporta como siempre.
+  const muxPlaybackId = lesson.videoUrl ? getMuxPlaybackId(lesson.videoUrl) : null;
+  const muxPlaybackToken = muxPlaybackId ? createMuxPlaybackToken(muxPlaybackId) : null;
 
   return (
     <LessonViewerClient
@@ -56,6 +66,7 @@ export default async function LessonPage({
           : null,
       }}
       courseId={courseId}
+      muxPlaybackToken={muxPlaybackToken}
       sections={sidebarSections.map((s) => ({
         id: s.id,
         title: s.title,
@@ -80,6 +91,7 @@ export default async function LessonPage({
       hasFinalExam={hasFinalExam}
       savedQuizScore={savedQuizScore}
       savedQuizAnswers={savedQuizAnswers as Record<string, number | number[]> | null}
+      savedQuizResult={savedQuizResult}
     />
   );
 }

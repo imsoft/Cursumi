@@ -5,6 +5,7 @@ import { getSessionSafe } from "@/lib/session";
 import { AdminShell } from "@/components/layouts/admin-shell";
 import { getUserBasicInfo } from "@/lib/user-service";
 import { getSignatory } from "@/lib/governance";
+import { debeConfigurar2FA, RUTA_CONFIGURAR_2FA } from "@/lib/two-factor-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,13 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   if (role !== "admin") {
     if (role === "instructor") redirect("/instructor");
     redirect("/dashboard");
+  }
+
+  // Segundo factor obligatorio para cuentas con poder. La redirección va a una
+  // página fuera de los grupos por rol: si viviera dentro de (student) o de
+  // este mismo layout, el guardia y el layout se rebotarían sin parar.
+  if (await debeConfigurar2FA(session.user.id, role)) {
+    redirect(RUTA_CONFIGURAR_2FA);
   }
 
   const userName = session.user.name ?? "Admin";

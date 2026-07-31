@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { muxSigningConfigurado } from "@/lib/mux-token";
 
 const MUX_UPLOAD_ENDPOINT = "https://api.mux.com/video/v1/uploads";
 const MUX_ASSETS_ENDPOINT = "https://api.mux.com/video/v1/assets";
@@ -68,7 +69,12 @@ export async function createMuxUploadUrl(
     body: JSON.stringify({
       cors_origin: corsOrigin,
       new_asset_settings: {
-        playback_policy: ["public"],
+        // `signed` mientras haya llaves de firma configuradas. Con `public`, el
+        // id de reproducción sirve el video en stream.mux.com sin sesión, para
+        // siempre y compartible: el video de un curso de paga se filtraba con
+        // solo pasar el enlace. Si no hay llaves, se cae a `public` para no
+        // dejar de funcionar (ver scripts/mux-migrar-a-firmado.ts).
+        playback_policy: [muxSigningConfigurado() ? "signed" : "public"],
         passthrough,
       },
     }),
@@ -92,7 +98,15 @@ export async function createMuxUploadUrl(
  * Nota: el asset puede tardar en estar listo; idealmente se debería hacer polling.
  */
 export async function getMuxPlaybackId(uploadId: string) {
-  await requireSession();
+  const session = await requireSession();
+  // Resolver un uploadId revela el id de reproducción del video. Solo lo
+  // necesita quien está subiendo contenido (instructor o admin); antes bastaba
+  // con tener sesión, así que cualquier alumno podía resolver ids ajenos.
+  const { getUserRole } = await import("@/lib/user-service");
+  const rol = await getUserRole(session.user.id);
+  if (rol !== "instructor" && rol !== "admin") {
+    throw new Error("No autorizado");
+  }
   const { tokenId, tokenSecret } = requireMuxEnv();
   const authHeader = Buffer.from(`${tokenId}:${tokenSecret}`).toString("base64");
 
