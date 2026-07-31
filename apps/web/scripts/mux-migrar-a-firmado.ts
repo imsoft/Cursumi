@@ -26,10 +26,18 @@
  * si no, la app no sabrá firmar y los videos migrados no se verán.
  */
 
-import { PrismaClient } from "../src/generated/prisma";
+// El cliente del proyecto: lleva el adaptador de Neon, sin el cual
+// `new PrismaClient()` ni siquiera arranca.
+import { prisma } from "../src/lib/prisma";
 
-const prisma = new PrismaClient();
 const APLICAR = process.argv.includes("--aplicar");
+const REVERTIR = process.argv.includes("--revertir");
+/** `--limite N` migra solo N videos: sirve para probar con uno antes de ir por todos. */
+const LIMITE = (() => {
+  const i = process.argv.indexOf("--limite");
+  const n = i >= 0 ? Number(process.argv[i + 1]) : NaN;
+  return Number.isFinite(n) && n > 0 ? n : Infinity;
+})();
 const API = "https://api.mux.com/video/v1";
 
 function auth(): string {
@@ -52,8 +60,54 @@ function playbackIdDe(url: string): string | null {
   return url.match(/stream\.mux\.com\/([^/.]+)/)?.[1] ?? null;
 }
 
+/**
+ * Deshace la migración: vuelve a poner un id público y quita el firmado.
+ * Existe para poder retroceder rápido si algo sale mal a media migración
+ * (por ejemplo, si la app todavía no tiene las llaves y los videos no cargan).
+ */
+async function revertir() {
+  const lecciones = await prisma.lesson.findMany({
+    where: { videoUrl: { contains: "stream.mux.com" } },
+    select: { id: true, title: true, videoUrl: true },
+  });
+  let hechas = 0;
+
+  for (const leccion of lecciones) {
+    const id = leccion.videoUrl ? playbackIdDe(leccion.videoUrl) : null;
+    if (!id) continue;
+    try {
+      const info = await mux<{ data: { policy: string; object: { id: string } } }>(`/playback-ids/${id}`);
+      if (info.data.policy !== "signed") continue;
+
+      const assetId = info.data.object.id;
+      console.log(`• ${leccion.title}  (asset ${assetId})`);
+      if (!APLICAR) { console.log("    → volvería a público\n"); hechas++; continue; }
+
+      const creado = await mux<{ data: { id: string } }>(`/assets/${assetId}/playback-ids`, {
+        method: "POST",
+        body: JSON.stringify({ policy: "public" }),
+      });
+      await prisma.lesson.update({
+        where: { id: leccion.id },
+        data: { videoUrl: `https://stream.mux.com/${creado.data.id}.m3u8` },
+      });
+      await mux(`/assets/${assetId}/playback-ids/${id}`, { method: "DELETE" });
+      console.log(`    ✓ público ${creado.data.id}\n`);
+      hechas++;
+    } catch (error) {
+      console.error(`    ✗ ${leccion.title}: ${error instanceof Error ? error.message : error}\n`);
+    }
+  }
+  console.log(`revertidas: ${hechas}`);
+}
+
 async function main() {
+  if (REVERTIR) {
+    console.log(APLICAR ? "▶ REVIRTIENDO a público\n" : "▶ Simulación de reversión\n");
+    return revertir();
+  }
   console.log(APLICAR ? "▶ Aplicando cambios\n" : "▶ Simulación (usa --aplicar para ejecutar)\n");
+  if (LIMITE !== Infinity) console.log(`   (limitado a ${LIMITE})\n`);
 
   const lecciones = await prisma.lesson.findMany({
     where: { videoUrl: { contains: "stream.mux.com" } },
@@ -64,6 +118,7 @@ async function main() {
   let migradas = 0, yaFirmadas = 0, fallos = 0;
 
   for (const leccion of lecciones) {
+    if (migradas >= LIMITE) break;
     const publicId = leccion.videoUrl ? playbackIdDe(leccion.videoUrl) : null;
     if (!publicId) continue;
 
