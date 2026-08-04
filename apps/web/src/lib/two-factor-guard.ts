@@ -28,6 +28,23 @@ export async function tiene2FAActivado(userId: string): Promise<boolean> {
 }
 
 /**
+ * ¿Esta persona entra únicamente con un proveedor externo (Google)?
+ *
+ * Importa porque el alta del TOTP de better-auth pide la contraseña para
+ * generar el QR, y quien se registró con Google sencillamente no tiene. Sin
+ * esta comprobación, exigir 2FA deja a esas cuentas fuera para siempre: no
+ * pueden activarlo y tampoco entrar. Nos pasó con las tres cuentas con
+ * privilegios el 31 de julio de 2026.
+ */
+export async function soloEntraConProveedorExterno(userId: string): Promise<boolean> {
+  const conContrasena = await prisma.account.findFirst({
+    where: { userId, password: { not: null } },
+    select: { id: true },
+  });
+  return !conContrasena;
+}
+
+/**
  * ¿Hay que mandar a esta persona a configurar su segundo factor?
  *
  * Se consulta a la base y no a la sesión: el plugin de better-auth mete
@@ -36,5 +53,15 @@ export async function tiene2FAActivado(userId: string): Promise<boolean> {
  */
 export async function debeConfigurar2FA(userId: string, rol: string): Promise<boolean> {
   if (!rolExige2FA(rol)) return false;
-  return !(await tiene2FAActivado(userId));
+  if (await tiene2FAActivado(userId)) return false;
+
+  // Quien solo entra con Google queda exento: su segundo factor es el de la
+  // cuenta de Google, que es donde de verdad se autentica. Obligarlo a crear
+  // una contraseña aquí para poder sumar un TOTP no lo protegería más —
+  // añadiría una credencial nueva, robable, donde antes no había ninguna.
+  // A cambio, la seguridad de esas cuentas depende de que tengan la
+  // verificación en dos pasos activada EN GOOGLE.
+  if (await soloEntraConProveedorExterno(userId)) return false;
+
+  return true;
 }
