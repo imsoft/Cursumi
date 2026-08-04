@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { puntoEnLienzo } from "@/lib/canvas-coords";
 
 const COLORS = [
   "#0f172a",
@@ -51,10 +52,15 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return null;
-    const rect = wrap.getBoundingClientRect();
-    // Usar el rect real del contenedor (evita lienzo más ancho que el viewport)
-    const w = Math.max(280, Math.floor(rect.width));
-    const h = Math.max(200, Math.floor(rect.height));
+    // clientWidth/clientHeight = caja de contenido: excluye el borde del
+    // contenedor. Con getBoundingClientRect se colaban los 2px del borde y el
+    // lienzo quedaba desplazado.
+    //
+    // Tampoco sirve medir el canvas: es un elemento reemplazado y su tamaño en
+    // pantalla depende del bitmap (ver más abajo), así que medirlo para
+    // dimensionarlo sería morderse la cola.
+    const w = Math.max(280, wrap.clientWidth);
+    const h = Math.max(200, wrap.clientHeight);
     return { w, h };
   }, []);
 
@@ -97,8 +103,20 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
 
     canvas.width = newW;
     canvas.height = newH;
-    // Display size is controlled by CSS (absolute inset-0); setting style.width/height
-    // would conflict with inset-0 and re-trigger ResizeObserver, so we skip it.
+
+    // El tamaño en pantalla se fija a mano, y es imprescindible.
+    //
+    // Un <canvas> es un elemento reemplazado: con `position:absolute; inset:0`
+    // y sin ancho en CSS, el navegador IGNORA `right`/`bottom` y lo pinta al
+    // tamaño de su bitmap. En una pantalla retina eso significaba mostrarlo a
+    // 1600px de ancho dentro de una caja de 800: el puntero recorría la mitad
+    // del lienzo que el trazo, y el dibujo salía muy lejos del cursor.
+    //
+    // Esto no realimenta al ResizeObserver: observa al contenedor, y el canvas
+    // está fuera de flujo, así que cambiarle el tamaño no mueve al contenedor.
+    canvas.style.width = `${size.w}px`;
+    canvas.style.height = `${size.h}px`;
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -160,18 +178,29 @@ export function VirtualWhiteboard({ className }: { className?: string }) {
     redoRef.current = [];
   }, [snapshot]);
 
+  /**
+   * Punto del lienzo bajo el cursor.
+   *
+   * Restar el rect no basta: el bitmap y la caja en pantalla pueden tener
+   * tamaños distintos (borde, zoom del navegador, pantalla completa), y en ese
+   * caso el navegador escala el dibujo. Convertimos la posición aplicando esa
+   * misma proporción, así el trazo cae bajo el cursor pase lo que pase con el
+   * CSS. El contexto está en unidades lógicas (setTransform con dpr), de ahí
+   * la división entre dpr.
+   */
   const coords = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
-    const rect = canvas.getBoundingClientRect();
-    if ("touches" in e && e.touches[0]) {
-      return {
-        x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top,
-      };
-    }
-    const me = e as React.MouseEvent;
-    return { x: me.clientX - rect.left, y: me.clientY - rect.top };
+    const punto =
+      "touches" in e && e.touches[0]
+        ? { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY }
+        : (e as React.MouseEvent);
+    return puntoEnLienzo(
+      punto,
+      canvas.getBoundingClientRect(),
+      { width: canvas.width, height: canvas.height },
+      window.devicePixelRatio || 1,
+    );
   };
 
   const start = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
