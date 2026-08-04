@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   History,
   FileText,
+  ChevronRight,
 } from "lucide-react";
 import type { GovernanceContent } from "@/lib/governance";
 import { contar } from "@/lib/plural";
@@ -32,6 +33,15 @@ type HistoryEntry = {
   version: number;
   publishedAt: string;
   changeNote: string | null;
+  /** Texto congelado de esa versión: lo que realmente se firmó. */
+  content: GovernanceContent;
+  cambios: {
+    modificadas: string[];
+    nuevas: string[];
+    eliminadas: string[];
+    introCambio: boolean;
+  };
+  firmadaPorMi: boolean;
   signatures: { fullName: string; email: string; acceptedAt: string }[];
 };
 
@@ -65,6 +75,8 @@ export function GovernanceClient({
   myAcceptance: { fullName: string; acceptedAt: string } | null;
   history: HistoryEntry[];
 }) {
+  /** Versión del historial desplegada (null = todas cerradas). */
+  const [versionAbierta, setVersionAbierta] = useState<number | null>(null);
   const [content, setContent] = useState<GovernanceContent>(initialContent);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -446,33 +458,111 @@ export function GovernanceClient({
             <History className="h-4 w-4" />
             Historial de versiones
           </h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Cada versión guarda el texto tal como estaba al publicarse. Ábrela para
+            releer exactamente lo que se firmó.
+          </p>
           <ul className="mt-3 space-y-2">
-            {history.map((v) => (
-              <li
-                key={v.version}
-                className="rounded-lg border border-border bg-card px-4 py-3 text-sm"
-              >
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="font-semibold text-foreground">Versión {v.version}</span>
-                  {v.version === version && (
-                    <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
-                      Vigente
-                    </span>
+            {history.map((v) => {
+              const abierta = versionAbierta === v.version;
+              const totalCambios =
+                v.cambios.modificadas.length +
+                v.cambios.nuevas.length +
+                v.cambios.eliminadas.length;
+
+              return (
+                <li key={v.version} className="rounded-lg border border-border bg-card text-sm">
+                  <button
+                    type="button"
+                    onClick={() => setVersionAbierta(abierta ? null : v.version)}
+                    aria-expanded={abierta}
+                    className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40"
+                  >
+                    <ChevronRight
+                      className={`mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform ${
+                        abierta ? "rotate-90" : ""
+                      }`}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="font-semibold text-foreground">Versión {v.version}</span>
+                        {v.version === version && (
+                          <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-primary">
+                            Vigente
+                          </span>
+                        )}
+                        {v.firmadaPorMi && (
+                          <span className="rounded bg-green-500/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-green-700 dark:text-green-400">
+                            La firmaste
+                          </span>
+                        )}
+                        <span className="text-xs text-muted-foreground">{fmt(v.publishedAt)}</span>
+                      </div>
+                      {v.changeNote && (
+                        <p className="mt-1 text-xs text-muted-foreground">{v.changeNote}</p>
+                      )}
+                      <p className="mt-1.5 text-xs text-muted-foreground">
+                        {v.signatures.length === 0
+                          ? "Sin firmas"
+                          : v.signatures
+                              .map((s) => `${s.fullName} (${fmt(s.acceptedAt)})`)
+                              .join(" · ")}
+                        {totalCambios > 0 && ` · ${contar(totalCambios, "cambio", "cambios")}`}
+                      </p>
+                    </div>
+                  </button>
+
+                  {abierta && (
+                    <div className="border-t border-border px-4 py-4">
+                      {v.cambios.eliminadas.length > 0 && (
+                        <p className="mb-3 rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+                          Se quitaron respecto a la versión anterior:{" "}
+                          {v.cambios.eliminadas.join(" · ")}
+                        </p>
+                      )}
+                      {v.content.intro && (
+                        <p className="mb-4 whitespace-pre-wrap text-sm text-muted-foreground">
+                          {v.content.intro}
+                        </p>
+                      )}
+                      {v.content.sections.map((s) => (
+                        <div key={s.id} className="mb-4 last:mb-0">
+                          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            {s.title}
+                          </h3>
+                          <dl className="mt-2 space-y-3">
+                            {s.questions.map((q) => {
+                              const esNueva = v.cambios.nuevas.includes(q.id);
+                              const cambio = v.cambios.modificadas.includes(q.id);
+                              return (
+                                <div key={q.id}>
+                                  <dt className="flex flex-wrap items-center gap-2 text-sm font-medium text-foreground">
+                                    {q.q}
+                                    {esNueva && (
+                                      <span className="rounded bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-blue-700 dark:text-blue-400">
+                                        Nueva
+                                      </span>
+                                    )}
+                                    {cambio && (
+                                      <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-700 dark:text-amber-400">
+                                        Cambió
+                                      </span>
+                                    )}
+                                  </dt>
+                                  <dd className="mt-0.5 whitespace-pre-wrap text-sm text-muted-foreground">
+                                    {q.answer?.trim() || "— sin acuerdo escrito —"}
+                                  </dd>
+                                </div>
+                              );
+                            })}
+                          </dl>
+                        </div>
+                      ))}
+                    </div>
                   )}
-                  <span className="text-xs text-muted-foreground">{fmt(v.publishedAt)}</span>
-                </div>
-                {v.changeNote && (
-                  <p className="mt-1 text-xs text-muted-foreground">{v.changeNote}</p>
-                )}
-                <p className="mt-1.5 text-xs text-muted-foreground">
-                  {v.signatures.length === 0
-                    ? "Sin firmas"
-                    : v.signatures
-                        .map((s) => `${s.fullName} (${fmt(s.acceptedAt)})`)
-                        .join(" · ")}
-                </p>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}
