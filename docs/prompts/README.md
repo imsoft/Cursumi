@@ -13,6 +13,7 @@ Prompts reutilizables para trabajar con herramientas de IA en Cursumi. Cada subc
 |---|---|
 | [carrusel-maestro.md](./instagram/carrusel-maestro.md) | Prompt maestro para carruseles de Instagram (Claude Design). Autocontenido: rellenas TEMA, COPY BASE y COLOR arriba, y lo copias entero. |
 | [descripcion-hashtags.md](./instagram/descripcion-hashtags.md) | Prompt para el pie de publicación y los hashtags, a partir del carrusel ya definido. Autocontenido: rellenas PUBLICACIÓN, OBJETIVO y CURSO. |
+| [descripcion-hashtags.md](./instagram/descripcion-hashtags.md) | Prompt para el pie de publicación y los hashtags, a partir del carrusel ya definido. Autocontenido igual que el maestro. |
 | [temas-color.md](./instagram/temas-color.md) | Referencia de las tres paletas de marca y de cuándo conviene cada una. Consulta previa: las paletas ya van dentro del prompt maestro. |
 
 Cómo usarlo:
