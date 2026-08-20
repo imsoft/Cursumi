@@ -24,6 +24,13 @@ const staticRoutes: StaticRoute[] = [
   { url: `${siteUrl}/blog`,          changeFrequency: "weekly",  priority: 0.8 },
   { url: `${siteUrl}/login`,         changeFrequency: "monthly", priority: 0.5 },
   { url: `${siteUrl}/signup`,        changeFrequency: "monthly", priority: 0.5 },
+  // Políticas públicas: son indexables y se enlazan desde el pie de página,
+  // así que también entran al sitemap.
+  { url: `${siteUrl}/cookies`,          changeFrequency: "yearly",  priority: 0.3 },
+  { url: `${siteUrl}/copyright`,        changeFrequency: "yearly",  priority: 0.3 },
+  { url: `${siteUrl}/refunds`,          changeFrequency: "yearly",  priority: 0.3 },
+  { url: `${siteUrl}/instructor-terms`, changeFrequency: "yearly",  priority: 0.3 },
+  { url: `${siteUrl}/ai`,               changeFrequency: "yearly",  priority: 0.3 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
