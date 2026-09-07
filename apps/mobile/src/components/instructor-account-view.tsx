@@ -25,7 +25,8 @@ import {
 const PURPLE = Brand.primary;
 
 export function InstructorAccountView({ onBack }: { onBack: () => void }) {
-  const [profile, setProfile] = useState<InstructorProfile | null>(null);
+  // Solo se escribe: los campos editables viven en sus propios estados.
+  const [, setProfile] = useState<InstructorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
