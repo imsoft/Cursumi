@@ -57,8 +57,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: TypeScript check
-        run: pnpm exec tsc --noEmit
+      - name: TypeScript check (web)
+        run: pnpm --filter @cursumi/web exec tsc --noEmit
+
+      # La app móvil no tiene build en CI, así que este es el único sitio donde
+      # se detecta que una dependencia compartida (better-auth, por ejemplo)
+      # cambió su API para el cliente Expo.
+      - name: TypeScript check (mobile)
+        run: pnpm --filter @cursumi/mobile exec tsc --noEmit
 
       - name: Unit tests
         run: pnpm test
