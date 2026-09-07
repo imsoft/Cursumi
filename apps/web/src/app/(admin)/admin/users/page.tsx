@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import {
   Users,
-  UserPlus,
   ShieldCheck,
   ChevronDown,
   ChevronUp,
@@ -214,15 +213,12 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-6">
+      {/* Sin botón de alta: las cuentas se crean siempre desde el registro
+          público (necesitan contraseña y verificación de correo). Aquí el admin
+          solo consulta y cambia roles. */}
       <PageHeader
         title="Usuarios"
         description="Administra usuarios de la plataforma"
-        action={{
-          label: "Nuevo usuario",
-          href: "/admin/users/new",
-          variant: "default",
-          icon: <UserPlus className="mr-2 h-4 w-4" />,
-        }}
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
 

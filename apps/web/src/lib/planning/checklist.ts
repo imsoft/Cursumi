@@ -67,19 +67,6 @@ export function createEmptyChecklist(prefill?: {
   };
 }
 
-export function verificationSummary(data: ChecklistData): { total: number; existing: number } {
-  let total = 0;
-  let existing = 0;
-  for (const key of CATEGORY_ORDER) {
-    for (const item of data.items[key]) {
-      if (!item.description.trim()) continue;
-      total += 1;
-      if (item.status === "existe") existing += 1;
-    }
-  }
-  return { total, existing };
-}
-
 export function hydrateChecklist(
   raw: unknown,
   prefill?: Parameters<typeof createEmptyChecklist>[0],

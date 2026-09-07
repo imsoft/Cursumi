@@ -25,6 +25,7 @@ interface Member {
 
 interface Invite {
   id: string;
+  token: string;
   email: string;
   orgRole: string;
   status: string;
@@ -45,6 +46,7 @@ export default function EmployeesPage() {
   const [inviting, setInviting] = useState(false);
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [showInviteForm, setShowInviteForm] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -89,9 +91,24 @@ export default function EmployeesPage() {
     if (res.ok) setMembers((prev) => prev.filter((m) => m.id !== memberId));
   }
 
-  async function cancelInvite(inviteId: string) {
-    await fetch(`/api/business/invitations/${inviteId}`, { method: "DELETE" });
-    setInvites((prev) => prev.filter((i) => i.id !== inviteId));
+  // Solo quitamos la invitación de la lista si el servidor confirma el borrado:
+  // en caso contrario el enlace seguiría siendo válido y el panel estaría
+  // diciendo que se revocó un acceso que en realidad sigue abierto.
+  async function cancelInvite(invite: Invite) {
+    setCancelError(null);
+    try {
+      const res = await fetch(`/api/business/invitations/${invite.token}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setCancelError(data.error || "No se pudo cancelar la invitación");
+        return;
+      }
+      setInvites((prev) => prev.filter((i) => i.id !== invite.id));
+    } catch {
+      setCancelError("Error de conexión");
+    }
   }
 
   if (loading) {
@@ -156,12 +173,13 @@ export default function EmployeesPage() {
                       <span className="text-sm">{invite.email}</span>
                       <Badge variant="outline">Pendiente</Badge>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => cancelInvite(invite.id)}>
+                    <Button variant="ghost" size="sm" onClick={() => cancelInvite(invite)}>
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
                 ))}
             </div>
+            {cancelError && <p className="mt-2 text-sm text-destructive">{cancelError}</p>}
           </CardContent>
         </Card>
       )}

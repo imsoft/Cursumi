@@ -2,7 +2,15 @@ import type { MetadataRoute } from "next";
 
 const siteUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/$/, "");
 
-const privateRoutes = ["/dashboard", "/instructor", "/admin", "/api"];
+const privateRoutes = [
+  "/dashboard",
+  "/instructor",
+  "/admin",
+  "/api",
+  "/business/dashboard",
+  "/gobernanza",
+  "/seguridad",
+];
 
 export default function robots(): MetadataRoute.Robots {
   return {
