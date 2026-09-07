@@ -2,6 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar } from "@/components/ui/avatar";
 import { ProfilePhotoImg } from "@/components/ui/profile-photo-img";
@@ -33,13 +34,16 @@ export function DashboardHeader({
   profileHref = "/dashboard/account?tab=profile",
 }: DashboardHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
   const firstName = user?.name ? user.name.split(" ")[0] : "Usuario";
 
   const handleSignOut = async () => {
     await signOut();
-    window.location.assign("/");
+    // refresh() hace que los Server Components vuelvan a renderizar ya sin sesión.
+    router.push("/");
+    router.refresh();
   };
 
   return (
