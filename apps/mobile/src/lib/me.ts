@@ -22,15 +22,18 @@ export type StudentCourse = {
  * Adjunta la cookie de sesión (guardada por el cliente expo en SecureStore) para
  * llamar a endpoints autenticados de la API de Cursumi.
  */
-function authHeaders(): Record<string, string> {
-  const cookie = authClient.getCookie();
+// @better-auth/expo 1.7 hizo asíncrono getCookie(); antes devolvía la cookie
+// directamente. Sin el await, el header llevaba "[object Promise]" y todas las
+// llamadas autenticadas fallaban en silencio.
+async function authHeaders(): Promise<Record<string, string>> {
+  const cookie = await authClient.getCookie();
   return cookie ? { Cookie: cookie } : {};
 }
 
 /** Cursos en los que el usuario está inscrito. */
 export async function getMyCourses(): Promise<StudentCourse[]> {
   const res = await fetch(`${API_URL}/api/me/courses`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
@@ -63,7 +66,7 @@ export type CourseDetail = {
 /** Detalle (temario + progreso) de un curso inscrito. */
 export async function getMyCourseDetail(courseId: string): Promise<CourseDetail> {
   const res = await fetch(`${API_URL}/api/me/courses/${courseId}`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as CourseDetail;
@@ -135,7 +138,7 @@ export async function completeSectionMinigame(
 ): Promise<void> {
   await fetch(`${API_URL}/api/sections/${sectionId}/minigame/complete`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ courseId, activityId: "default" }),
   });
 }
@@ -168,7 +171,7 @@ export async function submitSectionQuiz(
 ): Promise<{ score: number; passed: boolean }> {
   const res = await fetch(`${API_URL}/api/sections/${sectionId}/quiz/submit`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ courseId, activityId: "default", answers }),
   });
   if (!res.ok) {
@@ -182,7 +185,7 @@ export async function submitSectionQuiz(
 /** Contenido de una lección (verifica inscripción en el servidor). */
 export async function getLesson(lessonId: string): Promise<Lesson> {
   const res = await fetch(`${API_URL}/api/me/lessons/${lessonId}`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as Lesson;
@@ -196,7 +199,7 @@ export async function completeLesson(
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/lessons/${lessonId}/complete`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ courseId, ...extra }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -209,7 +212,7 @@ export async function getAssignment(
 ): Promise<{ content: string; submittedAt: string } | null> {
   const res = await fetch(
     `${API_URL}/api/lessons/${lessonId}/assignment?courseId=${encodeURIComponent(courseId)}`,
-    { headers: authHeaders() }
+    { headers: await authHeaders() }
   );
   if (!res.ok) return null;
   const data = await res.json();
@@ -224,7 +227,7 @@ export async function submitAssignment(
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/lessons/${lessonId}/assignment`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ courseId, content }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -331,7 +334,7 @@ export type Certificate = {
 
 /** Certificados obtenidos por el usuario. */
 export async function getCertificates(): Promise<Certificate[]> {
-  const res = await fetch(`${API_URL}/api/me/certificates`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/me/certificates`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as Certificate[];
@@ -352,7 +355,7 @@ export async function getNotifications(): Promise<{
   notifications: Notification[];
   unreadCount: number;
 }> {
-  const res = await fetch(`${API_URL}/api/notifications`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/notifications`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return {
@@ -365,7 +368,7 @@ export async function getNotifications(): Promise<{
 export async function markNotificationRead(id: string): Promise<void> {
   await fetch(`${API_URL}/api/notifications/${id}/read`, {
     method: "PATCH",
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
 }
 
@@ -373,13 +376,13 @@ export async function markNotificationRead(id: string): Promise<void> {
 export async function markAllNotificationsRead(): Promise<void> {
   await fetch(`${API_URL}/api/notifications/read-all`, {
     method: "PATCH",
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
 }
 
 /** IDs de cursos en la lista de deseos del usuario. */
 export async function getWishlist(): Promise<string[]> {
-  const res = await fetch(`${API_URL}/api/wishlist`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/wishlist`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as string[];
@@ -389,7 +392,7 @@ export async function getWishlist(): Promise<string[]> {
 export async function toggleWishlist(courseId: string): Promise<boolean> {
   const res = await fetch(`${API_URL}/api/wishlist`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ courseId }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -418,7 +421,7 @@ export type Exam = {
 /** Examen final del curso (sin respuestas). 404 si el curso no tiene examen. */
 export async function getExam(courseId: string): Promise<Exam | null> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/exam`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -438,7 +441,7 @@ export async function submitExam(
 ): Promise<ExamResult> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/exam/submit`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ answers }),
   });
   if (!res.ok) {
@@ -461,7 +464,7 @@ export async function getReviews(
   courseId: string
 ): Promise<{ reviews: Review[]; average: number; total: number }> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/reviews`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
@@ -480,7 +483,7 @@ export async function postReview(
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/reviews`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ rating, comment }),
   });
   if (!res.ok) {
@@ -501,7 +504,7 @@ export type Referral = {
 
 /** Datos del programa de referidos del usuario (código, link, stats). */
 export async function getReferral(): Promise<Referral> {
-  const res = await fetch(`${API_URL}/api/me/referral`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/me/referral`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as Referral;
 }
@@ -525,7 +528,7 @@ export async function getNotes(filter?: {
   if (filter?.courseId) qs.set("courseId", filter.courseId);
   if (filter?.lessonId) qs.set("lessonId", filter.lessonId);
   const suffix = qs.toString() ? `?${qs.toString()}` : "";
-  const res = await fetch(`${API_URL}/api/notes${suffix}`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/notes${suffix}`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as Note[];
@@ -539,7 +542,7 @@ export async function createNote(
 ): Promise<Note> {
   const res = await fetch(`${API_URL}/api/notes`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ courseId, lessonId, content }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -550,7 +553,7 @@ export async function createNote(
 export async function deleteNote(noteId: string): Promise<void> {
   await fetch(`${API_URL}/api/notes/${noteId}`, {
     method: "DELETE",
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
 }
 
@@ -567,7 +570,7 @@ export async function getConversation(
   courseId: string
 ): Promise<{ id: string; messages: ChatMessage[] }> {
   const res = await fetch(`${API_URL}/api/conversations?courseId=${encodeURIComponent(courseId)}`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
@@ -577,7 +580,7 @@ export async function getConversation(
 /** Mensajes de una conversación. */
 export async function getMessages(conversationId: string): Promise<ChatMessage[]> {
   const res = await fetch(`${API_URL}/api/conversations/${conversationId}/messages`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
@@ -588,7 +591,7 @@ export async function getMessages(conversationId: string): Promise<ChatMessage[]
 export async function sendMessage(conversationId: string, body: string): Promise<ChatMessage> {
   const res = await fetch(`${API_URL}/api/conversations/${conversationId}/messages`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ body }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -599,7 +602,7 @@ export async function sendMessage(conversationId: string, body: string): Promise
 export async function markConversationRead(conversationId: string): Promise<void> {
   await fetch(`${API_URL}/api/conversations/${conversationId}/read`, {
     method: "PATCH",
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
 }
 
@@ -644,13 +647,13 @@ export type InstructorConversation = {
 };
 
 export async function getInstructorEarnings(): Promise<InstructorEarnings> {
-  const res = await fetch(`${API_URL}/api/instructor/earnings`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/instructor/earnings`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as InstructorEarnings;
 }
 
 export async function getInstructorAnalytics(): Promise<InstructorAnalytics> {
-  const res = await fetch(`${API_URL}/api/instructor/analytics`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/instructor/analytics`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as InstructorAnalytics;
 }
@@ -671,7 +674,7 @@ export type InstructorProfile = {
 };
 
 export async function getInstructorProfile(): Promise<InstructorProfile> {
-  const res = await fetch(`${API_URL}/api/instructor/profile`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/instructor/profile`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as InstructorProfile;
 }
@@ -687,7 +690,7 @@ export async function updateInstructorProfile(data: {
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/instructor/profile`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -698,7 +701,7 @@ export async function updateInstructorProfile(data: {
 
 /** Estado de Stripe Connect del instructor (cobros). */
 export async function getStripeStatus(): Promise<{ connected: boolean; onboarded: boolean }> {
-  const res = await fetch(`${API_URL}/api/instructor/stripe/connect`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/instructor/stripe/connect`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return { connected: Boolean(data.connected), onboarded: Boolean(data.onboarded) };
@@ -708,7 +711,7 @@ export async function getStripeStatus(): Promise<{ connected: boolean; onboarded
 export async function startStripeConnect(): Promise<string> {
   const res = await fetch(`${API_URL}/api/instructor/stripe/connect`, {
     method: "POST",
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.url) throw new Error(data.error ?? "No se pudo conectar con Stripe.");
@@ -727,7 +730,7 @@ export type InstructorCourse = {
 
 /** Cursos del instructor. */
 export async function getInstructorCourses(): Promise<InstructorCourse[]> {
-  const res = await fetch(`${API_URL}/api/instructor/courses`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/instructor/courses`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as InstructorCourse[];
@@ -740,7 +743,7 @@ export async function setCourseStatus(
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/instructor/courses/${courseId}`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ status }),
   });
   if (!res.ok) {
@@ -750,7 +753,7 @@ export async function setCourseStatus(
 }
 
 export async function getInstructorConversations(): Promise<InstructorConversation[]> {
-  const res = await fetch(`${API_URL}/api/instructor/conversations`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/instructor/conversations`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as InstructorConversation[];
@@ -758,7 +761,7 @@ export async function getInstructorConversations(): Promise<InstructorConversati
 
 /** Perfil del usuario + estadísticas de cursos. */
 export async function getMyProfile(): Promise<MyProfile> {
-  const res = await fetch(`${API_URL}/api/me/profile`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/me/profile`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as MyProfile;
 }
@@ -776,7 +779,7 @@ export async function updateMyProfile(data: {
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/me/profile`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -802,7 +805,7 @@ export type BlogPost = BlogPostSummary & {
 
 /** Artículos publicados del blog. */
 export async function getBlogPosts(): Promise<BlogPostSummary[]> {
-  const res = await fetch(`${API_URL}/api/blog`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/blog`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   const list = Array.isArray(data)
@@ -813,7 +816,7 @@ export async function getBlogPosts(): Promise<BlogPostSummary[]> {
 
 /** Artículo completo por slug. */
 export async function getBlogPost(slug: string): Promise<BlogPost> {
-  const res = await fetch(`${API_URL}/api/blog/${slug}`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/blog/${slug}`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as BlogPost;
 }
@@ -854,7 +857,7 @@ export type GameState = {
 export async function joinGame(code: string, nickname: string): Promise<string> {
   const res = await fetch(`${API_URL}/api/games/join`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ code: code.toUpperCase().trim(), nickname: nickname.trim() }),
   });
   const data = await res.json().catch(() => ({}));
@@ -864,7 +867,7 @@ export async function joinGame(code: string, nickname: string): Promise<string> 
 
 /** Estado actual del juego para el jugador. */
 export async function getGame(gameId: string): Promise<GameState> {
-  const res = await fetch(`${API_URL}/api/games/${gameId}`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/games/${gameId}`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as GameState;
 }
@@ -877,7 +880,7 @@ export async function answerGame(
 ): Promise<void> {
   await fetch(`${API_URL}/api/games/${gameId}/answer`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ questionId, selectedOption }),
   });
 }
@@ -894,7 +897,7 @@ export async function submitQuoteRequest(data: {
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/business/quote-requests`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -913,7 +916,7 @@ export type AdminStats = {
   estimatedRevenue: number;
 };
 export async function getAdminStats(): Promise<AdminStats> {
-  const res = await fetch(`${API_URL}/api/admin/stats`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/stats`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as AdminStats;
 }
@@ -923,7 +926,7 @@ export type AdminAnalytics = {
   usersByMonth: { month: string; users: number }[];
 };
 export async function getAdminAnalytics(): Promise<AdminAnalytics> {
-  const res = await fetch(`${API_URL}/api/admin/analytics`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/analytics`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const d = await res.json();
   return {
@@ -939,7 +942,7 @@ export type AdminFinances = {
   thisMonthRevenue?: number;
 };
 export async function getAdminFinances(): Promise<AdminFinances> {
-  const res = await fetch(`${API_URL}/api/admin/finances`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/finances`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as AdminFinances;
 }
@@ -954,7 +957,7 @@ export type AdminReview = {
 };
 export async function getAdminReviews(approved = false): Promise<AdminReview[]> {
   const res = await fetch(`${API_URL}/api/admin/reviews?approved=${approved}`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const d: unknown = await res.json();
@@ -964,12 +967,12 @@ export async function getAdminReviews(approved = false): Promise<AdminReview[]> 
 export async function setReviewApproved(id: string, approved: boolean): Promise<void> {
   await fetch(`${API_URL}/api/admin/reviews/${id}`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ approved }),
   });
 }
 export async function deleteReview(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/admin/reviews/${id}`, { method: "DELETE", headers: authHeaders() });
+  await fetch(`${API_URL}/api/admin/reviews/${id}`, { method: "DELETE", headers: await authHeaders() });
 }
 
 // ── Cupones ──
@@ -984,7 +987,7 @@ export type AdminCoupon = {
   expiresAt?: string | null;
 };
 export async function getCoupons(): Promise<AdminCoupon[]> {
-  const res = await fetch(`${API_URL}/api/admin/coupons`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/coupons`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const d: unknown = await res.json();
   const list = Array.isArray(d) ? d : (d as { coupons?: unknown }).coupons;
@@ -997,7 +1000,7 @@ export async function createCoupon(data: {
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/admin/coupons`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -1008,18 +1011,18 @@ export async function createCoupon(data: {
 export async function setCouponActive(id: string, active: boolean): Promise<void> {
   await fetch(`${API_URL}/api/admin/coupons/${id}`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ active }),
   });
 }
 export async function deleteCoupon(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/admin/coupons/${id}`, { method: "DELETE", headers: authHeaders() });
+  await fetch(`${API_URL}/api/admin/coupons/${id}`, { method: "DELETE", headers: await authHeaders() });
 }
 
 // ── Categorías ──
 export type AdminCategory = { id: string; name: string; slug: string; _count?: { courses: number } };
 export async function getAdminCategories(): Promise<AdminCategory[]> {
-  const res = await fetch(`${API_URL}/api/admin/categories`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/categories`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const d: unknown = await res.json();
   const list = Array.isArray(d) ? d : (d as { categories?: unknown }).categories;
@@ -1034,7 +1037,7 @@ export async function createCategory(name: string): Promise<void> {
     .replace(/^-+|-+$/g, "");
   const res = await fetch(`${API_URL}/api/admin/categories`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ name, slug }),
   });
   if (!res.ok) {
@@ -1043,7 +1046,7 @@ export async function createCategory(name: string): Promise<void> {
   }
 }
 export async function deleteCategory(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/admin/categories/${id}`, { method: "DELETE", headers: authHeaders() });
+  await fetch(`${API_URL}/api/admin/categories/${id}`, { method: "DELETE", headers: await authHeaders() });
 }
 
 // ── KPIs ──
@@ -1056,7 +1059,7 @@ export type AdminKpi = {
   category?: string;
 };
 export async function getKpis(): Promise<AdminKpi[]> {
-  const res = await fetch(`${API_URL}/api/admin/kpis`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/kpis`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const d: unknown = await res.json();
   const list = Array.isArray(d) ? d : (d as { kpis?: unknown }).kpis;
@@ -1070,7 +1073,7 @@ export async function createKpi(data: {
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/admin/kpis`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -1079,7 +1082,7 @@ export async function createKpi(data: {
   }
 }
 export async function deleteKpi(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/admin/kpis/${id}`, { method: "DELETE", headers: authHeaders() });
+  await fetch(`${API_URL}/api/admin/kpis/${id}`, { method: "DELETE", headers: await authHeaders() });
 }
 
 export type AdminApplication = {
@@ -1094,7 +1097,7 @@ export type AdminApplication = {
 
 export async function getInstructorApplications(): Promise<AdminApplication[]> {
   const res = await fetch(`${API_URL}/api/admin/instructor-applications?status=pending`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
@@ -1108,7 +1111,7 @@ export async function reviewApplication(
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/admin/instructor-applications/${id}`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(action === "approve" ? { action } : { action, rejectionReason }),
   });
   if (!res.ok) {
@@ -1126,7 +1129,7 @@ export type AdminUser = {
 };
 
 export async function getAdminUsers(): Promise<AdminUser[]> {
-  const res = await fetch(`${API_URL}/api/admin/users`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/admin/users`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data: unknown = await res.json();
   const list = Array.isArray(data) ? data : (data as { users?: unknown }).users;
@@ -1139,7 +1142,7 @@ export async function setUserRole(
 ): Promise<void> {
   const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ role }),
   });
   if (!res.ok) {
@@ -1163,7 +1166,7 @@ export type QuoteRequest = {
 
 export async function getQuoteRequests(): Promise<QuoteRequest[]> {
   const res = await fetch(`${API_URL}/api/admin/business/quote-requests`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
@@ -1176,14 +1179,14 @@ export async function updateQuoteRequest(
 ): Promise<void> {
   await fetch(`${API_URL}/api/admin/business/quote-requests`, {
     method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ id, status }),
   });
 }
 
 // ─── Crear curso (instructor) ────────────────────────────────────────────────
 export async function getCategories(): Promise<{ name: string; slug: string }[]> {
-  const res = await fetch(`${API_URL}/api/categories`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/categories`, { headers: await authHeaders() });
   if (!res.ok) return [];
   const data: unknown = await res.json();
   return (Array.isArray(data) ? data : []) as { name: string; slug: string }[];
@@ -1219,7 +1222,7 @@ export type NewCoursePayload = {
 export async function createInstructorCourse(payload: NewCoursePayload): Promise<{ id: string }> {
   const res = await fetch(`${API_URL}/api/instructor/courses`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => ({}));
@@ -1233,7 +1236,7 @@ export async function requestMuxUpload(
 ): Promise<{ uploadId: string; uploadUrl: string }> {
   const res = await fetch(`${API_URL}/api/mux/upload-url`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ lessonTitle }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1256,7 +1259,7 @@ export async function uploadVideoToMux(uploadUrl: string, uri: string): Promise<
 export async function getMuxPlayback(
   uploadId: string
 ): Promise<{ playbackId?: string; playbackUrl?: string }> {
-  const res = await fetch(`${API_URL}/api/mux/playback/${uploadId}`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/mux/playback/${uploadId}`, { headers: await authHeaders() });
   if (!res.ok) return {};
   return (await res.json()) as { playbackId?: string; playbackUrl?: string };
 }
@@ -1274,7 +1277,7 @@ export type NewGameQuestion = { question: string; options: string[]; correct: nu
 
 /** Lista los juegos creados por el instructor. */
 export async function listMyGames(): Promise<HostGame[]> {
-  const res = await fetch(`${API_URL}/api/games`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/games`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return Array.isArray(data.games) ? data.games : [];
@@ -1284,7 +1287,7 @@ export async function listMyGames(): Promise<HostGame[]> {
 export async function createGame(title: string, questions: NewGameQuestion[]): Promise<string> {
   const res = await fetch(`${API_URL}/api/games`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ title, questions }),
   });
   const data = await res.json().catch(() => ({}));
@@ -1293,13 +1296,13 @@ export async function createGame(title: string, questions: NewGameQuestion[]): P
 }
 
 export async function startGame(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/games/${id}/start`, { method: "POST", headers: authHeaders() });
+  await fetch(`${API_URL}/api/games/${id}/start`, { method: "POST", headers: await authHeaders() });
 }
 export async function nextGameQuestion(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/games/${id}/next`, { method: "POST", headers: authHeaders() });
+  await fetch(`${API_URL}/api/games/${id}/next`, { method: "POST", headers: await authHeaders() });
 }
 export async function finishGame(id: string): Promise<void> {
-  await fetch(`${API_URL}/api/games/${id}/finish`, { method: "POST", headers: authHeaders() });
+  await fetch(`${API_URL}/api/games/${id}/finish`, { method: "POST", headers: await authHeaders() });
 }
 
 // ─── Materiales de empresa ──────────────────────────────────────────────────
@@ -1317,7 +1320,7 @@ export async function getOrgMaterials(): Promise<{
   orgName: string | null;
   materials: OrgMaterial[];
 }> {
-  const res = await fetch(`${API_URL}/api/me/org-materials`, { headers: authHeaders() });
+  const res = await fetch(`${API_URL}/api/me/org-materials`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return {
@@ -1337,7 +1340,7 @@ export async function uploadAvatar(uri: string): Promise<void> {
   form.append("file", { uri, name, type } as unknown as Blob);
   const res = await fetch(`${API_URL}/api/me/avatar`, {
     method: "POST",
-    headers: authHeaders(), // sin Content-Type: lo fija FormData con el boundary
+    headers: await authHeaders(), // sin Content-Type: lo fija FormData con el boundary
     body: form,
   });
   if (!res.ok) {
@@ -1355,7 +1358,7 @@ export async function applyInstructor(data: {
 }): Promise<void> {
   const res = await fetch(`${API_URL}/api/instructor/apply`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -1374,7 +1377,7 @@ export type Reflection = {
 /** Reflexiones de aprendizaje de un curso. */
 export async function getReflections(courseId: string): Promise<Reflection[]> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/learning-reflections`, {
-    headers: authHeaders(),
+    headers: await authHeaders(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
@@ -1385,7 +1388,7 @@ export async function getReflections(courseId: string): Promise<Reflection[]> {
 export async function postReflection(courseId: string, content: string): Promise<void> {
   const res = await fetch(`${API_URL}/api/courses/${courseId}/learning-reflections`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { ...await authHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ content }),
   });
   if (!res.ok) {

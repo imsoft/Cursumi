@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { WebView, type WebViewMessageEvent } from "react-native-webview";
@@ -29,7 +29,28 @@ export function PlanningWebView({
   courseId: string;
   onBack: () => void;
 }) {
-  const cookie = authClient.getCookie();
+  // getCookie() es asíncrono desde @better-auth/expo 1.7: se resuelve en un
+  // efecto y el WebView no se monta hasta tenerla, para no lanzar la primera
+  // carga sin sesión y acabar en el login dentro del WebView.
+  const [cookie, setCookie] = useState<string | null>(null);
+  const [cookieReady, setCookieReady] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    authClient
+      .getCookie()
+      .then((c) => {
+        if (!cancelled) setCookie(c || null);
+      })
+      .catch(() => {
+        if (!cancelled) setCookie(null);
+      })
+      .finally(() => {
+        if (!cancelled) setCookieReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const redirect = `/instructor/courses/${courseId}/planning`;
   const uri = `${API_URL}/api/mobile/planning-bridge?redirect=${encodeURIComponent(redirect)}`;
 
@@ -81,16 +102,18 @@ export function PlanningWebView({
       )}
 
       <View style={styles.webWrap}>
-        <WebView
-          source={{ uri, headers: cookie ? { Cookie: cookie } : undefined }}
-          sharedCookiesEnabled
-          thirdPartyCookiesEnabled
-          originWhitelist={["*"]}
-          onMessage={handleMessage}
-          onLoadEnd={() => setLoading(false)}
-          startInLoadingState={false}
-          style={styles.web}
-        />
+        {cookieReady && (
+          <WebView
+            source={{ uri, headers: cookie ? { Cookie: cookie } : undefined }}
+            sharedCookiesEnabled
+            thirdPartyCookiesEnabled
+            originWhitelist={["*"]}
+            onMessage={handleMessage}
+            onLoadEnd={() => setLoading(false)}
+            startInLoadingState={false}
+            style={styles.web}
+          />
+        )}
         {(loading || savingPdf) && (
           <View style={styles.overlay} pointerEvents="none">
             <ActivityIndicator color={Brand.primary} size="large" />

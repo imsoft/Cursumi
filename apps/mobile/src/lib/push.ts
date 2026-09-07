@@ -62,8 +62,11 @@ try {
   );
 }
 
-function authHeaders(): Record<string, string> {
-  const cookie = authClient.getCookie();
+// @better-auth/expo 1.7 hizo asíncrono getCookie(); antes devolvía la cookie
+// directamente. Sin el await, el header llevaba "[object Promise]" y todas las
+// llamadas autenticadas fallaban en silencio.
+async function authHeaders(): Promise<Record<string, string>> {
+  const cookie = await authClient.getCookie();
   return cookie ? { Cookie: cookie } : {};
 }
 
@@ -119,7 +122,7 @@ export async function syncPushToken(): Promise<void> {
     if (!token) return;
     await fetch(`${API_URL}/api/me/push-token`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...authHeaders() },
+      headers: { "Content-Type": "application/json", ...await authHeaders() },
       body: JSON.stringify({ token }),
     });
   } catch {
@@ -136,7 +139,7 @@ export async function removePushToken(): Promise<void> {
     const { data: token } = await Notifications.getExpoPushTokenAsync({ projectId });
     await fetch(`${API_URL}/api/me/push-token`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json", ...authHeaders() },
+      headers: { "Content-Type": "application/json", ...await authHeaders() },
       body: JSON.stringify({ token }),
     });
   } catch {
