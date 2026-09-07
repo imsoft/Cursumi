@@ -202,5 +202,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
+      - name: Lint (web)
         run: pnpm lint
+
+      - name: Lint (mobile)
+        run: pnpm --filter @cursumi/mobile lint -- --max-warnings=1000
