@@ -72,18 +72,39 @@ jobs:
       - name: Build
         run: pnpm build
 
+  # E2E requiere una BD real y datos de prueba, así que solo corre cuando el
+  # secret NEON_DATABASE_URL está configurado. El contexto `secrets` no está
+  # disponible en el `if` de un job (el workflow entero se rechazaba y CI no
+  # ejecutaba NINGÚN job), por eso la comprobación vive en este job puerta,
+  # que sí puede leerlo desde `env` en un step.
+  e2e-gate:
+    name: ¿E2E habilitado?
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
+    steps:
+      - id: check
+        env:
+          NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+        run: |
+          if [ -n "$NEON_DATABASE_URL" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "NEON_DATABASE_URL no está configurado: se omiten los E2E."
+          fi
+
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: build
-    # E2E requiere una BD real y datos de prueba.
-    # Solo se ejecuta cuando el secret NEON_DATABASE_URL está configurado.
-    # En PRs y pushes normales se omite para no bloquear el CI.
-    if: ${{ secrets.NEON_DATABASE_URL != '' }}
+    needs: [build, e2e-gate]
+    if: needs.e2e-gate.outputs.enabled == 'true'
 
     env:
-      DATABASE_URL: "postgresql://fake:fake@localhost:5432/fake"
+      # Aquí sí hace falta la BD real: los E2E navegan la app con datos.
+      DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
       BETTER_AUTH_SECRET: "ci-secret-placeholder-32-chars-min"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
       NEXT_PUBLIC_TURNSTILE_SITE_KEY: ""
