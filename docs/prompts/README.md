@@ -5,6 +5,7 @@ Prompts reutilizables para trabajar con herramientas de IA en Cursumi. Cada subc
 | Carpeta | Contenido |
 |---|---|
 | [instagram/](./instagram/) | Contenido social: carruseles de Instagram y el sistema de color de marca. |
+| [marketing/](./marketing/) | Planificación: el plan de marketing mensual como documento diseñado. |
 | [dev/](./dev/) | Prompts de desarrollo: validación del build. |
 
 ## instagram/
@@ -26,6 +27,21 @@ Cómo usarlo:
 El prompt del carrusel ya pide un pie y unos hashtags como entregable. Usa el prompt de descripción cuando quieras trabajarlos en serio: da tres versiones de distinta longitud, alternativas de primera línea con su conteo de caracteres y el set de hashtags desglosado.
 
 Los colores de los temas salen de la identidad real de la marca: el logo (`apps/web/public/logos/cursumi.svg`) y los tokens de `apps/web/src/app/globals.css`. Si cambia la paleta del producto, actualiza también `instagram/temas-color.md` para que el contenido social no se desalinee.
+
+## marketing/
+
+| Archivo | Para qué sirve |
+|---|---|
+| [plan-mensual.md](./marketing/plan-mensual.md) | Prompt para el plan de marketing de un mes como documento diseñado (Claude Design). Autocontenido: rellenas MES, OBJETIVO, FRECUENCIA y NOTAS arriba, y lo copias entero. Viene precargado con septiembre de 2026 (fiestas patrias + cierre de Q3, educación en general, sin promoción de cursos). |
+
+Cómo usarlo:
+
+1. Abre `marketing/plan-mensual.md`, revisa las cuatro secciones de arriba y ajusta lo que cambie ese mes.
+2. Copia el archivo entero y mándalo a Claude Design.
+3. Primero te devuelve el **esquema y los temas por semana** en texto; apruébalo o corrígelo.
+4. Con el esquema aprobado, produce el documento. Las piezas de cada publicación se hacen después con los prompts de `instagram/`.
+
+El documento usa el Tema Claro en el interior y el Violeta solo en portada, con las mismas paletas de `instagram/temas-color.md`.
 
 ## dev/
 
