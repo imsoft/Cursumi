@@ -12,7 +12,7 @@ import { ReviewSection } from "@/components/student/review-section";
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { ModalityBadge } from "@/components/ui/modality-badge";
-import { formatPriceMXN } from "@/lib/utils";
+import { formatPriceMXN, metaDescription } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const canonicalUrl = `${baseUrl}/courses/${course.slug || slug}`;
   return {
     title: `${course.title} | Cursumi`,
-    description: course.description,
+    description: metaDescription(course.description),
     robots: { index: false, follow: true },
     alternates: { canonical: canonicalUrl },
   };
@@ -81,7 +81,7 @@ export default async function ExploreCourseDetail({
             "@context": "https://schema.org",
             "@type": "Course",
             name: course.title,
-            description: course.description,
+            description: metaDescription(course.description),
             provider: { "@type": "Organization", name: "Cursumi", sameAs: "https://cursumi.com" },
             educationalLevel: course.level,
             timeRequired: course.duration,

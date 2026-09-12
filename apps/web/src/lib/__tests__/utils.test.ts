@@ -4,6 +4,7 @@ import {
   formatPriceMXN,
   firstNameFromFullName,
   stripHtml,
+  metaDescription,
 } from "../utils";
 
 describe("parseDurationToMinutes", () => {
@@ -45,4 +46,47 @@ describe("stripHtml", () => {
   it("retorna vacío para null", () => expect(stripHtml(null)).toBe(""));
   it("retorna vacío para undefined", () => expect(stripHtml(undefined)).toBe(""));
   it("retorna texto plano sin cambios", () => expect(stripHtml("texto plano")).toBe("texto plano"));
+
+  it("decodifica las entidades del editor", () => {
+    expect(stripHtml("<p>Ventas &amp; Marketing</p>")).toBe("Ventas & Marketing");
+    expect(stripHtml("<p>El &quot;mejor&quot; curso</p>")).toBe('El "mejor" curso');
+    expect(stripHtml("<p>Qu&#39;est-ce</p>")).toBe("Qu'est-ce");
+  });
+
+  it("no se come el texto cuando el usuario escribió una etiqueta escapada", () => {
+    // Decodificar antes de quitar etiquetas convertiría esto en <b> y lo borraría.
+    expect(stripHtml("<p>Usa &lt;b&gt; para negritas</p>")).toBe("Usa <b> para negritas");
+  });
+});
+
+describe("metaDescription", () => {
+  it("quita el HTML de la descripción, que es lo que veía WhatsApp", () => {
+    expect(metaDescription("<p>Aprende <strong>ventas</strong></p>")).toBe("Aprende ventas");
+  });
+
+  it("colapsa en una sola línea los saltos que dejan los párrafos", () => {
+    expect(metaDescription("<p>Primero</p><p>Segundo</p>")).toBe("PrimeroSegundo");
+    expect(metaDescription("<p>Uno</p>\n\n   <p>Dos</p>")).toBe("Uno Dos");
+  });
+
+  it("recorta por palabra completa y marca el corte", () => {
+    const largo = "palabra ".repeat(40).trim();
+    const r = metaDescription(largo);
+    expect(r.length).toBeLessThanOrEqual(161);
+    expect(r.endsWith("…")).toBe(true);
+    expect(r).not.toContain("palab…");
+  });
+
+  it("respeta un máximo a medida", () => {
+    expect(metaDescription("<p>uno dos tres cuatro</p>", 10)).toBe("uno dos…");
+  });
+
+  it("deja intacto lo que ya cabe", () => {
+    expect(metaDescription("<p>Curso corto</p>")).toBe("Curso corto");
+  });
+
+  it("tolera null y undefined", () => {
+    expect(metaDescription(null)).toBe("");
+    expect(metaDescription(undefined)).toBe("");
+  });
 });

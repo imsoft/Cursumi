@@ -18,10 +18,9 @@ import { LearningReflectionsSection } from "@/components/courses/learning-reflec
 import { PublicCourseDetailCTA } from "@/components/courses/public-course-detail-cta";
 import { CourseCoverImage } from "@/components/courses/course-cover-image";
 import { WishlistButton } from "@/components/courses/wishlist-button";
-import { formatPriceMXN } from "@/lib/utils";
+import { formatPriceMXN, metaDescription, parseDurationToMinutes } from "@/lib/utils";
 import { formatDuration } from "@/lib/course-completion";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
-import { parseDurationToMinutes } from "@/lib/utils";
 import { formatDateLongMX } from "@/lib/date-format";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -49,7 +48,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return {
     title: `${course.title} | Cursumi`,
-    description: course.description,
+    description: metaDescription(course.description),
     keywords: [
       course.title,
       course.category,
@@ -65,7 +64,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${course.title} — Cursumi`,
-      description: course.description || "Curso en Cursumi",
+      description: metaDescription(course.description) || "Curso en Cursumi",
       url: canonicalUrl,
       siteName: "Cursumi",
       locale: "es_MX",
@@ -79,7 +78,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       card: "summary_large_image",
       site: "@cursumi",
       title: `${course.title} — Cursumi`,
-      description: course.description || "Curso en Cursumi",
+      description: metaDescription(course.description) || "Curso en Cursumi",
       images: [ogImageUrl],
     },
   };
@@ -149,7 +148,7 @@ export default async function PublicCourseDetailPage({
     "@context": "https://schema.org",
     "@type": "Course",
     name: course.title,
-    description: course.description,
+    description: metaDescription(course.description),
     url: `${baseUrl}/courses/${courseSlug}`,
     provider: { "@type": "Organization", name: "Cursumi", sameAs: baseUrl },
     ...(course.instructor?.name && {
