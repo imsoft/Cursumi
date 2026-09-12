@@ -66,6 +66,13 @@ jobs:
       - name: TypeScript check (mobile)
         run: pnpm --filter @cursumi/mobile exec tsc --noEmit
 
+      # En apps/mobile las versiones las fija la SDK de Expo, no el semver de
+      # npm. tsc no detecta esa deriva: un PR que suba react a una versión que
+      # la SDK no espera compila igual y pasa CI en verde (ocurrió en #49).
+      # Esta es la única comprobación que lo caza.
+      - name: Versiones alineadas con la SDK de Expo
+        run: pnpm --filter @cursumi/mobile exec expo install --check
+
       - name: Unit tests
         run: pnpm test
 
