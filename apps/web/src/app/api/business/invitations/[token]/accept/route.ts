@@ -43,6 +43,29 @@ export async function POST(
       return NextResponse.json({ message: "Ya eres miembro de esta organización" });
     }
 
+    // El límite de asientos solo se comprobaba al CREAR la invitación, nunca
+    // al aceptarla. Entre ambos momentos pueden pasar días: la empresa puede
+    // haber bajado de plan o cancelado, y las invitaciones pendientes seguían
+    // entrando igual. Se revalida aquí, que es cuando se ocupa el asiento.
+    const sub = await prisma.orgSubscription.findUnique({
+      where: { organizationId: invite.organizationId },
+    });
+    if (!sub || sub.status !== "active") {
+      throw new ApiError(
+        403,
+        "La suscripción de esta organización no está activa. Pide a tu administrador que la reactive.",
+      );
+    }
+    const currentMembers = await prisma.orgMember.count({
+      where: { organizationId: invite.organizationId },
+    });
+    if (currentMembers >= sub.maxSeats) {
+      throw new ApiError(
+        403,
+        `Esta organización ya ocupó sus ${sub.maxSeats} asientos. Pide a tu administrador que libere uno o amplíe el plan.`,
+      );
+    }
+
     // Create membership + update invite in transaction
     await prisma.$transaction(async (tx) => {
       await tx.orgMember.create({
