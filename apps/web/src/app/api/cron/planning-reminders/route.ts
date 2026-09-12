@@ -5,8 +5,10 @@ import { PLANNING_DOCUMENTS } from "@/lib/planning/registry";
 import { checkCronAuth } from "@/lib/cron-auth";
 
 // GET /api/cron/planning-reminders
-// Semanal (lunes 09:00) — envía recordatorio a instructores con expedientes incompletos.
+// Semanal — envía recordatorio a instructores con expedientes incompletos.
 // Solo cursos presenciales con al menos un documento guardado pero sin completar el expediente.
+// Horario: `0 15 * * 1` UTC, o sea los lunes a las 09:00 en México.
+// Vercel programa siempre en UTC y puede disparar hasta 59 min más tarde.
 export async function GET(req: NextRequest) {
   const noAutorizado = checkCronAuth(req);
   if (noAutorizado) return noAutorizado;

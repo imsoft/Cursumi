@@ -6,6 +6,8 @@ import { checkCronAuth } from "@/lib/cron-auth";
 // GET /api/cron/learning-reflection-emails
 // Sesiones presenciales ya pasadas: invita a alumnos que aún no recibieron el correo.
 // Protegido con CRON_SECRET (igual que otros crons).
+// Horario: `0 17 * * *` UTC, o sea todos los días a las 11:00 en México.
+// Vercel programa siempre en UTC y puede disparar hasta 59 min más tarde.
 export async function GET(req: NextRequest) {
   const noAutorizado = checkCronAuth(req);
   if (noAutorizado) return noAutorizado;
