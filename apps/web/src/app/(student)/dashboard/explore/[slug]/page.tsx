@@ -23,11 +23,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const course = await getPublishedCourseDetail(slug);
   if (!course) {
-    return { title: "Curso no encontrado | Cursumi" };
+    return { title: "Curso no encontrado" };
   }
   const canonicalUrl = `${baseUrl}/courses/${course.slug || slug}`;
   return {
-    title: `${course.title} | Cursumi`,
+    title: course.title,
     description: metaDescription(course.description),
     robots: { index: false, follow: true },
     alternates: { canonical: canonicalUrl },

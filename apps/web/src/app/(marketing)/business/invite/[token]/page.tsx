@@ -5,7 +5,7 @@ import { getSessionSafe } from "@/lib/session";
 import { AcceptInviteClient } from "@/components/business/accept-invite-client";
 
 export const metadata: Metadata = {
-  title: "Invitación de organización | Cursumi",
+  title: "Invitación de organización",
   robots: { index: false, follow: false },
 };
 

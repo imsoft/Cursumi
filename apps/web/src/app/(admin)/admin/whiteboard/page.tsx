@@ -1,7 +1,7 @@
 import { VirtualWhiteboard } from "@/components/whiteboard/virtual-whiteboard";
 
 export const metadata = {
-  title: "Pizarrón virtual | Cursumi Admin",
+  title: "Pizarrón virtual",
   description: "Lienzo para dibujar y compartir en reuniones o presentaciones.",
 };
 

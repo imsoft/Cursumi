@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { NotesClient } from "./notes-client";
 
 export const metadata = {
-  title: "Mis Notas | Cursumi",
+  title: "Mis notas",
   description: "Consulta y filtra las anotaciones de tus cursos por instructor y lección.",
 };
 

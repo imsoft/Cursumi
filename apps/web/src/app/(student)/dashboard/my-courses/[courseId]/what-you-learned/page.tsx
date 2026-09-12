@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { WhatYouLearnedForm } from "./what-you-learned-form";
 
 export const metadata = {
-  title: "¿Qué aprendiste? | Cursumi",
+  title: "¿Qué aprendiste?",
 };
 
 export default async function WhatYouLearnedPage({

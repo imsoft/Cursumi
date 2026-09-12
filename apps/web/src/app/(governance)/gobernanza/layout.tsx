@@ -10,7 +10,7 @@ import { StudentShell } from "@/components/layouts/student-shell";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Gobernanza · Cursumi",
+  title: "Gobernanza",
   robots: { index: false, follow: false },
 };
 

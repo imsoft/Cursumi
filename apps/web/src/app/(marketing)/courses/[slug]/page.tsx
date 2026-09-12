@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const course = await getPublishedCourseDetail(slug);
   if (!course) {
     return {
-      title: "Curso no encontrado | Cursumi",
+      title: "Curso no encontrado",
     };
   }
   const baseUrl = getBaseUrl();
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const modalityLabel = course.modality === "virtual" ? "en video" : "por evento";
 
   return {
-    title: `${course.title} | Cursumi`,
+    title: course.title,
     description: metaDescription(course.description),
     keywords: [
       course.title,
@@ -226,7 +226,13 @@ export default async function PublicCourseDetailPage({
             </div>
             <WishlistButton courseId={course.id} isLoggedIn={isLoggedIn} />
           </div>
-          <CardTitle className="text-3xl">{course.title}</CardTitle>
+          {/* h1 de la página: es el título del curso, no un CardTitle. CardTitle
+              pinta un <h3>, así que la ficha se servía sin ningún h1 y perdía
+              la señal on-page más importante justo en la página que más
+              interesa posicionar. */}
+          <h1 className="text-3xl font-semibold leading-tight text-foreground">
+            {course.title}
+          </h1>
           <RichTextRenderer content={course.description} className="text-sm leading-relaxed text-muted-foreground" />
         </CardHeader>
         <CardContent className="space-y-6">

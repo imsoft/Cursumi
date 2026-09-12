@@ -14,7 +14,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Blog | Cursumi",
+  title: "Blog",
   description:
     "Artículos, guías y recursos de educación en video, eventos en vivo y aprendizaje profesional.",
   alternates: { canonical: "/blog" },

@@ -8,7 +8,7 @@ import { BusinessCTA } from "@/components/business/business-cta";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Cursumi Business | Capacitación empresarial",
+  title: "Capacitación para equipos de trabajo",
   description:
     "Capacita a tu equipo con cursos de calidad. Gestiona empleados, mide progreso y genera certificados desde un solo panel.",
   alternates: { canonical: `${baseUrl}/business` },

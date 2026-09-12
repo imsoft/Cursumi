@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Sin conexión · Cursumi",
+  title: "Sin conexión",
   robots: { index: false, follow: false },
 };
 

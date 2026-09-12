@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Política de reembolsos — Cursumi",
+  title: "Política de reembolsos",
   description: "Condiciones y proceso para solicitar la devolución de una compra en Cursumi.",
   alternates: { canonical: `${baseUrl}/refunds` },
 };

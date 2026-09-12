@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Aviso de privacidad — Cursumi",
+  title: "Aviso de privacidad",
   description: "Cómo Cursumi recopila, usa y protege tus datos personales.",
   alternates: { canonical: `${baseUrl}/privacy` },
 };

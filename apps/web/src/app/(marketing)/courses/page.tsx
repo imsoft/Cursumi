@@ -10,7 +10,7 @@ export const revalidate = 300;
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Cursos disponibles | Cursumi",
+  title: "Cursos disponibles",
   description: "Explora cursos en video y eventos en vivo de programación, marketing, diseño y más.",
   alternates: { canonical: `${baseUrl}/courses` },
   openGraph: {
