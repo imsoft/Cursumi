@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireSession, handleApiError, ApiError } from "@/lib/api-helpers";
 import { resolveOrgAdmin, requireActiveOrgSubscription } from "@/lib/org-service";
 import { sendOrgInviteEmail } from "@/lib/email";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 import type { OrgRole } from "@/generated/prisma";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com";
@@ -11,6 +12,14 @@ export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
     const { org } = await resolveOrgAdmin(session.user.id);
+
+    // Cada invitación manda un correo; sin tope se puede quemar la reputación de envío.
+    const limitado = await checkRateLimitAsync({
+      key: `org-invitations:${session.user.id}`,
+      limit: 30,
+      windowSecs: 3600,
+    });
+    if (limitado) return limitado;
 
     // No se puede gestionar al equipo hasta que la suscripción esté activa (pagada).
     await requireActiveOrgSubscription(org.id);
