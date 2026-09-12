@@ -7,6 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { CalendarDays, ArrowLeft, User } from "lucide-react";
 
+// Hoy esto NO tiene efecto: el layout raíz lee la cabecera del nonce para la
+// CSP estricta, y eso obliga a Next a renderizar TODAS las páginas en cada
+// petición. La consulta filtra por `publishedAt <= now`, así que un artículo
+// programado aparece al instante y no hay caché que refrescar.
+// Se conserva para que vuelva a aplicar si algún día se quita el nonce.
 export const revalidate = 300;
 
 type Params = { params: Promise<{ slug: string }> };
