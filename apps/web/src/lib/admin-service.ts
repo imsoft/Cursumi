@@ -311,6 +311,7 @@ export async function getAdminFinances(): Promise<AdminFinances> {
 
   const pctRevenue = lastMonthRevenue > 0 ? Math.round(((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100) : 0;
   const pctCount = lastMonthCount > 0 ? thisMonthCount - lastMonthCount : thisMonthCount;
+  const avgFeePercent = totalRevenue > 0 ? Math.round((totalPlatformFee / totalRevenue) * 100) : 0;
 
   const financialStats: FinancialStatItem[] = [
     {
@@ -332,7 +333,10 @@ export async function getAdminFinances(): Promise<AdminFinances> {
       value: formatMxn(totalPlatformFee),
       description: "Total de comisiones cobradas",
       iconColor: "text-purple-600",
-      trend: { value: "20% promedio", isPositive: true },
+      // Se calcula, no se escribe a mano: decía "20% promedio" mientras la
+      // comisión real era del 15%, así que la tarjeta se contradecía con su
+      // propio importe.
+      trend: { value: `${avgFeePercent}% promedio`, isPositive: true },
     },
     {
       title: "Transacciones",
