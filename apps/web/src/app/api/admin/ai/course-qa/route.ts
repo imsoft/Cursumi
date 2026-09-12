@@ -2,11 +2,20 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, requireRole, requireSession } from "@/lib/api-helpers";
 import { getGemini, GEMINI_MODEL } from "@/lib/gemini";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
     const session = await requireSession();
     await requireRole(session.user.id, ["admin"]);
+
+    // Cada llamada consume cuota de Gemini, que se paga por uso.
+    const limitado = await checkRateLimitAsync({
+      key: `ai-course-qa:${session.user.id}`,
+      limit: 20,
+      windowSecs: 3600,
+    });
+    if (limitado) return limitado;
 
     const { courseId, question, history } = await req.json();
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
+import { checkRateLimitAsync } from "@/lib/rate-limit";
 import { authorizeCloudinaryUploader } from "@/lib/authorize-cloudinary-uploader";
 import { prisma } from "@/lib/prisma";
 import { resolveOrgAdmin } from "@/lib/org-service";
@@ -69,6 +70,14 @@ async function resolveFolder(
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
+
+    // Entrega credenciales de subida y la alcanza cualquier usuario autenticado.
+    const limitado = await checkRateLimitAsync({
+      key: `cloudinary-signature:${session.user.id}`,
+      limit: 30,
+      windowSecs: 3600,
+    });
+    if (limitado) return limitado;
     await authorizeCloudinaryUploader(session.user.id);
 
     const cloudName = requireEnv("CLOUDINARY_CLOUD_NAME");
