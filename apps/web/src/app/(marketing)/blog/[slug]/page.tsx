@@ -42,7 +42,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!post) return { title: "Artículo no encontrado | Cursumi" };
 
   const canonical = `${siteUrl}/blog/${post.slug}`;
-  const image = post.coverImageUrl ?? `${siteUrl}/api/og`;
+  // Mismo criterio que la ficha del curso: el tamaño solo se declara para la
+  // imagen generada, que sí mide 1200×630. La portada subida es la que sea.
+  const socialImage = post.coverImageUrl
+    ? { url: post.coverImageUrl, alt: post.title }
+    : { url: `${siteUrl}/api/og`, width: 1200, height: 630, alt: post.title };
 
   return {
     title: `${post.title} | Blog de Cursumi`,
@@ -56,13 +60,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       publishedTime: post.publishedAt?.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
       authors: post.author.name ? [post.author.name] : undefined,
-      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
+      images: [socialImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt ?? undefined,
-      images: [image],
+      images: [socialImage.url],
     },
   };
 }

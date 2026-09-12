@@ -24,8 +24,6 @@ import { RichTextRenderer } from "@/components/ui/rich-text-renderer";
 import { formatDateLongMX } from "@/lib/date-format";
 
 type Params = { params: Promise<{ slug: string }> };
-const ogFallback =
-  "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80";
 
 function getBaseUrl(): string {
   return (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
@@ -41,8 +39,21 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   }
   const baseUrl = getBaseUrl();
   const canonicalUrl = `${baseUrl}/courses/${course.slug || slug}`;
-  const image = course.imageUrl || ogFallback;
   const ogImageUrl = `${baseUrl}/api/og/course/${course.id}`;
+  // Una sola imagen para todas las plataformas.
+  //
+  // Antes se declaraban dos y cada plataforma elegía distinto: WhatsApp y
+  // Facebook mostraban la portada del curso y Twitter el degradado generado,
+  // así que el mismo enlace se veía de dos formas. Gana la portada, que la
+  // diseña quien imparte el curso; el degradado queda como respaldo.
+  //
+  // El tamaño solo se declara cuando se conoce de verdad. La imagen generada
+  // mide 1200×630; la portada es lo que haya subido el instructor, al que se
+  // le recomienda 1920×1080. Afirmar 1200×630 sobre una imagen 16:9 era
+  // decirle a los rastreadores algo que podía ser falso.
+  const socialImage = course.imageUrl
+    ? { url: course.imageUrl, alt: course.title }
+    : { url: ogImageUrl, width: 1200, height: 630, alt: course.title };
 
   const modalityLabel = course.modality === "virtual" ? "en video" : "por evento";
 
@@ -68,10 +79,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       url: canonicalUrl,
       siteName: "Cursumi",
       locale: "es_MX",
-      images: [
-        { url: ogImageUrl, width: 1200, height: 630, alt: course.title },
-        { url: image, width: 1200, height: 630, alt: course.title },
-      ],
+      images: [socialImage],
       type: "article",
     },
     twitter: {
@@ -79,7 +87,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       site: "@cursumi",
       title: `${course.title} — Cursumi`,
       description: metaDescription(course.description) || "Curso en Cursumi",
-      images: [ogImageUrl],
+      images: [socialImage.url],
     },
   };
 }
