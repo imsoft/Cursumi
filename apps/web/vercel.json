@@ -1,28 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/cron/progress-reminders",
-      "schedule": "0 10 * * 1"
-    },
-    {
-      "path": "/api/cron/profile-reminders",
-      "schedule": "0 10 * * 3"
-    },
-    {
-      "path": "/api/cron/learning-reflection-emails",
-      "schedule": "0 11 * * *"
-    },
-    {
-      "path": "/api/cron/planning-reminders",
-      "schedule": "0 9 * * 1"
-    },
-    {
-      "path": "/api/cron/publish-blog",
-      "schedule": "0 14 * * *"
-    },
-    {
-      "path": "/api/cron/exam-retry-reminders",
-      "schedule": "0 12 * * *"
+      "path": "/api/cron/diario",
+      "schedule": "0 15 * * *"
     }
   ]
 }
