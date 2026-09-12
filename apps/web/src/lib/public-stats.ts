@@ -1,4 +1,19 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "./prisma";
+
+/**
+ * Datos públicos de la portada, cacheados.
+ *
+ * La portada se renderiza en cada visita, así que sin caché cada visitante
+ * anónimo disparaba seis consultas contra Neon antes de recibir el primer
+ * byte. Y en el plan gratuito la base se duerme, de modo que la primera
+ * visita tras un rato de inactividad pagaba además el arranque: de ahí el
+ * TTFB de más de tres segundos que medía Speed Insights.
+ *
+ * Cinco minutos, el mismo intervalo que ya usan /courses y /blog. Nada de
+ * esto cambia de un segundo a otro.
+ */
+const REVALIDAR_SEGUNDOS = 300;
 
 export type PublicStats = {
   studentsCount: number;
@@ -8,9 +23,14 @@ export type PublicStats = {
   averageRating: number | null;
 };
 
-export async function getPublicStats(): Promise<PublicStats> {
-  const [enrollmentsDistinct, courses, instructors, reviewAgg] = await Promise.all([
-    prisma.enrollment.findMany({ select: { studentId: true }, distinct: ["studentId"] }),
+export const getPublicStats = unstable_cache(
+  async (): Promise<PublicStats> => {
+  // COUNT(DISTINCT) en la base en vez de traerse TODAS las filas de
+  // inscripciones a memoria para contar alumnos únicos.
+  const [alumnosUnicos, courses, instructors, reviewAgg] = await Promise.all([
+    prisma.$queryRaw<{ total: number }[]>`
+      SELECT COUNT(DISTINCT "studentId")::int AS total FROM "Enrollment"
+    `,
     prisma.course.findMany({
       where: { status: "published", city: { not: null } },
       select: { city: true },
@@ -25,12 +45,15 @@ export async function getPublicStats(): Promise<PublicStats> {
   const uniqueCities = new Set(courses.map((c) => c.city).filter(Boolean));
   const avg = reviewAgg._avg.rating;
   return {
-    studentsCount: enrollmentsDistinct.length,
+    studentsCount: alumnosUnicos[0]?.total ?? 0,
     citiesCount: uniqueCities.size,
     instructorsCount: instructors,
     averageRating: avg != null ? Math.round(avg * 10) / 10 : null,
   };
-}
+  },
+  ["public-stats"],
+  { revalidate: REVALIDAR_SEGUNDOS, tags: ["public-stats"] },
+);
 
 export type PublicTestimonial = {
   quote: string;
@@ -38,7 +61,8 @@ export type PublicTestimonial = {
   role: string;
 };
 
-export async function getPublicTestimonials(limit: number = 6): Promise<PublicTestimonial[]> {
+export const getPublicTestimonials = unstable_cache(
+  async (limit: number = 6): Promise<PublicTestimonial[]> => {
   const reviews = await prisma.review.findMany({
     where: { comment: { not: null } },
     orderBy: { createdAt: "desc" },
@@ -55,7 +79,10 @@ export async function getPublicTestimonials(limit: number = 6): Promise<PublicTe
     name: r.user.name ?? "Estudiante",
     role: r.course.title,
   }));
-}
+  },
+  ["public-testimonials"],
+  { revalidate: REVALIDAR_SEGUNDOS, tags: ["public-stats"] },
+);
 
 export type FeaturedCourseItem = {
   id: string;
@@ -67,7 +94,8 @@ export type FeaturedCourseItem = {
   imageUrl: string | null;
 };
 
-export async function getFeaturedCourses(limit: number = 6): Promise<FeaturedCourseItem[]> {
+export const getFeaturedCourses = unstable_cache(
+  async (limit: number = 6): Promise<FeaturedCourseItem[]> => {
   const courses = await prisma.course.findMany({
     where: { status: "published" },
     orderBy: { createdAt: "desc" },
@@ -83,4 +111,7 @@ export async function getFeaturedCourses(limit: number = 6): Promise<FeaturedCou
     },
   });
   return courses;
-}
+  },
+  ["featured-courses"],
+  { revalidate: REVALIDAR_SEGUNDOS, tags: ["public-stats"] },
+);
