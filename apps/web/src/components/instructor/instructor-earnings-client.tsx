@@ -28,9 +28,11 @@ import { contar } from "@/lib/plural";
 
 interface InstructorEarningsClientProps {
   earnings: InstructorEarnings;
+  /** Comisión vigente de la plataforma. Llega del servidor: es configurable. */
+  platformFeePercent: number;
 }
 
-export function InstructorEarningsClient({ earnings }: InstructorEarningsClientProps) {
+export function InstructorEarningsClient({ earnings, platformFeePercent }: InstructorEarningsClientProps) {
   const [timeframe, setTimeframe] = useState<"6m" | "12m">("6m");
   const [courseSearch, setCourseSearch] = useState("");
   const [txSearch, setTxSearch] = useState("");
@@ -56,12 +58,12 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
 
   // Calculator computations
   const projectedGross = calcPrice * calcStudents;
-  const projectedFee = Math.round(projectedGross * 0.15);
-  const projectedNet = Math.round(projectedGross * 0.85);
+  const projectedFee = Math.round((projectedGross * platformFeePercent) / 100);
+  const projectedNet = projectedGross - projectedFee;
 
   // Export CSV Handler
   const handleExportCSV = () => {
-    const headers = ["ID Transaccion", "Fecha", "Estudiante", "Curso", "Monto Bruto (MXN)", "Ganancia Neta (85% MXN)"];
+    const headers = ["ID Transaccion", "Fecha", "Estudiante", "Curso", "Monto Bruto (MXN)", "Ganancia Neta (MXN)"];
     const rows = earnings.recentTransactions.map((tx) => [
       tx.id,
       new Date(tx.createdAt).toLocaleDateString("es-MX"),
@@ -577,7 +579,7 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
                         {formatMXN(projectedNet)}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Tu ganancia neta estimada enviada a tu cuenta bancaria (85%).
+                        Tu ganancia neta estimada enviada a tu cuenta bancaria ({100 - platformFeePercent}%).
                       </p>
                     </div>
 
@@ -587,7 +589,7 @@ export function InstructorEarningsClient({ earnings }: InstructorEarningsClientP
                         <span className="font-medium text-foreground">{formatMXN(projectedGross)}</span>
                       </div>
                       <div className="flex justify-between pt-2">
-                        <span className="text-muted-foreground">Comisión Plataforma Cursumi (15%):</span>
+                        <span className="text-muted-foreground">Comisión Plataforma Cursumi ({platformFeePercent}%):</span>
                         <span className="font-medium text-rose-500">-{formatMXN(projectedFee)}</span>
                       </div>
                     </div>
