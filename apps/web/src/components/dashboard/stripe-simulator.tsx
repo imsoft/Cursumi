@@ -4,15 +4,20 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { calculateStripeStandard } from "@/lib/stripe-calculator";
+import {
+  calculateStripeStandard,
+  REGIMENES_FISCALES,
+  type RegimenFiscal,
+} from "@/lib/stripe-calculator";
 import { formatPriceMXN } from "@/lib/utils";
 import { TrendingDown, DollarSign, Receipt, AlertCircle } from "lucide-react";
 
 export function StripeSimulator() {
   const [amount, setAmount] = useState(1000);
   const [includeIVA, setIncludeIVA] = useState(true);
+  const [regimen, setRegimen] = useState<RegimenFiscal>("actividad_empresarial");
 
-  const result = calculateStripeStandard(amount, includeIVA);
+  const result = calculateStripeStandard(amount, includeIVA, regimen);
 
   return (
     <Card className="border border-border bg-card/90">
@@ -56,6 +61,25 @@ export function StripeSimulator() {
             checked={includeIVA}
             onCheckedChange={setIncludeIVA}
           />
+        </div>
+
+
+        {/* Régimen fiscal */}
+        <div className="space-y-2">
+          <Label htmlFor="stripe-regimen">Régimen fiscal de quien cobra</Label>
+          <select
+            id="stripe-regimen"
+            value={regimen}
+            onChange={(e) => setRegimen(e.target.value as RegimenFiscal)}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          >
+            {Object.entries(REGIMENES_FISCALES).map(([value, r]) => (
+              <option key={value} value={value}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-muted-foreground">{REGIMENES_FISCALES[regimen].nota}</p>
         </div>
 
         {/* Resumen visual */}

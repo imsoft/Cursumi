@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { REGIMENES_FISCALES } from "@/lib/stripe-calculator";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
@@ -31,6 +32,11 @@ const instructorProfileSchema = z.object({
   website: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
   linkedinUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
   instagramUrl: z.union([z.string().url("Ingresa una URL válida"), z.literal("")]).optional(),
+  // "" es la opción "Sin indicar" del selector; el API la recibe como null.
+  regimenFiscal: z
+    .enum(["actividad_empresarial", "resico", "persona_moral"])
+    .or(z.literal(""))
+    .optional(),
 });
 
 export type InstructorProfileFormValues = z.infer<typeof instructorProfileSchema>;
@@ -56,6 +62,7 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
       website: "",
       linkedinUrl: "",
       instagramUrl: "",
+      regimenFiscal: "",
     },
     mode: "onBlur",
   });
@@ -77,6 +84,7 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
           bio: data.bio || "",
           specialties: data.specialties || "",
           teachingYears: data.teachingYears || undefined,
+          regimenFiscal: data.regimenFiscal || "",
           website: data.website || "",
           linkedinUrl: data.linkedinUrl || "",
           instagramUrl: data.instagramUrl || "",
@@ -101,7 +109,8 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
     try {
       setError(null);
       setStatusMessage(null);
-      const { email: _email, ...payload } = values;
+      const { email: _email, regimenFiscal, ...resto } = values;
+      const payload = { ...resto, regimenFiscal: regimenFiscal || null };
       const res = await fetch("/api/instructor/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -221,6 +230,28 @@ export const InstructorProfileForm = ({ onSaved }: InstructorProfileFormProps) =
                 </p>
               )}
             </div>
+          </div>
+          <Separator />
+          <div className="space-y-2">
+            <label htmlFor="regimen-fiscal" className="text-sm font-medium text-foreground">
+              Régimen fiscal
+            </label>
+            <select
+              id="regimen-fiscal"
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+              {...form.register("regimenFiscal")}
+            >
+              <option value="">Sin indicar</option>
+              {Object.entries(REGIMENES_FISCALES).map(([value, r]) => (
+                <option key={value} value={value}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-muted-foreground">
+              Determina las retenciones de ISR e IVA que se te aplican al cobrar. Si no lo
+              sabes, tu contador puede decírtelo. Puedes dejarlo sin indicar.
+            </p>
           </div>
           <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-end">
             <Button type="button" variant="outline" className="w-full sm:w-auto sm:min-w-30">

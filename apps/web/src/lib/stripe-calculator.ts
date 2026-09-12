@@ -34,6 +34,43 @@ export const MEXICAN_TAXES = {
   iva_retencion: (2 / 3) * 16,
 };
 
+/**
+ * Régimen fiscal de quien cobra. Determina las retenciones que le aplica una
+ * persona moral al pagarle.
+ *
+ * Los porcentajes son los del caso general; un contador puede tener matices
+ * según la actividad concreta. Por eso el simulador deja elegirlo en vez de
+ * asumir uno, que es lo que hacía antes.
+ */
+export type RegimenFiscal = "actividad_empresarial" | "resico" | "persona_moral";
+
+export const REGIMENES_FISCALES: Record<
+  RegimenFiscal,
+  { label: string; corto: string; isr: number; retieneIva: boolean; nota: string }
+> = {
+  actividad_empresarial: {
+    label: "Persona física · Actividad empresarial y profesional",
+    corto: "Régimen general",
+    isr: 10,
+    retieneIva: true,
+    nota: "Retención de ISR del 10% y de dos tercios del IVA trasladado.",
+  },
+  resico: {
+    label: "Persona física · RESICO",
+    corto: "RESICO",
+    isr: 1.25,
+    retieneIva: true,
+    nota: "El Régimen Simplificado de Confianza retiene 1.25% de ISR en vez del 10%. La retención de IVA no cambia.",
+  },
+  persona_moral: {
+    label: "Persona moral",
+    corto: "Persona moral",
+    isr: 0,
+    retieneIva: false,
+    nota: "Entre personas morales no hay retención de ISR ni de IVA por servicios.",
+  },
+};
+
 export interface StripeCalculationResult {
   precioOriginal: number;
   comisionStripe: number;
@@ -58,7 +95,8 @@ export interface StripeCalculationResult {
  */
 export function calculateStripeStandard(
   amount: number,
-  includeIVA: boolean = true
+  includeIVA: boolean = true,
+  regimen: RegimenFiscal = "actividad_empresarial",
 ): StripeCalculationResult {
   const precioOriginal = amount;
 
@@ -75,8 +113,10 @@ export function calculateStripeStandard(
   const baseImponible = includeIVA ? subtotal - iva : subtotal;
 
   // Retenciones
-  const isrRetencion = (baseImponible * MEXICAN_TAXES.isr) / 100;
-  const ivaRetencion = includeIVA ? iva * MEXICAN_TAXES.ivaRetencionFraccion : 0;
+  const reglas = REGIMENES_FISCALES[regimen];
+  const isrRetencion = (baseImponible * reglas.isr) / 100;
+  const ivaRetencion =
+    includeIVA && reglas.retieneIva ? iva * MEXICAN_TAXES.ivaRetencionFraccion : 0;
 
   const totalRecibido = subtotal - isrRetencion - ivaRetencion;
 
@@ -92,11 +132,17 @@ export function calculateStripeStandard(
     breakdown.push({ label: 'Base imponible', amount: baseImponible });
   }
 
-  breakdown.push(
-    { label: 'Retención ISR (10%)', amount: isrRetencion, isNegative: true },
-  );
+  // Sin retención no hay línea: a una persona moral le salía un
+  // "Retención ISR (0%)" que solo era ruido.
+  if (reglas.isr > 0) {
+    breakdown.push({
+      label: `Retención ISR (${reglas.isr}%)`,
+      amount: isrRetencion,
+      isNegative: true,
+    });
+  }
 
-  if (includeIVA) {
+  if (includeIVA && reglas.retieneIva) {
     breakdown.push({
       label: `Retención IVA (${MEXICAN_TAXES.iva_retencion.toFixed(2)}%)`,
       amount: ivaRetencion,
@@ -127,7 +173,8 @@ export function calculateStripeStandard(
 export function calculateStripeConnect(
   amount: number,
   platformFeePercentage: number = 20,
-  includeIVA: boolean = true
+  includeIVA: boolean = true,
+  regimen: RegimenFiscal = "actividad_empresarial",
 ): StripeCalculationResult {
   const precioOriginal = amount;
 
@@ -149,8 +196,10 @@ export function calculateStripeConnect(
   const baseImponible = includeIVA ? subtotal - iva : subtotal;
 
   // Retenciones
-  const isrRetencion = (baseImponible * MEXICAN_TAXES.isr) / 100;
-  const ivaRetencion = includeIVA ? iva * MEXICAN_TAXES.ivaRetencionFraccion : 0;
+  const reglas = REGIMENES_FISCALES[regimen];
+  const isrRetencion = (baseImponible * reglas.isr) / 100;
+  const ivaRetencion =
+    includeIVA && reglas.retieneIva ? iva * MEXICAN_TAXES.ivaRetencionFraccion : 0;
 
   const totalRecibido = subtotal - isrRetencion - ivaRetencion;
 
@@ -167,11 +216,17 @@ export function calculateStripeConnect(
     breakdown.push({ label: 'Base imponible', amount: baseImponible });
   }
 
-  breakdown.push(
-    { label: 'Retención ISR (10%)', amount: isrRetencion, isNegative: true },
-  );
+  // Sin retención no hay línea: a una persona moral le salía un
+  // "Retención ISR (0%)" que solo era ruido.
+  if (reglas.isr > 0) {
+    breakdown.push({
+      label: `Retención ISR (${reglas.isr}%)`,
+      amount: isrRetencion,
+      isNegative: true,
+    });
+  }
 
-  if (includeIVA) {
+  if (includeIVA && reglas.retieneIva) {
     breakdown.push({
       label: `Retención IVA (${MEXICAN_TAXES.iva_retencion.toFixed(2)}%)`,
       amount: ivaRetencion,
@@ -203,7 +258,8 @@ export function calculateReversePrice(
   desiredNet: number,
   platformFeePercentage: number = 20,
   includeIVA: boolean = true,
-  useConnect: boolean = true
+  useConnect: boolean = true,
+  regimen: RegimenFiscal = "actividad_empresarial",
 ): number {
   // Iteración para encontrar el precio que resulte en el ingreso neto deseado
   let estimatedPrice = desiredNet;
@@ -212,8 +268,8 @@ export function calculateReversePrice(
 
   while (iterations < maxIterations) {
     const result = useConnect
-      ? calculateStripeConnect(estimatedPrice, platformFeePercentage, includeIVA)
-      : calculateStripeStandard(estimatedPrice, includeIVA);
+      ? calculateStripeConnect(estimatedPrice, platformFeePercentage, includeIVA, regimen)
+      : calculateStripeStandard(estimatedPrice, includeIVA, regimen);
 
     const difference = desiredNet - result.totalRecibido;
 

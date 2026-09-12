@@ -18,6 +18,11 @@ const patchSchema = z.object({
   website: z.union([z.string().url(), z.literal("")]).optional(),
   linkedinUrl: z.union([z.string().url(), z.literal("")]).optional(),
   instagramUrl: z.union([z.string().url(), z.literal("")]).optional(),
+  // Lo declara la propia persona instructora. null = prefiere no indicarlo.
+  regimenFiscal: z
+    .enum(["actividad_empresarial", "resico", "persona_moral"])
+    .nullable()
+    .optional(),
 });
 
 export async function GET() {
@@ -49,6 +54,7 @@ export async function GET() {
       website: profile?.website || "",
       linkedinUrl: profile?.linkedinUrl || "",
       instagramUrl: profile?.instagramUrl || "",
+      regimenFiscal: profile?.regimenFiscal ?? null,
     });
   } catch (error) {
     return handleApiError(error);
@@ -64,7 +70,7 @@ export async function PATCH(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Datos inválidos" }, { status: 422 });
     }
-    const { fullName, email, state, city, headline, bio, specialties, teachingYears, website, linkedinUrl, instagramUrl } = parsed.data;
+    const { fullName, email, state, city, headline, bio, specialties, teachingYears, website, linkedinUrl, instagramUrl, regimenFiscal } = parsed.data;
 
     const profileData = {
       state,
@@ -76,6 +82,9 @@ export async function PATCH(req: NextRequest) {
       website: website || null,
       linkedinUrl: linkedinUrl || null,
       instagramUrl: instagramUrl || null,
+      // Solo se toca si viene en la petición: si no, un guardado parcial del
+      // formulario borraría el régimen ya declarado.
+      ...(regimenFiscal !== undefined ? { regimenFiscal } : {}),
     };
 
     await Promise.all([

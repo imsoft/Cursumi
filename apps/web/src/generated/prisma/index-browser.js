@@ -215,6 +215,7 @@ exports.Prisma.InstructorProfileScalarFieldEnum = {
   instagramUrl: 'instagramUrl',
   stripeAccountId: 'stripeAccountId',
   stripeOnboarded: 'stripeOnboarded',
+  regimenFiscal: 'regimenFiscal',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -782,6 +783,12 @@ exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
   pending: 'pending',
   approved: 'approved',
   rejected: 'rejected'
+};
+
+exports.RegimenFiscal = exports.$Enums.RegimenFiscal = {
+  actividad_empresarial: 'actividad_empresarial',
+  resico: 'resico',
+  persona_moral: 'persona_moral'
 };
 
 exports.Modality = exports.$Enums.Modality = {

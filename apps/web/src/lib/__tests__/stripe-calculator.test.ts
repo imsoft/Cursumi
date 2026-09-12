@@ -5,6 +5,7 @@ import {
   calculateReversePrice,
   STRIPE_RATES,
   MEXICAN_TAXES,
+  REGIMENES_FISCALES,
 } from "../stripe-calculator";
 
 describe("calculateStripeStandard", () => {
@@ -131,5 +132,55 @@ describe("calculateStripeConnect modela lo que hace producción", () => {
     expect(r.comisionStripe).toBeGreaterThan(0);
     const labels = r.breakdown.map((b) => b.label);
     expect(labels.some((l) => l.includes("absorbe Cursumi"))).toBe(true);
+  });
+});
+
+describe("régimen fiscal", () => {
+  it("por defecto usa el régimen general, para no cambiar lo que ya se mostraba", () => {
+    const porDefecto = calculateStripeConnect(1000, 15, true);
+    const explicito = calculateStripeConnect(1000, 15, true, "actividad_empresarial");
+    expect(porDefecto.totalRecibido).toBe(explicito.totalRecibido);
+  });
+
+  it("RESICO retiene 1.25% de ISR en vez del 10%", () => {
+    const general = calculateStripeConnect(1000, 15, true, "actividad_empresarial");
+    const resico = calculateStripeConnect(1000, 15, true, "resico");
+
+    expect(resico.isrRetencion).toBeCloseTo(general.isrRetencion / 8, 6); // 1.25 es 10/8
+    expect(resico.totalRecibido).toBeGreaterThan(general.totalRecibido);
+  });
+
+  it("RESICO no cambia la retención de IVA", () => {
+    const general = calculateStripeConnect(1000, 15, true, "actividad_empresarial");
+    const resico = calculateStripeConnect(1000, 15, true, "resico");
+    expect(resico.ivaRetencion).toBeCloseTo(general.ivaRetencion, 6);
+  });
+
+  it("a una persona moral no se le retiene nada", () => {
+    const r = calculateStripeConnect(1000, 15, true, "persona_moral");
+    expect(r.isrRetencion).toBe(0);
+    expect(r.ivaRetencion).toBe(0);
+    // Cobra íntegro su parte del bruto: 1000 menos el 15% de comisión.
+    expect(r.totalRecibido).toBeCloseTo(850, 6);
+  });
+
+  it("el desglose de una persona moral no lista retenciones", () => {
+    const labels = calculateStripeConnect(1000, 15, true, "persona_moral").breakdown.map(
+      (b) => b.label,
+    );
+    expect(labels.some((l) => l.includes("Retención"))).toBe(false);
+  });
+
+  it("el régimen también aplica en pagos directos", () => {
+    const general = calculateStripeStandard(1000, true, "actividad_empresarial");
+    const resico = calculateStripeStandard(1000, true, "resico");
+    expect(resico.totalRecibido).toBeGreaterThan(general.totalRecibido);
+  });
+
+  it("el catálogo cubre los tres regímenes con sus tasas", () => {
+    expect(REGIMENES_FISCALES.actividad_empresarial.isr).toBe(10);
+    expect(REGIMENES_FISCALES.resico.isr).toBe(1.25);
+    expect(REGIMENES_FISCALES.persona_moral.isr).toBe(0);
+    expect(REGIMENES_FISCALES.persona_moral.retieneIva).toBe(false);
   });
 });
