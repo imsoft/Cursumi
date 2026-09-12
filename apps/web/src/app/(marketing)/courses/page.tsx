@@ -1,4 +1,5 @@
 import { listPublicCourses } from "@/app/actions/course-actions";
+import { metaDescription } from "@/lib/utils";
 import { jsonLdScript } from "@/lib/sanitize";
 import { CoursesPageClient } from "@/components/courses/courses-page-client";
 import type { Metadata } from "next";
@@ -43,7 +44,7 @@ export default async function CoursesPage() {
       item: {
         "@type": "Course",
         name: course.title,
-        description: course.description,
+        description: metaDescription(course.description),
         provider: {
           "@type": "Organization",
           name: "Cursumi",
