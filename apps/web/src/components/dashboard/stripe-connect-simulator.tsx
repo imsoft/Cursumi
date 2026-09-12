@@ -4,7 +4,11 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { calculateStripeConnect } from "@/lib/stripe-calculator";
+import {
+  calculateStripeConnect,
+  REGIMENES_FISCALES,
+  type RegimenFiscal,
+} from "@/lib/stripe-calculator";
 import { formatPriceMXN } from "@/lib/utils";
 import { TrendingDown, Network, Receipt, AlertCircle, Percent } from "lucide-react";
 
@@ -13,8 +17,9 @@ export function StripeConnectSimulator({ platformFeePercent }: { platformFeePerc
   // Arranca en la comisión realmente configurada, no en un 20% inventado.
   const [platformFee, setPlatformFee] = useState(platformFeePercent);
   const [includeIVA, setIncludeIVA] = useState(true);
+  const [regimen, setRegimen] = useState<RegimenFiscal>("actividad_empresarial");
 
-  const result = calculateStripeConnect(amount, platformFee, includeIVA);
+  const result = calculateStripeConnect(amount, platformFee, includeIVA, regimen);
 
   return (
     <Card className="border border-border bg-card/90">
@@ -79,6 +84,25 @@ export function StripeConnectSimulator({ platformFeePercent }: { platformFeePerc
             checked={includeIVA}
             onCheckedChange={setIncludeIVA}
           />
+        </div>
+
+
+        {/* Régimen fiscal */}
+        <div className="space-y-2">
+          <Label htmlFor="connect-regimen">Régimen fiscal de quien cobra</Label>
+          <select
+            id="connect-regimen"
+            value={regimen}
+            onChange={(e) => setRegimen(e.target.value as RegimenFiscal)}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          >
+            {Object.entries(REGIMENES_FISCALES).map(([value, r]) => (
+              <option key={value} value={value}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-muted-foreground">{REGIMENES_FISCALES[regimen].nota}</p>
         </div>
 
         {/* Resumen visual */}

@@ -4,7 +4,12 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { calculateStripeStandard, calculateStripeConnect } from "@/lib/stripe-calculator";
+import {
+  calculateStripeStandard,
+  calculateStripeConnect,
+  REGIMENES_FISCALES,
+  type RegimenFiscal,
+} from "@/lib/stripe-calculator";
 import { formatPriceMXN } from "@/lib/utils";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
@@ -13,9 +18,10 @@ export function PricingComparison({ platformFeePercent }: { platformFeePercent: 
   // Arranca en la comisión realmente configurada, no en un 20% inventado.
   const [platformFee, setPlatformFee] = useState(platformFeePercent);
   const [includeIVA, setIncludeIVA] = useState(true);
+  const [regimen, setRegimen] = useState<RegimenFiscal>("actividad_empresarial");
 
-  const stripeResult = calculateStripeStandard(amount, includeIVA);
-  const connectResult = calculateStripeConnect(amount, platformFee, includeIVA);
+  const stripeResult = calculateStripeStandard(amount, includeIVA, regimen);
+  const connectResult = calculateStripeConnect(amount, platformFee, includeIVA, regimen);
 
   const difference = stripeResult.totalRecibido - connectResult.totalRecibido;
   const percentageDiff = (difference / stripeResult.totalRecibido) * 100;
@@ -74,6 +80,25 @@ export function PricingComparison({ platformFeePercent }: { platformFeePercent: 
             checked={includeIVA}
             onCheckedChange={setIncludeIVA}
           />
+        </div>
+
+
+        {/* Régimen fiscal */}
+        <div className="space-y-2">
+          <Label htmlFor="compare-regimen">Régimen fiscal de quien cobra</Label>
+          <select
+            id="compare-regimen"
+            value={regimen}
+            onChange={(e) => setRegimen(e.target.value as RegimenFiscal)}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          >
+            {Object.entries(REGIMENES_FISCALES).map(([value, r]) => (
+              <option key={value} value={value}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-muted-foreground">{REGIMENES_FISCALES[regimen].nota}</p>
         </div>
 
         {/* Comparación visual */}
