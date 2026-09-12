@@ -7,6 +7,8 @@ import { checkCronAuth } from "@/lib/cron-auth";
 // Llamado por Vercel Cron Jobs (vercel.json) — envía recordatorios a estudiantes
 // con cursos en progreso que no han tenido actividad en 7 días.
 // Protegido con CRON_SECRET para que solo Vercel pueda llamarlo.
+// Horario: `0 16 * * 1` UTC, o sea los lunes a las 10:00 en México.
+// Vercel programa siempre en UTC y puede disparar hasta 59 min más tarde.
 export async function GET(req: NextRequest) {
   const noAutorizado = checkCronAuth(req);
   if (noAutorizado) return noAutorizado;

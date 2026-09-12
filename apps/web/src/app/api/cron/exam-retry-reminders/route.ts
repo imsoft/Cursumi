@@ -7,6 +7,8 @@ import { checkCronAuth } from "@/lib/cron-auth";
 // Ejecutado por Vercel Cron Jobs — notifica a estudiantes cuando expira el cooldown de 4 horas
 // para volver a tomar el examen de un curso en el que no aprobaron.
 // Protegido con CRON_SECRET.
+// Horario: `0 18 * * *` UTC, o sea todos los días a las 12:00 en México.
+// Vercel programa siempre en UTC y puede disparar hasta 59 min más tarde.
 export async function GET(req: NextRequest) {
   const noAutorizado = checkCronAuth(req);
   if (noAutorizado) return noAutorizado;

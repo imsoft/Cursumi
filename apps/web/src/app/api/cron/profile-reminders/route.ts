@@ -18,6 +18,8 @@ const PROFILE_FIELDS: { key: string; label: string }[] = [
 // GET /api/cron/profile-reminders
 // Envía un correo a usuarios con perfil incompleto.
 // Protegido con CRON_SECRET.
+// Horario: `0 16 * * 3` UTC, o sea los miércoles a las 10:00 en México.
+// Vercel programa siempre en UTC y puede disparar hasta 59 min más tarde.
 export async function GET(req: NextRequest) {
   const noAutorizado = checkCronAuth(req);
   if (noAutorizado) return noAutorizado;
