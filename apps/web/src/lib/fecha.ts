@@ -61,25 +61,6 @@ function anioMesEnMexico(fecha: Date): { anio: number; mesIndice: number } {
   return { anio: g("year"), mesIndice: g("month") - 1 };
 }
 
-const DIAS_EN_INGLES = [
-  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
-];
-
-/**
- * Día de la semana en horario de México: 0 domingo … 6 sábado.
- *
- * El cron diario lo usa para decidir qué recordatorios semanales toca enviar.
- * Con `getDay()` sobre la hora del servidor, una ejecución de madrugada en UTC
- * caería en el día equivocado para México.
- */
-export function diaSemanaEnMexico(ref: Date = new Date()): number {
-  const nombre = new Intl.DateTimeFormat("en-US", {
-    timeZone: ZONA,
-    weekday: "long",
-  }).format(ref);
-  return DIAS_EN_INGLES.indexOf(nombre);
-}
-
 /** Clave "YYYY-MM" del mes al que pertenece la fecha, en horario de México. */
 export function claveMes(fecha: Date): string {
   const { anio, mesIndice } = anioMesEnMexico(fecha);
