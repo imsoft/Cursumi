@@ -6,7 +6,7 @@ import { BusinessPricing } from "@/components/business/business-pricing";
 import { BusinessCTA } from "@/components/business/business-cta";
 
 export const metadata: Metadata = {
-  title: "Para empresas | Cursumi",
+  title: "Para empresas",
   robots: { index: false, follow: false },
 };
 

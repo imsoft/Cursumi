@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Términos para instructores — Cursumi",
+  title: "Términos para instructores",
   description: "Condiciones aplicables a los instructores que publican cursos en Cursumi.",
   alternates: { canonical: `${baseUrl}/instructor-terms` },
 };

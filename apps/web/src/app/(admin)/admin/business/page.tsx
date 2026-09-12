@@ -5,7 +5,7 @@ import { BusinessAdminClient } from "@/components/admin/business-admin-client";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Empresas | Admin Cursumi",
+  title: "Empresas",
   robots: { index: false, follow: false },
 };
 

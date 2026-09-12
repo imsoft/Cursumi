@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Precios | Cursumi",
+  title: "Precios",
   description:
     "Sin suscripciones. Paga solo por los cursos que quieres. Acceso de por vida, certificado incluido.",
   alternates: { canonical: `${baseUrl}/pricing` },

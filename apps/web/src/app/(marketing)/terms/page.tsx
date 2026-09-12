@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Términos y condiciones — Cursumi",
+  title: "Términos y condiciones",
   description: "Términos y condiciones de uso de la plataforma Cursumi.",
   alternates: { canonical: `${baseUrl}/terms` },
 };

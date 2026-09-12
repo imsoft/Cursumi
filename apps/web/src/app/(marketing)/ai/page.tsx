@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Política de uso de IA — Cursumi",
+  title: "Política de uso de IA",
   description: "Cómo Cursumi utiliza la inteligencia artificial, qué datos procesa y sus límites.",
   alternates: { canonical: `${baseUrl}/ai` },
 };

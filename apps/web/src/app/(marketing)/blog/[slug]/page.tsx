@@ -39,7 +39,7 @@ async function getPost(slug: string) {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) return { title: "Artículo no encontrado | Cursumi" };
+  if (!post) return { title: "Artículo no encontrado" };
 
   const canonical = `${siteUrl}/blog/${post.slug}`;
   // Mismo criterio que la ficha del curso: el tamaño solo se declara para la
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     : { url: `${siteUrl}/api/og`, width: 1200, height: 630, alt: post.title };
 
   return {
-    title: `${post.title} | Blog de Cursumi`,
+    title: `${post.title} | Blog`,
     description: post.excerpt ?? `Lee "${post.title}" en el blog de Cursumi.`,
     alternates: { canonical },
     openGraph: {

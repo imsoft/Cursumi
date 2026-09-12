@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Política de cookies — Cursumi",
+  title: "Política de cookies",
   description: "Qué cookies y tecnologías similares utiliza Cursumi y cómo gestionarlas.",
   alternates: { canonical: `${baseUrl}/cookies` },
 };

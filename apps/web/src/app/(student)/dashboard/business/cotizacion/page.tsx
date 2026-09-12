@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { QuoteRequestForm } from "@/components/business/quote-request-form";
 
 export const metadata: Metadata = {
-  title: "Solicita una cotización | Cursumi",
+  title: "Solicita una cotización",
   robots: { index: false, follow: false },
 };
 

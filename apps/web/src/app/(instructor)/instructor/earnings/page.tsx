@@ -9,7 +9,7 @@ import { StripeConnectBanner } from "@/components/instructor/stripe-connect-bann
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
-  title: "Ganancias e Ingresos de Instructor | Cursumi",
+  title: "Ganancias e ingresos",
   description: "Consulta tus ingresos netos por ventas de cursos, métricas financieras y estado de depósitos en Cursumi.",
 };
 

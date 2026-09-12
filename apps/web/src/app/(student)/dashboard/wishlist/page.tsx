@@ -12,7 +12,7 @@ import { formatMexicoLocation } from "@/lib/mexico-location-helpers";
 import { stripHtml } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Mis guardados | Cursumi",
+  title: "Mis guardados",
   robots: { index: false, follow: false },
 };
 

@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Cómo funciona Cursumi",
+  title: "Cómo funciona",
   description: "Conoce el flujo para estudiantes e instructores en Cursumi: publica, aprende y certifica.",
   alternates: { canonical: `${baseUrl}/how-it-works` },
   openGraph: {

@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Blog | Cursumi Instructor",
+  title: "Blog",
   robots: { index: false, follow: false },
 };
 

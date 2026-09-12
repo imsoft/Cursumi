@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com").replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Política de propiedad intelectual — Cursumi",
+  title: "Política de propiedad intelectual",
   description: "Cómo Cursumi protege los derechos de autor y atiende avisos de infracción.",
   alternates: { canonical: `${baseUrl}/copyright` },
 };
