@@ -1,5 +1,3 @@
-"use client";
-
 import { PageHeader } from "@/components/shared/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StripeSimulator } from "@/components/dashboard/stripe-simulator";
@@ -7,8 +5,13 @@ import { StripeConnectSimulator } from "@/components/dashboard/stripe-connect-si
 import { PricingComparison } from "@/components/dashboard/pricing-comparison";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calculator, Info, Scale, BookOpen } from "lucide-react";
+import { getPlatformFeePercent } from "@/lib/platform-fee";
+import { MEXICAN_TAXES } from "@/lib/stripe-calculator";
 
-export default function FinancesPage() {
+export default async function FinancesPage() {
+  const platformFeePercent = await getPlatformFeePercent();
+  const retencionIva = MEXICAN_TAXES.iva_retencion.toFixed(2);
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -43,7 +46,7 @@ export default function FinancesPage() {
           <CardContent>
             <div className="text-2xl font-bold">IVA 16%</div>
             <p className="text-xs text-muted-foreground mt-1">
-              ISR 10% | Retención IVA 6.67%
+              ISR 10% | Retención IVA {retencionIva}%
             </p>
           </CardContent>
         </Card>
@@ -94,7 +97,7 @@ export default function FinancesPage() {
               <ul className="list-disc list-inside space-y-1 text-blue-800 dark:text-blue-200">
                 <li>IVA: 16% (puede estar incluido en el precio)</li>
                 <li>Retención ISR: 10% sobre ingresos</li>
-                <li>Retención IVA: 6.67% (2/3 del IVA)</li>
+                <li>Retención IVA: {retencionIva}% (2/3 del IVA)</li>
               </ul>
             </div>
           </div>
@@ -110,7 +113,7 @@ export default function FinancesPage() {
         </TabsList>
 
         <TabsContent value="comparison" className="space-y-4">
-          <PricingComparison />
+          <PricingComparison platformFeePercent={platformFeePercent} />
         </TabsContent>
 
         <TabsContent value="stripe" className="space-y-4">
@@ -118,7 +121,7 @@ export default function FinancesPage() {
         </TabsContent>
 
         <TabsContent value="connect" className="space-y-4">
-          <StripeConnectSimulator />
+          <StripeConnectSimulator platformFeePercent={platformFeePercent} />
         </TabsContent>
       </Tabs>
 
@@ -158,17 +161,22 @@ export default function FinancesPage() {
 
           <div className="p-3 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800">
             <p className="font-semibold text-purple-900 dark:text-purple-100 mb-1">
-              Ejemplo con Stripe Connect (comisión 20%):
-            </p>
-            <p className="text-purple-800 dark:text-purple-200">
-              Un curso de <span className="font-medium">$1,000 MXN</span>:
+              Cómo se reparte hoy una venta:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-2 mt-1 text-purple-800 dark:text-purple-200">
-              <li>Cursumi recibe ~$154 (20% menos costos)</li>
-              <li>Instructor recibe ~$623 (después de todo)</li>
-              <li>Stripe cobra ~$42</li>
-              <li>Gobierno (impuestos) ~$181</li>
+              <li>
+                Cursumi retiene el <span className="font-medium">{platformFeePercent}%</span> del
+                precio de venta, que es la comisión configurada.
+              </li>
+              <li>El resto es del instructor, antes de sus retenciones fiscales.</li>
+              <li>
+                La comisión de Stripe sale de la parte de Cursumi: no reduce lo que cobra el
+                instructor.
+              </li>
             </ul>
+            <p className="mt-2 text-purple-800 dark:text-purple-200">
+              Usa las pestañas de arriba para verlo con cifras concretas.
+            </p>
           </div>
         </CardContent>
       </Card>

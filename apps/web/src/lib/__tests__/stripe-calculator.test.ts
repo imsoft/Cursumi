@@ -4,6 +4,7 @@ import {
   calculateStripeConnect,
   calculateReversePrice,
   STRIPE_RATES,
+  MEXICAN_TAXES,
 } from "../stripe-calculator";
 
 describe("calculateStripeStandard", () => {
@@ -90,5 +91,45 @@ describe("calculateReversePrice", () => {
     const desiredNet = 800;
     const price = calculateReversePrice(desiredNet, 20);
     expect(price).toBeGreaterThan(desiredNet);
+  });
+});
+
+describe("impuestos mexicanos", () => {
+  it("la retención de IVA son dos tercios del IVA trasladado", () => {
+    // LIVA art. 1-A. La constante decía 6.67% con la etiqueta "2/3" y la
+    // fórmula acababa reteniendo el 41.7% del IVA en vez del 66.7%.
+    const r = calculateStripeConnect(1000, 15, true);
+    expect(r.ivaRetencion).toBeCloseTo(r.iva * (2 / 3), 6);
+  });
+
+  it("sobre la base imponible, esa retención equivale al 10.67%", () => {
+    expect(MEXICAN_TAXES.iva_retencion).toBeCloseTo(10.67, 2);
+  });
+
+  it("sin IVA no hay retención de IVA", () => {
+    const r = calculateStripeConnect(1000, 15, false);
+    expect(r.ivaRetencion).toBe(0);
+  });
+});
+
+describe("calculateStripeConnect modela lo que hace producción", () => {
+  it("la comisión de plataforma se calcula sobre el bruto, como calculateSplit", () => {
+    const r = calculateStripeConnect(1000, 15);
+    expect(r.comisionPlataforma).toBeCloseTo(150, 6);
+    expect(r.subtotal).toBeCloseTo(850, 6);
+  });
+
+  it("la comisión de Stripe no reduce lo que cobra el instructor", () => {
+    // El cobro entra en la cuenta de Cursumi y Stripe descuenta de ahí, así que
+    // sin comisión de plataforma al instructor le corresponde el bruto íntegro.
+    const r = calculateStripeConnect(1000, 0, false);
+    expect(r.subtotal).toBeCloseTo(1000, 6);
+  });
+
+  it("sigue informando la comisión de Stripe como coste de la plataforma", () => {
+    const r = calculateStripeConnect(1000, 15);
+    expect(r.comisionStripe).toBeGreaterThan(0);
+    const labels = r.breakdown.map((b) => b.label);
+    expect(labels.some((l) => l.includes("absorbe Cursumi"))).toBe(true);
   });
 });

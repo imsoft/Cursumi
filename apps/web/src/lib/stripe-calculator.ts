@@ -23,7 +23,15 @@ export const STRIPE_RATES = {
 export const MEXICAN_TAXES = {
   iva: 16, // IVA 16%
   isr: 10, // ISR retención 10% (para servicios digitales)
-  iva_retencion: 6.67, // Retención de IVA 2/3 (6.67%)
+  /**
+   * Retención de IVA: la persona moral retiene DOS TERCIOS del IVA trasladado
+   * (LIVA art. 1-A). La constante anterior decía 6.67 con la etiqueta "2/3",
+   * pero dos tercios de 16% son 10.67%, no 6.67%, y la fórmula terminaba
+   * reteniendo el 41.7% del IVA en lugar del 66.7%.
+   */
+  ivaRetencionFraccion: 2 / 3,
+  /** El mismo dato visto sobre la base imponible: 2/3 × 16% = 10.67%. */
+  iva_retencion: (2 / 3) * 16,
 };
 
 export interface StripeCalculationResult {
@@ -68,7 +76,7 @@ export function calculateStripeStandard(
 
   // Retenciones
   const isrRetencion = (baseImponible * MEXICAN_TAXES.isr) / 100;
-  const ivaRetencion = includeIVA ? (iva * MEXICAN_TAXES.iva_retencion * 100) / MEXICAN_TAXES.iva / 100 : 0;
+  const ivaRetencion = includeIVA ? iva * MEXICAN_TAXES.ivaRetencionFraccion : 0;
 
   const totalRecibido = subtotal - isrRetencion - ivaRetencion;
 
@@ -89,7 +97,11 @@ export function calculateStripeStandard(
   );
 
   if (includeIVA) {
-    breakdown.push({ label: 'Retención IVA (6.67%)', amount: ivaRetencion, isNegative: true });
+    breakdown.push({
+      label: `Retención IVA (${MEXICAN_TAXES.iva_retencion.toFixed(2)}%)`,
+      amount: ivaRetencion,
+      isNegative: true,
+    });
   }
 
   breakdown.push({ label: 'Total a recibir', amount: totalRecibido });
@@ -119,17 +131,18 @@ export function calculateStripeConnect(
 ): StripeCalculationResult {
   const precioOriginal = amount;
 
-  // Calcular comisión de Stripe
+  // Comisión de Stripe. La paga la plataforma, no el instructor: el cobro
+  // entra en la cuenta de Cursumi, Stripe descuenta de ahí, y a la persona
+  // instructora se le liquida su parte del BRUTO. Se sigue calculando para
+  // mostrarla como coste de la plataforma.
   const comisionStripeBase = (amount * STRIPE_RATES.connect.percentageFee) / 100 + STRIPE_RATES.connect.fixedFee;
   const ivaComisionStripe = (comisionStripeBase * STRIPE_RATES.connect.ivaOnFees) / 100;
-  const comisionStripe = comisionStripeBase + ivaComisionStripe;
 
-  // Restar comisión de Stripe
-  let subtotal = amount - comisionStripe;
-
-  // Calcular comisión de la plataforma (Cursumi)
-  const comisionPlataforma = (subtotal * platformFeePercentage) / 100;
-  subtotal = subtotal - comisionPlataforma;
+  // Comisión de la plataforma sobre el BRUTO, igual que calculateSplit() en
+  // producción. Antes se aplicaba sobre el subtotal ya descontado de Stripe,
+  // así que el simulador prometía menos de lo que el instructor cobra.
+  const comisionPlataforma = (amount * platformFeePercentage) / 100;
+  const subtotal = amount - comisionPlataforma;
 
   // Calcular IVA e impuestos
   const iva = includeIVA ? (subtotal * MEXICAN_TAXES.iva) / (100 + MEXICAN_TAXES.iva) : 0;
@@ -137,16 +150,16 @@ export function calculateStripeConnect(
 
   // Retenciones
   const isrRetencion = (baseImponible * MEXICAN_TAXES.isr) / 100;
-  const ivaRetencion = includeIVA ? (iva * MEXICAN_TAXES.iva_retencion * 100) / MEXICAN_TAXES.iva / 100 : 0;
+  const ivaRetencion = includeIVA ? iva * MEXICAN_TAXES.ivaRetencionFraccion : 0;
 
   const totalRecibido = subtotal - isrRetencion - ivaRetencion;
 
   const breakdown = [
     { label: 'Precio del curso', amount: precioOriginal },
-    { label: 'Comisión Stripe (3.6%)', amount: comisionStripeBase, isNegative: true },
-    { label: 'IVA sobre comisión Stripe', amount: ivaComisionStripe, isNegative: true },
     { label: `Comisión plataforma (${platformFeePercentage}%)`, amount: comisionPlataforma, isNegative: true },
     { label: 'Subtotal para instructor', amount: subtotal },
+    { label: 'Comisión Stripe (3.6%) — la absorbe Cursumi', amount: comisionStripeBase },
+    { label: 'IVA sobre comisión Stripe — lo absorbe Cursumi', amount: ivaComisionStripe },
   ];
 
   if (includeIVA) {
@@ -159,7 +172,11 @@ export function calculateStripeConnect(
   );
 
   if (includeIVA) {
-    breakdown.push({ label: 'Retención IVA (6.67%)', amount: ivaRetencion, isNegative: true });
+    breakdown.push({
+      label: `Retención IVA (${MEXICAN_TAXES.iva_retencion.toFixed(2)}%)`,
+      amount: ivaRetencion,
+      isNegative: true,
+    });
   }
 
   breakdown.push({ label: 'Total a recibir', amount: totalRecibido });

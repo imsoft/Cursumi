@@ -8,9 +8,10 @@ import { calculateStripeStandard, calculateStripeConnect } from "@/lib/stripe-ca
 import { formatPriceMXN } from "@/lib/utils";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
-export function PricingComparison() {
+export function PricingComparison({ platformFeePercent }: { platformFeePercent: number }) {
   const [amount, setAmount] = useState(1000);
-  const [platformFee, setPlatformFee] = useState(20);
+  // Arranca en la comisión realmente configurada, no en un 20% inventado.
+  const [platformFee, setPlatformFee] = useState(platformFeePercent);
   const [includeIVA, setIncludeIVA] = useState(true);
 
   const stripeResult = calculateStripeStandard(amount, includeIVA);

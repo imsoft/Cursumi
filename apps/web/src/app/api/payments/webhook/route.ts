@@ -125,7 +125,13 @@ export async function POST(req: NextRequest) {
     if (paymentIntentId) {
       const transaction = await prisma.transaction.findFirst({
         where: { stripePaymentId: paymentIntentId, status: "completed" },
-        select: { id: true, enrollmentId: true, courseId: true, userId: true },
+        select: {
+          id: true,
+          enrollmentId: true,
+          courseId: true,
+          userId: true,
+          couponCode: true,
+        },
       });
 
       if (transaction) {
@@ -139,6 +145,17 @@ export async function POST(req: NextRequest) {
           where: { courseId: transaction.courseId, studentId: transaction.userId },
           data: { status: "cancelled" },
         });
+
+        // Devolver el uso del cupón: si no, un cupón con límite se consume
+        // para siempre aunque la compra se haya deshecho. El GREATEST evita
+        // dejarlo en negativo si el contador ya se hubiera tocado a mano.
+        if (transaction.couponCode) {
+          await prisma.$executeRaw`
+            UPDATE "Coupon"
+            SET "usedCount" = GREATEST("usedCount" - 1, 0)
+            WHERE code = ${transaction.couponCode}
+          `;
+        }
 
         await notifyAdmins({
           type: "transaction_refunded",

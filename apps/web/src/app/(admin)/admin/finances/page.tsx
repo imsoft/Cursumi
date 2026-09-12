@@ -278,12 +278,17 @@ export default function FinancesPage() {
                     {formatPriceMXN(data.commissionSummary.paidToInstructors / 100)}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Comisiones de Stripe:</span>
-                  <span className="font-semibold text-red-600 dark:text-red-400">
-                    -{formatPriceMXN(data.commissionSummary.stripeFees / 100)}
-                  </span>
-                </div>
+                {/* Las comisiones de Stripe no se registran en la base, así que
+                    esta cifra siempre era -$0.00 y solo confundía. Se muestra
+                    únicamente si algún día se empiezan a guardar. */}
+                {data.commissionSummary.stripeFees > 0 && (
+                  <div className="flex justify-between">
+                    <span>Comisiones de Stripe:</span>
+                    <span className="font-semibold text-red-600 dark:text-red-400">
+                      -{formatPriceMXN(data.commissionSummary.stripeFees / 100)}
+                    </span>
+                  </div>
+                )}
                 <div className="my-1 h-px bg-green-200 dark:bg-green-800" />
                 <div className="flex justify-between text-base font-bold">
                   <span>Neto para la plataforma:</span>
