@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { claveMes, ultimosMeses } from "@/lib/fecha";
+import { claveMes, ultimosMeses, diaSemanaEnMexico } from "@/lib/fecha";
 
 /**
  * Las series mensuales de ingresos se agrupaban con la hora del servidor, que
@@ -44,5 +44,19 @@ describe("ultimosMeses", () => {
     const meses = ultimosMeses(6, new Date("2026-10-01T02:00:00Z"));
     expect(meses[meses.length - 1].clave).toBe("2026-09");
     expect(meses).toHaveLength(6);
+  });
+});
+
+describe("diaSemanaEnMexico", () => {
+  it("devuelve el día de México, no el de UTC", () => {
+    // Lunes 14 de septiembre a las 02:00 UTC son las 20:00 del domingo 13 en México.
+    expect(diaSemanaEnMexico(new Date("2026-09-14T02:00:00Z"))).toBe(0);
+  });
+
+  it("a mediodía coincide con el día natural", () => {
+    // Lunes 14 de septiembre de 2026.
+    expect(diaSemanaEnMexico(new Date("2026-09-14T18:00:00Z"))).toBe(1);
+    // Miércoles 16.
+    expect(diaSemanaEnMexico(new Date("2026-09-16T18:00:00Z"))).toBe(3);
   });
 });
