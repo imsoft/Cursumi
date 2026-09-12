@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { claveMes, ultimosMeses } from "./fecha";
 
 export type AdminStats = {
   totalUsers: number;
@@ -173,24 +174,24 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
     // tenía el panel de ingresos del instructor.
     prisma.$queryRaw<{ month_label: string; month_key: string; amount: number }[]>`
       SELECT
-        TO_CHAR(DATE_TRUNC('month', t."createdAt"), 'Mon') AS month_label,
-        TO_CHAR(DATE_TRUNC('month', t."createdAt"), 'YYYY-MM') AS month_key,
+        TO_CHAR(DATE_TRUNC('month', t."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City'), 'Mon') AS month_label,
+        TO_CHAR(DATE_TRUNC('month', t."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City'), 'YYYY-MM') AS month_key,
         COALESCE(SUM(t.amount), 0)::int AS amount
       FROM "Transaction" t
       WHERE t."status"::text = 'completed'
         AND t."createdAt" >= ${startOfRange}
-      GROUP BY DATE_TRUNC('month', t."createdAt")
-      ORDER BY DATE_TRUNC('month', t."createdAt")
+      GROUP BY DATE_TRUNC('month', t."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City')
+      ORDER BY DATE_TRUNC('month', t."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City')
     `,
     prisma.$queryRaw<{ month_label: string; month_key: string; users: number }[]>`
       SELECT
-        TO_CHAR(DATE_TRUNC('month', "createdAt"), 'Mon') AS month_label,
-        TO_CHAR(DATE_TRUNC('month', "createdAt"), 'YYYY-MM') AS month_key,
+        TO_CHAR(DATE_TRUNC('month', "createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City'), 'Mon') AS month_label,
+        TO_CHAR(DATE_TRUNC('month', "createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City'), 'YYYY-MM') AS month_key,
         COUNT(*)::int AS users
       FROM "User"
       WHERE "createdAt" >= ${startOfRange}
-      GROUP BY DATE_TRUNC('month', "createdAt")
-      ORDER BY DATE_TRUNC('month', "createdAt")
+      GROUP BY DATE_TRUNC('month', "createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City')
+      ORDER BY DATE_TRUNC('month', "createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City')
     `,
   ]);
 
@@ -198,11 +199,7 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
   const revenueByMonth: { month: string; amount: number }[] = [];
   const usersByMonth: { month: string; users: number }[] = [];
 
-  for (let i = 5; i >= 0; i--) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-    const label = date.toLocaleDateString("es-MX", { month: "short" });
-
+  for (const { clave: key, etiqueta: label } of ultimosMeses(6, now)) {
     const rev = revenueRows.find((r) => r.month_key === key);
     const usr = userRows.find((u) => u.month_key === key);
 
@@ -366,8 +363,14 @@ export async function getAdminFinances(): Promise<AdminFinances> {
 
   const byMonthKey = new Map<string, { monthLabel: string; revenue: number; count: number }>();
   for (const t of transactionsForMonthly) {
-    const key = `${t.createdAt.getFullYear()}-${String(t.createdAt.getMonth() + 1).padStart(2, "0")}`;
-    const monthLabel = new Date(t.createdAt.getFullYear(), t.createdAt.getMonth(), 1).toLocaleDateString("es-MX", { month: "long" });
+    const key = claveMes(t.createdAt);
+    const [anio, mes] = key.split("-").map(Number);
+    // Se arma en UTC a propósito: solo se necesita el nombre del mes, y así el
+    // nombre no depende de la hora del servidor.
+    const monthLabel = new Date(Date.UTC(anio, mes - 1, 1)).toLocaleDateString("es-MX", {
+      month: "long",
+      timeZone: "UTC",
+    });
     if (!byMonthKey.has(key)) byMonthKey.set(key, { monthLabel, revenue: 0, count: 0 });
     const cur = byMonthKey.get(key)!;
     cur.revenue += t.amount;

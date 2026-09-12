@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { claveMes, ultimosMeses } from "./fecha";
 
 export type MonthlyEarning = {
   month: string;
@@ -99,8 +100,10 @@ export async function getInstructorEarnings(instructorId: string): Promise<Instr
     }),
   ]);
 
-  const now = new Date();
-  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  // Los meses se resuelven en horario de México, no en el del servidor: una
+  // compra de las 21:00 del último día del mes cae en el mes siguiente si se
+  // mira en UTC, que es como corre Vercel.
+  const [mesAnterior, mesActual] = ultimosMeses(2).map((m) => m.clave);
 
   let totalGrossCents = 0;
   let totalNetCents = 0;
@@ -117,10 +120,11 @@ export async function getInstructorEarnings(instructorId: string): Promise<Instr
     totalGrossCents += t.amount;
     totalNetCents += netCents;
 
-    if (isSameMonth(t.createdAt, now)) {
+    const clave = claveMes(t.createdAt);
+    if (clave === mesActual) {
       thisMonthGrossCents += t.amount;
       thisMonthNetCents += netCents;
-    } else if (isSameMonth(t.createdAt, lastMonthDate)) {
+    } else if (clave === mesAnterior) {
       lastMonthGrossCents += t.amount;
       lastMonthNetCents += netCents;
     }
@@ -229,40 +233,30 @@ function netCentsOf(t: Pick<EarningTransaction, "amount" | "platformFee" | "inst
   return t.amount;
 }
 
-function isSameMonth(date: Date, ref: Date) {
-  return date.getFullYear() === ref.getFullYear() && date.getMonth() === ref.getMonth();
-}
-
 function buildMonthlySeries(
   transactions: EarningTransaction[],
   monthsCount: number,
 ): MonthlyEarning[] {
-  const now = new Date();
-  const months: MonthlyEarning[] = [];
-
-  for (let i = monthsCount - 1; i >= 0; i--) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const label = date.toLocaleDateString("es-MX", { month: "short" });
-
-    let grossCents = 0;
-    let netCents = 0;
-    let count = 0;
-
-    for (const t of transactions) {
-      if (!isSameMonth(t.createdAt, date)) continue;
-      grossCents += t.amount;
-      netCents += netCentsOf(t);
-      count += 1;
-    }
-
-    months.push({
-      month: label,
-      amount: toPesos(grossCents),
-      netAmount: toPesos(netCents),
-      // Ventas del mes, no inscripciones: una inscripción regalada no es venta.
-      enrollments: count,
-    });
+  // Una sola pasada por las transacciones: resolver la zona horaria es caro y
+  // antes se repetía por cada mes de la serie.
+  const porMes = new Map<string, { gross: number; net: number; count: number }>();
+  for (const t of transactions) {
+    const clave = claveMes(t.createdAt);
+    const acc = porMes.get(clave) ?? { gross: 0, net: 0, count: 0 };
+    acc.gross += t.amount;
+    acc.net += netCentsOf(t);
+    acc.count += 1;
+    porMes.set(clave, acc);
   }
 
-  return months;
+  return ultimosMeses(monthsCount).map(({ clave, etiqueta }) => {
+    const acc = porMes.get(clave) ?? { gross: 0, net: 0, count: 0 };
+    return {
+      month: etiqueta,
+      amount: toPesos(acc.gross),
+      netAmount: toPesos(acc.net),
+      // Ventas del mes, no inscripciones: una inscripción regalada no es venta.
+      enrollments: acc.count,
+    };
+  });
 }
