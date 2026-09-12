@@ -8,9 +8,10 @@ import { calculateStripeConnect } from "@/lib/stripe-calculator";
 import { formatPriceMXN } from "@/lib/utils";
 import { TrendingDown, Network, Receipt, AlertCircle, Percent } from "lucide-react";
 
-export function StripeConnectSimulator() {
+export function StripeConnectSimulator({ platformFeePercent }: { platformFeePercent: number }) {
   const [amount, setAmount] = useState(1000);
-  const [platformFee, setPlatformFee] = useState(20);
+  // Arranca en la comisión realmente configurada, no en un 20% inventado.
+  const [platformFee, setPlatformFee] = useState(platformFeePercent);
   const [includeIVA, setIncludeIVA] = useState(true);
 
   const result = calculateStripeConnect(amount, platformFee, includeIVA);
