@@ -167,16 +167,20 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
 
   // SQL GROUP BY en lugar de traer todos los registros y filtrar en JS
   const [revenueRows, userRows] = await Promise.all([
+    // Dinero cobrado, no precio de catálogo. Antes sumaba SUM(c.price) sobre
+    // Enrollment, así que cada inscripción gratuita, de empresa o con cupón
+    // engordaba la gráfica con dinero que nadie pagó. Es el mismo fallo que
+    // tenía el panel de ingresos del instructor.
     prisma.$queryRaw<{ month_label: string; month_key: string; amount: number }[]>`
       SELECT
-        TO_CHAR(DATE_TRUNC('month', e."createdAt"), 'Mon') AS month_label,
-        TO_CHAR(DATE_TRUNC('month', e."createdAt"), 'YYYY-MM') AS month_key,
-        COALESCE(SUM(c.price), 0)::int AS amount
-      FROM "Enrollment" e
-      JOIN "Course" c ON c.id = e."courseId"
-      WHERE e."createdAt" >= ${startOfRange}
-      GROUP BY DATE_TRUNC('month', e."createdAt")
-      ORDER BY DATE_TRUNC('month', e."createdAt")
+        TO_CHAR(DATE_TRUNC('month', t."createdAt"), 'Mon') AS month_label,
+        TO_CHAR(DATE_TRUNC('month', t."createdAt"), 'YYYY-MM') AS month_key,
+        COALESCE(SUM(t.amount), 0)::int AS amount
+      FROM "Transaction" t
+      WHERE t."status"::text = 'completed'
+        AND t."createdAt" >= ${startOfRange}
+      GROUP BY DATE_TRUNC('month', t."createdAt")
+      ORDER BY DATE_TRUNC('month', t."createdAt")
     `,
     prisma.$queryRaw<{ month_label: string; month_key: string; users: number }[]>`
       SELECT
@@ -202,7 +206,8 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
     const rev = revenueRows.find((r) => r.month_key === key);
     const usr = userRows.find((u) => u.month_key === key);
 
-    revenueByMonth.push({ month: label, amount: Number(rev?.amount ?? 0) });
+    // La consulta devuelve CENTAVOS; esta gráfica se pinta en pesos.
+    revenueByMonth.push({ month: label, amount: Math.round(Number(rev?.amount ?? 0) / 100) });
     usersByMonth.push({ month: label, users: Number(usr?.users ?? 0) });
   }
 
