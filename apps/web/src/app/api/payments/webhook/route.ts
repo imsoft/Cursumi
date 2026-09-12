@@ -45,7 +45,16 @@ export async function POST(req: NextRequest) {
     if (!alreadyCompleted) {
       await prisma.transaction.update({
         where: { id: transaction.id },
-        data: { status: "completed" },
+        data: {
+          status: "completed",
+          // Sin el PaymentIntent no hay manera de encontrar esta transacción
+          // cuando Stripe avise de un reembolso: el evento charge.refunded no
+          // trae el id de la sesión de checkout.
+          stripePaymentId:
+            typeof session.payment_intent === "string"
+              ? session.payment_intent
+              : (session.payment_intent?.id ?? null),
+        },
       });
     }
 
@@ -92,6 +101,56 @@ export async function POST(req: NextRequest) {
         courseId,
         transactionId: transaction.id,
       });
+    }
+  }
+
+  /**
+   * Reembolsos.
+   *
+   * La política pública promete devolución dentro de 7 días, pero no había
+   * nada que escuchara este evento: al reembolsar desde Stripe la transacción
+   * seguía en `completed`, así que continuaba sumando en los ingresos del
+   * instructor y del panel de admin, y el alumno conservaba el acceso.
+   *
+   * Al marcarla `refunded` desaparece de los ingresos sola, porque todos esos
+   * cálculos filtran por `completed`.
+   */
+  if (event.type === "charge.refunded") {
+    const charge = event.data.object as Stripe.Charge;
+    const paymentIntentId =
+      typeof charge.payment_intent === "string"
+        ? charge.payment_intent
+        : (charge.payment_intent?.id ?? null);
+
+    if (paymentIntentId) {
+      const transaction = await prisma.transaction.findFirst({
+        where: { stripePaymentId: paymentIntentId, status: "completed" },
+        select: { id: true, enrollmentId: true, courseId: true, userId: true },
+      });
+
+      if (transaction) {
+        await prisma.transaction.update({
+          where: { id: transaction.id },
+          data: { status: "refunded" },
+        });
+
+        // Se devolvió el dinero, así que se retira el acceso al curso.
+        await prisma.enrollment.updateMany({
+          where: { courseId: transaction.courseId, studentId: transaction.userId },
+          data: { status: "cancelled" },
+        });
+
+        await notifyAdmins({
+          type: "transaction_refunded",
+          title: "Reembolso procesado",
+          body: "Se reembolsó una compra y se retiró el acceso al curso.",
+          link: "/admin/finances",
+        });
+      } else {
+        console.warn(
+          `[pagos] Reembolso del PaymentIntent ${paymentIntentId} sin transacción completada asociada.`,
+        );
+      }
     }
   }
 
