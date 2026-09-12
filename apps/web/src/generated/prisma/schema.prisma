@@ -254,9 +254,18 @@ model InstructorApplication {
   @@index([status])
 }
 
+/// Régimen fiscal de quien cobra. Cambia las retenciones que se le aplican:
+/// RESICO retiene 1.25% de ISR y el régimen general 10%, y las personas
+/// morales no reciben retención de una persona moral.
+enum RegimenFiscal {
+  actividad_empresarial
+  resico
+  persona_moral
+}
+
 model InstructorProfile {
-  id              String   @id @default(cuid())
-  userId          String   @unique
+  id              String         @id @default(cuid())
+  userId          String         @unique
   headline        String?
   bio             String?
   city            String?
@@ -266,10 +275,12 @@ model InstructorProfile {
   website         String?
   linkedinUrl     String?
   instagramUrl    String?
-  stripeAccountId String?  @unique // Stripe Connect account ID — un ID por instructor
-  stripeOnboarded Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  stripeAccountId String?        @unique // Stripe Connect account ID — un ID por instructor
+  stripeOnboarded Boolean        @default(false)
+  /// Lo declara la propia persona instructora; null = aún no lo ha indicado.
+  regimenFiscal   RegimenFiscal?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -420,6 +420,15 @@ export const CourseVisibility: {
 export type CourseVisibility = (typeof CourseVisibility)[keyof typeof CourseVisibility]
 
 
+export const RegimenFiscal: {
+  actividad_empresarial: 'actividad_empresarial',
+  resico: 'resico',
+  persona_moral: 'persona_moral'
+};
+
+export type RegimenFiscal = (typeof RegimenFiscal)[keyof typeof RegimenFiscal]
+
+
 export const SessionAnonymousQuestionStatus: {
   open: 'open',
   answered: 'answered',
@@ -511,6 +520,10 @@ export const OrgSubscriptionStatus: typeof $Enums.OrgSubscriptionStatus
 export type CourseVisibility = $Enums.CourseVisibility
 
 export const CourseVisibility: typeof $Enums.CourseVisibility
+
+export type RegimenFiscal = $Enums.RegimenFiscal
+
+export const RegimenFiscal: typeof $Enums.RegimenFiscal
 
 export type SessionAnonymousQuestionStatus = $Enums.SessionAnonymousQuestionStatus
 
@@ -14493,6 +14506,7 @@ export namespace Prisma {
     instagramUrl: string | null
     stripeAccountId: string | null
     stripeOnboarded: boolean | null
+    regimenFiscal: $Enums.RegimenFiscal | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14511,6 +14525,7 @@ export namespace Prisma {
     instagramUrl: string | null
     stripeAccountId: string | null
     stripeOnboarded: boolean | null
+    regimenFiscal: $Enums.RegimenFiscal | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14529,6 +14544,7 @@ export namespace Prisma {
     instagramUrl: number
     stripeAccountId: number
     stripeOnboarded: number
+    regimenFiscal: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14557,6 +14573,7 @@ export namespace Prisma {
     instagramUrl?: true
     stripeAccountId?: true
     stripeOnboarded?: true
+    regimenFiscal?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14575,6 +14592,7 @@ export namespace Prisma {
     instagramUrl?: true
     stripeAccountId?: true
     stripeOnboarded?: true
+    regimenFiscal?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14593,6 +14611,7 @@ export namespace Prisma {
     instagramUrl?: true
     stripeAccountId?: true
     stripeOnboarded?: true
+    regimenFiscal?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14698,6 +14717,7 @@ export namespace Prisma {
     instagramUrl: string | null
     stripeAccountId: string | null
     stripeOnboarded: boolean
+    regimenFiscal: $Enums.RegimenFiscal | null
     createdAt: Date
     updatedAt: Date
     _count: InstructorProfileCountAggregateOutputType | null
@@ -14735,6 +14755,7 @@ export namespace Prisma {
     instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
+    regimenFiscal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -14754,6 +14775,7 @@ export namespace Prisma {
     instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
+    regimenFiscal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -14773,6 +14795,7 @@ export namespace Prisma {
     instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
+    regimenFiscal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -14792,11 +14815,12 @@ export namespace Prisma {
     instagramUrl?: boolean
     stripeAccountId?: boolean
     stripeOnboarded?: boolean
+    regimenFiscal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InstructorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "city" | "state" | "specialties" | "teachingYears" | "website" | "linkedinUrl" | "instagramUrl" | "stripeAccountId" | "stripeOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorProfile"]>
+  export type InstructorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "headline" | "bio" | "city" | "state" | "specialties" | "teachingYears" | "website" | "linkedinUrl" | "instagramUrl" | "stripeAccountId" | "stripeOnboarded" | "regimenFiscal" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorProfile"]>
   export type InstructorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -14826,6 +14850,10 @@ export namespace Prisma {
       instagramUrl: string | null
       stripeAccountId: string | null
       stripeOnboarded: boolean
+      /**
+       * Lo declara la propia persona instructora; null = aún no lo ha indicado.
+       */
+      regimenFiscal: $Enums.RegimenFiscal | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["instructorProfile"]>
@@ -15265,6 +15293,7 @@ export namespace Prisma {
     readonly instagramUrl: FieldRef<"InstructorProfile", 'String'>
     readonly stripeAccountId: FieldRef<"InstructorProfile", 'String'>
     readonly stripeOnboarded: FieldRef<"InstructorProfile", 'Boolean'>
+    readonly regimenFiscal: FieldRef<"InstructorProfile", 'RegimenFiscal'>
     readonly createdAt: FieldRef<"InstructorProfile", 'DateTime'>
     readonly updatedAt: FieldRef<"InstructorProfile", 'DateTime'>
   }
@@ -70042,6 +70071,7 @@ export namespace Prisma {
     instagramUrl: 'instagramUrl',
     stripeAccountId: 'stripeAccountId',
     stripeOnboarded: 'stripeOnboarded',
+    regimenFiscal: 'regimenFiscal',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -70841,6 +70871,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RegimenFiscal'
+   */
+  export type EnumRegimenFiscalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegimenFiscal'>
+    
+
+
+  /**
+   * Reference to a field of type 'RegimenFiscal[]'
+   */
+  export type ListEnumRegimenFiscalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegimenFiscal[]'>
     
 
 
@@ -71690,6 +71734,7 @@ export namespace Prisma {
     instagramUrl?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeAccountId?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolFilter<"InstructorProfile"> | boolean
+    regimenFiscal?: EnumRegimenFiscalNullableFilter<"InstructorProfile"> | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -71709,6 +71754,7 @@ export namespace Prisma {
     instagramUrl?: SortOrderInput | SortOrder
     stripeAccountId?: SortOrderInput | SortOrder
     stripeOnboarded?: SortOrder
+    regimenFiscal?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -71731,6 +71777,7 @@ export namespace Prisma {
     linkedinUrl?: StringNullableFilter<"InstructorProfile"> | string | null
     instagramUrl?: StringNullableFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolFilter<"InstructorProfile"> | boolean
+    regimenFiscal?: EnumRegimenFiscalNullableFilter<"InstructorProfile"> | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -71750,6 +71797,7 @@ export namespace Prisma {
     instagramUrl?: SortOrderInput | SortOrder
     stripeAccountId?: SortOrderInput | SortOrder
     stripeOnboarded?: SortOrder
+    regimenFiscal?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InstructorProfileCountOrderByAggregateInput
@@ -71776,6 +71824,7 @@ export namespace Prisma {
     instagramUrl?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     stripeAccountId?: StringNullableWithAggregatesFilter<"InstructorProfile"> | string | null
     stripeOnboarded?: BoolWithAggregatesFilter<"InstructorProfile"> | boolean
+    regimenFiscal?: EnumRegimenFiscalNullableWithAggregatesFilter<"InstructorProfile"> | $Enums.RegimenFiscal | null
     createdAt?: DateTimeWithAggregatesFilter<"InstructorProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"InstructorProfile"> | Date | string
   }
@@ -76073,6 +76122,7 @@ export namespace Prisma {
     instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
+    regimenFiscal?: $Enums.RegimenFiscal | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutInstructorProfileInput
@@ -76092,6 +76142,7 @@ export namespace Prisma {
     instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
+    regimenFiscal?: $Enums.RegimenFiscal | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -76109,6 +76160,7 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    regimenFiscal?: NullableEnumRegimenFiscalFieldUpdateOperationsInput | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutInstructorProfileNestedInput
@@ -76128,6 +76180,7 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    regimenFiscal?: NullableEnumRegimenFiscalFieldUpdateOperationsInput | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -76146,6 +76199,7 @@ export namespace Prisma {
     instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
+    regimenFiscal?: $Enums.RegimenFiscal | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -76163,6 +76217,7 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    regimenFiscal?: NullableEnumRegimenFiscalFieldUpdateOperationsInput | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -76181,6 +76236,7 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    regimenFiscal?: NullableEnumRegimenFiscalFieldUpdateOperationsInput | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -80672,6 +80728,13 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumRegimenFiscalNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.RegimenFiscal | EnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    in?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel> | $Enums.RegimenFiscal | null
+  }
+
   export type InstructorProfileCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -80686,6 +80749,7 @@ export namespace Prisma {
     instagramUrl?: SortOrder
     stripeAccountId?: SortOrder
     stripeOnboarded?: SortOrder
+    regimenFiscal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -80708,6 +80772,7 @@ export namespace Prisma {
     instagramUrl?: SortOrder
     stripeAccountId?: SortOrder
     stripeOnboarded?: SortOrder
+    regimenFiscal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -80726,6 +80791,7 @@ export namespace Prisma {
     instagramUrl?: SortOrder
     stripeAccountId?: SortOrder
     stripeOnboarded?: SortOrder
+    regimenFiscal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -80748,6 +80814,16 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumRegimenFiscalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RegimenFiscal | EnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    in?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRegimenFiscalNullableWithAggregatesFilter<$PrismaModel> | $Enums.RegimenFiscal | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
+    _max?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -84547,6 +84623,10 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableEnumRegimenFiscalFieldUpdateOperationsInput = {
+    set?: $Enums.RegimenFiscal | null
+  }
+
   export type UserUpdateOneRequiredWithoutInstructorProfileNestedInput = {
     create?: XOR<UserCreateWithoutInstructorProfileInput, UserUncheckedCreateWithoutInstructorProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutInstructorProfileInput
@@ -87886,6 +87966,13 @@ export namespace Prisma {
     _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumRegimenFiscalNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.RegimenFiscal | EnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    in?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel> | $Enums.RegimenFiscal | null
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -87911,6 +87998,16 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumRegimenFiscalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RegimenFiscal | EnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    in?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.RegimenFiscal[] | ListEnumRegimenFiscalFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRegimenFiscalNullableWithAggregatesFilter<$PrismaModel> | $Enums.RegimenFiscal | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
+    _max?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -88357,6 +88454,7 @@ export namespace Prisma {
     instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
+    regimenFiscal?: $Enums.RegimenFiscal | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -88374,6 +88472,7 @@ export namespace Prisma {
     instagramUrl?: string | null
     stripeAccountId?: string | null
     stripeOnboarded?: boolean
+    regimenFiscal?: $Enums.RegimenFiscal | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -89436,6 +89535,7 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    regimenFiscal?: NullableEnumRegimenFiscalFieldUpdateOperationsInput | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -89453,6 +89553,7 @@ export namespace Prisma {
     instagramUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripeAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     stripeOnboarded?: BoolFieldUpdateOperationsInput | boolean
+    regimenFiscal?: NullableEnumRegimenFiscalFieldUpdateOperationsInput | $Enums.RegimenFiscal | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
