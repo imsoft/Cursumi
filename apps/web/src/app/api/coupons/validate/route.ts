@@ -42,8 +42,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Este cupón no es válido para este curso" }, { status: 422 });
     }
     // Un solo uso exitoso por usuario
+    // Misma condición que el checkout. Antes esta ruta miraba solo las
+    // transacciones completadas, así que con un checkout pendiente en otro
+    // curso la interfaz anunciaba el descuento y luego el checkout lo
+    // rechazaba con un 422: dos fuentes de verdad para la misma regla.
     const alreadyUsed = await prisma.transaction.findFirst({
-      where: { userId: session.user.id, couponCode: coupon.code, status: "completed" },
+      where: {
+        userId: session.user.id,
+        couponCode: coupon.code,
+        status: { in: ["completed", "pending"] },
+        // La pendiente de ESTE curso no cuenta: es el checkout que el usuario
+        // está a punto de reintentar.
+        ...(courseId ? { NOT: { courseId, status: "pending" as const } } : {}),
+      },
       select: { id: true },
     });
     if (alreadyUsed) {
