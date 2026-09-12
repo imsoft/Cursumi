@@ -114,6 +114,11 @@ export async function POST(req: NextRequest) {
    *
    * Al marcarla `refunded` desaparece de los ingresos sola, porque todos esos
    * cálculos filtran por `completed`.
+   *
+   * Stripe dispara este mismo evento en los reembolsos PARCIALES, así que hay
+   * que distinguirlos: devolver la mitad del importe por una queja no debe
+   * dejar al alumno sin el curso. Los parciales solo avisan al admin, que es
+   * quien decide qué hacer con el acceso.
    */
   if (event.type === "charge.refunded") {
     const charge = event.data.object as Stripe.Charge;
@@ -122,7 +127,22 @@ export async function POST(req: NextRequest) {
         ? charge.payment_intent
         : (charge.payment_intent?.id ?? null);
 
-    if (paymentIntentId) {
+    const reembolsoTotal = charge.amount_refunded >= charge.amount;
+
+    if (paymentIntentId && !reembolsoTotal) {
+      const pesos = (centavos: number) =>
+        (centavos / 100).toLocaleString("es-MX", { style: "currency", currency: "MXN" });
+      await notifyAdmins({
+        type: "transaction_refunded_partial",
+        title: "Reembolso parcial",
+        body:
+          `Se devolvieron ${pesos(charge.amount_refunded)} de ${pesos(charge.amount)}. ` +
+          `El alumno conserva el acceso: revisa si procede retirarlo.`,
+        link: "/admin/finances",
+      });
+    }
+
+    if (paymentIntentId && reembolsoTotal) {
       const transaction = await prisma.transaction.findFirst({
         where: { stripePaymentId: paymentIntentId, status: "completed" },
         select: {
