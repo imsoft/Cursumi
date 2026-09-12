@@ -14,7 +14,13 @@ import { esRutaProtegida } from "@/lib/rutas-protegidas";
  *     estos carguen vía `'strict-dynamic'`.
  *
  * Notas CSP:
- *  - `'unsafe-eval'` se mantiene (lo requieren Next/HMR y algunas libs).
+ *  - `'wasm-unsafe-eval'` en lugar de `'unsafe-eval'`: permite compilar
+ *    WebAssembly (lo necesitan reproductores de video como Mux) pero NO
+ *    ejecutar texto como código, que es el vector que interesa cerrar. Lo
+ *    único que en el bundle usaba `Function(...)` era el polyfill de core-js
+ *    para obtener el objeto global, y está al final de una cadena `||`: en
+ *    cualquier navegador moderno `globalThis` resuelve antes y no llega a
+ *    evaluarse.
  *  - Los hosts (Stripe, Turnstile) son fallback para navegadores CSP2 sin
  *    `'strict-dynamic'`; en CSP3 se ignoran y la confianza se propaga por nonce.
  *  - `style-src` mantiene `'unsafe-inline'` (estilos inline de Next/Tailwind).
@@ -24,7 +30,7 @@ function buildCsp(nonce: string): string {
   const isProd = process.env.NODE_ENV === "production";
   return [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval' blob: https://challenges.cloudflare.com https://js.stripe.com`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'wasm-unsafe-eval' blob: https://challenges.cloudflare.com https://js.stripe.com`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' blob: data: https://images.unsplash.com https://res.cloudinary.com https://image.mux.com https://*.googleusercontent.com`,
     `media-src 'self' blob: data: https://stream.mux.com`,
