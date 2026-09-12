@@ -15,7 +15,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const hintId = hint ? `${inputId}-hint` : undefined;
 
     return (
-      <div className="flex w-full flex-col gap-1">
+      <div className="flex w-full flex-col gap-2">
         {label && (
           <label
             htmlFor={inputId}

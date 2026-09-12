@@ -16,7 +16,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
     const inputId = id ?? generatedId;
 
     return (
-      <div className="flex w-full flex-col gap-1">
+      <div className="flex w-full flex-col gap-2">
         {label && (
           <label
             htmlFor={inputId}

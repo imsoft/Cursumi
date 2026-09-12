@@ -53,7 +53,7 @@ export function Combobox({
   const selectedLabel = options.find((o) => o.value === value)?.label;
 
   return (
-    <div className={cn("flex w-full flex-col gap-1.5", className)}>
+    <div className={cn("flex w-full flex-col gap-2", className)}>
       {label && (
         <label
           htmlFor={id}
