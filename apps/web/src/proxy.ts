@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import { esRutaProtegida } from "@/lib/rutas-protegidas";
 
 /**
  * Proxy para Next.js 16+ (antes "middleware").
@@ -45,12 +46,10 @@ export async function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
   const pathname = request.nextUrl.pathname;
 
-  // Rutas que requieren autenticación (cookie presente; el layout valida la sesión real)
-  const protectedRoutes = ["/dashboard", "/instructor", "/admin", "/business"];
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-
-  // Si es una ruta protegida y no hay cookie de sesión, redirigir al login.
-  if (isProtectedRoute && !sessionCookie) {
+  // Rutas que requieren autenticación (cookie presente; el layout valida la
+  // sesión real). La comparación respeta los límites de ruta — ver
+  // lib/rutas-protegidas.ts.
+  if (esRutaProtegida(pathname) && !sessionCookie) {
     const redirect = NextResponse.redirect(new URL("/login", request.url));
     redirect.headers.set("Content-Security-Policy", csp);
     return redirect;
