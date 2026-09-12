@@ -20,7 +20,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-foreground"
+            className="mb-1 text-sm font-medium text-foreground"
           >
             {label}
           </label>
