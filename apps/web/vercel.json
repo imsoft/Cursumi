@@ -17,10 +17,6 @@
       "schedule": "0 9 * * 1"
     },
     {
-      "path": "/api/cron/publish-blog",
-      "schedule": "0 14 * * *"
-    },
-    {
       "path": "/api/cron/exam-retry-reminders",
       "schedule": "0 12 * * *"
     }
