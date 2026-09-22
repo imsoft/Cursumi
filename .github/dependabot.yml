@@ -20,20 +20,6 @@ updates:
           - "patch"
     # Las actualizaciones MAJOR se abren individualmente (revisar breaking changes).
     ignore:
-      # apps/mobile está en Expo SDK 57 y las versiones de todo el stack nativo
-      # las fija la SDK (`npx expo install --check` es la fuente de verdad).
-      # Subir cualquiera de estos por su cuenta rompe la app; el salto se hace
-      # a mano, SDK a SDK.
-      - dependency-name: "expo"
-      - dependency-name: "expo-*"
-      - dependency-name: "@expo/*"
-      - dependency-name: "react-native"
-      - dependency-name: "react-native-*"
-      - dependency-name: "eslint-config-expo"
-      # eslint-config-expo 57 sigue sobre eslint 9; la web ya va en 10, así que
-      # ignorar el major solo afecta a mobile.
-      - dependency-name: "eslint"
-        update-types: ["version-update:semver-major"]
       # typescript-eslint no soporta TypeScript 7.0 (soporte previsto para 7.1).
       # Quitar esta regla cuando lo anuncien.
       - dependency-name: "typescript"

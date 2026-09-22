@@ -61,19 +61,6 @@ jobs:
       - name: TypeScript check (web)
         run: pnpm --filter @cursumi/web exec tsc --noEmit
 
-      # La app móvil no tiene build en CI, así que este es el único sitio donde
-      # se detecta que una dependencia compartida (better-auth, por ejemplo)
-      # cambió su API para el cliente Expo.
-      - name: TypeScript check (mobile)
-        run: pnpm --filter @cursumi/mobile exec tsc --noEmit
-
-      # En apps/mobile las versiones las fija la SDK de Expo, no el semver de
-      # npm. tsc no detecta esa deriva: un PR que suba react a una versión que
-      # la SDK no espera compila igual y pasa CI en verde (ocurrió en #49).
-      # Esta es la única comprobación que lo caza.
-      - name: Versiones alineadas con la SDK de Expo
-        run: pnpm --filter @cursumi/mobile exec expo install --check
-
       - name: Unit tests
         run: pnpm test
 
@@ -212,9 +199,6 @@ jobs:
 
       - name: Lint (web)
         run: pnpm lint
-
-      - name: Lint (mobile)
-        run: pnpm --filter @cursumi/mobile lint -- --max-warnings=1000
 
   # App nativa de iOS (apps/ios). El repo es público, así que los runners de
   # macOS no cuestan minutos. Compila y corre las pruebas unitarias en el

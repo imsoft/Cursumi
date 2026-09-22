@@ -57,8 +57,6 @@ next-env.d.ts
 .claude/settings.json
 .claude/settings.local.json
 
-# Expo
-.expo/
 # iOS nativa (apps/ios): el .xcodeproj lo genera XcodeGen desde project.yml
 apps/ios/*.xcodeproj
 apps/ios/DerivedData/

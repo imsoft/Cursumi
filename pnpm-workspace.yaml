@@ -2,10 +2,9 @@ packages:
   - 'packages/*'
   - 'apps/*'
 
-# pnpm v11 lee la configuración desde aquí (no desde .npmrc). Layout hoisted:
-# Expo/Metro hacen require("@babel/*") "pelón" y necesitan los paquetes de
-# babel accesibles en node_modules top-level (isolated los oculta → falla el
-# bundling en Expo Go y en EAS Build).
+# pnpm v11 lee la configuración desde aquí (no desde .npmrc). El layout hoisted
+# venía de la app Expo (ya retirada); se conserva porque la web y su lockfile
+# están validados con él y cambiarlo no aporta nada.
 nodeLinker: hoisted
 
 allowBuilds:
