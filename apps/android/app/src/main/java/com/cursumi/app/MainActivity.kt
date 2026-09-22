@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         handleDeepLink(intent)
-        setContent { CursumiTheme { Root() } }
+        setContent { CursumiTheme { androidx.compose.material3.Surface(color = androidx.compose.material3.MaterialTheme.colorScheme.background) { Root() } } }
     }
 
     override fun onNewIntent(intent: Intent) {

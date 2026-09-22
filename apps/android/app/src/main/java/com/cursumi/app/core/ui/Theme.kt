@@ -21,7 +21,7 @@ object Brand {
     val gradient = Brush.linearGradient(listOf(deep, vivid, accent))
 }
 
-private val Light = lightColorScheme(primary = Brand.primary, secondary = Brand.vivid, tertiary = Brand.accent, error = Brand.danger)
+private val Light = lightColorScheme(primary = Brand.primary, secondary = Brand.vivid, tertiary = Brand.accent, error = Brand.danger, background = Color.White, surface = Color.White)
 private val Dark = darkColorScheme(primary = Color(0xFFB794F6), secondary = Brand.vivid, tertiary = Brand.accent, error = Brand.danger)
 
 @Composable

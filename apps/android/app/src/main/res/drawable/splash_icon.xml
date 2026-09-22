@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- El splash de Android 12+ recorta el icono en un círculo: un disco del mismo
+     color del fondo lo hace invisible, y el logo va con margen para caber entero. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval"><solid android:color="#4F00F6" /></shape>
+    </item>
+    <item>
+        <inset android:drawable="@drawable/logo"
+            android:insetLeft="36%" android:insetRight="36%"
+            android:insetTop="36%" android:insetBottom="36%" />
+    </item>
+</layer-list>

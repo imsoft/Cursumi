@@ -5,7 +5,7 @@
     </style>
     <style name="Theme.Cursumi.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#4F00F6</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
         <item name="postSplashScreenTheme">@style/Theme.Cursumi</item>
     </style>
 </resources>
