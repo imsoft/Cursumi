@@ -38,6 +38,21 @@ struct ProfileView: View {
                             }
                         }
                     }
+                    if profile?.role == "instructor" || profile?.role == "admin" {
+                        Section("Instructor") {
+                            NavigationLink { InstructorView() } label: { Label("Panel de instructor", systemImage: "chart.bar") }
+                            NavigationLink { InstructorAccountView() } label: { Label("Perfil de instructor", systemImage: "person.text.rectangle") }
+                            NavigationLink { CourseCreatorView() } label: { Label("Crear curso", systemImage: "plus.square") }
+                            NavigationLink { HostGamesView() } label: { Label("Hostear juegos", systemImage: "gamecontroller") }
+                            NavigationLink { WhiteboardView() } label: { Label("Pizarrón", systemImage: "pencil.and.outline") }
+                            NavigationLink { TemplatesView() } label: { Label("Plantillas", systemImage: "doc.on.doc") }
+                        }
+                    }
+                    if profile?.role == "admin" {
+                        Section("Administración") {
+                            NavigationLink { AdminView() } label: { Label("Administración", systemImage: "shield") }
+                        }
+                    }
                     Section {
                         NavigationLink { NotificationsView() } label: { Label("Notificaciones", systemImage: "bell") }
                         NavigationLink { CertificatesView() } label: { Label("Certificados", systemImage: "rosette") }
@@ -47,6 +62,7 @@ struct ProfileView: View {
                         NavigationLink { ReferralView() } label: { Label("Referidos", systemImage: "gift") }
                         NavigationLink { OrgMaterialsView() } label: { Label("Materiales de mi empresa", systemImage: "folder") }
                         NavigationLink { BlogView() } label: { Label("Blog", systemImage: "newspaper") }
+                        NavigationLink { BusinessView() } label: { Label("Para empresas", systemImage: "building.2") }
                     }
                     Section {
                         Button { editing = true } label: { Label("Editar perfil", systemImage: "pencil") }
