@@ -11,7 +11,14 @@ final class SessionStore {
         case signedIn(SessionUser)
     }
 
-    private(set) var state: State = .loading
+    private(set) var state: State = .loading {
+        didSet {
+            // Al entrar, registrar el dispositivo para push (idempotente).
+            if case .signedIn = state, case .signedIn = oldValue {} else if case .signedIn = state {
+                Task { await PushManager.shared.register() }
+            }
+        }
+    }
     private let auth: AuthService
 
     init(auth: AuthService = AuthService()) {
@@ -54,6 +61,7 @@ final class SessionStore {
     }
 
     func signOut() async {
+        await PushManager.shared.unregister() // antes de invalidar la cookie
         await auth.signOut()
         state = .signedOut
     }

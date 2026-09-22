@@ -66,9 +66,15 @@ La app **no vende**: la ficha del curso y los certificados se abren en Safari
 (`SFSafariViewController`). Sin botón de compra ni enlace a checkout dentro de la
 app, para cumplir las reglas de Apple sin pagar comisión de tienda.
 
-## Qué falta respecto a la app Expo
+## Push (APNs)
 
-Solo las **notificaciones push** (requiere la clave APNs de Apple y un envío
-desde el servidor; la app Expo usa el servicio de Expo, que no sirve para una
-app nativa). Se van portando por fases; mientras, la app
+La app registra el token de APNs en `POST /api/me/push-token` con el prefijo
+`apns:`; el servidor lo manda por HTTP/2 (`apps/web/src/lib/apns-push.ts`).
+Para activarlo hacen falta en Vercel `APNS_KEY_ID`, `APNS_TEAM_ID` y `APNS_KEY`
+(clave .p8 de Apple Developer → Keys) y la capacidad Push Notifications en el
+App ID. Sin eso la app funciona igual, solo sin push.
+
+## Paridad
+
+Completa respecto a la app Expo. Se van portando por fases; mientras, la app
 Expo sigue viva en `apps/mobile`.

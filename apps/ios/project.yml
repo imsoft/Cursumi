@@ -20,6 +20,11 @@ targets:
     platform: iOS
     sources:
       - path: Cursumi
+    entitlements:
+      path: Cursumi/Resources/Cursumi.entitlements
+      properties:
+        # Push nativo (APNs). Xcode cambia a "production" al archivar.
+        aps-environment: development
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.cursumi.app
