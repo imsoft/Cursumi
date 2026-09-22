@@ -4,7 +4,9 @@ Plataforma de cursos virtuales, presenciales y en vivo: estudiantes exploran e i
 
 **Stack:** Next.js 16 (App Router), React 19, Better Auth, Neon + Prisma 7, shadcn/ui + Tailwind CSS v4, editor enriquecido con **Lexical**. Vídeo con Mux, medios con Cloudinary, pagos con Stripe (Connect para instructores). Funciones de **IA para admin** (Google Gemini) opcionales vía API.
 
-**Documentación extra:** [docs/PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md) y [docs/README.md](./docs/README.md).
+**Monorepo:** la web vive en `apps/web`; las apps nativas en `apps/ios` (Swift/SwiftUI) y `apps/android` (Kotlin/Compose); código compartido en `packages/shared`.
+
+**Documentación extra:** [docs/PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md), [docs/README.md](./docs/README.md) y, para instalar y correr las apps móviles en tu Mac o tu celular, [docs/APPS-MOVILES.md](./docs/APPS-MOVILES.md).
 
 ---
 

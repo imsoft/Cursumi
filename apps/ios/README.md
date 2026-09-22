@@ -11,6 +11,8 @@ servidor solo la atiende el plugin `native-app` de better-auth
 
 ## Cómo correrla
 
+Guía paso a paso (simulador, iPhone, errores frecuentes): [docs/APPS-MOVILES.md](../../docs/APPS-MOVILES.md).
+
 ```bash
 cd apps/ios
 xcodegen generate      # crea Cursumi.xcodeproj a partir de project.yml (no se versiona)

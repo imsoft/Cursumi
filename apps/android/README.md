@@ -11,6 +11,8 @@ servidor solo la atiende el plugin `native-app` de better-auth
 
 ## Cómo correrla
 
+Guía paso a paso (emulador, teléfono, errores frecuentes): [docs/APPS-MOVILES.md](../../docs/APPS-MOVILES.md).
+
 ```bash
 cd apps/android
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"  # o tu JDK
@@ -66,11 +68,14 @@ Se reutilizan los editores de la web dentro de un `WebView`. La interfaz JS se l
 `CursumiNative`; la web la detecta para ocultar su chrome y entregar el PDF por
 `postMessage`; el PDF se comparte con `FileProvider`.
 
-## Push
+## Push (FCM)
 
-Pendiente: en Android las push nativas van por FCM, que necesita un proyecto de
-Firebase (`google-services.json`) y un envío desde el servidor. Ver [[app-nativa-swift-kotlin]]
-en la memoria del proyecto.
+La app pide permiso (Android 13+), obtiene el token de Firebase Cloud Messaging y
+lo registra en `POST /api/me/push-token` con el prefijo `fcm:`; el servidor envía
+por la API HTTP v1 (`apps/web/src/lib/fcm-push.ts`). Requiere
+`app/google-services.json` (versionado, es público) y en Vercel la variable
+`FCM_SERVICE_ACCOUNT` con la cuenta de servicio de Firebase (secreta). En el
+emulador funciona si la imagen trae Google Play.
 
 ## Paridad
 
