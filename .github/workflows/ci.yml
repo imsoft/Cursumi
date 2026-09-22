@@ -3,8 +3,9 @@ name: CI
 on:
   push:
     branches: [main]
+  # Sin filtro de rama base: los PR apilados (p. ej. Android sobre iOS) también
+  # deben pasar por CI antes de que su base se mergee a main.
   pull_request:
-    branches: [main]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -59,19 +60,6 @@ jobs:
 
       - name: TypeScript check (web)
         run: pnpm --filter @cursumi/web exec tsc --noEmit
-
-      # La app móvil no tiene build en CI, así que este es el único sitio donde
-      # se detecta que una dependencia compartida (better-auth, por ejemplo)
-      # cambió su API para el cliente Expo.
-      - name: TypeScript check (mobile)
-        run: pnpm --filter @cursumi/mobile exec tsc --noEmit
-
-      # En apps/mobile las versiones las fija la SDK de Expo, no el semver de
-      # npm. tsc no detecta esa deriva: un PR que suba react a una versión que
-      # la SDK no espera compila igual y pasa CI en verde (ocurrió en #49).
-      # Esta es la única comprobación que lo caza.
-      - name: Versiones alineadas con la SDK de Expo
-        run: pnpm --filter @cursumi/mobile exec expo install --check
 
       - name: Unit tests
         run: pnpm test
@@ -212,9 +200,6 @@ jobs:
       - name: Lint (web)
         run: pnpm lint
 
-      - name: Lint (mobile)
-        run: pnpm --filter @cursumi/mobile lint -- --max-warnings=1000
-
   # App nativa de iOS (apps/ios). El repo es público, así que los runners de
   # macOS no cuestan minutos. Compila y corre las pruebas unitarias en el
   # simulador; el .xcodeproj se genera aquí con XcodeGen desde project.yml.
@@ -257,3 +242,33 @@ jobs:
           xcodebuild test -project Cursumi.xcodeproj -scheme Cursumi \
             -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
             CODE_SIGNING_ALLOWED=NO -quiet
+
+  # App nativa de Android (apps/android). Compila el APK de debug y corre las
+  # pruebas unitarias. El wrapper de Gradle va versionado, así que no hay que
+  # instalar nada más que el JDK y el SDK (el runner ya trae el SDK).
+  android:
+    name: Android (build + tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apps/android
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Build
+        run: ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Unit tests
+        run: ./gradlew --no-daemon :app:testDebugUnitTest
