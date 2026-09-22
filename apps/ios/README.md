@@ -67,6 +67,6 @@ app, para cumplir las reglas de Apple sin pagar comisión de tienda.
 
 ## Qué falta respecto a la app Expo
 
-Chat con el instructor, notas, reflexiones, reseñas, referidos, blog, panel de
-instructor, panel de administración, juegos en vivo y notificaciones push. Se van portando por fases; mientras, la app
+Panel de instructor, panel de administración, anfitrión de juegos en vivo y
+notificaciones push. Se van portando por fases; mientras, la app
 Expo sigue viva en `apps/mobile`.

@@ -42,7 +42,18 @@ struct ProfileView: View {
                         NavigationLink { NotificationsView() } label: { Label("Notificaciones", systemImage: "bell") }
                         NavigationLink { CertificatesView() } label: { Label("Certificados", systemImage: "rosette") }
                         NavigationLink { WishlistView() } label: { Label("Lista de deseos", systemImage: "heart") }
+                        NavigationLink { NotesView() } label: { Label("Mis notas", systemImage: "note.text") }
+                        NavigationLink { GamesView() } label: { Label("Unirse a un juego", systemImage: "gamecontroller") }
+                        NavigationLink { ReferralView() } label: { Label("Referidos", systemImage: "gift") }
+                        NavigationLink { OrgMaterialsView() } label: { Label("Materiales de mi empresa", systemImage: "folder") }
+                        NavigationLink { BlogView() } label: { Label("Blog", systemImage: "newspaper") }
+                    }
+                    Section {
                         Button { editing = true } label: { Label("Editar perfil", systemImage: "pencil") }
+                        NavigationLink { SettingsView() } label: { Label("Configuración", systemImage: "gearshape") }
+                        if profile?.role == "student" {
+                            NavigationLink { BecomeInstructorView() } label: { Label("Conviértete en instructor", systemImage: "person.badge.plus") }
+                        }
                     }
                     if let error {
                         Section { Text(error).foregroundStyle(Brand.danger) }

@@ -34,6 +34,9 @@ struct CourseDetailView: View {
                         .listRowSeparator(.hidden)
                     }
                     Section {
+                        NavigationLink { ChatView(courseId: courseId) } label: {
+                            Label("Mensajes con el instructor", systemImage: "bubble.left.and.bubble.right").foregroundStyle(Brand.primary)
+                        }
                         NavigationLink { ExamView(courseId: courseId) } label: {
                             Label("Examen final", systemImage: "graduationcap.fill").foregroundStyle(Brand.primary)
                         }
@@ -63,6 +66,8 @@ struct CourseDetailView: View {
                             }
                         }
                     }
+                    Section { ReflectionsSection(courseId: courseId).listRowSeparator(.hidden) }
+                    Section { ReviewsSection(courseId: courseId).listRowSeparator(.hidden) }
                 }
                 .listStyle(.insetGrouped)
             } else {

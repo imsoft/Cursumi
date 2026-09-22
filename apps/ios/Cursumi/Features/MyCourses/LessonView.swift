@@ -48,6 +48,8 @@ struct LessonView: View {
                             }
                             .tint(done ? Brand.success : Brand.primary)
                         }
+
+                        NotesSection(courseId: lesson.courseId, lessonId: lesson.id)
                     }
                     .padding(16)
                 }
