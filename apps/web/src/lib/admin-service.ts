@@ -258,6 +258,8 @@ export type AdminFinances = {
     paidToInstructors: number;
     stripeFees: number;
     netPlatform: number;
+    /** Ventas cobradas cuya comisión de Stripe aún no se ha leído. */
+    withoutStripeFee: number;
   };
 };
 
@@ -276,7 +278,7 @@ export async function getAdminFinances(): Promise<AdminFinances> {
   ] = await Promise.all([
     prisma.transaction.findMany({
       where: { status: "completed" },
-      select: { amount: true, platformFee: true, instructorAmount: true, createdAt: true },
+      select: { amount: true, platformFee: true, instructorAmount: true, stripeFee: true, createdAt: true },
     }),
     prisma.transaction.findMany({
       where: { status: "completed", createdAt: { gte: startOfMonth } },
@@ -356,7 +358,7 @@ export async function getAdminFinances(): Promise<AdminFinances> {
     student: t.user.name ?? "—",
     amount: t.amount,
     platformFee: t.platformFee ?? 0,
-    stripeFee: 0,
+    stripeFee: t.stripeFee ?? 0,
     date: t.createdAt.toISOString().slice(0, 10),
     status: t.status,
   }));
@@ -401,11 +403,17 @@ export async function getAdminFinances(): Promise<AdminFinances> {
     .slice(0, 10);
 
   const paidToInstructors = allCompleted.reduce((s, t) => s + (t.instructorAmount ?? t.amount - (t.platformFee ?? 0)), 0); // instructorAmount en centavos
+  // La comisión de Stripe sale de la parte de Cursumi, nunca de la del
+  // instructor: el neto real es comisión de plataforma menos Stripe. Las
+  // ventas sin stripeFee (anteriores al registro) cuentan como 0 y se avisa.
+  const stripeFees = allCompleted.reduce((s, t) => s + (t.stripeFee ?? 0), 0);
+  const withoutStripeFee = allCompleted.filter((t) => t.stripeFee == null).length;
   const commissionSummary = {
     platformCommission: totalPlatformFee,
     paidToInstructors,
-    stripeFees: 0,
-    netPlatform: totalPlatformFee,
+    stripeFees,
+    netPlatform: totalPlatformFee - stripeFees,
+    withoutStripeFee,
   };
 
   return {

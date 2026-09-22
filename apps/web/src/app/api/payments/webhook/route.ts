@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { notifyAdmins, notifyEnrollment } from "@/lib/notification-helpers";
+import { fetchStripeFee } from "@/lib/stripe-fee";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -43,10 +44,19 @@ export async function POST(req: NextRequest) {
     const sessionId = (session.metadata?.sessionId as string) || null;
 
     if (!alreadyCompleted) {
+      const paymentIntentId =
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : (session.payment_intent?.id ?? null);
+      // Lo que Stripe se quedó de este cobro: sin esto el admin ve la comisión
+      // de Cursumi pero no el neto real. Si falla, la venta se registra igual
+      // y queda en null para el backfill.
+      const stripeFee = paymentIntentId ? await fetchStripeFee(paymentIntentId) : null;
       await prisma.transaction.update({
         where: { id: transaction.id },
         data: {
           status: "completed",
+          stripeFee,
           // Sesiones creadas antes de existir el estado de pago: si hay parte
           // para el instructor y no se repartió en el cobro, queda pendiente.
           ...(transaction.payoutStatus === "none" && (transaction.instructorAmount ?? 0) > 0
@@ -55,10 +65,7 @@ export async function POST(req: NextRequest) {
           // Sin el PaymentIntent no hay manera de encontrar esta transacción
           // cuando Stripe avise de un reembolso: el evento charge.refunded no
           // trae el id de la sesión de checkout.
-          stripePaymentId:
-            typeof session.payment_intent === "string"
-              ? session.payment_intent
-              : (session.payment_intent?.id ?? null),
+          stripePaymentId: paymentIntentId,
         },
       });
     }

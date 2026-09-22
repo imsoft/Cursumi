@@ -671,6 +671,9 @@ model Transaction {
   platformFee      Int?
   instructorAmount Int?
   couponCode       String?           // cupón aplicado al momento del pago
+  /// Comisión que Stripe cobró por este pago, en centavos. La absorbe Cursumi.
+  /// Se lee del balance_transaction al confirmar el cobro; null si aún no se pudo leer.
+  stripeFee        Int?
   /// Estado del pago al instructor (ver enum). Se fija al cobrar y lo cambia el admin.
   payoutStatus     PayoutStatus      @default(none)
   /// Id del Transfer de Stripe cuando el pago fue por Connect (manual o automático).

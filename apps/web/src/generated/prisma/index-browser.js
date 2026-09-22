@@ -412,6 +412,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   platformFee: 'platformFee',
   instructorAmount: 'instructorAmount',
   couponCode: 'couponCode',
+  stripeFee: 'stripeFee',
   payoutStatus: 'payoutStatus',
   stripeTransferId: 'stripeTransferId',
   paidOutAt: 'paidOutAt',
