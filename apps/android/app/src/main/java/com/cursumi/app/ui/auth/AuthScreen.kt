@@ -88,14 +88,24 @@ fun AuthScreen() {
                     try {
                         // Abre el navegador; la vuelta (mobile://?cookie=…) la recibe MainActivity.
                         val uri = app.auth.startGoogle()
-                        CustomTabsIntent.Builder().build().launchUrl(context, uri)
+                        try {
+                            CustomTabsIntent.Builder().build().launchUrl(context, uri)
+                        } catch (_: android.content.ActivityNotFoundException) {
+                            // Sin navegador con Custom Tabs (p. ej. un emulador pelón): el que haya.
+                            context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, uri))
+                        }
                     } catch (e: Exception) {
                         error = "No se pudo continuar con Google. Inténtalo de nuevo."
                     } finally { googleLoading = false }
                 }
             },
             enabled = !googleLoading, modifier = Modifier.fillMaxWidth().height(50.dp),
-        ) { Text(if (googleLoading) "Abriendo…" else "Continuar con Google", fontWeight = FontWeight.SemiBold) }
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                androidx.compose.material3.Icon(painterResource(R.drawable.ic_google), contentDescription = null, modifier = Modifier.size(20.dp), tint = Color.Unspecified)
+                Text(if (googleLoading) "Abriendo…" else "Continuar con Google", fontWeight = FontWeight.SemiBold, color = Color(0xFF111827))
+            }
+        }
 
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             HorizontalDivider(Modifier.weight(1f)); Text("o", color = Brand.muted); HorizontalDivider(Modifier.weight(1f))

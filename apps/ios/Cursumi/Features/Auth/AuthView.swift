@@ -226,17 +226,10 @@ struct CheckboxToggleStyle: ToggleStyle {
     }
 }
 
-/// "G" de Google en sus cuatro colores.
+/// "G" oficial de Google (SVG vectorial en el catálogo de assets).
 struct GoogleIcon: View {
     var body: some View {
-        ZStack {
-            Circle().trim(from: 0.0, to: 0.25).stroke(Color(hex: 0xEA4335), lineWidth: 4).rotationEffect(.degrees(-90))
-            Circle().trim(from: 0.25, to: 0.5).stroke(Color(hex: 0xFBBC05), lineWidth: 4).rotationEffect(.degrees(-90))
-            Circle().trim(from: 0.5, to: 0.75).stroke(Color(hex: 0x34A853), lineWidth: 4).rotationEffect(.degrees(-90))
-            Circle().trim(from: 0.75, to: 0.95).stroke(Color(hex: 0x4285F4), lineWidth: 4).rotationEffect(.degrees(-90))
-            Rectangle().fill(Color(hex: 0x4285F4)).frame(width: 9, height: 4).offset(x: 4.5, y: 0)
-        }
-        .padding(2)
+        Image("GoogleG").resizable().scaledToFit()
     }
 }
 
