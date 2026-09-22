@@ -7,6 +7,7 @@
 import { prisma } from "./prisma";
 import { sendPushToUser } from "./web-push";
 import { sendApnsPushToUser } from "./apns-push";
+import { sendFcmPushToUser } from "./fcm-push";
 
 export interface CreateNotificationInput {
   userId: string;
@@ -35,6 +36,7 @@ export async function createNotification(input: CreateNotificationInput) {
   };
   sendPushToUser(input.userId, payload).catch(() => {}); // web (navegador)
   sendApnsPushToUser(input.userId, payload).catch(() => {}); // iOS nativa (APNs)
+  sendFcmPushToUser(input.userId, payload).catch(() => {}); // Android nativa (FCM)
 
   return notification;
 }

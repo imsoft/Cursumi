@@ -31,7 +31,7 @@ class CursumiApp : Application() {
         )
         api = ApiClient(jar)
         auth = AuthService(api)
-        session = SessionStore(auth)
+        session = SessionStore(auth, onSignOut = { com.cursumi.app.core.PushManager.unregister(this) })
         student = StudentApi(api)
         social = SocialApi(api)
         instructor = InstructorApi(api)

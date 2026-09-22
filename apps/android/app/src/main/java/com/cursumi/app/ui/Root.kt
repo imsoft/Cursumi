@@ -19,6 +19,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.cursumi.app.core.PushManager
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -109,6 +115,18 @@ private val tabs = listOf(
 @Composable
 fun AppNav() {
     val nav: NavHostController = rememberNavController()
+    val context = LocalContext.current
+    // Push: en Android 13+ hay que pedir permiso; después se registra el token de FCM.
+    val askPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) PushManager.register(context)
+    }
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            askPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            PushManager.register(context)
+        }
+    }
     val backStack by nav.currentBackStackEntryAsState()
     val current = backStack?.destination?.route
     val showBar = tabs.any { it.route == current }

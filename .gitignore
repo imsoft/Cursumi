@@ -72,3 +72,6 @@ apps/android/.idea/
 apps/android/*.iml
 apps/android/app/*.iml
 apps/android/.kotlin/
+
+# Clave de servicio de Firebase (FCM): secreto, va en Vercel como FCM_SERVICE_ACCOUNT
+apps/web/fcm-service-account.json

@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { prisma } from "@/lib/prisma";
 import { isApnsToken } from "@/lib/apns-push";
+import { isFcmToken } from "@/lib/fcm-push";
 
 interface TokenBody {
   token: string;
 }
 
-// Tokens de las apps nativas: iOS (`apns:<64 hex>`); Android (`fcm:…`) cuando exista.
+// Tokens de las apps nativas: iOS (`apns:<64 hex>`) y Android (`fcm:<token>`).
 function isValidPushToken(token: unknown): token is string {
-  return typeof token === "string" && isApnsToken(token);
+  return typeof token === "string" && (isApnsToken(token) || isFcmToken(token));
 }
 
 // POST /api/me/push-token — registrar el token de push del dispositivo

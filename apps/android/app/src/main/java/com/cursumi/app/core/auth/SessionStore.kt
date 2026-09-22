@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import com.cursumi.app.core.api.NetworkException
 
 /** Estado global de la sesión. */
-class SessionStore(private val auth: AuthService) {
+class SessionStore(private val auth: AuthService, private val onSignOut: suspend () -> Unit = {}) {
     sealed interface State {
         data object Loading : State
         data object SignedOut : State
@@ -38,6 +38,7 @@ class SessionStore(private val auth: AuthService) {
     }
 
     suspend fun signOut() {
+        onSignOut() // da de baja el token de push antes de invalidar la cookie
         auth.signOut()
         state = State.SignedOut
     }
