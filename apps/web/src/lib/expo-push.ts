@@ -30,8 +30,10 @@ interface ExpoPushTicket {
  * Elimina tokens marcados por Expo como no registrados (DeviceNotRegistered).
  */
 export async function sendExpoPushToUser(userId: string, payload: PushPayload): Promise<void> {
+  // Solo tokens de Expo: los de la app nativa de iOS (prefijo `apns:`) van por
+  // `sendApnsPushToUser`; Expo rechazaría ese formato.
   const tokens = await prisma.expoPushToken.findMany({
-    where: { userId },
+    where: { userId, token: { startsWith: "Expo" } },
     select: { token: true },
   });
   if (tokens.length === 0) return;

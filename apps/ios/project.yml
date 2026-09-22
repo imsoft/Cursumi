@@ -1,0 +1,81 @@
+name: Cursumi
+options:
+  bundleIdPrefix: com.cursumi
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "27.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  Cursumi:
+    type: application
+    platform: iOS
+    sources:
+      - path: Cursumi
+    entitlements:
+      path: Cursumi/Resources/Cursumi.entitlements
+      properties:
+        # Push nativo (APNs). Xcode cambia a "production" al archivar.
+        aps-environment: development
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cursumi.app
+        INFOPLIST_FILE: Cursumi/Resources/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: NO
+    info:
+      path: Cursumi/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Cursumi
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: Logo
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIUserInterfaceStyle: Automatic
+        # Deep link de vuelta desde el navegador tras entrar con Google.
+        # Debe coincidir con `Config.scheme` y con trustedOrigins del servidor.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.cursumi.app
+            CFBundleURLSchemes: [mobile]
+        NSPhotoLibraryUsageDescription: Cursumi necesita acceso a tus fotos para actualizar tu foto de perfil.
+        ITSAppUsesNonExemptEncryption: false
+  CursumiTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: CursumiTests
+    dependencies:
+      - target: Cursumi
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cursumi.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Cursumi:
+    build:
+      targets:
+        Cursumi: all
+        CursumiTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - CursumiTests

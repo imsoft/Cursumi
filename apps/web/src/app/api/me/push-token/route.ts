@@ -1,27 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { prisma } from "@/lib/prisma";
+import { isApnsToken } from "@/lib/apns-push";
 
 interface TokenBody {
   token: string;
 }
 
-// Acepta solo tokens con el formato de Expo: ExponentPushToken[...] o ExpoPushToken[...]
-function isValidExpoToken(token: unknown): token is string {
+// Acepta tokens de Expo (ExponentPushToken[...] / ExpoPushToken[...]) y de la
+// app nativa de iOS (`apns:<64 hex>`).
+function isValidPushToken(token: unknown): token is string {
   return (
     typeof token === "string" &&
-    /^Expo(nent)?PushToken\[.+\]$/.test(token)
+    (/^Expo(nent)?PushToken\[.+\]$/.test(token) || isApnsToken(token))
   );
 }
 
-// POST /api/me/push-token — registrar el token de Expo del dispositivo
+// POST /api/me/push-token — registrar el token de push del dispositivo (Expo o APNs)
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
     const body = (await req.json()) as TokenBody;
 
-    if (!isValidExpoToken(body.token)) {
-      return NextResponse.json({ error: "Token de Expo inválido" }, { status: 400 });
+    if (!isValidPushToken(body.token)) {
+      return NextResponse.json({ error: "Token de push inválido" }, { status: 400 });
     }
 
     await prisma.expoPushToken.upsert({

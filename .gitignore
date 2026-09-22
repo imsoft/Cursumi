@@ -59,3 +59,8 @@ next-env.d.ts
 
 # Expo
 .expo/
+# iOS nativa (apps/ios): el .xcodeproj lo genera XcodeGen desde project.yml
+apps/ios/*.xcodeproj
+apps/ios/DerivedData/
+xcuserdata/
+*.xcuserstate
