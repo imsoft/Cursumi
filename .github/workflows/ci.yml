@@ -3,8 +3,9 @@ name: CI
 on:
   push:
     branches: [main]
+  # Sin filtro de rama base: los PR apilados (p. ej. Android sobre iOS) también
+  # deben pasar por CI antes de que su base se mergee a main.
   pull_request:
-    branches: [main]
 
 concurrency:
   group: ci-${{ github.ref }}
