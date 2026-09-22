@@ -412,6 +412,10 @@ exports.Prisma.TransactionScalarFieldEnum = {
   platformFee: 'platformFee',
   instructorAmount: 'instructorAmount',
   couponCode: 'couponCode',
+  payoutStatus: 'payoutStatus',
+  stripeTransferId: 'stripeTransferId',
+  paidOutAt: 'paidOutAt',
+  payoutNote: 'payoutNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -851,6 +855,13 @@ exports.TransactionStatus = exports.$Enums.TransactionStatus = {
   completed: 'completed',
   failed: 'failed',
   refunded: 'refunded'
+};
+
+exports.PayoutStatus = exports.$Enums.PayoutStatus = {
+  none: 'none',
+  pending: 'pending',
+  transferred: 'transferred',
+  automatic: 'automatic'
 };
 
 exports.GameStatus = exports.$Enums.GameStatus = {

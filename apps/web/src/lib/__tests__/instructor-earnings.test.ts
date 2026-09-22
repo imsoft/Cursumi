@@ -32,6 +32,9 @@ type TxMock = {
   createdAt: Date;
   user: { name: string | null; image: string | null };
   course: { title: string };
+  couponCode?: string | null;
+  payoutStatus?: "none" | "pending" | "transferred" | "automatic";
+  paidOutAt?: Date | null;
 };
 
 let cursos: CursoMock[] = [];
@@ -123,6 +126,26 @@ describe("getInstructorEarnings", () => {
     expect(porCurso.c1.sharePercentage).toBe(0);
     expect(porCurso.c2.grossRevenue).toBe(180);
     expect(porCurso.c2.sharePercentage).toBe(100);
+  });
+
+  it("separa lo depositado por Stripe, lo transferido y lo pendiente", async () => {
+    cursos = [curso("c1", "Curso", 100, 3)];
+    transacciones = [
+      { ...tx("a", "c1", 10000), payoutStatus: "automatic" },
+      { ...tx("b", "c1", 10000), payoutStatus: "transferred", paidOutAt: new Date("2026-09-20") },
+      // Sin estado (anterior a la migración): el dinero sigue en Cursumi.
+      tx("c", "c1", 10000),
+      { ...tx("d", "c1", 0, { platformFee: 0, instructorAmount: 0 }), payoutStatus: "none" },
+    ] as TxMock[];
+
+    const e = await getInstructorEarnings("inst-1");
+
+    expect(e.payouts).toEqual({ automaticNet: 85, transferredNet: 85, pendingNet: 85, pendingCount: 1 });
+    const fila = e.recentTransactions.find((t) => t.id === "a")!;
+    expect(fila.feeAmount).toBe(15);
+    expect(fila.feePercent).toBe(15);
+    expect(fila.netAmount).toBe(85);
+    expect(e.recentTransactions.find((t) => t.id === "b")!.paidOutAt).toBe("2026-09-20T00:00:00.000Z");
   });
 
   it("cambiar el precio del curso no reescribe el histórico", async () => {

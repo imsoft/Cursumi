@@ -205,6 +205,18 @@ enum TransactionStatus {
   refunded
 }
 
+/// Qué pasó con la parte del instructor de una transacción cobrada.
+///  - none: no hay nada que pagar (importe 0, pendiente, fallida o reembolsada)
+///  - pending: el dinero está en la cuenta de Stripe de Cursumi y hay que transferirlo
+///  - transferred: el admin ya lo transfirió (Stripe Connect o a mano, ver payoutNote)
+///  - automatic: Stripe lo mandó al instructor en el mismo cobro (transfer_data)
+enum PayoutStatus {
+  none
+  pending
+  transferred
+  automatic
+}
+
 enum ReferralStatus {
   pending   // registrado pero sin compra aún
   earned    // primera compra completada — comisión acumulada
@@ -659,6 +671,13 @@ model Transaction {
   platformFee      Int?
   instructorAmount Int?
   couponCode       String?           // cupón aplicado al momento del pago
+  /// Estado del pago al instructor (ver enum). Se fija al cobrar y lo cambia el admin.
+  payoutStatus     PayoutStatus      @default(none)
+  /// Id del Transfer de Stripe cuando el pago fue por Connect (manual o automático).
+  stripeTransferId String?
+  paidOutAt        DateTime?
+  /// Nota libre del admin (p. ej. "SPEI 22/09/2026, folio 1234").
+  payoutNote       String?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 
@@ -671,6 +690,7 @@ model Transaction {
   @@index([courseId])
   @@index([status])
   @@index([userId, courseId, status]) // acelera findFirst en checkout (pending transactions)
+  @@index([payoutStatus])
 }
 
 // ─────────────────────────────────────────

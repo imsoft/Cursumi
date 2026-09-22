@@ -6,6 +6,7 @@ import { stripe, calculateSplit } from "@/lib/stripe";
 import { getPlatformFeePercent } from "@/lib/platform-fee";
 import { handleApiError, requireSession } from "@/lib/api-helpers";
 import { checkRateLimitAsync } from "@/lib/rate-limit";
+import { canSplitAtCheckout, initialPayoutStatus } from "@/lib/payouts";
 
 const bodySchema = z.object({
   courseId: z.string().min(1),
@@ -39,7 +40,14 @@ export async function POST(req: NextRequest) {
 
     const course = await prisma.course.findUnique({
       where: { id: courseId, status: "published" },
-      select: { id: true, title: true, price: true, imageUrl: true },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        imageUrl: true,
+        // Para repartir en el propio cobro si el instructor ya tiene Stripe Connect.
+        instructor: { select: { instructorProfile: { select: { stripeAccountId: true, stripeOnboarded: true } } } },
+      },
     });
 
     if (!course) {
@@ -164,6 +172,7 @@ export async function POST(req: NextRequest) {
           platformFee,
           instructorAmount,
           couponCode: appliedCoupon?.code ?? null,
+          payoutStatus: "none", // no se cobró nada: no hay parte que pagar
         },
       });
 
@@ -206,6 +215,13 @@ export async function POST(req: NextRequest) {
     const platformFeePercent = await getPlatformFeePercent();
     const { platformFee, instructorAmount } = calculateSplit(amountCents, platformFeePercent);
 
+    // Reparto en el propio cobro (Stripe Connect, "destination charge"): la
+    // parte del instructor va a su cuenta al confirmarse el pago y Cursumi se
+    // queda con la comisión. Sin cuenta conectada, todo entra a Cursumi y la
+    // transacción queda pendiente de transferir desde /admin/payouts.
+    const connect = course.instructor.instructorProfile;
+    const splitAtCheckout = canSplitAtCheckout(connect) && instructorAmount > 0;
+
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -229,6 +245,14 @@ export async function POST(req: NextRequest) {
         userId: session.user.id,
         ...(sessionId ? { sessionId } : {}),
       },
+      ...(splitAtCheckout
+        ? {
+            payment_intent_data: {
+              application_fee_amount: platformFee,
+              transfer_data: { destination: connect.stripeAccountId },
+            },
+          }
+        : {}),
     });
 
     await prisma.transaction.create({
@@ -242,6 +266,7 @@ export async function POST(req: NextRequest) {
         platformFee,
         instructorAmount,
         couponCode: appliedCoupon?.code ?? null,
+        payoutStatus: initialPayoutStatus({ instructorAmount, splitAtCheckout }),
       },
     });
 

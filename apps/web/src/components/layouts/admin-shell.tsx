@@ -17,6 +17,7 @@ import {
   Settings,
   BarChart3,
   DollarSign,
+  Landmark,
   Calculator,
   Tag,
   GraduationCap,
@@ -64,6 +65,7 @@ const adminSections = [
     label: "Finanzas",
     items: [
       { title: "Finanzas", href: "/admin/finances", icon: DollarSign },
+      { title: "Pagos a instructores", href: "/admin/payouts", icon: Landmark },
       { title: "Cupones", href: "/admin/coupons", icon: Ticket },
       { title: "Simulador", href: "/admin/simulator", icon: Calculator },
     ],

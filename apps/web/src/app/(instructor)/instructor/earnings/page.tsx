@@ -25,7 +25,7 @@ export default async function InstructorEarningsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 py-4">
       <Suspense fallback={<Skeleton className="h-20 w-full rounded-2xl" />}>
-        <StripeConnectBanner />
+        <StripeConnectBanner platformFeePercent={platformFeePercent} />
       </Suspense>
       <InstructorEarningsClient earnings={earnings} platformFeePercent={platformFeePercent} />
     </div>

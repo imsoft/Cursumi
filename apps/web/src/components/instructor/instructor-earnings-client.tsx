@@ -22,9 +22,12 @@ import {
   PieChart,
   CheckCircle2,
   HelpCircle,
+  Landmark,
+  Clock,
 } from "lucide-react";
-import type { InstructorEarnings } from "@/lib/instructor-service";
+import type { InstructorEarnings, RecentTransaction } from "@/lib/instructor-service";
 import { contar } from "@/lib/plural";
+import { payoutLabel } from "@/lib/payouts";
 
 interface InstructorEarningsClientProps {
   earnings: InstructorEarnings;
@@ -60,17 +63,23 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
   const projectedGross = calcPrice * calcStudents;
   const projectedFee = Math.round((projectedGross * platformFeePercent) / 100);
   const projectedNet = projectedGross - projectedFee;
+  const instructorPercent = 100 - platformFeePercent;
 
   // Export CSV Handler
   const handleExportCSV = () => {
-    const headers = ["ID Transaccion", "Fecha", "Estudiante", "Curso", "Monto Bruto (MXN)", "Ganancia Neta (MXN)"];
+    const headers = ["ID Transaccion", "Fecha", "Estudiante", "Curso", "Cupon", "Cobrado (MXN)", "Comision Cursumi (MXN)", "% comision", "Tu parte (MXN)", "Estado del pago", "Fecha de pago"];
     const rows = earnings.recentTransactions.map((tx) => [
       tx.id,
       new Date(tx.createdAt).toLocaleDateString("es-MX"),
       `"${tx.studentName.replace(/"/g, '""')}"`,
       `"${tx.courseTitle.replace(/"/g, '""')}"`,
+      tx.couponCode ?? "",
       tx.amount,
+      tx.feeAmount,
+      tx.feePercent,
       tx.netAmount,
+      `"${payoutLabel(tx.payoutStatus, tx.paidOutAt)}"`,
+      tx.paidOutAt ? new Date(tx.paidOutAt).toLocaleDateString("es-MX") : "",
     ]);
 
     const csvContent =
@@ -100,7 +109,7 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
             </Badge>
           </div>
           <p className="text-sm text-muted-foreground mt-1">
-            Resumen de ventas, ganancias netas (85%), desglose por curso y flujo de transferencias bancarias.
+            Resumen de ventas, tu parte ({instructorPercent}%), desglose por curso y estado de cada pago.
           </p>
         </div>
 
@@ -131,7 +140,7 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
               </div>
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Badge variant="outline" className="text-[10px] py-0 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-medium tracking-normal">
-                  85% Neto
+                  {instructorPercent}% tuyo
                 </Badge>
                 <span>Bruto: {formatMXN(earnings.totalGross)}</span>
               </div>
@@ -218,6 +227,43 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
         </motion.div>
       </div>
 
+      {/* Estado de tus pagos: qué ya te llegó y qué sigue en Cursumi */}
+      <Card className="shadow-xs">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-bold">Estado de tus pagos</CardTitle>
+          <CardDescription>
+            De cada venta te toca el {instructorPercent}% de lo que pagó el alumno. La comisión de Stripe la absorbe Cursumi: recibes esa cantidad íntegra.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <Landmark className="h-4 w-4 text-emerald-600" /> Depositado por Stripe
+            </div>
+            <div className="mt-1 text-2xl font-extrabold">{formatMXN(earnings.payouts.automaticNet)}</div>
+            <p className="text-xs text-muted-foreground">Ventas con tu cuenta conectada: llegó en el mismo cobro.</p>
+          </div>
+          <div className="rounded-xl border border-border/60 p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Transferido por Cursumi
+            </div>
+            <div className="mt-1 text-2xl font-extrabold">{formatMXN(earnings.payouts.transferredNet)}</div>
+            <p className="text-xs text-muted-foreground">Ventas anteriores a conectar Stripe que ya se te pagaron.</p>
+          </div>
+          <div className={`rounded-xl border p-4 ${earnings.payouts.pendingNet > 0 ? "border-amber-500/40 bg-amber-500/5" : "border-border/60"}`}>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <Clock className="h-4 w-4 text-amber-600" /> Pendiente de transferencia
+            </div>
+            <div className="mt-1 text-2xl font-extrabold">{formatMXN(earnings.payouts.pendingNet)}</div>
+            <p className="text-xs text-muted-foreground">
+              {earnings.payouts.pendingCount > 0
+                ? `${contar(earnings.payouts.pendingCount, "venta", "ventas")} cobradas por Cursumi que te transferiremos. Si aún no conectas Stripe, hazlo arriba para recibirlas.`
+                : "Nada pendiente."}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Main Tabs Section */}
       <Tabs defaultValue="monthly" className="space-y-6">
         <TabsList className="bg-muted/60 p-1 rounded-xl grid grid-cols-2 md:grid-cols-4 w-full h-auto">
@@ -276,7 +322,7 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <span className="h-3 w-3 rounded-sm bg-emerald-500 inline-block" />
-                    <span className="font-medium text-foreground">Ganancia Neta (85%)</span>
+                    <span className="font-medium text-foreground">Tu parte ({instructorPercent}%)</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-3 w-3 rounded-sm bg-primary/30 inline-block" />
@@ -345,7 +391,7 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
               <div className="flex items-center gap-2 text-xs text-muted-foreground bg-primary/5 p-3 rounded-lg border border-primary/10">
                 <HelpCircle className="h-4 w-4 text-primary shrink-0" />
                 <span>
-                  Las transferencias netas se procesan automáticamente hacia tu cuenta Stripe Connect registrada cada 7 días o según tu calendario de depósitos.
+                  Con tu cuenta de Stripe conectada, tu parte se deposita en el mismo cobro. Las ventas anteriores a conectarla te las transfiere Cursumi; el estado de cada una está en la pestaña Transacciones.
                 </span>
               </div>
             </CardContent>
@@ -445,9 +491,9 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
           <Card className="shadow-xs">
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4">
               <div>
-                <CardTitle className="text-lg font-bold">Historial de Ventas Recientes</CardTitle>
+                <CardTitle className="text-lg font-bold">Historial de ventas</CardTitle>
                 <CardDescription>
-                  Registro detallado de los últimos alumnos inscritos y el desglose de su pago.
+                  Cada venta con su cuenta clara: lo que pagó el alumno, la comisión de Cursumi, tu parte y si ya te llegó.
                 </CardDescription>
               </div>
 
@@ -471,35 +517,7 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
               ) : (
                 <div className="divide-y divide-border/40">
                   {filteredTx.map((tx) => (
-                    <div key={tx.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 overflow-hidden">
-                          {tx.studentImage ? (
-                            <img src={tx.studentImage} alt={tx.studentName} className="h-full w-full object-cover" />
-                          ) : (
-                            tx.studentName.charAt(0).toUpperCase()
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-semibold text-foreground text-sm truncate">{tx.studentName}</p>
-                          <p className="text-xs text-muted-foreground truncate">{tx.courseTitle}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0">
-                        <div className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Calendar className="h-3.5 w-3.5" />
-                          <span>{new Date(tx.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" })}</span>
-                        </div>
-
-                        <div className="text-right">
-                          <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm block">
-                            +{formatMXN(tx.netAmount)}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground">Bruto {formatMXN(tx.amount)}</span>
-                        </div>
-                      </div>
-                    </div>
+                    <TransactionRow key={tx.id} tx={tx} />
                   ))}
                 </div>
               )}
@@ -579,7 +597,7 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
                         {formatMXN(projectedNet)}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Tu ganancia neta estimada enviada a tu cuenta bancaria ({100 - platformFeePercent}%).
+                        Tu parte estimada ({instructorPercent}% de lo cobrado).
                       </p>
                     </div>
 
@@ -605,6 +623,62 @@ export function InstructorEarningsClient({ earnings, platformFeePercent }: Instr
           </Card>
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+/** Una venta con su cuenta completa: cobrado − comisión = tu parte, y el estado del pago. */
+function TransactionRow({ tx }: { tx: RecentTransaction }) {
+  const status = tx.payoutStatus;
+  const badge =
+    status === "automatic" || status === "transferred"
+      ? "border-emerald-500/30 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10"
+      : status === "pending"
+        ? "border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10"
+        : "border-border text-muted-foreground";
+  return (
+    <div className="py-3.5 flex flex-col gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 overflow-hidden">
+            {tx.studentImage ? (
+              <img src={tx.studentImage} alt={tx.studentName} className="h-full w-full object-cover" />
+            ) : (
+              tx.studentName.charAt(0).toUpperCase()
+            )}
+          </div>
+          <div className="min-w-0">
+            <p className="font-semibold text-foreground text-sm truncate">{tx.studentName}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {tx.courseTitle}
+              {tx.couponCode ? ` · cupón ${tx.couponCode}` : ""}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0">
+          <div className="text-xs text-muted-foreground flex items-center gap-1">
+            <Calendar className="h-3.5 w-3.5" />
+            <span>{new Date(tx.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" })}</span>
+          </div>
+          <Badge variant="outline" className={`text-[10px] tracking-normal ${badge}`}>
+            {payoutLabel(status, tx.paidOutAt)}
+          </Badge>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2 rounded-lg bg-muted/40 px-3 py-2 text-xs sm:ml-12">
+        <div>
+          <div className="text-muted-foreground">Pagó el alumno</div>
+          <div className="font-medium">{formatMXN(tx.amount)}</div>
+        </div>
+        <div>
+          <div className="text-muted-foreground">Comisión Cursumi ({tx.feePercent}%)</div>
+          <div className="font-medium text-rose-600 dark:text-rose-400">−{formatMXN(tx.feeAmount)}</div>
+        </div>
+        <div>
+          <div className="text-muted-foreground">Tu parte</div>
+          <div className="font-bold text-emerald-600 dark:text-emerald-400">{formatMXN(tx.netAmount)}</div>
+        </div>
+      </div>
     </div>
   );
 }
