@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488452907614",
+    "project_id": "cursumi-1e489",
+    "storage_bucket": "cursumi-1e489.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488452907614:android:a1e129a430f89275c38acf",
+        "android_client_info": {
+          "package_name": "com.cursumi.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_M7iy9vrG8bz_iva31ijaQSRrKWGX5I4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

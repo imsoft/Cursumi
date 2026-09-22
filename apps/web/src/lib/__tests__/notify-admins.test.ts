@@ -23,6 +23,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 vi.mock("@/lib/web-push", () => ({ sendPushToUser: vi.fn(async () => {}) }));
 vi.mock("@/lib/apns-push", () => ({ sendApnsPushToUser: vi.fn(async () => {}) }));
+vi.mock("@/lib/fcm-push", () => ({ sendFcmPushToUser: vi.fn(async () => {}) }));
 
 const { notifyAdmins } = await import("@/lib/notification-helpers");
 
