@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import { claveMes, ultimosMeses } from "./fecha";
+import type { PayoutStatus } from "@/generated/prisma";
 
 export type MonthlyEarning = {
   month: string;
@@ -24,9 +25,29 @@ export type RecentTransaction = {
   studentName: string;
   studentImage: string | null;
   courseTitle: string;
+  /** Cobrado al alumno, en pesos. */
   amount: number;
+  /** Comisión de Cursumi, en pesos. */
+  feeAmount: number;
+  /** Porcentaje de comisión aplicado en ESA venta (puede diferir del vigente). */
+  feePercent: number;
+  /** Lo que le toca al instructor, en pesos. */
   netAmount: number;
+  couponCode: string | null;
+  payoutStatus: PayoutStatus;
+  paidOutAt: string | null;
   createdAt: string;
+};
+
+/** Resumen de qué parte del neto ya llegó al instructor y cuál sigue en Cursumi. */
+export type PayoutSummary = {
+  /** Depositado por Stripe en el mismo cobro (Connect). */
+  automaticNet: number;
+  /** Transferido después por el admin. */
+  transferredNet: number;
+  /** Cobrado por Cursumi y aún no transferido. */
+  pendingNet: number;
+  pendingCount: number;
 };
 
 export type InstructorEarnings = {
@@ -49,6 +70,7 @@ export type InstructorEarnings = {
   monthly12: MonthlyEarning[];
   courseBreakdown: CourseEarningDetail[];
   recentTransactions: RecentTransaction[];
+  payouts: PayoutSummary;
 };
 
 /**
@@ -92,6 +114,9 @@ export async function getInstructorEarnings(instructorId: string): Promise<Instr
         amount: true,
         platformFee: true,
         instructorAmount: true,
+        couponCode: true,
+        payoutStatus: true,
+        paidOutAt: true,
         createdAt: true,
         user: { select: { name: true, image: true } },
         course: { select: { title: true } },
@@ -114,11 +139,22 @@ export async function getInstructorEarnings(instructorId: string): Promise<Instr
 
   const perCourseCents = new Map<string, { gross: number; net: number }>();
   const recentTransactions: RecentTransaction[] = [];
+  const payoutCents = { automatic: 0, transferred: 0, pending: 0, pendingCount: 0 };
 
   for (const t of transactions) {
     const netCents = netCentsOf(t);
     totalGrossCents += t.amount;
     totalNetCents += netCents;
+
+    // Transacciones anteriores al estado de pago llegan sin él: el dinero
+    // sigue en Cursumi, así que cuentan como pendientes si hay algo que pagar.
+    const payoutStatus: PayoutStatus = t.payoutStatus ?? (netCents > 0 ? "pending" : "none");
+    if (payoutStatus === "automatic") payoutCents.automatic += netCents;
+    else if (payoutStatus === "transferred") payoutCents.transferred += netCents;
+    else if (payoutStatus === "pending") {
+      payoutCents.pending += netCents;
+      payoutCents.pendingCount += 1;
+    }
 
     const clave = claveMes(t.createdAt);
     if (clave === mesActual) {
@@ -134,14 +170,20 @@ export async function getInstructorEarnings(instructorId: string): Promise<Instr
     acc.net += netCents;
     perCourseCents.set(t.courseId, acc);
 
-    if (recentTransactions.length < 15) {
+    if (recentTransactions.length < 50) {
+      const feeCents = t.amount - netCents;
       recentTransactions.push({
         id: t.id,
         studentName: t.user.name || "Estudiante",
         studentImage: t.user.image || null,
         courseTitle: t.course.title,
         amount: toPesos(t.amount),
+        feeAmount: toPesos(feeCents),
+        feePercent: t.amount > 0 ? Math.round((feeCents / t.amount) * 100) : 0,
         netAmount: toPesos(netCents),
+        couponCode: t.couponCode ?? null,
+        payoutStatus,
+        paidOutAt: t.paidOutAt ? new Date(t.paidOutAt).toISOString() : null,
         createdAt: t.createdAt.toISOString(),
       });
     }
@@ -202,6 +244,12 @@ export async function getInstructorEarnings(instructorId: string): Promise<Instr
     monthly12: buildMonthlySeries(transactions, 12),
     courseBreakdown,
     recentTransactions,
+    payouts: {
+      automaticNet: toPesos(payoutCents.automatic),
+      transferredNet: toPesos(payoutCents.transferred),
+      pendingNet: toPesos(payoutCents.pending),
+      pendingCount: payoutCents.pendingCount,
+    },
   };
 }
 
@@ -211,6 +259,9 @@ type EarningTransaction = {
   platformFee: number | null;
   instructorAmount: number | null;
   createdAt: Date;
+  couponCode?: string | null;
+  payoutStatus?: PayoutStatus | null;
+  paidOutAt?: Date | null;
 };
 
 const CENTAVOS_POR_PESO = 100;

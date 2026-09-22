@@ -47,6 +47,11 @@ export async function POST(req: NextRequest) {
         where: { id: transaction.id },
         data: {
           status: "completed",
+          // Sesiones creadas antes de existir el estado de pago: si hay parte
+          // para el instructor y no se repartió en el cobro, queda pendiente.
+          ...(transaction.payoutStatus === "none" && (transaction.instructorAmount ?? 0) > 0
+            ? { payoutStatus: "pending" as const }
+            : {}),
           // Sin el PaymentIntent no hay manera de encontrar esta transacción
           // cuando Stripe avise de un reembolso: el evento charge.refunded no
           // trae el id de la sesión de checkout.
@@ -157,7 +162,10 @@ export async function POST(req: NextRequest) {
       if (transaction) {
         await prisma.transaction.update({
           where: { id: transaction.id },
-          data: { status: "refunded" },
+          // Reembolso total: ya no se le debe nada al instructor. Si el pago fue
+          // automático por Connect, la reversión del transfer se decide en el
+          // dashboard de Stripe al reembolsar ("reverse transfer").
+          data: { status: "refunded", payoutStatus: "none" },
         });
 
         // Se devolvió el dinero, así que se retira el acceso al curso.

@@ -12,7 +12,8 @@ interface ConnectStatus {
   onboarded: boolean;
 }
 
-export function StripeConnectBanner() {
+export function StripeConnectBanner({ platformFeePercent }: { platformFeePercent: number }) {
+  const instructorPercent = 100 - platformFeePercent;
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<ConnectStatus | null>(null);
   const [loading, setLoading] = useState(false);
@@ -63,7 +64,7 @@ export function StripeConnectBanner() {
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
-                Recibes automáticamente el <strong className="text-foreground font-semibold">85% neto</strong> de cada venta directamente en tu banco. Cursumi retiene el 15% por servicio y procesamiento.
+                Desde ahora, en cada venta Stripe deposita tu <strong className="text-foreground font-semibold">{instructorPercent}%</strong> directo en tu cuenta al momento del cobro. Cursumi se queda con el {platformFeePercent}% y absorbe la comisión de Stripe. Las ventas anteriores a conectar tu cuenta te las transfiere Cursumi; abajo ves cuáles siguen pendientes.
               </p>
             </div>
           </div>
@@ -102,7 +103,7 @@ export function StripeConnectBanner() {
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
-                Configura tu CLABE interbancaria o tarjeta de débito a través de la plataforma segura de Stripe Express. Solo toma 2 minutos.
+                Sin cuenta conectada, Cursumi cobra tus ventas y te transfiere tu {instructorPercent}% a mano. Con Stripe Express el depósito es automático en cada cobro. Solo toma 2 minutos con tu CLABE.
               </p>
             </div>
           </div>
