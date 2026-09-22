@@ -1,8 +1,8 @@
 # Cursumi iOS (Swift + SwiftUI)
 
-App nativa de iOS. Consume la misma API que la web (`apps/web`) y trata al servidor
-exactamente igual que la app Expo: misma cookie de sesión, mismo origen `mobile://`.
-No hace falta cambiar nada del lado del servidor.
+App nativa de iOS. Consume la misma API que la web (`apps/web`); del lado del
+servidor solo la atiende el plugin `native-app` de better-auth
+(`apps/web/src/lib/auth-native-app.ts`).
 
 ## Requisitos
 
@@ -37,7 +37,7 @@ Cursumi/
   Core/
     Auth/      CookieJar (cookies better-auth en el llavero), AuthService, SessionStore
     API/       APIClient (URLSession + cookie), StudentAPI (endpoints)
-    Models/    Formas de la API (espejo de apps/mobile/src/lib/me.ts)
+    Models/    Formas de la API
     UI/        Brand (paleta), Components, WebViews (Turnstile, HTML)
   Features/    Auth, MyCourses (curso, lección, quizzes, examen, tarea, minijuegos,
                chat, notas, reseñas), Catalog, Profile, Instructor (panel, perfil,
@@ -51,7 +51,7 @@ project.yml    Definición del proyecto para XcodeGen
 - **Correo y contraseña**: `POST /api/auth/sign-in/email`. Si el usuario tiene 2FA,
   el servidor responde `twoFactorRedirect` y se pide el TOTP en `TwoFactorView`.
 - **Google**: `POST /api/auth/sign-in/social` → se abre la URL con
-  `ASWebAuthenticationSession` a través de `/api/auth/expo-authorization-proxy`
+  `ASWebAuthenticationSession` a través de `/api/auth/native-authorization-proxy`
   (fija la cookie `state` en el navegador). El servidor termina en
   `mobile://?cookie=<Set-Cookie>` y la app guarda esa cookie.
 - **Registro y recuperar contraseña**: exigen el token de Cloudflare Turnstile,
@@ -76,5 +76,4 @@ App ID. Sin eso la app funciona igual, solo sin push.
 
 ## Paridad
 
-Completa respecto a la app Expo. Se van portando por fases; mientras, la app
-Expo sigue viva en `apps/mobile`.
+Completa en lo que la app cubre; push pendiente de las claves de Apple.

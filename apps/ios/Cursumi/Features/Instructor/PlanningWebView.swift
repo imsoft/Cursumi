@@ -6,9 +6,9 @@ import WebKit
 /// cookie de sesión; ese endpoint la re-emite con `Set-Cookie` para que quede en
 /// el jar del WebView y redirige a la página real.
 ///
-/// La web detecta `window.ReactNativeWebView` para ocultar su chrome y para
-/// entregar el PDF por `postMessage`; aquí inyectamos ese objeto y lo conectamos
-/// al handler nativo, así no hace falta tocar la web.
+/// La web detecta `window.CursumiNative` para ocultar su chrome y para entregar
+/// el PDF por `postMessage`; aquí inyectamos ese objeto y lo conectamos al
+/// handler nativo.
 struct PlanningWebView: View {
     let courseId: String
 
@@ -46,7 +46,7 @@ private struct PlanningWebContainer: UIViewRepresentable {
     func makeUIView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
         let bridge = """
-        window.ReactNativeWebView = {
+        window.CursumiNative = {
           postMessage: function (m) { window.webkit.messageHandlers.cursumi.postMessage(String(m)); }
         };
         """

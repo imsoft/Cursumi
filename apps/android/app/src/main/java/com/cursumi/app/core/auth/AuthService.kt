@@ -91,7 +91,7 @@ class AuthService(val api: ApiClient) {
 
     /**
      * Paso 1 del login con Google: pide la URL de autorización y devuelve la URL a
-     * abrir en Custom Tabs vía `expo-authorization-proxy` (fija la cookie `state`
+     * abrir en Custom Tabs vía `native-authorization-proxy` (fija la cookie `state`
      * en el navegador). El servidor termina en `mobile://?cookie=<Set-Cookie>`,
      * que llega a `MainActivity` y se completa con [completeGoogle].
      */
@@ -101,7 +101,7 @@ class AuthService(val api: ApiClient) {
         })
         if (!res.isOk) throw AuthError(res.errorMessage ?: "No se pudo continuar con Google.")
         val authorizationURL = ((com.cursumi.app.core.api.AppJson.parseToJsonElement(res.body) as JsonObject)["url"] as JsonPrimitive).content
-        val b = api.url("api/auth/expo-authorization-proxy").newBuilder().addQueryParameter("authorizationURL", authorizationURL)
+        val b = api.url("api/auth/native-authorization-proxy").newBuilder().addQueryParameter("authorizationURL", authorizationURL)
         api.jar.oauthState()?.let { b.addQueryParameter("oauthState", it) }
         return Uri.parse(b.build().toString())
     }

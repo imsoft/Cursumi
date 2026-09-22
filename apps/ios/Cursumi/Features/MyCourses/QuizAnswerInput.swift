@@ -1,7 +1,6 @@
 import SwiftUI
 
-/// Entrada de respuesta para los 5 tipos de pregunta. Espejo de
-/// `apps/mobile/src/components/quiz-answer-input.tsx`.
+/// Entrada de respuesta para los 5 tipos de pregunta.
 struct QuizAnswerInput: View {
     let type: QuizQuestionType
     /// ordenar: elementos (se barajan al mostrar). relacionar: columna izquierda.

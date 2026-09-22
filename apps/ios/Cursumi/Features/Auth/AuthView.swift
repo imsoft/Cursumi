@@ -204,7 +204,7 @@ struct AuthView: View {
     }
 }
 
-/// Casilla morada estilo app Expo.
+/// Casilla morada de marca.
 struct CheckboxToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         Button { configuration.isOn.toggle() } label: {

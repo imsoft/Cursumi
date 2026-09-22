@@ -10,7 +10,7 @@ const LOGO_SRC = "/icons/icon-512.png";
 
 let cachedLogo: string | null | undefined;
 
-type RNWebView = { postMessage: (msg: string) => void };
+type NativeBridge = { postMessage: (msg: string) => void };
 
 /**
  * Entrega el PDF ya generado. En un navegador normal dispara la descarga
@@ -20,15 +20,15 @@ type RNWebView = { postMessage: (msg: string) => void };
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function deliverPdf(pdf: any, filename: string): void {
-  const rn = (typeof window !== "undefined"
-    ? (window as unknown as { ReactNativeWebView?: RNWebView }).ReactNativeWebView
+  const native = (typeof window !== "undefined"
+    ? (window as unknown as { CursumiNative?: NativeBridge }).CursumiNative
     : undefined);
 
-  if (rn) {
+  if (native) {
     // "data:application/pdf;filename=…;base64,XXXX" → nos quedamos con XXXX.
     const dataUri: string = pdf.output("datauristring");
     const base64 = dataUri.slice(dataUri.indexOf(",") + 1);
-    rn.postMessage(JSON.stringify({ type: "planning-pdf", filename, base64 }));
+    native.postMessage(JSON.stringify({ type: "planning-pdf", filename, base64 }));
     return;
   }
 

@@ -1,8 +1,8 @@
 # Cursumi Android (Kotlin + Jetpack Compose)
 
-App nativa de Android. Consume la misma API que la web (`apps/web`) y trata al
-servidor exactamente igual que la app Expo y la de iOS: misma cookie de sesión,
-mismo origen `mobile://`. No hace falta cambiar nada del lado del servidor.
+App nativa de Android. Consume la misma API que la web (`apps/web`); del lado del
+servidor solo la atiende el plugin `native-app` de better-auth
+(`apps/web/src/lib/auth-native-app.ts`), igual que a la de iOS.
 
 ## Requisitos
 
@@ -53,7 +53,7 @@ app/src/test/          Pruebas unitarias (JUnit 4)
 
 - **Correo y contraseña**: `POST /api/auth/sign-in/email`; con 2FA se pide el TOTP.
 - **Google**: `POST /api/auth/sign-in/social` → se abre en Custom Tabs vía
-  `/api/auth/expo-authorization-proxy`; el servidor termina en `mobile://?cookie=…`,
+  `/api/auth/native-authorization-proxy`; el servidor termina en `mobile://?cookie=…`,
   que `MainActivity` recibe por el intent-filter del scheme `mobile`.
 - **Registro y recuperar contraseña**: exigen el token de Turnstile, obtenido en un
   `WebView` mínimo con interfaz JS.
@@ -63,8 +63,8 @@ app/src/test/          Pruebas unitarias (JUnit 4)
 ## Planeación didáctica
 
 Se reutilizan los editores de la web dentro de un `WebView`. La interfaz JS se llama
-`ReactNativeWebView` (igual que en React Native), así la web oculta su chrome y
-entrega el PDF por `postMessage` sin cambios; el PDF se comparte con `FileProvider`.
+`CursumiNative`; la web la detecta para ocultar su chrome y entregar el PDF por
+`postMessage`; el PDF se comparte con `FileProvider`.
 
 ## Push
 
@@ -74,4 +74,4 @@ en la memoria del proyecto.
 
 ## Paridad
 
-Completa respecto a la app Expo, salvo push.
+Completa respecto a la web en lo que la app cubre, salvo push.

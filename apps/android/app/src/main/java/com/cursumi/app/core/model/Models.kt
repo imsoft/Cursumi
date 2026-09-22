@@ -14,7 +14,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 
-// Formas de la API de Cursumi. Espejo de los tipos de `apps/mobile/src/lib/me.ts`.
+// Formas de la API de Cursumi.
 
 /** `category` llega como string o como `{ name }` según el endpoint. */
 @Serializable(with = CategoryRefSerializer::class)

@@ -21,7 +21,7 @@ enum Config {
     /// en `apps/web/src/lib/auth.ts`.
     static let scheme = "mobile"
 
-    /// Origen que la app declara al servidor de auth. El plugin expo del servidor
-    /// lo copia a `Origin` para pasar la comprobación de origen en los POST.
+    /// Origen que la app declara al servidor de auth (cabecera `x-native-origin`);
+    /// el plugin native-app lo copia a `Origin` para pasar la comprobación en los POST.
     static let origin = "\(scheme)://"
 }

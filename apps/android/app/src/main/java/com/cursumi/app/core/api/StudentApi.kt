@@ -17,7 +17,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-/** Endpoints del alumno. Espejo de `apps/mobile/src/lib/me.ts`. */
+/** Endpoints del alumno. */
 class StudentApi(private val api: ApiClient) {
 
     suspend fun myCourses(): List<StudentCourse> = api.get("api/me/courses")

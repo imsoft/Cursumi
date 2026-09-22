@@ -1,6 +1,6 @@
 import Foundation
 
-// Instructor y administración. Espejo de `apps/mobile/src/lib/me.ts`.
+// Instructor y administración.
 
 /// Lista que la API devuelve como array suelto o envuelta en `{ <clave>: [...] }`.
 struct FlexibleList<T: Decodable>: Decodable {
@@ -266,7 +266,7 @@ struct QuoteRequestPayload: Encodable {
 }
 
 extension String {
-    /// Slug como lo genera la app Expo al crear categorías.
+    /// Slug como lo genera la web al crear categorías.
     var slugified: String {
         let folded = folding(options: .diacriticInsensitive, locale: nil).lowercased()
         let parts = folded.split { !($0.isLetter || $0.isNumber) || !$0.isASCII }

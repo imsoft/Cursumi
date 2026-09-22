@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { twoFactor } from "better-auth/plugins/two-factor";
-import { expo } from "@better-auth/expo";
+import { nativeApp } from "./auth-native-app";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prisma } from "./prisma";
 import { sendVerificationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "./email";
@@ -84,7 +84,7 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // Actualizar cada 24 horas
   },
   plugins: [
-    expo(), // Soporte para la app móvil (Expo): auth por token + deep links.
+    nativeApp(), // Apps nativas de iOS/Android: origen, proxy de autorización y cookie en el deep link.
     // 2FA por TOTP + códigos de respaldo. El login exige el segundo factor
     // cuando el usuario lo tiene activado (twoFactorEnabled).
     twoFactor({
@@ -298,12 +298,8 @@ function getTrustedOrigins(): string[] {
     const v = vercel.startsWith("http") ? vercel : `https://${vercel}`;
     origins.add(v);
   }
-  // Deep-link scheme de la app móvil (Expo, app.json: "mobile") para @better-auth/expo.
+  // Deep-link scheme de las apps nativas de iOS y Android (Config.scheme / manifest).
   origins.add("mobile://");
-  // Expo Go en desarrollo usa el scheme exp:// (p. ej. exp://192.168.x.x:8081).
-  // Sin esto, cualquier POST auth desde Expo Go con cookie falla con INVALID_ORIGIN.
-  // Riesgo bajo: los navegadores no pueden falsificar un header Origin con scheme exp://.
-  origins.add("exp://*");
   return [...origins];
 }
 

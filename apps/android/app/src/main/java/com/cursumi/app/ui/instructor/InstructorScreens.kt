@@ -275,8 +275,8 @@ fun InstructorAccountScreen(nav: NavController) {
  * Planeación didáctica: reutiliza los editores de la web dentro de un WebView.
  * La carga inicial va a `/api/mobile/planning-bridge` con la cookie de sesión; ese
  * endpoint la re-emite con `Set-Cookie` para que quede en el jar del WebView.
- * La web detecta `window.ReactNativeWebView` (así se llama la interfaz JS aquí,
- * igual que en React Native) para ocultar su chrome y entregar el PDF.
+ * La web detecta `window.CursumiNative` (así se llama la interfaz JS aquí) para
+ * ocultar su chrome y entregar el PDF.
  */
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
@@ -309,7 +309,7 @@ fun PlanningScreen(nav: NavController, courseId: String) {
                                 post { ctx.startActivity(android.content.Intent.createChooser(send, name)) }
                             }.onFailure { post { error = "No se pudo guardar el PDF. Inténtalo de nuevo." } }
                         }
-                    }, "ReactNativeWebView")
+                    }, "CursumiNative")
                     val url = "${Config.API_URL}/api/mobile/planning-bridge?redirect=" + android.net.Uri.encode("/instructor/courses/$courseId/planning")
                     val headers = app.api.jar.cookieHeader()?.let { mapOf("Cookie" to it) } ?: emptyMap()
                     loadUrl(url, headers)

@@ -16,6 +16,6 @@ object Config {
      */
     const val SCHEME = "mobile"
 
-    /** Origen que la app declara al servidor de auth (el plugin expo lo copia a `Origin`). */
+    /** Origen que la app declara al servidor de auth (`x-native-origin`; el plugin native-app lo copia a `Origin`). */
     const val ORIGIN = "$SCHEME://"
 }

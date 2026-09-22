@@ -117,9 +117,9 @@ struct AuthService {
 
     // MARK: - Google
 
-    /// Entra con Google reutilizando el flujo del plugin expo del servidor:
+    /// Entra con Google con el plugin native-app del servidor:
     /// 1. `sign-in/social` devuelve la URL de autorización.
-    /// 2. Se abre vía `expo-authorization-proxy`, que fija la cookie `state` en el navegador.
+    /// 2. Se abre vía `native-authorization-proxy`, que fija la cookie `state` en el navegador.
     /// 3. Al terminar, el servidor redirige a `mobile://?cookie=<Set-Cookie>`.
     @MainActor
     func signInWithGoogle(presenting anchor: ASPresentationAnchor) async throws {
@@ -129,7 +129,7 @@ struct AuthService {
         struct Reply: Decodable { let url: String }
         let authorizationURL = try res.decode(Reply.self).url
 
-        var components = URLComponents(url: api.baseURL.appendingPathComponent("api/auth/expo-authorization-proxy"), resolvingAgainstBaseURL: false)!
+        var components = URLComponents(url: api.baseURL.appendingPathComponent("api/auth/native-authorization-proxy"), resolvingAgainstBaseURL: false)!
         var items = [URLQueryItem(name: "authorizationURL", value: authorizationURL)]
         if let state = api.jar.oauthState {
             items.append(URLQueryItem(name: "oauthState", value: state))

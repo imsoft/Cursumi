@@ -1,7 +1,6 @@
 import SwiftUI
 
-/// Paleta de marca. Misma fuente de verdad que `apps/mobile/src/constants/theme.ts`
-/// y los tokens de la web.
+/// Paleta de marca, alineada con los tokens de la web.
 enum Brand {
     /// Morado principal (= web --primary).
     static let primary = Color(hex: 0x6D28D9)

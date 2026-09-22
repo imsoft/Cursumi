@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// Estado global de la sesión. Equivale a `useSession()` de la app Expo.
+/// Estado global de la sesión.
 @MainActor
 @Observable
 final class SessionStore {

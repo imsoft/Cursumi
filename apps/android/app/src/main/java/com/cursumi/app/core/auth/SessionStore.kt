@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.cursumi.app.core.api.NetworkException
 
-/** Estado global de la sesión. Equivale a `useSession()` de la app Expo. */
+/** Estado global de la sesión. */
 class SessionStore(private val auth: AuthService) {
     sealed interface State {
         data object Loading : State

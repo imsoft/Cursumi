@@ -36,10 +36,7 @@ import com.cursumi.app.core.model.QuizAnswer
 import com.cursumi.app.core.model.QuizQuestionType
 import com.cursumi.app.core.ui.Brand
 
-/**
- * Entrada de respuesta para los 5 tipos de pregunta. Espejo de
- * `apps/mobile/src/components/quiz-answer-input.tsx`.
- */
+/** Entrada de respuesta para los 5 tipos de pregunta. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun QuizAnswerInput(

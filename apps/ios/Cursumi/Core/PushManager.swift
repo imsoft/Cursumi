@@ -6,7 +6,7 @@ import UserNotifications
 ///
 /// Flujo: con sesión → pedir permiso → registrar en APNs → el sistema entrega el
 /// token del dispositivo → se manda a `POST /api/me/push-token` con el prefijo
-/// `apns:` (misma tabla que los tokens de Expo). Al cerrar sesión se da de baja.
+/// `apns:`. Al cerrar sesión se da de baja.
 ///
 /// Requiere la capacidad Push Notifications (entitlement `aps-environment`) y un
 /// dispositivo físico: el simulador no recibe push remoto.

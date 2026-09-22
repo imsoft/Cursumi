@@ -1,6 +1,6 @@
 import Foundation
 
-// Formas de la API de Cursumi. Espejo de los tipos de `apps/mobile/src/lib/me.ts`.
+// Formas de la API de Cursumi.
 
 /// `category` llega como string o como `{ name }` según el endpoint.
 enum CategoryRef: Decodable, Equatable {

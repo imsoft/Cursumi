@@ -1,6 +1,6 @@
 import Foundation
 
-/// Endpoints del alumno. Espejo de `apps/mobile/src/lib/me.ts`.
+/// Endpoints del alumno.
 struct StudentAPI {
     let api: APIClient
     init(api: APIClient = .shared) { self.api = api }

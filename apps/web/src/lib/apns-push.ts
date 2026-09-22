@@ -1,9 +1,8 @@
 /**
  * Envío de notificaciones push a la app nativa de iOS vía APNs (HTTP/2 + JWT).
  *
- * Los tokens de dispositivo se guardan en la misma tabla que los de Expo
- * (`ExpoPushToken`) con el prefijo `apns:` seguido del token hexadecimal, así
- * no hace falta migración y cada canal filtra los suyos.
+ * Los tokens de dispositivo se guardan en `PushToken` con el prefijo `apns:`
+ * seguido del token hexadecimal (los de Android llevarán `fcm:`).
  *
  * Variables de entorno (Apple Developer → Keys → Apple Push Notifications):
  *   APNS_KEY_ID   — id de la clave .p8 (10 caracteres)
@@ -114,7 +113,7 @@ export async function sendApnsPushToUser(userId: string, payload: PushPayload): 
     const jwt = getJwt();
     if (!jwt) return;
 
-    const rows = await prisma.expoPushToken.findMany({
+    const rows = await prisma.pushToken.findMany({
       where: { userId, token: { startsWith: APNS_TOKEN_PREFIX } },
       select: { token: true },
     });
@@ -139,7 +138,7 @@ export async function sendApnsPushToUser(userId: string, payload: PushPayload): 
     }
 
     if (stale.length > 0) {
-      await prisma.expoPushToken.deleteMany({ where: { token: { in: stale } } }).catch(() => {});
+      await prisma.pushToken.deleteMany({ where: { token: { in: stale } } }).catch(() => {});
     }
   } catch {
     // silencioso — el push nunca debe romper el flujo de negocio

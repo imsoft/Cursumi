@@ -53,7 +53,7 @@ model User {
   learningReflections       LearningReflection[]
   wishlistItems             WishlistItem[]
   pushSubscriptions         PushSubscription[]
-  expoPushTokens            ExpoPushToken[]
+  pushTokens                PushToken[]
 
   /// Código único para compartir — generado al crear la cuenta
   referralCode        String?    @unique
@@ -1141,8 +1141,8 @@ model PushSubscription {
   @@index([userId])
 }
 
-/// Token de Expo Push para notificaciones en la app móvil (ExponentPushToken[...]).
-model ExpoPushToken {
+/// Token de push de las apps nativas: `apns:<hex>` (iOS) o `fcm:<token>` (Android).
+model PushToken {
   id        String   @id @default(cuid())
   userId    String
   token     String   @unique

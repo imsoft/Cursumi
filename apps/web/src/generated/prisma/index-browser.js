@@ -680,7 +680,7 @@ exports.Prisma.PushSubscriptionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.ExpoPushTokenScalarFieldEnum = {
+exports.Prisma.PushTokenScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   token: 'token',
@@ -940,7 +940,7 @@ exports.Prisma.ModelName = {
   WishlistItem: 'WishlistItem',
   Referral: 'Referral',
   PushSubscription: 'PushSubscription',
-  ExpoPushToken: 'ExpoPushToken',
+  PushToken: 'PushToken',
   BlogPost: 'BlogPost',
   AuditLog: 'AuditLog',
   GovernanceDocument: 'GovernanceDocument',
