@@ -1,5 +1,5 @@
 /**
- * @cursumi/shared — código compartido entre la web (Next.js) y la futura app móvil (Expo).
+ * @cursumi/shared — código compartido de la web (Next.js); TypeScript puro.
  *
  * REGLA DE ORO: este paquete es TypeScript puro. NO debe importar React, Next,
  * React Native ni Prisma. Solo tipos de dominio, esquemas de validación (Zod)

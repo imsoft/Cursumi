@@ -7,16 +7,12 @@ interface TokenBody {
   token: string;
 }
 
-// Acepta tokens de Expo (ExponentPushToken[...] / ExpoPushToken[...]) y de la
-// app nativa de iOS (`apns:<64 hex>`).
+// Tokens de las apps nativas: iOS (`apns:<64 hex>`); Android (`fcm:…`) cuando exista.
 function isValidPushToken(token: unknown): token is string {
-  return (
-    typeof token === "string" &&
-    (/^Expo(nent)?PushToken\[.+\]$/.test(token) || isApnsToken(token))
-  );
+  return typeof token === "string" && isApnsToken(token);
 }
 
-// POST /api/me/push-token — registrar el token de push del dispositivo (Expo o APNs)
+// POST /api/me/push-token — registrar el token de push del dispositivo
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
@@ -26,7 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Token de push inválido" }, { status: 400 });
     }
 
-    await prisma.expoPushToken.upsert({
+    await prisma.pushToken.upsert({
       where: { token: body.token },
       create: { userId: session.user.id, token: body.token },
       update: { userId: session.user.id },
@@ -48,7 +44,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "token requerido" }, { status: 400 });
     }
 
-    await prisma.expoPushToken.deleteMany({
+    await prisma.pushToken.deleteMany({
       where: { token: body.token, userId: session.user.id },
     });
 

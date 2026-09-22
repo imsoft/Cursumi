@@ -17,7 +17,7 @@ import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
 
-// Quizzes, examen y minijuegos. Espejo de la lógica de `apps/mobile/src/lib/me.ts`.
+// Quizzes, examen y minijuegos. Misma lógica de calificación que el servidor.
 
 enum class QuizQuestionType(val wire: String) {
     MULTIPLE_CHOICE("multiple-choice"), TRUE_FALSE("true-false"), CHECKBOX("checkbox"),

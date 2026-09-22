@@ -1,7 +1,7 @@
 import Foundation
 
 /// Chat, notas, reflexiones, reseñas, referidos, blog, materiales, juegos y
-/// solicitud de instructor. Espejo de `apps/mobile/src/lib/me.ts`.
+/// solicitud de instructor.
 struct SocialAPI {
     let api: APIClient
     init(api: APIClient = .shared) { self.api = api }

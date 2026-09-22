@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Mensajes con el instructor del curso. Sondea cada 5 s, como la app Expo.
+/// Mensajes con el instructor del curso. Sondea cada 5 s, como la web.
 struct ChatView: View {
     let courseId: String
 

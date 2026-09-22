@@ -1,6 +1,6 @@
 import Foundation
 
-// Quizzes, examen y minijuegos. Espejo de la lógica de `apps/mobile/src/lib/me.ts`.
+// Quizzes, examen y minijuegos. Misma lógica de calificación que el servidor.
 
 enum QuizQuestionType: String, Decodable {
     case multipleChoice = "multiple-choice"

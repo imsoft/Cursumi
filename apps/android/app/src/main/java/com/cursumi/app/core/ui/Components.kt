@@ -45,7 +45,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import coil3.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 
-/** Cabecera con gradiente de marca, igual que las pestañas de la app Expo. */
+/** Cabecera con gradiente de marca, igual que en la web. */
 @Composable
 fun BrandHeader(title: String, subtitle: String? = null, content: @Composable ColumnScopeWrapper.() -> Unit = {}) {
     Column(

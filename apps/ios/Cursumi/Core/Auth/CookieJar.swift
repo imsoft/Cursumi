@@ -3,9 +3,8 @@ import Foundation
 /// Guarda las cookies de better-auth que el servidor manda en `Set-Cookie` y las
 /// devuelve como cabecera `Cookie` para las llamadas autenticadas.
 ///
-/// Reproduce el contrato de `@better-auth/expo`: el servidor trata a la app
-/// exactamente igual que a la app Expo (misma cookie de sesión, mismo origen
-/// `mobile://`), así que no hace falta cambiar nada del lado del servidor.
+/// El servidor manda las cookies de sesión como a cualquier navegador; aquí se
+/// persisten para adjuntarlas en cada petición a `/api/*`.
 ///
 /// La persistencia es inyectable para que las pruebas no toquen el llavero.
 final class CookieJar {

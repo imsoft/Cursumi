@@ -124,7 +124,7 @@ export function InstructorShell({
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
-      (window as unknown as { ReactNativeWebView?: unknown }).ReactNativeWebView
+      (window as unknown as { CursumiNative?: unknown }).CursumiNative
     ) {
       setEmbedded(true);
     }

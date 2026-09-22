@@ -30,8 +30,7 @@ enum VideoSource: Equatable {
     /// YouTube: se reproduce embebido en un WebView.
     case youtube(id: String)
 
-    /// Traduce la `videoUrl` de la lección a una fuente reproducible. Misma lógica
-    /// que `nativeVideoSource` en `apps/mobile/src/components/lesson-view.tsx`.
+    /// Traduce la `videoUrl` de la lección a una fuente reproducible.
     static func from(_ raw: String?) -> VideoSource? {
         guard let raw, !raw.isEmpty else { return nil }
         if let id = muxPlaybackId(raw) {
@@ -61,7 +60,7 @@ enum VideoSource: Equatable {
 
 enum LessonContent {
     /// Envuelve el contenido de una lección (HTML o texto plano) en una página
-    /// con estilos legibles. Misma lógica que `contentToHtml` de la app Expo.
+    /// con estilos legibles.
     static func html(from content: String) -> String {
         let isHtml = content.contains("<")
         let body = isHtml ? content : content

@@ -39,7 +39,7 @@ val AppJson = Json {
 
 /**
  * Cliente HTTP hacia la API de Cursumi. Adjunta la cookie de sesión y las
- * cabeceras que espera el plugin expo del servidor. OkHttp no gestiona cookies:
+ * cabecera que espera el plugin native-app del servidor. OkHttp no gestiona cookies:
  * así controlamos qué se guarda y la cookie nunca sale del dominio de Cursumi.
  */
 class ApiClient(val jar: CookieJar, val baseUrl: String = Config.API_URL) {
@@ -84,8 +84,8 @@ class ApiClient(val jar: CookieJar, val baseUrl: String = Config.API_URL) {
         val builder = Request.Builder().url(url(path, query)).header("Accept", "application/json")
         if (auth) jar.cookieHeader()?.let { builder.header("Cookie", it) }
         if (path.trimStart('/').startsWith("api/auth/")) {
-            // Mismas cabeceras que manda @better-auth/expo.
-            builder.header("expo-origin", Config.ORIGIN).header("x-skip-oauth-proxy", "true")
+            // El plugin native-app del servidor copia esta cabecera a `Origin`.
+            builder.header("x-native-origin", Config.ORIGIN)
         }
         val body: RequestBody? = when {
             jsonBody != null -> jsonBody.toString().toRequestBody("application/json".toMediaType())

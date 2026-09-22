@@ -40,7 +40,7 @@ sealed interface VideoSource {
         private val mux = Regex("stream\\.mux\\.com/([^/.]+)")
         private val yt = Regex("(?:youtube\\.com/(?:watch\\?v=|embed/)|youtu\\.be/)([A-Za-z0-9_-]{11})")
 
-        /** Misma lógica que `nativeVideoSource` en la app Expo. */
+        /** Misma lógica que la web al resolver la fuente de video. */
         fun from(raw: String?): VideoSource? {
             if (raw.isNullOrEmpty()) return null
             mux.find(raw)?.let { return Native("https://stream.mux.com/${it.groupValues[1]}.m3u8") }
@@ -67,7 +67,7 @@ object LessonContent {
     }
 }
 
-/** Slug como lo genera la app Expo al crear categorías. */
+/** Slug como lo genera la web al crear categorías. */
 fun String.slugified(): String {
     val folded = java.text.Normalizer.normalize(this, java.text.Normalizer.Form.NFD)
         .replace(Regex("\\p{M}"), "").lowercase()

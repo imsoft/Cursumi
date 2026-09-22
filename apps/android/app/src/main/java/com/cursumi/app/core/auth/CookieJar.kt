@@ -10,8 +10,8 @@ import java.time.Instant
  * Guarda las cookies de better-auth que el servidor manda en `Set-Cookie` y las
  * devuelve como cabecera `Cookie` para las llamadas autenticadas.
  *
- * Reproduce el contrato de `@better-auth/expo`: el servidor trata a la app igual
- * que a la app Expo (misma cookie de sesión, mismo origen `mobile://`).
+ * El servidor manda las cookies de sesión como a cualquier navegador; aquí se
+ * persisten para adjuntarlas en cada petición a `/api/…`.
  *
  * La persistencia es inyectable para que las pruebas no toquen Android.
  */

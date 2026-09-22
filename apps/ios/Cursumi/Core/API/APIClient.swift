@@ -18,7 +18,7 @@ enum APIError: LocalizedError {
 }
 
 /// Cliente HTTP hacia la API de Cursumi. Adjunta la cookie de sesión y las
-/// cabeceras que espera el plugin expo del servidor.
+/// cabecera que espera el plugin native-app del servidor.
 final class APIClient {
     static let shared = APIClient()
 
@@ -82,9 +82,8 @@ final class APIClient {
             req.setValue(cookie, forHTTPHeaderField: "Cookie")
         }
         if path.hasPrefix("api/auth/") || path.hasPrefix("/api/auth/") {
-            // Mismas cabeceras que manda @better-auth/expo.
-            req.setValue(Config.origin, forHTTPHeaderField: "expo-origin")
-            req.setValue("true", forHTTPHeaderField: "x-skip-oauth-proxy")
+            // El plugin native-app del servidor copia esta cabecera a `Origin`.
+            req.setValue(Config.origin, forHTTPHeaderField: "x-native-origin")
         }
         if let body {
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")

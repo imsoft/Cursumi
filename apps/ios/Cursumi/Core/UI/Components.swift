@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Cabecera con gradiente de marca, igual que las pestañas de la app Expo.
+/// Cabecera con gradiente de marca, igual que en la web.
 struct BrandHeader: View {
     let title: String
     var subtitle: String? = nil
@@ -49,7 +49,7 @@ struct PrimaryButton: View {
     }
 }
 
-/// Campo de texto con borde, como los de la app Expo.
+/// Campo de texto con borde.
 struct BrandTextField: View {
     let placeholder: String
     @Binding var text: String

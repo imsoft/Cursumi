@@ -256,10 +256,10 @@ export type Referral = $Result.DefaultSelection<Prisma.$ReferralPayload>
  */
 export type PushSubscription = $Result.DefaultSelection<Prisma.$PushSubscriptionPayload>
 /**
- * Model ExpoPushToken
- * Token de Expo Push para notificaciones en la app móvil (ExponentPushToken[...]).
+ * Model PushToken
+ * Token de push de las apps nativas: `apns:<hex>` (iOS) o `fcm:<token>` (Android).
  */
-export type ExpoPushToken = $Result.DefaultSelection<Prisma.$ExpoPushTokenPayload>
+export type PushToken = $Result.DefaultSelection<Prisma.$PushTokenPayload>
 /**
  * Model BlogPost
  * 
@@ -1143,14 +1143,14 @@ export class PrismaClient<
   get pushSubscription(): Prisma.PushSubscriptionDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.expoPushToken`: Exposes CRUD operations for the **ExpoPushToken** model.
+   * `prisma.pushToken`: Exposes CRUD operations for the **PushToken** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ExpoPushTokens
-    * const expoPushTokens = await prisma.expoPushToken.findMany()
+    * // Fetch zero or more PushTokens
+    * const pushTokens = await prisma.pushToken.findMany()
     * ```
     */
-  get expoPushToken(): Prisma.ExpoPushTokenDelegate<ExtArgs, ClientOptions>;
+  get pushToken(): Prisma.PushTokenDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.blogPost`: Exposes CRUD operations for the **BlogPost** model.
@@ -1696,7 +1696,7 @@ export namespace Prisma {
     WishlistItem: 'WishlistItem',
     Referral: 'Referral',
     PushSubscription: 'PushSubscription',
-    ExpoPushToken: 'ExpoPushToken',
+    PushToken: 'PushToken',
     BlogPost: 'BlogPost',
     AuditLog: 'AuditLog',
     GovernanceDocument: 'GovernanceDocument',
@@ -1717,7 +1717,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verification" | "twoFactor" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "businessQuoteRequest" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "expoPushToken" | "blogPost" | "auditLog" | "governanceDocument" | "governanceVersion" | "governanceAcceptance"
+      modelProps: "user" | "account" | "session" | "verification" | "twoFactor" | "instructorApplication" | "instructorProfile" | "category" | "course" | "coursePlanningDocument" | "courseSection" | "lesson" | "lessonProgress" | "courseSession" | "sessionAnonymousQuestion" | "enrollment" | "learningReflection" | "sectionQuizSubmission" | "assignmentSubmission" | "examSubmission" | "certificate" | "transaction" | "review" | "notification" | "conversation" | "message" | "quizGame" | "quizGameQuestion" | "quizGameParticipant" | "quizGameAnswer" | "organization" | "orgMember" | "orgInvite" | "team" | "teamMember" | "orgSubscription" | "orgCourseAccess" | "teamCourseAccess" | "orgMaterial" | "businessQuoteRequest" | "kpi" | "kpiProgress" | "siteSetting" | "coupon" | "courseNote" | "wishlistItem" | "referral" | "pushSubscription" | "pushToken" | "blogPost" | "auditLog" | "governanceDocument" | "governanceVersion" | "governanceAcceptance"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5273,77 +5273,77 @@ export namespace Prisma {
           }
         }
       }
-      ExpoPushToken: {
-        payload: Prisma.$ExpoPushTokenPayload<ExtArgs>
-        fields: Prisma.ExpoPushTokenFieldRefs
+      PushToken: {
+        payload: Prisma.$PushTokenPayload<ExtArgs>
+        fields: Prisma.PushTokenFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ExpoPushTokenFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload> | null
+            args: Prisma.PushTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ExpoPushTokenFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>
+            args: Prisma.PushTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>
           }
           findFirst: {
-            args: Prisma.ExpoPushTokenFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload> | null
+            args: Prisma.PushTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ExpoPushTokenFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>
+            args: Prisma.PushTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>
           }
           findMany: {
-            args: Prisma.ExpoPushTokenFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>[]
+            args: Prisma.PushTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>[]
           }
           create: {
-            args: Prisma.ExpoPushTokenCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>
+            args: Prisma.PushTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>
           }
           createMany: {
-            args: Prisma.ExpoPushTokenCreateManyArgs<ExtArgs>
+            args: Prisma.PushTokenCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ExpoPushTokenCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>[]
+            args: Prisma.PushTokenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>[]
           }
           delete: {
-            args: Prisma.ExpoPushTokenDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>
+            args: Prisma.PushTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>
           }
           update: {
-            args: Prisma.ExpoPushTokenUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>
+            args: Prisma.PushTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>
           }
           deleteMany: {
-            args: Prisma.ExpoPushTokenDeleteManyArgs<ExtArgs>
+            args: Prisma.PushTokenDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ExpoPushTokenUpdateManyArgs<ExtArgs>
+            args: Prisma.PushTokenUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.ExpoPushTokenUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>[]
+            args: Prisma.PushTokenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>[]
           }
           upsert: {
-            args: Prisma.ExpoPushTokenUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ExpoPushTokenPayload>
+            args: Prisma.PushTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushTokenPayload>
           }
           aggregate: {
-            args: Prisma.ExpoPushTokenAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateExpoPushToken>
+            args: Prisma.PushTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePushToken>
           }
           groupBy: {
-            args: Prisma.ExpoPushTokenGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ExpoPushTokenGroupByOutputType>[]
+            args: Prisma.PushTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PushTokenGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ExpoPushTokenCountArgs<ExtArgs>
-            result: $Utils.Optional<ExpoPushTokenCountAggregateOutputType> | number
+            args: Prisma.PushTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<PushTokenCountAggregateOutputType> | number
           }
         }
       }
@@ -5888,7 +5888,7 @@ export namespace Prisma {
     wishlistItem?: WishlistItemOmit
     referral?: ReferralOmit
     pushSubscription?: PushSubscriptionOmit
-    expoPushToken?: ExpoPushTokenOmit
+    pushToken?: PushTokenOmit
     blogPost?: BlogPostOmit
     auditLog?: AuditLogOmit
     governanceDocument?: GovernanceDocumentOmit
@@ -5993,7 +5993,7 @@ export namespace Prisma {
     learningReflections: number
     wishlistItems: number
     pushSubscriptions: number
-    expoPushTokens: number
+    pushTokens: number
     referrals: number
     referralCommissions: number
     blogPosts: number
@@ -6019,7 +6019,7 @@ export namespace Prisma {
     learningReflections?: boolean | UserCountOutputTypeCountLearningReflectionsArgs
     wishlistItems?: boolean | UserCountOutputTypeCountWishlistItemsArgs
     pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
-    expoPushTokens?: boolean | UserCountOutputTypeCountExpoPushTokensArgs
+    pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs
     referrals?: boolean | UserCountOutputTypeCountReferralsArgs
     referralCommissions?: boolean | UserCountOutputTypeCountReferralCommissionsArgs
     blogPosts?: boolean | UserCountOutputTypeCountBlogPostsArgs
@@ -6172,8 +6172,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountExpoPushTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ExpoPushTokenWhereInput
+  export type UserCountOutputTypeCountPushTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PushTokenWhereInput
   }
 
   /**
@@ -7247,7 +7247,7 @@ export namespace Prisma {
     learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
     pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
-    expoPushTokens?: boolean | User$expoPushTokensArgs<ExtArgs>
+    pushTokens?: boolean | User$pushTokensArgs<ExtArgs>
     referredBy?: boolean | User$referredByArgs<ExtArgs>
     referrals?: boolean | User$referralsArgs<ExtArgs>
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
@@ -7348,7 +7348,7 @@ export namespace Prisma {
     learningReflections?: boolean | User$learningReflectionsArgs<ExtArgs>
     wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
     pushSubscriptions?: boolean | User$pushSubscriptionsArgs<ExtArgs>
-    expoPushTokens?: boolean | User$expoPushTokensArgs<ExtArgs>
+    pushTokens?: boolean | User$pushTokensArgs<ExtArgs>
     referredBy?: boolean | User$referredByArgs<ExtArgs>
     referrals?: boolean | User$referralsArgs<ExtArgs>
     referralCommissions?: boolean | User$referralCommissionsArgs<ExtArgs>
@@ -7388,7 +7388,7 @@ export namespace Prisma {
       learningReflections: Prisma.$LearningReflectionPayload<ExtArgs>[]
       wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
       pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
-      expoPushTokens: Prisma.$ExpoPushTokenPayload<ExtArgs>[]
+      pushTokens: Prisma.$PushTokenPayload<ExtArgs>[]
       referredBy: Prisma.$UserPayload<ExtArgs> | null
       referrals: Prisma.$UserPayload<ExtArgs>[]
       /**
@@ -7849,7 +7849,7 @@ export namespace Prisma {
     learningReflections<T extends User$learningReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$learningReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wishlistItems<T extends User$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pushSubscriptions<T extends User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    expoPushTokens<T extends User$expoPushTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$expoPushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pushTokens<T extends User$pushTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$pushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     referredBy<T extends User$referredByArgs<ExtArgs> = {}>(args?: Subset<T, User$referredByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     referrals<T extends User$referralsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     referralCommissions<T extends User$referralCommissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralCommissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8799,27 +8799,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.expoPushTokens
+   * User.pushTokens
    */
-  export type User$expoPushTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$pushTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
-    where?: ExpoPushTokenWhereInput
-    orderBy?: ExpoPushTokenOrderByWithRelationInput | ExpoPushTokenOrderByWithRelationInput[]
-    cursor?: ExpoPushTokenWhereUniqueInput
+    include?: PushTokenInclude<ExtArgs> | null
+    where?: PushTokenWhereInput
+    orderBy?: PushTokenOrderByWithRelationInput | PushTokenOrderByWithRelationInput[]
+    cursor?: PushTokenWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ExpoPushTokenScalarFieldEnum | ExpoPushTokenScalarFieldEnum[]
+    distinct?: PushTokenScalarFieldEnum | PushTokenScalarFieldEnum[]
   }
 
   /**
@@ -63323,30 +63323,30 @@ export namespace Prisma {
 
 
   /**
-   * Model ExpoPushToken
+   * Model PushToken
    */
 
-  export type AggregateExpoPushToken = {
-    _count: ExpoPushTokenCountAggregateOutputType | null
-    _min: ExpoPushTokenMinAggregateOutputType | null
-    _max: ExpoPushTokenMaxAggregateOutputType | null
+  export type AggregatePushToken = {
+    _count: PushTokenCountAggregateOutputType | null
+    _min: PushTokenMinAggregateOutputType | null
+    _max: PushTokenMaxAggregateOutputType | null
   }
 
-  export type ExpoPushTokenMinAggregateOutputType = {
+  export type PushTokenMinAggregateOutputType = {
     id: string | null
     userId: string | null
     token: string | null
     createdAt: Date | null
   }
 
-  export type ExpoPushTokenMaxAggregateOutputType = {
+  export type PushTokenMaxAggregateOutputType = {
     id: string | null
     userId: string | null
     token: string | null
     createdAt: Date | null
   }
 
-  export type ExpoPushTokenCountAggregateOutputType = {
+  export type PushTokenCountAggregateOutputType = {
     id: number
     userId: number
     token: number
@@ -63355,21 +63355,21 @@ export namespace Prisma {
   }
 
 
-  export type ExpoPushTokenMinAggregateInputType = {
+  export type PushTokenMinAggregateInputType = {
     id?: true
     userId?: true
     token?: true
     createdAt?: true
   }
 
-  export type ExpoPushTokenMaxAggregateInputType = {
+  export type PushTokenMaxAggregateInputType = {
     id?: true
     userId?: true
     token?: true
     createdAt?: true
   }
 
-  export type ExpoPushTokenCountAggregateInputType = {
+  export type PushTokenCountAggregateInputType = {
     id?: true
     userId?: true
     token?: true
@@ -63377,146 +63377,146 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type ExpoPushTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ExpoPushToken to aggregate.
+     * Filter which PushToken to aggregate.
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ExpoPushTokens to fetch.
+     * Determine the order of PushTokens to fetch.
      */
-    orderBy?: ExpoPushTokenOrderByWithRelationInput | ExpoPushTokenOrderByWithRelationInput[]
+    orderBy?: PushTokenOrderByWithRelationInput | PushTokenOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ExpoPushTokenWhereUniqueInput
+    cursor?: PushTokenWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ExpoPushTokens from the position of the cursor.
+     * Take `±n` PushTokens from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ExpoPushTokens.
+     * Skip the first `n` PushTokens.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ExpoPushTokens
+     * Count returned PushTokens
     **/
-    _count?: true | ExpoPushTokenCountAggregateInputType
+    _count?: true | PushTokenCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ExpoPushTokenMinAggregateInputType
+    _min?: PushTokenMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ExpoPushTokenMaxAggregateInputType
+    _max?: PushTokenMaxAggregateInputType
   }
 
-  export type GetExpoPushTokenAggregateType<T extends ExpoPushTokenAggregateArgs> = {
-        [P in keyof T & keyof AggregateExpoPushToken]: P extends '_count' | 'count'
+  export type GetPushTokenAggregateType<T extends PushTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregatePushToken]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateExpoPushToken[P]>
-      : GetScalarType<T[P], AggregateExpoPushToken[P]>
+        : GetScalarType<T[P], AggregatePushToken[P]>
+      : GetScalarType<T[P], AggregatePushToken[P]>
   }
 
 
 
 
-  export type ExpoPushTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ExpoPushTokenWhereInput
-    orderBy?: ExpoPushTokenOrderByWithAggregationInput | ExpoPushTokenOrderByWithAggregationInput[]
-    by: ExpoPushTokenScalarFieldEnum[] | ExpoPushTokenScalarFieldEnum
-    having?: ExpoPushTokenScalarWhereWithAggregatesInput
+  export type PushTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PushTokenWhereInput
+    orderBy?: PushTokenOrderByWithAggregationInput | PushTokenOrderByWithAggregationInput[]
+    by: PushTokenScalarFieldEnum[] | PushTokenScalarFieldEnum
+    having?: PushTokenScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ExpoPushTokenCountAggregateInputType | true
-    _min?: ExpoPushTokenMinAggregateInputType
-    _max?: ExpoPushTokenMaxAggregateInputType
+    _count?: PushTokenCountAggregateInputType | true
+    _min?: PushTokenMinAggregateInputType
+    _max?: PushTokenMaxAggregateInputType
   }
 
-  export type ExpoPushTokenGroupByOutputType = {
+  export type PushTokenGroupByOutputType = {
     id: string
     userId: string
     token: string
     createdAt: Date
-    _count: ExpoPushTokenCountAggregateOutputType | null
-    _min: ExpoPushTokenMinAggregateOutputType | null
-    _max: ExpoPushTokenMaxAggregateOutputType | null
+    _count: PushTokenCountAggregateOutputType | null
+    _min: PushTokenMinAggregateOutputType | null
+    _max: PushTokenMaxAggregateOutputType | null
   }
 
-  type GetExpoPushTokenGroupByPayload<T extends ExpoPushTokenGroupByArgs> = Prisma.PrismaPromise<
+  type GetPushTokenGroupByPayload<T extends PushTokenGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ExpoPushTokenGroupByOutputType, T['by']> &
+      PickEnumerable<PushTokenGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ExpoPushTokenGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PushTokenGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ExpoPushTokenGroupByOutputType[P]>
-            : GetScalarType<T[P], ExpoPushTokenGroupByOutputType[P]>
+              : GetScalarType<T[P], PushTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], PushTokenGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ExpoPushTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PushTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     token?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["expoPushToken"]>
+  }, ExtArgs["result"]["pushToken"]>
 
-  export type ExpoPushTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PushTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     token?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["expoPushToken"]>
+  }, ExtArgs["result"]["pushToken"]>
 
-  export type ExpoPushTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PushTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     token?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["expoPushToken"]>
+  }, ExtArgs["result"]["pushToken"]>
 
-  export type ExpoPushTokenSelectScalar = {
+  export type PushTokenSelectScalar = {
     id?: boolean
     userId?: boolean
     token?: boolean
     createdAt?: boolean
   }
 
-  export type ExpoPushTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "createdAt", ExtArgs["result"]["expoPushToken"]>
-  export type ExpoPushTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "createdAt", ExtArgs["result"]["pushToken"]>
+  export type PushTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type ExpoPushTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type ExpoPushTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
-  export type $ExpoPushTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ExpoPushToken"
+  export type $PushTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PushToken"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
     }
@@ -63525,136 +63525,136 @@ export namespace Prisma {
       userId: string
       token: string
       createdAt: Date
-    }, ExtArgs["result"]["expoPushToken"]>
+    }, ExtArgs["result"]["pushToken"]>
     composites: {}
   }
 
-  type ExpoPushTokenGetPayload<S extends boolean | null | undefined | ExpoPushTokenDefaultArgs> = $Result.GetResult<Prisma.$ExpoPushTokenPayload, S>
+  type PushTokenGetPayload<S extends boolean | null | undefined | PushTokenDefaultArgs> = $Result.GetResult<Prisma.$PushTokenPayload, S>
 
-  type ExpoPushTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ExpoPushTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ExpoPushTokenCountAggregateInputType | true
+  type PushTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PushTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PushTokenCountAggregateInputType | true
     }
 
-  export interface ExpoPushTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExpoPushToken'], meta: { name: 'ExpoPushToken' } }
+  export interface PushTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PushToken'], meta: { name: 'PushToken' } }
     /**
-     * Find zero or one ExpoPushToken that matches the filter.
-     * @param {ExpoPushTokenFindUniqueArgs} args - Arguments to find a ExpoPushToken
+     * Find zero or one PushToken that matches the filter.
+     * @param {PushTokenFindUniqueArgs} args - Arguments to find a PushToken
      * @example
-     * // Get one ExpoPushToken
-     * const expoPushToken = await prisma.expoPushToken.findUnique({
+     * // Get one PushToken
+     * const pushToken = await prisma.pushToken.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ExpoPushTokenFindUniqueArgs>(args: SelectSubset<T, ExpoPushTokenFindUniqueArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends PushTokenFindUniqueArgs>(args: SelectSubset<T, PushTokenFindUniqueArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ExpoPushToken that matches the filter or throw an error with `error.code='P2025'`
+     * Find one PushToken that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {ExpoPushTokenFindUniqueOrThrowArgs} args - Arguments to find a ExpoPushToken
+     * @param {PushTokenFindUniqueOrThrowArgs} args - Arguments to find a PushToken
      * @example
-     * // Get one ExpoPushToken
-     * const expoPushToken = await prisma.expoPushToken.findUniqueOrThrow({
+     * // Get one PushToken
+     * const pushToken = await prisma.pushToken.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ExpoPushTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, ExpoPushTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends PushTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, PushTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ExpoPushToken that matches the filter.
+     * Find the first PushToken that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenFindFirstArgs} args - Arguments to find a ExpoPushToken
+     * @param {PushTokenFindFirstArgs} args - Arguments to find a PushToken
      * @example
-     * // Get one ExpoPushToken
-     * const expoPushToken = await prisma.expoPushToken.findFirst({
+     * // Get one PushToken
+     * const pushToken = await prisma.pushToken.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ExpoPushTokenFindFirstArgs>(args?: SelectSubset<T, ExpoPushTokenFindFirstArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends PushTokenFindFirstArgs>(args?: SelectSubset<T, PushTokenFindFirstArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ExpoPushToken that matches the filter or
+     * Find the first PushToken that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenFindFirstOrThrowArgs} args - Arguments to find a ExpoPushToken
+     * @param {PushTokenFindFirstOrThrowArgs} args - Arguments to find a PushToken
      * @example
-     * // Get one ExpoPushToken
-     * const expoPushToken = await prisma.expoPushToken.findFirstOrThrow({
+     * // Get one PushToken
+     * const pushToken = await prisma.pushToken.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ExpoPushTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, ExpoPushTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends PushTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, PushTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more ExpoPushTokens that matches the filter.
+     * Find zero or more PushTokens that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PushTokenFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ExpoPushTokens
-     * const expoPushTokens = await prisma.expoPushToken.findMany()
+     * // Get all PushTokens
+     * const pushTokens = await prisma.pushToken.findMany()
      * 
-     * // Get first 10 ExpoPushTokens
-     * const expoPushTokens = await prisma.expoPushToken.findMany({ take: 10 })
+     * // Get first 10 PushTokens
+     * const pushTokens = await prisma.pushToken.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const expoPushTokenWithIdOnly = await prisma.expoPushToken.findMany({ select: { id: true } })
+     * const pushTokenWithIdOnly = await prisma.pushToken.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ExpoPushTokenFindManyArgs>(args?: SelectSubset<T, ExpoPushTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends PushTokenFindManyArgs>(args?: SelectSubset<T, PushTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a ExpoPushToken.
-     * @param {ExpoPushTokenCreateArgs} args - Arguments to create a ExpoPushToken.
+     * Create a PushToken.
+     * @param {PushTokenCreateArgs} args - Arguments to create a PushToken.
      * @example
-     * // Create one ExpoPushToken
-     * const ExpoPushToken = await prisma.expoPushToken.create({
+     * // Create one PushToken
+     * const PushToken = await prisma.pushToken.create({
      *   data: {
-     *     // ... data to create a ExpoPushToken
+     *     // ... data to create a PushToken
      *   }
      * })
      * 
      */
-    create<T extends ExpoPushTokenCreateArgs>(args: SelectSubset<T, ExpoPushTokenCreateArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends PushTokenCreateArgs>(args: SelectSubset<T, PushTokenCreateArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many ExpoPushTokens.
-     * @param {ExpoPushTokenCreateManyArgs} args - Arguments to create many ExpoPushTokens.
+     * Create many PushTokens.
+     * @param {PushTokenCreateManyArgs} args - Arguments to create many PushTokens.
      * @example
-     * // Create many ExpoPushTokens
-     * const expoPushToken = await prisma.expoPushToken.createMany({
+     * // Create many PushTokens
+     * const pushToken = await prisma.pushToken.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ExpoPushTokenCreateManyArgs>(args?: SelectSubset<T, ExpoPushTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends PushTokenCreateManyArgs>(args?: SelectSubset<T, PushTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ExpoPushTokens and returns the data saved in the database.
-     * @param {ExpoPushTokenCreateManyAndReturnArgs} args - Arguments to create many ExpoPushTokens.
+     * Create many PushTokens and returns the data saved in the database.
+     * @param {PushTokenCreateManyAndReturnArgs} args - Arguments to create many PushTokens.
      * @example
-     * // Create many ExpoPushTokens
-     * const expoPushToken = await prisma.expoPushToken.createManyAndReturn({
+     * // Create many PushTokens
+     * const pushToken = await prisma.pushToken.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ExpoPushTokens and only return the `id`
-     * const expoPushTokenWithIdOnly = await prisma.expoPushToken.createManyAndReturn({
+     * // Create many PushTokens and only return the `id`
+     * const pushTokenWithIdOnly = await prisma.pushToken.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -63664,28 +63664,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ExpoPushTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, ExpoPushTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends PushTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, PushTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a ExpoPushToken.
-     * @param {ExpoPushTokenDeleteArgs} args - Arguments to delete one ExpoPushToken.
+     * Delete a PushToken.
+     * @param {PushTokenDeleteArgs} args - Arguments to delete one PushToken.
      * @example
-     * // Delete one ExpoPushToken
-     * const ExpoPushToken = await prisma.expoPushToken.delete({
+     * // Delete one PushToken
+     * const PushToken = await prisma.pushToken.delete({
      *   where: {
-     *     // ... filter to delete one ExpoPushToken
+     *     // ... filter to delete one PushToken
      *   }
      * })
      * 
      */
-    delete<T extends ExpoPushTokenDeleteArgs>(args: SelectSubset<T, ExpoPushTokenDeleteArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends PushTokenDeleteArgs>(args: SelectSubset<T, PushTokenDeleteArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one ExpoPushToken.
-     * @param {ExpoPushTokenUpdateArgs} args - Arguments to update one ExpoPushToken.
+     * Update one PushToken.
+     * @param {PushTokenUpdateArgs} args - Arguments to update one PushToken.
      * @example
-     * // Update one ExpoPushToken
-     * const expoPushToken = await prisma.expoPushToken.update({
+     * // Update one PushToken
+     * const pushToken = await prisma.pushToken.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63695,30 +63695,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ExpoPushTokenUpdateArgs>(args: SelectSubset<T, ExpoPushTokenUpdateArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends PushTokenUpdateArgs>(args: SelectSubset<T, PushTokenUpdateArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more ExpoPushTokens.
-     * @param {ExpoPushTokenDeleteManyArgs} args - Arguments to filter ExpoPushTokens to delete.
+     * Delete zero or more PushTokens.
+     * @param {PushTokenDeleteManyArgs} args - Arguments to filter PushTokens to delete.
      * @example
-     * // Delete a few ExpoPushTokens
-     * const { count } = await prisma.expoPushToken.deleteMany({
+     * // Delete a few PushTokens
+     * const { count } = await prisma.pushToken.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ExpoPushTokenDeleteManyArgs>(args?: SelectSubset<T, ExpoPushTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends PushTokenDeleteManyArgs>(args?: SelectSubset<T, PushTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ExpoPushTokens.
+     * Update zero or more PushTokens.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PushTokenUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ExpoPushTokens
-     * const expoPushToken = await prisma.expoPushToken.updateMany({
+     * // Update many PushTokens
+     * const pushToken = await prisma.pushToken.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63728,14 +63728,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ExpoPushTokenUpdateManyArgs>(args: SelectSubset<T, ExpoPushTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends PushTokenUpdateManyArgs>(args: SelectSubset<T, PushTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ExpoPushTokens and returns the data updated in the database.
-     * @param {ExpoPushTokenUpdateManyAndReturnArgs} args - Arguments to update many ExpoPushTokens.
+     * Update zero or more PushTokens and returns the data updated in the database.
+     * @param {PushTokenUpdateManyAndReturnArgs} args - Arguments to update many PushTokens.
      * @example
-     * // Update many ExpoPushTokens
-     * const expoPushToken = await prisma.expoPushToken.updateManyAndReturn({
+     * // Update many PushTokens
+     * const pushToken = await prisma.pushToken.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -63744,8 +63744,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ExpoPushTokens and only return the `id`
-     * const expoPushTokenWithIdOnly = await prisma.expoPushToken.updateManyAndReturn({
+     * // Update zero or more PushTokens and only return the `id`
+     * const pushTokenWithIdOnly = await prisma.pushToken.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -63758,56 +63758,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends ExpoPushTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, ExpoPushTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends PushTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, PushTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one ExpoPushToken.
-     * @param {ExpoPushTokenUpsertArgs} args - Arguments to update or create a ExpoPushToken.
+     * Create or update one PushToken.
+     * @param {PushTokenUpsertArgs} args - Arguments to update or create a PushToken.
      * @example
-     * // Update or create a ExpoPushToken
-     * const expoPushToken = await prisma.expoPushToken.upsert({
+     * // Update or create a PushToken
+     * const pushToken = await prisma.pushToken.upsert({
      *   create: {
-     *     // ... data to create a ExpoPushToken
+     *     // ... data to create a PushToken
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ExpoPushToken we want to update
+     *     // ... the filter for the PushToken we want to update
      *   }
      * })
      */
-    upsert<T extends ExpoPushTokenUpsertArgs>(args: SelectSubset<T, ExpoPushTokenUpsertArgs<ExtArgs>>): Prisma__ExpoPushTokenClient<$Result.GetResult<Prisma.$ExpoPushTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends PushTokenUpsertArgs>(args: SelectSubset<T, PushTokenUpsertArgs<ExtArgs>>): Prisma__PushTokenClient<$Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of ExpoPushTokens.
+     * Count the number of PushTokens.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenCountArgs} args - Arguments to filter ExpoPushTokens to count.
+     * @param {PushTokenCountArgs} args - Arguments to filter PushTokens to count.
      * @example
-     * // Count the number of ExpoPushTokens
-     * const count = await prisma.expoPushToken.count({
+     * // Count the number of PushTokens
+     * const count = await prisma.pushToken.count({
      *   where: {
-     *     // ... the filter for the ExpoPushTokens we want to count
+     *     // ... the filter for the PushTokens we want to count
      *   }
      * })
     **/
-    count<T extends ExpoPushTokenCountArgs>(
-      args?: Subset<T, ExpoPushTokenCountArgs>,
+    count<T extends PushTokenCountArgs>(
+      args?: Subset<T, PushTokenCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ExpoPushTokenCountAggregateOutputType>
+          : GetScalarType<T['select'], PushTokenCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ExpoPushToken.
+     * Allows you to perform aggregations operations on a PushToken.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PushTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -63827,13 +63827,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ExpoPushTokenAggregateArgs>(args: Subset<T, ExpoPushTokenAggregateArgs>): Prisma.PrismaPromise<GetExpoPushTokenAggregateType<T>>
+    aggregate<T extends PushTokenAggregateArgs>(args: Subset<T, PushTokenAggregateArgs>): Prisma.PrismaPromise<GetPushTokenAggregateType<T>>
 
     /**
-     * Group by ExpoPushToken.
+     * Group by PushToken.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ExpoPushTokenGroupByArgs} args - Group by arguments.
+     * @param {PushTokenGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -63848,14 +63848,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ExpoPushTokenGroupByArgs,
+      T extends PushTokenGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ExpoPushTokenGroupByArgs['orderBy'] }
-        : { orderBy?: ExpoPushTokenGroupByArgs['orderBy'] },
+        ? { orderBy: PushTokenGroupByArgs['orderBy'] }
+        : { orderBy?: PushTokenGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -63904,20 +63904,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ExpoPushTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExpoPushTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PushTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPushTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ExpoPushToken model
+   * Fields of the PushToken model
    */
-  readonly fields: ExpoPushTokenFieldRefs;
+  readonly fields: PushTokenFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ExpoPushToken.
+   * The delegate class that acts as a "Promise-like" for PushToken.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ExpoPushTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PushTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -63946,429 +63946,429 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ExpoPushToken model
+   * Fields of the PushToken model
    */
-  interface ExpoPushTokenFieldRefs {
-    readonly id: FieldRef<"ExpoPushToken", 'String'>
-    readonly userId: FieldRef<"ExpoPushToken", 'String'>
-    readonly token: FieldRef<"ExpoPushToken", 'String'>
-    readonly createdAt: FieldRef<"ExpoPushToken", 'DateTime'>
+  interface PushTokenFieldRefs {
+    readonly id: FieldRef<"PushToken", 'String'>
+    readonly userId: FieldRef<"PushToken", 'String'>
+    readonly token: FieldRef<"PushToken", 'String'>
+    readonly createdAt: FieldRef<"PushToken", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * ExpoPushToken findUnique
+   * PushToken findUnique
    */
-  export type ExpoPushTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * Filter, which ExpoPushToken to fetch.
+     * Filter, which PushToken to fetch.
      */
-    where: ExpoPushTokenWhereUniqueInput
+    where: PushTokenWhereUniqueInput
   }
 
   /**
-   * ExpoPushToken findUniqueOrThrow
+   * PushToken findUniqueOrThrow
    */
-  export type ExpoPushTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * Filter, which ExpoPushToken to fetch.
+     * Filter, which PushToken to fetch.
      */
-    where: ExpoPushTokenWhereUniqueInput
+    where: PushTokenWhereUniqueInput
   }
 
   /**
-   * ExpoPushToken findFirst
+   * PushToken findFirst
    */
-  export type ExpoPushTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * Filter, which ExpoPushToken to fetch.
+     * Filter, which PushToken to fetch.
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ExpoPushTokens to fetch.
+     * Determine the order of PushTokens to fetch.
      */
-    orderBy?: ExpoPushTokenOrderByWithRelationInput | ExpoPushTokenOrderByWithRelationInput[]
+    orderBy?: PushTokenOrderByWithRelationInput | PushTokenOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ExpoPushTokens.
+     * Sets the position for searching for PushTokens.
      */
-    cursor?: ExpoPushTokenWhereUniqueInput
+    cursor?: PushTokenWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ExpoPushTokens from the position of the cursor.
+     * Take `±n` PushTokens from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ExpoPushTokens.
+     * Skip the first `n` PushTokens.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ExpoPushTokens.
+     * Filter by unique combinations of PushTokens.
      */
-    distinct?: ExpoPushTokenScalarFieldEnum | ExpoPushTokenScalarFieldEnum[]
+    distinct?: PushTokenScalarFieldEnum | PushTokenScalarFieldEnum[]
   }
 
   /**
-   * ExpoPushToken findFirstOrThrow
+   * PushToken findFirstOrThrow
    */
-  export type ExpoPushTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * Filter, which ExpoPushToken to fetch.
+     * Filter, which PushToken to fetch.
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ExpoPushTokens to fetch.
+     * Determine the order of PushTokens to fetch.
      */
-    orderBy?: ExpoPushTokenOrderByWithRelationInput | ExpoPushTokenOrderByWithRelationInput[]
+    orderBy?: PushTokenOrderByWithRelationInput | PushTokenOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ExpoPushTokens.
+     * Sets the position for searching for PushTokens.
      */
-    cursor?: ExpoPushTokenWhereUniqueInput
+    cursor?: PushTokenWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ExpoPushTokens from the position of the cursor.
+     * Take `±n` PushTokens from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ExpoPushTokens.
+     * Skip the first `n` PushTokens.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ExpoPushTokens.
+     * Filter by unique combinations of PushTokens.
      */
-    distinct?: ExpoPushTokenScalarFieldEnum | ExpoPushTokenScalarFieldEnum[]
+    distinct?: PushTokenScalarFieldEnum | PushTokenScalarFieldEnum[]
   }
 
   /**
-   * ExpoPushToken findMany
+   * PushToken findMany
    */
-  export type ExpoPushTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * Filter, which ExpoPushTokens to fetch.
+     * Filter, which PushTokens to fetch.
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ExpoPushTokens to fetch.
+     * Determine the order of PushTokens to fetch.
      */
-    orderBy?: ExpoPushTokenOrderByWithRelationInput | ExpoPushTokenOrderByWithRelationInput[]
+    orderBy?: PushTokenOrderByWithRelationInput | PushTokenOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ExpoPushTokens.
+     * Sets the position for listing PushTokens.
      */
-    cursor?: ExpoPushTokenWhereUniqueInput
+    cursor?: PushTokenWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ExpoPushTokens from the position of the cursor.
+     * Take `±n` PushTokens from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ExpoPushTokens.
+     * Skip the first `n` PushTokens.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ExpoPushTokens.
+     * Filter by unique combinations of PushTokens.
      */
-    distinct?: ExpoPushTokenScalarFieldEnum | ExpoPushTokenScalarFieldEnum[]
+    distinct?: PushTokenScalarFieldEnum | PushTokenScalarFieldEnum[]
   }
 
   /**
-   * ExpoPushToken create
+   * PushToken create
    */
-  export type ExpoPushTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * The data needed to create a ExpoPushToken.
+     * The data needed to create a PushToken.
      */
-    data: XOR<ExpoPushTokenCreateInput, ExpoPushTokenUncheckedCreateInput>
+    data: XOR<PushTokenCreateInput, PushTokenUncheckedCreateInput>
   }
 
   /**
-   * ExpoPushToken createMany
+   * PushToken createMany
    */
-  export type ExpoPushTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ExpoPushTokens.
+     * The data used to create many PushTokens.
      */
-    data: ExpoPushTokenCreateManyInput | ExpoPushTokenCreateManyInput[]
+    data: PushTokenCreateManyInput | PushTokenCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ExpoPushToken createManyAndReturn
+   * PushToken createManyAndReturn
    */
-  export type ExpoPushTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelectCreateManyAndReturn<ExtArgs> | null
+    select?: PushTokenSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
-     * The data used to create many ExpoPushTokens.
+     * The data used to create many PushTokens.
      */
-    data: ExpoPushTokenCreateManyInput | ExpoPushTokenCreateManyInput[]
+    data: PushTokenCreateManyInput | PushTokenCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: PushTokenIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ExpoPushToken update
+   * PushToken update
    */
-  export type ExpoPushTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * The data needed to update a ExpoPushToken.
+     * The data needed to update a PushToken.
      */
-    data: XOR<ExpoPushTokenUpdateInput, ExpoPushTokenUncheckedUpdateInput>
+    data: XOR<PushTokenUpdateInput, PushTokenUncheckedUpdateInput>
     /**
-     * Choose, which ExpoPushToken to update.
+     * Choose, which PushToken to update.
      */
-    where: ExpoPushTokenWhereUniqueInput
+    where: PushTokenWhereUniqueInput
   }
 
   /**
-   * ExpoPushToken updateMany
+   * PushToken updateMany
    */
-  export type ExpoPushTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ExpoPushTokens.
+     * The data used to update PushTokens.
      */
-    data: XOR<ExpoPushTokenUpdateManyMutationInput, ExpoPushTokenUncheckedUpdateManyInput>
+    data: XOR<PushTokenUpdateManyMutationInput, PushTokenUncheckedUpdateManyInput>
     /**
-     * Filter which ExpoPushTokens to update
+     * Filter which PushTokens to update
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
-     * Limit how many ExpoPushTokens to update.
+     * Limit how many PushTokens to update.
      */
     limit?: number
   }
 
   /**
-   * ExpoPushToken updateManyAndReturn
+   * PushToken updateManyAndReturn
    */
-  export type ExpoPushTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: PushTokenSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
-     * The data used to update ExpoPushTokens.
+     * The data used to update PushTokens.
      */
-    data: XOR<ExpoPushTokenUpdateManyMutationInput, ExpoPushTokenUncheckedUpdateManyInput>
+    data: XOR<PushTokenUpdateManyMutationInput, PushTokenUncheckedUpdateManyInput>
     /**
-     * Filter which ExpoPushTokens to update
+     * Filter which PushTokens to update
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
-     * Limit how many ExpoPushTokens to update.
+     * Limit how many PushTokens to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: PushTokenIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ExpoPushToken upsert
+   * PushToken upsert
    */
-  export type ExpoPushTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * The filter to search for the ExpoPushToken to update in case it exists.
+     * The filter to search for the PushToken to update in case it exists.
      */
-    where: ExpoPushTokenWhereUniqueInput
+    where: PushTokenWhereUniqueInput
     /**
-     * In case the ExpoPushToken found by the `where` argument doesn't exist, create a new ExpoPushToken with this data.
+     * In case the PushToken found by the `where` argument doesn't exist, create a new PushToken with this data.
      */
-    create: XOR<ExpoPushTokenCreateInput, ExpoPushTokenUncheckedCreateInput>
+    create: XOR<PushTokenCreateInput, PushTokenUncheckedCreateInput>
     /**
-     * In case the ExpoPushToken was found with the provided `where` argument, update it with this data.
+     * In case the PushToken was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ExpoPushTokenUpdateInput, ExpoPushTokenUncheckedUpdateInput>
+    update: XOR<PushTokenUpdateInput, PushTokenUncheckedUpdateInput>
   }
 
   /**
-   * ExpoPushToken delete
+   * PushToken delete
    */
-  export type ExpoPushTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
     /**
-     * Filter which ExpoPushToken to delete.
+     * Filter which PushToken to delete.
      */
-    where: ExpoPushTokenWhereUniqueInput
+    where: PushTokenWhereUniqueInput
   }
 
   /**
-   * ExpoPushToken deleteMany
+   * PushToken deleteMany
    */
-  export type ExpoPushTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ExpoPushTokens to delete
+     * Filter which PushTokens to delete
      */
-    where?: ExpoPushTokenWhereInput
+    where?: PushTokenWhereInput
     /**
-     * Limit how many ExpoPushTokens to delete.
+     * Limit how many PushTokens to delete.
      */
     limit?: number
   }
 
   /**
-   * ExpoPushToken without action
+   * PushToken without action
    */
-  export type ExpoPushTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PushTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ExpoPushToken
+     * Select specific fields to fetch from the PushToken
      */
-    select?: ExpoPushTokenSelect<ExtArgs> | null
+    select?: PushTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ExpoPushToken
+     * Omit specific fields from the PushToken
      */
-    omit?: ExpoPushTokenOmit<ExtArgs> | null
+    omit?: PushTokenOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ExpoPushTokenInclude<ExtArgs> | null
+    include?: PushTokenInclude<ExtArgs> | null
   }
 
 
@@ -70698,14 +70698,14 @@ export namespace Prisma {
   export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
 
 
-  export const ExpoPushTokenScalarFieldEnum: {
+  export const PushTokenScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
     token: 'token',
     createdAt: 'createdAt'
   };
 
-  export type ExpoPushTokenScalarFieldEnum = (typeof ExpoPushTokenScalarFieldEnum)[keyof typeof ExpoPushTokenScalarFieldEnum]
+  export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof typeof PushTokenScalarFieldEnum]
 
 
   export const BlogPostScalarFieldEnum: {
@@ -71225,7 +71225,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
     pushSubscriptions?: PushSubscriptionListRelationFilter
-    expoPushTokens?: ExpoPushTokenListRelationFilter
+    pushTokens?: PushTokenListRelationFilter
     referredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     referrals?: UserListRelationFilter
     referralCommissions?: ReferralListRelationFilter
@@ -71275,7 +71275,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionOrderByRelationAggregateInput
     wishlistItems?: WishlistItemOrderByRelationAggregateInput
     pushSubscriptions?: PushSubscriptionOrderByRelationAggregateInput
-    expoPushTokens?: ExpoPushTokenOrderByRelationAggregateInput
+    pushTokens?: PushTokenOrderByRelationAggregateInput
     referredBy?: UserOrderByWithRelationInput
     referrals?: UserOrderByRelationAggregateInput
     referralCommissions?: ReferralOrderByRelationAggregateInput
@@ -71328,7 +71328,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
     pushSubscriptions?: PushSubscriptionListRelationFilter
-    expoPushTokens?: ExpoPushTokenListRelationFilter
+    pushTokens?: PushTokenListRelationFilter
     referredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     referrals?: UserListRelationFilter
     referralCommissions?: ReferralListRelationFilter
@@ -75062,18 +75062,18 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"PushSubscription"> | Date | string
   }
 
-  export type ExpoPushTokenWhereInput = {
-    AND?: ExpoPushTokenWhereInput | ExpoPushTokenWhereInput[]
-    OR?: ExpoPushTokenWhereInput[]
-    NOT?: ExpoPushTokenWhereInput | ExpoPushTokenWhereInput[]
-    id?: StringFilter<"ExpoPushToken"> | string
-    userId?: StringFilter<"ExpoPushToken"> | string
-    token?: StringFilter<"ExpoPushToken"> | string
-    createdAt?: DateTimeFilter<"ExpoPushToken"> | Date | string
+  export type PushTokenWhereInput = {
+    AND?: PushTokenWhereInput | PushTokenWhereInput[]
+    OR?: PushTokenWhereInput[]
+    NOT?: PushTokenWhereInput | PushTokenWhereInput[]
+    id?: StringFilter<"PushToken"> | string
+    userId?: StringFilter<"PushToken"> | string
+    token?: StringFilter<"PushToken"> | string
+    createdAt?: DateTimeFilter<"PushToken"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
-  export type ExpoPushTokenOrderByWithRelationInput = {
+  export type PushTokenOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
     token?: SortOrder
@@ -75081,35 +75081,35 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
   }
 
-  export type ExpoPushTokenWhereUniqueInput = Prisma.AtLeast<{
+  export type PushTokenWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     token?: string
-    AND?: ExpoPushTokenWhereInput | ExpoPushTokenWhereInput[]
-    OR?: ExpoPushTokenWhereInput[]
-    NOT?: ExpoPushTokenWhereInput | ExpoPushTokenWhereInput[]
-    userId?: StringFilter<"ExpoPushToken"> | string
-    createdAt?: DateTimeFilter<"ExpoPushToken"> | Date | string
+    AND?: PushTokenWhereInput | PushTokenWhereInput[]
+    OR?: PushTokenWhereInput[]
+    NOT?: PushTokenWhereInput | PushTokenWhereInput[]
+    userId?: StringFilter<"PushToken"> | string
+    createdAt?: DateTimeFilter<"PushToken"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "token">
 
-  export type ExpoPushTokenOrderByWithAggregationInput = {
+  export type PushTokenOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     token?: SortOrder
     createdAt?: SortOrder
-    _count?: ExpoPushTokenCountOrderByAggregateInput
-    _max?: ExpoPushTokenMaxOrderByAggregateInput
-    _min?: ExpoPushTokenMinOrderByAggregateInput
+    _count?: PushTokenCountOrderByAggregateInput
+    _max?: PushTokenMaxOrderByAggregateInput
+    _min?: PushTokenMinOrderByAggregateInput
   }
 
-  export type ExpoPushTokenScalarWhereWithAggregatesInput = {
-    AND?: ExpoPushTokenScalarWhereWithAggregatesInput | ExpoPushTokenScalarWhereWithAggregatesInput[]
-    OR?: ExpoPushTokenScalarWhereWithAggregatesInput[]
-    NOT?: ExpoPushTokenScalarWhereWithAggregatesInput | ExpoPushTokenScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ExpoPushToken"> | string
-    userId?: StringWithAggregatesFilter<"ExpoPushToken"> | string
-    token?: StringWithAggregatesFilter<"ExpoPushToken"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"ExpoPushToken"> | Date | string
+  export type PushTokenScalarWhereWithAggregatesInput = {
+    AND?: PushTokenScalarWhereWithAggregatesInput | PushTokenScalarWhereWithAggregatesInput[]
+    OR?: PushTokenScalarWhereWithAggregatesInput[]
+    NOT?: PushTokenScalarWhereWithAggregatesInput | PushTokenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PushToken"> | string
+    userId?: StringWithAggregatesFilter<"PushToken"> | string
+    token?: StringWithAggregatesFilter<"PushToken"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PushToken"> | Date | string
   }
 
   export type BlogPostWhereInput = {
@@ -75528,7 +75528,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -75578,7 +75578,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -75626,7 +75626,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -75676,7 +75676,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -79635,48 +79635,48 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ExpoPushTokenCreateInput = {
+  export type PushTokenCreateInput = {
     id?: string
     token: string
     createdAt?: Date | string
-    user: UserCreateNestedOneWithoutExpoPushTokensInput
+    user: UserCreateNestedOneWithoutPushTokensInput
   }
 
-  export type ExpoPushTokenUncheckedCreateInput = {
+  export type PushTokenUncheckedCreateInput = {
     id?: string
     userId: string
     token: string
     createdAt?: Date | string
   }
 
-  export type ExpoPushTokenUpdateInput = {
+  export type PushTokenUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutExpoPushTokensNestedInput
+    user?: UserUpdateOneRequiredWithoutPushTokensNestedInput
   }
 
-  export type ExpoPushTokenUncheckedUpdateInput = {
+  export type PushTokenUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ExpoPushTokenCreateManyInput = {
+  export type PushTokenCreateManyInput = {
     id?: string
     userId: string
     token: string
     createdAt?: Date | string
   }
 
-  export type ExpoPushTokenUpdateManyMutationInput = {
+  export type PushTokenUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ExpoPushTokenUncheckedUpdateManyInput = {
+  export type PushTokenUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
@@ -80277,10 +80277,10 @@ export namespace Prisma {
     none?: PushSubscriptionWhereInput
   }
 
-  export type ExpoPushTokenListRelationFilter = {
-    every?: ExpoPushTokenWhereInput
-    some?: ExpoPushTokenWhereInput
-    none?: ExpoPushTokenWhereInput
+  export type PushTokenListRelationFilter = {
+    every?: PushTokenWhereInput
+    some?: PushTokenWhereInput
+    none?: PushTokenWhereInput
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -80393,7 +80393,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ExpoPushTokenOrderByRelationAggregateInput = {
+  export type PushTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -83214,21 +83214,21 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type ExpoPushTokenCountOrderByAggregateInput = {
+  export type PushTokenCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     token?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type ExpoPushTokenMaxOrderByAggregateInput = {
+  export type PushTokenMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     token?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type ExpoPushTokenMinOrderByAggregateInput = {
+  export type PushTokenMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     token?: SortOrder
@@ -83630,11 +83630,11 @@ export namespace Prisma {
     connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
   }
 
-  export type ExpoPushTokenCreateNestedManyWithoutUserInput = {
-    create?: XOR<ExpoPushTokenCreateWithoutUserInput, ExpoPushTokenUncheckedCreateWithoutUserInput> | ExpoPushTokenCreateWithoutUserInput[] | ExpoPushTokenUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ExpoPushTokenCreateOrConnectWithoutUserInput | ExpoPushTokenCreateOrConnectWithoutUserInput[]
-    createMany?: ExpoPushTokenCreateManyUserInputEnvelope
-    connect?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
+  export type PushTokenCreateNestedManyWithoutUserInput = {
+    create?: XOR<PushTokenCreateWithoutUserInput, PushTokenUncheckedCreateWithoutUserInput> | PushTokenCreateWithoutUserInput[] | PushTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushTokenCreateOrConnectWithoutUserInput | PushTokenCreateOrConnectWithoutUserInput[]
+    createMany?: PushTokenCreateManyUserInputEnvelope
+    connect?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
   }
 
   export type UserCreateNestedOneWithoutReferralsInput = {
@@ -83821,11 +83821,11 @@ export namespace Prisma {
     connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
   }
 
-  export type ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ExpoPushTokenCreateWithoutUserInput, ExpoPushTokenUncheckedCreateWithoutUserInput> | ExpoPushTokenCreateWithoutUserInput[] | ExpoPushTokenUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ExpoPushTokenCreateOrConnectWithoutUserInput | ExpoPushTokenCreateOrConnectWithoutUserInput[]
-    createMany?: ExpoPushTokenCreateManyUserInputEnvelope
-    connect?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
+  export type PushTokenUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PushTokenCreateWithoutUserInput, PushTokenUncheckedCreateWithoutUserInput> | PushTokenCreateWithoutUserInput[] | PushTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushTokenCreateOrConnectWithoutUserInput | PushTokenCreateOrConnectWithoutUserInput[]
+    createMany?: PushTokenCreateManyUserInputEnvelope
+    connect?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
   }
 
   export type UserUncheckedCreateNestedManyWithoutReferredByInput = {
@@ -84171,18 +84171,18 @@ export namespace Prisma {
     deleteMany?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
   }
 
-  export type ExpoPushTokenUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ExpoPushTokenCreateWithoutUserInput, ExpoPushTokenUncheckedCreateWithoutUserInput> | ExpoPushTokenCreateWithoutUserInput[] | ExpoPushTokenUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ExpoPushTokenCreateOrConnectWithoutUserInput | ExpoPushTokenCreateOrConnectWithoutUserInput[]
-    upsert?: ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput | ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ExpoPushTokenCreateManyUserInputEnvelope
-    set?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    disconnect?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    delete?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    connect?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    update?: ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput | ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ExpoPushTokenUpdateManyWithWhereWithoutUserInput | ExpoPushTokenUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ExpoPushTokenScalarWhereInput | ExpoPushTokenScalarWhereInput[]
+  export type PushTokenUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PushTokenCreateWithoutUserInput, PushTokenUncheckedCreateWithoutUserInput> | PushTokenCreateWithoutUserInput[] | PushTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushTokenCreateOrConnectWithoutUserInput | PushTokenCreateOrConnectWithoutUserInput[]
+    upsert?: PushTokenUpsertWithWhereUniqueWithoutUserInput | PushTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PushTokenCreateManyUserInputEnvelope
+    set?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    disconnect?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    delete?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    connect?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    update?: PushTokenUpdateWithWhereUniqueWithoutUserInput | PushTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PushTokenUpdateManyWithWhereWithoutUserInput | PushTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PushTokenScalarWhereInput | PushTokenScalarWhereInput[]
   }
 
   export type UserUpdateOneWithoutReferralsNestedInput = {
@@ -84543,18 +84543,18 @@ export namespace Prisma {
     deleteMany?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
   }
 
-  export type ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ExpoPushTokenCreateWithoutUserInput, ExpoPushTokenUncheckedCreateWithoutUserInput> | ExpoPushTokenCreateWithoutUserInput[] | ExpoPushTokenUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ExpoPushTokenCreateOrConnectWithoutUserInput | ExpoPushTokenCreateOrConnectWithoutUserInput[]
-    upsert?: ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput | ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ExpoPushTokenCreateManyUserInputEnvelope
-    set?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    disconnect?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    delete?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    connect?: ExpoPushTokenWhereUniqueInput | ExpoPushTokenWhereUniqueInput[]
-    update?: ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput | ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ExpoPushTokenUpdateManyWithWhereWithoutUserInput | ExpoPushTokenUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ExpoPushTokenScalarWhereInput | ExpoPushTokenScalarWhereInput[]
+  export type PushTokenUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PushTokenCreateWithoutUserInput, PushTokenUncheckedCreateWithoutUserInput> | PushTokenCreateWithoutUserInput[] | PushTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushTokenCreateOrConnectWithoutUserInput | PushTokenCreateOrConnectWithoutUserInput[]
+    upsert?: PushTokenUpsertWithWhereUniqueWithoutUserInput | PushTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PushTokenCreateManyUserInputEnvelope
+    set?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    disconnect?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    delete?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    connect?: PushTokenWhereUniqueInput | PushTokenWhereUniqueInput[]
+    update?: PushTokenUpdateWithWhereUniqueWithoutUserInput | PushTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PushTokenUpdateManyWithWhereWithoutUserInput | PushTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PushTokenScalarWhereInput | PushTokenScalarWhereInput[]
   }
 
   export type UserUncheckedUpdateManyWithoutReferredByNestedInput = {
@@ -87693,18 +87693,18 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, UserUpdateWithoutPushSubscriptionsInput>, UserUncheckedUpdateWithoutPushSubscriptionsInput>
   }
 
-  export type UserCreateNestedOneWithoutExpoPushTokensInput = {
-    create?: XOR<UserCreateWithoutExpoPushTokensInput, UserUncheckedCreateWithoutExpoPushTokensInput>
-    connectOrCreate?: UserCreateOrConnectWithoutExpoPushTokensInput
+  export type UserCreateNestedOneWithoutPushTokensInput = {
+    create?: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPushTokensInput
     connect?: UserWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutExpoPushTokensNestedInput = {
-    create?: XOR<UserCreateWithoutExpoPushTokensInput, UserUncheckedCreateWithoutExpoPushTokensInput>
-    connectOrCreate?: UserCreateOrConnectWithoutExpoPushTokensInput
-    upsert?: UserUpsertWithoutExpoPushTokensInput
+  export type UserUpdateOneRequiredWithoutPushTokensNestedInput = {
+    create?: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPushTokensInput
+    upsert?: UserUpsertWithoutPushTokensInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutExpoPushTokensInput, UserUpdateWithoutExpoPushTokensInput>, UserUncheckedUpdateWithoutExpoPushTokensInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPushTokensInput, UserUpdateWithoutPushTokensInput>, UserUncheckedUpdateWithoutPushTokensInput>
   }
 
   export type BlogPostCreatetagsInput = {
@@ -89183,25 +89183,25 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ExpoPushTokenCreateWithoutUserInput = {
+  export type PushTokenCreateWithoutUserInput = {
     id?: string
     token: string
     createdAt?: Date | string
   }
 
-  export type ExpoPushTokenUncheckedCreateWithoutUserInput = {
+  export type PushTokenUncheckedCreateWithoutUserInput = {
     id?: string
     token: string
     createdAt?: Date | string
   }
 
-  export type ExpoPushTokenCreateOrConnectWithoutUserInput = {
-    where: ExpoPushTokenWhereUniqueInput
-    create: XOR<ExpoPushTokenCreateWithoutUserInput, ExpoPushTokenUncheckedCreateWithoutUserInput>
+  export type PushTokenCreateOrConnectWithoutUserInput = {
+    where: PushTokenWhereUniqueInput
+    create: XOR<PushTokenCreateWithoutUserInput, PushTokenUncheckedCreateWithoutUserInput>
   }
 
-  export type ExpoPushTokenCreateManyUserInputEnvelope = {
-    data: ExpoPushTokenCreateManyUserInput | ExpoPushTokenCreateManyUserInput[]
+  export type PushTokenCreateManyUserInputEnvelope = {
+    data: PushTokenCreateManyUserInput | PushTokenCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -89245,7 +89245,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
@@ -89294,7 +89294,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
@@ -89346,7 +89346,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
@@ -89394,7 +89394,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -90185,30 +90185,30 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
   }
 
-  export type ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput = {
-    where: ExpoPushTokenWhereUniqueInput
-    update: XOR<ExpoPushTokenUpdateWithoutUserInput, ExpoPushTokenUncheckedUpdateWithoutUserInput>
-    create: XOR<ExpoPushTokenCreateWithoutUserInput, ExpoPushTokenUncheckedCreateWithoutUserInput>
+  export type PushTokenUpsertWithWhereUniqueWithoutUserInput = {
+    where: PushTokenWhereUniqueInput
+    update: XOR<PushTokenUpdateWithoutUserInput, PushTokenUncheckedUpdateWithoutUserInput>
+    create: XOR<PushTokenCreateWithoutUserInput, PushTokenUncheckedCreateWithoutUserInput>
   }
 
-  export type ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput = {
-    where: ExpoPushTokenWhereUniqueInput
-    data: XOR<ExpoPushTokenUpdateWithoutUserInput, ExpoPushTokenUncheckedUpdateWithoutUserInput>
+  export type PushTokenUpdateWithWhereUniqueWithoutUserInput = {
+    where: PushTokenWhereUniqueInput
+    data: XOR<PushTokenUpdateWithoutUserInput, PushTokenUncheckedUpdateWithoutUserInput>
   }
 
-  export type ExpoPushTokenUpdateManyWithWhereWithoutUserInput = {
-    where: ExpoPushTokenScalarWhereInput
-    data: XOR<ExpoPushTokenUpdateManyMutationInput, ExpoPushTokenUncheckedUpdateManyWithoutUserInput>
+  export type PushTokenUpdateManyWithWhereWithoutUserInput = {
+    where: PushTokenScalarWhereInput
+    data: XOR<PushTokenUpdateManyMutationInput, PushTokenUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type ExpoPushTokenScalarWhereInput = {
-    AND?: ExpoPushTokenScalarWhereInput | ExpoPushTokenScalarWhereInput[]
-    OR?: ExpoPushTokenScalarWhereInput[]
-    NOT?: ExpoPushTokenScalarWhereInput | ExpoPushTokenScalarWhereInput[]
-    id?: StringFilter<"ExpoPushToken"> | string
-    userId?: StringFilter<"ExpoPushToken"> | string
-    token?: StringFilter<"ExpoPushToken"> | string
-    createdAt?: DateTimeFilter<"ExpoPushToken"> | Date | string
+  export type PushTokenScalarWhereInput = {
+    AND?: PushTokenScalarWhereInput | PushTokenScalarWhereInput[]
+    OR?: PushTokenScalarWhereInput[]
+    NOT?: PushTokenScalarWhereInput | PushTokenScalarWhereInput[]
+    id?: StringFilter<"PushToken"> | string
+    userId?: StringFilter<"PushToken"> | string
+    token?: StringFilter<"PushToken"> | string
+    createdAt?: DateTimeFilter<"PushToken"> | Date | string
   }
 
   export type UserUpsertWithoutReferralsInput = {
@@ -90262,7 +90262,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
@@ -90311,7 +90311,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
@@ -90518,7 +90518,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -90567,7 +90567,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -90630,7 +90630,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -90679,7 +90679,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -90726,7 +90726,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -90775,7 +90775,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -90838,7 +90838,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -90887,7 +90887,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -90935,7 +90935,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -90984,7 +90984,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -91047,7 +91047,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -91096,7 +91096,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -91142,7 +91142,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -91191,7 +91191,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -91254,7 +91254,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -91303,7 +91303,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -91350,7 +91350,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -91399,7 +91399,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -91462,7 +91462,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -91511,7 +91511,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -91674,7 +91674,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -91723,7 +91723,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -92285,7 +92285,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -92334,7 +92334,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -94112,7 +94112,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -94161,7 +94161,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -94374,7 +94374,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -94423,7 +94423,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -94565,7 +94565,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -94614,7 +94614,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -95048,7 +95048,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -95097,7 +95097,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -95556,7 +95556,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -95605,7 +95605,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -95818,7 +95818,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -95867,7 +95867,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -96389,7 +96389,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -96438,7 +96438,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -96645,7 +96645,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -96694,7 +96694,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -96885,7 +96885,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -96934,7 +96934,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -97166,7 +97166,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -97215,7 +97215,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -97489,7 +97489,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -97538,7 +97538,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -97702,7 +97702,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -97751,7 +97751,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -97798,7 +97798,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -97847,7 +97847,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -97910,7 +97910,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -97959,7 +97959,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -98101,7 +98101,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -98150,7 +98150,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -98202,7 +98202,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -98251,7 +98251,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -98441,7 +98441,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -98490,7 +98490,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -98548,7 +98548,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -98597,7 +98597,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -98683,7 +98683,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -98732,7 +98732,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -98824,7 +98824,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -98873,7 +98873,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -98920,7 +98920,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -98969,7 +98969,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -99122,7 +99122,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -99171,7 +99171,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -99445,7 +99445,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -99494,7 +99494,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -99626,7 +99626,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -99675,7 +99675,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -100371,7 +100371,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -100420,7 +100420,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -100550,7 +100550,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -100599,7 +100599,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -102056,7 +102056,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -102105,7 +102105,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -102306,7 +102306,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -102355,7 +102355,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -102552,7 +102552,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -102601,7 +102601,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -102759,7 +102759,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -102808,7 +102808,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -102957,7 +102957,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralCreateNestedOneWithoutReferredUserInput
@@ -103006,7 +103006,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
@@ -103058,7 +103058,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -103107,7 +103107,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     blogPosts?: BlogPostUncheckedCreateNestedManyWithoutAuthorInput
@@ -103209,7 +103209,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
@@ -103258,7 +103258,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
@@ -103316,7 +103316,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -103365,7 +103365,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     blogPosts?: BlogPostUncheckedUpdateManyWithoutAuthorNestedInput
@@ -103456,7 +103456,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -103505,7 +103505,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedCreateNestedManyWithoutAuthorInput
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -103568,7 +103568,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -103617,7 +103617,7 @@ export namespace Prisma {
     sessionAnonymousQuestions?: SessionAnonymousQuestionUncheckedUpdateManyWithoutAuthorNestedInput
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -103625,7 +103625,7 @@ export namespace Prisma {
     twoFactor?: TwoFactorUncheckedUpdateOneWithoutUserNestedInput
   }
 
-  export type UserCreateWithoutExpoPushTokensInput = {
+  export type UserCreateWithoutPushTokensInput = {
     id?: string
     name?: string | null
     email: string
@@ -103673,7 +103673,7 @@ export namespace Prisma {
     twoFactor?: TwoFactorCreateNestedOneWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutExpoPushTokensInput = {
+  export type UserUncheckedCreateWithoutPushTokensInput = {
     id?: string
     name?: string | null
     email: string
@@ -103721,23 +103721,23 @@ export namespace Prisma {
     twoFactor?: TwoFactorUncheckedCreateNestedOneWithoutUserInput
   }
 
-  export type UserCreateOrConnectWithoutExpoPushTokensInput = {
+  export type UserCreateOrConnectWithoutPushTokensInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutExpoPushTokensInput, UserUncheckedCreateWithoutExpoPushTokensInput>
+    create: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>
   }
 
-  export type UserUpsertWithoutExpoPushTokensInput = {
-    update: XOR<UserUpdateWithoutExpoPushTokensInput, UserUncheckedUpdateWithoutExpoPushTokensInput>
-    create: XOR<UserCreateWithoutExpoPushTokensInput, UserUncheckedCreateWithoutExpoPushTokensInput>
+  export type UserUpsertWithoutPushTokensInput = {
+    update: XOR<UserUpdateWithoutPushTokensInput, UserUncheckedUpdateWithoutPushTokensInput>
+    create: XOR<UserCreateWithoutPushTokensInput, UserUncheckedCreateWithoutPushTokensInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutExpoPushTokensInput = {
+  export type UserUpdateToOneWithWhereWithoutPushTokensInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutExpoPushTokensInput, UserUncheckedUpdateWithoutExpoPushTokensInput>
+    data: XOR<UserUpdateWithoutPushTokensInput, UserUncheckedUpdateWithoutPushTokensInput>
   }
 
-  export type UserUpdateWithoutExpoPushTokensInput = {
+  export type UserUpdateWithoutPushTokensInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
@@ -103785,7 +103785,7 @@ export namespace Prisma {
     twoFactor?: TwoFactorUpdateOneWithoutUserNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutExpoPushTokensInput = {
+  export type UserUncheckedUpdateWithoutPushTokensInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
@@ -103873,7 +103873,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenCreateNestedManyWithoutUserInput
     referredBy?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralCreateNestedManyWithoutReferrerInput
@@ -103922,7 +103922,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
     pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
-    expoPushTokens?: ExpoPushTokenUncheckedCreateNestedManyWithoutUserInput
+    pushTokens?: PushTokenUncheckedCreateNestedManyWithoutUserInput
     referrals?: UserUncheckedCreateNestedManyWithoutReferredByInput
     referralCommissions?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
     referralEntry?: ReferralUncheckedCreateNestedOneWithoutReferredUserInput
@@ -103985,7 +103985,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referredBy?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
@@ -104034,7 +104034,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput
@@ -104482,7 +104482,7 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ExpoPushTokenCreateManyUserInput = {
+  export type PushTokenCreateManyUserInput = {
     id?: string
     token: string
     createdAt?: Date | string
@@ -105214,19 +105214,19 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ExpoPushTokenUpdateWithoutUserInput = {
+  export type PushTokenUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ExpoPushTokenUncheckedUpdateWithoutUserInput = {
+  export type PushTokenUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ExpoPushTokenUncheckedUpdateManyWithoutUserInput = {
+  export type PushTokenUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -105272,7 +105272,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUpdateManyWithoutUserNestedInput
     referrals?: UserUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUpdateOneWithoutReferredUserNestedInput
@@ -105320,7 +105320,7 @@ export namespace Prisma {
     learningReflections?: LearningReflectionUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
     pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-    expoPushTokens?: ExpoPushTokenUncheckedUpdateManyWithoutUserNestedInput
+    pushTokens?: PushTokenUncheckedUpdateManyWithoutUserNestedInput
     referrals?: UserUncheckedUpdateManyWithoutReferredByNestedInput
     referralCommissions?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
     referralEntry?: ReferralUncheckedUpdateOneWithoutReferredUserNestedInput

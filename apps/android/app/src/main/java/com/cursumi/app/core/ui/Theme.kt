@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-/** Paleta de marca. Misma fuente de verdad que `apps/mobile/src/constants/theme.ts`. */
+/** Paleta de marca, alineada con los tokens de la web. */
 object Brand {
     val primary = Color(0xFF6D28D9)
     val deep = Color(0xFF1F1147)

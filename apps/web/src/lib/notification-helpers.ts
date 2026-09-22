@@ -6,7 +6,6 @@
  */
 import { prisma } from "./prisma";
 import { sendPushToUser } from "./web-push";
-import { sendExpoPushToUser } from "./expo-push";
 import { sendApnsPushToUser } from "./apns-push";
 
 export interface CreateNotificationInput {
@@ -35,7 +34,6 @@ export async function createNotification(input: CreateNotificationInput) {
     url: input.link,
   };
   sendPushToUser(input.userId, payload).catch(() => {}); // web (navegador)
-  sendExpoPushToUser(input.userId, payload).catch(() => {}); // móvil (Expo)
   sendApnsPushToUser(input.userId, payload).catch(() => {}); // iOS nativa (APNs)
 
   return notification;

@@ -9,7 +9,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        // Mismo id que la app Expo, a propósito: sustituirá esa ficha en Play.
+        // Id de la app en Play.
         applicationId = "com.cursumi.app"
         minSdk = 26
         targetSdk = 36
