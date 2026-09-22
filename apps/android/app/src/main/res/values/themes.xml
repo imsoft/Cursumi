@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.Cursumi" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <style name="Theme.Cursumi.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#4F00F6</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Cursumi</item>
+    </style>
+</resources>
