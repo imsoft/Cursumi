@@ -39,7 +39,8 @@ Cursumi/
     API/       APIClient (URLSession + cookie), StudentAPI (endpoints)
     Models/    Formas de la API (espejo de apps/mobile/src/lib/me.ts)
     UI/        Brand (paleta), Components, WebViews (Turnstile, HTML)
-  Features/    Auth, MyCourses, Catalog, Profile
+  Features/    Auth, MyCourses (curso, lección, quizzes, examen, tarea, minijuegos),
+               Catalog, Profile
 CursumiTests/  Pruebas unitarias (XCTest)
 project.yml    Definición del proyecto para XcodeGen
 ```
@@ -66,7 +67,6 @@ app, para cumplir las reglas de Apple sin pagar comisión de tienda.
 
 ## Qué falta respecto a la app Expo
 
-Quizzes, tareas, examen final, minijuegos, chat con el instructor, notas,
-reflexiones, referidos, blog, panel de instructor, panel de administración,
-juegos en vivo y notificaciones push. Se van portando por fases; mientras, la app
+Chat con el instructor, notas, reflexiones, reseñas, referidos, blog, panel de
+instructor, panel de administración, juegos en vivo y notificaciones push. Se van portando por fases; mientras, la app
 Expo sigue viva en `apps/mobile`.

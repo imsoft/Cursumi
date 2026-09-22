@@ -28,9 +28,53 @@ struct StudentAPI {
         try await api.get("api/me/lessons/\(lessonId)")
     }
 
-    func completeLesson(_ lessonId: String, courseId: String, score: Int? = nil) async throws {
-        struct Body: Encodable { let courseId: String; let score: Int? }
-        try await api.post("api/lessons/\(lessonId)/complete", Body(courseId: courseId, score: score))
+    func completeLesson(_ lessonId: String, courseId: String, score: Int? = nil, answers: [String: QuizAnswer]? = nil) async throws {
+        struct Body: Encodable { let courseId: String; let score: Int?; let answers: [String: QuizAnswer]? }
+        try await api.post("api/lessons/\(lessonId)/complete", Body(courseId: courseId, score: score, answers: answers))
+    }
+
+    /// Envía el quiz de una sección; el servidor califica.
+    func submitSectionQuiz(sectionId: String, courseId: String, answers: [String: QuizAnswer]) async throws -> (score: Int, passed: Bool) {
+        struct Body: Encodable { let courseId: String; let activityId: String; let answers: [String: QuizAnswer] }
+        struct Reply: Decodable { let score: Double?; let passed: Bool? }
+        let reply: Reply = try await api.post("api/sections/\(sectionId)/quiz/submit", Body(courseId: courseId, activityId: "default", answers: answers))
+        return (Int((reply.score ?? 0).rounded()), reply.passed ?? false)
+    }
+
+    func completeMinigame(sectionId: String, courseId: String) async throws {
+        struct Body: Encodable { let courseId: String; let activityId: String }
+        try await api.post("api/sections/\(sectionId)/minigame/complete", Body(courseId: courseId, activityId: "default"))
+    }
+
+    // MARK: Tareas
+
+    struct AssignmentSubmission: Decodable { let content: String; let submittedAt: String }
+
+    func assignment(lessonId: String, courseId: String) async throws -> AssignmentSubmission? {
+        struct Reply: Decodable { let submission: AssignmentSubmission? }
+        let res = try await api.request("GET", "api/lessons/\(lessonId)/assignment", query: ["courseId": courseId])
+        guard res.isOK else { return nil }
+        return try res.decode(Reply.self).submission
+    }
+
+    func submitAssignment(lessonId: String, courseId: String, content: String) async throws {
+        struct Body: Encodable { let courseId: String; let content: String }
+        try await api.post("api/lessons/\(lessonId)/assignment", Body(courseId: courseId, content: content))
+    }
+
+    // MARK: Examen final
+
+    /// nil si el curso no tiene examen (404).
+    func exam(courseId: String) async throws -> Exam? {
+        let res = try await api.request("GET", "api/courses/\(courseId)/exam")
+        if res.status == 404 { return nil }
+        guard res.isOK else { throw APIError.http(res.status, message: res.errorMessage) }
+        return try res.decode(Exam.self)
+    }
+
+    func submitExam(courseId: String, answers: [String: QuizAnswer]) async throws -> ExamResult {
+        struct Body: Encodable { let answers: [String: QuizAnswer] }
+        return try await api.post("api/courses/\(courseId)/exam/submit", Body(answers: answers))
     }
 
     // MARK: Perfil

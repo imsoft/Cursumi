@@ -2,7 +2,7 @@ import AVKit
 import SwiftUI
 
 /// Visor de lección: video (Mux/HLS/mp4 nativo o YouTube embebido), contenido
-/// HTML y botón de completar. Los tipos quiz/tarea/juego llegan en la siguiente fase.
+/// HTML, quizzes, tarea o minijuego según el tipo, y botón de completar.
 struct LessonView: View {
     let lessonId: String
     let onCompleted: (String) -> Void
@@ -30,17 +30,19 @@ struct LessonView: View {
 
                         video(for: lesson)
 
-                        if let content = lesson.content, !content.isEmpty, !isInteractive(lesson) {
-                            HTMLView(source: .html(LessonContent.html(from: content)), height: $contentHeight)
-                                .frame(height: contentHeight)
-                        }
-
-                        if isInteractive(lesson) {
-                            Text("Este tipo de lección (\(lesson.type)) aún no está disponible en la app. Ábrela desde la web.")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .italic()
-                        } else {
+                        switch lesson.type {
+                        case "quiz":
+                            LessonQuizView(lesson: lesson, onCompleted: completed)
+                        case "section_quiz":
+                            SectionQuizView(lesson: lesson, onCompleted: completed)
+                        case "section_minigame":
+                            MinigameView(lesson: lesson, onCompleted: completed)
+                        case "assignment":
+                            // Enunciado de la tarea (si viene en content).
+                            htmlContent(lesson)
+                            AssignmentView(lesson: lesson, onCompleted: completed)
+                        default:
+                            htmlContent(lesson)
                             PrimaryButton(title: done ? "✓ Completada" : "Marcar como completada", loading: completing, disabled: done) {
                                 Task { await markComplete(lesson) }
                             }
@@ -91,8 +93,17 @@ struct LessonView: View {
         }
     }
 
-    private func isInteractive(_ lesson: Lesson) -> Bool {
-        ["quiz", "assignment", "section_quiz", "section_minigame"].contains(lesson.type)
+    @ViewBuilder
+    private func htmlContent(_ lesson: Lesson) -> some View {
+        if let content = lesson.content, !content.isEmpty {
+            HTMLView(source: .html(LessonContent.html(from: content)), height: $contentHeight)
+                .frame(height: contentHeight)
+        }
+    }
+
+    private func completed(_ id: String) {
+        done = true
+        onCompleted(id)
     }
 
     private func markComplete(_ lesson: Lesson) async {

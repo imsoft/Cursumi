@@ -33,6 +33,11 @@ struct CourseDetailView: View {
                         }
                         .listRowSeparator(.hidden)
                     }
+                    Section {
+                        NavigationLink { ExamView(courseId: courseId) } label: {
+                            Label("Examen final", systemImage: "graduationcap.fill").foregroundStyle(Brand.primary)
+                        }
+                    }
                     ForEach(detail.course.sections) { section in
                         Section(section.title) {
                             ForEach(section.lessons) { lesson in

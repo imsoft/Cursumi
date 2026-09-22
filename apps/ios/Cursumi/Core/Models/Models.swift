@@ -105,6 +105,10 @@ struct Lesson: Decodable, Identifiable {
     let duration: String?
     let videoUrl: String?
     let content: String?
+    /// Solo en lecciones `section_quiz`: preguntas de la sección (Json).
+    let sectionQuiz: JSONValue?
+    /// Solo en lecciones `section_minigame`: definición del juego (Json).
+    let sectionMinigame: JSONValue?
     let completed: Bool
 }
 
