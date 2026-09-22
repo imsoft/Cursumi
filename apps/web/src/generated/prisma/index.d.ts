@@ -32787,12 +32787,14 @@ export namespace Prisma {
     amount: number | null
     platformFee: number | null
     instructorAmount: number | null
+    stripeFee: number | null
   }
 
   export type TransactionSumAggregateOutputType = {
     amount: number | null
     platformFee: number | null
     instructorAmount: number | null
+    stripeFee: number | null
   }
 
   export type TransactionMinAggregateOutputType = {
@@ -32808,6 +32810,7 @@ export namespace Prisma {
     platformFee: number | null
     instructorAmount: number | null
     couponCode: string | null
+    stripeFee: number | null
     payoutStatus: $Enums.PayoutStatus | null
     stripeTransferId: string | null
     paidOutAt: Date | null
@@ -32829,6 +32832,7 @@ export namespace Prisma {
     platformFee: number | null
     instructorAmount: number | null
     couponCode: string | null
+    stripeFee: number | null
     payoutStatus: $Enums.PayoutStatus | null
     stripeTransferId: string | null
     paidOutAt: Date | null
@@ -32850,6 +32854,7 @@ export namespace Prisma {
     platformFee: number
     instructorAmount: number
     couponCode: number
+    stripeFee: number
     payoutStatus: number
     stripeTransferId: number
     paidOutAt: number
@@ -32864,12 +32869,14 @@ export namespace Prisma {
     amount?: true
     platformFee?: true
     instructorAmount?: true
+    stripeFee?: true
   }
 
   export type TransactionSumAggregateInputType = {
     amount?: true
     platformFee?: true
     instructorAmount?: true
+    stripeFee?: true
   }
 
   export type TransactionMinAggregateInputType = {
@@ -32885,6 +32892,7 @@ export namespace Prisma {
     platformFee?: true
     instructorAmount?: true
     couponCode?: true
+    stripeFee?: true
     payoutStatus?: true
     stripeTransferId?: true
     paidOutAt?: true
@@ -32906,6 +32914,7 @@ export namespace Prisma {
     platformFee?: true
     instructorAmount?: true
     couponCode?: true
+    stripeFee?: true
     payoutStatus?: true
     stripeTransferId?: true
     paidOutAt?: true
@@ -32927,6 +32936,7 @@ export namespace Prisma {
     platformFee?: true
     instructorAmount?: true
     couponCode?: true
+    stripeFee?: true
     payoutStatus?: true
     stripeTransferId?: true
     paidOutAt?: true
@@ -33035,6 +33045,7 @@ export namespace Prisma {
     platformFee: number | null
     instructorAmount: number | null
     couponCode: string | null
+    stripeFee: number | null
     payoutStatus: $Enums.PayoutStatus
     stripeTransferId: string | null
     paidOutAt: Date | null
@@ -33075,6 +33086,7 @@ export namespace Prisma {
     platformFee?: boolean
     instructorAmount?: boolean
     couponCode?: boolean
+    stripeFee?: boolean
     payoutStatus?: boolean
     stripeTransferId?: boolean
     paidOutAt?: boolean
@@ -33100,6 +33112,7 @@ export namespace Prisma {
     platformFee?: boolean
     instructorAmount?: boolean
     couponCode?: boolean
+    stripeFee?: boolean
     payoutStatus?: boolean
     stripeTransferId?: boolean
     paidOutAt?: boolean
@@ -33124,6 +33137,7 @@ export namespace Prisma {
     platformFee?: boolean
     instructorAmount?: boolean
     couponCode?: boolean
+    stripeFee?: boolean
     payoutStatus?: boolean
     stripeTransferId?: boolean
     paidOutAt?: boolean
@@ -33148,6 +33162,7 @@ export namespace Prisma {
     platformFee?: boolean
     instructorAmount?: boolean
     couponCode?: boolean
+    stripeFee?: boolean
     payoutStatus?: boolean
     stripeTransferId?: boolean
     paidOutAt?: boolean
@@ -33156,7 +33171,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "userId" | "courseId" | "amount" | "currency" | "status" | "stripePaymentId" | "stripeSessionId" | "platformFee" | "instructorAmount" | "couponCode" | "payoutStatus" | "stripeTransferId" | "paidOutAt" | "payoutNote" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "userId" | "courseId" | "amount" | "currency" | "status" | "stripePaymentId" | "stripeSessionId" | "platformFee" | "instructorAmount" | "couponCode" | "stripeFee" | "payoutStatus" | "stripeTransferId" | "paidOutAt" | "payoutNote" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | Transaction$enrollmentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -33195,6 +33210,11 @@ export namespace Prisma {
       platformFee: number | null
       instructorAmount: number | null
       couponCode: string | null
+      /**
+       * Comisión que Stripe cobró por este pago, en centavos. La absorbe Cursumi.
+       * Se lee del balance_transaction al confirmar el cobro; null si aún no se pudo leer.
+       */
+      stripeFee: number | null
       /**
        * Estado del pago al instructor (ver enum). Se fija al cobrar y lo cambia el admin.
        */
@@ -33649,6 +33669,7 @@ export namespace Prisma {
     readonly platformFee: FieldRef<"Transaction", 'Int'>
     readonly instructorAmount: FieldRef<"Transaction", 'Int'>
     readonly couponCode: FieldRef<"Transaction", 'String'>
+    readonly stripeFee: FieldRef<"Transaction", 'Int'>
     readonly payoutStatus: FieldRef<"Transaction", 'PayoutStatus'>
     readonly stripeTransferId: FieldRef<"Transaction", 'String'>
     readonly paidOutAt: FieldRef<"Transaction", 'DateTime'>
@@ -70424,6 +70445,7 @@ export namespace Prisma {
     platformFee: 'platformFee',
     instructorAmount: 'instructorAmount',
     couponCode: 'couponCode',
+    stripeFee: 'stripeFee',
     payoutStatus: 'payoutStatus',
     stripeTransferId: 'stripeTransferId',
     paidOutAt: 'paidOutAt',
@@ -73231,6 +73253,7 @@ export namespace Prisma {
     platformFee?: IntNullableFilter<"Transaction"> | number | null
     instructorAmount?: IntNullableFilter<"Transaction"> | number | null
     couponCode?: StringNullableFilter<"Transaction"> | string | null
+    stripeFee?: IntNullableFilter<"Transaction"> | number | null
     payoutStatus?: EnumPayoutStatusFilter<"Transaction"> | $Enums.PayoutStatus
     stripeTransferId?: StringNullableFilter<"Transaction"> | string | null
     paidOutAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
@@ -73256,6 +73279,7 @@ export namespace Prisma {
     platformFee?: SortOrderInput | SortOrder
     instructorAmount?: SortOrderInput | SortOrder
     couponCode?: SortOrderInput | SortOrder
+    stripeFee?: SortOrderInput | SortOrder
     payoutStatus?: SortOrder
     stripeTransferId?: SortOrderInput | SortOrder
     paidOutAt?: SortOrderInput | SortOrder
@@ -73284,6 +73308,7 @@ export namespace Prisma {
     platformFee?: IntNullableFilter<"Transaction"> | number | null
     instructorAmount?: IntNullableFilter<"Transaction"> | number | null
     couponCode?: StringNullableFilter<"Transaction"> | string | null
+    stripeFee?: IntNullableFilter<"Transaction"> | number | null
     payoutStatus?: EnumPayoutStatusFilter<"Transaction"> | $Enums.PayoutStatus
     stripeTransferId?: StringNullableFilter<"Transaction"> | string | null
     paidOutAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
@@ -73309,6 +73334,7 @@ export namespace Prisma {
     platformFee?: SortOrderInput | SortOrder
     instructorAmount?: SortOrderInput | SortOrder
     couponCode?: SortOrderInput | SortOrder
+    stripeFee?: SortOrderInput | SortOrder
     payoutStatus?: SortOrder
     stripeTransferId?: SortOrderInput | SortOrder
     paidOutAt?: SortOrderInput | SortOrder
@@ -73338,6 +73364,7 @@ export namespace Prisma {
     platformFee?: IntNullableWithAggregatesFilter<"Transaction"> | number | null
     instructorAmount?: IntNullableWithAggregatesFilter<"Transaction"> | number | null
     couponCode?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    stripeFee?: IntNullableWithAggregatesFilter<"Transaction"> | number | null
     payoutStatus?: EnumPayoutStatusWithAggregatesFilter<"Transaction"> | $Enums.PayoutStatus
     stripeTransferId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     paidOutAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
@@ -77760,6 +77787,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -77785,6 +77813,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -77804,6 +77833,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77829,6 +77859,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77851,6 +77882,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -77869,6 +77901,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77890,6 +77923,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82124,6 +82158,7 @@ export namespace Prisma {
     platformFee?: SortOrder
     instructorAmount?: SortOrder
     couponCode?: SortOrder
+    stripeFee?: SortOrder
     payoutStatus?: SortOrder
     stripeTransferId?: SortOrder
     paidOutAt?: SortOrder
@@ -82136,6 +82171,7 @@ export namespace Prisma {
     amount?: SortOrder
     platformFee?: SortOrder
     instructorAmount?: SortOrder
+    stripeFee?: SortOrder
   }
 
   export type TransactionMaxOrderByAggregateInput = {
@@ -82151,6 +82187,7 @@ export namespace Prisma {
     platformFee?: SortOrder
     instructorAmount?: SortOrder
     couponCode?: SortOrder
+    stripeFee?: SortOrder
     payoutStatus?: SortOrder
     stripeTransferId?: SortOrder
     paidOutAt?: SortOrder
@@ -82172,6 +82209,7 @@ export namespace Prisma {
     platformFee?: SortOrder
     instructorAmount?: SortOrder
     couponCode?: SortOrder
+    stripeFee?: SortOrder
     payoutStatus?: SortOrder
     stripeTransferId?: SortOrder
     paidOutAt?: SortOrder
@@ -82184,6 +82222,7 @@ export namespace Prisma {
     amount?: SortOrder
     platformFee?: SortOrder
     instructorAmount?: SortOrder
+    stripeFee?: SortOrder
   }
 
   export type EnumTransactionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -88970,6 +89009,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -88993,6 +89033,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -90019,6 +90060,7 @@ export namespace Prisma {
     platformFee?: IntNullableFilter<"Transaction"> | number | null
     instructorAmount?: IntNullableFilter<"Transaction"> | number | null
     couponCode?: StringNullableFilter<"Transaction"> | string | null
+    stripeFee?: IntNullableFilter<"Transaction"> | number | null
     payoutStatus?: EnumPayoutStatusFilter<"Transaction"> | $Enums.PayoutStatus
     stripeTransferId?: StringNullableFilter<"Transaction"> | string | null
     paidOutAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
@@ -92126,6 +92168,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -92149,6 +92192,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -95002,6 +95046,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -95025,6 +95070,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -95513,6 +95559,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -95536,6 +95583,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -103356,6 +103404,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -103380,6 +103429,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -103628,6 +103678,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -103652,6 +103703,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -104608,6 +104660,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -105068,6 +105121,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105091,6 +105145,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105112,6 +105167,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105890,6 +105946,7 @@ export namespace Prisma {
     platformFee?: number | null
     instructorAmount?: number | null
     couponCode?: string | null
+    stripeFee?: number | null
     payoutStatus?: $Enums.PayoutStatus
     stripeTransferId?: string | null
     paidOutAt?: Date | string | null
@@ -106162,6 +106219,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -106185,6 +106243,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -106206,6 +106265,7 @@ export namespace Prisma {
     platformFee?: NullableIntFieldUpdateOperationsInput | number | null
     instructorAmount?: NullableIntFieldUpdateOperationsInput | number | null
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeFee?: NullableIntFieldUpdateOperationsInput | number | null
     payoutStatus?: EnumPayoutStatusFieldUpdateOperationsInput | $Enums.PayoutStatus
     stripeTransferId?: NullableStringFieldUpdateOperationsInput | string | null
     paidOutAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
