@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import type { InstructorEarnings, RecentTransaction } from "@/lib/instructor-service";
 import { contar } from "@/lib/plural";
-import { payoutLabel } from "@/lib/payouts";
+import { payoutLabel } from "@/lib/payout-status";
 
 interface InstructorEarningsClientProps {
   earnings: InstructorEarnings;
