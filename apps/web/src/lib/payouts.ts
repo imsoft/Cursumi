@@ -17,41 +17,11 @@
  */
 import { prisma } from "./prisma";
 import { stripe } from "./stripe";
-import type { PayoutStatus } from "@/generated/prisma";
+import { canSplitAtCheckout } from "./payout-status";
 
-export type { PayoutStatus };
-
-/** Perfil mínimo para decidir si el reparto puede hacerse en el propio cobro. */
-export type ConnectProfile = { stripeAccountId: string | null; stripeOnboarded: boolean } | null | undefined;
-
-/** Solo con cuenta creada Y onboarding completo: si no, Stripe rechaza el transfer. */
-export function canSplitAtCheckout(profile: ConnectProfile): profile is { stripeAccountId: string; stripeOnboarded: true } {
-  return Boolean(profile?.stripeAccountId && profile.stripeOnboarded);
-}
-
-/** Estado con el que nace una transacción según cómo se cobró. */
-export function initialPayoutStatus(input: { instructorAmount: number; splitAtCheckout: boolean }): PayoutStatus {
-  if (input.instructorAmount <= 0) return "none";
-  return input.splitAtCheckout ? "automatic" : "pending";
-}
-
-/** Texto para el instructor y el admin. */
-export function payoutLabel(status: PayoutStatus, paidOutAt?: Date | string | null): string {
-  switch (status) {
-    case "automatic":
-      return "Depositado por Stripe al cobrar";
-    case "transferred":
-      return paidOutAt ? `Transferido el ${formatDate(paidOutAt)}` : "Transferido";
-    case "pending":
-      return "Pendiente de transferencia";
-    default:
-      return "Sin pago (importe $0)";
-  }
-}
-
-function formatDate(d: Date | string): string {
-  return new Date(d).toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric", timeZone: "America/Mexico_City" });
-}
+// Los helpers puros viven en payout-status.ts para poder usarlos en el
+// navegador sin arrastrar Prisma. Se reexportan por compatibilidad.
+export { canSplitAtCheckout, initialPayoutStatus, payoutLabel, type ConnectProfile, type PayoutStatus } from "./payout-status";
 
 export type PendingPayoutRow = {
   transactionId: string;
