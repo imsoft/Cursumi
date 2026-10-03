@@ -1,5 +1,6 @@
 "use client";
 
+import { addOption as addChoiceOption, removeOption as removeChoiceOption, canAddOption } from "@/lib/exam-options";
 import { useState } from "react";
 import { Combobox } from "@/components/ui/combobox";
 import { useRouter } from "next/navigation";
@@ -92,25 +93,10 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
     );
 
   const addOption = (qId: string) =>
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === qId && q.options && q.options.length < 5
-          ? { ...q, options: [...q.options, ""] }
-          : q
-      )
-    );
+    setQuestions((prev) => prev.map((q) => (q.id === qId ? addChoiceOption(q) : q)));
 
   const removeOption = (qId: string, idx: number) =>
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== qId || !q.options || q.options.length <= 2) return q;
-        const newOptions = q.options.filter((_, i) => i !== idx);
-        let newCorrect = q.correctAnswer as number;
-        if (newCorrect === idx) newCorrect = 0;
-        else if (newCorrect > idx) newCorrect -= 1;
-        return { ...q, options: newOptions, correctAnswer: newCorrect };
-      })
-    );
+    setQuestions((prev) => prev.map((q) => (q.id === qId ? removeChoiceOption(q, idx) : q)));
 
   /** Cambia el tipo de una pregunta e inicializa los campos que necesita. */
   const changeType = (qId: string, type: QuizQuestion["type"]) => {
@@ -424,7 +410,7 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
                         <p className="text-xs text-muted-foreground">
                           Haz clic en el círculo para marcar la respuesta correcta.
                         </p>
-                        {(q.options?.length ?? 0) < 5 && (
+                        {canAddOption(q) && (
                           <button
                             type="button"
                             onClick={() => addOption(q.id)}
@@ -491,7 +477,7 @@ export function ExamPageClient({ courseId, exam, lessons }: ExamPageClientProps)
                       ))}
                       <div className="flex items-center justify-between">
                         <p className="text-xs text-muted-foreground">Marca TODAS las opciones correctas (el alumno debe seleccionarlas todas).</p>
-                        {(q.options?.length ?? 0) < 6 && (
+                        {canAddOption(q) && (
                           <button type="button" onClick={() => addOption(q.id)} className="flex items-center gap-1 text-xs text-primary hover:underline">
                             <Plus className="h-3 w-3" /> Agregar opción
                           </button>
