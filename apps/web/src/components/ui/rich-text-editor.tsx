@@ -19,8 +19,12 @@ import {
   $createTextNode,
   $getRoot,
   FORMAT_TEXT_COMMAND,
+  INDENT_CONTENT_COMMAND,
+  OUTDENT_CONTENT_COMMAND,
   COMMAND_PRIORITY_NORMAL,
   KEY_ENTER_COMMAND,
+  KEY_TAB_COMMAND,
+  type LexicalNode,
   type EditorState,
   type LexicalEditor,
 } from "lexical";
@@ -30,17 +34,42 @@ import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
   $isListNode,
+  type ListNode as ListNodeType,
 } from "@lexical/list";
 import {
   Bold,
   Heading1,
   Heading2,
   Heading3,
+  IndentDecrease,
+  IndentIncrease,
   List,
   ListOrdered,
   Pilcrow,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// ── Listas ───────────────────────────────────────────────────────────────────
+
+/** Tope de niveles de sublista: más allá el texto queda ilegible en el celular. */
+const MAX_LIST_DEPTH = 4;
+
+/** Lista más cercana que contiene al nodo, o null si no está dentro de una. */
+function $nearestList(node: LexicalNode | null): ListNodeType | null {
+  for (let n: LexicalNode | null = node; n; n = n.getParent()) {
+    if ($isListNode(n)) return n;
+  }
+  return null;
+}
+
+/** Cuántas listas envuelven al nodo (0 = fuera de una lista, 1 = primer nivel). */
+function $listDepth(node: LexicalNode | null): number {
+  let depth = 0;
+  for (let n: LexicalNode | null = node; n; n = n.getParent()) {
+    if ($isListNode(n)) depth += 1;
+  }
+  return depth;
+}
 
 // ── Toolbar ──────────────────────────────────────────────────────────────────
 
@@ -48,6 +77,7 @@ function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [blockType, setBlockType] = useState<string>("paragraph");
+  const [listDepth, setListDepth] = useState(0);
 
   const updateToolbar = useCallback(() => {
     editor.getEditorState().read(() => {
@@ -56,16 +86,17 @@ function ToolbarPlugin() {
       setIsBold(selection.hasFormat("bold"));
       const anchor = selection.anchor.getNode();
       const parent = anchor.getParent();
+      // El texto de una viñeta cuelga del elemento de lista, no de la lista:
+      // hay que subir hasta encontrarla (antes los botones de lista nunca se
+      // marcaban como activos).
+      const list = $nearestList(anchor);
+      setListDepth($listDepth(anchor));
       if ($isHeadingNode(anchor)) {
         setBlockType(anchor.getTag());
       } else if (parent && $isHeadingNode(parent)) {
         setBlockType(parent.getTag());
-      } else if ($isListNode(anchor) || (parent && $isListNode(parent))) {
-        // walk up to find list node
-        const listNode = $isListNode(anchor) ? anchor : parent;
-        if (listNode && $isListNode(listNode)) {
-          setBlockType(listNode.getListType() === "bullet" ? "ul" : "ol");
-        }
+      } else if (list) {
+        setBlockType(list.getListType() === "bullet" ? "ul" : "ol");
       } else {
         setBlockType("paragraph");
       }
@@ -130,6 +161,28 @@ function ToolbarPlugin() {
       <button type="button" className={btnClass(blockType === "ol")} title="Lista numerada" onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)}>
         <ListOrdered className="h-4 w-4" />
       </button>
+      {/* La sangría solo aplica a listas: crea o deshace sublistas. En un
+          párrafo suelto no se guardaría (el HTML publicado no admite estilos). */}
+      <button
+        type="button"
+        className={cn(btnClass(false), "disabled:pointer-events-none disabled:opacity-40")}
+        title="Quitar sangría: sacar de la sublista (Shift+Tab)"
+        aria-label="Quitar sangría"
+        disabled={listDepth < 2}
+        onClick={() => editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)}
+      >
+        <IndentDecrease className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        className={cn(btnClass(false), "disabled:pointer-events-none disabled:opacity-40")}
+        title="Aumentar sangría: convertir en sublista (Tab)"
+        aria-label="Aumentar sangría"
+        disabled={listDepth === 0 || listDepth >= MAX_LIST_DEPTH}
+        onClick={() => editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)}
+      >
+        <IndentIncrease className="h-4 w-4" />
+      </button>
     </div>
   );
 }
@@ -154,6 +207,39 @@ function SoftBreakPlugin() {
           return true;
         }
         return false;
+      },
+      COMMAND_PRIORITY_NORMAL,
+    );
+  }, [editor]);
+
+  return null;
+}
+
+// ── Sangría con Tab dentro de listas ─────────────────────────────────────────
+
+/**
+ * Tab / Shift+Tab crean o deshacen sublistas, como en Word o Google Docs.
+ * Fuera de una lista no se intercepta: Tab sigue moviendo el foco al siguiente
+ * campo del formulario, que es lo que espera quien navega con teclado.
+ */
+function ListTabPlugin() {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    return editor.registerCommand(
+      KEY_TAB_COMMAND,
+      (event: KeyboardEvent) => {
+        const selection = $getSelection();
+        if (!$isRangeSelection(selection)) return false;
+        const depth = $listDepth(selection.anchor.getNode());
+        if (depth === 0) return false;
+        event.preventDefault();
+        if (event.shiftKey) {
+          if (depth > 1) editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
+        } else if (depth < MAX_LIST_DEPTH) {
+          editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
+        }
+        return true;
       },
       COMMAND_PRIORITY_NORMAL,
     );
@@ -209,7 +295,7 @@ interface RichTextEditorProps {
   minHeight?: string;
 }
 
-const theme = {
+export const richTextTheme = {
   heading: {
     h1: "text-2xl font-bold",
     h2: "text-xl font-semibold",
@@ -222,6 +308,10 @@ const theme = {
     ul: "list-disc ml-6",
     ol: "list-decimal ml-6",
     listitem: "",
+    // Lexical mete cada sublista dentro de un <li> propio. Sin esta clase ese
+    // envoltorio mostraba su número o viñeta y la lista se veía "1. 2. • … 2."
+    // (ver .rte-nested-item en globals.css).
+    nested: { listitem: "rte-nested-item" },
   },
   paragraph: "",
 };
@@ -247,7 +337,7 @@ export function RichTextEditor({
 
   const initialConfig = {
     namespace: "RichTextEditor",
-    theme,
+    theme: richTextTheme,
     nodes: [HeadingNode, ListNode, ListItemNode],
     onError: (error: Error) => console.error("[RichTextEditor]", error),
   };
@@ -274,6 +364,7 @@ export function RichTextEditor({
         </div>
         <HistoryPlugin />
         <ListPlugin />
+        <ListTabPlugin />
         <SoftBreakPlugin />
         <OnChangePlugin onChange={handleChange} />
         <InitialContentPlugin html={value} />

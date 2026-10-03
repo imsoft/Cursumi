@@ -134,6 +134,13 @@
 .rich-text-content ul { @apply list-disc ml-6 mb-2; }
 .rich-text-content ol { @apply list-decimal ml-6 mb-2; }
 .rich-text-content li { @apply mb-1; }
+/* Sublistas. Lexical envuelve cada sublista en un <li> propio: ese envoltorio
+   no debe pintar número ni viñeta, ni gastar un número de la lista. Aplica al
+   editor (.rte-nested-item la pone el tema de Lexical) y al contenido publicado
+   (la pone sanitizeHtml cuando el <li> solo contiene una lista). */
+li.rte-nested-item { list-style-type: none; }
+.rich-text-content li.rte-nested-item { counter-increment: list-item 0; }
+.rich-text-content li > ul, .rich-text-content li > ol { @apply mb-0 mt-1; }
 .rich-text-content strong, .rich-text-content b { @apply font-bold; }
 .rich-text-content br { @apply block; }
 

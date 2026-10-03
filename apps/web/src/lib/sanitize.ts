@@ -29,9 +29,26 @@ export function jsonLdScript(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
 }
 
+/**
+ * Marca los `<li>` que solo envuelven una sublista (`<li><ul>…`), que es como
+ * Lexical guarda una sublista sin elemento padre. Sin la clase, ese envoltorio
+ * pinta su propio número y la lista sale "1. 2. • …". Un `<li>Texto<ul>` normal
+ * no se toca: ahí el número sí corresponde al texto.
+ */
+export function markNestedListItems(html: string): string {
+  return html.replace(/<li(\s[^>]*)?>(\s*<(?:ul|ol)[\s>])/gi, (_m, attrs: string | undefined, rest: string) => {
+    const a = attrs ?? "";
+    if (/\brte-nested-item\b/.test(a)) return `<li${a}>${rest}`;
+    const withClass = /\bclass="/i.test(a)
+      ? a.replace(/\bclass="/i, 'class="rte-nested-item ')
+      : `${a} class="rte-nested-item"`;
+    return `<li${withClass}>${rest}`;
+  });
+}
+
 export function sanitizeHtml(html: string | null | undefined): string {
   if (!html) return "";
-  return sanitizeHtmlLib(html, {
+  return markNestedListItems(sanitizeHtmlLib(html, {
     allowedTags: ALLOWED_TAGS,
     allowedAttributes: {
       a: ["href", "target", "rel"],
@@ -43,5 +60,5 @@ export function sanitizeHtml(html: string | null | undefined): string {
     transformTags: {
       a: sanitizeHtmlLib.simpleTransform("a", { rel: "noopener noreferrer" }, true),
     },
-  });
+  }));
 }
