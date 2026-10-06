@@ -9182,7 +9182,7 @@ export namespace Prisma {
     userId: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer: string | null
     accessToken: string | null
     refreshToken: string | null
     idToken: string | null
@@ -9309,12 +9309,11 @@ export namespace Prisma {
       accountId: string
       providerId: string
       /**
-       * Emisor de la identidad. Lo introdujo better-auth 1.7 y es obligatorio:
-       * "https://accounts.google.com" para Google, "local:credential" para las
-       * cuentas de correo y contraseña. Sin esta columna, iniciar sesión con
-       * Google reventaba con PrismaClientValidationError.
+       * Emisor de la identidad. Lo introdujo better-auth 1.7.0 como obligatorio y
+       * 1.7.3 lo retiró (vuelve a identificar por providerId + accountId). Ya no
+       * se escribe; queda nullable para no perder lo rellenado en 2026-09.
        */
-      issuer: string
+      issuer: string | null
       accessToken: string | null
       refreshToken: string | null
       idToken: string | null
@@ -12308,8 +12307,18 @@ export namespace Prisma {
 
   export type AggregateTwoFactor = {
     _count: TwoFactorCountAggregateOutputType | null
+    _avg: TwoFactorAvgAggregateOutputType | null
+    _sum: TwoFactorSumAggregateOutputType | null
     _min: TwoFactorMinAggregateOutputType | null
     _max: TwoFactorMaxAggregateOutputType | null
+  }
+
+  export type TwoFactorAvgAggregateOutputType = {
+    failedVerificationCount: number | null
+  }
+
+  export type TwoFactorSumAggregateOutputType = {
+    failedVerificationCount: number | null
   }
 
   export type TwoFactorMinAggregateOutputType = {
@@ -12318,6 +12327,8 @@ export namespace Prisma {
     backupCodes: string | null
     userId: string | null
     verified: boolean | null
+    failedVerificationCount: number | null
+    lockedUntil: Date | null
   }
 
   export type TwoFactorMaxAggregateOutputType = {
@@ -12326,6 +12337,8 @@ export namespace Prisma {
     backupCodes: string | null
     userId: string | null
     verified: boolean | null
+    failedVerificationCount: number | null
+    lockedUntil: Date | null
   }
 
   export type TwoFactorCountAggregateOutputType = {
@@ -12334,9 +12347,19 @@ export namespace Prisma {
     backupCodes: number
     userId: number
     verified: number
+    failedVerificationCount: number
+    lockedUntil: number
     _all: number
   }
 
+
+  export type TwoFactorAvgAggregateInputType = {
+    failedVerificationCount?: true
+  }
+
+  export type TwoFactorSumAggregateInputType = {
+    failedVerificationCount?: true
+  }
 
   export type TwoFactorMinAggregateInputType = {
     id?: true
@@ -12344,6 +12367,8 @@ export namespace Prisma {
     backupCodes?: true
     userId?: true
     verified?: true
+    failedVerificationCount?: true
+    lockedUntil?: true
   }
 
   export type TwoFactorMaxAggregateInputType = {
@@ -12352,6 +12377,8 @@ export namespace Prisma {
     backupCodes?: true
     userId?: true
     verified?: true
+    failedVerificationCount?: true
+    lockedUntil?: true
   }
 
   export type TwoFactorCountAggregateInputType = {
@@ -12360,6 +12387,8 @@ export namespace Prisma {
     backupCodes?: true
     userId?: true
     verified?: true
+    failedVerificationCount?: true
+    lockedUntil?: true
     _all?: true
   }
 
@@ -12401,6 +12430,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: TwoFactorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TwoFactorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: TwoFactorMinAggregateInputType
@@ -12431,6 +12472,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: TwoFactorCountAggregateInputType | true
+    _avg?: TwoFactorAvgAggregateInputType
+    _sum?: TwoFactorSumAggregateInputType
     _min?: TwoFactorMinAggregateInputType
     _max?: TwoFactorMaxAggregateInputType
   }
@@ -12441,7 +12484,11 @@ export namespace Prisma {
     backupCodes: string
     userId: string
     verified: boolean
+    failedVerificationCount: number
+    lockedUntil: Date | null
     _count: TwoFactorCountAggregateOutputType | null
+    _avg: TwoFactorAvgAggregateOutputType | null
+    _sum: TwoFactorSumAggregateOutputType | null
     _min: TwoFactorMinAggregateOutputType | null
     _max: TwoFactorMaxAggregateOutputType | null
   }
@@ -12466,6 +12513,8 @@ export namespace Prisma {
     backupCodes?: boolean
     userId?: boolean
     verified?: boolean
+    failedVerificationCount?: boolean
+    lockedUntil?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["twoFactor"]>
 
@@ -12475,6 +12524,8 @@ export namespace Prisma {
     backupCodes?: boolean
     userId?: boolean
     verified?: boolean
+    failedVerificationCount?: boolean
+    lockedUntil?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["twoFactor"]>
 
@@ -12484,6 +12535,8 @@ export namespace Prisma {
     backupCodes?: boolean
     userId?: boolean
     verified?: boolean
+    failedVerificationCount?: boolean
+    lockedUntil?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["twoFactor"]>
 
@@ -12493,9 +12546,11 @@ export namespace Prisma {
     backupCodes?: boolean
     userId?: boolean
     verified?: boolean
+    failedVerificationCount?: boolean
+    lockedUntil?: boolean
   }
 
-  export type TwoFactorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret" | "backupCodes" | "userId" | "verified", ExtArgs["result"]["twoFactor"]>
+  export type TwoFactorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret" | "backupCodes" | "userId" | "verified" | "failedVerificationCount" | "lockedUntil", ExtArgs["result"]["twoFactor"]>
   export type TwoFactorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -12517,6 +12572,11 @@ export namespace Prisma {
       backupCodes: string
       userId: string
       verified: boolean
+      /**
+       * better-auth 1.7.7: intentos fallidos de TOTP y bloqueo temporal.
+       */
+      failedVerificationCount: number
+      lockedUntil: Date | null
     }, ExtArgs["result"]["twoFactor"]>
     composites: {}
   }
@@ -12946,6 +13006,8 @@ export namespace Prisma {
     readonly backupCodes: FieldRef<"TwoFactor", 'String'>
     readonly userId: FieldRef<"TwoFactor", 'String'>
     readonly verified: FieldRef<"TwoFactor", 'Boolean'>
+    readonly failedVerificationCount: FieldRef<"TwoFactor", 'Int'>
+    readonly lockedUntil: FieldRef<"TwoFactor", 'DateTime'>
   }
     
 
@@ -70167,7 +70229,9 @@ export namespace Prisma {
     secret: 'secret',
     backupCodes: 'backupCodes',
     userId: 'userId',
-    verified: 'verified'
+    verified: 'verified',
+    failedVerificationCount: 'failedVerificationCount',
+    lockedUntil: 'lockedUntil'
   };
 
   export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
@@ -70986,20 +71050,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'ApplicationStatus'
-   */
-  export type EnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'ApplicationStatus[]'
-   */
-  export type ListEnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -71010,6 +71060,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApplicationStatus'
+   */
+  export type EnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApplicationStatus[]'
+   */
+  export type ListEnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus[]'>
     
 
 
@@ -71510,7 +71574,7 @@ export namespace Prisma {
     userId?: StringFilter<"Account"> | string
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
-    issuer?: StringFilter<"Account"> | string
+    issuer?: StringNullableFilter<"Account"> | string | null
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -71529,7 +71593,7 @@ export namespace Prisma {
     userId?: SortOrder
     accountId?: SortOrder
     providerId?: SortOrder
-    issuer?: SortOrder
+    issuer?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
     idToken?: SortOrderInput | SortOrder
@@ -71546,14 +71610,13 @@ export namespace Prisma {
   export type AccountWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     providerId_accountId?: AccountProviderIdAccountIdCompoundUniqueInput
-    issuer_accountId?: AccountIssuerAccountIdCompoundUniqueInput
     AND?: AccountWhereInput | AccountWhereInput[]
     OR?: AccountWhereInput[]
     NOT?: AccountWhereInput | AccountWhereInput[]
     userId?: StringFilter<"Account"> | string
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
-    issuer?: StringFilter<"Account"> | string
+    issuer?: StringNullableFilter<"Account"> | string | null
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -71565,14 +71628,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Account"> | Date | string
     updatedAt?: DateTimeFilter<"Account"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "providerId_accountId" | "issuer_accountId">
+  }, "id" | "providerId_accountId">
 
   export type AccountOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     accountId?: SortOrder
     providerId?: SortOrder
-    issuer?: SortOrder
+    issuer?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
     idToken?: SortOrderInput | SortOrder
@@ -71596,7 +71659,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Account"> | string
     accountId?: StringWithAggregatesFilter<"Account"> | string
     providerId?: StringWithAggregatesFilter<"Account"> | string
-    issuer?: StringWithAggregatesFilter<"Account"> | string
+    issuer?: StringNullableWithAggregatesFilter<"Account"> | string | null
     accessToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
     refreshToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
     idToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
@@ -71745,6 +71808,8 @@ export namespace Prisma {
     backupCodes?: StringFilter<"TwoFactor"> | string
     userId?: StringFilter<"TwoFactor"> | string
     verified?: BoolFilter<"TwoFactor"> | boolean
+    failedVerificationCount?: IntFilter<"TwoFactor"> | number
+    lockedUntil?: DateTimeNullableFilter<"TwoFactor"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -71754,6 +71819,8 @@ export namespace Prisma {
     backupCodes?: SortOrder
     userId?: SortOrder
     verified?: SortOrder
+    failedVerificationCount?: SortOrder
+    lockedUntil?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -71766,6 +71833,8 @@ export namespace Prisma {
     secret?: StringFilter<"TwoFactor"> | string
     backupCodes?: StringFilter<"TwoFactor"> | string
     verified?: BoolFilter<"TwoFactor"> | boolean
+    failedVerificationCount?: IntFilter<"TwoFactor"> | number
+    lockedUntil?: DateTimeNullableFilter<"TwoFactor"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
@@ -71775,9 +71844,13 @@ export namespace Prisma {
     backupCodes?: SortOrder
     userId?: SortOrder
     verified?: SortOrder
+    failedVerificationCount?: SortOrder
+    lockedUntil?: SortOrderInput | SortOrder
     _count?: TwoFactorCountOrderByAggregateInput
+    _avg?: TwoFactorAvgOrderByAggregateInput
     _max?: TwoFactorMaxOrderByAggregateInput
     _min?: TwoFactorMinOrderByAggregateInput
+    _sum?: TwoFactorSumOrderByAggregateInput
   }
 
   export type TwoFactorScalarWhereWithAggregatesInput = {
@@ -71789,6 +71862,8 @@ export namespace Prisma {
     backupCodes?: StringWithAggregatesFilter<"TwoFactor"> | string
     userId?: StringWithAggregatesFilter<"TwoFactor"> | string
     verified?: BoolWithAggregatesFilter<"TwoFactor"> | boolean
+    failedVerificationCount?: IntWithAggregatesFilter<"TwoFactor"> | number
+    lockedUntil?: DateTimeNullableWithAggregatesFilter<"TwoFactor"> | Date | string | null
   }
 
   export type InstructorApplicationWhereInput = {
@@ -75893,7 +75968,7 @@ export namespace Prisma {
     id?: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -75912,7 +75987,7 @@ export namespace Prisma {
     userId: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -75929,7 +76004,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75948,7 +76023,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75966,7 +76041,7 @@ export namespace Prisma {
     userId: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -75983,7 +76058,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76001,7 +76076,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76158,6 +76233,8 @@ export namespace Prisma {
     secret: string
     backupCodes: string
     verified?: boolean
+    failedVerificationCount?: number
+    lockedUntil?: Date | string | null
     user: UserCreateNestedOneWithoutTwoFactorInput
   }
 
@@ -76167,6 +76244,8 @@ export namespace Prisma {
     backupCodes: string
     userId: string
     verified?: boolean
+    failedVerificationCount?: number
+    lockedUntil?: Date | string | null
   }
 
   export type TwoFactorUpdateInput = {
@@ -76174,6 +76253,8 @@ export namespace Prisma {
     secret?: StringFieldUpdateOperationsInput | string
     backupCodes?: StringFieldUpdateOperationsInput | string
     verified?: BoolFieldUpdateOperationsInput | boolean
+    failedVerificationCount?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutTwoFactorNestedInput
   }
 
@@ -76183,6 +76264,8 @@ export namespace Prisma {
     backupCodes?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     verified?: BoolFieldUpdateOperationsInput | boolean
+    failedVerificationCount?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TwoFactorCreateManyInput = {
@@ -76191,6 +76274,8 @@ export namespace Prisma {
     backupCodes: string
     userId: string
     verified?: boolean
+    failedVerificationCount?: number
+    lockedUntil?: Date | string | null
   }
 
   export type TwoFactorUpdateManyMutationInput = {
@@ -76198,6 +76283,8 @@ export namespace Prisma {
     secret?: StringFieldUpdateOperationsInput | string
     backupCodes?: StringFieldUpdateOperationsInput | string
     verified?: BoolFieldUpdateOperationsInput | boolean
+    failedVerificationCount?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TwoFactorUncheckedUpdateManyInput = {
@@ -76206,6 +76293,8 @@ export namespace Prisma {
     backupCodes?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     verified?: BoolFieldUpdateOperationsInput | boolean
+    failedVerificationCount?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type InstructorApplicationCreateInput = {
@@ -80747,11 +80836,6 @@ export namespace Prisma {
     accountId: string
   }
 
-  export type AccountIssuerAccountIdCompoundUniqueInput = {
-    issuer: string
-    accountId: string
-  }
-
   export type AccountCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -80880,12 +80964,29 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type TwoFactorCountOrderByAggregateInput = {
     id?: SortOrder
     secret?: SortOrder
     backupCodes?: SortOrder
     userId?: SortOrder
     verified?: SortOrder
+    failedVerificationCount?: SortOrder
+    lockedUntil?: SortOrder
+  }
+
+  export type TwoFactorAvgOrderByAggregateInput = {
+    failedVerificationCount?: SortOrder
   }
 
   export type TwoFactorMaxOrderByAggregateInput = {
@@ -80894,6 +80995,8 @@ export namespace Prisma {
     backupCodes?: SortOrder
     userId?: SortOrder
     verified?: SortOrder
+    failedVerificationCount?: SortOrder
+    lockedUntil?: SortOrder
   }
 
   export type TwoFactorMinOrderByAggregateInput = {
@@ -80902,6 +81005,28 @@ export namespace Prisma {
     backupCodes?: SortOrder
     userId?: SortOrder
     verified?: SortOrder
+    failedVerificationCount?: SortOrder
+    lockedUntil?: SortOrder
+  }
+
+  export type TwoFactorSumOrderByAggregateInput = {
+    failedVerificationCount?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumApplicationStatusFilter<$PrismaModel = never> = {
@@ -81075,17 +81200,6 @@ export namespace Prisma {
     _max?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type CategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -81113,22 +81227,6 @@ export namespace Prisma {
 
   export type CategorySumOrderByAggregateInput = {
     order?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumModalityFilter<$PrismaModel = never> = {
@@ -84866,6 +84964,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutTwoFactorNestedInput = {
     create?: XOR<UserCreateWithoutTwoFactorInput, UserUncheckedCreateWithoutTwoFactorInput>
     connectOrCreate?: UserCreateOrConnectWithoutTwoFactorInput
@@ -84930,14 +85036,6 @@ export namespace Prisma {
     connectOrCreate?: CourseCreateOrConnectWithoutCategoryRefInput | CourseCreateOrConnectWithoutCategoryRefInput[]
     createMany?: CourseCreateManyCategoryRefInputEnvelope
     connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type CourseUpdateManyWithoutCategoryRefNestedInput = {
@@ -88236,6 +88334,33 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumApplicationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
@@ -88295,33 +88420,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
     _max?: NestedEnumRegimenFiscalNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumModalityFilter<$PrismaModel = never> = {
@@ -88679,7 +88777,7 @@ export namespace Prisma {
     id?: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -88696,7 +88794,7 @@ export namespace Prisma {
     id?: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -89750,6 +89848,8 @@ export namespace Prisma {
     secret: string
     backupCodes: string
     verified?: boolean
+    failedVerificationCount?: number
+    lockedUntil?: Date | string | null
   }
 
   export type TwoFactorUncheckedCreateWithoutUserInput = {
@@ -89757,6 +89857,8 @@ export namespace Prisma {
     secret: string
     backupCodes: string
     verified?: boolean
+    failedVerificationCount?: number
+    lockedUntil?: Date | string | null
   }
 
   export type TwoFactorCreateOrConnectWithoutUserInput = {
@@ -89788,7 +89890,7 @@ export namespace Prisma {
     userId?: StringFilter<"Account"> | string
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
-    issuer?: StringFilter<"Account"> | string
+    issuer?: StringNullableFilter<"Account"> | string | null
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -90715,6 +90817,8 @@ export namespace Prisma {
     secret?: StringFieldUpdateOperationsInput | string
     backupCodes?: StringFieldUpdateOperationsInput | string
     verified?: BoolFieldUpdateOperationsInput | boolean
+    failedVerificationCount?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TwoFactorUncheckedUpdateWithoutUserInput = {
@@ -90722,6 +90826,8 @@ export namespace Prisma {
     secret?: StringFieldUpdateOperationsInput | string
     backupCodes?: StringFieldUpdateOperationsInput | string
     verified?: BoolFieldUpdateOperationsInput | boolean
+    failedVerificationCount?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -104574,7 +104680,7 @@ export namespace Prisma {
     id?: string
     accountId: string
     providerId: string
-    issuer: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -104837,7 +104943,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -104854,7 +104960,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -104871,7 +104977,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
-    issuer?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
