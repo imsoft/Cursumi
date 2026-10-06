@@ -46,6 +46,8 @@ struct ProfileView: View {
                             NavigationLink { HostGamesView() } label: { Label("Hostear juegos", systemImage: "gamecontroller") }
                             NavigationLink { WhiteboardView() } label: { Label("Pizarrón", systemImage: "pencil.and.outline") }
                             NavigationLink { TemplatesView() } label: { Label("Plantillas", systemImage: "doc.on.doc") }
+                            NavigationLink { WebSectionView(path: "/instructor/blog", title: "Blog de instructor") } label: { Label("Blog de instructor", systemImage: "square.and.pencil") }
+                            NavigationLink { WebSectionView(path: "/gobernanza", title: "Gobernanza") } label: { Label("Gobernanza", systemImage: "building.columns") }
                         }
                     }
                     if profile?.role == "admin" {
@@ -61,11 +63,13 @@ struct ProfileView: View {
                         NavigationLink { GamesView() } label: { Label("Unirse a un juego", systemImage: "gamecontroller") }
                         NavigationLink { ReferralView() } label: { Label("Referidos", systemImage: "gift") }
                         NavigationLink { OrgMaterialsView() } label: { Label("Materiales de mi empresa", systemImage: "folder") }
+                        NavigationLink { WebSectionView(path: "/business/dashboard", title: "Panel de mi empresa") } label: { Label("Panel de mi empresa", systemImage: "chart.pie") }
                         NavigationLink { BlogView() } label: { Label("Blog", systemImage: "newspaper") }
                         NavigationLink { BusinessView() } label: { Label("Para empresas", systemImage: "building.2") }
                     }
                     Section {
                         Button { editing = true } label: { Label("Editar perfil", systemImage: "pencil") }
+                        NavigationLink { SignatureView() } label: { Label("Mi firma", systemImage: "signature") }
                         NavigationLink { SettingsView() } label: { Label("Configuración", systemImage: "gearshape") }
                         if profile?.role == "student" {
                             NavigationLink { BecomeInstructorView() } label: { Label("Conviértete en instructor", systemImage: "person.badge.plus") }

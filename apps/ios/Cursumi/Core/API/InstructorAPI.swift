@@ -23,6 +23,12 @@ struct InstructorAPI {
         return list.items
     }
 
+    /// Alumnos inscritos agrupados por curso.
+    func students() async throws -> [InstructorCourseStudents] {
+        let list: FlexibleList<InstructorCourseStudents> = try await api.get("api/instructor/students")
+        return list.items
+    }
+
     func profile() async throws -> InstructorProfile { try await api.get("api/instructor/profile") }
 
     func updateProfile(_ update: InstructorProfileUpdate) async throws {
@@ -182,4 +188,39 @@ struct AdminAPI {
         struct Body: Encodable { let id: String; let status: String }
         try await api.patch("api/admin/business/quote-requests", Body(id: id, status: status))
     }
+
+    // MARK: Pagos a instructores
+
+    func payouts() async throws -> AdminPayouts { try await api.get("api/admin/payouts") }
+
+    /// Transfiere por Stripe Connect (mueve dinero real). 409 si ya no está pendiente.
+    func transferPayout(_ transactionId: String) async throws {
+        struct Body: Encodable { let action = "transfer" }
+        try await api.post("api/admin/payouts/\(transactionId)", Body())
+    }
+
+    /// Registra a mano un pago hecho fuera de Stripe. 409 si ya no está pendiente.
+    func markPayoutPaid(_ transactionId: String, note: String) async throws {
+        struct Body: Encodable { let action = "mark-paid"; let note: String }
+        try await api.post("api/admin/payouts/\(transactionId)", Body(note: note))
+    }
+
+    // MARK: Bitácora
+
+    func auditLogs(limit: Int = 200) async throws -> [AuditLog] {
+        let list: FlexibleList<AuditLog> = try await api.get("api/admin/audit-logs", query: ["limit": String(limit)])
+        return list.items
+    }
+
+    // MARK: Ajustes de plataforma
+
+    func platformFee() async throws -> PlatformFee { try await api.get("api/admin/platform-fee") }
+    func setPlatformFee(_ percent: Double) async throws { try await api.put("api/admin/platform-fee", PlatformFee(platformFeePercent: percent)) }
+
+    func socialLinks() async throws -> [SocialLink] {
+        let list: FlexibleList<SocialLink> = try await api.get("api/admin/social-links")
+        return list.items
+    }
+    /// Reemplaza la lista completa de redes sociales.
+    func setSocialLinks(_ links: [SocialLink]) async throws { try await api.put("api/admin/social-links", links) }
 }

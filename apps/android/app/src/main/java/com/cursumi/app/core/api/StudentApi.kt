@@ -10,6 +10,7 @@ import com.cursumi.app.core.model.MyProfile
 import com.cursumi.app.core.model.NotificationsResponse
 import com.cursumi.app.core.model.ProfileUpdate
 import com.cursumi.app.core.model.QuizAnswer
+import com.cursumi.app.core.model.SignatureReply
 import com.cursumi.app.core.model.StudentCourse
 import com.cursumi.app.core.model.StudentCourseDetail
 import kotlinx.serialization.Serializable
@@ -71,12 +72,13 @@ class StudentApi(private val api: ApiClient) {
     suspend fun profile(): MyProfile = api.get("api/me/profile")
     suspend fun updateProfile(update: ProfileUpdate) = api.patch("api/me/profile", update)
 
-    suspend fun uploadAvatar(jpeg: ByteArray) {
-        val body = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("file", "avatar.jpg", jpeg.toRequestBody("image/jpeg".toMediaType()))
-            .build()
-        api.request("POST", "api/me/avatar", rawBody = body).throwIfError()
-    }
+    suspend fun uploadAvatar(jpeg: ByteArray) { api.postFile("api/me/avatar", "file", "avatar.jpg", jpeg, "image/jpeg") }
+
+    // ── Firma para certificados ──
+    suspend fun signature(): SignatureReply = api.get("api/me/signature")
+    /** PNG de hasta 4 MB; devuelve la URL (https o `data:image/png;base64,…`). */
+    suspend fun uploadSignature(png: ByteArray): SignatureReply = api.postFile("api/me/signature", "file", "firma.png", png, "image/png").decode()
+    suspend fun deleteSignature() = api.delete<Unit>("api/me/signature")
 
     suspend fun certificates(): List<Certificate> = api.get("api/me/certificates")
     suspend fun notifications(): NotificationsResponse = api.get("api/notifications")

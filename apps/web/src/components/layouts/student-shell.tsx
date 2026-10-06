@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { useNativeEmbedded } from "@/hooks/use-native-embedded";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
@@ -152,6 +153,12 @@ export function StudentShell({
     }
     return group;
   });
+
+  // Dentro del visor web de la app móvil: solo el contenido, sin menú.
+  const embedded = useNativeEmbedded();
+  if (embedded) {
+    return <div className="min-h-svh bg-background p-4 md:p-6">{children}</div>;
+  }
 
   return (
     <SidebarProvider

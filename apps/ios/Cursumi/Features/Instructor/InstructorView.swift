@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Panel del instructor: ingresos, datos, cursos y chats.
+/// Panel del instructor: ingresos, datos, cursos, alumnos y chats.
 struct InstructorView: View {
-    private enum Tab: String, CaseIterable { case earnings = "Ingresos", analytics = "Datos", courses = "Cursos", messages = "Chats" }
+    private enum Tab: String, CaseIterable { case earnings = "Ingresos", analytics = "Datos", courses = "Cursos", students = "Alumnos", messages = "Chats" }
     @State private var tab: Tab = .earnings
 
     var body: some View {
@@ -16,6 +16,7 @@ struct InstructorView: View {
             case .earnings: EarningsTab()
             case .analytics: AnalyticsTab()
             case .courses: CoursesTab()
+            case .students: InstructorStudentsView()
             case .messages: MessagesTab()
             }
         }

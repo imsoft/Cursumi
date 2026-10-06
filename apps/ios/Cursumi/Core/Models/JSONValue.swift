@@ -48,4 +48,31 @@ enum JSONValue: Codable, Equatable {
     static func parse(_ text: String) -> JSONValue? {
         try? JSONDecoder().decode(JSONValue.self, from: Data(text.utf8))
     }
+
+    /// Versión en una línea para mostrar en listas: un objeto se vuelve
+    /// `clave: valor · clave: valor`; lo demás, JSON compacto.
+    var compact: String {
+        switch self {
+        case .null: return ""
+        case .string(let s): return s
+        case .bool(let b): return b ? "sí" : "no"
+        case .number(let n): return n.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(n)) : String(n)
+        case .object(let o):
+            return o.keys.sorted().map { "\($0): \(o[$0]!.compactNested)" }.joined(separator: " · ")
+        case .array(let a):
+            return "[" + a.map(\.compactNested).joined(separator: ", ") + "]"
+        }
+    }
+
+    /// Como `compact`, pero los objetos anidados van como JSON para no perder la estructura.
+    private var compactNested: String {
+        switch self {
+        case .object, .array:
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
+            return (try? encoder.encode(self)).flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        case .null: return "null"
+        default: return compact
+        }
+    }
 }
