@@ -211,7 +211,7 @@ private fun ForgotPasswordDialog(onDismiss: () -> Unit) {
         title = { Text("Recuperar contraseña") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (sent) Text("Si el correo existe, te enviamos un enlace para restablecer tu contraseña.", color = Brand.success)
+                if (sent) Text("Te enviamos un correo. Abre el enlace desde este teléfono y te traerá de vuelta a la app para elegir tu nueva contraseña.", color = Brand.success)
                 else {
                     Text("Te enviaremos un enlace para crear una contraseña nueva.")
                     BrandTextField(email, { email = it }, "Correo electrónico", keyboard = KeyboardOptions(keyboardType = KeyboardType.Email))

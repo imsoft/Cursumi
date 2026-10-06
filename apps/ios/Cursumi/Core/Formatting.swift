@@ -16,6 +16,21 @@ enum Formatting {
         return "\(formatted) MXN"
     }
 
+    /// Importe guardado en centavos (como `Transaction`) en pesos con sufijo MXN.
+    /// A diferencia de `priceMXN`, 0 se muestra como "$0.00 MXN" (es dinero, no un precio).
+    static func centsMXN(_ cents: Int) -> String {
+        if cents == 0 { return "$0.00 MXN" }
+        return priceMXN(Double(cents) / 100, showDecimals: true)
+    }
+
+    /// Fecha corta en español ("5 oct 2026").
+    static func shortDate(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "es_MX")
+        f.dateFormat = "d MMM yyyy"
+        return f.string(from: date)
+    }
+
     /// Iniciales para el avatar de respaldo ("Ana López" → "AL").
     static func initials(_ name: String) -> String {
         let parts = name.split(separator: " ").prefix(2)

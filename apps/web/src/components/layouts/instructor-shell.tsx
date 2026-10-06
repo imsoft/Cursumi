@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
+import { useNativeEmbedded } from "@/hooks/use-native-embedded";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
@@ -119,16 +120,8 @@ export function InstructorShell({
   const isWhiteboard = pathname?.startsWith("/instructor/whiteboard") ?? false;
 
   // Dentro del WebView de la app móvil renderizamos solo el contenido (sin
-  // sidebar ni header web), para que la sección de planeación se sienta nativa.
-  const [embedded, setEmbedded] = useState(false);
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      (window as unknown as { CursumiNative?: unknown }).CursumiNative
-    ) {
-      setEmbedded(true);
-    }
-  }, []);
+  // sidebar ni header web), para que la sección se sienta nativa.
+  const embedded = useNativeEmbedded();
 
   if (embedded) {
     return <div className="min-h-svh bg-background p-4 md:p-6">{children}</div>;

@@ -17,7 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.staticCompositionLocalOf
 import android.Manifest
 import android.os.Build
@@ -41,6 +44,7 @@ import com.cursumi.app.core.ui.Brand
 import com.cursumi.app.ui.admin.AdminHome
 import com.cursumi.app.ui.admin.AdminSection
 import com.cursumi.app.ui.auth.AuthScreen
+import com.cursumi.app.ui.auth.ResetPasswordScreen
 import com.cursumi.app.ui.catalog.CatalogScreen
 import com.cursumi.app.ui.courses.ChatScreen
 import com.cursumi.app.ui.courses.CourseDetailScreen
@@ -54,6 +58,7 @@ import com.cursumi.app.ui.instructor.CreateGameScreen
 import com.cursumi.app.ui.instructor.HostGamesScreen
 import com.cursumi.app.ui.instructor.InstructorAccountScreen
 import com.cursumi.app.ui.instructor.InstructorScreen
+import com.cursumi.app.ui.instructor.InstructorStudentsScreen
 import com.cursumi.app.ui.instructor.PlanningScreen
 import com.cursumi.app.ui.instructor.TemplatesScreen
 import com.cursumi.app.ui.instructor.ThreadScreen
@@ -69,7 +74,9 @@ import com.cursumi.app.ui.profile.OrgMaterialsScreen
 import com.cursumi.app.ui.profile.ProfileScreen
 import com.cursumi.app.ui.profile.ReferralScreen
 import com.cursumi.app.ui.profile.SettingsScreen
+import com.cursumi.app.ui.profile.SignatureScreen
 import com.cursumi.app.ui.profile.WishlistScreen
+import com.cursumi.app.ui.web.WebSectionScreen
 
 /** Acceso a la composición de la app desde cualquier pantalla. */
 val LocalApp = staticCompositionLocalOf<CursumiApp> { error("Sin CursumiApp") }
@@ -88,6 +95,8 @@ object Routes {
     fun controlGame(id: String) = "host-game/${Uri.encode(id)}"
     fun blogPost(slug: String) = "blog/${Uri.encode(slug)}"
     fun admin(section: String) = "admin/$section"
+    /** Sección de la web (ruta absoluta, p. ej. `/instructor/blog`) dentro del visor con sesión. */
+    fun web(path: String, title: String) = "web?path=${Uri.encode(path)}&title=${Uri.encode(title)}"
 }
 
 @Composable
@@ -95,8 +104,17 @@ fun Root() {
     val app = CursumiApp.from(LocalContext.current)
     CompositionLocalProvider(LocalApp provides app) {
         val session = app.session
+        val scope = rememberCoroutineScope()
         LaunchedEffect(Unit) { session.restore() }
-        when (session.state) {
+        // El deep link de restablecer contraseña manda sobre la sesión: se atiende con o sin ella.
+        val resetToken by app.pendingResetToken.collectAsState()
+        val token = resetToken
+        if (token != null) ResetPasswordScreen(token, onFinished = { success ->
+            app.pendingResetToken.value = null
+            // Con la contraseña nueva se vuelve al login; si había sesión, la cerramos.
+            if (success && session.state is SessionStore.State.SignedIn) scope.launch { session.signOut() }
+        })
+        else when (session.state) {
             SessionStore.State.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = Brand.primary) }
             SessionStore.State.SignedOut -> AuthScreen()
             is SessionStore.State.SignedIn -> AppNav()
@@ -177,6 +195,11 @@ fun AppNav() {
             composable("templates") { TemplatesScreen(nav) }
             composable("admin") { AdminHome(nav) }
             composable("admin/{section}") { AdminSection(nav, it.arg("section")) }
+            composable("instructor-students") { InstructorStudentsScreen(nav) }
+            composable("signature") { SignatureScreen(nav) }
+            composable("web?path={path}&title={title}") {
+                WebSectionScreen(nav, it.arguments?.getString("path") ?: "/", it.arguments?.getString("title") ?: "Cursumi")
+            }
         }
     }
 }

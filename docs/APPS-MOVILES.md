@@ -156,6 +156,9 @@ mismas Opciones de desarrollador (`adb pair` con el código que muestra).
 | Cursos, lecciones, video, quizzes, chat, planeación | ✅ | ✅ | ✅ | ✅ |
 | Subir foto / video (Mux) | ✅ (fotos del simulador) | ✅ | ✅ | ✅ |
 | Notificaciones push | ❌ Apple no lo soporta | ❌ hasta tener la clave APNs de una cuenta de desarrollador de pago | ✅ | ✅ |
+| Alumnos por curso, pagos a instructores, bitácora, ajustes, firma | ✅ | ✅ | ✅ | ✅ |
+| Blog de instructor, gobernanza, panel de empresa, laboratorio de IA, blog admin (visor web con sesión) | ✅ | ✅ | ✅ | ✅ |
+| Restablecer contraseña desde el correo (botón "Abrir en la app") | ❌ el simulador no recibe correo | ✅ | ❌ | ✅ |
 
 Push en Android ya está activo del lado del servidor (Firebase / FCM). Push en
 iOS requiere el Apple Developer Program (99 USD/año); ver el README de iOS.
@@ -229,6 +232,20 @@ cada PR, así que si CI está en verde, `main` compila.
 - Push: `POST /api/me/push-token` con `apns:<token>` (iOS) o `fcm:<token>`
   (Android). El servidor envía por APNs ([apns-push.ts](../apps/web/src/lib/apns-push.ts))
   y FCM ([fcm-push.ts](../apps/web/src/lib/fcm-push.ts)).
-- La planeación didáctica del instructor reutiliza los editores de la web dentro
-  de un WebView; la web detecta `window.CursumiNative` para ocultar su barra y
-  entregar el PDF a la app.
+- Las secciones que no tienen pantalla nativa (planeación, blog de instructor,
+  gobernanza, panel de empresa, laboratorio de IA y blog de admin) reutilizan la
+  web dentro de un WebView con sesión: `WebSectionView` (iOS) y
+  `WebSectionScreen` (Android) cargan `/api/mobile/planning-bridge?redirect=<ruta>`
+  con la cookie; el servidor la re-emite con `Set-Cookie` y redirige. Solo acepta
+  rutas de `/instructor`, `/admin`, `/dashboard`, `/business` y `/gobernanza`
+  ([native-bridge.ts](../apps/web/src/lib/native-bridge.ts)). Las cuatro shells
+  de la web ocultan menú y cabecera cuando detectan `window.CursumiNative`
+  ([use-native-embedded.ts](../apps/web/src/hooks/use-native-embedded.ts)); la
+  planeación además entrega el PDF a la app por `postMessage`.
+- Restablecer contraseña: el correo abre `cursumi.com/reset-password?token=…`;
+  en un teléfono esa página muestra "Abrir en la app de Cursumi", que lanza
+  `mobile://reset-password?token=…`. La app abre su pantalla de nueva contraseña
+  y llama `POST /api/auth/reset-password`.
+- Lo que sigue solo en la web: comprar cursos (la app abre la ficha en el
+  navegador), pizarrón y plantillas abren el navegador, simulador y pagos con
+  tarjeta de empresas.

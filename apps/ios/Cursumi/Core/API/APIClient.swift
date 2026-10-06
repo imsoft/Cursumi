@@ -134,6 +134,34 @@ final class APIClient {
         let res = try await request("DELETE", path, json: body)
         guard res.isOK else { throw APIError.http(res.status, message: res.errorMessage) }
     }
+
+    func put(_ path: String, _ body: Encodable? = nil) async throws {
+        let res = try await request("PUT", path, json: body)
+        guard res.isOK else { throw APIError.http(res.status, message: res.errorMessage) }
+    }
+
+    // MARK: - Subidas
+
+    /// Sube un archivo como `multipart/form-data` con un solo campo.
+    @discardableResult
+    func upload(_ path: String, field: String = "file", filename: String, mimeType: String, data: Data) async throws -> Response {
+        let boundary = "cursumi-\(UUID().uuidString)"
+        let body = Self.multipartBody(boundary: boundary, field: field, filename: filename, mimeType: mimeType, data: data)
+        let res = try await request("POST", path, rawBody: body, contentType: "multipart/form-data; boundary=\(boundary)")
+        guard res.isOK else { throw APIError.http(res.status, message: res.errorMessage) }
+        return res
+    }
+
+    /// Cuerpo multipart con un único campo de archivo.
+    static func multipartBody(boundary: String, field: String, filename: String, mimeType: String, data: Data) -> Data {
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"\(field)\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: \(mimeType)\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        return body
+    }
 }
 
 /// Envuelve cualquier `Encodable` para poder pasarlo como existencial.

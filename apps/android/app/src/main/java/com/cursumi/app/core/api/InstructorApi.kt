@@ -11,6 +11,7 @@ import com.cursumi.app.core.model.AdminKpi
 import com.cursumi.app.core.model.AdminReview
 import com.cursumi.app.core.model.AdminStats
 import com.cursumi.app.core.model.AdminUser
+import com.cursumi.app.core.model.AuditLog
 import com.cursumi.app.core.model.Category
 import com.cursumi.app.core.model.FlexibleListSerializer
 import com.cursumi.app.core.model.GameState
@@ -18,11 +19,15 @@ import com.cursumi.app.core.model.HostGame
 import com.cursumi.app.core.model.InstructorAnalytics
 import com.cursumi.app.core.model.InstructorConversation
 import com.cursumi.app.core.model.InstructorCourse
+import com.cursumi.app.core.model.InstructorCourseStudents
 import com.cursumi.app.core.model.InstructorEarnings
 import com.cursumi.app.core.model.InstructorProfile
 import com.cursumi.app.core.model.InstructorProfileUpdate
 import com.cursumi.app.core.model.NewCoursePayload
 import com.cursumi.app.core.model.NewGameQuestion
+import com.cursumi.app.core.model.PayoutsResponse
+import com.cursumi.app.core.model.PlatformFee
+import com.cursumi.app.core.model.SocialLink
 import com.cursumi.app.core.model.QuoteRequest
 import com.cursumi.app.core.model.QuoteRequestPayload
 import com.cursumi.app.core.model.StripeStatus
@@ -31,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -47,6 +53,8 @@ class InstructorApi(private val api: ApiClient) {
     suspend fun courses(): List<InstructorCourse> = api.getList("api/instructor/courses", InstructorCourse.serializer())
     @Serializable private data class StatusBody(val status: String)
     suspend fun setCourseStatus(courseId: String, status: String) = api.patch("api/instructor/courses/$courseId", StatusBody(status))
+    /** Alumnos inscritos agrupados por curso. */
+    suspend fun students(): List<InstructorCourseStudents> = api.getList("api/instructor/students", InstructorCourseStudents.serializer())
     suspend fun conversations(): List<InstructorConversation> = api.getList("api/instructor/conversations", InstructorConversation.serializer())
     suspend fun profile(): InstructorProfile = api.get("api/instructor/profile")
     suspend fun updateProfile(update: InstructorProfileUpdate) = api.patch("api/instructor/profile", update)
@@ -140,4 +148,21 @@ class AdminApi(private val api: ApiClient) {
     suspend fun quoteRequests(): List<QuoteRequest> = api.getList("api/admin/business/quote-requests", QuoteRequest.serializer())
     @Serializable private data class QuoteStatusBody(val id: String, val status: String)
     suspend fun updateQuoteRequest(id: String, status: String) = api.patch("api/admin/business/quote-requests", QuoteStatusBody(id, status))
+
+    // ── Pagos a instructores ──
+    suspend fun payouts(): PayoutsResponse = api.get("api/admin/payouts")
+    @Serializable private data class PayoutActionBody(val action: String, val note: String? = null)
+    /** Transferencia real vía Stripe Connect (solo con `stripeOnboarded`). 409 si ya no está pendiente. */
+    suspend fun transferPayout(transactionId: String) = api.postUnit("api/admin/payouts/$transactionId", PayoutActionBody("transfer"))
+    /** Registra un pago hecho fuera de Stripe. 409 si ya no está pendiente. */
+    suspend fun markPayoutPaid(transactionId: String, note: String?) = api.postUnit("api/admin/payouts/$transactionId", PayoutActionBody("mark-paid", note?.trim()?.ifEmpty { null }))
+
+    // ── Bitácora ──
+    suspend fun auditLogs(limit: Int = 200): List<AuditLog> = api.getList("api/admin/audit-logs", AuditLog.serializer(), mapOf("limit" to limit.toString()))
+
+    // ── Ajustes de plataforma ──
+    suspend fun platformFee(): PlatformFee = api.get("api/admin/platform-fee")
+    suspend fun setPlatformFee(percent: Double) { api.request("PUT", "api/admin/platform-fee", jsonBody = AppJsonWithDefaults.encodeToJsonElement(PlatformFee.serializer(), PlatformFee(percent))).throwIfError() }
+    suspend fun socialLinks(): List<SocialLink> = api.getList("api/admin/social-links", SocialLink.serializer())
+    suspend fun setSocialLinks(links: List<SocialLink>) { api.request("PUT", "api/admin/social-links", jsonBody = AppJsonWithDefaults.encodeToJsonElement(ListSerializer(SocialLink.serializer()), links)).throwIfError() }
 }

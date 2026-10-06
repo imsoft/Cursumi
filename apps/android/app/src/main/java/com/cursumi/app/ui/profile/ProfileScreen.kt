@@ -57,6 +57,7 @@ import com.cursumi.app.core.ui.BrandTextField
 import com.cursumi.app.core.ui.ErrorText
 import com.cursumi.app.core.ui.StatRow
 import com.cursumi.app.ui.LocalApp
+import com.cursumi.app.ui.Routes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -143,11 +144,15 @@ fun ProfileScreen(nav: NavController) {
             if (role == "instructor" || role == "admin") item {
                 MenuCard("Instructor", listOf(
                     "Panel de instructor" to { nav.navigate("instructor") },
+                    "Alumnos" to { nav.navigate("instructor-students") },
                     "Perfil de instructor" to { nav.navigate("instructor-account") },
+                    "Mi firma" to { nav.navigate("signature") },
                     "Crear curso" to { nav.navigate("create-course") },
                     "Hostear juegos" to { nav.navigate("host-games") },
                     "Pizarrón" to { nav.navigate("whiteboard") },
                     "Plantillas" to { nav.navigate("templates") },
+                    "Blog de instructor" to { nav.navigate(Routes.web("/instructor/blog", "Blog de instructor")) },
+                    "Gobernanza" to { nav.navigate(Routes.web("/gobernanza", "Gobernanza")) },
                 ))
             }
             if (role == "admin") item { MenuCard("Administración", listOf("Administración" to { nav.navigate("admin") })) }
@@ -160,6 +165,7 @@ fun ProfileScreen(nav: NavController) {
                     "Unirse a un juego" to { nav.navigate("games") },
                     "Referidos" to { nav.navigate("referral") },
                     "Materiales de mi empresa" to { nav.navigate("org-materials") },
+                    "Panel de mi empresa" to { nav.navigate(Routes.web("/business/dashboard", "Panel de mi empresa")) },
                     "Blog" to { nav.navigate("blog") },
                     "Para empresas" to { nav.navigate("business") },
                 ))

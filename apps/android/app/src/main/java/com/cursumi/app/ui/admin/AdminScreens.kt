@@ -62,13 +62,21 @@ import kotlinx.coroutines.launch
 private val sections = listOf(
     "stats" to "Resumen", "applications" to "Solicitudes de instructor", "users" to "Usuarios", "reviews" to "Moderar reseñas",
     "finances" to "Finanzas", "analytics" to "Analíticas", "coupons" to "Cupones", "categories" to "Categorías", "kpis" to "KPIs", "business" to "Empresas",
+    "payouts" to "Pagos a instructores", "audit-logs" to "Bitácora", "settings" to "Ajustes de plataforma",
+)
+
+/** Secciones que siguen viviendo en la web: se abren en el visor con sesión. */
+private val webSections = listOf(
+    "Laboratorio de IA" to "/admin/ai-lab",
+    "Blog" to "/admin/blog",
 )
 
 @Composable
 fun AdminHome(nav: NavController) {
     Screen("Administración", onBack = { nav.popBackStack() }) { padding ->
-        Column(Modifier.padding(padding).padding(16.dp)) {
-            MenuCard(null, sections.map { (id, label) -> label to { nav.navigate(Routes.admin(id)) } })
+        Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(16.dp)) {
+            MenuCard(null, sections.map { (id, label) -> label to { nav.navigate(Routes.admin(id)) } } +
+                webSections.map { (label, path) -> label to { nav.navigate(Routes.web(path, label)) } })
         }
     }
 }
@@ -88,6 +96,9 @@ fun AdminSection(nav: NavController, section: String) {
                 "categories" -> CategoriesSection()
                 "kpis" -> KpisSection()
                 "business" -> BusinessSection()
+                "payouts" -> PayoutsSection()
+                "audit-logs" -> AuditLogsSection()
+                "settings" -> PlatformSettingsSection()
             }
         }
     }

@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionSafe } from "@/lib/session";
+import { safeBridgePath } from "@/lib/native-bridge";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Puente de sesión para la app móvil (Cursumi para iOS/Android).
  *
- * La app abre la sección de planeación dentro de un WebView. El cliente móvil
+ * La app abre dentro de un WebView las secciones que no tiene nativas
+ * (planeación, blog, gobernanza, empresa, laboratorio de IA…). El cliente móvil
  * envía la cookie de sesión de better-auth en la cabecera `Cookie` de la carga
  * inicial, pero esa cabecera NO se guarda en el "cookie jar" del WebView, así
  * que las peticiones posteriores (autoguardado, marcar completado) irían sin
@@ -17,15 +19,13 @@ export const dynamic = "force-dynamic";
  * redirige a la página de planeación real. A partir de ahí todas las peticiones
  * del WebView llevan la sesión.
  *
- * `redirect` se restringe a rutas internas de planeación para evitar open-redirect.
+ * `redirect` se restringe a rutas internas con sesión (ver `safeBridgePath`)
+ * para evitar open-redirect. Las shells ocultan su menú cuando detectan
+ * `window.CursumiNative` (ver `useNativeEmbedded`).
  */
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const requested = url.searchParams.get("redirect") ?? "";
-  const safePath =
-    /^\/instructor\/courses\/[^/?#]+\/planning(?:\/[^?#]*)?$/.test(requested)
-      ? requested
-      : "/instructor";
+  const safePath = safeBridgePath(url.searchParams.get("redirect"));
 
   const session = await getSessionSafe();
   const target = new URL(session ? safePath : "/login", url.origin);

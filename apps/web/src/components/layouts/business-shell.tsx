@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
+import { useNativeEmbedded } from "@/hooks/use-native-embedded";
 import { usePathname } from "next/navigation";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
@@ -70,6 +71,12 @@ export function BusinessShell({
   // No mostrar el banner en la propia página de suscripción (ahí ya se paga).
   const showActivateBanner =
     !subscriptionActive && pathname !== "/business/dashboard/subscription";
+
+  // Dentro del visor web de la app móvil: solo el contenido, sin menú.
+  const embedded = useNativeEmbedded();
+  if (embedded) {
+    return <div className="min-h-svh bg-background p-4 md:p-6">{children}</div>;
+  }
 
   return (
     <SidebarProvider>

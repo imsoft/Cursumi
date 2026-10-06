@@ -1,10 +1,5 @@
 package com.cursumi.app.ui.instructor
 
-import android.annotation.SuppressLint
-import android.util.Base64
-import android.webkit.JavascriptInterface
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -60,8 +55,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.cursumi.app.core.Config
 import com.cursumi.app.core.Formatting
@@ -87,8 +80,8 @@ import com.cursumi.app.ui.LocalApp
 import com.cursumi.app.ui.Routes
 import com.cursumi.app.ui.catalog.openInBrowser
 import com.cursumi.app.ui.courses.ChatThread
+import com.cursumi.app.ui.web.WebSectionScreen
 import kotlinx.coroutines.launch
-import java.io.File
 
 /** Panel del instructor: ingresos, datos, cursos y chats. */
 @Composable
@@ -271,54 +264,10 @@ fun InstructorAccountScreen(nav: NavController) {
     }
 }
 
-/**
- * Planeación didáctica: reutiliza los editores de la web dentro de un WebView.
- * La carga inicial va a `/api/mobile/planning-bridge` con la cookie de sesión; ese
- * endpoint la re-emite con `Set-Cookie` para que quede en el jar del WebView.
- * La web detecta `window.CursumiNative` (así se llama la interfaz JS aquí) para
- * ocultar su chrome y entregar el PDF.
- */
-@SuppressLint("SetJavaScriptEnabled")
+/** Planeación didáctica: los editores de la web dentro del visor con sesión (PDF incluido). */
 @Composable
-fun PlanningScreen(nav: NavController, courseId: String) {
-    val app = LocalApp.current
-    val context = LocalContext.current
-    var error by remember { mutableStateOf<String?>(null) }
-    Screen("Planeación didáctica", onBack = { nav.popBackStack() }) { padding ->
-        Column(Modifier.padding(padding).fillMaxSize()) {
-            ErrorText(error)
-            AndroidView(modifier = Modifier.fillMaxSize(), factory = { ctx ->
-                WebView(ctx).apply {
-                    settings.javaScriptEnabled = true
-                    settings.domStorageEnabled = true
-                    webViewClient = WebViewClient()
-                    addJavascriptInterface(object {
-                        @JavascriptInterface
-                        fun postMessage(raw: String) {
-                            runCatching {
-                                val obj = com.cursumi.app.core.api.AppJson.parseToJsonElement(raw) as kotlinx.serialization.json.JsonObject
-                                if ((obj["type"] as? kotlinx.serialization.json.JsonPrimitive)?.content != "planning-pdf") return
-                                val base64 = (obj["base64"] as? kotlinx.serialization.json.JsonPrimitive)?.content ?: return
-                                val name = ((obj["filename"] as? kotlinx.serialization.json.JsonPrimitive)?.content ?: "documento.pdf").replace(Regex("[\\\\/:*?\"<>|]"), "").ifEmpty { "documento.pdf" }
-                                val dir = File(ctx.cacheDir, "pdf").apply { mkdirs() }
-                                val file = File(dir, name).apply { writeBytes(Base64.decode(base64, Base64.DEFAULT)) }
-                                val uri = FileProvider.getUriForFile(ctx, "${ctx.packageName}.files", file)
-                                val send = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                    type = "application/pdf"; putExtra(android.content.Intent.EXTRA_STREAM, uri); addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                }
-                                post { ctx.startActivity(android.content.Intent.createChooser(send, name)) }
-                            }.onFailure { post { error = "No se pudo guardar el PDF. Inténtalo de nuevo." } }
-                        }
-                    }, "CursumiNative")
-                    val url = "${Config.API_URL}/api/mobile/planning-bridge?redirect=" + android.net.Uri.encode("/instructor/courses/$courseId/planning")
-                    val headers = app.api.jar.cookieHeader()?.let { mapOf("Cookie" to it) } ?: emptyMap()
-                    loadUrl(url, headers)
-                }
-            })
-        }
-    }
-    @Suppress("UNUSED_VARIABLE") val unused = context
-}
+fun PlanningScreen(nav: NavController, courseId: String) =
+    WebSectionScreen(nav, "/instructor/courses/$courseId/planning", "Planeación didáctica")
 
 /** Plantillas oficiales (mismas que `public/templates/` en la web). */
 @Composable

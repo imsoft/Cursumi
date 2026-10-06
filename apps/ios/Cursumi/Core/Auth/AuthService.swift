@@ -110,6 +110,15 @@ struct AuthService {
         guard res.isOK else { throw AuthError.server(res.errorMessage ?? "No se pudo enviar el correo.") }
     }
 
+    /// Fija la contraseña con el token del correo de recuperación.
+    func resetPassword(token: String, newPassword: String) async throws {
+        struct Body: Encodable { let newPassword: String; let token: String }
+        let res = try await api.request("POST", "api/auth/reset-password", json: Body(newPassword: newPassword, token: token), auth: false)
+        guard res.isOK else {
+            throw AuthError.server(res.errorMessage ?? "El enlace no es válido o ya expiró. Solicita uno nuevo.")
+        }
+    }
+
     func signOut() async {
         _ = try? await api.request("POST", "api/auth/sign-out")
         api.jar.clear()
