@@ -77,11 +77,10 @@ model Account {
   userId               String
   accountId            String
   providerId           String
-  /// Emisor de la identidad. Lo introdujo better-auth 1.7 y es obligatorio:
-  /// "https://accounts.google.com" para Google, "local:credential" para las
-  /// cuentas de correo y contraseña. Sin esta columna, iniciar sesión con
-  /// Google reventaba con PrismaClientValidationError.
-  issuer               String
+  /// Emisor de la identidad. Lo introdujo better-auth 1.7.0 como obligatorio y
+  /// 1.7.3 lo retiró (vuelve a identificar por providerId + accountId). Ya no
+  /// se escribe; queda nullable para no perder lo rellenado en 2026-09.
+  issuer               String?
   accessToken          String?   @db.Text
   refreshToken         String?   @db.Text
   idToken              String?   @db.Text
@@ -98,7 +97,6 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([providerId, accountId])
-  @@unique([issuer, accountId])
   @@index([userId])
 }
 
@@ -137,6 +135,9 @@ model TwoFactor {
   userId      String  @unique
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   verified    Boolean @default(true)
+  /// better-auth 1.7.7: intentos fallidos de TOTP y bloqueo temporal.
+  failedVerificationCount Int       @default(0)
+  lockedUntil             DateTime?
 
   @@index([secret])
 }
