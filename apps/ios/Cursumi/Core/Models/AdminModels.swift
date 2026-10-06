@@ -273,3 +273,120 @@ extension String {
         return parts.joined(separator: "-")
     }
 }
+
+// MARK: - Alumnos del instructor
+
+/// Curso del instructor con sus inscritos (`GET api/instructor/students`).
+struct InstructorCourseStudents: Decodable, Identifiable {
+    var id: String { courseId }
+    let courseId: String
+    let courseTitle: String
+    let modality: String?
+    let status: String?
+    let students: [InstructorStudent]
+}
+
+struct InstructorStudent: Decodable, Identifiable {
+    var id: String { enrollmentId }
+    let enrollmentId: String
+    let studentId: String
+    let studentName: String?
+    let studentEmail: String?
+    /// Avance 0–100.
+    let progress: Double
+    let status: String?
+    let enrolledAt: Date
+
+    var progressPercent: Int { Int(min(100, max(0, progress)).rounded()) }
+}
+
+// MARK: - Pagos a instructores
+
+/// Respuesta de `GET api/admin/payouts`.
+struct AdminPayouts: Decodable {
+    let groups: [AdminPayoutGroup]
+    let totalPendingCents: Int
+}
+
+struct AdminPayoutGroup: Decodable, Identifiable {
+    var id: String { instructorId }
+    let instructorId: String
+    let instructorName: String?
+    let instructorEmail: String?
+    let stripeAccountId: String?
+    let stripeOnboarded: Bool
+    let pendingCents: Int
+    var rows: [AdminPayoutRow]
+}
+
+struct AdminPayoutRow: Decodable, Identifiable {
+    var id: String { transactionId }
+    let transactionId: String
+    let createdAt: Date
+    let courseTitle: String?
+    let studentName: String?
+    /// Total cobrado al alumno, en centavos MXN.
+    let amountCents: Int
+    /// Parte que corresponde al instructor, en centavos MXN.
+    let instructorAmountCents: Int
+}
+
+// MARK: - Bitácora
+
+/// Entrada de `GET api/admin/audit-logs`.
+struct AuditLog: Decodable, Identifiable {
+    let id: String
+    let actorId: String
+    let actorEmail: String?
+    let action: String
+    let targetType: String?
+    let targetId: String?
+    let metadata: JSONValue?
+    let ip: String?
+    let createdAt: Date
+
+    private static let labels: [String: String] = [
+        "user.role_change": "Cambio de rol",
+        "instructor_application.approve": "Instructor aprobado",
+        "instructor_application.reject": "Instructor rechazado",
+        "course.disable": "Curso deshabilitado",
+        "course.enable": "Curso habilitado",
+        "platform_fee.change": "Cambio de comisión",
+        "review.delete": "Reseña eliminada",
+        "payout.transfer": "Pago transferido",
+        "payout.mark-paid": "Pago registrado a mano",
+    ]
+
+    /// Etiqueta legible de la acción; si no la conocemos, la clave tal cual.
+    var actionLabel: String { Self.labels[action] ?? action }
+
+    /// Metadatos en una línea (`rol: admin · antes: student`), o nil si no hay.
+    var metadataSummary: String? {
+        guard let metadata, metadata != .null else { return nil }
+        let text = metadata.compact
+        return text.isEmpty ? nil : text
+    }
+}
+
+// MARK: - Ajustes de plataforma
+
+/// `GET/PUT api/admin/platform-fee`.
+struct PlatformFee: Codable, Equatable {
+    let platformFeePercent: Double
+}
+
+/// `GET/PUT api/admin/social-links`.
+struct SocialLink: Codable, Identifiable, Equatable {
+    var id: String { key }
+    let key: String
+    let label: String
+    var url: String
+    var visible: Bool
+}
+
+// MARK: - Firma
+
+/// `GET/POST api/me/signature`. La URL puede ser https o `data:image/png;base64,…`.
+struct SignatureInfo: Decodable, Equatable {
+    let url: String?
+}

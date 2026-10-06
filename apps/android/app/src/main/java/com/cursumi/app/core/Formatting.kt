@@ -18,6 +18,15 @@ object Formatting {
         return "$${nf.format(price)} MXN"
     }
 
+    /** Importe en centavos (como `Transaction`) → "$1,234.50 MXN"; 0 → "$0 MXN" (no "Gratis": son pagos). */
+    fun centsMXN(cents: Long): String = if (cents == 0L) "$0 MXN" else priceMXN(cents / 100.0, showDecimals = true)
+
+    /** Fecha ISO ("2026-03-05T12:00:00.000Z") → "05/03/2026"; si no se puede leer, los primeros 10 caracteres. */
+    fun shortDate(iso: String): String = runCatching {
+        val date = java.time.OffsetDateTime.parse(iso).atZoneSameInstant(java.time.ZoneId.systemDefault()).toLocalDate()
+        date.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    }.getOrElse { iso.take(10) }
+
     /** Iniciales para el avatar de respaldo ("Ana López" → "AL"). */
     fun initials(name: String): String =
         name.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }.take(2).mapNotNull { it.firstOrNull()?.uppercaseChar() }.joinToString("")

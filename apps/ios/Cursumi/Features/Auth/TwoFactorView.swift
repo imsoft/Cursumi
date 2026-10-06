@@ -64,7 +64,7 @@ struct ForgotPasswordView: View {
         NavigationStack {
             VStack(spacing: 16) {
                 if sent {
-                    Text("Si el correo existe, te enviamos un enlace para restablecer tu contraseña.")
+                    Text("Te enviamos un correo. Abre el enlace desde este teléfono y te traerá de vuelta a la app para elegir tu nueva contraseña.")
                         .foregroundStyle(Brand.success)
                         .multilineTextAlignment(.center)
                 } else {

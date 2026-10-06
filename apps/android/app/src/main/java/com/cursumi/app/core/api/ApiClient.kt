@@ -16,6 +16,7 @@ import okhttp3.Callback
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -36,6 +37,12 @@ val AppJson = Json {
     coerceInputValues = true
     explicitNulls = false
 }
+
+/**
+ * Igual que [AppJson] pero escribiendo también los valores por defecto: para los
+ * PUT que reemplazan un recurso completo (p. ej. `visible: true` en redes sociales).
+ */
+val AppJsonWithDefaults = Json(AppJson) { encodeDefaults = true }
 
 /**
  * Cliente HTTP hacia la API de Cursumi. Adjunta la cookie de sesión y las
@@ -116,6 +123,14 @@ class ApiClient(val jar: CookieJar, val baseUrl: String = Config.API_URL) {
     }
 
     suspend fun postEmpty(path: String) { request("POST", path).throwIfError() }
+
+    /** `multipart/form-data` con un solo archivo en el campo [field] (avatar, firma…). */
+    suspend fun postFile(path: String, field: String, filename: String, bytes: ByteArray, mediaType: String): ApiResponse {
+        val body = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart(field, filename, bytes.toRequestBody(mediaType.toMediaType()))
+            .build()
+        return request("POST", path, rawBody = body).throwIfError()
+    }
 
     suspend inline fun <reified B> patch(path: String, body: B? = null) {
         request("PATCH", path, jsonBody = body?.let { AppJson.encodeToJsonElement(serializer<B>(), it) }).throwIfError()

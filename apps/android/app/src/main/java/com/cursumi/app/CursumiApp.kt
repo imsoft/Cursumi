@@ -10,6 +10,7 @@ import com.cursumi.app.core.api.StudentApi
 import com.cursumi.app.core.auth.AuthService
 import com.cursumi.app.core.auth.CookieJar
 import com.cursumi.app.core.auth.SessionStore
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /** Composición de dependencias de la app (sin framework de DI: son 6 objetos). */
 class CursumiApp : Application() {
@@ -20,6 +21,13 @@ class CursumiApp : Application() {
     lateinit var social: SocialApi; private set
     lateinit var instructor: InstructorApi; private set
     lateinit var admin: AdminApi; private set
+
+    /**
+     * Token de `mobile://reset-password?token=…` pendiente de usar. La Activity lo
+     * deja aquí (intent inicial u `onNewIntent`) y `Root` muestra la pantalla de
+     * nueva contraseña mientras no sea null, haya sesión o no.
+     */
+    val pendingResetToken = MutableStateFlow<String?>(null)
 
     override fun onCreate() {
         super.onCreate()

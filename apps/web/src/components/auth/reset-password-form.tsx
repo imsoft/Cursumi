@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createZodResolver } from "@/lib/form-resolver";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { resetPassword } from "@/lib/auth-client";
 
@@ -30,6 +30,14 @@ interface ResetPasswordFormProps {
 export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  // En un teléfono, el correo de recuperación suele abrirse en el navegador
+  // aunque la cuenta se use desde la app: ofrecemos terminar ahí. El enlace
+  // `mobile://` solo lo entiende la app; si no está instalada, no hace nada.
+  const onPhone = useSyncExternalStore(
+    () => () => {},
+    () => /android|iphone|ipad|ipod/i.test(navigator.userAgent),
+    () => false,
+  );
   
   const form = useForm<ResetPasswordFormValues>({
     resolver: createZodResolver(resetPasswordSchema),
@@ -118,6 +126,13 @@ export const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
         </p>
       </CardHeader>
       <CardContent className="px-6 pb-6">
+        {token && onPhone && (
+          <Button asChild variant="outline" className="mb-4 w-full">
+            <a href={`mobile://reset-password?token=${encodeURIComponent(token)}`}>
+              Abrir en la app de Cursumi
+            </a>
+          </Button>
+        )}
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <PasswordInput

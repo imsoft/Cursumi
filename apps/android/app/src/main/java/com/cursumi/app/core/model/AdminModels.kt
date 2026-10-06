@@ -3,6 +3,8 @@ package com.cursumi.app.core.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
 import java.util.UUID
 
 // Instructor y administración.
@@ -92,3 +94,79 @@ data class QuoteRequestPayload(
     val companyName: String, val contactName: String, val contactEmail: String, val contactPhone: String? = null,
     val companySize: String? = null, val interests: String? = null, val message: String? = null,
 )
+
+// ── Alumnos del instructor ───────────────────────────────────────────────────
+
+@Serializable
+data class InstructorStudent(
+    val enrollmentId: String, val studentId: String = "", val studentName: String = "", val studentEmail: String = "",
+    val progress: Double = 0.0, val status: String = "", val enrolledAt: String = "",
+) {
+    val progressPercent get() = progress.coerceIn(0.0, 100.0).toInt()
+}
+
+@Serializable
+data class InstructorCourseStudents(
+    val courseId: String, val courseTitle: String = "", val modality: String? = null, val status: String = "",
+    val students: List<InstructorStudent> = emptyList(),
+)
+
+// ── Pagos a instructores ─────────────────────────────────────────────────────
+
+@Serializable
+data class PayoutRow(
+    val transactionId: String, val createdAt: String = "", val courseTitle: String = "", val studentName: String = "",
+    val amountCents: Long = 0, val instructorAmountCents: Long = 0,
+)
+
+@Serializable
+data class PayoutGroup(
+    val instructorId: String, val instructorName: String = "", val instructorEmail: String = "",
+    val stripeAccountId: String? = null, val stripeOnboarded: Boolean = false, val pendingCents: Long = 0,
+    val rows: List<PayoutRow> = emptyList(),
+)
+
+@Serializable data class PayoutsResponse(val groups: List<PayoutGroup> = emptyList(), val totalPendingCents: Long = 0)
+
+// ── Bitácora ─────────────────────────────────────────────────────────────────
+
+@Serializable
+data class AuditLog(
+    val id: String, val actorId: String = "", val actorEmail: String? = null, val action: String = "",
+    val targetType: String? = null, val targetId: String? = null,
+    /** Cualquier JSON (objeto, array, primitivo) o null. */
+    val metadata: JsonElement? = null,
+    val ip: String? = null, val createdAt: String = "",
+) {
+    /** Etiqueta legible de la acción; si no la conocemos, la clave tal cual. */
+    val label get() = labels[action] ?: action
+
+    /** `metadata` compacto para mostrar; vacío si es null. */
+    val metadataText: String get() = when (val m = metadata) {
+        null, is JsonNull -> ""
+        else -> m.toString()
+    }
+
+    companion object {
+        val labels = mapOf(
+            "user.role_change" to "Cambio de rol",
+            "instructor_application.approve" to "Instructor aprobado",
+            "instructor_application.reject" to "Instructor rechazado",
+            "course.disable" to "Curso deshabilitado",
+            "course.enable" to "Curso habilitado",
+            "platform_fee.change" to "Cambio de comisión",
+            "review.delete" to "Reseña eliminada",
+            "payout.transfer" to "Pago transferido",
+            "payout.mark-paid" to "Pago registrado a mano",
+        )
+    }
+}
+
+// ── Ajustes de plataforma ────────────────────────────────────────────────────
+
+@Serializable data class PlatformFee(val platformFeePercent: Double = 0.0)
+@Serializable data class SocialLink(val key: String, val label: String = "", val url: String = "", val visible: Boolean = true)
+
+// ── Firma para certificados ──────────────────────────────────────────────────
+
+@Serializable data class SignatureReply(val url: String? = null)

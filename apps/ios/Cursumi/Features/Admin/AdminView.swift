@@ -14,6 +14,15 @@ struct AdminView: View {
             NavigationLink("Categorías") { AdminCategoriesView() }
             NavigationLink("KPIs") { AdminKpisView() }
             NavigationLink("Empresas") { AdminBusinessView() }
+            Section("Dinero y control") {
+                NavigationLink("Pagos a instructores") { AdminPayoutsView() }
+                NavigationLink("Bitácora") { AdminAuditLogView() }
+                NavigationLink("Ajustes de plataforma") { AdminSettingsView() }
+            }
+            Section("Contenido (web)") {
+                NavigationLink("Laboratorio de IA") { WebSectionView(path: "/admin/ai-lab", title: "Laboratorio de IA") }
+                NavigationLink("Blog") { WebSectionView(path: "/admin/blog", title: "Blog") }
+            }
         }
         .navigationTitle("Administración")
     }

@@ -75,6 +75,17 @@ class AuthService(val api: ApiClient) {
         if (!res.isOk) throw AuthError(res.errorMessage ?: "No se pudo enviar el correo.")
     }
 
+    /**
+     * Nueva contraseña con el token del correo de recuperación (el enlace de la web
+     * abre `mobile://reset-password?token=…`). Lleva `x-native-origin` como el resto de auth.
+     */
+    suspend fun resetPassword(token: String, newPassword: String) {
+        val res = api.request("POST", "api/auth/reset-password", jsonBody = buildJsonObject {
+            put("newPassword", newPassword); put("token", token)
+        })
+        if (!res.isOk) throw AuthError(res.errorMessage ?: "El enlace no es válido o ya caducó. Pide uno nuevo.")
+    }
+
     suspend fun changePassword(current: String, new: String) {
         val res = api.request("POST", "api/auth/change-password", jsonBody = buildJsonObject {
             put("currentPassword", current); put("newPassword", new); put("revokeOtherSessions", true)

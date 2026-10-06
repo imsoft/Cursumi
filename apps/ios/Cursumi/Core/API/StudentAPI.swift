@@ -88,16 +88,20 @@ struct StudentAPI {
     }
 
     func uploadAvatar(jpeg: Data) async throws {
-        let boundary = "cursumi-\(UUID().uuidString)"
-        var body = Data()
-        body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"avatar.jpg\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
-        body.append(jpeg)
-        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-        let res = try await api.request("POST", "api/me/avatar", rawBody: body, contentType: "multipart/form-data; boundary=\(boundary)")
-        guard res.isOK else { throw APIError.http(res.status, message: res.errorMessage) }
+        try await api.upload("api/me/avatar", filename: "avatar.jpg", mimeType: "image/jpeg", data: jpeg)
     }
+
+    // MARK: Firma (certificados)
+
+    func signature() async throws -> SignatureInfo { try await api.get("api/me/signature") }
+
+    /// Sube la firma en PNG (máx. 4 MB) y devuelve su URL.
+    func uploadSignature(png: Data) async throws -> String? {
+        let res = try await api.upload("api/me/signature", filename: "firma.png", mimeType: "image/png", data: png)
+        return (try? res.decode(SignatureInfo.self))?.url
+    }
+
+    func deleteSignature() async throws { try await api.delete("api/me/signature") }
 
     // MARK: Certificados, notificaciones, deseos
 
