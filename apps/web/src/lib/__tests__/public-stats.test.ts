@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const db = {
   students: 0,
-  approvedInstructors: 0,
+  instructorsByRole: 0,
   reviews: [] as number[],
 };
 const calls: { instructorWhere?: unknown; reviewWhere?: unknown } = {};
@@ -11,10 +11,10 @@ vi.mock("next/cache", () => ({ unstable_cache: <T,>(fn: T) => fn }));
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     $queryRaw: vi.fn(async () => [{ total: db.students }]),
-    instructorApplication: {
+    user: {
       count: vi.fn(async (args: { where: unknown }) => {
         calls.instructorWhere = args.where;
-        return db.approvedInstructors;
+        return db.instructorsByRole;
       }),
     },
     review: {
@@ -37,16 +37,16 @@ const hasDigit = (s: string) => /\d/.test(s);
 describe("getPublicStats", () => {
   beforeEach(() => {
     db.students = 0;
-    db.approvedInstructors = 0;
+    db.instructorsByRole = 0;
     db.reviews = [];
   });
 
-  it("cuenta instructores aprobados por InstructorApplication y solo reseñas aprobadas", async () => {
+  it("cuenta instructores por rol (no por solicitud aprobada) y solo reseñas aprobadas", async () => {
     db.students = 3;
-    db.approvedInstructors = 2;
+    db.instructorsByRole = 2;
     db.reviews = [5, 4];
     const stats = await getPublicStats();
-    expect(calls.instructorWhere).toEqual({ status: "approved" });
+    expect(calls.instructorWhere).toEqual({ role: "instructor" });
     expect(calls.reviewWhere).toEqual({ approved: true });
     expect(stats).toEqual({ studentsCount: 3, instructorsCount: 2, reviewsCount: 2, averageRating: 4.5 });
   });

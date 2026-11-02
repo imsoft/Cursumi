@@ -63,7 +63,14 @@ export async function renderOgImage(children: ReactNode, footerRight?: ReactNode
     <OgFrame logo={logo} footerRight={footerRight}>
       {children}
     </OgFrame>,
-    { ...OG_SIZE, fonts },
+    {
+      ...OG_SIZE,
+      fonts,
+      // Sin esto salía `max-age=0` y cada vez que alguien compartía un enlace
+      // el servidor volvía a dibujar la imagen (~0.7 s). El CDN de Vercel la
+      // guarda un día y la sirve mientras regenera en segundo plano.
+      headers: { "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" },
+    },
   );
 }
 
