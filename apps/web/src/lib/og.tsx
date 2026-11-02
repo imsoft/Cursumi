@@ -35,7 +35,7 @@ let fontsPromise: Promise<OgFont[]> | null = null;
 let logoPromise: Promise<string> | null = null;
 
 /** Lee los .ttf una sola vez por instancia (satori no acepta woff2 ni fuentes variables). */
-function loadOgFonts(): Promise<OgFont[]> {
+export function loadOgFonts(): Promise<OgFont[]> {
   fontsPromise ??= Promise.all([
     readFile(join(process.cwd(), "assets/fonts/PlusJakartaSans-ExtraBold.ttf")),
     readFile(join(process.cwd(), "assets/fonts/PlusJakartaSans-SemiBold.ttf")),
@@ -46,7 +46,7 @@ function loadOgFonts(): Promise<OgFont[]> {
   return fontsPromise;
 }
 
-function loadLogoDataUri(): Promise<string> {
+export function loadLogoDataUri(): Promise<string> {
   logoPromise ??= readFile(join(process.cwd(), "public/logos/cursumi.svg")).then(
     (svg) => `data:image/svg+xml;base64,${svg.toString("base64")}`,
   );
