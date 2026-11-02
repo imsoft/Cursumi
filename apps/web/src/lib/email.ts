@@ -35,9 +35,10 @@ const SITE_URL = () => process.env.NEXT_PUBLIC_APP_URL || "https://cursumi.com";
 
 /**
  * Colores marca en HTML (coinciden con el logo `cursumi.svg` y el tema --primary).
+ * También es el fondo de las imágenes OG (`lib/og.tsx`): una sola fuente de verdad.
  * Evitar el antiguo índigo #667eea / #764ba2, que no es el violeta de la plataforma.
  */
-const EMAIL_BRAND_GRADIENT =
+export const EMAIL_BRAND_GRADIENT =
   "linear-gradient(135deg,#4300d0 0%,#6d28d9 50%,#a400e3 100%)";
 const EMAIL_BRAND_ACCENT = "#6d28d9";
 

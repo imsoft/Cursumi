@@ -1,29 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles, Star } from "lucide-react";
+import { ArrowRight, BadgeCheck, Infinity as InfinityIcon, PlayCircle, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, type Variants, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect, useRef } from "react";
-import type { PublicStats } from "@/lib/public-stats";
+import { motion, type Variants } from "framer-motion";
+import { Fragment } from "react";
+import type { HomeStatItem } from "@/lib/public-stats";
 
 interface HeroProps {
-  stats: PublicStats;
+  /** Ya calculado en el servidor con `buildHomeStats` (umbrales incluidos). */
+  stats: HomeStatItem[];
 }
 
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v).toLocaleString() + suffix);
-  const ref = useRef(false);
+const CLAIM_ICONS = {
+  students: InfinityIcon,
+  instructors: BadgeCheck,
+  rating: PlayCircle,
+} as const;
 
-  useEffect(() => {
-    if (ref.current) return;
-    ref.current = true;
-    const controls = animate(count, target, { duration: 1.8, ease: "easeOut", delay: 0.6 });
-    return controls.stop;
-  }, [count, target]);
-
-  return <motion.span>{rounded}</motion.span>;
+/**
+ * Sin animación de conteo: el valor final va en el HTML del servidor. El
+ * contador animado arrancaba en 0, así que crawlers, previsualizaciones y
+ * cualquiera con JS lento veían "0+".
+ */
+function HeroStat({ item }: { item: HomeStatItem }) {
+  if (item.kind === "claim") {
+    const Icon = CLAIM_ICONS[item.key];
+    return (
+      <div data-testid="hero-stat" className="flex max-w-36 flex-col items-center gap-1.5">
+        <Icon className="h-6 w-6 text-primary" aria-hidden />
+        <div className="font-medium leading-tight text-foreground">{item.label}</div>
+      </div>
+    );
+  }
+  return (
+    <div data-testid="hero-stat">
+      <div className="flex items-center justify-center gap-1 text-2xl font-bold text-foreground">
+        {item.value}
+        {item.kind === "rating" && <Star className="h-5 w-5 fill-amber-400 text-amber-400" aria-hidden />}
+      </div>
+      <div>{item.label}</div>
+    </div>
+  );
 }
 
 export const Hero = ({ stats }: HeroProps) => {
@@ -115,44 +133,18 @@ export const Hero = ({ stats }: HeroProps) => {
         </Link>
       </motion.div>
 
-      {(stats.studentsCount > 0 || stats.instructorsCount > 0 || stats.citiesCount > 0) && (
+      {stats.length > 0 && (
         <motion.div
           variants={itemVariants}
-          className="mt-12 flex items-center gap-8 text-sm text-muted-foreground"
+          data-testid="hero-stats"
+          className="mt-12 flex items-center gap-6 text-sm text-muted-foreground sm:gap-8"
         >
-          {stats.studentsCount > 0 && (
-            <>
-              <div>
-                <div className="text-2xl font-bold text-foreground">
-                  <CountUp target={stats.studentsCount} suffix="+" />
-                </div>
-                <div>Estudiantes</div>
-              </div>
-              <div className="h-8 w-px bg-border" />
-            </>
-          )}
-          {stats.instructorsCount > 0 && (
-            <>
-              <div>
-                <div className="text-2xl font-bold text-foreground">
-                  <CountUp target={stats.instructorsCount} suffix="+" />
-                </div>
-                <div>Instructores</div>
-              </div>
-              <div className="h-8 w-px bg-border" />
-            </>
-          )}
-          {stats.averageRating != null && (
-            <div>
-              <div className="flex items-center justify-center gap-1 text-2xl font-bold text-foreground">
-                {stats.averageRating % 1 === 0
-                  ? stats.averageRating
-                  : stats.averageRating.toFixed(1)}
-                <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-              </div>
-              <div>Valoración media</div>
-            </div>
-          )}
+          {stats.map((item, idx) => (
+            <Fragment key={item.key}>
+              {idx > 0 && <div className="h-8 w-px shrink-0 bg-border" />}
+              <HeroStat item={item} />
+            </Fragment>
+          ))}
         </motion.div>
       )}
     </motion.section>

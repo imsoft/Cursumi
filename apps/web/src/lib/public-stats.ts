@@ -15,43 +15,101 @@ import { prisma } from "./prisma";
  */
 const REVALIDAR_SEGUNDOS = 300;
 
+/**
+ * Umbrales para mostrar cada número en la portada. Por debajo, en vez de un
+ * "0+" o una calificación de 5 con dos reseñas, se muestra un argumento sin
+ * número. Cada stat se evalúa por separado.
+ */
+export const HOME_STATS_THRESHOLDS = {
+  /** Alumnos únicos inscritos */
+  students: 100,
+  /** Instructores con solicitud (InstructorApplication) aprobada */
+  instructors: 10,
+  /** Reseñas aprobadas necesarias para mostrar la calificación promedio */
+  reviews: 10,
+} as const;
+
+export type HomeStatsThresholds = {
+  students: number;
+  instructors: number;
+  reviews: number;
+};
+
 export type PublicStats = {
+  /** Alumnos únicos con al menos una inscripción */
   studentsCount: number;
-  citiesCount: number;
+  /** Instructores aprobados por InstructorApplication */
   instructorsCount: number;
-  /** Promedio de reseñas aprobadas (1–5); null si no hay reseñas publicadas */
+  /** Reseñas aprobadas */
+  reviewsCount: number;
+  /** Promedio de reseñas aprobadas (1–5, un decimal); null si no hay reseñas */
   averageRating: number | null;
 };
+
+/** Lo que pinta el hero: un número real o, si no da el umbral, un argumento. */
+export type HomeStatItem =
+  | { kind: "number"; key: "students" | "instructors"; value: string; label: string }
+  | { kind: "rating"; key: "rating"; value: string; label: string }
+  | { kind: "claim"; key: "students" | "instructors" | "rating"; label: string };
+
+const formatCount = (n: number) => `${n.toLocaleString("es-MX")}+`;
+
+export function buildHomeStats(
+  stats: PublicStats,
+  thresholds: HomeStatsThresholds = HOME_STATS_THRESHOLDS,
+): HomeStatItem[] {
+  const students: HomeStatItem =
+    stats.studentsCount >= thresholds.students
+      ? { kind: "number", key: "students", value: formatCount(stats.studentsCount), label: "Estudiantes" }
+      : { kind: "claim", key: "students", label: "Pago único, acceso de por vida" };
+
+  const instructors: HomeStatItem =
+    stats.instructorsCount >= thresholds.instructors
+      ? { kind: "number", key: "instructors", value: formatCount(stats.instructorsCount), label: "Instructores" }
+      : { kind: "claim", key: "instructors", label: "Instructores verificados" };
+
+  // Nunca una calificación sin reseñas: el umbral mínimo es 1 aunque se configure 0.
+  const showRating =
+    stats.averageRating != null &&
+    stats.reviewsCount > 0 &&
+    stats.reviewsCount >= thresholds.reviews;
+  const rating: HomeStatItem = showRating
+    ? {
+        kind: "rating",
+        key: "rating",
+        value: stats.averageRating!.toFixed(1),
+        label: "Calificación promedio",
+      }
+    : { kind: "claim", key: "rating", label: "Curso en video o por evento" };
+
+  return [students, instructors, rating];
+}
 
 export const getPublicStats = unstable_cache(
   async (): Promise<PublicStats> => {
   // COUNT(DISTINCT) en la base en vez de traerse TODAS las filas de
   // inscripciones a memoria para contar alumnos únicos.
-  const [alumnosUnicos, courses, instructors, reviewAgg] = await Promise.all([
+  const [alumnosUnicos, instructors, reviewAgg] = await Promise.all([
     prisma.$queryRaw<{ total: number }[]>`
       SELECT COUNT(DISTINCT "studentId")::int AS total FROM "Enrollment"
     `,
-    prisma.course.findMany({
-      where: { status: "published", city: { not: null } },
-      select: { city: true },
-    }),
-    prisma.user.count({ where: { role: "instructor" } }),
+    prisma.instructorApplication.count({ where: { status: "approved" } }),
     prisma.review.aggregate({
       where: { approved: true },
       _avg: { rating: true },
+      _count: { _all: true },
     }),
   ]);
 
-  const uniqueCities = new Set(courses.map((c) => c.city).filter(Boolean));
   const avg = reviewAgg._avg.rating;
   return {
     studentsCount: alumnosUnicos[0]?.total ?? 0,
-    citiesCount: uniqueCities.size,
     instructorsCount: instructors,
+    reviewsCount: reviewAgg._count._all,
     averageRating: avg != null ? Math.round(avg * 10) / 10 : null,
   };
   },
-  ["public-stats"],
+  ["public-stats-v2"],
   { revalidate: REVALIDAR_SEGUNDOS, tags: ["public-stats"] },
 );
 

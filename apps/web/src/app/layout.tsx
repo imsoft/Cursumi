@@ -125,8 +125,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@cursumi",
-    creator: "@cursumi",
+    site: "@cursumi_",
+    creator: "@cursumi_",
     title: "Cursumi · Aprende a tu ritmo o en vivo",
     description:
       "Cursos en video y en vivo con instructores expertos. Aprende, practica y consigue resultados reales.",

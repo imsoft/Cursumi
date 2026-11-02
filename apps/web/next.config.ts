@@ -51,6 +51,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Las imágenes OG leen la tipografía y el logo del disco en runtime; así
+  // quedan incluidos en la función serverless aunque el tracing no los vea.
+  outputFileTracingIncludes: {
+    "/api/og": ["./assets/fonts/**/*.ttf", "./public/logos/cursumi.svg"],
+    "/api/og/course/[id]": ["./assets/fonts/**/*.ttf", "./public/logos/cursumi.svg"],
+  },
   transpilePackages: [
     "@prisma/client",
     "@prisma/client-runtime-utils",

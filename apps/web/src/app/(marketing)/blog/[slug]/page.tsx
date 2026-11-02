@@ -64,6 +64,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
+      site: "@cursumi_",
       title: post.title,
       description: post.excerpt ?? undefined,
       images: [socialImage.url],

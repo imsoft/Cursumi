@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSessionSafe } from "@/lib/session";
 import { getUserRole } from "@/lib/user-service";
-import { getPublicStats, getPublicTestimonials, getFeaturedCourses } from "@/lib/public-stats";
+import { buildHomeStats, getPublicStats, getPublicTestimonials, getFeaturedCourses } from "@/lib/public-stats";
 import { CourseTypes } from "@/components/course-types";
 import { FeaturedCourses } from "@/components/featured-courses";
 import { CTASection } from "@/components/cta-section";
@@ -59,7 +59,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main>
-        <Hero stats={stats} />
+        <Hero stats={buildHomeStats(stats)} />
         <CourseTypes />
         <HowItWorks />
         <FeaturedCourses courses={featuredCourses} />
