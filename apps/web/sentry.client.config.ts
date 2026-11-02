@@ -4,7 +4,10 @@ Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   // Solo activar en producción para no llenar de ruido en desarrollo
   enabled: process.env.NODE_ENV === "production",
-  tracesSampleRate: 0.1,         // 10% de trazas de performance
+  tracesSampleRate: 0.1,
+  // Sentry 11 recopila por defecto cookies, cabeceras, cuerpos de petición y
+  // datos del usuario. Se apaga todo para quedar como en la versión 10 (sin PII).
+  dataCollection: { userInfo: false, cookies: false, httpHeaders: false, httpBodies: [], urlQueryParams: false },         // 10% de trazas de performance
   replaysSessionSampleRate: 0,   // no grabar sesiones normales (Replay es pesado en el cliente)
   replaysOnErrorSampleRate: 1.0, // 100% de replays cuando hay error
   // El SDK de Session Replay añade ~50-90 KB al bundle de cada página y se

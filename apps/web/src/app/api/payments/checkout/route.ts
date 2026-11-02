@@ -223,7 +223,10 @@ export async function POST(req: NextRequest) {
     const splitAtCheckout = canSplitAtCheckout(connect) && instructorAmount > 0;
 
     const checkoutSession = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
+      // stripe 23 (API 2026-09-30) quitó `payment_method_types`. Este filtra la
+      // lista dinámica de métodos que calcula Stripe: solo tarjeta, como antes,
+      // aunque en el dashboard se activen OXXO o SPEI.
+      allowed_payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
