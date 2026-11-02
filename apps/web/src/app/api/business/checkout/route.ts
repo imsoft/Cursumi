@@ -75,7 +75,10 @@ export async function POST() {
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
-      payment_method_types: ["card"],
+      // stripe 23 (API 2026-09-30) quitó `payment_method_types`. Este filtra la
+      // lista dinámica de métodos que calcula Stripe: solo tarjeta, como antes,
+      // aunque en el dashboard se activen OXXO o SPEI.
+      allowed_payment_method_types: ["card"],
       customer: stripeCustomerId,
       line_items: [
         {
