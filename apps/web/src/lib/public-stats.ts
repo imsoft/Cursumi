@@ -23,7 +23,7 @@ const REVALIDAR_SEGUNDOS = 300;
 export const HOME_STATS_THRESHOLDS = {
   /** Alumnos únicos inscritos */
   students: 100,
-  /** Instructores con solicitud (InstructorApplication) aprobada */
+  /** Usuarios con rol instructor */
   instructors: 10,
   /** Reseñas aprobadas necesarias para mostrar la calificación promedio */
   reviews: 10,
@@ -38,7 +38,7 @@ export type HomeStatsThresholds = {
 export type PublicStats = {
   /** Alumnos únicos con al menos una inscripción */
   studentsCount: number;
-  /** Instructores aprobados por InstructorApplication */
+  /** Usuarios con rol instructor (el admin también los da de alta sin solicitud) */
   instructorsCount: number;
   /** Reseñas aprobadas */
   reviewsCount: number;
@@ -93,7 +93,10 @@ export const getPublicStats = unstable_cache(
     prisma.$queryRaw<{ total: number }[]>`
       SELECT COUNT(DISTINCT "studentId")::int AS total FROM "Enrollment"
     `,
-    prisma.instructorApplication.count({ where: { status: "approved" } }),
+    // Por rol y no por solicitud aprobada: el admin da de alta instructores
+    // cambiando el rol directo, sin pasar por InstructorApplication, y esos
+    // no contaban (había 2 instructores reales y 0 solicitudes aprobadas).
+    prisma.user.count({ where: { role: "instructor" } }),
     prisma.review.aggregate({
       where: { approved: true },
       _avg: { rating: true },
@@ -109,7 +112,7 @@ export const getPublicStats = unstable_cache(
     averageRating: avg != null ? Math.round(avg * 10) / 10 : null,
   };
   },
-  ["public-stats-v2"],
+  ["public-stats-v3"],
   { revalidate: REVALIDAR_SEGUNDOS, tags: ["public-stats"] },
 );
 
