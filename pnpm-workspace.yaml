@@ -19,3 +19,11 @@ allowBuilds:
   protobufjs: true
   sharp: true
   unrs-resolver: true
+
+# Parches de seguridad en dependencias transitivas (pnpm audit). Revisar y
+# quitar cuando los paquetes que las traen suban por su cuenta.
+overrides:
+  effect: ^3.22.1 # prisma/@prisma/config lo fija en 3.20.0
+  dompurify: ^3.4.17 # dependencia de jspdf
+  '@typescript-eslint/typescript-estree>minimatch': ^11.0.1 # tooling de lint
+  '@ts-morph/common>minimatch': ^11.0.1 # CLI de shadcn
